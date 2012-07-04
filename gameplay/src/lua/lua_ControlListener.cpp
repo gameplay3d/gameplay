@@ -40,7 +40,7 @@ int lua_ControlListener__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "ControlListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'ControlListener' expected.");
@@ -80,18 +80,12 @@ int lua_ControlListener_controlEvent(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Control");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Control' for parameter 2.");
-                    lua_error(state);
-                }
-                Control* param1 = (Control*)((ScriptController::LuaObject*)userdata2)->instance;
+                Control* param1 = ScriptController::getInstance()->getObjectPointer<Control>(2, "Control", false);
 
                 // Get parameter 2 off the stack.
                 Control::Listener::EventType param2 = (Control::Listener::EventType)lua_enumFromString_ControlListenerEventType(luaL_checkstring(state, 3));

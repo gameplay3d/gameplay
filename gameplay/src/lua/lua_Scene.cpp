@@ -30,6 +30,7 @@ void luaRegister_Scene()
         {"setActiveCamera", lua_Scene_setActiveCamera},
         {"setAmbientColor", lua_Scene_setAmbientColor},
         {"setId", lua_Scene_setId},
+        {"visit", lua_Scene_visit},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -60,7 +61,7 @@ int lua_Scene__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Scene");
                 luaL_argcheck(state, userdata != NULL, 1, "'Scene' expected.");
@@ -100,14 +101,22 @@ int lua_Scene_addNode(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->addNode();
-                object->owns = false;
-                luaL_getmetatable(state, "Node");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->addNode();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Node");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -120,32 +129,34 @@ int lua_Scene_addNode(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->addNode(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Node");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->addNode(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Node");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Node");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 2.");
-                    lua_error(state);
-                }
-                Node* param1 = (Node*)((ScriptController::LuaObject*)userdata2)->instance;
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
 
                 Scene* instance = getInstance(state);
                 instance->addNode(param1);
@@ -179,7 +190,7 @@ int lua_Scene_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
                 instance->addRef();
@@ -213,7 +224,7 @@ int lua_Scene_bindAudioListenerToCamera(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -251,7 +262,7 @@ int lua_Scene_drawDebug(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -289,18 +300,26 @@ int lua_Scene_findNode(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->findNode(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Node");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->findNode(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Node");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -313,22 +332,30 @@ int lua_Scene_findNode(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = (luaL_checkint(state, 3) != 0);
 
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->findNode(param1, param2);
-                object->owns = false;
-                luaL_getmetatable(state, "Node");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->findNode(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Node");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -341,13 +368,13 @@ int lua_Scene_findNode(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TBOOLEAN &&
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = (luaL_checkint(state, 3) != 0);
@@ -356,11 +383,19 @@ int lua_Scene_findNode(lua_State* state)
                 bool param3 = (luaL_checkint(state, 4) != 0);
 
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->findNode(param1, param2, param3);
-                object->owns = false;
-                luaL_getmetatable(state, "Node");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->findNode(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Node");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -391,14 +426,22 @@ int lua_Scene_getActiveCamera(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getActiveCamera();
-                object->owns = false;
-                luaL_getmetatable(state, "Camera");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getActiveCamera();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Camera");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -429,14 +472,22 @@ int lua_Scene_getAmbientColor(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getAmbientColor());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector3");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getAmbientColor());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -467,14 +518,22 @@ int lua_Scene_getFirstNode(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getFirstNode();
-                object->owns = false;
-                luaL_getmetatable(state, "Node");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getFirstNode();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Node");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -505,7 +564,7 @@ int lua_Scene_getId(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -542,7 +601,7 @@ int lua_Scene_getNodeCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
                 unsigned int result = instance->getNodeCount();
@@ -579,7 +638,7 @@ int lua_Scene_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -616,7 +675,7 @@ int lua_Scene_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
                 instance->release();
@@ -650,7 +709,7 @@ int lua_Scene_removeAllNodes(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Scene* instance = getInstance(state);
                 instance->removeAllNodes();
@@ -684,17 +743,11 @@ int lua_Scene_removeNode(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Node");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 2.");
-                    lua_error(state);
-                }
-                Node* param1 = (Node*)((ScriptController::LuaObject*)userdata2)->instance;
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
 
                 Scene* instance = getInstance(state);
                 instance->removeNode(param1);
@@ -728,17 +781,11 @@ int lua_Scene_setActiveCamera(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Camera");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Camera' for parameter 2.");
-                    lua_error(state);
-                }
-                Camera* param1 = (Camera*)((ScriptController::LuaObject*)userdata2)->instance;
+                Camera* param1 = ScriptController::getInstance()->getObjectPointer<Camera>(2, "Camera", false);
 
                 Scene* instance = getInstance(state);
                 instance->setActiveCamera(param1);
@@ -772,7 +819,7 @@ int lua_Scene_setAmbientColor(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
@@ -818,11 +865,11 @@ int lua_Scene_setId(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Scene* instance = getInstance(state);
                 instance->setId(param1);
@@ -856,11 +903,19 @@ int lua_Scene_static_createScene(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)Scene::createScene();
-            object->owns = false;
-            luaL_getmetatable(state, "Scene");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)Scene::createScene();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Scene");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -885,16 +940,24 @@ int lua_Scene_static_load(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)Scene::load(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Scene");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)Scene::load(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Scene");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -908,6 +971,44 @@ int lua_Scene_static_load(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_visit(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                Scene* instance = getInstance(state);
+                instance->visit(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

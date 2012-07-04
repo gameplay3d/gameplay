@@ -38,10 +38,11 @@ void luaRegister_Form()
         {"getCursorColor", lua_Form_getCursorColor},
         {"getCursorRegion", lua_Form_getCursorRegion},
         {"getCursorUVs", lua_Form_getCursorUVs},
+        {"getFocusIndex", lua_Form_getFocusIndex},
         {"getFont", lua_Form_getFont},
         {"getFontSize", lua_Form_getFontSize},
         {"getHeight", lua_Form_getHeight},
-        {"getID", lua_Form_getID},
+        {"getId", lua_Form_getId},
         {"getImageColor", lua_Form_getImageColor},
         {"getImageRegion", lua_Form_getImageRegion},
         {"getImageUVs", lua_Form_getImageUVs},
@@ -58,11 +59,14 @@ void luaRegister_Form()
         {"getTextAlignment", lua_Form_getTextAlignment},
         {"getTextColor", lua_Form_getTextColor},
         {"getTextRightToLeft", lua_Form_getTextRightToLeft},
+        {"getTheme", lua_Form_getTheme},
+        {"getType", lua_Form_getType},
         {"getWidth", lua_Form_getWidth},
         {"getX", lua_Form_getX},
         {"getY", lua_Form_getY},
         {"getZIndex", lua_Form_getZIndex},
         {"insertControl", lua_Form_insertControl},
+        {"isContainer", lua_Form_isContainer},
         {"isEnabled", lua_Form_isEnabled},
         {"isScrollBarsAutoHide", lua_Form_isScrollBarsAutoHide},
         {"release", lua_Form_release},
@@ -76,6 +80,7 @@ void luaRegister_Form()
         {"setConsumeInputEvents", lua_Form_setConsumeInputEvents},
         {"setCursorColor", lua_Form_setCursorColor},
         {"setCursorRegion", lua_Form_setCursorRegion},
+        {"setFocusIndex", lua_Form_setFocusIndex},
         {"setFont", lua_Form_setFont},
         {"setFontSize", lua_Form_setFontSize},
         {"setImageColor", lua_Form_setImageColor},
@@ -85,7 +90,6 @@ void luaRegister_Form()
         {"setOpacity", lua_Form_setOpacity},
         {"setPadding", lua_Form_setPadding},
         {"setPosition", lua_Form_setPosition},
-        {"setQuad", lua_Form_setQuad},
         {"setScroll", lua_Form_setScroll},
         {"setScrollBarsAutoHide", lua_Form_setScrollBarsAutoHide},
         {"setSize", lua_Form_setSize},
@@ -136,7 +140,7 @@ int lua_Form__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Form");
                 luaL_argcheck(state, userdata != NULL, 1, "'Form' expected.");
@@ -176,17 +180,11 @@ int lua_Form_addControl(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Control");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Control' for parameter 2.");
-                    lua_error(state);
-                }
-                Control* param1 = (Control*)((ScriptController::LuaObject*)userdata2)->instance;
+                Control* param1 = ScriptController::getInstance()->getObjectPointer<Control>(2, "Control", false);
 
                 Form* instance = getInstance(state);
                 unsigned int result = instance->addControl(param1);
@@ -223,18 +221,12 @@ int lua_Form_addListener(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "ControlListener");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Control::Listener' for parameter 2.");
-                    lua_error(state);
-                }
-                Control::Listener* param1 = (Control::Listener*)((ScriptController::LuaObject*)userdata2)->instance;
+                Control::Listener* param1 = ScriptController::getInstance()->getObjectPointer<Control::Listener>(2, "ControlListener", false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -271,7 +263,7 @@ int lua_Form_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 instance->addRef();
@@ -305,47 +297,57 @@ int lua_Form_createAnimation(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = luaL_checkstring(state, 3);
+                const char* param2 = ScriptController::getInstance()->getString(3, false);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Properties");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Properties' for parameter 3.");
-                    lua_error(state);
-                }
-                Properties* param2 = (Properties*)((ScriptController::LuaObject*)userdata3)->instance;
+                Properties* param2 = ScriptController::getInstance()->getObjectPointer<Properties>(3, "Properties", false);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -358,16 +360,16 @@ int lua_Form_createAnimation(lua_State* state)
         }
         case 7:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 7) == LUA_TSTRING)
+                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -385,11 +387,19 @@ int lua_Form_createAnimation(lua_State* state)
                 Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -402,18 +412,18 @@ int lua_Form_createAnimation(lua_State* state)
         }
         case 9:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 9) == LUA_TSTRING)
+                (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -437,11 +447,19 @@ int lua_Form_createAnimation(lua_State* state)
                 Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -472,16 +490,16 @@ int lua_Form_createAnimationFromBy(lua_State* state)
     {
         case 7:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 6) == LUA_TSTRING &&
+                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -499,11 +517,19 @@ int lua_Form_createAnimationFromBy(lua_State* state)
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimationFromBy(param1, param2, param3, param4, param5, param6);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimationFromBy(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -534,16 +560,16 @@ int lua_Form_createAnimationFromTo(lua_State* state)
     {
         case 7:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 6) == LUA_TSTRING &&
+                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -561,11 +587,19 @@ int lua_Form_createAnimationFromTo(lua_State* state)
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimationFromTo(param1, param2, param3, param4, param5, param6);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimationFromTo(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -596,7 +630,7 @@ int lua_Form_destroyAnimation(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 instance->destroyAnimation();
@@ -612,11 +646,11 @@ int lua_Form_destroyAnimation(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Form* instance = getInstance(state);
                 instance->destroyAnimation(param1);
@@ -650,7 +684,7 @@ int lua_Form_disable(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 instance->disable();
@@ -684,7 +718,7 @@ int lua_Form_draw(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 instance->draw();
@@ -718,7 +752,7 @@ int lua_Form_enable(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 instance->enable();
@@ -752,7 +786,7 @@ int lua_Form_getAlignment(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 Control::Alignment result = instance->getAlignment();
@@ -789,14 +823,22 @@ int lua_Form_getAnimation(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getAnimation();
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getAnimation();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -809,18 +851,26 @@ int lua_Form_getAnimation(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getAnimation(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getAnimation(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -851,7 +901,7 @@ int lua_Form_getAnimationPropertyComponentCount(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -892,21 +942,15 @@ int lua_Form_getAnimationPropertyValue(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "AnimationValue");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationValue' for parameter 3.");
-                    lua_error(state);
-                }
-                AnimationValue* param2 = (AnimationValue*)((ScriptController::LuaObject*)userdata3)->instance;
+                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Form* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
@@ -940,7 +984,7 @@ int lua_Form_getAutoHeight(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 bool result = instance->getAutoHeight();
@@ -977,7 +1021,7 @@ int lua_Form_getAutoWidth(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 bool result = instance->getAutoWidth();
@@ -1014,14 +1058,22 @@ int lua_Form_getBorder(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getBorder());
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getBorder());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1034,18 +1086,26 @@ int lua_Form_getBorder(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getBorder(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getBorder(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1076,14 +1136,22 @@ int lua_Form_getBounds(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getBounds());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getBounds());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1114,14 +1182,22 @@ int lua_Form_getClip(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getClip());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getClip());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1152,14 +1228,22 @@ int lua_Form_getClipBounds(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getClipBounds());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getClipBounds());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1190,7 +1274,7 @@ int lua_Form_getConsumeInputEvents(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 bool result = instance->getConsumeInputEvents();
@@ -1227,33 +1311,49 @@ int lua_Form_getControl(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getControl(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Control");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getControl(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getControl(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Control");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getControl(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Control");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1284,18 +1384,26 @@ int lua_Form_getCursorColor(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getCursorColor(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getCursorColor(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1326,18 +1434,26 @@ int lua_Form_getCursorRegion(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getCursorRegion(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getCursorRegion(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1368,18 +1484,26 @@ int lua_Form_getCursorUVs(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getCursorUVs(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeUVs");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getCursorUVs(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeUVs");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1400,6 +1524,43 @@ int lua_Form_getCursorUVs(lua_State* state)
     return 0;
 }
 
+int lua_Form_getFocusIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Form* instance = getInstance(state);
+                int result = instance->getFocusIndex();
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_getFont(lua_State* state)
 {
     // Get the number of parameters.
@@ -1410,14 +1571,22 @@ int lua_Form_getFont(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getFont();
-                object->owns = false;
-                luaL_getmetatable(state, "Font");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getFont();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Font");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1430,18 +1599,26 @@ int lua_Form_getFont(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getFont(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Font");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getFont(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Font");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1472,7 +1649,7 @@ int lua_Form_getFontSize(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 unsigned int result = instance->getFontSize();
@@ -1491,8 +1668,8 @@ int lua_Form_getFontSize(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -1532,7 +1709,7 @@ int lua_Form_getHeight(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 float result = instance->getHeight();
@@ -1559,7 +1736,7 @@ int lua_Form_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Form_getID(lua_State* state)
+int lua_Form_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1569,10 +1746,10 @@ int lua_Form_getID(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                const char* result = instance->getID();
+                const char* result = instance->getId();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, result);
@@ -1606,22 +1783,30 @@ int lua_Form_getImageColor(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getImageColor(param1, param2));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getImageColor(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1652,22 +1837,30 @@ int lua_Form_getImageRegion(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getImageRegion(param1, param2));
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getImageRegion(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1698,22 +1891,30 @@ int lua_Form_getImageUVs(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getImageUVs(param1, param2));
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeUVs");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getImageUVs(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeUVs");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1744,14 +1945,22 @@ int lua_Form_getLayout(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getLayout();
-                object->owns = false;
-                luaL_getmetatable(state, "Layout");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getLayout();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Layout");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1782,14 +1991,22 @@ int lua_Form_getMargin(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getMargin());
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getMargin());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1820,7 +2037,7 @@ int lua_Form_getOpacity(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 float result = instance->getOpacity();
@@ -1839,8 +2056,8 @@ int lua_Form_getOpacity(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -1880,14 +2097,22 @@ int lua_Form_getPadding(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getPadding());
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getPadding());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1918,7 +2143,7 @@ int lua_Form_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -1955,7 +2180,7 @@ int lua_Form_getScroll(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 Container::Scroll result = instance->getScroll();
@@ -1992,14 +2217,22 @@ int lua_Form_getSkinColor(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinColor());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinColor());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2012,18 +2245,26 @@ int lua_Form_getSkinColor(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinColor(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinColor(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2054,14 +2295,22 @@ int lua_Form_getSkinRegion(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinRegion());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinRegion());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2074,18 +2323,26 @@ int lua_Form_getSkinRegion(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinRegion(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinRegion(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2116,7 +2373,7 @@ int lua_Form_getState(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 Control::State result = instance->getState();
@@ -2153,14 +2410,22 @@ int lua_Form_getStyle(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getStyle();
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeStyle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getStyle();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeStyle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2191,7 +2456,7 @@ int lua_Form_getTextAlignment(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 Font::Justify result = instance->getTextAlignment();
@@ -2210,8 +2475,8 @@ int lua_Form_getTextAlignment(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -2251,14 +2516,22 @@ int lua_Form_getTextColor(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getTextColor());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getTextColor());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2271,18 +2544,26 @@ int lua_Form_getTextColor(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Form* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getTextColor(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getTextColor(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2313,7 +2594,7 @@ int lua_Form_getTextRightToLeft(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 bool result = instance->getTextRightToLeft();
@@ -2332,8 +2613,8 @@ int lua_Form_getTextRightToLeft(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -2363,6 +2644,89 @@ int lua_Form_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Form_getTheme(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Form* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getTheme();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Theme");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_getType(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Form* instance = getInstance(state);
+                const char* result = instance->getType();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_getWidth(lua_State* state)
 {
     // Get the number of parameters.
@@ -2373,7 +2737,7 @@ int lua_Form_getWidth(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 float result = instance->getWidth();
@@ -2410,7 +2774,7 @@ int lua_Form_getX(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 float result = instance->getX();
@@ -2447,7 +2811,7 @@ int lua_Form_getY(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 float result = instance->getY();
@@ -2484,7 +2848,7 @@ int lua_Form_getZIndex(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 int result = instance->getZIndex();
@@ -2521,18 +2885,12 @@ int lua_Form_insertControl(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Control");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Control' for parameter 2.");
-                    lua_error(state);
-                }
-                Control* param1 = (Control*)((ScriptController::LuaObject*)userdata2)->instance;
+                Control* param1 = ScriptController::getInstance()->getObjectPointer<Control>(2, "Control", false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -2559,6 +2917,43 @@ int lua_Form_insertControl(lua_State* state)
     return 0;
 }
 
+int lua_Form_isContainer(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Form* instance = getInstance(state);
+                bool result = instance->isContainer();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_isEnabled(lua_State* state)
 {
     // Get the number of parameters.
@@ -2569,7 +2964,7 @@ int lua_Form_isEnabled(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 bool result = instance->isEnabled();
@@ -2606,7 +3001,7 @@ int lua_Form_isScrollBarsAutoHide(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 bool result = instance->isScrollBarsAutoHide();
@@ -2643,7 +3038,7 @@ int lua_Form_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Form* instance = getInstance(state);
                 instance->release();
@@ -2677,7 +3072,7 @@ int lua_Form_removeControl(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -2688,28 +3083,22 @@ int lua_Form_removeControl(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Form* instance = getInstance(state);
                 instance->removeControl(param1);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Control");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Control' for parameter 2.");
-                    lua_error(state);
-                }
-                Control* param1 = (Control*)((ScriptController::LuaObject*)userdata2)->instance;
+                Control* param1 = ScriptController::getInstance()->getObjectPointer<Control>(2, "Control", false);
 
                 Form* instance = getInstance(state);
                 instance->removeControl(param1);
@@ -2743,8 +3132,8 @@ int lua_Form_setAlignment(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::Alignment param1 = (Control::Alignment)lua_enumFromString_ControlAlignment(luaL_checkstring(state, 2));
@@ -2781,21 +3170,15 @@ int lua_Form_setAnimationPropertyValue(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "AnimationValue");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationValue' for parameter 3.");
-                    lua_error(state);
-                }
-                AnimationValue* param2 = (AnimationValue*)((ScriptController::LuaObject*)userdata3)->instance;
+                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Form* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
@@ -2811,22 +3194,16 @@ int lua_Form_setAnimationPropertyValue(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "AnimationValue");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationValue' for parameter 3.");
-                    lua_error(state);
-                }
-                AnimationValue* param2 = (AnimationValue*)((ScriptController::LuaObject*)userdata3)->instance;
+                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -2863,7 +3240,7 @@ int lua_Form_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2901,7 +3278,7 @@ int lua_Form_setAutoWidth(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2939,7 +3316,7 @@ int lua_Form_setBorder(lua_State* state)
     {
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -2971,7 +3348,7 @@ int lua_Form_setBorder(lua_State* state)
         }
         case 6:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -3025,17 +3402,11 @@ int lua_Form_setBounds(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Form* instance = getInstance(state);
                 instance->setBounds(*param1);
@@ -3069,7 +3440,7 @@ int lua_Form_setConsumeInputEvents(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -3107,18 +3478,12 @@ int lua_Form_setCursorColor(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3155,18 +3520,12 @@ int lua_Form_setCursorRegion(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3193,6 +3552,44 @@ int lua_Form_setCursorRegion(lua_State* state)
     return 0;
 }
 
+int lua_Form_setFocusIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setFocusIndex(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_setFont(lua_State* state)
 {
     // Get the number of parameters.
@@ -3203,17 +3600,11 @@ int lua_Form_setFont(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Font");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Font' for parameter 2.");
-                    lua_error(state);
-                }
-                Font* param1 = (Font*)((ScriptController::LuaObject*)userdata2)->instance;
+                Font* param1 = ScriptController::getInstance()->getObjectPointer<Font>(2, "Font", false);
 
                 Form* instance = getInstance(state);
                 instance->setFont(param1);
@@ -3229,18 +3620,12 @@ int lua_Form_setFont(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Font");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Font' for parameter 2.");
-                    lua_error(state);
-                }
-                Font* param1 = (Font*)((ScriptController::LuaObject*)userdata2)->instance;
+                Font* param1 = ScriptController::getInstance()->getObjectPointer<Font>(2, "Font", false);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3277,7 +3662,7 @@ int lua_Form_setFontSize(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3297,7 +3682,7 @@ int lua_Form_setFontSize(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3339,21 +3724,15 @@ int lua_Form_setImageColor(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector4");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector4* param2 = (Vector4*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", true);
 
                 Form* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
@@ -3369,22 +3748,16 @@ int lua_Form_setImageColor(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector4");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector4* param2 = (Vector4*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", true);
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
@@ -3421,21 +3794,15 @@ int lua_Form_setImageRegion(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Rectangle");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 3.");
-                    lua_error(state);
-                }
-                Rectangle* param2 = (Rectangle*)((ScriptController::LuaObject*)userdata3)->instance;
+                Rectangle* param2 = ScriptController::getInstance()->getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 Form* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
@@ -3451,22 +3818,16 @@ int lua_Form_setImageRegion(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Rectangle");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 3.");
-                    lua_error(state);
-                }
-                Rectangle* param2 = (Rectangle*)((ScriptController::LuaObject*)userdata3)->instance;
+                Rectangle* param2 = ScriptController::getInstance()->getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
@@ -3503,7 +3864,7 @@ int lua_Form_setMargin(lua_State* state)
     {
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -3553,17 +3914,11 @@ int lua_Form_setNode(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Node");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 2.");
-                    lua_error(state);
-                }
-                Node* param1 = (Node*)((ScriptController::LuaObject*)userdata2)->instance;
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
 
                 Form* instance = getInstance(state);
                 instance->setNode(param1);
@@ -3597,7 +3952,7 @@ int lua_Form_setOpacity(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3617,7 +3972,7 @@ int lua_Form_setOpacity(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3659,7 +4014,7 @@ int lua_Form_setPadding(lua_State* state)
     {
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -3709,7 +4064,7 @@ int lua_Form_setPosition(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3741,103 +4096,6 @@ int lua_Form_setPosition(lua_State* state)
     return 0;
 }
 
-int lua_Form_setQuad(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 5:
-        {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA &&
-                lua_type(state, 5) == LUA_TUSERDATA)
-            {
-                // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
-
-                // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector3");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata3)->instance;
-
-                // Get parameter 3 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Vector3");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 4.");
-                    lua_error(state);
-                }
-                Vector3* param3 = (Vector3*)((ScriptController::LuaObject*)userdata4)->instance;
-
-                // Get parameter 4 off the stack.
-                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "Vector3");
-                if (!userdata5)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 5.");
-                    lua_error(state);
-                }
-                Vector3* param4 = (Vector3*)((ScriptController::LuaObject*)userdata5)->instance;
-
-                Form* instance = getInstance(state);
-                instance->setQuad(*param1, *param2, *param3, *param4);
-                
-                return 0;
-            }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 4);
-
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 5);
-
-                Form* instance = getInstance(state);
-                instance->setQuad(param1, param2, param3, param4);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 5).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Form_setScroll(lua_State* state)
 {
     // Get the number of parameters.
@@ -3848,8 +4106,8 @@ int lua_Form_setScroll(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Container::Scroll param1 = (Container::Scroll)lua_enumFromString_ContainerScroll(luaL_checkstring(state, 2));
@@ -3886,7 +4144,7 @@ int lua_Form_setScrollBarsAutoHide(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -3924,7 +4182,7 @@ int lua_Form_setSize(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3966,17 +4224,11 @@ int lua_Form_setSkinColor(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 Form* instance = getInstance(state);
                 instance->setSkinColor(*param1);
@@ -3992,18 +4244,12 @@ int lua_Form_setSkinColor(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4040,17 +4286,11 @@ int lua_Form_setSkinRegion(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Form* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
@@ -4066,18 +4306,12 @@ int lua_Form_setSkinRegion(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4114,8 +4348,8 @@ int lua_Form_setState(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -4152,17 +4386,11 @@ int lua_Form_setStyle(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "ThemeStyle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Theme::Style' for parameter 2.");
-                    lua_error(state);
-                }
-                Theme::Style* param1 = (Theme::Style*)((ScriptController::LuaObject*)userdata2)->instance;
+                Theme::Style* param1 = ScriptController::getInstance()->getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
 
                 Form* instance = getInstance(state);
                 instance->setStyle(param1);
@@ -4196,8 +4424,8 @@ int lua_Form_setTextAlignment(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
@@ -4216,8 +4444,8 @@ int lua_Form_setTextAlignment(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -4258,17 +4486,11 @@ int lua_Form_setTextColor(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 Form* instance = getInstance(state);
                 instance->setTextColor(*param1);
@@ -4284,18 +4506,12 @@ int lua_Form_setTextColor(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4332,7 +4548,7 @@ int lua_Form_setTextRightToLeft(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -4352,7 +4568,7 @@ int lua_Form_setTextRightToLeft(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -4394,7 +4610,7 @@ int lua_Form_setZIndex(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -4568,16 +4784,96 @@ int lua_Form_static_create(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)Form::create(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Form");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)Form::create(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
+
+                // Get parameter 2 off the stack.
+                Theme::Style* param2 = ScriptController::getInstance()->getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+
+                void* returnPtr = (void*)Form::create(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
+
+                // Get parameter 2 off the stack.
+                Theme::Style* param2 = ScriptController::getInstance()->getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+
+                // Get parameter 3 off the stack.
+                Layout::Type param3 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 3));
+
+                void* returnPtr = (void*)Form::create(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -4590,7 +4886,7 @@ int lua_Form_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1, 2 or 3).");
             lua_error(state);
             break;
         }
@@ -4608,16 +4904,24 @@ int lua_Form_static_getForm(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)Form::getForm(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Form");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)Form::getForm(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Form");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -4646,12 +4950,16 @@ int lua_Form_update(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 1:
+        case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER)
             {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
                 Form* instance = getInstance(state);
-                instance->update();
+                instance->update(param1);
                 
                 return 0;
             }
@@ -4664,7 +4972,7 @@ int lua_Form_update(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

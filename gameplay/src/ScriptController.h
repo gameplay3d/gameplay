@@ -45,6 +45,7 @@ public:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
+     *      - '<object-type>' - a pointer to an object of the given type (where the type is enclosed by angle brackets).
      * @return The return value of the executed Lua function.
      * @script{ignore}
      */
@@ -94,6 +95,7 @@ public:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
+     *      - '<object-type>' - a pointer to an object of the given type (where the type is enclosed by angle brackets).
      * @return The return value of the executed Lua function.
      * @script{ignore}
      */
@@ -198,11 +200,22 @@ public:
      * 
      * @param type The type of object pointer to retrieve.
      * @param index The stack index.
+     * @param nonNull Whether the pointer must be non-null (e.g. if the parameter we 
+     *      are retreiving is actually a reference or by-value parameter).
      * @return The object pointer or <code>NULL</code> if the data at the stack index
      *      is not an object or if the object is not derived from the given type.
      * @script{ignore}
      */
-    void* getObjectPointer(int index, const char* type);
+    template<typename T> T* getObjectPointer(int index, const char* type, bool nonNull);
+
+    /**
+     * Gets a string for the given stack index.
+     * 
+     * @param index The stack index.
+     * @return The string or <code>NULL</code>.
+     * @script{ignore}
+     */
+    const char* getString(int index, bool isStdString);
 
     /**
      * Gets the global boolean variable with the given name.
@@ -320,7 +333,7 @@ public:
      * @return The global pointer variable.
      * @script{ignore}
      */
-    template<typename T>T* getPointer(const char* type, const char* name);
+    template<typename T>T* getObjectPointer(const char* type, const char* name);
 
     /**
      * Sets the global boolean variable with the given name.
@@ -590,6 +603,7 @@ private:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
+     *      - '<object-type>' - a pointer to an object of the given type (where the type is enclosed by angle brackets).
      * @param list The variable argument list.
      */
     void executeFunctionHelper(int resultCount, const char* func, const char* args, va_list& list);
@@ -601,6 +615,15 @@ private:
      * @param function The name of the function within the Lua script to call.
      */
     void registerCallback(ScriptCallback callback, std::string function);
+
+    /**
+     * Checks that the parameter at the given stack position is a boolean and returns it.
+     * 
+     * @param state The Lua state.
+     * @param n The stack index.
+     * @return The boolean (if successful; otherwise it logs an error).
+     */
+    static bool luaCheckBool(lua_State* state, int n);
 
     lua_State* _lua;
     unsigned int _returnCount;

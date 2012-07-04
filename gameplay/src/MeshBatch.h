@@ -94,7 +94,7 @@ public:
      * Begins batching.
      *
      * This method should be called before calling add() to add primitives to the batch.
-     * After all primitives have been added to the batch, call the end() method to
+     * After all primitives have been added to the batch, call the finish() method to
      * complete the batch.
      *
      * Calling this method will clear any primitives currently in the batch and set the
@@ -105,7 +105,7 @@ public:
     /**
      * Indicates that batching is complete and prepares the batch for drawing.
      */
-    void end();
+    void finish();
 
     /**
      * Draws the primitives currently in batch.

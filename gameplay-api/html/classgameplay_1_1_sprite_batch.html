@@ -99,7 +99,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a42bb08796911363a8cbd743c4936fc90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a42bb08796911363a8cbd743c4936fc90">draw</a> (float x, float y, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color)</td></tr>
 <tr class="memitem:ad20a0e98fec87d117d55858a1cd46b13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#ad20a0e98fec87d117d55858a1cd46b13">draw</a> (float x, float y, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr class="memitem:a387de73d85ec26aa866fc50d914dac16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a387de73d85ec26aa866fc50d914dac16">draw</a> (float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, bool positionIsCenter=false)</td></tr>
-<tr class="memitem:aae1b18511d335ed10c027627a5cefe04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04">end</a> ()</td></tr>
+<tr class="memitem:a2951d5c5dc8b9cbed5728f6d2f42eb56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a2951d5c5dc8b9cbed5728f6d2f42eb56">finish</a> ()</td></tr>
 <tr class="memitem:a5b87358a17b8e7cbdfadee1add078c99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">RenderState::StateBlock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a5b87358a17b8e7cbdfadee1add078c99">getStateBlock</a> () const </td></tr>
 <tr class="memitem:ac0e593a836e20f43301f937885d5e379"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#ac0e593a836e20f43301f937885d5e379">getMaterial</a> () const </td></tr>
 <tr class="memitem:a03f381137640f9ad77e73b0c584f0749"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a03f381137640f9ad77e73b0c584f0749">setProjectionMatrix</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
@@ -153,7 +153,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Begins drawing sprites.</p>
-<p>This method must be called before drawing any sprites and it must eventually be followed by a call to <a class="el" href="classgameplay_1_1_sprite_batch.html#aae1b18511d335ed10c027627a5cefe04">end()</a>. </p>
+<p>This method must be called before drawing any sprites and it must eventually be followed by a call to <a class="el" href="classgameplay_1_1_sprite_batch.html#a2951d5c5dc8b9cbed5728f6d2f42eb56">finish()</a>. </p>
 
 </div>
 </div>
@@ -1010,19 +1010,19 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 
 </div>
 </div>
-<a class="anchor" id="aae1b18511d335ed10c027627a5cefe04"></a>
+<a class="anchor" id="a2951d5c5dc8b9cbed5728f6d2f42eb56"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::SpriteBatch::end </td>
+          <td class="memname">void gameplay::SpriteBatch::finish </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Ends sprite drawing.</p>
+<p>Finishes sprite drawing.</p>
 <p>This method flushes the batch and commits rendering of all sprites that were drawn since the last call to <a class="el" href="classgameplay_1_1_sprite_batch.html#acccf9b0d9d23593702cc83ecd1f2ebc9">begin()</a>. </p>
 
 </div>
@@ -1089,7 +1089,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 20 2012 14:49:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 12:24:44 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

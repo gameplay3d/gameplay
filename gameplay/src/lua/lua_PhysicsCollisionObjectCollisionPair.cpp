@@ -41,7 +41,7 @@ int lua_PhysicsCollisionObjectCollisionPair__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionPair");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionPair' expected.");
@@ -81,32 +81,28 @@ int lua_PhysicsCollisionObjectCollisionPair__init(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "PhysicsCollisionObject");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 1.");
-                    lua_error(state);
-                }
-                PhysicsCollisionObject* param1 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata1)->instance;
+                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(1, "PhysicsCollisionObject", false);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsCollisionObject");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 2.");
-                    lua_error(state);
-                }
-                PhysicsCollisionObject* param2 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata2)->instance;
+                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsCollisionObject::CollisionPair(param1, param2);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsCollisionObjectCollisionPair");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsCollisionObject::CollisionPair(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsCollisionObjectCollisionPair");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -140,24 +136,26 @@ int lua_PhysicsCollisionObjectCollisionPair_objectA(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsCollisionObject");
-        if (!userdata2)
-        {
-            lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 2.");
-            lua_error(state);
-        }
-        PhysicsCollisionObject* param2 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata2)->instance;
+        PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
         instance->objectA = param2;
         return 0;
     }
     else
     {
-        ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-        object->instance = (void*)instance->objectA;
-        object->owns = false;
-        luaL_getmetatable(state, "PhysicsCollisionObject");
-        lua_setmetatable(state, -2);
+        void* returnPtr = (void*)instance->objectA;
+        if (returnPtr)
+        {
+            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            object->instance = returnPtr;
+            object->owns = false;
+            luaL_getmetatable(state, "PhysicsCollisionObject");
+            lua_setmetatable(state, -2);
+        }
+        else
+        {
+            lua_pushnil(state);
+        }
 
         return 1;
     }
@@ -176,24 +174,26 @@ int lua_PhysicsCollisionObjectCollisionPair_objectB(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsCollisionObject");
-        if (!userdata2)
-        {
-            lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 2.");
-            lua_error(state);
-        }
-        PhysicsCollisionObject* param2 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata2)->instance;
+        PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
         instance->objectB = param2;
         return 0;
     }
     else
     {
-        ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-        object->instance = (void*)instance->objectB;
-        object->owns = false;
-        luaL_getmetatable(state, "PhysicsCollisionObject");
-        lua_setmetatable(state, -2);
+        void* returnPtr = (void*)instance->objectB;
+        if (returnPtr)
+        {
+            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            object->instance = returnPtr;
+            object->owns = false;
+            luaL_getmetatable(state, "PhysicsCollisionObject");
+            lua_setmetatable(state, -2);
+        }
+        else
+        {
+            lua_pushnil(state);
+        }
 
         return 1;
     }

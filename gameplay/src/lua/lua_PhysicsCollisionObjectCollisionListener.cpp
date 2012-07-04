@@ -40,7 +40,7 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionListener' expected.");
@@ -80,21 +80,15 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "PhysicsCollisionObjectCollisionPair");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject::CollisionPair' for parameter 3.");
-                    lua_error(state);
-                }
-                PhysicsCollisionObject::CollisionPair* param2 = (PhysicsCollisionObject::CollisionPair*)((ScriptController::LuaObject*)userdata3)->instance;
+                PhysicsCollisionObject::CollisionPair* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2);
@@ -110,31 +104,19 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "PhysicsCollisionObjectCollisionPair");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject::CollisionPair' for parameter 3.");
-                    lua_error(state);
-                }
-                PhysicsCollisionObject::CollisionPair* param2 = (PhysicsCollisionObject::CollisionPair*)((ScriptController::LuaObject*)userdata3)->instance;
+                PhysicsCollisionObject::CollisionPair* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Vector3");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 4.");
-                    lua_error(state);
-                }
-                Vector3* param3 = (Vector3*)((ScriptController::LuaObject*)userdata4)->instance;
+                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2, *param3);
@@ -150,41 +132,23 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA &&
-                lua_type(state, 5) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "PhysicsCollisionObjectCollisionPair");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject::CollisionPair' for parameter 3.");
-                    lua_error(state);
-                }
-                PhysicsCollisionObject::CollisionPair* param2 = (PhysicsCollisionObject::CollisionPair*)((ScriptController::LuaObject*)userdata3)->instance;
+                PhysicsCollisionObject::CollisionPair* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Vector3");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 4.");
-                    lua_error(state);
-                }
-                Vector3* param3 = (Vector3*)((ScriptController::LuaObject*)userdata4)->instance;
+                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "Vector3");
-                if (!userdata5)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 5.");
-                    lua_error(state);
-                }
-                Vector3* param4 = (Vector3*)((ScriptController::LuaObject*)userdata5)->instance;
+                Vector3* param4 = ScriptController::getInstance()->getObjectPointer<Vector3>(5, "Vector3", true);
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2, *param3, *param4);

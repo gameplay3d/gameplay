@@ -71,6 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
@@ -102,7 +103,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6ea946f99bd2a1a5fef5b412376b2ff5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#a6ea946f99bd2a1a5fef5b412376b2ff5">setChecked</a> (bool checked)</td></tr>
 <tr class="memitem:a4dd59d4410110784da07a96dd4f32d86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#a4dd59d4410110784da07a96dd4f32d86">setImageSize</a> (float width, float height)</td></tr>
 <tr class="memitem:aad6b5a6830145ced013df02d57394467"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#aad6b5a6830145ced013df02d57394467">getImageSize</a> () const </td></tr>
+<tr class="memitem:ae8a9efbb552eb4c88c500c0e231b4167"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">getType</a> () const </td></tr>
 <tr class="memitem:ac317d5e1ce467855d0cc61b316337b30"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#ac317d5e1ce467855d0cc61b316337b30">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab677341620e314ccf2ae62d5ef431f7b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">create</a> (const char *id, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -126,7 +132,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a24ffdbd2fd875c056ad9cce4f4dcf0f6 inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a24ffdbd2fd875c056ad9cce4f4dcf0f6">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr class="memitem:a0556a8e97fdca1d40e5bebd895618e29 inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0556a8e97fdca1d40e5bebd895618e29">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
 <tr class="memitem:aae210d6d79efcc53ac52feb7ec5d5043 inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">draw</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, bool needsClear, bool cleared, float targetHeight)</td></tr>
-<tr class="memitem:a034218b6ff76dc32d1d3694c362a5dc5 inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a034218b6ff76dc32d1d3694c362a5dc5">isContainer</a> ()</td></tr>
 <tr class="memitem:a867d58fde43fb1d38614fc8d3b72e4ba inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a867d58fde43fb1d38614fc8d3b72e4ba">isDirty</a> ()</td></tr>
 <tr class="memitem:a1a0ef2fde6b78c668f30d96e49e4dced inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1a0ef2fde6b78c668f30d96e49e4dced">getImage</a> (const char *id, <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
 <tr class="memitem:a7e8946a67d3db56e3faaa849e65e5dc1 inherit pro_methods_classgameplay_1_1_control"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a7e8946a67d3db56e3faaa849e65e5dc1">notifyListeners</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a> eventType)</td></tr>
@@ -262,6 +267,51 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab677341620e314ccf2ae62d5ef431f7b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_check_box.html">CheckBox</a>* gameplay::CheckBox::create </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td>
+          <td class="paramname"><em>style</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Create a new check box control.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The control's ID. </td></tr>
+    <tr><td class="paramname">style</td><td>The control's style.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The new check box. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_button.html#a61ee6eca719e35574b69599f750f614d">gameplay::Button</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a5c979c1aed5bdfbee7d933177ebc1e78"></a>
 <div class="memitem">
 <div class="memproto">
@@ -365,6 +415,32 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Get the size at which the checkbox icon will be drawn.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The size of the checkbox icon. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae8a9efbb552eb4c88c500c0e231b4167"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* gameplay::CheckBox::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">Control::getType</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>.</p>
 
 </div>
 </div>
@@ -613,7 +689,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 20 2012 14:49:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 12:24:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

@@ -399,7 +399,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
     spriteBatch->begin();
     Control::drawBorder(spriteBatch, clip);
-    spriteBatch->end();
+    spriteBatch->finish();
 
     std::vector<Control*>::const_iterator it;
     Rectangle boundsUnion = Rectangle::empty();
@@ -485,7 +485,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
         }
 
-        spriteBatch->end();
+        spriteBatch->finish();
 
         if (_scrollingVelocity.isZero())
         {

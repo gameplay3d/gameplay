@@ -40,16 +40,6 @@ ScriptController* ScriptController::__instance = NULL;
     } \
     return NULL
 
-static bool luaCheckBool(lua_State* state, int n)
-{
-    if (!lua_isboolean(state, n))
-    {
-        const char* msg = lua_pushfstring(state, "%s expected, got %s", lua_typename(state, LUA_TBOOLEAN), luaL_typename(state, n));
-        luaL_argerror(state, n, msg);
-        return false;
-    }
-    return (lua_toboolean(state, n) != 0);
-}
 
 ScriptController* ScriptController::getInstance()
 {
@@ -106,39 +96,17 @@ double* ScriptController::getDoublePointer(int index)
     GENERATE_LUA_GET_POINTER(double, (double)luaL_checknumber);
 }
 
-void* ScriptController::getObjectPointer(int index, const char* type)
+const char* ScriptController::getString(int index, bool isStdString)
 {
-    void* p = lua_touserdata(_lua, index);
-    if (p != NULL)
+    if (lua_type(_lua, index) == LUA_TSTRING)
+        return luaL_checkstring(_lua, index);
+    else if (lua_type(_lua, index) == LUA_TNIL && !isStdString)
+        return NULL;
+    else
     {
-        if (lua_getmetatable(_lua, index))
-        {
-            // Check if it matches the type's metatable.
-            luaL_getmetatable(_lua, type);
-            if (lua_rawequal(_lua, -1, -2))
-            {
-                lua_pop(_lua, 2);
-                return p;
-            }
-            lua_pop(_lua, 1);
-
-            // Check if it matches any of the derived types' metatables.
-            const std::vector<std::string>& types = _hierarchy[type];
-            for (unsigned int i = 0, count = types.size(); i < count; i++)
-            {
-                luaL_getmetatable(_lua, types[i].c_str());
-                if (lua_rawequal(_lua, -1, -2))
-                {
-                    lua_pop(_lua, 2);
-                    return p;
-                }
-                lua_pop(_lua, 1);
-            }
-            
-            lua_pop(_lua, 1);
-        }
+        GP_ERROR("Invalid string parameter (index = %d).", index);
+        return NULL;
     }
-    return NULL;
 }
 
 void ScriptController::loadScript(const char* path)
@@ -539,7 +507,7 @@ void ScriptController::update(long elapsedTime)
 {
     if (_callbacks[UPDATE])
     {
-        executeFunction<void>(_callbacks[UPDATE]->c_str(), "l", elapsedTime);
+        executeFunction<void>(_callbacks[UPDATE]->c_str(), "f", elapsedTime);
     }
 }
 
@@ -547,7 +515,7 @@ void ScriptController::render(long elapsedTime)
 {
     if (_callbacks[RENDER])
     {
-        executeFunction<void>(_callbacks[RENDER]->c_str(), "l", elapsedTime);
+        executeFunction<void>(_callbacks[RENDER]->c_str(), "f", elapsedTime);
     }
 }
 
@@ -598,6 +566,30 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
             case 'p':
                 lua_pushlightuserdata(_lua, va_arg(list, void*));
                 break;
+            // Object references/pointers (Lua userdata).
+            case '<':
+            {
+                std::string type = sig;
+                type = type.substr(0, type.find(">"));
+
+                // Skip past the closing '>' (the semi-colon here is intentional-do not remove).
+                while (*sig++ != '>');
+
+                void* ptr = va_arg(list, void*);
+                if (ptr == NULL)
+                {
+                    lua_pushnil(_lua);
+                }
+                else
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(_lua, sizeof(ScriptController::LuaObject));
+                    object->instance = ptr;
+                    object->owns = false;
+                    luaL_getmetatable(_lua, type.c_str());
+                    lua_setmetatable(_lua, -2);
+                }
+                break;
+            }
             default:
                 GP_ERROR("Invalid argument type '%d'.", *(sig - 1));
             }
@@ -616,6 +608,17 @@ void ScriptController::registerCallback(ScriptCallback callback, std::string fun
 {
     SAFE_DELETE(_callbacks[callback]);
     _callbacks[callback] = new std::string(function);
+}
+
+bool ScriptController::luaCheckBool(lua_State* state, int n)
+{
+    if (!lua_isboolean(state, n))
+    {
+        const char* msg = lua_pushfstring(state, "%s expected, got %s", lua_typename(state, LUA_TBOOLEAN), luaL_typename(state, n));
+        luaL_argerror(state, n, msg);
+        return false;
+    }
+    return (lua_toboolean(state, n) != 0);
 }
 
 }

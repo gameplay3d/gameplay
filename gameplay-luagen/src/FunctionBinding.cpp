@@ -3,7 +3,7 @@
 
 
 // Helper functions.
-static inline string getLuaTypeString(const FunctionBinding::Param& p = 
+static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBinding::Param& p = 
     FunctionBinding::Param(FunctionBinding::Param::TYPE_OBJECT, FunctionBinding::Param::KIND_POINTER));
 static inline void indent(ostream& o, int indentLevel);
 static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel);
@@ -115,17 +115,16 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         // Pass the return value back to Lua.
         if (bindings[0].returnParam.type == FunctionBinding::Param::TYPE_OBJECT)
         {
-            o << "        " << LUA_OBJECT << "* object = (" << LUA_OBJECT << "*)lua_newuserdata(state, sizeof(" << LUA_OBJECT << "));\n";
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "        object->instance = (void*)instance->" << bindings[0].name << ";\n";
+                o << "        void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
-                o << "        object->instance = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
+                o << "        void* returnPtr = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
                 break;
             case FunctionBinding::Param::KIND_REFERENCE:
-                o << "        object->instance = (void*)&(instance->" << bindings[0].name << ");\n";
+                o << "        void* returnPtr = (void*)&(instance->" << bindings[0].name << ");\n";
                 break;
             default:
                 GP_ERROR("Invalid return value kind '%d'.", bindings[0].returnParam.kind);
@@ -188,23 +187,22 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         // Pass the return value back to Lua.
         if (bindings[0].returnParam.type == FunctionBinding::Param::TYPE_OBJECT)
         {
-            o << "        " << LUA_OBJECT << "* object = (" << LUA_OBJECT << "*)lua_newuserdata(state, sizeof(" << LUA_OBJECT << "));\n";
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "        object->instance = (void*)";
+                o << "        void* returnPtr = (void*)";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
-                o << "        object->instance = (void*)new " << bindings[0].returnParam << "(";
+                o << "        void* returnPtr = (void*)new " << bindings[0].returnParam << "(";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ");\n";
                 break;
             case FunctionBinding::Param::KIND_REFERENCE:
-                o << "        object->instance = (void*)&(";
+                o << "        void* returnPtr = (void*)&(";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ");\n";
@@ -239,17 +237,16 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         o << "    " << bindings[0].classname << "* instance = getInstance(state);\n";
         if (bindings[0].returnParam.type == FunctionBinding::Param::TYPE_OBJECT)
         {
-            o << "    " << LUA_OBJECT << "* object = (" << LUA_OBJECT << "*)lua_newuserdata(state, sizeof(" << LUA_OBJECT << "));\n";
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "    object->instance = (void*)instance->" << bindings[0].name << ";\n";
+                o << "    void* returnPtr = (void*)instance->" << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
-                o << "    object->instance = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
+                o << "    void* returnPtr = (void*)new " << bindings[0].returnParam << "(instance->" << bindings[0].name << ");\n";
                 break;
             case FunctionBinding::Param::KIND_REFERENCE:
-                o << "    object->instance = (void*)&(instance->" << bindings[0].name << ");\n";
+                o << "    void* returnPtr = (void*)&(instance->" << bindings[0].name << ");\n";
                 break;
             default:
                 GP_ERROR("Invalid return value kind '%d'.", bindings[0].returnParam.kind);
@@ -278,23 +275,22 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         // Pass the return value back to Lua.
         if (bindings[0].returnParam.type == FunctionBinding::Param::TYPE_OBJECT)
         {
-            o << "    " << LUA_OBJECT << "* object = (" << LUA_OBJECT << "*)lua_newuserdata(state, sizeof(" << LUA_OBJECT << "));\n";
             switch (bindings[0].returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "    object->instance = (void*)";
+                o << "    void* returnPtr = (void*)";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ";\n";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
-                o << "    object->instance = (void*)new " << bindings[0].returnParam << "(";
+                o << "    void* returnPtr = (void*)new " << bindings[0].returnParam << "(";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ");\n";
                 break;
             case FunctionBinding::Param::KIND_REFERENCE:
-                o << "    object->instance = (void*)&(";
+                o << "    void* returnPtr = (void*)&(";
                 if (bindings[0].classname.size() > 0)
                     o << bindings[0].classname << "::";
                 o << bindings[0].name << ");\n";
@@ -494,12 +490,21 @@ ostream& operator<<(ostream& o, const FunctionBinding::Param& param)
 // ---------------------------------------------
 // Helper functions
 
-static inline string getLuaTypeString(const FunctionBinding::Param& p)
+static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBinding::Param& p)
 {
     switch (p.type)
     {
     case FunctionBinding::Param::TYPE_BOOL:
-        return ((p.kind == FunctionBinding::Param::KIND_POINTER) ? "LUA_TTABLE" : "LUA_TBOOLEAN");
+        if (p.kind == FunctionBinding::Param::KIND_POINTER) 
+        {
+            o << "(lua_type(state, " << index << ") == LUA_TTABLE || ";
+            o << "lua_type(state, " << index << ") == LUA_TLIGHTUSERDATA)";
+        }
+        else
+        {
+            o << "lua_type(state, " << index << ") == LUA_TBOOLEAN";
+        }
+        break;
     case FunctionBinding::Param::TYPE_CHAR:
     case FunctionBinding::Param::TYPE_SHORT:
     case FunctionBinding::Param::TYPE_INT:
@@ -510,18 +515,31 @@ static inline string getLuaTypeString(const FunctionBinding::Param& p)
     case FunctionBinding::Param::TYPE_ULONG:
     case FunctionBinding::Param::TYPE_FLOAT:
     case FunctionBinding::Param::TYPE_DOUBLE:
-        return ((p.kind == FunctionBinding::Param::KIND_POINTER) ? "LUA_TTABLE" : "LUA_TNUMBER");
+        if (p.kind == FunctionBinding::Param::KIND_POINTER) 
+        {
+            o << "(lua_type(state, " << index << ") == LUA_TTABLE || ";
+            o << "lua_type(state, " << index << ") == LUA_TLIGHTUSERDATA)";
+        }
+        else
+        {
+            o << "lua_type(state, " << index << ") == LUA_TNUMBER";
+        }
+        break;
     case FunctionBinding::Param::TYPE_STRING:
     case FunctionBinding::Param::TYPE_ENUM:
-        return "LUA_TSTRING";
+        o << "(lua_type(state, " << index << ") == LUA_TSTRING || ";
+        o << "lua_type(state, " << index << ") == LUA_TNIL)";
+        break;
     case FunctionBinding::Param::TYPE_OBJECT:
-        return "LUA_TUSERDATA";
+        o << "(lua_type(state, " << index << ") == LUA_TUSERDATA || ";
+        o << "lua_type(state, " << index << ") == LUA_TNIL)";
+        break;
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
     case FunctionBinding::Param::TYPE_VOID:
     case FunctionBinding::Param::TYPE_VARARGS:
     default:
-        return "LUA_TNONE";
+        o << "lua_type(state, " << index << ") == LUA_TNONE";
     }
 }
 
@@ -592,18 +610,16 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
         if (b.returnParam.type == FunctionBinding::Param::TYPE_CONSTRUCTOR || b.returnParam.type == FunctionBinding::Param::TYPE_OBJECT)
         {
             indent(o, indentLevel);
-            o << LUA_OBJECT << "* object = (" << LUA_OBJECT << "*)lua_newuserdata(state, sizeof(" << LUA_OBJECT << "));\n";
-            indent(o, indentLevel);
             switch (b.returnParam.kind)
             {
             case FunctionBinding::Param::KIND_POINTER:
-                o << "object->instance = (void*)";
+                o << "void* returnPtr = (void*)";
                 break;
             case FunctionBinding::Param::KIND_VALUE:
-                o << "object->instance = (void*)new " << b.returnParam << "(";
+                o << "void* returnPtr = (void*)new " << b.returnParam << "(";
                 break;
             case FunctionBinding::Param::KIND_REFERENCE:
-                o << "object->instance = (void*)&(";
+                o << "void* returnPtr = (void*)&(";
                 break;
             default:
                 GP_ERROR("Invalid return value kind '%d'.", b.returnParam.kind);
@@ -756,7 +772,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
             o << "(double)luaL_checknumber(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_STRING:
-        o << "luaL_checkstring(state, " << paramIndex << ");\n";
+        o << "ScriptController::getInstance()->getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
         o << "(" << p << ")lua_enumFromString_" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "(luaL_checkstring(state, " << paramIndex << "));\n";
@@ -767,27 +783,14 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
         indent(o, indentLevel);
-        o << "void* userdata" << paramIndex << " = ScriptController::getInstance()->getObjectPointer(" << paramIndex;
-        o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\");\n";
-        indent(o, indentLevel);
-        o << "if (!userdata" << paramIndex << ")\n";
-        indent(o, indentLevel);
-        o << "{\n";
-        indent(o, indentLevel + 1);
-        o << "lua_pushstring(state, \"Failed to retrieve a valid object pointer of type \'";
-        o << Generator::getInstance()->getIdentifier(p.info) << "\' for parameter " << paramIndex << ".\");\n";
-        indent(o, indentLevel + 1);
-        o << "lua_error(state);\n";
-        indent(o, indentLevel);
-        o << "}\n";
-        indent(o, indentLevel);
         o << p;
         if (p.kind != FunctionBinding::Param::KIND_POINTER)
             o << "*";
-        o << " param" << i + 1 << " = (" << p;
-        if (p.kind != FunctionBinding::Param::KIND_POINTER)
-            o << "*";
-        o << ")((" << LUA_OBJECT  << "*)userdata" << paramIndex << ")->instance;\n";
+        o << " param" << i + 1 << " = ";
+        o << "ScriptController::getInstance()->getObjectPointer<";
+        o << Generator::getInstance()->getIdentifier(p.info) << ">(" << paramIndex;
+        o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
+        o << ((p.kind != FunctionBinding::Param::KIND_POINTER) ? "true" : "false") << ");\n";
         break;
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
@@ -820,17 +823,10 @@ static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, un
         o << "if (";
         for (unsigned int i = 0, count = paramCount; i < count; i++)
         {
-            string typeStr = "";
             if (isNormalMember && i == 0)
-                typeStr = getLuaTypeString();
+                outputLuaTypeCheck(o, i + 1);
             else
-                typeStr = getLuaTypeString(b.paramTypes[(isNormalMember ? i - 1 : i)]);
-            
-            // If the type is a basic-type pointer, then allow tables or light-userdata from Lua.
-            if (typeStr == "LUA_TTABLE")
-                o << "(lua_type(state, " << i + 1 << ") == LUA_TTABLE || lua_type(state, " << i + 1 << ") == LUA_TLIGHTUSERDATA)";
-            else
-                o << "lua_type(state, " << i + 1 << ") == " << typeStr;
+                outputLuaTypeCheck(o, i + 1, b.paramTypes[(isNormalMember ? i - 1 : i)]);
 
             if (i == count - 1)
                 o << ")\n";
@@ -908,16 +904,34 @@ static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int i
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
+        o << "if (returnPtr)\n";
+        indent(o, indentLevel);
+        o << "{\n";
+        indent(o, indentLevel + 1);
+        o << LUA_OBJECT << "* object = (" << LUA_OBJECT << "*)lua_newuserdata(state, sizeof(" << LUA_OBJECT << "));\n";
+        indent(o, indentLevel + 1);
+        o << "object->instance = returnPtr;\n";
+        indent(o, indentLevel + 1);
         o << "object->owns = ";
         if (b.own || (b.returnParam.type == FunctionBinding::Param::TYPE_OBJECT && b.returnParam.kind == FunctionBinding::Param::KIND_VALUE))
             o << "true";
         else
             o << "false";
         o << ";\n";
-        indent(o, indentLevel);
+        indent(o, indentLevel + 1);
         o << "luaL_getmetatable(state, \"" << Generator::getInstance()->getUniqueNameFromRef(b.returnParam.info) << "\");\n";
-        indent(o, indentLevel);
+        indent(o, indentLevel + 1);
         o << "lua_setmetatable(state, -2);\n";
+        indent(o, indentLevel);
+        o << "}\n";
+        indent(o, indentLevel);
+        o << "else\n";
+        indent(o, indentLevel);
+        o << "{\n";
+        indent(o, indentLevel + 1);
+        o << "lua_pushnil(state);\n";
+        indent(o, indentLevel);
+        o << "}\n";
         break;
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
     case FunctionBinding::Param::TYPE_VOID:

@@ -131,10 +131,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a13a086704042c967d04f97838ca076e8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a13a086704042c967d04f97838ca076e8">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr class="memitem:a5a6a1e2e2774f849a75b21a79a22deae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5a6a1e2e2774f849a75b21a79a22deae">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:a4ef49d4e96928f71d0db8d4d47f56ba7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4ef49d4e96928f71d0db8d4d47f56ba7">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
+<tr class="memitem:a15ebb285ef4dfafbe1cc0875ca2593d2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a15ebb285ef4dfafbe1cc0875ca2593d2">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
 <tr class="memitem:ade96e57a1dbd20ab2dfb4203b4c0d6f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr class="memitem:a04720fabcd25eba03eaee2f81cfcdc16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
 <tr class="memitem:a11c781fe9845aa0e787f72844059e028"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr class="memitem:a3b8adb5a096f735bfcfec801f02ea0da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">schedule</a> (float timeOffset, <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> *timeListener, void *cookie=0)</td></tr>
+<tr class="memitem:a7f1b9a0142092d4f73bb159b93a37d7a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
+<tr class="memitem:a69b1dfb61bc67ce0968d7dbcbe6e8be7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a69b1dfb61bc67ce0968d7dbcbe6e8be7">getGamepad</a> (unsigned int index=0) const </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -370,6 +373,48 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a15ebb285ef4dfafbe1cc0875ca2593d2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void gameplay::Game::gamepadEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
+          <td class="paramname"><em>gamepad</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
+    <tr><td class="paramname">gamepad</td><td>the gamepad the event occurred on </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a6f85872cf099c846e3f42340d2c2713c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -544,6 +589,62 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Gets the current frame rate.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The current frame rate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a69b1dfb61bc67ce0968d7dbcbe6e8be7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a>* gameplay::Game::getGamepad </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the gamepad at the specified index.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index to get the gamepad for (0 &lt;= index &lt;= <a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">Game::getGamepadCount</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a7f1b9a0142092d4f73bb159b93a37d7a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int gameplay::Game::getGamepadCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the number of gamepad's connected to the game.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The number of gamepad's connected to the game. </dd></dl>
 
 </div>
 </div>
@@ -1289,7 +1390,7 @@ template&lt;class T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 20 2012 14:49:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 12:24:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

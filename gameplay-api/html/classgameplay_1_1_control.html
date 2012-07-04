@@ -76,7 +76,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Control Class Reference</div>  </div>
 </div><!--header-->
@@ -140,7 +141,7 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abe30eec6efbf600afb03b11a93fbc840"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#abe30eec6efbf600afb03b11a93fbc840">getID</a> () const </td></tr>
+<tr class="memitem:a8e31f6fd1f18ffd5d5766f3993410c0f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e31f6fd1f18ffd5d5766f3993410c0f">getId</a> () const </td></tr>
 <tr class="memitem:a3c1f7dee87df548854e36ddf909e39ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3c1f7dee87df548854e36ddf909e39ee">setPosition</a> (float x, float y)</td></tr>
 <tr class="memitem:ae09909f17b37e986195d8091482eed77"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae09909f17b37e986195d8091482eed77">setSize</a> (float width, float height)</td></tr>
 <tr class="memitem:af0913ff556aba2f03a258fac46e814d8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af0913ff556aba2f03a258fac46e814d8">setBounds</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;bounds)</td></tr>
@@ -200,6 +201,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd45546a7b8f58c9a50478aa3ffee02a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#abd45546a7b8f58c9a50478aa3ffee02a">getStyle</a> () const </td></tr>
 <tr class="memitem:a48e07df9a4877d666c5cae5d00115530"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a48e07df9a4877d666c5cae5d00115530">getZIndex</a> () const </td></tr>
 <tr class="memitem:ac7b612312a3af38cad20e0a20a40b371"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac7b612312a3af38cad20e0a20a40b371">setZIndex</a> (int zIndex)</td></tr>
+<tr class="memitem:aba60dc716e687b4e2edf3aef64f8162e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aba60dc716e687b4e2edf3aef64f8162e">getFocusIndex</a> () const </td></tr>
+<tr class="memitem:ab32797889a239b0b9d4ffe70da80a4d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab32797889a239b0b9d4ffe70da80a4d1">setFocusIndex</a> (int focusIndex)</td></tr>
+<tr class="memitem:a86b7ce720dacec4d5e31c61a102630b7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a86b7ce720dacec4d5e31c61a102630b7">isContainer</a> () const </td></tr>
+<tr class="memitem:adc74e6fa5d73449369faf239b1fe8bc3"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">getType</a> () const </td></tr>
 <tr class="memitem:ac15ca1b3063f4ad9b0fc1b54a6e2f535"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac15ca1b3063f4ad9b0fc1b54a6e2f535">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
 <tr class="memitem:a6d18739bdbd45718c043afb33245093b"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a6d18739bdbd45718c043afb33245093b">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
 <tr class="memitem:a3d0ea04fcf78d25124017c40c2846979"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3d0ea04fcf78d25124017c40c2846979">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
@@ -242,7 +247,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0c38fc0e79ee94779c0a366b5599dff7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0c38fc0e79ee94779c0a366b5599dff7">drawText</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr class="memitem:aae210d6d79efcc53ac52feb7ec5d5043"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">draw</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, bool needsClear, bool cleared, float targetHeight)</td></tr>
 <tr class="memitem:ab2aab797de258880dab8ab61edd2259a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab2aab797de258880dab8ab61edd2259a">initialize</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
-<tr class="memitem:a034218b6ff76dc32d1d3694c362a5dc5"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a034218b6ff76dc32d1d3694c362a5dc5">isContainer</a> ()</td></tr>
 <tr class="memitem:a867d58fde43fb1d38614fc8d3b72e4ba"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a867d58fde43fb1d38614fc8d3b72e4ba">isDirty</a> ()</td></tr>
 <tr class="memitem:a1a0ef2fde6b78c668f30d96e49e4dced"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1a0ef2fde6b78c668f30d96e49e4dced">getImage</a> (const char *id, <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
 <tr class="memitem:a7e8946a67d3db56e3faaa849e65e5dc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a7e8946a67d3db56e3faaa849e65e5dc1">notifyListeners</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a> eventType)</td></tr>
@@ -279,13 +283,19 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ae7b5d07de4a2e2d8cdb69ea94f6dd360"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Alignment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae7b5d07de4a2e2d8cdb69ea94f6dd360">_alignment</a></td></tr>
 <tr class="memitem:a793a5230d5df640c16b4bd8bf3e3c9b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a793a5230d5df640c16b4bd8bf3e3c9b7">_autoWidth</a></td></tr>
 <tr class="memitem:a3e881d2d3994afc23065a362c437e295"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3e881d2d3994afc23065a362c437e295">_autoHeight</a></td></tr>
-<tr class="memitem:a8adea2635b544f38ca34162f11ec903d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8adea2635b544f38ca34162f11ec903d">_style</a></td></tr>
 <tr class="memitem:a5159a7a6a2f42d60aaaee5e445f75ac2"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a>, <br class="typebreak"/>
 std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">Listener</a> * &gt; * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a5159a7a6a2f42d60aaaee5e445f75ac2">_listeners</a></td></tr>
+<tr class="memitem:a8adea2635b544f38ca34162f11ec903d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8adea2635b544f38ca34162f11ec903d">_style</a></td></tr>
 <tr class="memitem:a1cf80f236ba38ce3d035b5ba62f6454c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1cf80f236ba38ce3d035b5ba62f6454c">_opacity</a></td></tr>
 <tr class="memitem:a91b4d0f28ac8beab3c30c79e5fd9cf74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a91b4d0f28ac8beab3c30c79e5fd9cf74">_zIndex</a></td></tr>
+<tr class="memitem:a47d8c92a3d773672106b82ae8c66ef8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a47d8c92a3d773672106b82ae8c66ef8e">_contactIndex</a></td></tr>
+<tr class="memitem:a73150749073784d72da95375bb4ebd50"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a73150749073784d72da95375bb4ebd50">_focusIndex</a></td></tr>
 <tr class="inherit_header pro_attribs_classgameplay_1_1_animation_target"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classgameplay_1_1_animation_target')"><img src="closed.png" alt="-"/>&nbsp;Protected Attributes inherited from <a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td></tr>
 <tr class="memitem:a3427f0e388bbfed7b5ee9fdda24b60a8 inherit pro_attribs_classgameplay_1_1_animation_target"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_target.html#ac351f3b809938474d6688224a45aebcc">TargetType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_target.html#a3427f0e388bbfed7b5ee9fdda24b60a8">_targetType</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:a1c549701ef58bc3cf2df6f8c7c783ede"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1c549701ef58bc3cf2df6f8c7c783ede">INVALID_CONTACT_INDEX</a> = -1</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -916,6 +926,23 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aba60dc716e687b4e2edf3aef64f8162e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int gameplay::Control::getFocusIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get this control's focus index.</p>
+<dl class="section return"><dt>Returns:</dt><dd>This control's focus index. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a50c46ce7ac298f0cd2dd3a5a02b31cc3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -981,12 +1008,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abe30eec6efbf600afb03b11a93fbc840"></a>
+<a class="anchor" id="a8e31f6fd1f18ffd5d5766f3993410c0f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* gameplay::Control::getID </td>
+          <td class="memname">const char* gameplay::Control::getId </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1415,6 +1442,33 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="adc74e6fa5d73449369faf239b1fe8bc3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* gameplay::Control::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the type of the <a class="el" href="classgameplay_1_1_control.html">Control</a> and returns it as a string.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The string of the <a class="el" href="classgameplay_1_1_control.html">Control</a> type, all in lower-case. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a4049decfc54ec35255fe8e22e62a92dc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1514,13 +1568,20 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Initialize properties common to STATE_ALL Controls. </p>
+<p>Initialize properties common to all Controls from a <a class="el" href="classgameplay_1_1_properties.html">Properties</a> object.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">style</td><td>The style to apply to this control. </td></tr>
+    <tr><td class="paramname">properties</td><td>The properties to set on this control. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Reimplemented in <a class="el" href="classgameplay_1_1_joystick.html#a7cc06618945395cf4c74f18203514379">gameplay::Joystick</a>, and <a class="el" href="classgameplay_1_1_label.html#a5a3f16b1307aa392732e1167dc83ff6f">gameplay::Label</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a034218b6ff76dc32d1d3694c362a5dc5"></a>
+<a class="anchor" id="a86b7ce720dacec4d5e31c61a102630b7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1531,19 +1592,19 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">virtual bool gameplay::Control::isContainer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_container.html">Container</a> and classes that extend it should implement this and return true.</p>
+<p>Returns whether this <a class="el" href="classgameplay_1_1_control.html">Control</a> object is a <a class="el" href="classgameplay_1_1_container.html">Container</a> or not.</p>
 <dl class="section return"><dt>Returns:</dt><dd>true if this object is of class <a class="el" href="classgameplay_1_1_container.html">Container</a>, false otherwise. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a1c21338c00c1f888ac48ce5c175b13ac">gameplay::Container</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#aab3cb736de9572f4d6b6850b505fe35f">gameplay::Container</a>.</p>
 
 </div>
 </div>
@@ -1695,7 +1756,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns:</dt><dd>True if the mouse event is consumed or false if it is not consumed.</dd></dl>
 <dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a19874e847e653f22fd1f737182f3fcd2">gameplay::Container</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a19874e847e653f22fd1f737182f3fcd2">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_slider.html#a9bcc08d9d3812775096a92bc4fa3a7e0">gameplay::Slider</a>.</p>
 
 </div>
 </div>
@@ -2037,6 +2098,29 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">region</td><td>The cursor region. </td></tr>
     <tr><td class="paramname">states</td><td>The states to set this property on. One or more members of the <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">Control::State</a> enum, ORed together. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ab32797889a239b0b9d4ffe70da80a4d1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Control::setFocusIndex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>focusIndex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set this control's focus index.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">focusIndex</td><td>The new focus index. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2934,6 +3018,27 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a47d8c92a3d773672106b82ae8c66ef8e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int gameplay::Control::_contactIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The contact index assigned to this control. </p>
+
+</div>
+</div>
 <a class="anchor" id="a35ed3285594e18f0233a89ad69c8444c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2952,6 +3057,27 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>If the control is dirty and need updating. </p>
+
+</div>
+</div>
+<a class="anchor" id="a73150749073784d72da95375bb4ebd50"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int gameplay::Control::_focusIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The focus order of the control. </p>
 
 </div>
 </div>
@@ -3270,6 +3396,27 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1c549701ef58bc3cf2df6f8c7c783ede"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int gameplay::Control::INVALID_CONTACT_INDEX = -1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constant value representing an unset or invalid contact index. </p>
+
+</div>
+</div>
 <a class="anchor" id="a8768cfcc0e44dc168ea8d4445d8a0078"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3294,7 +3441,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 20 2012 14:49:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 4 2012 12:24:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

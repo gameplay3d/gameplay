@@ -90,7 +90,7 @@ public:
      * Begins drawing sprites.
      *
      * This method must be called before drawing any sprites and it must eventually be
-     * followed by a call to end().
+     * followed by a call to finish().
      */
     void begin();
 
@@ -236,12 +236,12 @@ public:
     void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter = false);
 
     /**
-     * Ends sprite drawing.
+     * Finishes sprite drawing.
      *
      * This method flushes the batch and commits rendering of all sprites that were
      * drawn since the last call to begin().
      */
-    void end();
+    void finish();
 
     /**
      * Returns the StateBlock for the SpriteBatch.

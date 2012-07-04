@@ -57,7 +57,7 @@ int lua_Rectangle__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Rectangle");
                 luaL_argcheck(state, userdata != NULL, 1, "'Rectangle' expected.");
@@ -97,33 +97,43 @@ int lua_Rectangle__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new Rectangle();
-            object->owns = true;
-            luaL_getmetatable(state, "Rectangle");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new Rectangle();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "Rectangle");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
         }
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Rectangle");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 1.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata1)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(1, "Rectangle", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Rectangle(*param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Rectangle(*param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -145,11 +155,19 @@ int lua_Rectangle__init(lua_State* state)
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Rectangle(param1, param2);
-                object->owns = true;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Rectangle(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -179,11 +197,19 @@ int lua_Rectangle__init(lua_State* state)
                 // Get parameter 4 off the stack.
                 float param4 = (float)luaL_checknumber(state, 4);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Rectangle(param1, param2, param3, param4);
-                object->owns = true;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Rectangle(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -214,7 +240,7 @@ int lua_Rectangle_bottom(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Rectangle* instance = getInstance(state);
                 float result = instance->bottom();
@@ -251,17 +277,11 @@ int lua_Rectangle_contains(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Rectangle* instance = getInstance(state);
                 bool result = instance->contains(*param1);
@@ -280,7 +300,7 @@ int lua_Rectangle_contains(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -307,7 +327,7 @@ int lua_Rectangle_contains(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -389,7 +409,7 @@ int lua_Rectangle_inflate(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -431,17 +451,11 @@ int lua_Rectangle_intersects(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Rectangle* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -460,7 +474,7 @@ int lua_Rectangle_intersects(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -513,7 +527,7 @@ int lua_Rectangle_isEmpty(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Rectangle* instance = getInstance(state);
                 bool result = instance->isEmpty();
@@ -550,7 +564,7 @@ int lua_Rectangle_left(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Rectangle* instance = getInstance(state);
                 float result = instance->left();
@@ -587,7 +601,7 @@ int lua_Rectangle_right(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Rectangle* instance = getInstance(state);
                 float result = instance->right();
@@ -624,17 +638,11 @@ int lua_Rectangle_set(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Rectangle* instance = getInstance(state);
                 instance->set(*param1);
@@ -650,7 +658,7 @@ int lua_Rectangle_set(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -700,7 +708,7 @@ int lua_Rectangle_setPosition(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -742,36 +750,18 @@ int lua_Rectangle_static_combine(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Rectangle");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 1.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata1)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(1, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param2 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param2 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Rectangle");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 3.");
-                    lua_error(state);
-                }
-                Rectangle* param3 = (Rectangle*)((ScriptController::LuaObject*)userdata3)->instance;
+                Rectangle* param3 = ScriptController::getInstance()->getObjectPointer<Rectangle>(3, "Rectangle", false);
 
                 Rectangle::combine(*param1, *param2, param3);
                 
@@ -804,11 +794,19 @@ int lua_Rectangle_static_empty(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Rectangle::empty());
-            object->owns = false;
-            luaL_getmetatable(state, "Rectangle");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Rectangle::empty());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Rectangle");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -833,7 +831,7 @@ int lua_Rectangle_top(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Rectangle* instance = getInstance(state);
                 float result = instance->top();

@@ -33,6 +33,7 @@
 #include "lua_FrameBuffer.h"
 #include "lua_Frustum.h"
 #include "lua_Game.h"
+#include "lua_Gamepad.h"
 #include "lua_Image.h"
 #include "lua_Joint.h"
 #include "lua_Joystick.h"

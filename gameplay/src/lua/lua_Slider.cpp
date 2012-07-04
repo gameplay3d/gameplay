@@ -35,10 +35,11 @@ void luaRegister_Slider()
         {"getCursorColor", lua_Slider_getCursorColor},
         {"getCursorRegion", lua_Slider_getCursorRegion},
         {"getCursorUVs", lua_Slider_getCursorUVs},
+        {"getFocusIndex", lua_Slider_getFocusIndex},
         {"getFont", lua_Slider_getFont},
         {"getFontSize", lua_Slider_getFontSize},
         {"getHeight", lua_Slider_getHeight},
-        {"getID", lua_Slider_getID},
+        {"getId", lua_Slider_getId},
         {"getImageColor", lua_Slider_getImageColor},
         {"getImageRegion", lua_Slider_getImageRegion},
         {"getImageUVs", lua_Slider_getImageUVs},
@@ -57,11 +58,13 @@ void luaRegister_Slider()
         {"getTextAlignment", lua_Slider_getTextAlignment},
         {"getTextColor", lua_Slider_getTextColor},
         {"getTextRightToLeft", lua_Slider_getTextRightToLeft},
+        {"getType", lua_Slider_getType},
         {"getValue", lua_Slider_getValue},
         {"getWidth", lua_Slider_getWidth},
         {"getX", lua_Slider_getX},
         {"getY", lua_Slider_getY},
         {"getZIndex", lua_Slider_getZIndex},
+        {"isContainer", lua_Slider_isContainer},
         {"isEnabled", lua_Slider_isEnabled},
         {"release", lua_Slider_release},
         {"setAlignment", lua_Slider_setAlignment},
@@ -73,6 +76,7 @@ void luaRegister_Slider()
         {"setConsumeInputEvents", lua_Slider_setConsumeInputEvents},
         {"setCursorColor", lua_Slider_setCursorColor},
         {"setCursorRegion", lua_Slider_setCursorRegion},
+        {"setFocusIndex", lua_Slider_setFocusIndex},
         {"setFont", lua_Slider_setFont},
         {"setFontSize", lua_Slider_setFontSize},
         {"setImageColor", lua_Slider_setImageColor},
@@ -106,6 +110,7 @@ void luaRegister_Slider()
         {"ANIMATE_SIZE", lua_Slider_static_ANIMATE_SIZE},
         {"ANIMATE_SIZE_HEIGHT", lua_Slider_static_ANIMATE_SIZE_HEIGHT},
         {"ANIMATE_SIZE_WIDTH", lua_Slider_static_ANIMATE_SIZE_WIDTH},
+        {"create", lua_Slider_static_create},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -130,7 +135,7 @@ int lua_Slider__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Slider");
                 luaL_argcheck(state, userdata != NULL, 1, "'Slider' expected.");
@@ -170,18 +175,12 @@ int lua_Slider_addListener(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "ControlListener");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Control::Listener' for parameter 2.");
-                    lua_error(state);
-                }
-                Control::Listener* param1 = (Control::Listener*)((ScriptController::LuaObject*)userdata2)->instance;
+                Control::Listener* param1 = ScriptController::getInstance()->getObjectPointer<Control::Listener>(2, "ControlListener", false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -218,7 +217,7 @@ int lua_Slider_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 instance->addRef();
@@ -252,47 +251,57 @@ int lua_Slider_createAnimation(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = luaL_checkstring(state, 3);
+                const char* param2 = ScriptController::getInstance()->getString(3, false);
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Properties");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Properties' for parameter 3.");
-                    lua_error(state);
-                }
-                Properties* param2 = (Properties*)((ScriptController::LuaObject*)userdata3)->instance;
+                Properties* param2 = ScriptController::getInstance()->getObjectPointer<Properties>(3, "Properties", false);
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -305,16 +314,16 @@ int lua_Slider_createAnimation(lua_State* state)
         }
         case 7:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 7) == LUA_TSTRING)
+                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -332,11 +341,19 @@ int lua_Slider_createAnimation(lua_State* state)
                 Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -349,18 +366,18 @@ int lua_Slider_createAnimation(lua_State* state)
         }
         case 9:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 9) == LUA_TSTRING)
+                (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -384,11 +401,19 @@ int lua_Slider_createAnimation(lua_State* state)
                 Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -419,16 +444,16 @@ int lua_Slider_createAnimationFromBy(lua_State* state)
     {
         case 7:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 6) == LUA_TSTRING &&
+                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -446,11 +471,19 @@ int lua_Slider_createAnimationFromBy(lua_State* state)
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimationFromBy(param1, param2, param3, param4, param5, param6);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimationFromBy(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -481,16 +514,16 @@ int lua_Slider_createAnimationFromTo(lua_State* state)
     {
         case 7:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 6) == LUA_TSTRING &&
+                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -508,11 +541,19 @@ int lua_Slider_createAnimationFromTo(lua_State* state)
                 unsigned long param6 = (unsigned long)luaL_checkunsigned(state, 7);
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createAnimationFromTo(param1, param2, param3, param4, param5, param6);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createAnimationFromTo(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -543,7 +584,7 @@ int lua_Slider_destroyAnimation(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 instance->destroyAnimation();
@@ -559,11 +600,11 @@ int lua_Slider_destroyAnimation(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Slider* instance = getInstance(state);
                 instance->destroyAnimation(param1);
@@ -597,7 +638,7 @@ int lua_Slider_disable(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 instance->disable();
@@ -631,7 +672,7 @@ int lua_Slider_enable(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 instance->enable();
@@ -665,7 +706,7 @@ int lua_Slider_getAlignment(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 Control::Alignment result = instance->getAlignment();
@@ -702,14 +743,22 @@ int lua_Slider_getAnimation(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getAnimation();
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getAnimation();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -722,18 +771,26 @@ int lua_Slider_getAnimation(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getAnimation(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Animation");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getAnimation(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Animation");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -764,7 +821,7 @@ int lua_Slider_getAnimationPropertyComponentCount(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -805,21 +862,15 @@ int lua_Slider_getAnimationPropertyValue(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "AnimationValue");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationValue' for parameter 3.");
-                    lua_error(state);
-                }
-                AnimationValue* param2 = (AnimationValue*)((ScriptController::LuaObject*)userdata3)->instance;
+                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Slider* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
@@ -853,7 +904,7 @@ int lua_Slider_getAutoHeight(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 bool result = instance->getAutoHeight();
@@ -890,7 +941,7 @@ int lua_Slider_getAutoWidth(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 bool result = instance->getAutoWidth();
@@ -927,14 +978,22 @@ int lua_Slider_getBorder(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getBorder());
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getBorder());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -947,18 +1006,26 @@ int lua_Slider_getBorder(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getBorder(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getBorder(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -989,14 +1056,22 @@ int lua_Slider_getBounds(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getBounds());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getBounds());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1027,14 +1102,22 @@ int lua_Slider_getClip(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getClip());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getClip());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1065,14 +1148,22 @@ int lua_Slider_getClipBounds(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getClipBounds());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getClipBounds());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1103,7 +1194,7 @@ int lua_Slider_getConsumeInputEvents(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 bool result = instance->getConsumeInputEvents();
@@ -1140,18 +1231,26 @@ int lua_Slider_getCursorColor(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getCursorColor(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getCursorColor(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1182,18 +1281,26 @@ int lua_Slider_getCursorRegion(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getCursorRegion(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getCursorRegion(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1224,18 +1331,26 @@ int lua_Slider_getCursorUVs(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getCursorUVs(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeUVs");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getCursorUVs(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeUVs");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1256,6 +1371,43 @@ int lua_Slider_getCursorUVs(lua_State* state)
     return 0;
 }
 
+int lua_Slider_getFocusIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Slider* instance = getInstance(state);
+                int result = instance->getFocusIndex();
+
+                // Push the return value onto the stack.
+                lua_pushinteger(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Slider_getFont(lua_State* state)
 {
     // Get the number of parameters.
@@ -1266,14 +1418,22 @@ int lua_Slider_getFont(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getFont();
-                object->owns = false;
-                luaL_getmetatable(state, "Font");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getFont();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Font");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1286,18 +1446,26 @@ int lua_Slider_getFont(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getFont(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "Font");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getFont(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Font");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1328,7 +1496,7 @@ int lua_Slider_getFontSize(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 unsigned int result = instance->getFontSize();
@@ -1347,8 +1515,8 @@ int lua_Slider_getFontSize(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -1388,7 +1556,7 @@ int lua_Slider_getHeight(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getHeight();
@@ -1415,7 +1583,7 @@ int lua_Slider_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_Slider_getID(lua_State* state)
+int lua_Slider_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1425,10 +1593,10 @@ int lua_Slider_getID(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                const char* result = instance->getID();
+                const char* result = instance->getId();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, result);
@@ -1462,22 +1630,30 @@ int lua_Slider_getImageColor(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getImageColor(param1, param2));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getImageColor(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1508,22 +1684,30 @@ int lua_Slider_getImageRegion(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getImageRegion(param1, param2));
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getImageRegion(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1554,22 +1738,30 @@ int lua_Slider_getImageUVs(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getImageUVs(param1, param2));
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeUVs");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getImageUVs(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeUVs");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1600,14 +1792,22 @@ int lua_Slider_getMargin(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getMargin());
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getMargin());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1638,7 +1838,7 @@ int lua_Slider_getMax(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getMax();
@@ -1675,7 +1875,7 @@ int lua_Slider_getMin(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getMin();
@@ -1712,7 +1912,7 @@ int lua_Slider_getOpacity(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getOpacity();
@@ -1731,8 +1931,8 @@ int lua_Slider_getOpacity(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -1772,14 +1972,22 @@ int lua_Slider_getPadding(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getPadding());
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeSideRegions");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getPadding());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeSideRegions");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1810,7 +2018,7 @@ int lua_Slider_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -1847,14 +2055,22 @@ int lua_Slider_getSkinColor(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinColor());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinColor());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1867,18 +2083,26 @@ int lua_Slider_getSkinColor(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinColor(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinColor(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1909,14 +2133,22 @@ int lua_Slider_getSkinRegion(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinRegion());
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinRegion());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1929,18 +2161,26 @@ int lua_Slider_getSkinRegion(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getSkinRegion(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Rectangle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getSkinRegion(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -1971,7 +2211,7 @@ int lua_Slider_getState(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 Control::State result = instance->getState();
@@ -2008,7 +2248,7 @@ int lua_Slider_getStep(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getStep();
@@ -2045,14 +2285,22 @@ int lua_Slider_getStyle(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getStyle();
-                object->owns = false;
-                luaL_getmetatable(state, "ThemeStyle");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getStyle();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "ThemeStyle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2083,7 +2331,7 @@ int lua_Slider_getText(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 const char* result = instance->getText();
@@ -2120,7 +2368,7 @@ int lua_Slider_getTextAlignment(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 Font::Justify result = instance->getTextAlignment();
@@ -2139,8 +2387,8 @@ int lua_Slider_getTextAlignment(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -2180,14 +2428,22 @@ int lua_Slider_getTextColor(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getTextColor());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getTextColor());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2200,18 +2456,26 @@ int lua_Slider_getTextColor(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
 
                 Slider* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getTextColor(param1));
-                object->owns = false;
-                luaL_getmetatable(state, "Vector4");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getTextColor(param1));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -2242,7 +2506,7 @@ int lua_Slider_getTextRightToLeft(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 bool result = instance->getTextRightToLeft();
@@ -2261,8 +2525,8 @@ int lua_Slider_getTextRightToLeft(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -2292,6 +2556,43 @@ int lua_Slider_getTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Slider_getType(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Slider* instance = getInstance(state);
+                const char* result = instance->getType();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Slider_getValue(lua_State* state)
 {
     // Get the number of parameters.
@@ -2302,7 +2603,7 @@ int lua_Slider_getValue(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getValue();
@@ -2339,7 +2640,7 @@ int lua_Slider_getWidth(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getWidth();
@@ -2376,7 +2677,7 @@ int lua_Slider_getX(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getX();
@@ -2413,7 +2714,7 @@ int lua_Slider_getY(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 float result = instance->getY();
@@ -2450,13 +2751,50 @@ int lua_Slider_getZIndex(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 int result = instance->getZIndex();
 
                 // Push the return value onto the stack.
                 lua_pushinteger(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_isContainer(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            {
+                Slider* instance = getInstance(state);
+                bool result = instance->isContainer();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
 
                 return 1;
             }
@@ -2487,7 +2825,7 @@ int lua_Slider_isEnabled(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 bool result = instance->isEnabled();
@@ -2524,7 +2862,7 @@ int lua_Slider_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Slider* instance = getInstance(state);
                 instance->release();
@@ -2558,8 +2896,8 @@ int lua_Slider_setAlignment(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::Alignment param1 = (Control::Alignment)lua_enumFromString_ControlAlignment(luaL_checkstring(state, 2));
@@ -2596,21 +2934,15 @@ int lua_Slider_setAnimationPropertyValue(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "AnimationValue");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationValue' for parameter 3.");
-                    lua_error(state);
-                }
-                AnimationValue* param2 = (AnimationValue*)((ScriptController::LuaObject*)userdata3)->instance;
+                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Slider* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
@@ -2626,22 +2958,16 @@ int lua_Slider_setAnimationPropertyValue(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "AnimationValue");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationValue' for parameter 3.");
-                    lua_error(state);
-                }
-                AnimationValue* param2 = (AnimationValue*)((ScriptController::LuaObject*)userdata3)->instance;
+                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -2678,7 +3004,7 @@ int lua_Slider_setAutoHeight(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2716,7 +3042,7 @@ int lua_Slider_setAutoWidth(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2754,7 +3080,7 @@ int lua_Slider_setBorder(lua_State* state)
     {
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -2786,7 +3112,7 @@ int lua_Slider_setBorder(lua_State* state)
         }
         case 6:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -2840,17 +3166,11 @@ int lua_Slider_setBounds(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Slider* instance = getInstance(state);
                 instance->setBounds(*param1);
@@ -2884,7 +3204,7 @@ int lua_Slider_setConsumeInputEvents(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2922,18 +3242,12 @@ int lua_Slider_setCursorColor(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -2970,18 +3284,12 @@ int lua_Slider_setCursorRegion(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3008,6 +3316,44 @@ int lua_Slider_setCursorRegion(lua_State* state)
     return 0;
 }
 
+int lua_Slider_setFocusIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                int param1 = (int)luaL_checkint(state, 2);
+
+                Slider* instance = getInstance(state);
+                instance->setFocusIndex(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Slider_setFont(lua_State* state)
 {
     // Get the number of parameters.
@@ -3018,17 +3364,11 @@ int lua_Slider_setFont(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Font");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Font' for parameter 2.");
-                    lua_error(state);
-                }
-                Font* param1 = (Font*)((ScriptController::LuaObject*)userdata2)->instance;
+                Font* param1 = ScriptController::getInstance()->getObjectPointer<Font>(2, "Font", false);
 
                 Slider* instance = getInstance(state);
                 instance->setFont(param1);
@@ -3044,18 +3384,12 @@ int lua_Slider_setFont(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Font");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Font' for parameter 2.");
-                    lua_error(state);
-                }
-                Font* param1 = (Font*)((ScriptController::LuaObject*)userdata2)->instance;
+                Font* param1 = ScriptController::getInstance()->getObjectPointer<Font>(2, "Font", false);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3092,7 +3426,7 @@ int lua_Slider_setFontSize(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3112,7 +3446,7 @@ int lua_Slider_setFontSize(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3154,21 +3488,15 @@ int lua_Slider_setImageColor(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector4");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector4* param2 = (Vector4*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", true);
 
                 Slider* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
@@ -3184,22 +3512,16 @@ int lua_Slider_setImageColor(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector4");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector4* param2 = (Vector4*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", true);
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
@@ -3236,21 +3558,15 @@ int lua_Slider_setImageRegion(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Rectangle");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 3.");
-                    lua_error(state);
-                }
-                Rectangle* param2 = (Rectangle*)((ScriptController::LuaObject*)userdata3)->instance;
+                Rectangle* param2 = ScriptController::getInstance()->getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 Slider* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
@@ -3266,22 +3582,16 @@ int lua_Slider_setImageRegion(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Rectangle");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 3.");
-                    lua_error(state);
-                }
-                Rectangle* param2 = (Rectangle*)((ScriptController::LuaObject*)userdata3)->instance;
+                Rectangle* param2 = ScriptController::getInstance()->getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
@@ -3318,7 +3628,7 @@ int lua_Slider_setMargin(lua_State* state)
     {
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -3368,7 +3678,7 @@ int lua_Slider_setMax(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3406,7 +3716,7 @@ int lua_Slider_setMin(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3444,7 +3754,7 @@ int lua_Slider_setOpacity(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3464,7 +3774,7 @@ int lua_Slider_setOpacity(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3506,7 +3816,7 @@ int lua_Slider_setPadding(lua_State* state)
     {
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -3556,7 +3866,7 @@ int lua_Slider_setPosition(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3598,7 +3908,7 @@ int lua_Slider_setSize(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -3640,17 +3950,11 @@ int lua_Slider_setSkinColor(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 Slider* instance = getInstance(state);
                 instance->setSkinColor(*param1);
@@ -3666,18 +3970,12 @@ int lua_Slider_setSkinColor(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3714,17 +4012,11 @@ int lua_Slider_setSkinRegion(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Slider* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
@@ -3740,18 +4032,12 @@ int lua_Slider_setSkinRegion(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Rectangle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Rectangle' for parameter 2.");
-                    lua_error(state);
-                }
-                Rectangle* param1 = (Rectangle*)((ScriptController::LuaObject*)userdata2)->instance;
+                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3788,8 +4074,8 @@ int lua_Slider_setState(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Control::State param1 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 2));
@@ -3826,7 +4112,7 @@ int lua_Slider_setStep(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -3864,17 +4150,11 @@ int lua_Slider_setStyle(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "ThemeStyle");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Theme::Style' for parameter 2.");
-                    lua_error(state);
-                }
-                Theme::Style* param1 = (Theme::Style*)((ScriptController::LuaObject*)userdata2)->instance;
+                Theme::Style* param1 = ScriptController::getInstance()->getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
 
                 Slider* instance = getInstance(state);
                 instance->setStyle(param1);
@@ -3908,11 +4188,11 @@ int lua_Slider_setText(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Slider* instance = getInstance(state);
                 instance->setText(param1);
@@ -3946,8 +4226,8 @@ int lua_Slider_setTextAlignment(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
@@ -3966,8 +4246,8 @@ int lua_Slider_setTextAlignment(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -4008,17 +4288,11 @@ int lua_Slider_setTextColor(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 Slider* instance = getInstance(state);
                 instance->setTextColor(*param1);
@@ -4034,18 +4308,12 @@ int lua_Slider_setTextColor(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4082,7 +4350,7 @@ int lua_Slider_setTextRightToLeft(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -4102,7 +4370,7 @@ int lua_Slider_setTextRightToLeft(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -4144,7 +4412,7 @@ int lua_Slider_setValue(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -4182,7 +4450,7 @@ int lua_Slider_setZIndex(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -4327,6 +4595,58 @@ int lua_Slider_static_ANIMATE_SIZE_WIDTH(lua_State* state)
     lua_pushinteger(state, result);
 
     return 1;
+}
+
+int lua_Slider_static_create(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
+
+                // Get parameter 2 off the stack.
+                Theme::Style* param2 = ScriptController::getInstance()->getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+
+                void* returnPtr = (void*)Slider::create(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Slider");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
 }
 
 }

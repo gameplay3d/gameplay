@@ -56,7 +56,7 @@ int lua_PhysicsFixedConstraint_getBreakingImpulse(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 float result = instance->getBreakingImpulse();
@@ -93,14 +93,22 @@ int lua_PhysicsFixedConstraint_getRotationOffsetA(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getRotationOffsetA());
-                object->owns = false;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getRotationOffsetA());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -131,14 +139,22 @@ int lua_PhysicsFixedConstraint_getRotationOffsetB(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getRotationOffsetB());
-                object->owns = false;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getRotationOffsetB());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -169,14 +185,22 @@ int lua_PhysicsFixedConstraint_getTranslationOffsetA(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getTranslationOffsetA());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector3");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getTranslationOffsetA());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -207,14 +231,22 @@ int lua_PhysicsFixedConstraint_getTranslationOffsetB(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)&(instance->getTranslationOffsetB());
-                object->owns = false;
-                luaL_getmetatable(state, "Vector3");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)&(instance->getTranslationOffsetB());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -245,7 +277,7 @@ int lua_PhysicsFixedConstraint_isEnabled(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 bool result = instance->isEnabled();
@@ -282,7 +314,7 @@ int lua_PhysicsFixedConstraint_setBreakingImpulse(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -320,7 +352,7 @@ int lua_PhysicsFixedConstraint_setEnabled(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -358,17 +390,11 @@ int lua_PhysicsFixedConstraint_setRotationOffsetA(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 PhysicsFixedConstraint* instance = getInstance(state);
                 instance->setRotationOffsetA(*param1);
@@ -402,17 +428,11 @@ int lua_PhysicsFixedConstraint_setRotationOffsetB(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 PhysicsFixedConstraint* instance = getInstance(state);
                 instance->setRotationOffsetB(*param1);
@@ -446,17 +466,11 @@ int lua_PhysicsFixedConstraint_setTranslationOffsetA(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsFixedConstraint* instance = getInstance(state);
                 instance->setTranslationOffsetA(*param1);
@@ -490,17 +504,11 @@ int lua_PhysicsFixedConstraint_setTranslationOffsetB(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsFixedConstraint* instance = getInstance(state);
                 instance->setTranslationOffsetB(*param1);
@@ -534,32 +542,28 @@ int lua_PhysicsFixedConstraint_static_centerOfMassMidpoint(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Node");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 1.");
-                    lua_error(state);
-                }
-                Node* param1 = (Node*)((ScriptController::LuaObject*)userdata1)->instance;
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Node");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 2.");
-                    lua_error(state);
-                }
-                Node* param2 = (Node*)((ScriptController::LuaObject*)userdata2)->instance;
+                Node* param2 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Vector3(PhysicsFixedConstraint::centerOfMassMidpoint(param1, param2));
-                object->owns = true;
-                luaL_getmetatable(state, "Vector3");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Vector3(PhysicsFixedConstraint::centerOfMassMidpoint(param1, param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -590,32 +594,28 @@ int lua_PhysicsFixedConstraint_static_getRotationOffset(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Node");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 1.");
-                    lua_error(state);
-                }
-                Node* param1 = (Node*)((ScriptController::LuaObject*)userdata1)->instance;
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Quaternion(PhysicsFixedConstraint::getRotationOffset(param1, *param2));
-                object->owns = true;
-                luaL_getmetatable(state, "Quaternion");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Quaternion(PhysicsFixedConstraint::getRotationOffset(param1, *param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Quaternion");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -646,32 +646,28 @@ int lua_PhysicsFixedConstraint_static_getTranslationOffset(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Node");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Node' for parameter 1.");
-                    lua_error(state);
-                }
-                Node* param1 = (Node*)((ScriptController::LuaObject*)userdata1)->instance;
+                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Vector3(PhysicsFixedConstraint::getTranslationOffset(param1, *param2));
-                object->owns = true;
-                luaL_getmetatable(state, "Vector3");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Vector3(PhysicsFixedConstraint::getTranslationOffset(param1, *param2));
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }

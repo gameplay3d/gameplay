@@ -514,7 +514,7 @@ void Scene::drawDebug(unsigned int debugFlags)
         drawDebugNode(_debugBatch, node, debugFlags);
     }
 
-    _debugBatch->end();
+    _debugBatch->finish();
 
     if (_activeCamera)
     {

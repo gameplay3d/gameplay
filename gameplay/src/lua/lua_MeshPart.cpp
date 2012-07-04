@@ -44,7 +44,7 @@ int lua_MeshPart__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "MeshPart");
                 luaL_argcheck(state, userdata != NULL, 1, "'MeshPart' expected.");
@@ -84,14 +84,22 @@ int lua_MeshPart_getIndexBuffer(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 MeshPart* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new GLuint(instance->getIndexBuffer());
-                object->owns = true;
-                luaL_getmetatable(state, "GLuint");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new GLuint(instance->getIndexBuffer());
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "GLuint");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -122,7 +130,7 @@ int lua_MeshPart_getIndexCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 MeshPart* instance = getInstance(state);
                 unsigned int result = instance->getIndexCount();
@@ -159,7 +167,7 @@ int lua_MeshPart_getIndexFormat(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 MeshPart* instance = getInstance(state);
                 Mesh::IndexFormat result = instance->getIndexFormat();
@@ -196,7 +204,7 @@ int lua_MeshPart_getMeshIndex(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 MeshPart* instance = getInstance(state);
                 unsigned int result = instance->getMeshIndex();
@@ -233,7 +241,7 @@ int lua_MeshPart_getPrimitiveType(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 MeshPart* instance = getInstance(state);
                 Mesh::PrimitiveType result = instance->getPrimitiveType();
@@ -270,7 +278,7 @@ int lua_MeshPart_isDynamic(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 MeshPart* instance = getInstance(state);
                 bool result = instance->isDynamic();

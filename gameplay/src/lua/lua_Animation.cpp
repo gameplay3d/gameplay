@@ -51,7 +51,7 @@ int lua_Animation__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Animation");
                 luaL_argcheck(state, userdata != NULL, 1, "'Animation' expected.");
@@ -91,7 +91,7 @@ int lua_Animation_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 instance->addRef();
@@ -125,13 +125,13 @@ int lua_Animation_createClip(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 // Get parameter 2 off the stack.
                 unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
@@ -140,11 +140,19 @@ int lua_Animation_createClip(lua_State* state)
                 unsigned long param3 = (unsigned long)luaL_checkunsigned(state, 4);
 
                 Animation* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->createClip(param1, param2, param3);
-                object->owns = false;
-                luaL_getmetatable(state, "AnimationClip");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->createClip(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AnimationClip");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -175,11 +183,11 @@ int lua_Animation_createClips(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->createClips(param1);
@@ -213,14 +221,22 @@ int lua_Animation_getClip(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getClip();
-                object->owns = false;
-                luaL_getmetatable(state, "AnimationClip");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getClip();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AnimationClip");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -233,33 +249,49 @@ int lua_Animation_getClip(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Animation* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getClip(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "AnimationClip");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getClip(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AnimationClip");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 Animation* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getClip(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "AnimationClip");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getClip(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AnimationClip");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -290,7 +322,7 @@ int lua_Animation_getClipCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 unsigned int result = instance->getClipCount();
@@ -327,7 +359,7 @@ int lua_Animation_getDuration(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 unsigned long result = instance->getDuration();
@@ -364,7 +396,7 @@ int lua_Animation_getId(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -401,7 +433,7 @@ int lua_Animation_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -438,7 +470,7 @@ int lua_Animation_pause(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 instance->pause();
@@ -454,11 +486,11 @@ int lua_Animation_pause(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->pause(param1);
@@ -492,7 +524,7 @@ int lua_Animation_play(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 instance->play();
@@ -508,11 +540,11 @@ int lua_Animation_play(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->play(param1);
@@ -546,7 +578,7 @@ int lua_Animation_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 instance->release();
@@ -580,7 +612,7 @@ int lua_Animation_stop(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Animation* instance = getInstance(state);
                 instance->stop();
@@ -596,11 +628,11 @@ int lua_Animation_stop(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 2);
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->stop(param1);
@@ -634,17 +666,11 @@ int lua_Animation_targets(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "AnimationTarget");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'AnimationTarget' for parameter 2.");
-                    lua_error(state);
-                }
-                AnimationTarget* param1 = (AnimationTarget*)((ScriptController::LuaObject*)userdata2)->instance;
+                AnimationTarget* param1 = ScriptController::getInstance()->getObjectPointer<AnimationTarget>(2, "AnimationTarget", false);
 
                 Animation* instance = getInstance(state);
                 bool result = instance->targets(param1);

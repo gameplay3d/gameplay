@@ -321,6 +321,22 @@ void luaRegister_lua_Global()
         sc->registerConstantString("PAUSED", "PAUSED", scopePath);
     }
 
+    // Register enumeration Gamepad::ButtonState.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Gamepad");
+        sc->registerConstantString("BUTTON_PRESSED", "BUTTON_PRESSED", scopePath);
+        sc->registerConstantString("BUTTON_RELEASED", "BUTTON_RELEASED", scopePath);
+    }
+
+    // Register enumeration Gamepad::GamepadEvent.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Gamepad");
+        sc->registerConstantString("ATTACHED_EVENT", "ATTACHED_EVENT", scopePath);
+        sc->registerConstantString("DETACHED_EVENT", "DETACHED_EVENT", scopePath);
+    }
+
     // Register enumeration Image::Format.
     {
         std::vector<std::string> scopePath;
@@ -794,10 +810,10 @@ int lua__printError(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
                 printError(param1);
                 
@@ -1441,6 +1457,46 @@ std::string lua_stringFromEnum_GameState(Game::State e)
     if (e == Game::PAUSED)
         return std::string("PAUSED");
     GP_ERROR("Invalid enumeration value '%d' for enumeration Game::State.", e);
+    return std::string();
+}
+
+Gamepad::ButtonState lua_enumFromString_GamepadButtonState(const char* s)
+{
+    if (strcmp(s, "BUTTON_PRESSED") == 0)
+        return Gamepad::BUTTON_PRESSED;
+    if (strcmp(s, "BUTTON_RELEASED") == 0)
+        return Gamepad::BUTTON_RELEASED;
+    GP_ERROR("Invalid enumeration value '%s' for enumeration Gamepad::ButtonState.", s);
+    return Gamepad::BUTTON_PRESSED;
+}
+
+std::string lua_stringFromEnum_GamepadButtonState(Gamepad::ButtonState e)
+{
+    if (e == Gamepad::BUTTON_PRESSED)
+        return std::string("BUTTON_PRESSED");
+    if (e == Gamepad::BUTTON_RELEASED)
+        return std::string("BUTTON_RELEASED");
+    GP_ERROR("Invalid enumeration value '%d' for enumeration Gamepad::ButtonState.", e);
+    return std::string();
+}
+
+Gamepad::GamepadEvent lua_enumFromString_GamepadGamepadEvent(const char* s)
+{
+    if (strcmp(s, "ATTACHED_EVENT") == 0)
+        return Gamepad::ATTACHED_EVENT;
+    if (strcmp(s, "DETACHED_EVENT") == 0)
+        return Gamepad::DETACHED_EVENT;
+    GP_ERROR("Invalid enumeration value '%s' for enumeration Gamepad::GamepadEvent.", s);
+    return Gamepad::ATTACHED_EVENT;
+}
+
+std::string lua_stringFromEnum_GamepadGamepadEvent(Gamepad::GamepadEvent e)
+{
+    if (e == Gamepad::ATTACHED_EVENT)
+        return std::string("ATTACHED_EVENT");
+    if (e == Gamepad::DETACHED_EVENT)
+        return std::string("DETACHED_EVENT");
+    GP_ERROR("Invalid enumeration value '%d' for enumeration Gamepad::GamepadEvent.", e);
     return std::string();
 }
 

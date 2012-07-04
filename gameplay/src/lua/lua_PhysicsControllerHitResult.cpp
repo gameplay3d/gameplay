@@ -43,7 +43,7 @@ int lua_PhysicsControllerHitResult__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitResult");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerHitResult' expected.");
@@ -83,11 +83,19 @@ int lua_PhysicsControllerHitResult__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new PhysicsController::HitResult();
-            object->owns = true;
-            luaL_getmetatable(state, "PhysicsControllerHitResult");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new PhysicsController::HitResult();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "PhysicsControllerHitResult");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -144,24 +152,26 @@ int lua_PhysicsControllerHitResult_normal(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-        if (!userdata2)
-        {
-            lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-            lua_error(state);
-        }
-        Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+        Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->normal = *param2;
         return 0;
     }
     else
     {
-        ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-        object->instance = (void*)new Vector3(instance->normal);
-        object->owns = true;
-        luaL_getmetatable(state, "Vector3");
-        lua_setmetatable(state, -2);
+        void* returnPtr = (void*)new Vector3(instance->normal);
+        if (returnPtr)
+        {
+            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            object->instance = returnPtr;
+            object->owns = true;
+            luaL_getmetatable(state, "Vector3");
+            lua_setmetatable(state, -2);
+        }
+        else
+        {
+            lua_pushnil(state);
+        }
 
         return 1;
     }
@@ -180,24 +190,26 @@ int lua_PhysicsControllerHitResult_object(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "PhysicsCollisionObject");
-        if (!userdata2)
-        {
-            lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionObject' for parameter 2.");
-            lua_error(state);
-        }
-        PhysicsCollisionObject* param2 = (PhysicsCollisionObject*)((ScriptController::LuaObject*)userdata2)->instance;
+        PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
         instance->object = param2;
         return 0;
     }
     else
     {
-        ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-        object->instance = (void*)instance->object;
-        object->owns = false;
-        luaL_getmetatable(state, "PhysicsCollisionObject");
-        lua_setmetatable(state, -2);
+        void* returnPtr = (void*)instance->object;
+        if (returnPtr)
+        {
+            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            object->instance = returnPtr;
+            object->owns = false;
+            luaL_getmetatable(state, "PhysicsCollisionObject");
+            lua_setmetatable(state, -2);
+        }
+        else
+        {
+            lua_pushnil(state);
+        }
 
         return 1;
     }
@@ -216,24 +228,26 @@ int lua_PhysicsControllerHitResult_point(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-        if (!userdata2)
-        {
-            lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-            lua_error(state);
-        }
-        Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+        Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->point = *param2;
         return 0;
     }
     else
     {
-        ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-        object->instance = (void*)new Vector3(instance->point);
-        object->owns = true;
-        luaL_getmetatable(state, "Vector3");
-        lua_setmetatable(state, -2);
+        void* returnPtr = (void*)new Vector3(instance->point);
+        if (returnPtr)
+        {
+            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            object->instance = returnPtr;
+            object->owns = true;
+            luaL_getmetatable(state, "Vector3");
+            lua_setmetatable(state, -2);
+        }
+        else
+        {
+            lua_pushnil(state);
+        }
 
         return 1;
     }

@@ -21,7 +21,11 @@ void luaRegister_VerticalLayout()
         {"setBottomToTop", lua_VerticalLayout_setBottomToTop},
         {NULL, NULL}
     };
-    const luaL_Reg* lua_statics = NULL;
+    const luaL_Reg lua_statics[] = 
+    {
+        {"create", lua_VerticalLayout_static_create},
+        {NULL, NULL}
+    };
     std::vector<std::string> scopePath;
 
     sc->registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
@@ -44,7 +48,7 @@ int lua_VerticalLayout__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "VerticalLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'VerticalLayout' expected.");
@@ -84,7 +88,7 @@ int lua_VerticalLayout_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 VerticalLayout* instance = getInstance(state);
                 instance->addRef();
@@ -118,7 +122,7 @@ int lua_VerticalLayout_getBottomToTop(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 VerticalLayout* instance = getInstance(state);
                 bool result = instance->getBottomToTop();
@@ -155,7 +159,7 @@ int lua_VerticalLayout_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 VerticalLayout* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -192,7 +196,7 @@ int lua_VerticalLayout_getType(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 VerticalLayout* instance = getInstance(state);
                 Layout::Type result = instance->getType();
@@ -229,7 +233,7 @@ int lua_VerticalLayout_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 VerticalLayout* instance = getInstance(state);
                 instance->release();
@@ -263,7 +267,7 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -284,6 +288,43 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_VerticalLayout_static_create(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)VerticalLayout::create();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "VerticalLayout");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

@@ -86,7 +86,7 @@ int lua_Matrix__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "Matrix");
                 luaL_argcheck(state, userdata != NULL, 1, "'Matrix' expected.");
@@ -126,11 +126,19 @@ int lua_Matrix__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new Matrix();
-            object->owns = true;
-            luaL_getmetatable(state, "Matrix");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new Matrix();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "Matrix");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -142,30 +150,40 @@ int lua_Matrix__init(lua_State* state)
                 // Get parameter 1 off the stack.
                 float* param1 = ScriptController::getInstance()->getFloatPointer(1);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Matrix(param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Matrix");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Matrix(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Matrix(*param1);
-                object->owns = true;
-                luaL_getmetatable(state, "Matrix");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Matrix(*param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -243,11 +261,19 @@ int lua_Matrix__init(lua_State* state)
                 // Get parameter 16 off the stack.
                 float param16 = (float)luaL_checknumber(state, 16);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new Matrix(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16);
-                object->owns = true;
-                luaL_getmetatable(state, "Matrix");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new Matrix(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -278,7 +304,7 @@ int lua_Matrix_add(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -289,17 +315,11 @@ int lua_Matrix_add(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->add(*param1);
@@ -315,21 +335,15 @@ int lua_Matrix_add(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->add(param1, param2);
@@ -363,37 +377,19 @@ int lua_Matrix_decompose(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Quaternion");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 3.");
-                    lua_error(state);
-                }
-                Quaternion* param2 = (Quaternion*)((ScriptController::LuaObject*)userdata3)->instance;
+                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", false);
 
                 // Get parameter 3 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Vector3");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 4.");
-                    lua_error(state);
-                }
-                Vector3* param3 = (Vector3*)((ScriptController::LuaObject*)userdata4)->instance;
+                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 bool result = instance->decompose(param1, param2, param3);
@@ -430,7 +426,7 @@ int lua_Matrix_determinant(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 float result = instance->determinant();
@@ -467,17 +463,11 @@ int lua_Matrix_getBackVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getBackVector(param1);
@@ -511,17 +501,11 @@ int lua_Matrix_getDownVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getDownVector(param1);
@@ -555,17 +539,11 @@ int lua_Matrix_getForwardVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getForwardVector(param1);
@@ -599,17 +577,11 @@ int lua_Matrix_getLeftVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getLeftVector(param1);
@@ -643,17 +615,11 @@ int lua_Matrix_getRightVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getRightVector(param1);
@@ -687,17 +653,11 @@ int lua_Matrix_getRotation(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Matrix* instance = getInstance(state);
                 bool result = instance->getRotation(param1);
@@ -734,17 +694,11 @@ int lua_Matrix_getScale(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getScale(param1);
@@ -778,17 +732,11 @@ int lua_Matrix_getTranslation(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getTranslation(param1);
@@ -822,17 +770,11 @@ int lua_Matrix_getUpVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getUpVector(param1);
@@ -866,7 +808,7 @@ int lua_Matrix_invert(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 bool result = instance->invert();
@@ -885,17 +827,11 @@ int lua_Matrix_invert(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 bool result = instance->invert(param1);
@@ -932,7 +868,7 @@ int lua_Matrix_isIdentity(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 bool result = instance->isIdentity();
@@ -997,7 +933,7 @@ int lua_Matrix_multiply(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1008,17 +944,11 @@ int lua_Matrix_multiply(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->multiply(*param1);
@@ -1034,21 +964,15 @@ int lua_Matrix_multiply(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->multiply(param1, param2);
@@ -1082,7 +1006,7 @@ int lua_Matrix_negate(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 instance->negate();
@@ -1098,17 +1022,11 @@ int lua_Matrix_negate(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->negate(param1);
@@ -1142,17 +1060,11 @@ int lua_Matrix_rotate(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Matrix* instance = getInstance(state);
                 instance->rotate(*param1);
@@ -1168,45 +1080,27 @@ int lua_Matrix_rotate(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Quaternion");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 2.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata2)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotate(*param1, param2);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -1225,31 +1119,19 @@ int lua_Matrix_rotate(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Matrix");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 4.");
-                    lua_error(state);
-                }
-                Matrix* param3 = (Matrix*)((ScriptController::LuaObject*)userdata4)->instance;
+                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotate(*param1, param2, param3);
@@ -1283,7 +1165,7 @@ int lua_Matrix_rotateX(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1303,21 +1185,15 @@ int lua_Matrix_rotateX(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotateX(param1, param2);
@@ -1351,7 +1227,7 @@ int lua_Matrix_rotateY(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1371,21 +1247,15 @@ int lua_Matrix_rotateY(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotateY(param1, param2);
@@ -1419,7 +1289,7 @@ int lua_Matrix_rotateZ(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1439,21 +1309,15 @@ int lua_Matrix_rotateZ(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotateZ(param1, param2);
@@ -1487,7 +1351,7 @@ int lua_Matrix_scale(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1498,17 +1362,11 @@ int lua_Matrix_scale(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(*param1);
@@ -1524,48 +1382,30 @@ int lua_Matrix_scale(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(param1, param2);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(*param1, param2);
@@ -1581,7 +1421,7 @@ int lua_Matrix_scale(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
@@ -1609,11 +1449,11 @@ int lua_Matrix_scale(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TUSERDATA)
+                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
@@ -1625,13 +1465,7 @@ int lua_Matrix_scale(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "Matrix");
-                if (!userdata5)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 5.");
-                    lua_error(state);
-                }
-                Matrix* param4 = (Matrix*)((ScriptController::LuaObject*)userdata5)->instance;
+                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(param1, param2, param3, param4);
@@ -1665,7 +1499,7 @@ int lua_Matrix_set(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
@@ -1676,17 +1510,11 @@ int lua_Matrix_set(lua_State* state)
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->set(*param1);
@@ -1702,7 +1530,7 @@ int lua_Matrix_set(lua_State* state)
         }
         case 17:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -1800,7 +1628,7 @@ int lua_Matrix_setIdentity(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 instance->setIdentity();
@@ -1834,7 +1662,7 @@ int lua_Matrix_setZero(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 instance->setZero();
@@ -1868,36 +1696,18 @@ int lua_Matrix_static_add(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param3 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::add(*param1, *param2, param3);
                 
@@ -1930,46 +1740,22 @@ int lua_Matrix_static_createLookAt(lua_State* state)
     {
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector3");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector3");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector3* param3 = (Vector3*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Matrix");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 4.");
-                    lua_error(state);
-                }
-                Matrix* param4 = (Matrix*)((ScriptController::LuaObject*)userdata4)->instance;
+                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix::createLookAt(*param1, *param2, *param3, param4);
                 
@@ -1993,7 +1779,7 @@ int lua_Matrix_static_createLookAt(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER &&
                 lua_type(state, 8) == LUA_TNUMBER &&
                 lua_type(state, 9) == LUA_TNUMBER &&
-                lua_type(state, 10) == LUA_TUSERDATA)
+                (lua_type(state, 10) == LUA_TUSERDATA || lua_type(state, 10) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -2023,13 +1809,7 @@ int lua_Matrix_static_createLookAt(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 9);
 
                 // Get parameter 10 off the stack.
-                void* userdata10 = ScriptController::getInstance()->getObjectPointer(10, "Matrix");
-                if (!userdata10)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 10.");
-                    lua_error(state);
-                }
-                Matrix* param10 = (Matrix*)((ScriptController::LuaObject*)userdata10)->instance;
+                Matrix* param10 = ScriptController::getInstance()->getObjectPointer<Matrix>(10, "Matrix", false);
 
                 Matrix::createLookAt(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
                 
@@ -2066,7 +1846,7 @@ int lua_Matrix_static_createOrthographic(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TUSERDATA)
+                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -2081,13 +1861,7 @@ int lua_Matrix_static_createOrthographic(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 5 off the stack.
-                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "Matrix");
-                if (!userdata5)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 5.");
-                    lua_error(state);
-                }
-                Matrix* param5 = (Matrix*)((ScriptController::LuaObject*)userdata5)->instance;
+                Matrix* param5 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix::createOrthographic(param1, param2, param3, param4, param5);
                 
@@ -2126,7 +1900,7 @@ int lua_Matrix_static_createOrthographicOffCenter(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER &&
                 lua_type(state, 5) == LUA_TNUMBER &&
                 lua_type(state, 6) == LUA_TNUMBER &&
-                lua_type(state, 7) == LUA_TUSERDATA)
+                (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -2147,13 +1921,7 @@ int lua_Matrix_static_createOrthographicOffCenter(lua_State* state)
                 float param6 = (float)luaL_checknumber(state, 6);
 
                 // Get parameter 7 off the stack.
-                void* userdata7 = ScriptController::getInstance()->getObjectPointer(7, "Matrix");
-                if (!userdata7)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 7.");
-                    lua_error(state);
-                }
-                Matrix* param7 = (Matrix*)((ScriptController::LuaObject*)userdata7)->instance;
+                Matrix* param7 = ScriptController::getInstance()->getObjectPointer<Matrix>(7, "Matrix", false);
 
                 Matrix::createOrthographicOffCenter(param1, param2, param3, param4, param5, param6, param7);
                 
@@ -2190,7 +1958,7 @@ int lua_Matrix_static_createPerspective(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TUSERDATA)
+                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -2205,13 +1973,7 @@ int lua_Matrix_static_createPerspective(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 5 off the stack.
-                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "Matrix");
-                if (!userdata5)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 5.");
-                    lua_error(state);
-                }
-                Matrix* param5 = (Matrix*)((ScriptController::LuaObject*)userdata5)->instance;
+                Matrix* param5 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix::createPerspective(param1, param2, param3, param4, param5);
                 
@@ -2244,26 +2006,14 @@ int lua_Matrix_static_createRotation(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Quaternion");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Quaternion' for parameter 1.");
-                    lua_error(state);
-                }
-                Quaternion* param1 = (Quaternion*)((ScriptController::LuaObject*)userdata1)->instance;
+                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotation(*param1, param2);
                 
@@ -2278,30 +2028,18 @@ int lua_Matrix_static_createRotation(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector3");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param3 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::createRotation(*param1, param2, param3);
                 
@@ -2335,19 +2073,13 @@ int lua_Matrix_static_createRotationX(lua_State* state)
         case 2:
         {
             if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotationX(param1, param2);
                 
@@ -2381,19 +2113,13 @@ int lua_Matrix_static_createRotationY(lua_State* state)
         case 2:
         {
             if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotationY(param1, param2);
                 
@@ -2427,19 +2153,13 @@ int lua_Matrix_static_createRotationZ(lua_State* state)
         case 2:
         {
             if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotationZ(param1, param2);
                 
@@ -2472,26 +2192,14 @@ int lua_Matrix_static_createScale(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector3");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createScale(*param1, param2);
                 
@@ -2509,7 +2217,7 @@ int lua_Matrix_static_createScale(lua_State* state)
             if (lua_type(state, 1) == LUA_TNUMBER &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -2521,13 +2229,7 @@ int lua_Matrix_static_createScale(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Matrix");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 4.");
-                    lua_error(state);
-                }
-                Matrix* param4 = (Matrix*)((ScriptController::LuaObject*)userdata4)->instance;
+                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix::createScale(param1, param2, param3, param4);
                 
@@ -2560,26 +2262,14 @@ int lua_Matrix_static_createTranslation(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Vector3");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 1.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata1)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createTranslation(*param1, param2);
                 
@@ -2597,7 +2287,7 @@ int lua_Matrix_static_createTranslation(lua_State* state)
             if (lua_type(state, 1) == LUA_TNUMBER &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TUSERDATA)
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 1);
@@ -2609,13 +2299,7 @@ int lua_Matrix_static_createTranslation(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                void* userdata4 = ScriptController::getInstance()->getObjectPointer(4, "Matrix");
-                if (!userdata4)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 4.");
-                    lua_error(state);
-                }
-                Matrix* param4 = (Matrix*)((ScriptController::LuaObject*)userdata4)->instance;
+                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix::createTranslation(param1, param2, param3, param4);
                 
@@ -2648,11 +2332,19 @@ int lua_Matrix_static_identity(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Matrix::identity());
-            object->owns = false;
-            luaL_getmetatable(state, "Matrix");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Matrix::identity());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Matrix");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -2677,65 +2369,35 @@ int lua_Matrix_static_multiply(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param3 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::multiply(*param1, param2, param3);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param3 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::multiply(*param1, *param2, param3);
                 
@@ -2768,36 +2430,18 @@ int lua_Matrix_static_subtract(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "Matrix");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 1.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata1)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param3 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::subtract(*param1, *param2, param3);
                 
@@ -2830,11 +2474,19 @@ int lua_Matrix_static_zero(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)&(Matrix::zero());
-            object->owns = false;
-            luaL_getmetatable(state, "Matrix");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)&(Matrix::zero());
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Matrix");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
@@ -2859,17 +2511,11 @@ int lua_Matrix_subtract(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->subtract(*param1);
@@ -2903,17 +2549,11 @@ int lua_Matrix_transformPoint(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformPoint(param1);
@@ -2929,27 +2569,15 @@ int lua_Matrix_transformPoint(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector3");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
@@ -2983,34 +2611,22 @@ int lua_Matrix_transformVector(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(param1);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(param1);
@@ -3026,54 +2642,30 @@ int lua_Matrix_transformVector(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector3");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector3* param2 = (Vector3*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
                 
                 return 0;
             }
-            else if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector4");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector4* param1 = (Vector4*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Vector4");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector4' for parameter 3.");
-                    lua_error(state);
-                }
-                Vector4* param2 = (Vector4*)((ScriptController::LuaObject*)userdata3)->instance;
+                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
@@ -3089,12 +2681,12 @@ int lua_Matrix_transformVector(lua_State* state)
         }
         case 6:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
                 lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TUSERDATA)
+                (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
@@ -3109,13 +2701,7 @@ int lua_Matrix_transformVector(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 5 off the stack.
-                void* userdata6 = ScriptController::getInstance()->getObjectPointer(6, "Vector3");
-                if (!userdata6)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 6.");
-                    lua_error(state);
-                }
-                Vector3* param5 = (Vector3*)((ScriptController::LuaObject*)userdata6)->instance;
+                Vector3* param5 = ScriptController::getInstance()->getObjectPointer<Vector3>(6, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
@@ -3149,17 +2735,11 @@ int lua_Matrix_translate(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Matrix* instance = getInstance(state);
                 instance->translate(*param1);
@@ -3175,27 +2755,15 @@ int lua_Matrix_translate(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
-                lua_type(state, 3) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Vector3");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Vector3' for parameter 2.");
-                    lua_error(state);
-                }
-                Vector3* param1 = (Vector3*)((ScriptController::LuaObject*)userdata2)->instance;
+                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                void* userdata3 = ScriptController::getInstance()->getObjectPointer(3, "Matrix");
-                if (!userdata3)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 3.");
-                    lua_error(state);
-                }
-                Matrix* param2 = (Matrix*)((ScriptController::LuaObject*)userdata3)->instance;
+                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->translate(*param1, param2);
@@ -3211,7 +2779,7 @@ int lua_Matrix_translate(lua_State* state)
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
@@ -3239,11 +2807,11 @@ int lua_Matrix_translate(lua_State* state)
         }
         case 5:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TUSERDATA)
+                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
@@ -3255,13 +2823,7 @@ int lua_Matrix_translate(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                void* userdata5 = ScriptController::getInstance()->getObjectPointer(5, "Matrix");
-                if (!userdata5)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 5.");
-                    lua_error(state);
-                }
-                Matrix* param4 = (Matrix*)((ScriptController::LuaObject*)userdata5)->instance;
+                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->translate(param1, param2, param3, param4);
@@ -3295,7 +2857,7 @@ int lua_Matrix_transpose(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 Matrix* instance = getInstance(state);
                 instance->transpose();
@@ -3311,17 +2873,11 @@ int lua_Matrix_transpose(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "Matrix");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'Matrix' for parameter 2.");
-                    lua_error(state);
-                }
-                Matrix* param1 = (Matrix*)((ScriptController::LuaObject*)userdata2)->instance;
+                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transpose(param1);

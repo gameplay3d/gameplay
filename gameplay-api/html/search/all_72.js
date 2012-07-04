@@ -20,7 +20,7 @@ var searchData=
   ['registerconstantstring',['registerConstantString',['../classgameplay_1_1_script_controller.html#a242eb8816c8ad4a26980f3bb9ae50479',1,'gameplay::ScriptController']]],
   ['registerfunction',['registerFunction',['../classgameplay_1_1_script_controller.html#ae3d9bab944a7b126e44eaa6e0dba3080',1,'gameplay::ScriptController']]],
   ['registerlibrary',['registerLibrary',['../classgameplay_1_1_script_controller.html#a1993f30682b79cd694b9336a6af51cb7',1,'gameplay::ScriptController']]],
-  ['release',['release',['../classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b',1,'gameplay::Ref::release()'],['../classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985',1,'gameplay::Control::Listener::RELEASE()']]],
+  ['release',['RELEASE',['../classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985',1,'gameplay::Control::Listener::RELEASE()'],['../classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b',1,'gameplay::Ref::release()']]],
   ['remove',['remove',['../classgameplay_1_1_node.html#a71bec872c8bebe618885caf08843a5f5',1,'gameplay::Node']]],
   ['removeallchildren',['removeAllChildren',['../classgameplay_1_1_node.html#adc86be8a62323ecc79515a3004a1e2f3',1,'gameplay::Node']]],
   ['removeallnodes',['removeAllNodes',['../classgameplay_1_1_scene.html#a6d1aae801439be43f2d8e11edbc4b77f',1,'gameplay::Scene']]],

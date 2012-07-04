@@ -17,7 +17,7 @@ void luaRegister_FrameBuffer()
         {"bind", lua_FrameBuffer_bind},
         {"getDepthStencilTarget", lua_FrameBuffer_getDepthStencilTarget},
         {"getHeight", lua_FrameBuffer_getHeight},
-        {"getID", lua_FrameBuffer_getID},
+        {"getId", lua_FrameBuffer_getId},
         {"getRefCount", lua_FrameBuffer_getRefCount},
         {"getRenderTarget", lua_FrameBuffer_getRenderTarget},
         {"getWidth", lua_FrameBuffer_getWidth},
@@ -56,7 +56,7 @@ int lua_FrameBuffer__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "FrameBuffer");
                 luaL_argcheck(state, userdata != NULL, 1, "'FrameBuffer' expected.");
@@ -96,7 +96,7 @@ int lua_FrameBuffer_addRef(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
                 instance->addRef();
@@ -130,7 +130,7 @@ int lua_FrameBuffer_bind(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
                 instance->bind();
@@ -164,14 +164,22 @@ int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getDepthStencilTarget();
-                object->owns = false;
-                luaL_getmetatable(state, "DepthStencilTarget");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getDepthStencilTarget();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "DepthStencilTarget");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -202,7 +210,7 @@ int lua_FrameBuffer_getHeight(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
                 unsigned int result = instance->getHeight();
@@ -229,7 +237,7 @@ int lua_FrameBuffer_getHeight(lua_State* state)
     return 0;
 }
 
-int lua_FrameBuffer_getID(lua_State* state)
+int lua_FrameBuffer_getId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -239,10 +247,10 @@ int lua_FrameBuffer_getID(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
-                const char* result = instance->getID();
+                const char* result = instance->getId();
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, result);
@@ -276,7 +284,7 @@ int lua_FrameBuffer_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -313,14 +321,22 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getRenderTarget();
-                object->owns = false;
-                luaL_getmetatable(state, "RenderTarget");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getRenderTarget();
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "RenderTarget");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -333,18 +349,26 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 FrameBuffer* instance = getInstance(state);
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)instance->getRenderTarget(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "RenderTarget");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)instance->getRenderTarget(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "RenderTarget");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -375,7 +399,7 @@ int lua_FrameBuffer_getWidth(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
                 unsigned int result = instance->getWidth();
@@ -412,7 +436,7 @@ int lua_FrameBuffer_release(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 FrameBuffer* instance = getInstance(state);
                 instance->release();
@@ -446,17 +470,11 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "DepthStencilTarget");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'DepthStencilTarget' for parameter 2.");
-                    lua_error(state);
-                }
-                DepthStencilTarget* param1 = (DepthStencilTarget*)((ScriptController::LuaObject*)userdata2)->instance;
+                DepthStencilTarget* param1 = ScriptController::getInstance()->getObjectPointer<DepthStencilTarget>(2, "DepthStencilTarget", false);
 
                 FrameBuffer* instance = getInstance(state);
                 instance->setDepthStencilTarget(param1);
@@ -490,17 +508,11 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
     {
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "RenderTarget");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'RenderTarget' for parameter 2.");
-                    lua_error(state);
-                }
-                RenderTarget* param1 = (RenderTarget*)((ScriptController::LuaObject*)userdata2)->instance;
+                RenderTarget* param1 = ScriptController::getInstance()->getObjectPointer<RenderTarget>(2, "RenderTarget", false);
 
                 FrameBuffer* instance = getInstance(state);
                 instance->setRenderTarget(param1);
@@ -516,18 +528,12 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA &&
-                lua_type(state, 2) == LUA_TUSERDATA &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                void* userdata2 = ScriptController::getInstance()->getObjectPointer(2, "RenderTarget");
-                if (!userdata2)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'RenderTarget' for parameter 2.");
-                    lua_error(state);
-                }
-                RenderTarget* param1 = (RenderTarget*)((ScriptController::LuaObject*)userdata2)->instance;
+                RenderTarget* param1 = ScriptController::getInstance()->getObjectPointer<RenderTarget>(2, "RenderTarget", false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -589,12 +595,12 @@ int lua_FrameBuffer_static_create(lua_State* state)
     {
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TSTRING &&
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -602,11 +608,19 @@ int lua_FrameBuffer_static_create(lua_State* state)
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)FrameBuffer::create(param1, param2, param3);
-                object->owns = false;
-                luaL_getmetatable(state, "FrameBuffer");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)FrameBuffer::create(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }
@@ -637,16 +651,24 @@ int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TSTRING)
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = luaL_checkstring(state, 1);
+                const char* param1 = ScriptController::getInstance()->getString(1, false);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)FrameBuffer::getFrameBuffer(param1);
-                object->owns = false;
-                luaL_getmetatable(state, "FrameBuffer");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)FrameBuffer::getFrameBuffer(param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }

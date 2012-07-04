@@ -1,6 +1,6 @@
 function init()
     --printError("init!\n\n")
-    
+
     _touched = false
 
     --[ [
@@ -36,27 +36,34 @@ function init()
 end
 
 function update(elapsedTime)
-    --str = string.format("update: %d!\n\n", elapsedTime)
-    --printError(str)
-
     if not _touched then
         _modelNode:rotateY(0.5 * 0.0174532925)
     end
 end
 
 function render(elapsedTime)
-    --str = string.format("render: %d!\n\n", elapsedTime)
-    --printError(str)
+    -- Clear the color and depth buffers.
+    Game.getInstance():clear(Game.CLEAR_COLOR_DEPTH, Vector4.zero(), 1.0, 0)
 
+    -- Visit all the nodes in the scene, drawing the models/mesh.
+    _scene:visit("drawScene");
+    
+    -- Draw the fps.
     buffer = string.format("%u", Game.getInstance():getFrameRate());
     _font:begin()
     _font:drawText(buffer, 5, 1, Vector4.new(0, 0.5, 1, 1), _font:getSize())
-    --_font:end()
+    _font:finish()
 end
 
 function finalize()
-    --printError("finalize!\n\n")
-
     _font = nil
     _scene = nil
+end
+
+function drawScene(node)
+    model = node:getModel()
+    if model then
+        model:draw()
+    end
+    return true
 end

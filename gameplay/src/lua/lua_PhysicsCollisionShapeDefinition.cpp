@@ -39,7 +39,7 @@ int lua_PhysicsCollisionShapeDefinition__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShapeDefinition");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionShapeDefinition' expected.");
@@ -79,33 +79,43 @@ int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new PhysicsCollisionShape::Definition();
-            object->owns = true;
-            luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new PhysicsCollisionShape::Definition();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;
         }
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                void* userdata1 = ScriptController::getInstance()->getObjectPointer(1, "PhysicsCollisionShapeDefinition");
-                if (!userdata1)
-                {
-                    lua_pushstring(state, "Failed to retrieve a valid object pointer of type 'PhysicsCollisionShape::Definition' for parameter 1.");
-                    lua_error(state);
-                }
-                PhysicsCollisionShape::Definition* param1 = (PhysicsCollisionShape::Definition*)((ScriptController::LuaObject*)userdata1)->instance;
+                PhysicsCollisionShape::Definition* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionShape::Definition>(1, "PhysicsCollisionShapeDefinition", true);
 
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                object->instance = (void*)new PhysicsCollisionShape::Definition(*param1);
-                object->owns = true;
-                luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                lua_setmetatable(state, -2);
+                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(*param1);
+                if (returnPtr)
+                {
+                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
 
                 return 1;
             }

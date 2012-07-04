@@ -38,7 +38,7 @@ int lua_SceneLoader__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "SceneLoader");
                 luaL_argcheck(state, userdata != NULL, 1, "'SceneLoader' expected.");
@@ -78,11 +78,19 @@ int lua_SceneLoader__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new SceneLoader();
-            object->owns = true;
-            luaL_getmetatable(state, "SceneLoader");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new SceneLoader();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "SceneLoader");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;

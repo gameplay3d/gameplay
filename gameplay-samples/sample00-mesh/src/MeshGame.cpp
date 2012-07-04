@@ -67,6 +67,7 @@ void MeshGame::update(float elapsedTime)
 
 void MeshGame::render(float elapsedTime)
 {
+    /*
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
@@ -78,6 +79,7 @@ void MeshGame::render(float elapsedTime)
 
     // Draw the fps
     //drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
+    */
 }
 
 void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -115,7 +117,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         {
             int deltaX = x - _touchX;
             _touchX = x;
-            Node* _modelNode = ScriptController::getInstance()->getPointer<Node>("Node", "_modelNode");
+            Node* _modelNode = ScriptController::getInstance()->getObjectPointer<Node>("Node", "_modelNode");
             _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;
@@ -124,6 +126,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     };
 }
 
+/*
 bool MeshGame::drawScene(Node* node)
 {
     Model* model = node->getModel();
@@ -131,15 +134,18 @@ bool MeshGame::drawScene(Node* node)
         model->draw();
     return true;
 }
+*/
 
+/*
 void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
     char buffer[10];
     sprintf(buffer, "%u", fps);
     font->begin();
     font->drawText(buffer, x, y, color, font->getSize());
-    font->end();
+    font->finish();
 }
+*/
 
 void MeshGame::drawSplash(void* param)
 {
@@ -147,7 +153,7 @@ void MeshGame::drawSplash(void* param)
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
 

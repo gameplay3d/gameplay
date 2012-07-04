@@ -38,7 +38,7 @@ int lua_ScreenDisplayer__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "ScreenDisplayer");
                 luaL_argcheck(state, userdata != NULL, 1, "'ScreenDisplayer' expected.");
@@ -78,11 +78,19 @@ int lua_ScreenDisplayer__init(lua_State* state)
     {
         case 0:
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-            object->instance = (void*)new ScreenDisplayer();
-            object->owns = true;
-            luaL_getmetatable(state, "ScreenDisplayer");
-            lua_setmetatable(state, -2);
+            void* returnPtr = (void*)new ScreenDisplayer();
+            if (returnPtr)
+            {
+                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "ScreenDisplayer");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
 
             return 1;
             break;

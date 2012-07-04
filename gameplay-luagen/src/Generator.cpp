@@ -2,7 +2,7 @@
 
 Generator* Generator::__instance = NULL;
 
-set<string> __unrecognizedTypes;
+set<string> __warnings;
 
 // Warning flags.
 static bool __printTemplateWarning = false;
@@ -15,6 +15,7 @@ static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param:
 static inline bool isWantedFileNormal(const string& s);
 static inline bool isNamespaceFile(const string& s);
 static bool getFileList(string directory, vector<string>& files, bool (*isWantedFile)(const string& s));
+static bool isReservedKeyword(string name);
 
 Generator* Generator::getInstance()
 {
@@ -225,13 +226,13 @@ void Generator::run(string inDir, string outDir)
     // Generate the script bindings.
     generateBindings();
 
-    // Print out all unrecognized parameter types.
-    if (__unrecognizedTypes.size() > 0)
+    // Print out all warnings (unsupported types, function name-Lua keyword clashes, etc.)
+    if (__warnings.size() > 0)
     {
-        cout << "\nUnrecognized Types:\n";
-        for (set<string>::iterator iter = __unrecognizedTypes.begin(); iter!= __unrecognizedTypes.end(); iter++)
+        cout << "\nWarnings:\n";
+        for (set<string>::iterator iter = __warnings.begin(); iter!= __warnings.end(); iter++)
         {
-            cout << *iter << "\n";
+            GP_WARN("%s", iter->c_str());
         }
     }
 
@@ -285,19 +286,26 @@ void Generator::getFunctions(XMLElement* fileNode)
                     FunctionBinding b;
                     b.type = FunctionBinding::GLOBAL_FUNCTION;
                     b.name = getName(e);
-                
-                    // Ignore operators.
-                    if (b.name.find("operator") != 0)
-                    {
-                        b.returnParam = getParam(e);
 
-                        getParams(e, b);
-                        getCreateFlag(e, b);
-                        _functions[b.getFunctionName()].push_back(b);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        // Ignore operators.
+                        if (b.name.find("operator") != 0)
+                        {
+                            b.returnParam = getParam(e);
+
+                            getParams(e, b);
+                            getCreateFlag(e, b);
+                            _functions[b.getFunctionName()].push_back(b);
+                        }
+                        else
+                        {
+                            __printOperatorWarning = true;
+                        }
                     }
                     else
                     {
-                        __printOperatorWarning = true;
+                        __warnings.insert(string("Function name '") + b.name + string("' is a reserved Lua keyword; binding '") + b.getFunctionName() + string("' was not generated."));
                     }
                 }
                 e = e->NextSiblingElement("memberdef");
@@ -319,8 +327,15 @@ void Generator::getFunctions(XMLElement* fileNode)
                         b.type = FunctionBinding::GLOBAL_VARIABLE;
 
                     b.name = getName(e);
-                    b.returnParam = getParam(e, true);
-                    _functions[b.getFunctionName()].push_back(b);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        b.returnParam = getParam(e, true);
+                        _functions[b.getFunctionName()].push_back(b);
+                    }
+                    else
+                    {
+                        __warnings.insert(string("Function name '") + b.name + string("' is a reserved Lua keyword; binding '") + b.getFunctionName() + string("' was not generated."));
+                    }
                 }
                 e = e->NextSiblingElement("memberdef");
             }
@@ -423,11 +438,18 @@ void Generator::getClass(XMLElement* classNode, const string& name)
                     b.type = FunctionBinding::STATIC_FUNCTION;
 
                     b.name = getName(e);
-                    b.returnParam = getParam(e, false, b.classname);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        b.returnParam = getParam(e, false, b.classname);
                         
-                    getParams(e, b);
-                    getCreateFlag(e, b);
-                    classBinding.bindings[b.getFunctionName()].push_back(b);
+                        getParams(e, b);
+                        getCreateFlag(e, b);
+                        classBinding.bindings[b.getFunctionName()].push_back(b);
+                    }
+                    else
+                    {
+                        __warnings.insert(string("Function name '") + b.name + string("' is a reserved Lua keyword; binding '") + b.getFunctionName() + string("' was not generated."));
+                    }
                 }
                 e = e->NextSiblingElement("memberdef");
             }
@@ -451,24 +473,31 @@ void Generator::getClass(XMLElement* classNode, const string& name)
                     b.type = FunctionBinding::MEMBER_FUNCTION;
 
                     b.name = getName(e);
-                
-                    // Ignore operators.
-                    if (b.name.find("operator") != 0)
-                    {
-                        b.returnParam = getParam(e, false, b.classname);
-                        if (b.returnParam.type == FunctionBinding::Param::TYPE_CONSTRUCTOR)
-                        {
-                            b.returnParam.info = refId;
-                            b.own = true;
-                        }
 
-                        getParams(e, b);
-                        getCreateFlag(e, b);
-                        classBinding.bindings[b.getFunctionName()].push_back(b);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        // Ignore operators.
+                        if (b.name.find("operator") != 0)
+                        {
+                            b.returnParam = getParam(e, false, b.classname);
+                            if (b.returnParam.type == FunctionBinding::Param::TYPE_CONSTRUCTOR)
+                            {
+                                b.returnParam.info = refId;
+                                b.own = true;
+                            }
+
+                            getParams(e, b);
+                            getCreateFlag(e, b);
+                            classBinding.bindings[b.getFunctionName()].push_back(b);
+                        }
+                        else
+                        {
+                            __printOperatorWarning = true;
+                        }
                     }
                     else
                     {
-                        __printOperatorWarning = true;
+                        __warnings.insert(string("Function name '") + b.name + string("' is a reserved Lua keyword; binding '") + b.getFunctionName() + string("' was not generated."));
                     }
                 }
                 e = e->NextSiblingElement("memberdef");
@@ -489,8 +518,15 @@ void Generator::getClass(XMLElement* classNode, const string& name)
                         b.type = FunctionBinding::STATIC_VARIABLE;
 
                     b.name = getName(e);
-                    b.returnParam = getParam(e, true, b.classname);
-                    classBinding.bindings[b.getFunctionName()].push_back(b);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        b.returnParam = getParam(e, true, b.classname);
+                        classBinding.bindings[b.getFunctionName()].push_back(b);
+                    }
+                    else
+                    {
+                        __warnings.insert(string("Function name '") + b.name + string("' is a reserved Lua keyword; binding '") + b.getFunctionName() + string("' was not generated."));
+                    }
                 }
                 e = e->NextSiblingElement("memberdef");
             }
@@ -514,8 +550,15 @@ void Generator::getClass(XMLElement* classNode, const string& name)
                         b.type = FunctionBinding::MEMBER_VARIABLE;
 
                     b.name = getName(e);
-                    b.returnParam = getParam(e, true, b.classname);
-                    classBinding.bindings[b.getFunctionName()].push_back(b);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        b.returnParam = getParam(e, true, b.classname);
+                        classBinding.bindings[b.getFunctionName()].push_back(b);
+                    }
+                    else
+                    {
+                        __warnings.insert(string("Function name '") + b.name + string("' is a reserved Lua keyword; binding '") + b.getFunctionName() + string("' was not generated."));
+                    }
                 }
                 e = e->NextSiblingElement("memberdef");
             }
@@ -550,23 +593,26 @@ void Generator::getClass(XMLElement* classNode, const string& name)
 
                     b.name = getName(e);
                 
-                    // Ignore operators.
-                    if (b.name.find("operator") != 0)
+                    if (!isReservedKeyword(b.name))
                     {
-                        b.returnParam = getParam(e, false, b.classname);
-                        if (b.returnParam.type == FunctionBinding::Param::TYPE_CONSTRUCTOR)
+                        // Ignore operators.
+                        if (b.name.find("operator") != 0)
                         {
-                            b.returnParam.info = refId;
-                            b.own = true;
-                        }
+                            b.returnParam = getParam(e, false, b.classname);
+                            if (b.returnParam.type == FunctionBinding::Param::TYPE_CONSTRUCTOR)
+                            {
+                                b.returnParam.info = refId;
+                                b.own = true;
+                            }
 
-                        getParams(e, b);
-                        getCreateFlag(e, b);
-                        classBinding.hidden[b.getFunctionName()].push_back(b);
-                    }
-                    else
-                    {
-                        __printOperatorWarning = true;
+                            getParams(e, b);
+                            getCreateFlag(e, b);
+                            classBinding.hidden[b.getFunctionName()].push_back(b);
+                        }
+                        else
+                        {
+                            __printOperatorWarning = true;
+                        }
                     }
                 }
                 e = e->NextSiblingElement("memberdef");
@@ -593,11 +639,14 @@ void Generator::getClass(XMLElement* classNode, const string& name)
                     b.type = FunctionBinding::STATIC_FUNCTION;
 
                     b.name = getName(e);
-                    b.returnParam = getParam(e, false, b.classname);
+                    if (!isReservedKeyword(b.name))
+                    {
+                        b.returnParam = getParam(e, false, b.classname);
                         
-                    getParams(e, b);
-                    getCreateFlag(e, b);
-                    classBinding.hidden[b.getFunctionName()].push_back(b);
+                        getParams(e, b);
+                        getCreateFlag(e, b);
+                        classBinding.hidden[b.getFunctionName()].push_back(b);
+                    }
                 }
                 e = e->NextSiblingElement("memberdef");
             }
@@ -1148,7 +1197,7 @@ void Generator::resolveType(FunctionBinding::Param* param, string functionName)
                 }
                 else
                 {
-                    __unrecognizedTypes.insert(functionName + string(" -- ") + (name.size() > 0 ? name : param->info));
+                    __warnings.insert(string("Unrecognized C++ type: ") + functionName + string(" -- ") + (name.size() > 0 ? name : param->info));
                 }
             }
         }
@@ -1621,6 +1670,37 @@ static bool getFileList(string directory, vector<string>& files, bool (*isWanted
     closedir(dir);
     return true;
 #endif
+}
+
+bool isReservedKeyword(string name)
+{
+    static set<string> keywords;
+    if (keywords.size() == 0)
+    {
+        keywords.insert("and");
+        keywords.insert("break");
+        keywords.insert("do");
+        keywords.insert("else");
+        keywords.insert("elseif");
+        keywords.insert("end");
+        keywords.insert("false");
+        keywords.insert("for");
+        keywords.insert("function");
+        keywords.insert("if");
+        keywords.insert("in");
+        keywords.insert("local");
+        keywords.insert("nil");
+        keywords.insert("not");
+        keywords.insert("or");
+        keywords.insert("repeat");
+        keywords.insert("return");
+        keywords.insert("then");
+        keywords.insert("true");
+        keywords.insert("until");
+        keywords.insert("while");
+    };
+
+    return keywords.find(name) != keywords.end();
 }
 
 // ----------------------------------------------------------------------------

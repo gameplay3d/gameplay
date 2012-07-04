@@ -38,7 +38,7 @@ int lua_AudioController__gc(lua_State* state)
     {
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TUSERDATA)
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 void* userdata = luaL_checkudata(state, 1, "AudioController");
                 luaL_argcheck(state, userdata != NULL, 1, "'AudioController' expected.");
