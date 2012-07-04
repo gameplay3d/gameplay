@@ -112,7 +112,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 {
                     _value.set(value);
                     _dirty = true;
-                    notifyListeners(Control::Listener::VALUE_CHANGED);
+                    notifyListeners(Listener::VALUE_CHANGED);
                 }
 
                 _state = ACTIVE;
@@ -138,7 +138,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 {
                     _value.set(value);
                     _dirty = true;
-                    notifyListeners(Control::Listener::VALUE_CHANGED);
+                    notifyListeners(Listener::VALUE_CHANGED);
                 }
             }
             else
@@ -151,7 +151,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 {
                     _value.set(value);
                     _dirty = true;
-                    notifyListeners(Control::Listener::VALUE_CHANGED);
+                    notifyListeners(Listener::VALUE_CHANGED);
                 }
             }
 
@@ -163,6 +163,8 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
         {
             _contactIndex = INVALID_CONTACT_INDEX;
 
+            notifyListeners(Listener::RELEASE);
+
             // Reset displacement and direction vectors.
             _displacement.set(0.0f, 0.0f);
 
@@ -171,7 +173,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
             {
                 _value.set(value);
                 _dirty = true;
-                notifyListeners(Control::Listener::VALUE_CHANGED);
+                notifyListeners(Listener::VALUE_CHANGED);
             }
 
             _state = NORMAL;
