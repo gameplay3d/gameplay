@@ -302,6 +302,11 @@ private:
      */
     Mesh(const Mesh& copy);
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    Mesh& operator=(const Mesh&);
+
     std::string _url;
     const VertexFormat _vertexFormat;
     unsigned int _vertexCount;

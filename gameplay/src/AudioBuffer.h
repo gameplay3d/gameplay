@@ -30,6 +30,11 @@ private:
     virtual ~AudioBuffer();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    AudioBuffer& operator=(const AudioBuffer&);
+
+    /**
      * Creates an audio buffer from a file.
      * 
      * @param path The path to the audio buffer on the filesystem.

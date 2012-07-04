@@ -638,6 +638,11 @@ private:
     ~ParticleEmitter();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    ParticleEmitter& operator=(const ParticleEmitter&);
+
+    /**
      * Sets the node that this emitter is attached to.
      */
     void setNode(Node* node);
