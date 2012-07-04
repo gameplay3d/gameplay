@@ -894,6 +894,34 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
 }
 
+bool Platform::hasMouse()
+{
+    // not supported
+    return false;
+}
+
+void Platform::setMouseCapture(bool captured)
+{
+    // not supported
+}
+
+bool Platform::isMouseCaptured()
+{
+    // not supported
+    return false;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    // not supported
+}
+
+bool Platform::isCursorVisible()
+{
+    // not supported
+    return false;
+}
+
 void Platform::setMultiTouch(bool enabled) 
 {
     __view.multipleTouchEnabled = enabled;

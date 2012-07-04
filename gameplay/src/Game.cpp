@@ -63,6 +63,31 @@ void Game::setVsync(bool enable)
     Platform::setVsync(enable);
 }
 
+bool Game::hasMouse()
+{
+    return Platform::hasMouse();
+}
+
+bool Game::isMouseCaptured()
+{
+    return Platform::isMouseCaptured();
+}
+
+void Game::setMouseCapture(bool captured)
+{
+    Platform::setMouseCapture(captured);
+}
+
+void Game::setCursorVisible(bool visible)
+{
+    Platform::setCursorVisible(visible);
+}
+
+bool Game::isCursorVisible()
+{
+    return Platform::isCursorVisible();
+}
+
 bool Game::isVsync()
 {
     return Platform::isVsync();
