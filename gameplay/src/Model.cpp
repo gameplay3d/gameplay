@@ -393,8 +393,21 @@ Model* Model::clone(NodeCloneContext &context)
             GP_ERROR("Failed to clone material for model.");
             return model;
         }
-        model->setMaterial(materialClone); // TODO: Don't forget material parts
+        model->setMaterial(materialClone);
         materialClone->release();
+    }
+    if (_partMaterials)
+    {
+        GP_ASSERT(_partCount == model->_partCount);
+        for (unsigned int i = 0; i < _partCount; ++i)
+        {
+            if (_partMaterials[i])
+            {
+                Material* materialClone = _partMaterials[i]->clone(context);
+                model->setMaterial(materialClone, i);
+                materialClone->release();
+            }
+        }
     }
     return model;
 }
