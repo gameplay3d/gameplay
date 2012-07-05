@@ -4,7 +4,7 @@
 MeshGame game;
 
 MeshGame::MeshGame()
-    : _font(NULL), _scene(NULL), _modelNode(NULL), _touched(false), _touchX(0)
+    //: _font(NULL), _scene(NULL), _modelNode(NULL), _touched(false), _touchX(0)
 {
 }
 
@@ -82,6 +82,7 @@ void MeshGame::render(float elapsedTime)
     */
 }
 
+/*
 void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
@@ -125,6 +126,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         break;
     };
 }
+*/
 
 /*
 bool MeshGame::drawScene(Node* node)

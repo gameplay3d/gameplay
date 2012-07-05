@@ -425,7 +425,7 @@ int lua_Mesh_getPrimitiveType(lua_State* state)
                 Mesh::PrimitiveType result = instance->getPrimitiveType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_MeshPrimitiveType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_MeshPrimitiveType(result));
 
                 return 1;
             }

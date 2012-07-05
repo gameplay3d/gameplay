@@ -173,7 +173,7 @@ int lua_MeshPart_getIndexFormat(lua_State* state)
                 Mesh::IndexFormat result = instance->getIndexFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_MeshIndexFormat(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_MeshIndexFormat(result));
 
                 return 1;
             }
@@ -247,7 +247,7 @@ int lua_MeshPart_getPrimitiveType(lua_State* state)
                 Mesh::PrimitiveType result = instance->getPrimitiveType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_MeshPrimitiveType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_MeshPrimitiveType(result));
 
                 return 1;
             }

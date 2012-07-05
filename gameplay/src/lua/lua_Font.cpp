@@ -1733,7 +1733,7 @@ int lua_Font_static_getJustify(lua_State* state)
                 Font::Justify result = Font::getJustify(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
 
                 return 1;
             }

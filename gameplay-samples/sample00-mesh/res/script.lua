@@ -1,8 +1,11 @@
+DEG_TO_RAD = 0.0174532925
+
 function init()
     -- Display splash screen for at least 1 second.
     ScreenDisplayer.start("drawSplash", 1000);
 
     _touched = false
+    _touchX = 0
 
     -- Load font
     _font = Font.create("res/arial40.gpb")
@@ -77,4 +80,32 @@ function drawSplash()
     batch:draw(game:getWidth() * 0.5, game:getHeight() * 0.5, 0.0, 512.0, 512.0, 0.0, 1.0, 1.0, 0.0, Vector4.one(), true)
     batch:finish()
     batch = nil
+end
+
+function keyEvent(evt, key)
+    --local str = string.format("key: %s, %s!\n\n", evt, key)
+    --printError(str)
+
+    if evt == Keyboard.KEY_PRESS then
+        if key == Keyboard.KEY_ESCAPE then
+            Game.getInstance():exit()
+        end
+    end
+end
+
+function touchEvent(evt, x, y, contactIndex)
+    --local str = string.format("touch: %s, %d, %d, %d!\n\n", evt, x, y, contactIndex)
+    --printError(str)
+
+    if evt == Touch.TOUCH_PRESS then
+        _touched = true
+        _touchX = x
+    elseif evt == Touch.TOUCH_RELEASE then
+        _touched = false
+        _touchX = 0
+    elseif evt == Touch.TOUCH_MOVE then
+        local deltaX = x - _touchX
+        _touchX = x
+        _modelNode:rotateY(deltaX * 0.5 * DEG_TO_RAD)
+    end    
 end

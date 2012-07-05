@@ -779,7 +779,7 @@ int lua_Game_getState(lua_State* state)
                 Game::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_GameState(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_GameState(result));
 
                 return 1;
             }

@@ -503,7 +503,7 @@ void ScriptController::finalizeGame()
     }
 }
 
-void ScriptController::update(long elapsedTime)
+void ScriptController::update(float elapsedTime)
 {
     if (_callbacks[UPDATE])
     {
@@ -511,11 +511,44 @@ void ScriptController::update(long elapsedTime)
     }
 }
 
-void ScriptController::render(long elapsedTime)
+void ScriptController::render(float elapsedTime)
 {
     if (_callbacks[RENDER])
     {
         executeFunction<void>(_callbacks[RENDER]->c_str(), "f", elapsedTime);
+    }
+}
+
+void ScriptController::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (_callbacks[KEY_EVENT])
+    {
+        executeFunction<void>(_callbacks[KEY_EVENT]->c_str(), "[Keyboard::KeyEvent][Keyboard::Key]", evt, key);
+    }
+}
+
+void ScriptController::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+{
+    if (_callbacks[TOUCH_EVENT])
+    {
+        executeFunction<void>(_callbacks[TOUCH_EVENT]->c_str(), "[Touch::TouchEvent]iiui", evt, x, y, contactIndex);
+    }
+}
+
+bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (_callbacks[MOUSE_EVENT])
+    {
+        return executeFunction<bool>(_callbacks[MOUSE_EVENT]->c_str(), "[Mouse::MouseEvent]iiii", evt, x, y, wheelDelta);
+    }
+    return false;
+}
+
+void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    if (_callbacks[GAMEPAD_EVENT])
+    {
+        executeFunction<void>(_callbacks[GAMEPAD_EVENT]->c_str(), "[Gamepad::GamepadEvent]<Gamepad>", evt, gamepad);
     }
 }
 
@@ -572,6 +605,18 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
             case 'p':
                 lua_pushlightuserdata(_lua, va_arg(list, void*));
                 break;
+            // Enums.
+            case '[':
+            {
+                std::string type = sig;
+                type = type.substr(0, type.find("]"));
+
+                // Skip past the closing ']' (the semi-colon here is intentional-do not remove).
+                while (*sig++ != ']');
+
+                lua_pushstring(_lua, lua_stringFromEnumGlobal(type, va_arg(list, int)));
+                break;
+            }
             // Object references/pointers (Lua userdata).
             case '<':
             {
@@ -580,6 +625,16 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
 
                 // Skip past the closing '>' (the semi-colon here is intentional-do not remove).
                 while (*sig++ != '>');
+
+                // Calculate the unique Lua type name.
+                size_t i = type.find("::");
+                while (i != type.npos)
+                {
+                    // We use "" as the replacement here-this must match the preprocessor
+                    // define SCOPE_REPLACEMENT from the gameplay-luagen project.
+                    type.replace(i, 2, "");
+                    i = type.find("::");
+                }
 
                 void* ptr = va_arg(list, void*);
                 if (ptr == NULL)

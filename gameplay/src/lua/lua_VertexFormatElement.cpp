@@ -194,7 +194,7 @@ int lua_VertexFormatElement_usage(lua_State* state)
         VertexFormat::Usage result = instance->usage;
 
         // Push the return value onto the stack.
-        lua_pushstring(state, lua_stringFromEnum_VertexFormatUsage(result).c_str());
+        lua_pushstring(state, lua_stringFromEnum_VertexFormatUsage(result));
 
         return 1;
     }

@@ -128,7 +128,7 @@ int lua_Image_getFormat(lua_State* state)
                 Image::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ImageFormat(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_ImageFormat(result));
 
                 return 1;
             }

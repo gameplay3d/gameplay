@@ -705,7 +705,7 @@ int lua_TextBox_getAlignment(lua_State* state)
                 Control::Alignment result = instance->getAlignment();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlAlignment(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_ControlAlignment(result));
 
                 return 1;
             }
@@ -2173,7 +2173,7 @@ int lua_TextBox_getState(lua_State* state)
                 Control::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ControlState(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_ControlState(result));
 
                 return 1;
             }
@@ -2293,7 +2293,7 @@ int lua_TextBox_getTextAlignment(lua_State* state)
                 Font::Justify result = instance->getTextAlignment();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
 
                 return 1;
             }
@@ -2316,7 +2316,7 @@ int lua_TextBox_getTextAlignment(lua_State* state)
                 Font::Justify result = instance->getTextAlignment(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_FontJustify(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
 
                 return 1;
             }

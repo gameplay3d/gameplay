@@ -129,7 +129,7 @@ int lua_Gamepad_getButtonState(lua_State* state)
                 Gamepad::ButtonState result = instance->getButtonState(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_GamepadButtonState(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_GamepadButtonState(result));
 
                 return 1;
             }

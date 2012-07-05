@@ -25,12 +25,12 @@ public:
     /**
      * @see Game::keyEvent
      */
-    void keyEvent(Keyboard::KeyEvent evt, int key);
+    //void keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
      * @see Game::touchEvent
      */
-    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    //void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
 
@@ -56,19 +56,19 @@ protected:
 
 private:
 
-    bool drawScene(Node* node);
+    //bool drawScene(Node* node);
 
-    void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
+    //void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
-    void drawSplash(void* param);
+    //void drawSplash(void* param);
 
     Model* createGridModel(unsigned int lineCount = 41);
 
-    Font* _font;
-    Scene* _scene;
-    Node* _modelNode;
-    bool _touched;
-    int _touchX;
+    //Font* _font;
+    //Scene* _scene;
+    //Node* _modelNode;
+    //bool _touched;
+    //int _touchX;
 };
 
 #endif

@@ -128,7 +128,7 @@ int lua_DepthStencilTarget_getFormat(lua_State* state)
                 DepthStencilTarget::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_DepthStencilTargetFormat(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_DepthStencilTargetFormat(result));
 
                 return 1;
             }

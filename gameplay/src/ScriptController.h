@@ -2,6 +2,7 @@
 #define SCRIPTCONTROLLER_H
 
 #include "Base.h"
+#include "Gamepad.h"
 
 namespace gameplay
 {
@@ -12,6 +13,7 @@ namespace gameplay
 class ScriptController
 {
     friend class Game;
+    friend class Platform;
 
 public:
 
@@ -45,7 +47,8 @@ public:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
-     *      - '<object-type>' - a pointer to an object of the given type (where the type is enclosed by angle brackets).
+     *      - '<object-type>' - a pointer to an object of the given type (where the qualified type name is enclosed by angle brackets).
+     *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @return The return value of the executed Lua function.
      * @script{ignore}
      */
@@ -95,7 +98,8 @@ public:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
-     *      - '<object-type>' - a pointer to an object of the given type (where the type is enclosed by angle brackets).
+     *      - '<object-type>' - a pointer to an object of the given type (where the qualified type name is enclosed by angle brackets).
+     *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @return The return value of the executed Lua function.
      * @script{ignore}
      */
@@ -545,7 +549,12 @@ private:
         UPDATE,
         RENDER,
         FINALIZE,
-        CALLBACK_COUNT
+        KEY_EVENT,
+        MOUSE_EVENT,
+        TOUCH_EVENT,
+        GAMEPAD_EVENT,
+        CALLBACK_COUNT,
+        INVALID_CALLBACK = CALLBACK_COUNT
     };
 
     /**
@@ -586,12 +595,59 @@ private:
     /**
      * Callback for when the controller receives a frame update event.
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     /**
      * Renders the game using the appropriate callback script (if it was specified).
      */
-    void render(long elapsedTime);
+    void render(float elapsedTime);
+
+    /**
+     * Script keyboard callback on key events.
+     *
+     * @param evt The key event that occured.
+     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
+     *            If evt is KEY_CHAR then key is the unicode value of the character.
+     * 
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Script touch callback on touch events.
+     *
+     * @param evt The touch event that occurred.
+     * @param x The x position of the touch in pixels. Left edge is zero.
+     * @param y The y position of the touch in pixels. Top edge is zero.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     *
+     * @see Touch::TouchEvent
+     */
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * Script mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
+     * then it is interpreted as a touch event instead.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Script gamepad callback on gamepad events.
+     *
+     * @param evt The gamepad event that occurred.
+     * @param gamepad the gamepad the event occurred on
+     */
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
      * Calls the specifed Lua function using the given parameters.
@@ -613,7 +669,8 @@ private:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
-     *      - '<object-type>' - a pointer to an object of the given type (where the type is enclosed by angle brackets).
+     *      - '<object-type>' - a pointer to an object of the given type (where the qualified type name is enclosed by angle brackets).
+     *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @param list The variable argument list.
      */
     void executeFunctionHelper(int resultCount, const char* func, const char* args, va_list& list);

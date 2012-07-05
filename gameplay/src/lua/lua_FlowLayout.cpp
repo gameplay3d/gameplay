@@ -159,7 +159,7 @@ int lua_FlowLayout_getType(lua_State* state)
                 Layout::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_LayoutType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_LayoutType(result));
 
                 return 1;
             }
