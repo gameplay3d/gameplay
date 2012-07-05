@@ -1341,9 +1341,10 @@ void Generator::generateBindings()
                 for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
                 {
                     global << iter->first << " lua_enumFromString_" << getUniqueName(iter->first) << "(const char* s);\n";
-                    global << "std::string lua_stringFromEnum_" << getUniqueName(iter->first) << "(" << iter->first << " e);\n";
+                    global << "const char* lua_stringFromEnum_" << getUniqueName(iter->first) << "(" << iter->first << " e);\n";
                 }
                 global << "\n";
+                global << "const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value);\n\n";
             }
             
             // Write out the signature of the function used to register the global functions with Lua.
@@ -1437,6 +1438,7 @@ void Generator::generateBindings()
             }
 
             // Write out the enum conversion functions.
+            global << "static const char* enumStringEmpty = \"\";\n\n";
             for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
             {
                 // Build the scope string if applicable.
@@ -1449,6 +1451,14 @@ void Generator::generateBindings()
                     }
                 }
 
+                // Write out the string constants that correspond to the enumeration values.
+                for (unsigned int i = 0; i < iter->second.values.size(); i++)
+                {
+                    global << "static const char* luaEnumString_" << getUniqueName(iter->first) << "_";
+                    global << iter->second.values[i] << " = \"" << iter->second.values[i] << "\";\n";
+                }
+                global << "\n";
+
                 global << iter->first << " lua_enumFromString_" << getUniqueName(iter->first) << "(const char* s)\n";
                 global << "{\n";
                 
@@ -1456,7 +1466,7 @@ void Generator::generateBindings()
                 {
                     global << "    ";
                         
-                    global << "if (strcmp(s, \"" << iter->second.values[i] << "\") == 0)\n";
+                    global << "if (strcmp(s, luaEnumString_" << getUniqueName(iter->first) << "_" << iter->second.values[i] << ") == 0)\n";
                     global << "        return ";
                     if (scope.size() > 0)
                         global << scope;
@@ -1474,9 +1484,10 @@ void Generator::generateBindings()
 
                 global << "}\n\n";
 
-                global << "std::string lua_stringFromEnum_" << getUniqueName(iter->first) << "(" << iter->first << " e)\n";
+                global << "const char* lua_stringFromEnum_" << getUniqueName(iter->first) << "(" << iter->first << " e)\n";
                 global << "{\n";
-                
+
+                // Write out the enum-to-string conversion code.
                 for (unsigned int i = 0; i < iter->second.values.size(); i++)
                 {
                     global << "    ";
@@ -1485,17 +1496,31 @@ void Generator::generateBindings()
                     if (scope.size() > 0)
                         global << scope;
                     global << iter->second.values[i] << ")\n";
-                    global << "        return std::string(\"" << iter->second.values[i] << "\");\n";
+                    global << "        return luaEnumString_" << getUniqueName(iter->first) << "_" << iter->second.values[i] << ";\n";
 
                     if (i == iter->second.values.size() - 1)
                     {
                         global << "    GP_ERROR(\"Invalid enumeration value '%d' for enumeration " << iter->first << ".\", e);\n";
-                        global << "    return std::string();\n";
+                        global << "    return enumStringEmpty;\n";
                     }
                 }
 
                 global << "}\n\n";
             }
+
+            // Write out the global enum conversion function (used to pass enums from C++ to Lua).
+            global << "const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)\n";
+            global << "{\n";
+            for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
+            {
+                global << "    if (enumname == \"";
+                global << iter->first << "\")\n";
+                global << "        return lua_stringFromEnum_" << getUniqueName(iter->first) << "((" << iter->first << ")value);\n";
+            }
+            global << "\n";
+            global << "    GP_ERROR(\"Unrecognized enumeration type '%s'.\", enumname.c_str());\n";
+            global << "    return enumStringEmpty;\n";
+            global << "}\n\n";
 
             if (bindingNS)
                 global << "}\n";

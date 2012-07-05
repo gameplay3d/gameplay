@@ -3196,7 +3196,7 @@ int lua_Node_getType(lua_State* state)
                 Node::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_NodeType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_NodeType(result));
 
                 return 1;
             }

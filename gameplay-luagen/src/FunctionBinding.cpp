@@ -894,7 +894,7 @@ static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int i
         o << "lua_pushnumber(state, result);\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
-        o << "lua_pushstring(state, lua_stringFromEnum_" << Generator::getInstance()->getUniqueNameFromRef(b.returnParam.info) << "(result).c_str());\n";
+        o << "lua_pushstring(state, lua_stringFromEnum_" << Generator::getInstance()->getUniqueNameFromRef(b.returnParam.info) << "(result));\n";
         break;
     case FunctionBinding::Param::TYPE_STRING:
         if (b.returnParam.info == "string")

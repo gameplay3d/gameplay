@@ -2552,7 +2552,7 @@ int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
                 ParticleEmitter::TextureBlending result = ParticleEmitter::getTextureBlendingFromString(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_ParticleEmitterTextureBlending(result));
 
                 return 1;
             }

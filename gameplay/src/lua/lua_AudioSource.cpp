@@ -297,7 +297,7 @@ int lua_AudioSource_getState(lua_State* state)
                 AudioSource::State result = instance->getState();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_AudioSourceState(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_AudioSourceState(result));
 
                 return 1;
             }

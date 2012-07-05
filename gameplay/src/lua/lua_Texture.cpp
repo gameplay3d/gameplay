@@ -168,7 +168,7 @@ int lua_Texture_getFormat(lua_State* state)
                 Texture::Format result = instance->getFormat();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_TextureFormat(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_TextureFormat(result));
 
                 return 1;
             }

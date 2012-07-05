@@ -787,7 +787,7 @@ int lua_Properties_getType(lua_State* state)
                 Properties::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PropertiesType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_PropertiesType(result));
 
                 return 1;
             }
@@ -810,7 +810,7 @@ int lua_Properties_getType(lua_State* state)
                 Properties::Type result = instance->getType(param1);
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PropertiesType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_PropertiesType(result));
 
                 return 1;
             }

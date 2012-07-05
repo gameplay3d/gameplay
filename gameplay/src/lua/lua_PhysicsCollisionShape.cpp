@@ -167,7 +167,7 @@ int lua_PhysicsCollisionShape_getType(lua_State* state)
                 PhysicsCollisionShape::Type result = instance->getType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_PhysicsCollisionShapeType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_PhysicsCollisionShapeType(result));
 
                 return 1;
             }

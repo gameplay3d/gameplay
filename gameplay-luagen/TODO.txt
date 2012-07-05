@@ -10,8 +10,6 @@ Normal Priority List:
 - Add support for object arrays (i.e. VertexElement*).
 - Add "@script{create}" to the appropriate gameplay functions.
 - Fix memory leaks in gameplay-luagen and in generated code.
-
-- Add support for touch/key/mouse event callbacks.
 - Add support for listener callbacks.
 
 Low Priority List:

@@ -489,6 +489,15 @@ private:
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
 
+    /**
+     * Converts the given string to a valid script callback enumeration value
+     * or to ScriptController::INVALID_CALLBACK if there is no valid conversion.
+     * 
+     * @param name The name of the callback.
+     * @return The corresponding callback enumeration value.
+     */
+    static ScriptController::ScriptCallback toCallback(const char* name);
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     static double _pausedTimeLast;              // The last time paused.

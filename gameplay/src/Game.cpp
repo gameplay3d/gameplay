@@ -30,6 +30,9 @@ Game::Game()
 
 Game::~Game()
 {
+    _scriptController->finalize();
+    SAFE_DELETE(_scriptController);
+
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
     SAFE_DELETE(_timeEvents);
@@ -116,7 +119,8 @@ bool Game::startup()
             const char* name;
             while ((name = scripts->getNextProperty()) != NULL)
             {
-                if (strcmp(name, "INITIALIZE") == 0)
+                ScriptController::ScriptCallback callback = toCallback(name);
+                if (callback != ScriptController::INVALID_CALLBACK)
                 {
                     std::string url = scripts->getString();
                     std::string file;
@@ -125,63 +129,12 @@ bool Game::startup()
 
                     if (file.size() <= 0 || id.size() <= 0)
                     {
-                        GP_ERROR("Invalid INITIALIZE script callback function '%s'.", url.c_str());
+                        GP_ERROR("Invalid %s script callback function '%s'.", name, url.c_str());
                     }
                     else
                     {
                         _scriptController->loadScript(file.c_str());
-                        _scriptController->registerCallback(ScriptController::INITIALIZE, id);
-                    }
-                }
-                else if (strcmp(name, "UPDATE") == 0)
-                {
-                    std::string url = scripts->getString();
-                    std::string file;
-                    std::string id;
-                    splitURL(url, &file, &id);
-
-                    if (file.size() <= 0 || id.size() <= 0)
-                    {
-                        GP_ERROR("Invalid UPDATE script callback function '%s'.", url.c_str());
-                    }
-                    else
-                    {
-                        _scriptController->loadScript(file.c_str());
-                        _scriptController->registerCallback(ScriptController::UPDATE, id);
-                    }
-                }
-                else if (strcmp(name, "RENDER") == 0)
-                {
-                    std::string url = scripts->getString();
-                    std::string file;
-                    std::string id;
-                    splitURL(url, &file, &id);
-
-                    if (file.size() <= 0 || id.size() <= 0)
-                    {
-                        GP_ERROR("Invalid RENDER script callback function '%s'.", url.c_str());
-                    }
-                    else
-                    {
-                        _scriptController->loadScript(file.c_str());
-                        _scriptController->registerCallback(ScriptController::RENDER, id);
-                    }
-                }
-                else if (strcmp(name, "FINALIZE") == 0)
-                {
-                    std::string url = scripts->getString();
-                    std::string file;
-                    std::string id;
-                    splitURL(url, &file, &id);
-
-                    if (file.size() <= 0 || id.size() <= 0)
-                    {
-                        GP_ERROR("Invalid FINALIZE script callback function '%s'.", url.c_str());
-                    }
-                    else
-                    {
-                        _scriptController->loadScript(file.c_str());
-                        _scriptController->registerCallback(ScriptController::FINALIZE, id);
+                        _scriptController->registerCallback(callback, id);
                     }
                 }
                 else
@@ -227,8 +180,8 @@ void Game::shutdown()
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
 
-        _scriptController->finalize();
-        SAFE_DELETE(_scriptController);
+        // Note: we do not clean up the script controller here
+        // because users can call Game::exit() from a script.
 
         SAFE_DELETE(_audioListener);
 
@@ -530,6 +483,28 @@ Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
     _gamepads.push_back(gamepad);
 
     return gamepad;
+}
+
+ScriptController::ScriptCallback Game::toCallback(const char* name)
+{
+    if (strcmp(name, "INITIALIZE") == 0)
+        return ScriptController::INITIALIZE;
+    else if (strcmp(name, "UPDATE") == 0)
+        return ScriptController::UPDATE;
+    else if (strcmp(name, "RENDER") == 0)
+        return ScriptController::RENDER;
+    else if (strcmp(name, "FINALIZE") == 0)
+        return ScriptController::FINALIZE;
+    else if (strcmp(name, "KEY_EVENT") == 0)
+        return ScriptController::KEY_EVENT;
+    else if (strcmp(name, "TOUCH_EVENT") == 0)
+        return ScriptController::TOUCH_EVENT;
+    else if (strcmp(name, "MOUSE_EVENT") == 0)
+        return ScriptController::MOUSE_EVENT;
+    else if (strcmp(name, "GAMEPAD_EVENT") == 0)
+        return ScriptController::GAMEPAD_EVENT;
+    else
+        return ScriptController::INVALID_CALLBACK;
 }
 
 }

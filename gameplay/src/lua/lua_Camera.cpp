@@ -186,7 +186,7 @@ int lua_Camera_getCameraType(lua_State* state)
                 Camera::Type result = instance->getCameraType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_CameraType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_CameraType(result));
 
                 return 1;
             }

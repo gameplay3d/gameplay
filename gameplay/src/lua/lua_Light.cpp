@@ -260,7 +260,7 @@ int lua_Light_getLightType(lua_State* state)
                 Light::Type result = instance->getLightType();
 
                 // Push the return value onto the stack.
-                lua_pushstring(state, lua_stringFromEnum_LightType(result).c_str());
+                lua_pushstring(state, lua_stringFromEnum_LightType(result));
 
                 return 1;
             }
