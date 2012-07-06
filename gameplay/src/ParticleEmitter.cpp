@@ -262,7 +262,7 @@ bool ParticleEmitter::isActive() const
     return active;
 }
 
-void ParticleEmitter::emit(unsigned int particleCount)
+void ParticleEmitter::emitOnce(unsigned int particleCount)
 {
     GP_ASSERT(_node);
     GP_ASSERT(_particles);
@@ -810,8 +810,7 @@ void ParticleEmitter::update(float elapsedTime)
             {
                 _timeRunning = fmodl(_timeRunning, _timePerEmission);
             }
-
-            emit(emitCount);
+            emitOnce(emitCount);
         }
     }
 

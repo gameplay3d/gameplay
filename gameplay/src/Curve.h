@@ -385,6 +385,11 @@ private:
          * Destructor.
          */
         ~Point();
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        Point& operator=(const Point&);
     };
 
     /**
@@ -411,7 +416,7 @@ private:
     ~Curve();
 
     /**
-     * Copy assignment operator.
+     * Hidden copy assignment operator.
      */
     Curve& operator=(const Curve&);
 

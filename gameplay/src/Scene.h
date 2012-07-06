@@ -217,6 +217,11 @@ private:
     virtual ~Scene();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Scene& operator=(const Scene&);
+
+    /**
      * Visits the given node and all of its children recursively.
      */
     template <class T>

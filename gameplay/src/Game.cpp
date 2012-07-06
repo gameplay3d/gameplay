@@ -5,7 +5,6 @@
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 
-// Extern global variables
 GLenum __gl_error_code = GL_NO_ERROR;
 ALenum __al_error_code = AL_NO_ERROR;
 
@@ -130,7 +129,7 @@ bool Game::startup()
     _physicsController = new PhysicsController();
     _physicsController->initialize();
 
-    loadGamepad();
+    loadGamepads();
     
     _state = RUNNING;
 
@@ -181,7 +180,6 @@ void Game::pause()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
-
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
@@ -197,7 +195,6 @@ void Game::resume()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
-
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController->resume();
@@ -268,6 +265,24 @@ void Game::frame()
     }
 }
 
+void Game::updateOnce()
+{
+    GP_ASSERT(_animationController);
+    GP_ASSERT(_audioController);
+    GP_ASSERT(_physicsController);
+
+    // Update Time.
+    static double lastFrameTime = getGameTime();
+    double frameTime = getGameTime();
+    float elapsedTime = (frameTime - lastFrameTime);
+    lastFrameTime = frameTime;
+
+    // Update the internal controllers.
+    _animationController->update(elapsedTime);
+    _physicsController->update(elapsedTime);
+    _audioController->update(elapsedTime);
+}
+
 void Game::setViewport(const Rectangle& viewport)
 {
     _viewport = viewport;
@@ -326,7 +341,7 @@ AudioListener* Game::getAudioListener()
     return _audioListener;
 }
 
-void Game::menu()
+void Game::menuEvent()
 {
 }
 
@@ -336,6 +351,11 @@ void Game::keyEvent(Keyboard::KeyEvent evt, int key)
 
 void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
+}
+
+bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    return false;
 }
 
 void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
@@ -349,27 +369,32 @@ void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
     _timeEvents->push(timeEvent);
 }
 
-bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+void Game::fireTimeEvents(double frameTime)
 {
-    return false;
+    while (_timeEvents->size() > 0)
+    {
+        const TimeEvent* timeEvent = &_timeEvents->top();
+        if (timeEvent->time > frameTime)
+        {
+            break;
+        }
+        if (timeEvent->listener)
+        {
+            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
+        }
+        _timeEvents->pop();
+    }
 }
 
-void Game::updateOnce()
+Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)
+    : time(time), listener(timeListener), cookie(cookie)
 {
-    GP_ASSERT(_animationController);
-    GP_ASSERT(_audioController);
-    GP_ASSERT(_physicsController);
+}
 
-    // Update Time.
-    static double lastFrameTime = getGameTime();
-    double frameTime = getGameTime();
-    float elapsedTime = (frameTime - lastFrameTime);
-    lastFrameTime = frameTime;
-
-    // Update the internal controllers.
-    _animationController->update(elapsedTime);
-    _physicsController->update(elapsedTime);
-    _audioController->update(elapsedTime);
+bool Game::TimeEvent::operator<(const TimeEvent& v) const
+{
+    // The first element of std::priority_queue is the greatest.
+    return time > v.time;
 }
 
 Properties* Game::getConfig() const
@@ -392,50 +417,14 @@ void Game::loadConfig()
             // Load filesystem aliases.
             Properties* aliases = _properties->getNamespace("aliases", true);
             if (aliases)
+            {
                 FileSystem::loadResourceAliases(aliases);
+            }
         }
     }
 }
 
-void Game::fireTimeEvents(double frameTime)
-{
-    while (_timeEvents->size() > 0)
-    {
-        const TimeEvent* timeEvent = &_timeEvents->top();
-        if (timeEvent->time > frameTime)
-        {
-            break;
-        }
-        if (timeEvent->listener)
-            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
-        _timeEvents->pop();
-    }
-}
-
-Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)
-            : time(time), listener(timeListener), cookie(cookie)
-{
-}
-
-bool Game::TimeEvent::operator<(const TimeEvent& v) const
-{
-    // The first element of std::priority_queue is the greatest.
-    return time > v.time;
-}
-
-Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
-{
-    GP_ASSERT(gamepadFormPath);
-
-    Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
-    GP_ASSERT(gamepad);
-
-    _gamepads.push_back(gamepad);
-
-    return gamepad;
-}
-
-void Game::loadGamepad()
+void Game::loadGamepads()
 {
     if (_properties)
     {
@@ -446,11 +435,20 @@ void Game::loadGamepad()
         {
             const char* gamepadFormPath = gamepadProperties->getString("form");
             GP_ASSERT(gamepadFormPath);
-
             Gamepad* gamepad = createGamepad(gamepadProperties->getId(), gamepadFormPath);
             GP_ASSERT(gamepad);
         }
     }
+}
+
+Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
+{
+    GP_ASSERT(gamepadFormPath);
+    Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
+    GP_ASSERT(gamepad);
+    _gamepads.push_back(gamepad);
+
+    return gamepad;
 }
 
 }

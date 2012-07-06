@@ -103,7 +103,7 @@ void CharacterGame::initializeGamepad()
     GP_ASSERT(game);
     GP_ASSERT(game->getGamepadCount() > 0);
 
-    _gamepad = game->getGamepad();
+    _gamepad = game->getGamepad(0);
     GP_ASSERT(_gamepad);
 }
 

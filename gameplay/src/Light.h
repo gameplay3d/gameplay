@@ -66,6 +66,11 @@ public:
     virtual ~Light();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Light& operator=(const Light&);
+
+    /**
      * Returns the light type.
      * 
      * @return The light type.
