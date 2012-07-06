@@ -47,7 +47,7 @@ int lua_VertexAttributeBinding__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "VertexAttributeBinding");
                 luaL_argcheck(state, userdata != NULL, 1, "'VertexAttributeBinding' expected.");
@@ -87,7 +87,7 @@ int lua_VertexAttributeBinding_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VertexAttributeBinding* instance = getInstance(state);
                 instance->addRef();
@@ -121,7 +121,7 @@ int lua_VertexAttributeBinding_bind(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VertexAttributeBinding* instance = getInstance(state);
                 instance->bind();
@@ -155,7 +155,7 @@ int lua_VertexAttributeBinding_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VertexAttributeBinding* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -192,7 +192,7 @@ int lua_VertexAttributeBinding_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VertexAttributeBinding* instance = getInstance(state);
                 instance->release();
@@ -226,8 +226,8 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Mesh* param1 = ScriptController::getInstance()->getObjectPointer<Mesh>(1, "Mesh", false);
@@ -278,7 +278,7 @@ int lua_VertexAttributeBinding_unbind(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VertexAttributeBinding* instance = getInstance(state);
                 instance->unbind();

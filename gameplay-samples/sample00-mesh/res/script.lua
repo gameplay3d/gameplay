@@ -32,9 +32,9 @@ function init()
     _scene:getActiveCamera():setAspectRatio(game:getWidth() / game:getHeight())
 
     -- Create the grid and add it to the scene.
-    --local model = createGridModel()
-    --_scene:addNode("grid"):setModel(model)
-    --model = nil
+    local model = createGridModel()
+    _scene:addNode("grid"):setModel(model)
+    model = nil
 
     ScreenDisplayer.finish()
 end
@@ -108,4 +108,105 @@ function touchEvent(evt, x, y, contactIndex)
         _touchX = x
         _modelNode:rotateY(deltaX * 0.5 * DEG_TO_RAD)
     end    
+end
+
+function createGridModel()
+    local lineCount = 41
+    local pointCount = lineCount * 4
+    local verticesSize = pointCount * (3 + 3) -- (3 (position(xyz) + 3 color(rgb))
+
+    local vertices = {};
+    local gridLength = math.floor(lineCount / 2)
+
+    local value = -gridLength
+    local i = 1
+    while i < verticesSize do
+        -- Default line color is dark grey
+        local color = Vector4.new(0.3, 0.3, 0.3, 1.0)
+
+        -- Every 10th line is brighter grey
+        if math.floor(value + 0.5) % 10 == 0 then
+            color:set(0.45, 0.45, 0.45, 1.0)
+        end
+
+        -- The Z axis is blue
+        if value == 0.0 then
+            color:set(0.15, 0.15, 0.7, 1.0)
+        end
+
+        -- Build the lines
+        vertices[i] = value
+        i = i + 1
+        vertices[i] = 0.0
+        i = i + 1
+        vertices[i] = -gridLength
+        i = i + 1
+        vertices[i] = color:x()
+        i = i + 1
+        vertices[i] = color:y()
+        i = i + 1
+        vertices[i] = color:z()
+        i = i + 1
+
+        vertices[i] = value
+        i = i + 1
+        vertices[i] = 0.0
+        i = i + 1
+        vertices[i] = gridLength
+        i = i + 1
+        vertices[i] = color:x()
+        i = i + 1
+        vertices[i] = color:y()
+        i = i + 1
+        vertices[i] = color:z()
+        i = i + 1
+
+        -- The X axis is red
+        if value == 0.0 then
+            color:set(0.7, 0.15, 0.15, 1.0)
+        end
+        vertices[i] = -gridLength
+        i = i + 1
+        vertices[i] = 0.0
+        i = i + 1
+        vertices[i] = value
+        i = i + 1
+        vertices[i] = color:x()
+        i = i + 1
+        vertices[i] = color:y()
+        i = i + 1
+        vertices[i] = color:z()
+        i = i + 1
+
+        vertices[i] = gridLength
+        i = i + 1
+        vertices[i] = 0.0
+        i = i + 1
+        vertices[i] = value
+        i = i + 1
+        vertices[i] = color:x()
+        i = i + 1
+        vertices[i] = color:y()
+        i = i + 1
+        vertices[i] = color:z()
+        i = i + 1
+
+        value = value + 1.0
+    end
+
+    elements = { 
+        VertexFormat.Element.new(VertexFormat.POSITION, 3),
+        VertexFormat.Element.new(VertexFormat.COLOR, 3)
+    }
+    mesh = Mesh.createMesh(VertexFormat.new(elements, 2), pointCount, false)
+    if mesh == nil then
+        return nil
+    end
+    mesh:setPrimitiveType(Mesh.LINES)
+    mesh:setVertexData(vertices, 0, pointCount)
+
+    model = Model.create(mesh)
+    model:setMaterial("res/grid.material")
+    mesh:release()
+    return model
 end

@@ -39,6 +39,8 @@
     <None Include="res\script.lua">
       <Filter>res</Filter>
     </None>
+    <None Include="res\line.fsh" />
+    <None Include="res\line.vsh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp">

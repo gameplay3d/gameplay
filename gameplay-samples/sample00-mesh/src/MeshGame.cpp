@@ -14,6 +14,7 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
+    createGridModel();
     /*
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
@@ -161,6 +162,8 @@ void MeshGame::drawSplash(void* param)
 }
 */
 
+#include <fstream>
+
 Model* MeshGame::createGridModel(unsigned int lineCount)
 {
     // There needs to be an odd number of lines
@@ -238,6 +241,17 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
     }
     mesh->setPrimitiveType(Mesh::LINES);
     mesh->setVertexData(&vertices[0], 0, pointCount);
+
+    // DEBUG
+    std::ofstream o("C:/cculy/t2.txt");
+    if (o)
+    {
+        for (unsigned int i = 0; i < vertices.size(); i++)
+        {
+            o << i << ": " << vertices[i] << "\n";
+        }
+    }
+    o.close();
 
     Model* model = Model::create(mesh);
     model->setMaterial("res/grid.material");

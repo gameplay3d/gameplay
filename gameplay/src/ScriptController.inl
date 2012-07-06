@@ -109,31 +109,79 @@ template<typename T>T* ScriptController::getObjectPointer(int index, const char*
 
         return NULL;
     }
-
-    void* p = lua_touserdata(_lua, index);
-    if (p != NULL)
+    else if (lua_type(_lua, index) == LUA_TTABLE)
     {
-        if (lua_getmetatable(_lua, index))
-        {
-            // Check if it matches the type's metatable.
-            luaL_getmetatable(_lua, type);
-            if (lua_rawequal(_lua, -1, -2))
-            {
-                lua_pop(_lua, 2);
-                T* ptr = (T*)((ScriptController::LuaObject*)p)->instance;
-                if (ptr == NULL && nonNull)
-                {
-                    GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
-                }
-                return ptr;
-            }
-            lua_pop(_lua, 1);
+        // Get the size of the array.
+        lua_len(_lua, index);
+        int size = luaL_checkint(_lua, -1);
 
-            // Check if it matches any of the derived types' metatables.
-            const std::vector<std::string>& types = _hierarchy[type];
-            for (unsigned int i = 0, count = types.size(); i < count; i++)
+        if (size <= 0)
+            return NULL;
+
+        // Create an array to store the values.
+        T* values = (T*)malloc(sizeof(T)*size);
+        
+        // Push the first key.
+        lua_pushnil(_lua);
+        int i = 0;
+        for (; lua_next(_lua, index) != 0 && i < size; i++)
+        {
+            void* p = lua_touserdata(_lua, -1);
+            if (p != NULL)
             {
-                luaL_getmetatable(_lua, types[i].c_str());
+                if (lua_getmetatable(_lua, -1))
+                {
+                    // Check if it matches the type's metatable.
+                    luaL_getmetatable(_lua, type);
+                    if (lua_rawequal(_lua, -1, -2))
+                    {
+                        lua_pop(_lua, 2);
+                        T* ptr = (T*)((ScriptController::LuaObject*)p)->instance;
+                        if (ptr)
+                            memcpy(&values[i], ptr, sizeof(T));
+                        else
+                            memset(&values[i], 0, sizeof(T));
+
+                        lua_pop(_lua, 1);
+                        continue;
+                    }
+                    lua_pop(_lua, 1);
+
+                    // Check if it matches any of the derived types' metatables.
+                    const std::vector<std::string>& types = _hierarchy[type];
+                    for (unsigned int k = 0, count = types.size(); k < count; k++)
+                    {
+                        luaL_getmetatable(_lua, types[k].c_str());
+                        if (lua_rawequal(_lua, -1, -2))
+                        {
+                            lua_pop(_lua, 2);
+                            T* ptr = (T*)((ScriptController::LuaObject*)p)->instance;
+                            if (ptr)
+                                memcpy(&values[i], ptr, sizeof(T));
+                            else
+                                memset(&values[i], 0, sizeof(T));
+                            lua_pop(_lua, 1);
+                            continue;
+                        }
+                        lua_pop(_lua, 1);
+                    }
+            
+                    lua_pop(_lua, 1);
+                }
+            }
+        }
+        
+        return values;
+    }
+    else
+    {
+        void* p = lua_touserdata(_lua, index);
+        if (p != NULL)
+        {
+            if (lua_getmetatable(_lua, index))
+            {
+                // Check if it matches the type's metatable.
+                luaL_getmetatable(_lua, type);
                 if (lua_rawequal(_lua, -1, -2))
                 {
                     lua_pop(_lua, 2);
@@ -145,17 +193,35 @@ template<typename T>T* ScriptController::getObjectPointer(int index, const char*
                     return ptr;
                 }
                 lua_pop(_lua, 1);
-            }
-            
-            lua_pop(_lua, 1);
-        }
-    }
 
-    if (nonNull)
-    {
-        GP_ERROR("Failed to retrieve a valid object pointer of type '%s' for parameter %d.", type, index);
+                // Check if it matches any of the derived types' metatables.
+                const std::vector<std::string>& types = _hierarchy[type];
+                for (unsigned int i = 0, count = types.size(); i < count; i++)
+                {
+                    luaL_getmetatable(_lua, types[i].c_str());
+                    if (lua_rawequal(_lua, -1, -2))
+                    {
+                        lua_pop(_lua, 2);
+                        T* ptr = (T*)((ScriptController::LuaObject*)p)->instance;
+                        if (ptr == NULL && nonNull)
+                        {
+                            GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
+                        }
+                        return ptr;
+                    }
+                    lua_pop(_lua, 1);
+                }
+            
+                lua_pop(_lua, 1);
+            }
+        }
+
+        if (nonNull)
+        {
+            GP_ERROR("Failed to retrieve a valid object pointer of type '%s' for parameter %d.", type, index);
+        }
+        return NULL;
     }
-    return NULL;
 }
 
 template<typename T>T* ScriptController::getObjectPointer(const char* type, const char* name)

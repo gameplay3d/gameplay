@@ -48,7 +48,7 @@ int lua_MeshBatch__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "MeshBatch");
                 luaL_argcheck(state, userdata != NULL, 1, "'MeshBatch' expected.");
@@ -88,7 +88,7 @@ int lua_MeshBatch_begin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshBatch* instance = getInstance(state);
                 instance->begin();
@@ -122,7 +122,7 @@ int lua_MeshBatch_draw(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshBatch* instance = getInstance(state);
                 instance->draw();
@@ -156,7 +156,7 @@ int lua_MeshBatch_finish(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshBatch* instance = getInstance(state);
                 instance->finish();
@@ -190,7 +190,7 @@ int lua_MeshBatch_getCapacity(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshBatch* instance = getInstance(state);
                 unsigned int result = instance->getCapacity();
@@ -227,7 +227,7 @@ int lua_MeshBatch_getMaterial(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshBatch* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getMaterial();
@@ -273,7 +273,7 @@ int lua_MeshBatch_setCapacity(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -346,7 +346,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -425,7 +425,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TBOOLEAN &&
                 lua_type(state, 5) == LUA_TNUMBER)
             {
@@ -512,7 +512,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TBOOLEAN &&
                 lua_type(state, 5) == LUA_TNUMBER &&
                 lua_type(state, 6) == LUA_TNUMBER)

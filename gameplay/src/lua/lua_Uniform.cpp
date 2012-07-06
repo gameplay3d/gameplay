@@ -41,7 +41,7 @@ int lua_Uniform_getEffect(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Uniform* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getEffect();
@@ -87,7 +87,7 @@ int lua_Uniform_getName(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Uniform* instance = getInstance(state);
                 const char* result = instance->getName();
@@ -124,7 +124,7 @@ int lua_Uniform_getType(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Uniform* instance = getInstance(state);
                 GLenum result = instance->getType();

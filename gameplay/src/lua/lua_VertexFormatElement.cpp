@@ -41,7 +41,7 @@ int lua_VertexFormatElement__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "VertexFormatElement");
                 luaL_argcheck(state, userdata != NULL, 1, "'VertexFormatElement' expected.");

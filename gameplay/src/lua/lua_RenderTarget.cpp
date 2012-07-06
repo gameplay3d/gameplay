@@ -48,7 +48,7 @@ int lua_RenderTarget__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "RenderTarget");
                 luaL_argcheck(state, userdata != NULL, 1, "'RenderTarget' expected.");
@@ -88,7 +88,7 @@ int lua_RenderTarget_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 RenderTarget* instance = getInstance(state);
                 instance->addRef();
@@ -122,7 +122,7 @@ int lua_RenderTarget_getId(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 RenderTarget* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -159,7 +159,7 @@ int lua_RenderTarget_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 RenderTarget* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -196,7 +196,7 @@ int lua_RenderTarget_getTexture(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 RenderTarget* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getTexture();
@@ -242,7 +242,7 @@ int lua_RenderTarget_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 RenderTarget* instance = getInstance(state);
                 instance->release();

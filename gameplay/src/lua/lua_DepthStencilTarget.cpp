@@ -48,7 +48,7 @@ int lua_DepthStencilTarget__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "DepthStencilTarget");
                 luaL_argcheck(state, userdata != NULL, 1, "'DepthStencilTarget' expected.");
@@ -88,7 +88,7 @@ int lua_DepthStencilTarget_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 DepthStencilTarget* instance = getInstance(state);
                 instance->addRef();
@@ -122,7 +122,7 @@ int lua_DepthStencilTarget_getFormat(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 DepthStencilTarget* instance = getInstance(state);
                 DepthStencilTarget::Format result = instance->getFormat();
@@ -159,7 +159,7 @@ int lua_DepthStencilTarget_getId(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 DepthStencilTarget* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -196,7 +196,7 @@ int lua_DepthStencilTarget_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 DepthStencilTarget* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -233,7 +233,7 @@ int lua_DepthStencilTarget_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 DepthStencilTarget* instance = getInstance(state);
                 instance->release();

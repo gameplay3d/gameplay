@@ -18,27 +18,27 @@ ScriptController* ScriptController::__instance = NULL;
         return NULL; \
     } \
     \
-    /* Create a vector to store the values. */ \
-    std::vector<type> values; \
+    /* Get the size of the array. */ \
+    lua_len(_lua, index); \
+    int size = luaL_checkint(_lua, -1); \
+    if (size <= 0) \
+        return NULL; \
+    \
+    /* Create an array to store the values. */ \
+    type* values = (type*)malloc(sizeof(type)*size); \
     \
     /* Push the first key. */ \
     lua_pushnil(_lua); \
-    while (lua_next(_lua, index) != 0) \
+    int i = 0; \
+    for (; lua_next(_lua, index) != 0 && i < size; i++) \
     { \
-        values.push_back(checkFunc(_lua, -1)); \
+        values[i] = (checkFunc(_lua, -1)); \
         \
         /* Remove the value we just retrieved, but leave the key for the next iteration. */ \
         lua_pop(_lua, 1); \
     } \
     \
-    /* Copy the values into an array. */ \
-    if (values.size() > 0) \
-    { \
-        type* ptr = new type[values.size()]; \
-        std::copy(values.begin(), values.end(), ptr); \
-        return ptr; \
-    } \
-    return NULL
+    return values
 
 
 ScriptController* ScriptController::getInstance()

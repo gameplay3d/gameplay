@@ -60,7 +60,7 @@ int lua_AudioSource__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "AudioSource");
                 luaL_argcheck(state, userdata != NULL, 1, "'AudioSource' expected.");
@@ -100,7 +100,7 @@ int lua_AudioSource_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->addRef();
@@ -134,7 +134,7 @@ int lua_AudioSource_getGain(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 float result = instance->getGain();
@@ -171,7 +171,7 @@ int lua_AudioSource_getNode(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getNode();
@@ -217,7 +217,7 @@ int lua_AudioSource_getPitch(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 float result = instance->getPitch();
@@ -254,7 +254,7 @@ int lua_AudioSource_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -291,7 +291,7 @@ int lua_AudioSource_getState(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 AudioSource::State result = instance->getState();
@@ -328,7 +328,7 @@ int lua_AudioSource_getVelocity(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getVelocity());
@@ -374,7 +374,7 @@ int lua_AudioSource_isLooped(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 bool result = instance->isLooped();
@@ -411,7 +411,7 @@ int lua_AudioSource_pause(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->pause();
@@ -445,7 +445,7 @@ int lua_AudioSource_play(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->play();
@@ -479,7 +479,7 @@ int lua_AudioSource_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->release();
@@ -513,7 +513,7 @@ int lua_AudioSource_resume(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->resume();
@@ -547,7 +547,7 @@ int lua_AudioSource_rewind(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->rewind();
@@ -581,7 +581,7 @@ int lua_AudioSource_setGain(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -619,7 +619,7 @@ int lua_AudioSource_setLooped(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -657,7 +657,7 @@ int lua_AudioSource_setPitch(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -695,7 +695,7 @@ int lua_AudioSource_setVelocity(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -754,7 +754,7 @@ int lua_AudioSource_static_create(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Properties* param1 = ScriptController::getInstance()->getObjectPointer<Properties>(1, "Properties", false);
@@ -802,7 +802,7 @@ int lua_AudioSource_stop(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AudioSource* instance = getInstance(state);
                 instance->stop();

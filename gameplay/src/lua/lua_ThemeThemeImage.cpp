@@ -46,7 +46,7 @@ int lua_ThemeThemeImage__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "ThemeThemeImage");
                 luaL_argcheck(state, userdata != NULL, 1, "'ThemeThemeImage' expected.");
@@ -86,7 +86,7 @@ int lua_ThemeThemeImage_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 instance->addRef();
@@ -120,7 +120,7 @@ int lua_ThemeThemeImage_getColor(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getColor());
@@ -166,7 +166,7 @@ int lua_ThemeThemeImage_getId(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -203,7 +203,7 @@ int lua_ThemeThemeImage_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -240,7 +240,7 @@ int lua_ThemeThemeImage_getRegion(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getRegion());
@@ -286,7 +286,7 @@ int lua_ThemeThemeImage_getUVs(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getUVs());
@@ -332,7 +332,7 @@ int lua_ThemeThemeImage_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme::ThemeImage* instance = getInstance(state);
                 instance->release();

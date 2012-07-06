@@ -31,6 +31,7 @@ void luaRegister_Mesh()
         {"setBoundingBox", lua_Mesh_setBoundingBox},
         {"setBoundingSphere", lua_Mesh_setBoundingSphere},
         {"setPrimitiveType", lua_Mesh_setPrimitiveType},
+        {"setVertexData", lua_Mesh_setVertexData},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -64,7 +65,7 @@ int lua_Mesh__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "Mesh");
                 luaL_argcheck(state, userdata != NULL, 1, "'Mesh' expected.");
@@ -104,7 +105,7 @@ int lua_Mesh_addPart(lua_State* state)
     {
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER)
@@ -144,7 +145,7 @@ int lua_Mesh_addPart(lua_State* state)
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -206,7 +207,7 @@ int lua_Mesh_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 instance->addRef();
@@ -240,7 +241,7 @@ int lua_Mesh_getBoundingBox(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getBoundingBox());
@@ -286,7 +287,7 @@ int lua_Mesh_getBoundingSphere(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getBoundingSphere());
@@ -332,7 +333,7 @@ int lua_Mesh_getPart(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -382,7 +383,7 @@ int lua_Mesh_getPartCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 unsigned int result = instance->getPartCount();
@@ -419,7 +420,7 @@ int lua_Mesh_getPrimitiveType(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 Mesh::PrimitiveType result = instance->getPrimitiveType();
@@ -456,7 +457,7 @@ int lua_Mesh_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -493,7 +494,7 @@ int lua_Mesh_getUrl(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 const char* result = instance->getUrl();
@@ -530,7 +531,7 @@ int lua_Mesh_getVertexBuffer(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 void* returnPtr = (void*)new GLuint(instance->getVertexBuffer());
@@ -576,7 +577,7 @@ int lua_Mesh_getVertexCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 unsigned int result = instance->getVertexCount();
@@ -613,7 +614,7 @@ int lua_Mesh_getVertexFormat(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getVertexFormat());
@@ -659,7 +660,7 @@ int lua_Mesh_getVertexSize(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 unsigned int result = instance->getVertexSize();
@@ -696,7 +697,7 @@ int lua_Mesh_isDynamic(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 bool result = instance->isDynamic();
@@ -733,7 +734,7 @@ int lua_Mesh_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Mesh* instance = getInstance(state);
                 instance->release();
@@ -767,7 +768,7 @@ int lua_Mesh_setBoundingBox(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -805,7 +806,7 @@ int lua_Mesh_setBoundingSphere(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -843,7 +844,7 @@ int lua_Mesh_setPrimitiveType(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -864,6 +865,96 @@ int lua_Mesh_setPrimitiveType(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Mesh_setVertexData(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
+            {
+                // Get parameter 1 off the stack.
+                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+
+                Mesh* instance = getInstance(state);
+                instance->setVertexData(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                Mesh* instance = getInstance(state);
+                instance->setVertexData(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                Mesh* instance = getInstance(state);
+                instance->setVertexData(param1, param2, param3);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 3 or 4).");
             lua_error(state);
             break;
         }
@@ -929,7 +1020,7 @@ int lua_Mesh_static_createLines(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.

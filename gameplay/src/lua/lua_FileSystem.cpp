@@ -47,7 +47,7 @@ int lua_FileSystem__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "FileSystem");
                 luaL_argcheck(state, userdata != NULL, 1, "'FileSystem' expected.");
@@ -163,7 +163,7 @@ int lua_FileSystem_static_loadResourceAliases(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Properties* param1 = ScriptController::getInstance()->getObjectPointer<Properties>(1, "Properties", false);

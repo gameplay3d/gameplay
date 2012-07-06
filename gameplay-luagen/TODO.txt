@@ -5,15 +5,19 @@ Unsupported:
 - variable arguments
 - Lua doesn't support as many types as C++ so if there are functions that overload on parameters with types that overlap in Lua, the overloading won't work properly (i.e. char, short, int, long, float, double and all corresponding unsigned variants overlap in Lua).
 
+- Note: primitive data type arrays and object arrays are both inefficient when created in Lua and passed to C++.
+
 Normal Priority List:
 =====================
-- Add support for object arrays (i.e. VertexElement*).
 - Add "@script{create}" to the appropriate gameplay functions.
 - Fix memory leaks in gameplay-luagen and in generated code.
+    - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
 - Add support for listener callbacks.
+- Figure out a way to determine the proper needed include files (generate Doxygen XML for cpp files?); along with this do the following:
+    - Reduce compilation dependencies (remove Global.h from all lua_XXX.cpp files)
+    - Separate the enums into separate files and have generated files include the enum files they need.
 
 Low Priority List:
 ==================
-- Reduce compilation dependencies (remove Global.h from lua_XXX.cpp?)
 - Add support for std::vector.
 - Separate threads?
