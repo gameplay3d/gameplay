@@ -26,10 +26,11 @@ public:
      * Creates a platform for the specified game which is will interacte with.
      *
      * @param game The game to create a platform for.
+     * @param nativeWindow The native window handle to optionally attach to.
      * 
      * @return The created platform interface.
      */
-    static Platform* create(Game* game);
+    static Platform* create(Game* game, unsigned int nativeWindow = 0);
 
     /**
      * Begins processing the platform messages.
@@ -37,9 +38,15 @@ public:
      * This method handles all OS window messages and drives the game loop.
      * It normally does not return until the application is closed.
      * 
+     * If a nativeWindow is passed the game is started but not looped. 
+     * The user must pump the game along from the seperate window via
+     * game events and Platform::swapBuffers
+     * 
+     * @param loop true to run the game loop; false to not.
+     *
      * @return The platform message pump return code.
      */
-    int enterMessagePump();
+    int enterMessagePump(bool loop = true);
     
     /**
      * This method informs the platform that the game is shutting down 

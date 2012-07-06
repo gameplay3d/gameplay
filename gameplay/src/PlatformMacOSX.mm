@@ -14,6 +14,8 @@
 using namespace std;
 using namespace gameplay;
 
+static unsigned int __nativeWindow = 0L;
+
 // Default to 720p
 static int __width = 1280;
 static int __height = 720;
@@ -617,14 +619,15 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, unsigned int nativeWindow)
 {
+	__nativeWindow = nativeWindow;
     Platform* platform = new Platform(game);
     
     return platform;
 }
 
-int Platform::enterMessagePump()
+int Platform::enterMessagePump(bool loop)
 {
     NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
     NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];

@@ -715,14 +715,14 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, unsigned int nativeWindow)
 {
     Platform* platform = new Platform(game);
     
     return platform;
 }
 
-int Platform::enterMessagePump()
+int Platform::enterMessagePump(bool loop)
 {
     GP_ASSERT(__state && __state->activity && __state->activity->vm);
 

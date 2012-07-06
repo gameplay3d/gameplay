@@ -477,112 +477,8 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game)
+bool initializeGL()
 {
-    GP_ASSERT(game);
-
-    FileSystem::setResourcePath("./");
-
-    Platform* platform = new Platform(game);
-
-    // Get the application module handle.
-    __hinstance = ::GetModuleHandle(NULL);
-
-    LPCTSTR windowClass = L"gameplay";
-    std::wstring windowName;
-    bool fullscreen = false;
-    
-    // Read window settings from config.
-    if (game->getConfig())
-    {
-        Properties* config = game->getConfig()->getNamespace("window", true);
-        if (config)
-        {
-            // Read window title.
-            const char* title = config->getString("title");
-            if (title)
-            {
-                int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
-                wchar_t* wtitle = new wchar_t[len];
-                MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
-                windowName = wtitle;
-                SAFE_DELETE_ARRAY(wtitle);
-            }
-
-            // Read window size.
-            int width = config->getInt("width");
-            if (width != 0)
-                __width = width;
-            int height = config->getInt("height");
-            if (height != 0)
-                __height = height;
-
-            // Read fullscreen state.
-            fullscreen = config->getBool("fullscreen");
-        }
-    }
-
-    RECT rect = { 0, 0, __width, __height };
-
-    // Register our window class.
-    WNDCLASSEX wc;
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wc.lpfnWndProc    = (WNDPROC)__WndProc;
-    wc.cbClsExtra     = 0;
-    wc.cbWndExtra     = 0;
-    wc.hInstance      = __hinstance;
-    wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hIconSm        = NULL;
-    wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
-    wc.lpszMenuName   = NULL;  // No default menu
-    wc.lpszClassName  = windowClass;
-
-    if (!::RegisterClassEx(&wc))
-    {
-        GP_ERROR("Failed to register window class.");
-        goto error;
-    }
-
-    if (fullscreen)
-    {
-        DEVMODE dm;
-        memset(&dm, 0, sizeof(dm));
-        dm.dmSize= sizeof(dm);
-        dm.dmPelsWidth	= __width;
-        dm.dmPelsHeight	= __height;
-        dm.dmBitsPerPel	= 32;
-        dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
-        // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
-        if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-        {
-            fullscreen = false;
-            GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
-            goto error;
-        }
-    }
-
-    // Set the window style.
-    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    //DWORD style   = (fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
-
-    // Adjust the window rectangle so the client size is the requested size.
-    AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-
-    // Create the native Windows window.
-    __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
-
-    // Get the drawing context.
-    __hdc = GetDC(__hwnd);
-
-    // Center the window
-    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
-    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
-    ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-
     // Choose pixel format. 32-bit. RGBA.
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
@@ -599,12 +495,12 @@ Platform* Platform::create(Game* game)
     if (pixelFormat == 0)
     {
         GP_ERROR("Failed to choose a pixel format.");
-        goto error;
+        return false;
     }
     if (!SetPixelFormat (__hdc, pixelFormat, &pfd))
     {
         GP_ERROR("Failed to set the pixel format.");
-        goto error;
+        return false;
     }
 
     HGLRC tempContext = wglCreateContext(__hdc);
@@ -613,7 +509,7 @@ Platform* Platform::create(Game* game)
     if (GLEW_OK != glewInit())
     {
         GP_ERROR("Failed to initialize GLEW.");
-        goto error;
+        return false;
     }
 
     int attribs[] =
@@ -627,21 +523,146 @@ Platform* Platform::create(Game* game)
     {
         wglDeleteContext(tempContext);
         GP_ERROR("Failed to create OpenGL context.");
-        goto error;
+        return false;
     }
     wglDeleteContext(tempContext);
 
     if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
     {
         GP_ERROR("Failed to make the window current.");
-        goto error;
+        return false;
     }
 
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
-    // Show the window.
-    ShowWindow(__hwnd, SW_SHOW);
+    return true;
+}
+
+Platform* Platform::create(Game* game, unsigned int nativeWindow)
+{
+    GP_ASSERT(game);
+
+    FileSystem::setResourcePath("./");
+
+    Platform* platform = new Platform(game);
+
+    // Get the application module handle.
+    __hinstance = ::GetModuleHandle(NULL);
+
+    if (!nativeWindow)
+    {
+        LPCTSTR windowClass = L"gameplay";
+        std::wstring windowName;
+        bool fullscreen = false;
+    
+        // Read window settings from config.
+        if (game->getConfig())
+        {
+            Properties* config = game->getConfig()->getNamespace("window", true);
+            if (config)
+            {
+                // Read window title.
+                const char* title = config->getString("title");
+                if (title)
+                {
+                    int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
+                    wchar_t* wtitle = new wchar_t[len];
+                    MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+                    windowName = wtitle;
+                    SAFE_DELETE_ARRAY(wtitle);
+                }
+
+                // Read window size.
+                int width = config->getInt("width");
+                if (width != 0)
+                    __width = width;
+                int height = config->getInt("height");
+                if (height != 0)
+                    __height = height;
+
+                // Read fullscreen state.
+                fullscreen = config->getBool("fullscreen");
+            }
+        }
+
+        RECT rect = { 0, 0, __width, __height };
+
+        // Register our window class.
+        WNDCLASSEX wc;
+        wc.cbSize = sizeof(WNDCLASSEX);
+        wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+        wc.lpfnWndProc    = (WNDPROC)__WndProc;
+        wc.cbClsExtra     = 0;
+        wc.cbWndExtra     = 0;
+        wc.hInstance      = __hinstance;
+        wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
+        wc.hIconSm        = NULL;
+        wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
+        wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
+        wc.lpszMenuName   = NULL;  // No default menu
+        wc.lpszClassName  = windowClass;
+
+        if (!::RegisterClassEx(&wc))
+        {
+            GP_ERROR("Failed to register window class.");
+            goto error;
+        }
+
+        if (fullscreen)
+        {
+            DEVMODE dm;
+            memset(&dm, 0, sizeof(dm));
+            dm.dmSize= sizeof(dm);
+            dm.dmPelsWidth	= __width;
+            dm.dmPelsHeight	= __height;
+            dm.dmBitsPerPel	= 32;
+            dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+            // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
+            if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+            {
+                fullscreen = false;
+                GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
+                goto error;
+            }
+        }
+
+        // Set the window style.
+        DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+        DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+
+        // Adjust the window rectangle so the client size is the requested size.
+        AdjustWindowRectEx(&rect, style, FALSE, styleEx);
+
+        // Create the native Windows window.
+        __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
+
+        // Get the drawing context.
+        __hdc = GetDC(__hwnd);
+
+        // Center the window
+        const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
+        const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
+        ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+        if (!initializeGL())
+            goto error;
+
+        // Show the window.
+        ShowWindow(__hwnd, SW_SHOW);
+    }
+    else
+    {
+        // Attach to a previous windows
+        __hwnd = (HWND)nativeWindow;
+        __hdc = GetDC(__hwnd);
+
+        SetWindowLongPtr(__hwnd, GWL_WNDPROC, (LONG)(WNDPROC)__WndProc);
+        
+        if (!initializeGL())
+            goto error;
+    }
 
     return platform;
 
@@ -651,7 +672,7 @@ error:
     return NULL;
 }
 
-int Platform::enterMessagePump()
+int Platform::enterMessagePump(bool loop)
 {
     GP_ASSERT(_game);
     int rc = 0;
@@ -673,6 +694,9 @@ int Platform::enterMessagePump()
 
     if (_game->getState() != Game::RUNNING)
         _game->run();
+
+    if (!loop)
+        return 0;
 
     // Enter event dispatch loop.
     MSG msg;
@@ -699,7 +723,6 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
     }
-
     return msg.wParam;
 }
 
