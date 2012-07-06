@@ -169,8 +169,8 @@
     <None Include="res\box.dae" />
     <None Include="res\box.gpb" />
     <None Include="res\box.material" />
-    <None Include="res\colored.fsh" />
-    <None Include="res\colored.vsh" />
+    <None Include="res\colored.frag" />
+    <None Include="res\colored.vert" />
   </ItemGroup> 
   <ItemGroup>
     <ClCompile Include="src\TemplateGame.cpp" />
