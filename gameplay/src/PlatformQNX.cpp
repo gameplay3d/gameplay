@@ -488,7 +488,7 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, unsigned int nativeWindow)
 {
     FileSystem::setResourcePath("./app/native/");
 
@@ -774,7 +774,7 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
     }
 }
 
-int Platform::enterMessagePump()
+int Platform::enterMessagePump(bool loop)
 {
     GP_ASSERT(_game);
 
