@@ -223,6 +223,11 @@ private:
      */
     ~Effect();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    Effect& operator=(const Effect&);
+
     static Effect* createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines = NULL);
 
     GLuint _program;
@@ -278,6 +283,11 @@ private:
      * Destructor.
      */
     ~Uniform();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Uniform& operator=(const Uniform&);
 
     std::string _name;
     GLint _location;

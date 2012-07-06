@@ -957,7 +957,7 @@ int Platform::enterMessagePump()
                 switch (bps_event_get_code(event))
                 {
                 case NAVIGATOR_SWIPE_DOWN:
-                    _game->menu();
+                    _game->menuEvent();
                     break;
                 case NAVIGATOR_WINDOW_STATE:
                 {

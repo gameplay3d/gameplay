@@ -63,6 +63,11 @@ private:
      */
     ~RenderTarget();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    RenderTarget& operator=(const RenderTarget&);
+
     std::string _id;
     Texture* _texture;
 };

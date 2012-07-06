@@ -181,7 +181,7 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
     fprintf(stderr,"  -g <node id> <animation id>\n" \
         "\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
-    fprintf(stderr,"  -heightmaps \"<node ids>\"\n" \
+    fprintf(stderr,"  -h \"<node ids>\"\n" \
         "\t\t\tList of nodes to generate heightmaps for.\n" \
         "\t\t\tNode id list should be in quotes with a space between each id.\n" \
         "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n");
@@ -313,7 +313,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         break;
     case 'h':
         {
-            if (str.compare("-heightmaps") == 0)
+            if (str.compare("-heightmaps") == 0 || str.compare("-h") == 0)
             {
                 (*index)++;
                 if (*index < options.size())

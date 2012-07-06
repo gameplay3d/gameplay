@@ -97,6 +97,11 @@ public:
         ~Text();
 
         /**
+         * Hidden copy assignment operator.
+         */
+        Text& operator=(const Text&);
+
+        /**
          * Get the string that will be drawn from this Text object.
          */
         const char* getText();
@@ -285,6 +290,11 @@ private:
      * Destructor.
      */
     ~Font();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Font& operator=(const Font&);
 
     void getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
                             std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);

@@ -235,7 +235,7 @@ public:
      *
      * @param particleCount The number of particles to emit immediately.
      */
-    void emit(unsigned int particleCount);
+    void emitOnce(unsigned int particleCount);
 
     /**
      * Gets the current number of particles.
@@ -636,6 +636,11 @@ private:
      * Destructor.
      */
     ~ParticleEmitter();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    ParticleEmitter& operator=(const ParticleEmitter&);
 
     /**
      * Sets the node that this emitter is attached to.
