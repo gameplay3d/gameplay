@@ -47,7 +47,7 @@ int lua_Theme__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "Theme");
                 luaL_argcheck(state, userdata != NULL, 1, "'Theme' expected.");
@@ -87,7 +87,7 @@ int lua_Theme_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme* instance = getInstance(state);
                 instance->addRef();
@@ -121,7 +121,7 @@ int lua_Theme_getEmptyStyle(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getEmptyStyle();
@@ -167,7 +167,7 @@ int lua_Theme_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -204,7 +204,7 @@ int lua_Theme_getStyle(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -254,7 +254,7 @@ int lua_Theme_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Theme* instance = getInstance(state);
                 instance->release();

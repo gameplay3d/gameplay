@@ -54,7 +54,7 @@ int lua_Plane__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "Plane");
                 luaL_argcheck(state, userdata != NULL, 1, "'Plane' expected.");
@@ -195,7 +195,7 @@ int lua_Plane_distance(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -236,7 +236,7 @@ int lua_Plane_getDistance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Plane* instance = getInstance(state);
                 float result = instance->getDistance();
@@ -273,7 +273,7 @@ int lua_Plane_getNormal(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Plane* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getNormal());
@@ -319,7 +319,7 @@ int lua_Plane_intersects(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -333,7 +333,7 @@ int lua_Plane_intersects(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -347,7 +347,7 @@ int lua_Plane_intersects(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -361,7 +361,7 @@ int lua_Plane_intersects(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -375,7 +375,7 @@ int lua_Plane_intersects(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -416,7 +416,7 @@ int lua_Plane_isParallel(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -457,7 +457,7 @@ int lua_Plane_set(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -477,7 +477,7 @@ int lua_Plane_set(lua_State* state)
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -519,7 +519,7 @@ int lua_Plane_setDistance(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -557,7 +557,7 @@ int lua_Plane_setNormal(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -649,7 +649,7 @@ int lua_Plane_static_intersection(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(1, "Plane", true);
@@ -694,7 +694,7 @@ int lua_Plane_transform(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.

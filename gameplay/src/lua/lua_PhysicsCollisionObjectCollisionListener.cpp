@@ -40,7 +40,7 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionListener' expected.");
@@ -80,7 +80,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
@@ -104,7 +104,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
@@ -132,7 +132,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&

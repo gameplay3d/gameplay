@@ -56,7 +56,7 @@ int lua_PhysicsFixedConstraint_getBreakingImpulse(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 float result = instance->getBreakingImpulse();
@@ -93,7 +93,7 @@ int lua_PhysicsFixedConstraint_getRotationOffsetA(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getRotationOffsetA());
@@ -139,7 +139,7 @@ int lua_PhysicsFixedConstraint_getRotationOffsetB(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getRotationOffsetB());
@@ -185,7 +185,7 @@ int lua_PhysicsFixedConstraint_getTranslationOffsetA(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getTranslationOffsetA());
@@ -231,7 +231,7 @@ int lua_PhysicsFixedConstraint_getTranslationOffsetB(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getTranslationOffsetB());
@@ -277,7 +277,7 @@ int lua_PhysicsFixedConstraint_isEnabled(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsFixedConstraint* instance = getInstance(state);
                 bool result = instance->isEnabled();
@@ -314,7 +314,7 @@ int lua_PhysicsFixedConstraint_setBreakingImpulse(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -352,7 +352,7 @@ int lua_PhysicsFixedConstraint_setEnabled(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -390,7 +390,7 @@ int lua_PhysicsFixedConstraint_setRotationOffsetA(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -428,7 +428,7 @@ int lua_PhysicsFixedConstraint_setRotationOffsetB(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -466,7 +466,7 @@ int lua_PhysicsFixedConstraint_setTranslationOffsetA(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -504,7 +504,7 @@ int lua_PhysicsFixedConstraint_setTranslationOffsetB(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -542,8 +542,8 @@ int lua_PhysicsFixedConstraint_static_centerOfMassMidpoint(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
@@ -594,7 +594,7 @@ int lua_PhysicsFixedConstraint_static_getRotationOffset(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -646,7 +646,7 @@ int lua_PhysicsFixedConstraint_static_getTranslationOffset(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.

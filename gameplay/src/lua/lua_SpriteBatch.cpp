@@ -49,7 +49,7 @@ int lua_SpriteBatch__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "SpriteBatch");
                 luaL_argcheck(state, userdata != NULL, 1, "'SpriteBatch' expected.");
@@ -89,7 +89,7 @@ int lua_SpriteBatch_begin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 SpriteBatch* instance = getInstance(state);
                 instance->begin();
@@ -123,7 +123,7 @@ int lua_SpriteBatch_draw(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
@@ -147,7 +147,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
@@ -166,7 +166,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
@@ -194,7 +194,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
@@ -226,7 +226,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
@@ -266,7 +266,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 10:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -318,7 +318,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 11:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -365,7 +365,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -412,7 +412,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -468,7 +468,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 12:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -519,7 +519,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -579,7 +579,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 13:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -634,7 +634,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
@@ -698,7 +698,7 @@ int lua_SpriteBatch_draw(lua_State* state)
         }
         case 14:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -784,7 +784,7 @@ int lua_SpriteBatch_finish(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 SpriteBatch* instance = getInstance(state);
                 instance->finish();
@@ -818,7 +818,7 @@ int lua_SpriteBatch_getMaterial(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 SpriteBatch* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getMaterial();
@@ -864,7 +864,7 @@ int lua_SpriteBatch_getProjectionMatrix(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 SpriteBatch* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getProjectionMatrix());
@@ -910,7 +910,7 @@ int lua_SpriteBatch_getStateBlock(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 SpriteBatch* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getStateBlock();
@@ -956,7 +956,7 @@ int lua_SpriteBatch_setProjectionMatrix(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -1015,7 +1015,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Texture* param1 = ScriptController::getInstance()->getObjectPointer<Texture>(1, "Texture", false);
@@ -1046,7 +1046,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 const char* param1 = ScriptController::getInstance()->getString(1, false);
@@ -1070,8 +1070,8 @@ int lua_SpriteBatch_static_create(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Texture* param1 = ScriptController::getInstance()->getObjectPointer<Texture>(1, "Texture", false);
@@ -1105,7 +1105,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1133,8 +1133,8 @@ int lua_SpriteBatch_static_create(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.

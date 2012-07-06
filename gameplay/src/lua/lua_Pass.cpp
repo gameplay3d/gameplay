@@ -51,7 +51,7 @@ int lua_Pass__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "Pass");
                 luaL_argcheck(state, userdata != NULL, 1, "'Pass' expected.");
@@ -91,7 +91,7 @@ int lua_Pass_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 instance->addRef();
@@ -125,7 +125,7 @@ int lua_Pass_bind(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 instance->bind();
@@ -159,7 +159,7 @@ int lua_Pass_getEffect(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getEffect();
@@ -205,7 +205,7 @@ int lua_Pass_getId(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -242,7 +242,7 @@ int lua_Pass_getParameter(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -292,7 +292,7 @@ int lua_Pass_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -329,7 +329,7 @@ int lua_Pass_getStateBlock(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getStateBlock();
@@ -375,7 +375,7 @@ int lua_Pass_getVertexAttributeBinding(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getVertexAttributeBinding();
@@ -421,7 +421,7 @@ int lua_Pass_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 instance->release();
@@ -455,7 +455,7 @@ int lua_Pass_setParameterAutoBinding(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
@@ -470,7 +470,7 @@ int lua_Pass_setParameterAutoBinding(lua_State* state)
                 
                 return 0;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
@@ -512,8 +512,8 @@ int lua_Pass_setStateBlock(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 RenderState::StateBlock* param1 = ScriptController::getInstance()->getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false);
@@ -550,8 +550,8 @@ int lua_Pass_setVertexAttributeBinding(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 VertexAttributeBinding* param1 = ScriptController::getInstance()->getObjectPointer<VertexAttributeBinding>(2, "VertexAttributeBinding", false);
@@ -588,7 +588,7 @@ int lua_Pass_unbind(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Pass* instance = getInstance(state);
                 instance->unbind();

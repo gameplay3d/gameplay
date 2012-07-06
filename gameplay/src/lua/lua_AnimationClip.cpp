@@ -67,7 +67,7 @@ int lua_AnimationClip__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "AnimationClip");
                 luaL_argcheck(state, userdata != NULL, 1, "'AnimationClip' expected.");
@@ -107,8 +107,8 @@ int lua_AnimationClip_addBeginListener(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 AnimationClip::Listener* param1 = ScriptController::getInstance()->getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false);
@@ -145,8 +145,8 @@ int lua_AnimationClip_addEndListener(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 AnimationClip::Listener* param1 = ScriptController::getInstance()->getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false);
@@ -183,8 +183,8 @@ int lua_AnimationClip_addListener(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -225,7 +225,7 @@ int lua_AnimationClip_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 instance->addRef();
@@ -259,8 +259,8 @@ int lua_AnimationClip_crossFade(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -301,7 +301,7 @@ int lua_AnimationClip_getActiveDuration(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 unsigned long result = instance->getActiveDuration();
@@ -338,7 +338,7 @@ int lua_AnimationClip_getAnimation(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation();
@@ -384,7 +384,7 @@ int lua_AnimationClip_getBlendWeight(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 float result = instance->getBlendWeight();
@@ -421,7 +421,7 @@ int lua_AnimationClip_getDuration(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 unsigned long result = instance->getDuration();
@@ -458,7 +458,7 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 float result = instance->getElaspedTime();
@@ -495,7 +495,7 @@ int lua_AnimationClip_getEndTime(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 unsigned long result = instance->getEndTime();
@@ -532,7 +532,7 @@ int lua_AnimationClip_getId(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -569,7 +569,7 @@ int lua_AnimationClip_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -606,7 +606,7 @@ int lua_AnimationClip_getRepeatCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 float result = instance->getRepeatCount();
@@ -643,7 +643,7 @@ int lua_AnimationClip_getSpeed(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 float result = instance->getSpeed();
@@ -680,7 +680,7 @@ int lua_AnimationClip_getStartTime(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 unsigned long result = instance->getStartTime();
@@ -717,7 +717,7 @@ int lua_AnimationClip_isPlaying(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 bool result = instance->isPlaying();
@@ -754,7 +754,7 @@ int lua_AnimationClip_pause(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 instance->pause();
@@ -788,7 +788,7 @@ int lua_AnimationClip_play(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 instance->play();
@@ -822,7 +822,7 @@ int lua_AnimationClip_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 instance->release();
@@ -856,7 +856,7 @@ int lua_AnimationClip_setActiveDuration(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -894,7 +894,7 @@ int lua_AnimationClip_setBlendWeight(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -932,7 +932,7 @@ int lua_AnimationClip_setRepeatCount(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -970,7 +970,7 @@ int lua_AnimationClip_setSpeed(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1025,7 +1025,7 @@ int lua_AnimationClip_stop(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
                 instance->stop();

@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "MeshSkin.h"
+#include "Joint.h"
 #include "lua_MeshSkin.h"
 #include "lua_Global.h"
 
@@ -49,7 +50,7 @@ int lua_MeshSkin_getBindShape(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshSkin* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getBindShape());
@@ -95,7 +96,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -118,7 +119,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -168,7 +169,7 @@ int lua_MeshSkin_getJointCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshSkin* instance = getInstance(state);
                 unsigned int result = instance->getJointCount();
@@ -205,8 +206,8 @@ int lua_MeshSkin_getJointIndex(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Joint* param1 = ScriptController::getInstance()->getObjectPointer<Joint>(2, "Joint", false);
@@ -246,7 +247,7 @@ int lua_MeshSkin_getMatrixPalette(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshSkin* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getMatrixPalette();
@@ -292,7 +293,7 @@ int lua_MeshSkin_getMatrixPaletteSize(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshSkin* instance = getInstance(state);
                 unsigned int result = instance->getMatrixPaletteSize();
@@ -329,7 +330,7 @@ int lua_MeshSkin_getModel(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshSkin* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getModel();
@@ -375,7 +376,7 @@ int lua_MeshSkin_getRootJoint(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 MeshSkin* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getRootJoint();
@@ -421,7 +422,7 @@ int lua_MeshSkin_setBindShape(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
@@ -459,8 +460,8 @@ int lua_MeshSkin_setRootJoint(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Joint* param1 = ScriptController::getInstance()->getObjectPointer<Joint>(2, "Joint", false);
@@ -497,8 +498,8 @@ int lua_MeshSkin_transformChanged(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.

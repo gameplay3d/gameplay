@@ -50,7 +50,7 @@ int lua_PhysicsCollisionShape__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShape");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionShape' expected.");
@@ -90,7 +90,7 @@ int lua_PhysicsCollisionShape_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsCollisionShape* instance = getInstance(state);
                 instance->addRef();
@@ -124,7 +124,7 @@ int lua_PhysicsCollisionShape_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsCollisionShape* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -161,7 +161,7 @@ int lua_PhysicsCollisionShape_getType(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsCollisionShape* instance = getInstance(state);
                 PhysicsCollisionShape::Type result = instance->getType();
@@ -198,7 +198,7 @@ int lua_PhysicsCollisionShape_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 PhysicsCollisionShape* instance = getInstance(state);
                 instance->release();
@@ -522,7 +522,7 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Image* param1 = ScriptController::getInstance()->getObjectPointer<Image>(1, "Image", false);
@@ -570,7 +570,7 @@ int lua_PhysicsCollisionShape_static_mesh(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Mesh* param1 = ScriptController::getInstance()->getObjectPointer<Mesh>(1, "Mesh", false);

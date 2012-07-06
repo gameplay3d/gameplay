@@ -56,7 +56,7 @@ int lua_FrameBuffer__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "FrameBuffer");
                 luaL_argcheck(state, userdata != NULL, 1, "'FrameBuffer' expected.");
@@ -96,7 +96,7 @@ int lua_FrameBuffer_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 instance->addRef();
@@ -130,7 +130,7 @@ int lua_FrameBuffer_bind(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 instance->bind();
@@ -164,7 +164,7 @@ int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getDepthStencilTarget();
@@ -210,7 +210,7 @@ int lua_FrameBuffer_getHeight(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 unsigned int result = instance->getHeight();
@@ -247,7 +247,7 @@ int lua_FrameBuffer_getId(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 const char* result = instance->getId();
@@ -284,7 +284,7 @@ int lua_FrameBuffer_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -321,7 +321,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getRenderTarget();
@@ -349,7 +349,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
         }
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -399,7 +399,7 @@ int lua_FrameBuffer_getWidth(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 unsigned int result = instance->getWidth();
@@ -436,7 +436,7 @@ int lua_FrameBuffer_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
                 instance->release();
@@ -470,8 +470,8 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 DepthStencilTarget* param1 = ScriptController::getInstance()->getObjectPointer<DepthStencilTarget>(2, "DepthStencilTarget", false);
@@ -508,8 +508,8 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 RenderTarget* param1 = ScriptController::getInstance()->getObjectPointer<RenderTarget>(2, "RenderTarget", false);
@@ -528,8 +528,8 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.

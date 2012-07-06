@@ -920,7 +920,6 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
     }
     else
     {
-
         // Get the type string without const or reference qualifiers (and trim whitespace).
         string refId = "";
         string typeStr = "";

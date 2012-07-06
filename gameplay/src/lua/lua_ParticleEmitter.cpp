@@ -101,7 +101,7 @@ int lua_ParticleEmitter__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "ParticleEmitter");
                 luaL_argcheck(state, userdata != NULL, 1, "'ParticleEmitter' expected.");
@@ -141,7 +141,7 @@ int lua_ParticleEmitter_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 instance->addRef();
@@ -175,7 +175,7 @@ int lua_ParticleEmitter_draw(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 instance->draw();
@@ -209,7 +209,7 @@ int lua_ParticleEmitter_emit(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -247,7 +247,7 @@ int lua_ParticleEmitter_getAcceleration(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getAcceleration());
@@ -293,7 +293,7 @@ int lua_ParticleEmitter_getAccelerationVariance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getAccelerationVariance());
@@ -339,7 +339,7 @@ int lua_ParticleEmitter_getColorEnd(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getColorEnd());
@@ -385,7 +385,7 @@ int lua_ParticleEmitter_getColorEndVariance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getColorEndVariance());
@@ -431,7 +431,7 @@ int lua_ParticleEmitter_getColorStart(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getColorStart());
@@ -477,7 +477,7 @@ int lua_ParticleEmitter_getColorStartVariance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getColorStartVariance());
@@ -523,7 +523,7 @@ int lua_ParticleEmitter_getEmissionRate(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 unsigned int result = instance->getEmissionRate();
@@ -560,7 +560,7 @@ int lua_ParticleEmitter_getEnergyMax(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 long result = instance->getEnergyMax();
@@ -597,7 +597,7 @@ int lua_ParticleEmitter_getEnergyMin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 long result = instance->getEnergyMin();
@@ -634,7 +634,7 @@ int lua_ParticleEmitter_getNode(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getNode();
@@ -680,7 +680,7 @@ int lua_ParticleEmitter_getParticlesCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 unsigned int result = instance->getParticlesCount();
@@ -717,7 +717,7 @@ int lua_ParticleEmitter_getPosition(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getPosition());
@@ -763,7 +763,7 @@ int lua_ParticleEmitter_getPositionVariance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getPositionVariance());
@@ -809,7 +809,7 @@ int lua_ParticleEmitter_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -846,7 +846,7 @@ int lua_ParticleEmitter_getRotationAxis(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getRotationAxis());
@@ -892,7 +892,7 @@ int lua_ParticleEmitter_getRotationAxisVariance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getRotationAxisVariance());
@@ -938,7 +938,7 @@ int lua_ParticleEmitter_getRotationPerParticleSpeedMax(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getRotationPerParticleSpeedMax();
@@ -975,7 +975,7 @@ int lua_ParticleEmitter_getRotationPerParticleSpeedMin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getRotationPerParticleSpeedMin();
@@ -1012,7 +1012,7 @@ int lua_ParticleEmitter_getRotationSpeedMax(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getRotationSpeedMax();
@@ -1049,7 +1049,7 @@ int lua_ParticleEmitter_getRotationSpeedMin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getRotationSpeedMin();
@@ -1086,7 +1086,7 @@ int lua_ParticleEmitter_getSizeEndMax(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getSizeEndMax();
@@ -1123,7 +1123,7 @@ int lua_ParticleEmitter_getSizeEndMin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getSizeEndMin();
@@ -1160,7 +1160,7 @@ int lua_ParticleEmitter_getSizeStartMax(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getSizeStartMax();
@@ -1197,7 +1197,7 @@ int lua_ParticleEmitter_getSizeStartMin(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 float result = instance->getSizeStartMin();
@@ -1234,7 +1234,7 @@ int lua_ParticleEmitter_getSpriteFrameDuration(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 long result = instance->getSpriteFrameDuration();
@@ -1271,7 +1271,7 @@ int lua_ParticleEmitter_getSpriteFrameRandomOffset(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 int result = instance->getSpriteFrameRandomOffset();
@@ -1308,7 +1308,7 @@ int lua_ParticleEmitter_getVelocity(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getVelocity());
@@ -1354,7 +1354,7 @@ int lua_ParticleEmitter_getVelocityVariance(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 void* returnPtr = (void*)&(instance->getVelocityVariance());
@@ -1400,7 +1400,7 @@ int lua_ParticleEmitter_isActive(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 bool result = instance->isActive();
@@ -1437,7 +1437,7 @@ int lua_ParticleEmitter_isEllipsoid(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 bool result = instance->isEllipsoid();
@@ -1474,7 +1474,7 @@ int lua_ParticleEmitter_isSpriteAnimated(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 bool result = instance->isSpriteAnimated();
@@ -1511,7 +1511,7 @@ int lua_ParticleEmitter_isSpriteLooped(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 bool result = instance->isSpriteLooped();
@@ -1548,7 +1548,7 @@ int lua_ParticleEmitter_isStarted(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 bool result = instance->isStarted();
@@ -1585,7 +1585,7 @@ int lua_ParticleEmitter_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 instance->release();
@@ -1619,7 +1619,7 @@ int lua_ParticleEmitter_setAcceleration(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
@@ -1661,7 +1661,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
     {
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
@@ -1711,7 +1711,7 @@ int lua_ParticleEmitter_setEllipsoid(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -1749,7 +1749,7 @@ int lua_ParticleEmitter_setEmissionRate(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -1787,7 +1787,7 @@ int lua_ParticleEmitter_setEnergy(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -1829,7 +1829,7 @@ int lua_ParticleEmitter_setOrbit(lua_State* state)
     {
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN &&
                 lua_type(state, 3) == LUA_TBOOLEAN &&
                 lua_type(state, 4) == LUA_TBOOLEAN)
@@ -1875,7 +1875,7 @@ int lua_ParticleEmitter_setPosition(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
@@ -1917,7 +1917,7 @@ int lua_ParticleEmitter_setRotation(lua_State* state)
     {
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
@@ -1967,7 +1967,7 @@ int lua_ParticleEmitter_setRotationPerParticle(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER)
             {
@@ -2009,7 +2009,7 @@ int lua_ParticleEmitter_setSize(lua_State* state)
     {
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER &&
@@ -2059,7 +2059,7 @@ int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2097,9 +2097,9 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -2121,7 +2121,7 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
                 lua_type(state, 4) == LUA_TNUMBER)
@@ -2167,7 +2167,7 @@ int lua_ParticleEmitter_setSpriteFrameDuration(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -2205,7 +2205,7 @@ int lua_ParticleEmitter_setSpriteFrameRandomOffset(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
@@ -2243,7 +2243,7 @@ int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
@@ -2281,7 +2281,7 @@ int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA))
             {
@@ -2323,7 +2323,7 @@ int lua_ParticleEmitter_setTextureBlending(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -2361,7 +2361,7 @@ int lua_ParticleEmitter_setVelocity(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
@@ -2403,7 +2403,7 @@ int lua_ParticleEmitter_start(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 instance->start();
@@ -2458,7 +2458,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
 
                 return 1;
             }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
                 Properties* param1 = ScriptController::getInstance()->getObjectPointer<Properties>(1, "Properties", false);
@@ -2583,7 +2583,7 @@ int lua_ParticleEmitter_stop(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 ParticleEmitter* instance = getInstance(state);
                 instance->stop();
@@ -2617,7 +2617,7 @@ int lua_ParticleEmitter_update(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.

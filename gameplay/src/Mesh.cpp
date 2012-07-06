@@ -282,7 +282,7 @@ void Mesh::setPrimitiveType(PrimitiveType type)
     _primitiveType = type;
 }
 
-void Mesh::setVertexData(void* vertexData, unsigned int vertexStart, unsigned int vertexCount)
+void Mesh::setVertexData(float* vertexData, unsigned int vertexStart, unsigned int vertexCount)
 {
     GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer) );
 

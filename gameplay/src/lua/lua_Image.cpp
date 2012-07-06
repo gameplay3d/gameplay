@@ -48,7 +48,7 @@ int lua_Image__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "Image");
                 luaL_argcheck(state, userdata != NULL, 1, "'Image' expected.");
@@ -88,7 +88,7 @@ int lua_Image_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Image* instance = getInstance(state);
                 instance->addRef();
@@ -122,7 +122,7 @@ int lua_Image_getFormat(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Image* instance = getInstance(state);
                 Image::Format result = instance->getFormat();
@@ -159,7 +159,7 @@ int lua_Image_getHeight(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Image* instance = getInstance(state);
                 unsigned int result = instance->getHeight();
@@ -196,7 +196,7 @@ int lua_Image_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Image* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -233,7 +233,7 @@ int lua_Image_getWidth(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Image* instance = getInstance(state);
                 unsigned int result = instance->getWidth();
@@ -270,7 +270,7 @@ int lua_Image_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Image* instance = getInstance(state);
                 instance->release();

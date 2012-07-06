@@ -3,6 +3,7 @@
 
 
 // Helper functions.
+static inline void outputLuaTypeCheckInstance(ostream& o);
 static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBinding::Param& p = 
     FunctionBinding::Param(FunctionBinding::Param::TYPE_OBJECT, FunctionBinding::Param::KIND_POINTER));
 static inline void indent(ostream& o, int indentLevel);
@@ -490,6 +491,11 @@ ostream& operator<<(ostream& o, const FunctionBinding::Param& param)
 // ---------------------------------------------
 // Helper functions
 
+static inline void outputLuaTypeCheckInstance(ostream& o)
+{
+    o << "(lua_type(state, 1) == LUA_TUSERDATA)";
+}
+
 static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBinding::Param& p)
 {
     switch (p.type)
@@ -532,6 +538,8 @@ static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBindi
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
         o << "(lua_type(state, " << index << ") == LUA_TUSERDATA || ";
+        if (p.kind == FunctionBinding::Param::KIND_POINTER)
+            o << "lua_type(state, " << index << ") == LUA_TTABLE || ";
         o << "lua_type(state, " << index << ") == LUA_TNIL)";
         break;
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
@@ -824,7 +832,7 @@ static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, un
         for (unsigned int i = 0, count = paramCount; i < count; i++)
         {
             if (isNormalMember && i == 0)
-                outputLuaTypeCheck(o, i + 1);
+                outputLuaTypeCheckInstance(o);
             else
                 outputLuaTypeCheck(o, i + 1, b.paramTypes[(isNormalMember ? i - 1 : i)]);
 

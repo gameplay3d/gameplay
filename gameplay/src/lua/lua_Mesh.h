@@ -24,6 +24,7 @@ int lua_Mesh_release(lua_State* state);
 int lua_Mesh_setBoundingBox(lua_State* state);
 int lua_Mesh_setBoundingSphere(lua_State* state);
 int lua_Mesh_setPrimitiveType(lua_State* state);
+int lua_Mesh_setVertexData(lua_State* state);
 int lua_Mesh_static_createBoundingBox(lua_State* state);
 int lua_Mesh_static_createLines(lua_State* state);
 int lua_Mesh_static_createMesh(lua_State* state);

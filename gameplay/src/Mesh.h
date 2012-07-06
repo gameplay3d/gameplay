@@ -196,9 +196,8 @@ public:
      * @param vertexData The vertex data to be set.
      * @param vertexStart The index of the starting vertex (0 by default).
      * @param vertexCount The number of vertices to be set (default is 0, for all vertices).
-     * @script{ignore}
      */
-    void setVertexData(void* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
+    void setVertexData(float* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
 
     /**
      * Creates and adds a new part of primitive data defining how the vertices are connected.

@@ -1373,7 +1373,7 @@ Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
     mesh->_url += "#";
     mesh->_url += id;
 
-    mesh->setVertexData(meshData->vertexData, 0, meshData->vertexCount);
+    mesh->setVertexData((float*)meshData->vertexData, 0, meshData->vertexCount);
 
     mesh->_boundingBox.set(meshData->boundingBox);
     mesh->_boundingSphere.set(meshData->boundingSphere);

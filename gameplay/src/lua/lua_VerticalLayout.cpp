@@ -48,7 +48,7 @@ int lua_VerticalLayout__gc(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 void* userdata = luaL_checkudata(state, 1, "VerticalLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'VerticalLayout' expected.");
@@ -88,7 +88,7 @@ int lua_VerticalLayout_addRef(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VerticalLayout* instance = getInstance(state);
                 instance->addRef();
@@ -122,7 +122,7 @@ int lua_VerticalLayout_getBottomToTop(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VerticalLayout* instance = getInstance(state);
                 bool result = instance->getBottomToTop();
@@ -159,7 +159,7 @@ int lua_VerticalLayout_getRefCount(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VerticalLayout* instance = getInstance(state);
                 unsigned int result = instance->getRefCount();
@@ -196,7 +196,7 @@ int lua_VerticalLayout_getType(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VerticalLayout* instance = getInstance(state);
                 Layout::Type result = instance->getType();
@@ -233,7 +233,7 @@ int lua_VerticalLayout_release(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 VerticalLayout* instance = getInstance(state);
                 instance->release();
@@ -267,7 +267,7 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
