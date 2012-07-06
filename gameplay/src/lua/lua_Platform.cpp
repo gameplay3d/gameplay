@@ -1,8 +1,10 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Platform.h"
 #include "lua_Platform.h"
-#include "lua_Global.h"
+#include "Platform.h"
+#include "lua_KeyboardKeyEvent.h"
+#include "lua_MouseMouseEvent.h"
+#include "lua_TouchTouchEvent.h"
 
 namespace gameplay
 {

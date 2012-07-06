@@ -1,8 +1,8 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "ScreenDisplayer.h"
 #include "lua_ScreenDisplayer.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "ScreenDisplayer.h"
 
 namespace gameplay
 {

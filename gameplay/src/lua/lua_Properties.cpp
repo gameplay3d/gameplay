@@ -1,8 +1,11 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Properties.h"
 #include "lua_Properties.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "FileSystem.h"
+#include "Properties.h"
+#include "Quaternion.h"
+#include "lua_PropertiesType.h"
 
 namespace gameplay
 {

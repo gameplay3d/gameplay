@@ -1,8 +1,21 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "CheckBox.h"
 #include "lua_CheckBox.h"
-#include "lua_Global.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Button.h"
+#include "CheckBox.h"
+#include "Control.h"
+#include "Game.h"
+#include "Label.h"
+#include "Node.h"
+#include "Ref.h"
+#include "lua_ControlAlignment.h"
+#include "lua_ControlListenerEventType.h"
+#include "lua_ControlState.h"
+#include "lua_CurveInterpolationType.h"
+#include "lua_FontJustify.h"
 
 namespace gameplay
 {

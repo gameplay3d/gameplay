@@ -1,8 +1,12 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Ray.h"
 #include "lua_Ray.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "BoundingBox.h"
+#include "BoundingSphere.h"
+#include "Frustum.h"
+#include "Plane.h"
+#include "Ray.h"
 
 namespace gameplay
 {

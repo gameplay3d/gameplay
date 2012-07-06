@@ -1,9 +1,15 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "MeshSkin.h"
-#include "Joint.h"
 #include "lua_MeshSkin.h"
-#include "lua_Global.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Game.h"
+#include "Joint.h"
+#include "MeshSkin.h"
+#include "Node.h"
+#include "Transform.h"
+#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {

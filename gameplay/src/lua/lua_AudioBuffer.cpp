@@ -1,8 +1,11 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "AudioBuffer.h"
 #include "lua_AudioBuffer.h"
-#include "lua_Global.h"
+#include "AudioBuffer.h"
+#include "Base.h"
+#include "FileSystem.h"
+#include "Game.h"
+#include "Ref.h"
 
 namespace gameplay
 {

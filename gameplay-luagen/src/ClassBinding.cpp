@@ -24,7 +24,7 @@ ClassBinding::ClassBinding(string classname, string refId) : classname(classname
     uniquename = Generator::getUniqueName(this->classname);
 }
 
-void ClassBinding::write(string dir, string* bindingNS)
+void ClassBinding::write(string dir, const set<string>& includes, string* bindingNS)
 {
     // Calculate the constructor string.
     size_t index = uniquename.rfind(SCOPE_REPLACEMENT);
@@ -140,10 +140,20 @@ void ClassBinding::write(string dir, string* bindingNS)
         
         o << "#include \"Base.h\"\n";
         o << "#include \"ScriptController.h\"\n";
-        o << "#include \"" << include << "\"\n";
         o << "#include \"lua_" << uniquename << ".h\"\n";
-        o << "#include \"" << LUA_GLOBAL_FILENAME << ".h\"\n\n";
+
+        // Ensure we include the original class header, even 
+        // if the list of includes doesn't have it.
+        if (includes.find(include) == includes.end())
+            o << "#include \"" << include << "\"\n";
+
+        for (set<string>::iterator iter = includes.begin(); iter != includes.end(); iter++)
+        {
+            o << "#include \"" << *iter << "\"\n";
+        }
+        o << "\n";
         
+
         // If the original class is part of a namespace and we aren't generating into that namespace,
         // include its member with a 'using' statement.
         if (ns.length() > 0 && (!bindingNS || (*bindingNS != ns)))

@@ -1,8 +1,7 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Keyboard.h"
 #include "lua_Keyboard.h"
-#include "lua_Global.h"
+#include "Keyboard.h"
 
 namespace gameplay
 {

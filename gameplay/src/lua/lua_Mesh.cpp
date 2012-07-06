@@ -1,8 +1,16 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Mesh.h"
 #include "lua_Mesh.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Effect.h"
+#include "Game.h"
+#include "Material.h"
+#include "Mesh.h"
+#include "MeshPart.h"
+#include "Model.h"
+#include "Ref.h"
+#include "lua_MeshIndexFormat.h"
+#include "lua_MeshPrimitiveType.h"
 
 namespace gameplay
 {

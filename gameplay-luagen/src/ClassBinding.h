@@ -21,9 +21,10 @@ struct ClassBinding
      * Writes out the generated Lua bindings in C++ to the given directory.
      * 
      * @param dir The directory to write the bindings files (.h and .cpp) to.
+     * @param includes The includes for the class.
      * @param bindingNS The namespace to generate the Lua bindings within.
      */
-    void write(string dir, string* bindingNS = NULL);
+    void write(string dir, const set<string>& includes, string* bindingNS = NULL);
 
     /** Holds all the public function bindings of the class. */
     map<string, vector<FunctionBinding> > bindings;

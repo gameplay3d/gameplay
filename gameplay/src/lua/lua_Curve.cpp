@@ -1,8 +1,12 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Curve.h"
 #include "lua_Curve.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Curve.h"
+#include "Game.h"
+#include "Quaternion.h"
+#include "Ref.h"
+#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {

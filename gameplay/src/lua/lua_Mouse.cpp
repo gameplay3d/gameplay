@@ -1,8 +1,7 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Mouse.h"
 #include "lua_Mouse.h"
-#include "lua_Global.h"
+#include "Mouse.h"
 
 namespace gameplay
 {

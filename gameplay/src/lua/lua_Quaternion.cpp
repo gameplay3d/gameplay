@@ -1,8 +1,8 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Quaternion.h"
 #include "lua_Quaternion.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Quaternion.h"
 
 namespace gameplay
 {

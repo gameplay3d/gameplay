@@ -1,8 +1,8 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Vector2.h"
 #include "lua_Vector2.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Vector2.h"
 
 namespace gameplay
 {
