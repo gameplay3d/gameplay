@@ -10,6 +10,7 @@ struct EnumBinding
 {
     vector<string> values;
     vector<string> scopePath;
+    string include;
 };
 
 #endif

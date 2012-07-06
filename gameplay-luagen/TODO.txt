@@ -5,19 +5,28 @@ Unsupported:
 - variable arguments
 - Lua doesn't support as many types as C++ so if there are functions that overload on parameters with types that overlap in Lua, the overloading won't work properly (i.e. char, short, int, long, float, double and all corresponding unsigned variants overlap in Lua).
 
-- Note: primitive data type arrays and object arrays are both inefficient when created in Lua and passed to C++.
 
 Normal Priority List:
 =====================
-- Add "@script{create}" to the appropriate gameplay functions.
-- Fix memory leaks in gameplay-luagen and in generated code.
-    - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
 - Add support for listener callbacks.
+- Fix memory leaks in gameplay-luagen and in generated code.
+    - Add "@script{create}" to the appropriate gameplay functions.
+    - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
 - Figure out a way to determine the proper needed include files (generate Doxygen XML for cpp files?); along with this do the following:
     - Reduce compilation dependencies (remove Global.h from all lua_XXX.cpp files)
     - Separate the enums into separate files and have generated files include the enum files they need.
 
-Low Priority List:
-==================
+Future Feature List:
+====================
+- Add support for users to generate bindings for their own classes.
 - Add support for std::vector.
 - Separate threads?
+
+
+Lua Tips
+========
+- To get printf/GP_WARN-like functionality using gameplay and Lua, use printError(string.format("...", ...)).
+- To do integer like comparisons or casts on a number variable x in Lua, use math.floor(x)
+- Make sure all your member function calls use ':' instead of '.'
+- Remember to access all gameplay variables, including static and global variables with '()' on the end of the name.
+- Primitive data type arrays and object arrays are both inefficient when created in Lua and passed to C++, so try to minimize this.

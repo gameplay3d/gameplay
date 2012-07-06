@@ -1,8 +1,9 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Ref.h"
 #include "lua_Ref.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Game.h"
+#include "Ref.h"
 
 namespace gameplay
 {

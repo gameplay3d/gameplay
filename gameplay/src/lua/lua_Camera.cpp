@@ -1,8 +1,17 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Camera.h"
 #include "lua_Camera.h"
-#include "lua_Global.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Camera.h"
+#include "Game.h"
+#include "Node.h"
+#include "PhysicsController.h"
+#include "Ref.h"
+#include "Transform.h"
+#include "lua_CameraType.h"
+#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {

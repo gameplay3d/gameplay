@@ -1,8 +1,14 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Font.h"
 #include "lua_FontText.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Bundle.h"
+#include "FileSystem.h"
+#include "Font.h"
+#include "Game.h"
+#include "Ref.h"
+#include "lua_FontJustify.h"
+#include "lua_FontStyle.h"
 
 namespace gameplay
 {

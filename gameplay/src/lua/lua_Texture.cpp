@@ -1,8 +1,15 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Texture.h"
 #include "lua_Texture.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "FileSystem.h"
+#include "Game.h"
+#include "Image.h"
+#include "Ref.h"
+#include "Texture.h"
+#include "lua_TextureFilter.h"
+#include "lua_TextureFormat.h"
+#include "lua_TextureWrap.h"
 
 namespace gameplay
 {

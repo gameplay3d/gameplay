@@ -161,8 +161,18 @@ protected:
     // Resolves the inheritance.
     void resolveInheritance();
 
-    // Resolves the type for a single parameter/return value (also takes the function that the parameter/return value is for).
-    void resolveType(FunctionBinding::Param* param, string functionName);
+    // Resolves includes for all classes' derived from class 'c'.
+    void resolveIncludes(const ClassBinding& c);
+
+    // Resolves inherited include files.
+    void resolveInheritedIncludes();
+
+    // Resolves the type for a single parameter/return value 
+    // (also takes the function that the parameter/return value is for along
+    // with the header file that the parameter/return value belongs to-the original
+    // class header file for class bindings or the global Lua bindings header file
+    // for global bindings).
+    void resolveType(FunctionBinding::Param* param, string functionName, string header);
 
     // Resolves all unrecognized types.
     void resolveTypes();
@@ -173,6 +183,9 @@ protected:
     // Gets the set off all classes that derives from the given class.
     void getAllDerived(set<string>& derived, string classname);
 
+    // Gets the included files for a cpp file.
+    void getIncludes(XMLElement* e, string filename);
+
 private:
     static Generator* __instance;
 
@@ -181,7 +194,7 @@ private:
     string _outDir;
     map<string, ClassBinding> _classes;
     vector<string> _topLevelBaseClasses;
-    set<string> _includes;
+    map<string, set<string> > _includes;
     map<string, vector<FunctionBinding> > _functions;
     map<string, EnumBinding> _enums;
     map<string, vector<string> > _namespaces;

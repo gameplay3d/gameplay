@@ -1,8 +1,13 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Transform.h"
 #include "lua_Transform.h"
-#include "lua_Global.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Game.h"
+#include "Node.h"
+#include "Transform.h"
+#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {

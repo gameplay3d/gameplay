@@ -7,7 +7,9 @@ namespace gameplay
 {
 
 // Utility functions (shared with SceneLoader).
+/** @script{ignore} */
 void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
+/** @script{ignore} */
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
 
 Properties::Properties()

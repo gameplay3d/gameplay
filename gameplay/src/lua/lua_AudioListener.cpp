@@ -1,8 +1,14 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "AudioListener.h"
 #include "lua_AudioListener.h"
-#include "lua_Global.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "AudioListener.h"
+#include "Base.h"
+#include "Game.h"
+#include "Node.h"
+#include "Transform.h"
+#include "lua_CurveInterpolationType.h"
 
 namespace gameplay
 {

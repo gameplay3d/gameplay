@@ -1,8 +1,9 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "VertexFormat.h"
 #include "lua_VertexFormatElement.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "VertexFormat.h"
+#include "lua_VertexFormatUsage.h"
 
 namespace gameplay
 {

@@ -1,8 +1,21 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "PhysicsCharacter.h"
 #include "lua_PhysicsCharacter.h"
-#include "lua_Global.h"
+#include "Animation.h"
+#include "AnimationTarget.h"
+#include "Base.h"
+#include "Game.h"
+#include "Node.h"
+#include "PhysicsCharacter.h"
+#include "PhysicsCollisionObject.h"
+#include "PhysicsController.h"
+#include "PhysicsGhostObject.h"
+#include "Scene.h"
+#include "Transform.h"
+#include "lua_CurveInterpolationType.h"
+#include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
+#include "lua_PhysicsCollisionObjectType.h"
+#include "lua_PhysicsCollisionShapeType.h"
 
 namespace gameplay
 {

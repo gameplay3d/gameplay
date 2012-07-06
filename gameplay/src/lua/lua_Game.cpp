@@ -1,8 +1,19 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Game.h"
 #include "lua_Game.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "FileSystem.h"
+#include "FrameBuffer.h"
+#include "Game.h"
+#include "Platform.h"
+#include "RenderState.h"
+#include "SceneLoader.h"
+#include "lua_GameClearFlags.h"
+#include "lua_GameState.h"
+#include "lua_GamepadGamepadEvent.h"
+#include "lua_KeyboardKeyEvent.h"
+#include "lua_MouseMouseEvent.h"
+#include "lua_TouchTouchEvent.h"
 
 namespace gameplay
 {

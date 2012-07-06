@@ -1,8 +1,11 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Effect.h"
 #include "lua_Uniform.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Effect.h"
+#include "FileSystem.h"
+#include "Game.h"
+#include "Ref.h"
 
 namespace gameplay
 {
@@ -130,7 +133,9 @@ int lua_Uniform_getType(lua_State* state)
                 GLenum result = instance->getType();
 
                 // Push the return value onto the stack.
-                
+                GP_WARN("Attempting to return value with unrecognized type GLenum as an unsigned integer.");
+                lua_pushunsigned(state, result);
+
                 return 1;
             }
             else

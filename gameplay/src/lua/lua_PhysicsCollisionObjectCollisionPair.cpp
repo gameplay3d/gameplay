@@ -1,8 +1,14 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "PhysicsCollisionObject.h"
 #include "lua_PhysicsCollisionObjectCollisionPair.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Game.h"
+#include "Node.h"
+#include "PhysicsCollisionObject.h"
+#include "PhysicsController.h"
+#include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
+#include "lua_PhysicsCollisionObjectType.h"
+#include "lua_PhysicsCollisionShapeType.h"
 
 namespace gameplay
 {

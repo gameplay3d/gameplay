@@ -1,8 +1,10 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Matrix.h"
 #include "lua_Matrix.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "MathUtil.h"
+#include "Matrix.h"
+#include "Quaternion.h"
 
 namespace gameplay
 {

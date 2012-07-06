@@ -317,6 +317,7 @@ static Material* createDebugMaterial()
 
 /**
  * DebugVertex structure.
+ * @script{ignore}
  */
 struct DebugVertex
 {

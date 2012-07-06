@@ -1,8 +1,9 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "SpriteBatch.h"
 #include "lua_SpriteBatch.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Game.h"
+#include "SpriteBatch.h"
 
 namespace gameplay
 {

@@ -891,6 +891,9 @@ static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int i
     case FunctionBinding::Param::TYPE_LONG:
         o << "lua_pushinteger(state, result);\n";
         break;
+    case FunctionBinding::Param::TYPE_UNRECOGNIZED:
+        o << "GP_WARN(\"Attempting to return value with unrecognized type " << b.returnParam.info << " as an unsigned integer.\");\n";
+        indent(o, indentLevel);
     case FunctionBinding::Param::TYPE_UCHAR:
     case FunctionBinding::Param::TYPE_USHORT:
     case FunctionBinding::Param::TYPE_UINT:

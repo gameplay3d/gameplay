@@ -311,7 +311,7 @@ void Form::setAutoHeight(bool autoHeight)
     }
 }
 
-Effect* createEffect()
+static Effect* createEffect()
 {
     Effect* effect = NULL;
     if (__formEffect == NULL)

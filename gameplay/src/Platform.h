@@ -238,4 +238,6 @@ private:
 
 }
 
+#include "Game.h"
+
 #endif

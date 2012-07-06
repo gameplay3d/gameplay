@@ -125,11 +125,6 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     }
 }
 
-void initialize(const char* id, Theme::Style* style, const Vector2& position, const Vector2& size)
-{
-
-}
-
 const char* Control::getId() const
 {
     return _id.c_str();

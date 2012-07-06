@@ -1,8 +1,16 @@
 #include "Base.h"
 #include "ScriptController.h"
-#include "Technique.h"
 #include "lua_Technique.h"
-#include "lua_Global.h"
+#include "Base.h"
+#include "Game.h"
+#include "Material.h"
+#include "Node.h"
+#include "Pass.h"
+#include "Ref.h"
+#include "RenderState.h"
+#include "Technique.h"
+#include "lua_RenderStateAutoBinding.h"
+#include "lua_RenderStateBlend.h"
 
 namespace gameplay
 {
