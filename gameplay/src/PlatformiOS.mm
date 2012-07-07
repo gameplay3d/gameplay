@@ -833,13 +833,13 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game, unsigned int nativeWindow)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
     Platform* platform = new Platform(game);
     return platform;
 }
 
-int Platform::enterMessagePump(bool loop)
+int Platform::enterMessagePump()
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     [AppDelegate load];
@@ -900,7 +900,7 @@ bool Platform::hasMouse()
     return false;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
     // not supported
 }
