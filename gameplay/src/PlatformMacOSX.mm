@@ -14,8 +14,6 @@
 using namespace std;
 using namespace gameplay;
 
-static unsigned int __nativeWindow = 0L;
-
 // Default to 720p
 static int __width = 1280;
 static int __height = 720;
@@ -37,6 +35,7 @@ static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
+static void* __attachToWindow = NULL;
 
 
 double getMachTimeInMilliseconds()
@@ -619,15 +618,15 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game, unsigned int nativeWindow)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
-	__nativeWindow = nativeWindow;
+	__attachToWindow = attachToWindow;
     Platform* platform = new Platform(game);
     
     return platform;
 }
 
-int Platform::enterMessagePump(bool loop)
+int Platform::enterMessagePump()
 {
     NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
     NSString* path = [bundlePath stringByAppendingString:@"/Contents/Resources/"];
@@ -764,7 +763,7 @@ bool Platform::hasMouse()
     return true;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
     // TODO: not implemented
 }

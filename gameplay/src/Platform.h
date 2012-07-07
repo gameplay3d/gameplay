@@ -26,11 +26,11 @@ public:
      * Creates a platform for the specified game which is will interacte with.
      *
      * @param game The game to create a platform for.
-     * @param nativeWindow The native window handle to optionally attach to.
+     * @param attachToWindow The native window handle to optionally attach to.
      * 
      * @return The created platform interface.
      */
-    static Platform* create(Game* game, unsigned int nativeWindow = 0);
+    static Platform* create(Game* game, void* attachToWindow = NULL);
 
     /**
      * Begins processing the platform messages.
@@ -38,15 +38,12 @@ public:
      * This method handles all OS window messages and drives the game loop.
      * It normally does not return until the application is closed.
      * 
-     * If a nativeWindow is passed the game is started but not looped. 
-     * The user must pump the game along from the seperate window via
-     * game events and Platform::swapBuffers
-     * 
-     * @param loop true to run the game loop; false to not.
+     * If a attachToWindow is passed to Platform::create the message pump will instead attach
+     * to or allow the attachToWindow to drive the game loop on the platform.
      *
      * @return The platform message pump return code.
      */
-    int enterMessagePump(bool loop = true);
+    int enterMessagePump();
     
     /**
      * This method informs the platform that the game is shutting down 
@@ -134,7 +131,7 @@ public:
      *
      * @param captured True to enable mouse capture, false to disable it.
      */
-    static void setMouseCapture(bool captured);
+    static void setMouseCaptured(bool captured);
 
     /**
      * Determines if mouse capture is currently enabled.

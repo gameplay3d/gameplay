@@ -21,6 +21,7 @@ static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
 static HINSTANCE __hinstance = 0;
+static HWND __attachToWindow = 0;
 static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
@@ -539,18 +540,18 @@ bool initializeGL()
     return true;
 }
 
-Platform* Platform::create(Game* game, unsigned int nativeWindow)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
     GP_ASSERT(game);
 
     FileSystem::setResourcePath("./");
-
     Platform* platform = new Platform(game);
 
     // Get the application module handle.
     __hinstance = ::GetModuleHandle(NULL);
 
-    if (!nativeWindow)
+    __attachToWindow = (HWND)attachToWindow;
+    if (!__attachToWindow)
     {
         LPCTSTR windowClass = L"gameplay";
         std::wstring windowName;
@@ -655,7 +656,7 @@ Platform* Platform::create(Game* game, unsigned int nativeWindow)
     else
     {
         // Attach to a previous windows
-        __hwnd = (HWND)nativeWindow;
+        __hwnd = (HWND)__attachToWindow;
         __hdc = GetDC(__hwnd);
 
         SetWindowLongPtr(__hwnd, GWL_WNDPROC, (LONG)(WNDPROC)__WndProc);
@@ -672,7 +673,7 @@ error:
     return NULL;
 }
 
-int Platform::enterMessagePump(bool loop)
+int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
     int rc = 0;
@@ -695,7 +696,7 @@ int Platform::enterMessagePump(bool loop)
     if (_game->getState() != Game::RUNNING)
         _game->run();
 
-    if (!loop)
+    if (__attachToWindow)
         return 0;
 
     // Enter event dispatch loop.
@@ -791,7 +792,7 @@ bool Platform::hasMouse()
     return true;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
     if (captured != __mouseCaptured)
     {

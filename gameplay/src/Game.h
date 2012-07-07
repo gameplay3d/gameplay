@@ -100,9 +100,9 @@ public:
      *
      * @param captured true to enable mouse capture mode, false to disable it.
      *
-     * @see Platform::setMouseCapture(bool)
+     * @see Platform::setMouseCaptured(bool)
      */
-    static void setMouseCapture(bool captured);
+    static void setMouseCaptured(bool captured);
 
     /**
      * Sets the visibility of the platform cursor.
