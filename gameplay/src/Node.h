@@ -347,9 +347,7 @@ public:
     Vector3 getForwardVectorWorld() const;
 
     /**
-     *  Returns the forward vector of the Node in view space.
-     *
-     * @param normalize True to return the vector normalized, false (default) otherwise.
+     * Returns the forward vector of the Node in view space.
      *
      * @return The forwward vector in view space.
      */
@@ -358,16 +356,12 @@ public:
     /**
      * Returns the right vector of the Node in world space.
      *
-     * @param normalize True to return the vector normalized, false (default) otherwise.
-     *
      * @return The right vector in world space.
      */
     Vector3 getRightVectorWorld() const;
 
     /**
      * Returns the up vector of the Node in world space.
-     *
-     * @param normalize True to return the vector normalized, false (default) otherwise.
      *
      * @return The up vector in world space.
      */

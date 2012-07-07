@@ -72,9 +72,9 @@ bool Game::isMouseCaptured()
     return Platform::isMouseCaptured();
 }
 
-void Game::setMouseCapture(bool captured)
+void Game::setMouseCaptured(bool captured)
 {
-    Platform::setMouseCapture(captured);
+    Platform::setMouseCaptured(captured);
 }
 
 void Game::setCursorVisible(bool visible)
