@@ -35,6 +35,7 @@ static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
+static void* __attachToWindow = NULL;
 
 
 double getMachTimeInMilliseconds()
@@ -617,8 +618,9 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
+	__attachToWindow = attachToWindow;
     Platform* platform = new Platform(game);
     
     return platform;
@@ -761,7 +763,7 @@ bool Platform::hasMouse()
     return true;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
     // TODO: not implemented
 }

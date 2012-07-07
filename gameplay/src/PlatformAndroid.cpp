@@ -715,10 +715,9 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
     Platform* platform = new Platform(game);
-    
     return platform;
 }
 
@@ -930,7 +929,7 @@ bool Platform::hasMouse()
     return false;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
     // not supported
 }
