@@ -488,10 +488,9 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game, unsigned int nativeWindow)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
     FileSystem::setResourcePath("./app/native/");
-
     Platform* platform = new Platform(game);
 
     bps_initialize();
@@ -774,7 +773,7 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
     }
 }
 
-int Platform::enterMessagePump(bool loop)
+int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
 
@@ -1126,7 +1125,7 @@ bool Platform::hasMouse()
     return false;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
     // not supported
 }
