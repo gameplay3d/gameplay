@@ -273,6 +273,11 @@ public:
      */
     void setProjectionMatrix(const Matrix& matrix);
 
+    /**
+     * Gets the projection matrix for the SpriteBatch.
+     * 
+     * @return The projection matrix.
+     */
     const Matrix& getProjectionMatrix() const;
 
 private:
