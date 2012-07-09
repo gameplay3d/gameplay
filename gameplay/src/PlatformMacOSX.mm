@@ -35,7 +35,10 @@ static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
-
+static void* __attachToWindow = NULL;
+static bool __mouseCaptured = false;
+static CGPoint __mouseCapturePoint;
+static bool __cursorVisible = true;
 
 double getMachTimeInMilliseconds()
 {
@@ -238,10 +241,24 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE x: point.x y: __height - point.y s: 0];
 }
 
-- (void)mouseMoved:(NSEvent *) event 
+- (void)mouseMoved:(NSEvent*) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    
+
+    if (__mouseCaptured)
+    {
+        point.x = [event deltaX];
+        point.y = [event deltaY];
+
+        NSWindow* window = __view.window;
+        NSRect rect = window.frame;
+        CGPoint centerPoint;
+        centerPoint.x = rect.origin.x + (rect.size.width / 2);
+        centerPoint.y = rect.origin.y + (rect.size.height / 2);
+        CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
+    }
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -622,8 +639,9 @@ Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
+	__attachToWindow = attachToWindow;
     Platform* platform = new Platform(game);
     
     return platform;
@@ -766,26 +784,52 @@ bool Platform::hasMouse()
     return true;
 }
 
-void Platform::setMouseCapture(bool captured)
+void Platform::setMouseCaptured(bool captured)
 {
-    // TODO: not implemented
+    if (captured != __mouseCaptured)
+    {
+        if (captured)
+        {
+            [NSCursor hide];
+        }
+        else
+        {   
+            [NSCursor unhide];
+        }
+        NSWindow* window = __view.window;
+        NSRect rect = window.frame;
+        CGPoint centerPoint;
+        centerPoint.x = rect.origin.x + (rect.size.width / 2);
+        centerPoint.y = rect.origin.y + (rect.size.height / 2);
+        CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
+        __mouseCaptured = captured;
+    }
 }
 
 bool Platform::isMouseCaptured()
 {
-    // TODO: not implemented
-    return false;
+    return __mouseCaptured;
 }
 
 void Platform::setCursorVisible(bool visible)
 {
-    // TODO: not implemented
+    if (visible != __cursorVisible)
+    {
+        if (visible)
+        {
+             [NSCursor unhide];
+        }
+        else 
+        {
+             [NSCursor hide];
+        }
+        __cursorVisible = visible;
+    }
 }
 
 bool Platform::isCursorVisible()
 {
-    // TODO: not implemented
-    return true;
+    return __cursorVisible;
 }
 
 void Platform::swapBuffers()

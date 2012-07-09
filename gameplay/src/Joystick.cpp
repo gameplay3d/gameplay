@@ -105,9 +105,9 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 
                 notifyListeners(Listener::PRESS);
 
-                _displacement.set(0.0f, 0.0f);
+                _displacement.set(dx, dy);
                 
-                Vector2 value(0.0f, 0.0f);
+                Vector2 value(dx, dy);
                 if (_value != value)
                 {
                     _value.set(value);
