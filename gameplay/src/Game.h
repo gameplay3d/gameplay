@@ -75,53 +75,6 @@ public:
      */
     static void setVsync(bool enable);
 
-    /** 
-     * Gets whether the current platform supports mouse input.
-     *
-      * @return true if a mouse is supported, false otherwise.
-      */
-    static bool hasMouse();
-
-    /**
-     * Gets whether mouse input is currently captured.
-     *
-     * @see Platform::isMouseCaptured()
-     */
-    static bool isMouseCaptured();
-
-    /**
-     * Enables or disables mouse capture.
-     *
-     * On platforms that support a mouse, when mouse capture is enabled,
-     * the platform cursor will be hidden and the mouse will be warped
-     * to the center of the screen. While mouse capture is enabled,
-     * all mouse move events will then be delivered as deltas instead
-     * of absolute positions.
-     *
-     * @param captured true to enable mouse capture mode, false to disable it.
-     *
-     * @see Platform::setMouseCaptured(bool)
-     */
-    static void setMouseCaptured(bool captured);
-
-    /**
-     * Sets the visibility of the platform cursor.
-     *
-     * @param visible true to show the platform cursor, false to hide it.
-     *
-     * @see Platform::setCursorVisible(bool)
-     */
-    static void setCursorVisible(bool visible);
-
-    /**
-     * Determines whether the platform cursor is currently visible.
-     *
-     * @return true if the platform cursor is visible, false otherwise.
-     *
-     * @see Platform::isCursorVisible()
-     */
-    static bool isCursorVisible();
-
     /**
      * Gets the total absolute running time (in milliseconds) since Game::run().
      * 
@@ -321,6 +274,47 @@ public:
      * @see Mouse::MouseEvent
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    
+    /** 
+     * Gets whether the current platform supports mouse input.
+     *
+     * @return true if a mouse is supported, false otherwise.
+     */
+    inline bool hasMouse();
+    
+    /**
+     * Gets whether mouse input is currently captured.
+     *
+     * @return is the mouse captured.
+     */
+    inline bool isMouseCaptured();
+    
+    /**
+     * Enables or disables mouse capture.
+     *
+     * On platforms that support a mouse, when mouse capture is enabled,
+     * the platform cursor will be hidden and the mouse will be warped
+     * to the center of the screen. While mouse capture is enabled,
+     * all mouse move events will then be delivered as deltas instead
+     * of absolute positions.
+     *
+     * @param captured true to enable mouse capture mode, false to disable it.
+     */
+    inline void setMouseCaptured(bool captured);
+    
+    /**
+     * Sets the visibility of the platform cursor.
+     *
+     * @param visible true to show the platform cursor, false to hide it.
+     */
+    inline void setCursorVisible(bool visible);
+    
+    /**
+     * Determines whether the platform cursor is currently visible.
+     *
+     * @return true if the platform cursor is visible, false otherwise.
+     */
+    inline bool isCursorVisible();
 
     /**
      * Gamepad callback on gamepad events.
