@@ -153,9 +153,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     _game->run();
     
     if (__fullscreen)
+    {
         [[self window] setLevel: NSMainMenuWindowLevel+1];
+        [[self window] setHidesOnDeactivate:YES]; 
+    }
     else
-        [[self window] setLevel: NSFloatingWindowLevel];
+    {
+        [[self window] setLevel: NSNormalWindowLevel];
+    }
     [[self window] makeKeyAndOrderFront: self];
     [[self window] setTitle: [NSString stringWithUTF8String: __title ? __title : ""]];
     
