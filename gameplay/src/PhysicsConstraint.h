@@ -2,7 +2,6 @@
 #define PHYSICSCONSTRAINT_H_
 
 #include "Base.h"
-#include "Model.h"
 #include "Vector3.h"
 
 namespace gameplay
@@ -93,9 +92,9 @@ protected:
     static btTransform getTransformOffset(const Node* node, const Vector3& origin);
     
     /**
-     * Calculates the center of mass in world space of the given model.
+     * Calculates the center of mass in world space of the given node.
      */
-    static Vector3 getWorldCenterOfMass(const Model* model);
+    static Vector3 getWorldCenterOfMass(const Node* node);
 
     /**
      * Offsets the given vector by the given node's center of mass.

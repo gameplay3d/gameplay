@@ -11,7 +11,7 @@ form gamepadForm
 		style = joystickStyle
 		size = 200, 200
 	    alignment = ALIGN_BOTTOM_LEFT
-		radius = 64
+		radius = 100
     }
 
     button
