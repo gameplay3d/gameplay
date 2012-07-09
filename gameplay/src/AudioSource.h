@@ -13,7 +13,7 @@ class Node;
 class NodeCloneContext;
 
 /**
- *  Declares an audio source in 3D space.
+ * Declares an audio source in 3D space.
  */
 class AudioSource : public Ref, public Transform::Listener
 {
