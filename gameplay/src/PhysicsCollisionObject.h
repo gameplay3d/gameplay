@@ -178,7 +178,7 @@ public:
     /**
      * Sets the collision object be enabled or disabled.
      *
-     * @param enable true enables the collision object, false diables it.
+     * @param enable true enables the collision object, false disables it.
      */
     void setEnabled(bool enable);
 

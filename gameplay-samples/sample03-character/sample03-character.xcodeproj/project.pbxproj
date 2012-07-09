@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		4239E08715755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
 		4239E08815755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
-		4239E08C157563C3005EA3F6 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08B157563C3005EA3F6 /* game.config */; };
-		4239E08D157563C3005EA3F6 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08B157563C3005EA3F6 /* game.config */; };
 		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
 		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
 		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
@@ -45,7 +43,6 @@
 
 /* Begin PBXFileReference section */
 		4239E08615755BDA005EA3F6 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		4239E08B157563C3005EA3F6 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
 		42C932E61491A1AC0098216A /* sample03-character-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macosx.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,7 +137,6 @@
 				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
 				42C932E61491A1AC0098216A /* sample03-character-macosx.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
-				4239E08B157563C3005EA3F6 /* game.config */,
 				DDBBAE861574040C00D39DE7 /* game.dxt.config */,
 				DDBBAE8B1574067600D39DE7 /* game.pvrtc.config */,
 				4239E08615755BDA005EA3F6 /* res */,
@@ -274,7 +270,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CCD5B1146EC62A00353661 /* icon.png in Resources */,
-				4239E08C157563C3005EA3F6 /* game.config in Resources */,
 				4239E08715755BDA005EA3F6 /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,7 +280,6 @@
 			files = (
 				5B43D1D814C35F4C008A5D9D /* icon.png in Resources */,
 				4239E08815755BDA005EA3F6 /* res in Resources */,
-				4239E08D157563C3005EA3F6 /* game.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
