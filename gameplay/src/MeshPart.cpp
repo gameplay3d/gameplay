@@ -9,10 +9,6 @@ MeshPart::MeshPart() :
 {
 }
 
-MeshPart::MeshPart(const MeshPart& copy)
-{
-}
-
 MeshPart::~MeshPart()
 {
     if (_indexBuffer)

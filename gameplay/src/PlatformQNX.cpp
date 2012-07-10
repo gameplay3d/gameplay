@@ -439,11 +439,6 @@ Platform::Platform(Game* game)
 {
 }
 
-Platform::Platform(const Platform& copy)
-{
-    // hidden
-}
-
 Platform::~Platform()
 {
     if (__eglDisplay != EGL_NO_DISPLAY)

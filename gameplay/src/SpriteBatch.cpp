@@ -52,11 +52,6 @@ SpriteBatch::SpriteBatch()
 {
 }
 
-SpriteBatch::SpriteBatch(const SpriteBatch& copy)
-{
-    // hiddden
-}
-
 SpriteBatch::~SpriteBatch()
 {
     SAFE_DELETE(_batch);

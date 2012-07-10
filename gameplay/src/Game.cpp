@@ -26,10 +26,6 @@ Game::Game()
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
-Game::Game(const Game& copy)
-{
-}
-
 Game::~Game()
 {
     // Do not call any virtual functions from the destructor.

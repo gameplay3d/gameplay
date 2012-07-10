@@ -45,11 +45,6 @@ Font::Font() :
 {
 }
 
-Font::Font(const Font& copy)
-{
-    // hidden
-}
-
 Font::~Font()
 {
     // Remove this Font from the font cache.

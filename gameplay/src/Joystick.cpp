@@ -8,10 +8,6 @@ Joystick::Joystick() : _absolute(true)
 {
 }
 
-Joystick::Joystick(const Joystick& copy)
-{
-}
-
 Joystick::~Joystick()
 {
 }

@@ -120,9 +120,14 @@ private:
     MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize);
 
     /**
-     * Constructor.
+     * Hidden copy constructor.
      */
     MeshBatch(const MeshBatch& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    MeshBatch& operator=(const MeshBatch&);
 
     void updateVertexAttributeBinding();
 

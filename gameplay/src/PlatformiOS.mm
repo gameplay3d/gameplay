@@ -825,10 +825,6 @@ Platform::Platform(Game* game) : _game(game)
 {
 }
 
-Platform::Platform(const Platform& copy)
-{
-}
-
 Platform::~Platform()
 {
 }
