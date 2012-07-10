@@ -12,10 +12,6 @@ Scene::Scene() : _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCo
 {
 }
 
-Scene::Scene(const Scene& copy)
-{
-}
-
 Scene::~Scene()
 {
     // Unbind our active camera from the audio listener

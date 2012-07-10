@@ -12,10 +12,6 @@ Control::Control()
 {
 }
 
-Control::Control(const Control& copy)
-{
-}
-
 Control::~Control()
 {
     if (_listeners)

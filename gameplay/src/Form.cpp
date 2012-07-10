@@ -42,10 +42,6 @@ Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL)
 {
 }
 
-Form::Form(const Form& copy)
-{
-}
-
 Form::~Form()
 {
     SAFE_RELEASE(_node);

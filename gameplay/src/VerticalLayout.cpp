@@ -10,10 +10,6 @@ VerticalLayout::VerticalLayout() : _bottomToTop(false)
 {
 }
 
-VerticalLayout::VerticalLayout(const VerticalLayout& copy)
-{
-}
-
 VerticalLayout::~VerticalLayout()
 {
     __instance = NULL;

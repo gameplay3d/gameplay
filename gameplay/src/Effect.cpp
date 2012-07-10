@@ -567,11 +567,6 @@ Uniform::Uniform() :
 {
 }
 
-Uniform::Uniform(const Uniform& copy)
-{
-    // hidden
-}
-
 Uniform::~Uniform()
 {
     // hidden
