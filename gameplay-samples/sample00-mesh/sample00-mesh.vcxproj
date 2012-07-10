@@ -176,7 +176,6 @@
     <None Include="res\grid.material" />
     <None Include="res\line.fsh" />
     <None Include="res\line.vsh" />
-    <None Include="res\script.lua" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />

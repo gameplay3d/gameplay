@@ -4,7 +4,7 @@
 MeshGame game;
 
 MeshGame::MeshGame()
-    //: _font(NULL), _scene(NULL), _modelNode(NULL), _touched(false), _touchX(0)
+    : _font(NULL), _scene(NULL), _modelNode(NULL), _touched(false), _touchX(0)
 {
 }
 
@@ -15,7 +15,7 @@ MeshGame::~MeshGame()
 void MeshGame::initialize()
 {
     createGridModel();
-    /*
+    
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
@@ -46,44 +46,33 @@ void MeshGame::initialize()
     Model* model = createGridModel();
     _scene->addNode("grid")->setModel(model);
     model->release();
-    //*/
 }
 
 void MeshGame::finalize()
 {
-    /*
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
-    */
 }
 
 void MeshGame::update(float elapsedTime)
 {
-    /*
     // Rotate model
     if (!_touched)
         _modelNode->rotateY(MATH_DEG_TO_RAD(0.5f));
-    */
 }
 
 void MeshGame::render(float elapsedTime)
 {
-    /*
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
-
-    ScriptController::getInstance()->getPointer<Font>("Font", "_font")->end();
-
+    
     // Visit all the nodes in the scene, drawing the models/mesh.
-    Scene* s = ScriptController::getInstance()->getPointer<Scene>("Scene", "_scene");
-    s->visit(this, &MeshGame::drawScene);
+    _scene->visit(this, &MeshGame::drawScene);
 
     // Draw the fps
-    //drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
-    */
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
-/*
 void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
@@ -103,15 +92,13 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     {
     case Touch::TOUCH_PRESS:
         {
-            ScriptController::getInstance()->setBool("_touched", true);
-            //_touched = true;
+            _touched = true;
             _touchX = x;
         }
         break;
     case Touch::TOUCH_RELEASE:
         {
-            ScriptController::getInstance()->setBool("_touched", false);
-            //_touched = false;
+            _touched = false;
             _touchX = 0;
         }
         break;
@@ -119,7 +106,6 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         {
             int deltaX = x - _touchX;
             _touchX = x;
-            Node* _modelNode = ScriptController::getInstance()->getObjectPointer<Node>("Node", "_modelNode");
             _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
         }
         break;
@@ -127,9 +113,7 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         break;
     };
 }
-*/
 
-/*
 bool MeshGame::drawScene(Node* node)
 {
     Model* model = node->getModel();
@@ -137,9 +121,7 @@ bool MeshGame::drawScene(Node* node)
         model->draw();
     return true;
 }
-*/
 
-/*
 void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
     char buffer[10];
@@ -148,9 +130,7 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
     font->drawText(buffer, x, y, color, font->getSize());
     font->finish();
 }
-*/
 
-/*
 void MeshGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
@@ -160,9 +140,6 @@ void MeshGame::drawSplash(void* param)
     batch->finish();
     SAFE_DELETE(batch);
 }
-*/
-
-#include <fstream>
 
 Model* MeshGame::createGridModel(unsigned int lineCount)
 {
@@ -241,17 +218,6 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
     }
     mesh->setPrimitiveType(Mesh::LINES);
     mesh->setVertexData(&vertices[0], 0, pointCount);
-
-    // DEBUG
-    std::ofstream o("C:/cculy/t2.txt");
-    if (o)
-    {
-        for (unsigned int i = 0; i < vertices.size(); i++)
-        {
-            o << i << ": " << vertices[i] << "\n";
-        }
-    }
-    o.close();
 
     Model* model = Model::create(mesh);
     model->setMaterial("res/grid.material");
