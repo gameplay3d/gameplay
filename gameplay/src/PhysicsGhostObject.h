@@ -21,7 +21,7 @@ class PhysicsGhostObject : public PhysicsCollisionObject, public Transform::List
 public:
 
     /**
-     * @see PhysicsCollisionObject#getType
+     * @see PhysicsCollisionObject::getType
      */
     PhysicsCollisionObject::Type getType() const;
 

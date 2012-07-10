@@ -377,7 +377,7 @@ public:
      * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
      * 
      * Note: the given Lua function must take a single floating point number, which is the difference between the
-     * current game time and the target time (see @link{TimeListener#timeEvent}).
+     * current game time and the target time (see TimeListener::timeEvent).
      * 
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
      * @param function The Lua script function that will receive the event.
@@ -498,6 +498,9 @@ private:
 
     /** 
      * Creates a Gamepad object from a .form file.
+     *
+     * @param gamepadId The gamepad id (typically equal to the corresponding player's number).
+     * @param gamepadFormPath The path to the .form file.
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
 

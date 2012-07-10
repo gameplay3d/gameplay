@@ -723,7 +723,7 @@ public:
      * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
      * as the second parameter.
      * 
-     * Note: the given Lua function must have the same function signature as Control#Listener#controlEvent.
+     * Note: the given Lua function must have the same function signature as Control::Listener::controlEvent.
      *
      * @param function The name of the Lua script function to add as a listener callback.
      * @param eventFlags The events to listen for.
@@ -731,17 +731,17 @@ public:
     virtual void addListener(const char* function, int eventFlags);
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 

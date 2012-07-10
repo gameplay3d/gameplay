@@ -174,7 +174,7 @@ public:
     bool isScrollBarsAutoHide() const;
 
     /**
-     * @see AnimationTarget#getAnimation
+     * @see AnimationTarget::getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
 
@@ -189,17 +189,17 @@ public:
     const char* getType() const;
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
@@ -339,8 +339,34 @@ protected:
      */
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * Mouse scroll event callback.
+     *
+     * @param evt The mouse scroll event that occurred.
+     * @param x The x position of the scroll in pixels. Left edge is zero.
+     * @param y The y position of the scroll in pixels. Top edge is zero.
+     * @param wheelDelta The value change of the mouse's scroll wheel.
+     *
+     * @return Whether the scroll event was consumed by scrolling within this container.
+     *
+     * @see Mouse::MouseEvent
+     */
     bool mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * Mouse pointer event callback.
+     *
+     * @param mouse Whether to treat the event as a mouse event or a touch event.
+     * @param evt The pointer event (either a Mouse::MouseEvent or a Touch::TouchEvent).
+     * @param x The x position of the pointer event in pixels. Left edge is zero.
+     * @param y The y position of the pointer event in pixels. Top edge is zero.
+     * @param data The event's data (depends on whether it is a mouse event or a touch event).
+     *
+     * @return Whether the pointer event was consumed by this container.
+     * 
+     * @see Mouse::MouseEvent
+     * @see Touch::TouchEvent
+     */
     bool pointerEvent(bool mouse, char evt, int x, int y, int data);
 
     /**

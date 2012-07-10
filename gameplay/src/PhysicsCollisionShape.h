@@ -76,11 +76,11 @@ public:
     private:
 
         /**
-         * Creates a PhysicsCollisionShape#Definition object from the given properties object (for the given node).
+         * Creates a PhysicsCollisionShape::Definition object from the given properties object (for the given node).
          * 
          * @param node The node to create the PhysicsCollisionShape::Definition object for.
-         * @param properties The properties object to create the PhysicsCollisionShape#Definition object from.
-         * @return A PhysicsCollisionShape#Definition object.
+         * @param properties The properties object to create the PhysicsCollisionShape::Definition object from.
+         * @return A PhysicsCollisionShape::Definition object.
          */
         static Definition* create(Node* node, Properties* properties);
 
