@@ -28,6 +28,7 @@ Normal Priority List:
 - Fix memory leaks in gameplay-luagen and in generated code.
     - Add "@script{create}" to the appropriate gameplay functions.
     - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
+- Get all platforms working.
 - Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).
 
 Future Feature List:
