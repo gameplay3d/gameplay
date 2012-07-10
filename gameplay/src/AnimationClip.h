@@ -231,7 +231,7 @@ public:
     /**
      * Adds an animation begin listener.
      * 
-     * Note: the given Lua function must have the same function signature as AnimationClip#Listener#animationEvent.
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
      *
      * @param function The Lua script function to be called when an AnimationClip begins.
      */
@@ -240,7 +240,7 @@ public:
     /**
      * Adds an animation end listener.
      * 
-     * Note: the given Lua function must have the same function signature as AnimationClip#Listener#animationEvent.
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
      *
      * @param function The Lua script function to be called when an AnimationClip ends.
      */
@@ -250,7 +250,7 @@ public:
      * Adds an animation listener to be called back at the specified eventTime during the playback 
      * of the AnimationClip.
      * 
-     * Note: the given Lua function must have the same function signature as AnimationClip#Listener#animationEvent.
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
      * 
      * @param function The Lua script function to be called when an AnimationClip reaches the 
      *      specified time in its playback.

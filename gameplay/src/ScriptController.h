@@ -53,19 +53,31 @@ public:
      */
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
-    // Template specializations.
+    /** Template specialization. */
     template<> void executeFunction<void>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> bool executeFunction<bool>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> char executeFunction<char>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> short executeFunction<short>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> int executeFunction<int>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> long executeFunction<long>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> unsigned char executeFunction<unsigned char>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> unsigned short executeFunction<unsigned short>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> unsigned int executeFunction<unsigned int>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> unsigned long executeFunction<unsigned long>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> float executeFunction<float>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> double executeFunction<double>(const char* func, const char* args, ...);
+    /** Template specialization. */
     template<> std::string executeFunction<std::string>(const char* func, const char* args, ...);
 
     /**
@@ -74,7 +86,9 @@ public:
      */
     struct Type
     {
+        /** Constructor. */
         explicit Type(const char* type) : type(type) {}
+        /** The name of the type. */
         const char* type;
     };
 
@@ -214,6 +228,7 @@ public:
      * Gets a string for the given stack index.
      * 
      * @param index The stack index.
+     * @param isStdString Whether the string being retrieved is a std::string object or not.
      * @return The string or <code>NULL</code>.
      * @script{ignore}
      */
@@ -459,7 +474,7 @@ public:
      * Registers the given library with Lua.
      * 
      * @param name The name of the library from within Lua.
-     * @param function The library function mapping (Lua function names to C++ functions).
+     * @param functions The library function mapping (Lua function names to C++ functions).
      * @script{ignore}
      */
     void registerLibrary(const char* name, const luaL_Reg* functions);

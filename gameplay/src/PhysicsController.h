@@ -156,7 +156,7 @@ public:
     /**
      * Adds a listener to the physics controller.
      * 
-     * Note: the given Lua function must have the same function signature as PhysicsController#Listener#statusEvent.
+     * Note: the given Lua function must have the same function signature as PhysicsController::Listener::statusEvent.
      * 
      * @param function The Lua script function to use as the listener callback.
      */

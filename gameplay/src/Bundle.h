@@ -388,7 +388,7 @@ private:
      * Reads the animation channel data at the current file position into the given animation
      * (with the given animation target and target attribute).
      * 
-     * Note: this is used by #loadNode(const char*, Scene*) and #readAnimationChannel(Scene*, Animation*, const char*).
+     * Note: this is used by Bundle::loadNode(const char*, Scene*) and Bundle::readAnimationChannel(Scene*, Animation*, const char*).
      * 
      * @param animation The animation to the load channel into.
      * @param id The ID of the animation that this channel is loaded into.

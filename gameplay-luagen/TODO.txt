@@ -25,7 +25,6 @@ Unsupported:
 
 Normal Priority List:
 =====================
-- Fix Doxygen warnings.
 - Fix memory leaks in gameplay-luagen and in generated code.
     - Add "@script{create}" to the appropriate gameplay functions.
     - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?

@@ -93,7 +93,7 @@ public:
     };
 
     /**
-     * @see PhysicsCollisionObject#getType
+     * @see PhysicsCollisionObject::getType
      */
     PhysicsCollisionObject::Type getType() const;
 
@@ -198,7 +198,7 @@ public:
 
     /**
      * Gets the gravity that affects the rigid body (this can
-     * be different from the global gravity; @see #setGravity).
+     * be different from the global gravity; @see setGravity(Vector3)).
      * 
      * @return The gravity.
      */

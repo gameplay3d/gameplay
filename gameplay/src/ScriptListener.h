@@ -28,7 +28,7 @@ class ScriptListener : public AnimationClip::Listener, public PhysicsCollisionOb
     friend class Transform;
 
 public:
-    /** @see AnimationClip#Listener */
+    /** @see AnimationClip::Listener */
     void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
         
     /** @see PhysicsCollisionObject::CollisionListener */

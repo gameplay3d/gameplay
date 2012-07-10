@@ -184,17 +184,17 @@ public:
     void bindValue(Node* node, const char* binding);
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 

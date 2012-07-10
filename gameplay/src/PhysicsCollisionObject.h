@@ -202,7 +202,7 @@ public:
     /**
      * Adds a collision listener for this collision object.
      * 
-     * Note: the given Lua function must match the function signature of PhysicsCollisionObject#CollisionListener#collisionEvent.
+     * Note: the given Lua function must match the function signature of PhysicsCollisionObject::CollisionListener::collisionEvent.
      * 
      * @param function The Lua script function to add as a listener callback.
      * @param object Optional collision object used to filter the collision event.
@@ -254,12 +254,12 @@ protected:
         virtual ~PhysicsMotionState();
 
         /**
-         * @see btMotionState#getWorldTransform
+         * @see btMotionState::getWorldTransform
          */
         virtual void getWorldTransform(btTransform &transform) const;
 
         /**
-         * @see btMotionState#setWorldTransform
+         * @see btMotionState::setWorldTransform
          */
         virtual void setWorldTransform(const btTransform &transform);
 

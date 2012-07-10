@@ -26,7 +26,7 @@ class PhysicsCharacter : public PhysicsGhostObject, public btActionInterface
 public:
 
     /**
-     * @see PhysicsCollisionObject#getType
+     * @see PhysicsCollisionObject::getType
      */
     PhysicsCollisionObject::Type getType() const;
 

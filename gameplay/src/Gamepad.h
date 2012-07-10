@@ -112,14 +112,16 @@ private:
 
     /**
      * Constructor.
+     * 
+     * @param id The gamepad's id.
      */
     Gamepad(const char* id);
     
     /**
-     * Constructor.
-     * Create a gamepad from the specified formPath.
+     * Constructs a gamepad from the specified .form file.
      *
-     * @param formPath
+     * @param id The gamepad's id.
+     * @param formPath The path the the .form file.
      */ 
     Gamepad(const char* id, const char* formPath);
 
