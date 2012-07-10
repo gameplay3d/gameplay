@@ -48,10 +48,6 @@ Texture::Texture() : _handle(0), _format(RGBA), _width(0), _height(0), _mipmappe
 {
 }
 
-Texture::Texture(const Texture& copy)
-{
-}
-
 Texture::~Texture()
 {
     if (_handle)

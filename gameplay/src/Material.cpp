@@ -15,10 +15,6 @@ Material::Material() :
 {
 }
 
-Material::Material(const Material& m)
-{
-}
-
 Material::~Material()
 {
     // Destroy all the techniques.

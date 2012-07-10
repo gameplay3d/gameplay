@@ -14,14 +14,6 @@ Mesh::Mesh(const VertexFormat& vertexFormat)
 {
 }
 
-Mesh::Mesh(const Mesh& copy) :
-    _vertexFormat(copy._vertexFormat), _vertexCount(copy._vertexCount), _vertexBuffer(copy._vertexBuffer),
-    _primitiveType(copy._primitiveType), _partCount(copy._partCount), _parts(copy._parts), _dynamic(copy._dynamic),
-    _boundingBox(copy._boundingBox), _boundingSphere(copy._boundingSphere)
-{
-    // hidden
-}
-
 Mesh::~Mesh()
 {
     if (_parts)

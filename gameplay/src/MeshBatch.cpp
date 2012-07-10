@@ -11,12 +11,6 @@ MeshBatch::MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primi
     resize(initialCapacity);
 }
 
-MeshBatch::MeshBatch(const MeshBatch& copy)
-    : _vertexFormat(copy._vertexFormat)
-{
-    // hidden
-}
-
 MeshBatch::~MeshBatch()
 {
     SAFE_RELEASE(_material);
