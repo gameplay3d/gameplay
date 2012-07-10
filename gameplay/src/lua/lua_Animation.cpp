@@ -73,7 +73,7 @@ int lua_Animation__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -107,7 +107,7 @@ int lua_Animation_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -165,7 +165,7 @@ int lua_Animation_createClip(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_createClip - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -203,7 +203,7 @@ int lua_Animation_createClips(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_createClips - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -249,7 +249,7 @@ int lua_Animation_getClip(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_getClip - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -304,7 +304,7 @@ int lua_Animation_getClip(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_getClip - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -341,7 +341,7 @@ int lua_Animation_getClipCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_getClipCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -378,7 +378,7 @@ int lua_Animation_getDuration(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_getDuration - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -415,7 +415,7 @@ int lua_Animation_getId(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_getId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -452,7 +452,7 @@ int lua_Animation_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -486,7 +486,7 @@ int lua_Animation_pause(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_pause - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -506,7 +506,7 @@ int lua_Animation_pause(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_pause - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -540,7 +540,7 @@ int lua_Animation_play(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_play - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -560,7 +560,7 @@ int lua_Animation_play(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_play - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -594,7 +594,7 @@ int lua_Animation_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -628,7 +628,7 @@ int lua_Animation_stop(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_stop - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -648,7 +648,7 @@ int lua_Animation_stop(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_stop - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -689,7 +689,7 @@ int lua_Animation_targets(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Animation_targets - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

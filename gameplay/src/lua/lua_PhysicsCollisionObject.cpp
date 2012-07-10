@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
+#include "ScriptListener.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
 #include "lua_PhysicsCollisionObjectType.h"
 #include "lua_PhysicsCollisionShapeType.h"
@@ -70,7 +71,7 @@ int lua_PhysicsCollisionObject__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -106,9 +107,20 @@ int lua_PhysicsCollisionObject_addCollisionListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                PhysicsCollisionObject* instance = getInstance(state);
+                instance->addCollisionListener(param1);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_addCollisionListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -130,9 +142,24 @@ int lua_PhysicsCollisionObject_addCollisionListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                // Get parameter 2 off the stack.
+                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
+
+                PhysicsCollisionObject* instance = getInstance(state);
+                instance->addCollisionListener(param1, param2);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_addCollisionListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -173,7 +200,7 @@ int lua_PhysicsCollisionObject_collidesWith(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_collidesWith - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -219,7 +246,7 @@ int lua_PhysicsCollisionObject_getCollisionShape(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_getCollisionShape - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -265,7 +292,7 @@ int lua_PhysicsCollisionObject_getNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_getNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -302,7 +329,7 @@ int lua_PhysicsCollisionObject_getShapeType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_getShapeType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -339,7 +366,7 @@ int lua_PhysicsCollisionObject_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -376,7 +403,7 @@ int lua_PhysicsCollisionObject_isDynamic(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_isDynamic - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -413,7 +440,7 @@ int lua_PhysicsCollisionObject_isEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_isEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -450,7 +477,7 @@ int lua_PhysicsCollisionObject_isKinematic(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_isKinematic - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -486,9 +513,20 @@ int lua_PhysicsCollisionObject_removeCollisionListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                PhysicsCollisionObject* instance = getInstance(state);
+                instance->removeCollisionListener(param1);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_removeCollisionListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -510,9 +548,24 @@ int lua_PhysicsCollisionObject_removeCollisionListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                // Get parameter 2 off the stack.
+                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
+
+                PhysicsCollisionObject* instance = getInstance(state);
+                instance->removeCollisionListener(param1, param2);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_removeCollisionListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -550,7 +603,7 @@ int lua_PhysicsCollisionObject_setEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObject_setEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

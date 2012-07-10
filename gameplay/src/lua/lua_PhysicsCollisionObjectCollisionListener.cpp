@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
+#include "ScriptListener.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
 #include "lua_PhysicsCollisionObjectType.h"
 #include "lua_PhysicsCollisionShapeType.h"
@@ -61,7 +62,7 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -103,7 +104,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -131,7 +132,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -163,7 +164,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

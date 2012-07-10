@@ -73,7 +73,7 @@ int lua_FrameBuffer__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -107,7 +107,7 @@ int lua_FrameBuffer_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -141,7 +141,7 @@ int lua_FrameBuffer_bind(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_bind - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -187,7 +187,7 @@ int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getDepthStencilTarget - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -224,7 +224,7 @@ int lua_FrameBuffer_getHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -261,7 +261,7 @@ int lua_FrameBuffer_getId(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -298,7 +298,7 @@ int lua_FrameBuffer_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -344,7 +344,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getRenderTarget - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -376,7 +376,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getRenderTarget - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -413,7 +413,7 @@ int lua_FrameBuffer_getWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_getWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -447,7 +447,7 @@ int lua_FrameBuffer_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -485,7 +485,7 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_setDepthStencilTarget - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -523,7 +523,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_setRenderTarget - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -547,7 +547,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_setRenderTarget - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -628,7 +628,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -676,7 +676,7 @@ int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FrameBuffer_static_getFrameBuffer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

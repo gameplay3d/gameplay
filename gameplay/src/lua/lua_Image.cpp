@@ -67,7 +67,7 @@ int lua_Image__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -101,7 +101,7 @@ int lua_Image_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -138,7 +138,7 @@ int lua_Image_getFormat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_getFormat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -175,7 +175,7 @@ int lua_Image_getHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -212,7 +212,7 @@ int lua_Image_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -249,7 +249,7 @@ int lua_Image_getWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_getWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -283,7 +283,7 @@ int lua_Image_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -331,7 +331,7 @@ int lua_Image_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Image_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

@@ -77,7 +77,7 @@ int lua_MaterialParameter__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -111,7 +111,7 @@ int lua_MaterialParameter_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -153,7 +153,7 @@ int lua_MaterialParameter_bindValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_bindValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -234,7 +234,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -286,7 +286,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -346,7 +346,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -416,7 +416,7 @@ int lua_MaterialParameter_createAnimationFromBy(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -486,7 +486,7 @@ int lua_MaterialParameter_createAnimationFromTo(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -520,7 +520,7 @@ int lua_MaterialParameter_destroyAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_destroyAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -540,7 +540,7 @@ int lua_MaterialParameter_destroyAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_destroyAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -586,7 +586,7 @@ int lua_MaterialParameter_getAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_getAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -618,7 +618,7 @@ int lua_MaterialParameter_getAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_getAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -659,7 +659,7 @@ int lua_MaterialParameter_getAnimationPropertyComponentCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -701,7 +701,7 @@ int lua_MaterialParameter_getAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -738,7 +738,7 @@ int lua_MaterialParameter_getName(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_getName - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -775,7 +775,7 @@ int lua_MaterialParameter_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -809,7 +809,7 @@ int lua_MaterialParameter_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -851,7 +851,7 @@ int lua_MaterialParameter_setAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -879,7 +879,7 @@ int lua_MaterialParameter_setAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1049,7 +1049,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_setValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1175,7 +1175,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MaterialParameter_setValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

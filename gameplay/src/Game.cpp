@@ -5,6 +5,7 @@
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "SceneLoader.h"
+#include "ScriptListener.h"
 
 GLenum __gl_error_code = GL_NO_ERROR;
 ALenum __al_error_code = AL_NO_ERROR;
@@ -21,7 +22,8 @@ Game::Game()
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL), 
-      _physicsController(NULL), _audioListener(NULL), _scriptController(NULL)
+      _physicsController(NULL), _audioListener(NULL), _scriptController(NULL),
+      _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -30,6 +32,15 @@ Game::Game()
 
 Game::~Game()
 {
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
+
     _scriptController->finalize();
     SAFE_DELETE(_scriptController);
 
@@ -401,6 +412,16 @@ void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
     GP_ASSERT(_timeEvents);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
     _timeEvents->push(timeEvent);
+}
+
+void Game::schedule(float timeOffset, const char* function)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    schedule(timeOffset, listener, NULL);
 }
 
 void Game::fireTimeEvents(double frameTime)

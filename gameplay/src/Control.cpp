@@ -1,14 +1,15 @@
 #include "Base.h"
 #include "Game.h"
 #include "Control.h"
+#include "ScriptListener.h"
 
 namespace gameplay
 {
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _contactIndex(INVALID_CONTACT_INDEX),
-    _styleOverridden(false), _skin(NULL)
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _scriptListeners(NULL),
+    _contactIndex(INVALID_CONTACT_INDEX), _styleOverridden(false), _skin(NULL)
 {
 }
 
@@ -22,6 +23,15 @@ Control::~Control()
             SAFE_DELETE(list);
         }
         SAFE_DELETE(_listeners);
+    }
+
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
     }
 
     if (_styleOverridden)
@@ -671,6 +681,16 @@ void Control::addListener(Control::Listener* listener, int eventFlags)
     {
         addSpecificListener(listener, Listener::TEXT_CHANGED);
     }
+}
+
+void Control::addListener(const char* function, int eventFlags)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addListener(listener, eventFlags);
 }
 
 void Control::addSpecificListener(Control::Listener* listener, Listener::EventType eventType)

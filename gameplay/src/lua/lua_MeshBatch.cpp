@@ -64,7 +64,7 @@ int lua_MeshBatch__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -98,7 +98,7 @@ int lua_MeshBatch_begin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_begin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -132,7 +132,7 @@ int lua_MeshBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -166,7 +166,7 @@ int lua_MeshBatch_finish(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_finish - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -203,7 +203,7 @@ int lua_MeshBatch_getCapacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_getCapacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -249,7 +249,7 @@ int lua_MeshBatch_getMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_getMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -287,7 +287,7 @@ int lua_MeshBatch_setCapacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_setCapacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -380,7 +380,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -463,7 +463,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -554,7 +554,7 @@ int lua_MeshBatch_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

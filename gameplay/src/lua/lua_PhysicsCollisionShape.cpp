@@ -70,7 +70,7 @@ int lua_PhysicsCollisionShape__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -104,7 +104,7 @@ int lua_PhysicsCollisionShape_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -141,7 +141,7 @@ int lua_PhysicsCollisionShape_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -178,7 +178,7 @@ int lua_PhysicsCollisionShape_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -212,7 +212,7 @@ int lua_PhysicsCollisionShape_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -279,7 +279,7 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -313,7 +313,7 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -351,7 +351,7 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -422,7 +422,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -460,7 +460,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -502,7 +502,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -550,7 +550,7 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_heightfield - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -598,7 +598,7 @@ int lua_PhysicsCollisionShape_static_mesh(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_mesh - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -665,7 +665,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -699,7 +699,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -737,7 +737,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

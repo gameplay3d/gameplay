@@ -89,7 +89,7 @@ int lua_PhysicsSpringConstraint_getBreakingImpulse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_getBreakingImpulse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -135,7 +135,7 @@ int lua_PhysicsSpringConstraint_getRotationOffsetA(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_getRotationOffsetA - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -181,7 +181,7 @@ int lua_PhysicsSpringConstraint_getRotationOffsetB(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_getRotationOffsetB - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -227,7 +227,7 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetA(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_getTranslationOffsetA - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -273,7 +273,7 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetB(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_getTranslationOffsetB - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -310,7 +310,7 @@ int lua_PhysicsSpringConstraint_isEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_isEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -348,7 +348,7 @@ int lua_PhysicsSpringConstraint_setAngularDampingX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -386,7 +386,7 @@ int lua_PhysicsSpringConstraint_setAngularDampingY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -424,7 +424,7 @@ int lua_PhysicsSpringConstraint_setAngularDampingZ(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingZ - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -462,7 +462,7 @@ int lua_PhysicsSpringConstraint_setAngularLowerLimit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularLowerLimit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -500,7 +500,7 @@ int lua_PhysicsSpringConstraint_setAngularStrengthX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -538,7 +538,7 @@ int lua_PhysicsSpringConstraint_setAngularStrengthY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -576,7 +576,7 @@ int lua_PhysicsSpringConstraint_setAngularStrengthZ(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthZ - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -614,7 +614,7 @@ int lua_PhysicsSpringConstraint_setAngularUpperLimit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularUpperLimit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -652,7 +652,7 @@ int lua_PhysicsSpringConstraint_setBreakingImpulse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setBreakingImpulse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -690,7 +690,7 @@ int lua_PhysicsSpringConstraint_setEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -728,7 +728,7 @@ int lua_PhysicsSpringConstraint_setLinearDampingX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -766,7 +766,7 @@ int lua_PhysicsSpringConstraint_setLinearDampingY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -804,7 +804,7 @@ int lua_PhysicsSpringConstraint_setLinearDampingZ(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingZ - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -842,7 +842,7 @@ int lua_PhysicsSpringConstraint_setLinearLowerLimit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearLowerLimit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -880,7 +880,7 @@ int lua_PhysicsSpringConstraint_setLinearStrengthX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -918,7 +918,7 @@ int lua_PhysicsSpringConstraint_setLinearStrengthY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -956,7 +956,7 @@ int lua_PhysicsSpringConstraint_setLinearStrengthZ(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthZ - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -994,7 +994,7 @@ int lua_PhysicsSpringConstraint_setLinearUpperLimit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearUpperLimit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1032,7 +1032,7 @@ int lua_PhysicsSpringConstraint_setRotationOffsetA(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setRotationOffsetA - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1070,7 +1070,7 @@ int lua_PhysicsSpringConstraint_setRotationOffsetB(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setRotationOffsetB - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1108,7 +1108,7 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetA(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setTranslationOffsetA - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1146,7 +1146,7 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetB(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_setTranslationOffsetB - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1198,7 +1198,7 @@ int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_static_centerOfMassMidpoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1250,7 +1250,7 @@ int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_static_getRotationOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1302,7 +1302,7 @@ int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSpringConstraint_static_getTranslationOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

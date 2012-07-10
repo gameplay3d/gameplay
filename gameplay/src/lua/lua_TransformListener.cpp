@@ -6,6 +6,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "Node.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 
@@ -60,7 +61,7 @@ int lua_TransformListener__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_TransformListener__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -102,7 +103,7 @@ int lua_TransformListener_transformChanged(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_TransformListener_transformChanged - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

@@ -58,7 +58,7 @@ int lua_ScreenDisplayer__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScreenDisplayer__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -160,7 +160,7 @@ int lua_ScreenDisplayer_static_start(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScreenDisplayer_static_start - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

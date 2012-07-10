@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Node.h"
 #include "Ref.h"
+#include "ScriptListener.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"
@@ -65,7 +66,7 @@ int lua_ControlListener__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ControlListener__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -107,7 +108,7 @@ int lua_ControlListener_controlEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ControlListener_controlEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

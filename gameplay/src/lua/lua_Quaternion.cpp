@@ -77,7 +77,7 @@ int lua_Quaternion__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -186,7 +186,7 @@ int lua_Quaternion__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -220,7 +220,7 @@ int lua_Quaternion__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -262,7 +262,7 @@ int lua_Quaternion__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -296,7 +296,7 @@ int lua_Quaternion_conjugate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_conjugate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -316,7 +316,7 @@ int lua_Quaternion_conjugate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_conjugate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -353,7 +353,7 @@ int lua_Quaternion_inverse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_inverse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -376,7 +376,7 @@ int lua_Quaternion_inverse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_inverse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -413,7 +413,7 @@ int lua_Quaternion_isIdentity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_isIdentity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -450,7 +450,7 @@ int lua_Quaternion_isZero(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_isZero - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -488,7 +488,7 @@ int lua_Quaternion_multiply(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_multiply - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -522,7 +522,7 @@ int lua_Quaternion_normalize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_normalize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -542,7 +542,7 @@ int lua_Quaternion_normalize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_normalize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -602,7 +602,7 @@ int lua_Quaternion_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -626,7 +626,7 @@ int lua_Quaternion_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -658,7 +658,7 @@ int lua_Quaternion_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -692,7 +692,7 @@ int lua_Quaternion_setIdentity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_setIdentity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -736,7 +736,7 @@ int lua_Quaternion_static_createFromAxisAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_static_createFromAxisAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -776,7 +776,7 @@ int lua_Quaternion_static_createFromRotationMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_static_createFromRotationMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -861,7 +861,7 @@ int lua_Quaternion_static_lerp(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_static_lerp - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -905,7 +905,7 @@ int lua_Quaternion_static_multiply(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_static_multiply - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -953,7 +953,7 @@ int lua_Quaternion_static_slerp(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_static_slerp - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1009,7 +1009,7 @@ int lua_Quaternion_static_squad(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_static_squad - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1087,7 +1087,7 @@ int lua_Quaternion_toAxisAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Quaternion_toAxisAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

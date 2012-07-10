@@ -741,6 +741,9 @@
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\ScriptListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1474,6 +1477,9 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_VertexFormatUsage.h">
       <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ScriptListener.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

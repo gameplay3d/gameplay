@@ -11,6 +11,7 @@
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
@@ -74,7 +75,7 @@ int lua_PhysicsRigidBodyParameters__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -141,7 +142,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -175,7 +176,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -213,7 +214,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -255,7 +256,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -301,7 +302,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -351,7 +352,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -405,7 +406,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

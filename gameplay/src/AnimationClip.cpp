@@ -4,6 +4,7 @@
 #include "AnimationTarget.h"
 #include "Game.h"
 #include "Quaternion.h"
+#include "ScriptListener.h"
 
 namespace gameplay
 {
@@ -12,7 +13,7 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), 
       _stateBits(0x00), _repeatCount(1.0f), _activeDuration(_duration * _repeatCount), _speed(1.0f), _timeStarted(0), 
       _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
-      _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL)
+      _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _scriptListeners(NULL), _listenerItr(NULL)
 {
     GP_ASSERT(_animation);
     GP_ASSERT(0 <= startTime && startTime <= _animation->_duration && 0 <= endTime && endTime <= _animation->_duration);
@@ -39,6 +40,15 @@ AnimationClip::~AnimationClip()
     SAFE_RELEASE(_crossFadeToClip);
     SAFE_DELETE(_beginListeners);
     SAFE_DELETE(_endListeners);
+
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
 
     if (_listeners)
     {
@@ -311,6 +321,36 @@ void AnimationClip::addEndListener(AnimationClip::Listener* listener)
 
     GP_ASSERT(listener);
     _endListeners->push_back(listener);
+}
+
+void AnimationClip::addBeginListener(const char* function)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>;
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addBeginListener(listener);
+}
+
+void AnimationClip::addEndListener(const char* function)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>;
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addEndListener(listener);
+}
+
+void AnimationClip::addListener(const char* function, unsigned long eventTime)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>;
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addListener(listener, eventTime);
 }
 
 bool AnimationClip::update(float elapsedTime)

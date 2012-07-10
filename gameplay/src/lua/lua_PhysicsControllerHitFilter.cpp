@@ -8,6 +8,7 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
+#include "ScriptListener.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
@@ -62,7 +63,7 @@ int lua_PhysicsControllerHitFilter__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsControllerHitFilter__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -140,7 +141,7 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsControllerHitFilter_filter - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -181,7 +182,7 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsControllerHitFilter_hit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

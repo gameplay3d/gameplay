@@ -64,7 +64,7 @@ int lua_ThemeThemeImage__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -98,7 +98,7 @@ int lua_ThemeThemeImage_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -144,7 +144,7 @@ int lua_ThemeThemeImage_getColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_getColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -181,7 +181,7 @@ int lua_ThemeThemeImage_getId(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_getId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -218,7 +218,7 @@ int lua_ThemeThemeImage_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -264,7 +264,7 @@ int lua_ThemeThemeImage_getRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_getRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -310,7 +310,7 @@ int lua_ThemeThemeImage_getUVs(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_getUVs - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -344,7 +344,7 @@ int lua_ThemeThemeImage_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeThemeImage_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

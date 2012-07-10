@@ -68,7 +68,7 @@ int lua_Ray__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -135,7 +135,7 @@ int lua_Ray__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -169,7 +169,7 @@ int lua_Ray__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -215,7 +215,7 @@ int lua_Ray_getDirection(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_getDirection - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -261,7 +261,7 @@ int lua_Ray_getOrigin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_getOrigin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -344,7 +344,7 @@ int lua_Ray_intersects(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_intersects - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -382,7 +382,7 @@ int lua_Ray_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -406,7 +406,7 @@ int lua_Ray_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -444,7 +444,7 @@ int lua_Ray_setDirection(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_setDirection - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -482,7 +482,7 @@ int lua_Ray_setOrigin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_setOrigin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -537,7 +537,7 @@ int lua_Ray_transform(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Ray_transform - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

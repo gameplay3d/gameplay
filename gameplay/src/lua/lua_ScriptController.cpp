@@ -68,7 +68,7 @@ int lua_ScriptController_getBoolPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getBoolPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -108,7 +108,7 @@ int lua_ScriptController_getDoublePointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getDoublePointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -148,7 +148,7 @@ int lua_ScriptController_getFloatPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getFloatPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -188,7 +188,7 @@ int lua_ScriptController_getIntPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getIntPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -228,7 +228,7 @@ int lua_ScriptController_getLongPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getLongPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -268,7 +268,7 @@ int lua_ScriptController_getShortPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getShortPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -308,7 +308,7 @@ int lua_ScriptController_getUnsignedCharPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getUnsignedCharPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -348,7 +348,7 @@ int lua_ScriptController_getUnsignedIntPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getUnsignedIntPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -388,7 +388,7 @@ int lua_ScriptController_getUnsignedLongPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getUnsignedLongPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -428,7 +428,7 @@ int lua_ScriptController_getUnsignedShortPointer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_getUnsignedShortPointer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -466,7 +466,7 @@ int lua_ScriptController_loadScript(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ScriptController_loadScript - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

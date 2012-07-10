@@ -76,7 +76,7 @@ int lua_Platform__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -113,7 +113,7 @@ int lua_Platform_enterMessagePump(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_enterMessagePump - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -161,7 +161,7 @@ int lua_Platform_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -197,7 +197,7 @@ int lua_Platform_static_displayKeyboard(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_displayKeyboard - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -265,7 +265,7 @@ int lua_Platform_static_getAccelerometerValues(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_getAccelerometerValues - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -417,7 +417,7 @@ int lua_Platform_static_keyEventInternal(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_keyEventInternal - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -468,7 +468,7 @@ int lua_Platform_static_mouseEventInternal(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_mouseEventInternal - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -504,7 +504,7 @@ int lua_Platform_static_setAbsoluteTime(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_setAbsoluteTime - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -540,7 +540,7 @@ int lua_Platform_static_setMultiTouch(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_setMultiTouch - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -576,7 +576,7 @@ int lua_Platform_static_setVsync(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_setVsync - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -637,7 +637,7 @@ int lua_Platform_static_sleep(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_sleep - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -710,7 +710,7 @@ int lua_Platform_static_touchEventInternal(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_touchEventInternal - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

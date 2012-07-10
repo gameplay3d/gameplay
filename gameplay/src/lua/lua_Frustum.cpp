@@ -65,7 +65,7 @@ int lua_Frustum__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -153,7 +153,7 @@ int lua_Frustum__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -199,7 +199,7 @@ int lua_Frustum_getBottom(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getBottom - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -237,7 +237,7 @@ int lua_Frustum_getCorners(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getCorners - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -283,7 +283,7 @@ int lua_Frustum_getFar(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getFar - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -329,7 +329,7 @@ int lua_Frustum_getLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -367,7 +367,7 @@ int lua_Frustum_getMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -413,7 +413,7 @@ int lua_Frustum_getNear(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getNear - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -459,7 +459,7 @@ int lua_Frustum_getRight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getRight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -505,7 +505,7 @@ int lua_Frustum_getTop(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_getTop - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -602,7 +602,7 @@ int lua_Frustum_intersects(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_intersects - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -651,7 +651,7 @@ int lua_Frustum_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Frustum_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

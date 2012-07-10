@@ -65,7 +65,7 @@ int lua_SpriteBatch__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -99,7 +99,7 @@ int lua_SpriteBatch_begin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_begin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -141,7 +141,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -188,7 +188,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -220,7 +220,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -260,7 +260,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -312,7 +312,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -462,7 +462,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -573,7 +573,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -692,7 +692,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -760,7 +760,7 @@ int lua_SpriteBatch_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -794,7 +794,7 @@ int lua_SpriteBatch_finish(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_finish - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -840,7 +840,7 @@ int lua_SpriteBatch_getMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_getMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -886,7 +886,7 @@ int lua_SpriteBatch_getProjectionMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_getProjectionMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -932,7 +932,7 @@ int lua_SpriteBatch_getStateBlock(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_getStateBlock - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -970,7 +970,7 @@ int lua_SpriteBatch_setProjectionMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_setProjectionMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1039,7 +1039,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1098,7 +1098,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1165,7 +1165,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_SpriteBatch_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

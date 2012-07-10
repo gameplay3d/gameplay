@@ -13,6 +13,7 @@ namespace gameplay
 class BoundingBox;
 class BoundingSphere;
 class NodeCloneContext;
+class ScriptListener;
 
 /**
  * Defines a 3-dimensional transformation.
@@ -734,6 +735,23 @@ public:
      * Removes a transform listener.
      */
     void removeListener(Transform::Listener* listener);
+
+    /**
+     * Adds a transform listener.
+     *
+     * Note: the given Lua function must match the function signature of Transform#Listener#transformChanged.
+     * 
+     * @param function The Lua script function to add as a listener callback.
+     * @param cookie An optional long value that is passed to the specified listener when it is called.
+     */
+    void addListener(const char* function, long cookie = 0);
+
+    /**
+     * Removes a transform listener.
+     * 
+     * @param function The Lua script function (used as a listener callback) to remove.
+     */
+    void removeListener(const char* function);
     
     /**
      * @see AnimationTarget#getAnimationPropertyComponentCount
@@ -841,6 +859,11 @@ protected:
      * List of TransformListener's on the Transform.
      */
     std::list<TransformListener>* _listeners;
+
+    /**
+     * List of Lua script transform listeners.
+     */
+    std::vector<ScriptListener*>* _scriptListeners;
 
 private:
    

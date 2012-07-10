@@ -73,7 +73,7 @@ int lua_Plane__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -140,7 +140,7 @@ int lua_Plane__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -174,7 +174,7 @@ int lua_Plane__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -215,7 +215,7 @@ int lua_Plane_distance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_distance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -252,7 +252,7 @@ int lua_Plane_getDistance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_getDistance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -298,7 +298,7 @@ int lua_Plane_getNormal(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_getNormal - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -395,7 +395,7 @@ int lua_Plane_intersects(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_intersects - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -436,7 +436,7 @@ int lua_Plane_isParallel(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_isParallel - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -474,7 +474,7 @@ int lua_Plane_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -498,7 +498,7 @@ int lua_Plane_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -536,7 +536,7 @@ int lua_Plane_setDistance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_setDistance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -574,7 +574,7 @@ int lua_Plane_setNormal(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_setNormal - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -673,7 +673,7 @@ int lua_Plane_static_intersection(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_static_intersection - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -711,7 +711,7 @@ int lua_Plane_transform(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Plane_transform - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

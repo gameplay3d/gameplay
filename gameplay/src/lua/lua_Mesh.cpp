@@ -88,7 +88,7 @@ int lua_Mesh__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -146,7 +146,7 @@ int lua_Mesh_addPart(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_addPart - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -190,7 +190,7 @@ int lua_Mesh_addPart(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_addPart - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -224,7 +224,7 @@ int lua_Mesh_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -270,7 +270,7 @@ int lua_Mesh_getBoundingBox(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getBoundingBox - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -316,7 +316,7 @@ int lua_Mesh_getBoundingSphere(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getBoundingSphere - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -366,7 +366,7 @@ int lua_Mesh_getPart(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getPart - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -403,7 +403,7 @@ int lua_Mesh_getPartCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getPartCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -440,7 +440,7 @@ int lua_Mesh_getPrimitiveType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getPrimitiveType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -477,7 +477,7 @@ int lua_Mesh_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -514,7 +514,7 @@ int lua_Mesh_getUrl(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getUrl - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -560,7 +560,7 @@ int lua_Mesh_getVertexBuffer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getVertexBuffer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -597,7 +597,7 @@ int lua_Mesh_getVertexCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getVertexCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -643,7 +643,7 @@ int lua_Mesh_getVertexFormat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getVertexFormat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -680,7 +680,7 @@ int lua_Mesh_getVertexSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_getVertexSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -717,7 +717,7 @@ int lua_Mesh_isDynamic(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_isDynamic - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -751,7 +751,7 @@ int lua_Mesh_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -789,7 +789,7 @@ int lua_Mesh_setBoundingBox(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_setBoundingBox - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -827,7 +827,7 @@ int lua_Mesh_setBoundingSphere(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_setBoundingSphere - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -865,7 +865,7 @@ int lua_Mesh_setPrimitiveType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_setPrimitiveType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -903,7 +903,7 @@ int lua_Mesh_setVertexData(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_setVertexData - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -927,7 +927,7 @@ int lua_Mesh_setVertexData(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_setVertexData - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -955,7 +955,7 @@ int lua_Mesh_setVertexData(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_setVertexData - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1003,7 +1003,7 @@ int lua_Mesh_static_createBoundingBox(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_static_createBoundingBox - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1055,7 +1055,7 @@ int lua_Mesh_static_createLines(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_static_createLines - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1107,7 +1107,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_static_createMesh - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1145,7 +1145,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_static_createMesh - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1238,7 +1238,7 @@ int lua_Mesh_static_createQuad(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Mesh_static_createQuad - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

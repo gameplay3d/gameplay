@@ -9,6 +9,7 @@
 #include "Node.h"
 #include "PhysicsController.h"
 #include "Ref.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CameraType.h"
 #include "lua_CurveInterpolationType.h"
@@ -93,7 +94,7 @@ int lua_Camera__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -127,7 +128,7 @@ int lua_Camera_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -164,7 +165,7 @@ int lua_Camera_getAspectRatio(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getAspectRatio - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -201,7 +202,7 @@ int lua_Camera_getCameraType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getCameraType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -238,7 +239,7 @@ int lua_Camera_getFarPlane(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getFarPlane - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -275,7 +276,7 @@ int lua_Camera_getFieldOfView(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getFieldOfView - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -321,7 +322,7 @@ int lua_Camera_getFrustum(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getFrustum - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -367,7 +368,7 @@ int lua_Camera_getInverseViewMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getInverseViewMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -413,7 +414,7 @@ int lua_Camera_getInverseViewProjectionMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getInverseViewProjectionMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -450,7 +451,7 @@ int lua_Camera_getNearPlane(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getNearPlane - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -496,7 +497,7 @@ int lua_Camera_getNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -542,7 +543,7 @@ int lua_Camera_getProjectionMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getProjectionMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -579,7 +580,7 @@ int lua_Camera_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -625,7 +626,7 @@ int lua_Camera_getViewMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getViewMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -671,7 +672,7 @@ int lua_Camera_getViewProjectionMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getViewProjectionMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -708,7 +709,7 @@ int lua_Camera_getZoomX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getZoomX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -745,7 +746,7 @@ int lua_Camera_getZoomY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_getZoomY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -795,7 +796,7 @@ int lua_Camera_pickRay(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_pickRay - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -845,7 +846,7 @@ int lua_Camera_project(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_project - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -881,7 +882,7 @@ int lua_Camera_project(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_project - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -915,7 +916,7 @@ int lua_Camera_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -953,7 +954,7 @@ int lua_Camera_setAspectRatio(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_setAspectRatio - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -991,7 +992,7 @@ int lua_Camera_setFarPlane(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_setFarPlane - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1029,7 +1030,7 @@ int lua_Camera_setFieldOfView(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_setFieldOfView - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1067,7 +1068,7 @@ int lua_Camera_setNearPlane(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_setNearPlane - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1105,7 +1106,7 @@ int lua_Camera_setZoomX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_setZoomX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1143,7 +1144,7 @@ int lua_Camera_setZoomY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_setZoomY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1207,7 +1208,7 @@ int lua_Camera_static_createOrthographic(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_static_createOrthographic - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1267,7 +1268,7 @@ int lua_Camera_static_createPerspective(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_static_createPerspective - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1321,7 +1322,7 @@ int lua_Camera_unproject(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Camera_unproject - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

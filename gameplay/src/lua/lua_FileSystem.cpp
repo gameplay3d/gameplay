@@ -63,7 +63,7 @@ int lua_FileSystem__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -102,7 +102,7 @@ int lua_FileSystem_static_fileExists(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem_static_fileExists - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -175,7 +175,7 @@ int lua_FileSystem_static_loadResourceAliases(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem_static_loadResourceAliases - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -214,7 +214,7 @@ int lua_FileSystem_static_readAll(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem_static_readAll - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -239,7 +239,7 @@ int lua_FileSystem_static_readAll(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem_static_readAll - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -278,7 +278,7 @@ int lua_FileSystem_static_resolvePath(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem_static_resolvePath - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -314,7 +314,7 @@ int lua_FileSystem_static_setResourcePath(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FileSystem_static_setResourcePath - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
