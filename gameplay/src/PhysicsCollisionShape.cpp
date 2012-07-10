@@ -12,11 +12,6 @@ PhysicsCollisionShape::PhysicsCollisionShape(Type type, btCollisionShape* shape)
     memset(&_shapeData, 0, sizeof(_shapeData));
 }
 
-PhysicsCollisionShape::PhysicsCollisionShape(const PhysicsCollisionShape& copy)
-{
-    // hidden
-}
-
 PhysicsCollisionShape::~PhysicsCollisionShape()
 {
     if (_shape)

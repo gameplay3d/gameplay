@@ -8,10 +8,6 @@ Label::Label() : _text(""), _font(NULL)
 {
 }
 
-Label::Label(const Label& copy)
-{
-}
-
 Label::~Label()
 {
 }

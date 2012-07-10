@@ -35,10 +35,6 @@ Container::Container()
 {
 }
 
-Container::Container(const Container& copy)
-{
-}
-
 Container::~Container()
 {
     std::vector<Control*>::iterator it;
