@@ -123,7 +123,7 @@ int lua_ParticleEmitter__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -157,7 +157,7 @@ int lua_ParticleEmitter_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -191,7 +191,7 @@ int lua_ParticleEmitter_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -229,7 +229,7 @@ int lua_ParticleEmitter_emit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_emit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -275,7 +275,7 @@ int lua_ParticleEmitter_getAcceleration(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getAcceleration - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -321,7 +321,7 @@ int lua_ParticleEmitter_getAccelerationVariance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getAccelerationVariance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -367,7 +367,7 @@ int lua_ParticleEmitter_getColorEnd(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getColorEnd - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -413,7 +413,7 @@ int lua_ParticleEmitter_getColorEndVariance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getColorEndVariance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -459,7 +459,7 @@ int lua_ParticleEmitter_getColorStart(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getColorStart - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -505,7 +505,7 @@ int lua_ParticleEmitter_getColorStartVariance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getColorStartVariance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -542,7 +542,7 @@ int lua_ParticleEmitter_getEmissionRate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getEmissionRate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -579,7 +579,7 @@ int lua_ParticleEmitter_getEnergyMax(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getEnergyMax - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -616,7 +616,7 @@ int lua_ParticleEmitter_getEnergyMin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getEnergyMin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -662,7 +662,7 @@ int lua_ParticleEmitter_getNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -699,7 +699,7 @@ int lua_ParticleEmitter_getParticlesCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getParticlesCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -745,7 +745,7 @@ int lua_ParticleEmitter_getPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -791,7 +791,7 @@ int lua_ParticleEmitter_getPositionVariance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getPositionVariance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -828,7 +828,7 @@ int lua_ParticleEmitter_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -874,7 +874,7 @@ int lua_ParticleEmitter_getRotationAxis(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRotationAxis - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -920,7 +920,7 @@ int lua_ParticleEmitter_getRotationAxisVariance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRotationAxisVariance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -957,7 +957,7 @@ int lua_ParticleEmitter_getRotationPerParticleSpeedMax(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRotationPerParticleSpeedMax - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -994,7 +994,7 @@ int lua_ParticleEmitter_getRotationPerParticleSpeedMin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRotationPerParticleSpeedMin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1031,7 +1031,7 @@ int lua_ParticleEmitter_getRotationSpeedMax(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRotationSpeedMax - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1068,7 +1068,7 @@ int lua_ParticleEmitter_getRotationSpeedMin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getRotationSpeedMin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1105,7 +1105,7 @@ int lua_ParticleEmitter_getSizeEndMax(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getSizeEndMax - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1142,7 +1142,7 @@ int lua_ParticleEmitter_getSizeEndMin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getSizeEndMin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1179,7 +1179,7 @@ int lua_ParticleEmitter_getSizeStartMax(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getSizeStartMax - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1216,7 +1216,7 @@ int lua_ParticleEmitter_getSizeStartMin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getSizeStartMin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1253,7 +1253,7 @@ int lua_ParticleEmitter_getSpriteFrameDuration(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getSpriteFrameDuration - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1290,7 +1290,7 @@ int lua_ParticleEmitter_getSpriteFrameRandomOffset(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getSpriteFrameRandomOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1336,7 +1336,7 @@ int lua_ParticleEmitter_getVelocity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getVelocity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1382,7 +1382,7 @@ int lua_ParticleEmitter_getVelocityVariance(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_getVelocityVariance - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1419,7 +1419,7 @@ int lua_ParticleEmitter_isActive(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_isActive - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1456,7 +1456,7 @@ int lua_ParticleEmitter_isEllipsoid(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_isEllipsoid - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1493,7 +1493,7 @@ int lua_ParticleEmitter_isSpriteAnimated(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_isSpriteAnimated - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1530,7 +1530,7 @@ int lua_ParticleEmitter_isSpriteLooped(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_isSpriteLooped - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1567,7 +1567,7 @@ int lua_ParticleEmitter_isStarted(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_isStarted - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1601,7 +1601,7 @@ int lua_ParticleEmitter_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1643,7 +1643,7 @@ int lua_ParticleEmitter_setAcceleration(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setAcceleration - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1693,7 +1693,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1731,7 +1731,7 @@ int lua_ParticleEmitter_setEllipsoid(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setEllipsoid - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1769,7 +1769,7 @@ int lua_ParticleEmitter_setEmissionRate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setEmissionRate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1811,7 +1811,7 @@ int lua_ParticleEmitter_setEnergy(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setEnergy - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1857,7 +1857,7 @@ int lua_ParticleEmitter_setOrbit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setOrbit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1899,7 +1899,7 @@ int lua_ParticleEmitter_setPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1949,7 +1949,7 @@ int lua_ParticleEmitter_setRotation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setRotation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1991,7 +1991,7 @@ int lua_ParticleEmitter_setRotationPerParticle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setRotationPerParticle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2041,7 +2041,7 @@ int lua_ParticleEmitter_setSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2079,7 +2079,7 @@ int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteAnimated - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2121,7 +2121,7 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteFrameCoords - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2149,7 +2149,7 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteFrameCoords - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2187,7 +2187,7 @@ int lua_ParticleEmitter_setSpriteFrameDuration(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteFrameDuration - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2225,7 +2225,7 @@ int lua_ParticleEmitter_setSpriteFrameRandomOffset(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteFrameRandomOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2263,7 +2263,7 @@ int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteLooped - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2305,7 +2305,7 @@ int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setSpriteTexCoords - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2343,7 +2343,7 @@ int lua_ParticleEmitter_setTextureBlending(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setTextureBlending - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2385,7 +2385,7 @@ int lua_ParticleEmitter_setVelocity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_setVelocity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2419,7 +2419,7 @@ int lua_ParticleEmitter_start(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_start - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2488,7 +2488,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2526,7 +2526,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2565,7 +2565,7 @@ int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_static_getTextureBlendingFromString - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2599,7 +2599,7 @@ int lua_ParticleEmitter_stop(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_stop - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2637,7 +2637,7 @@ int lua_ParticleEmitter_update(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_update - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

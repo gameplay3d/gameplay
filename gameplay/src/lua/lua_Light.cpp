@@ -79,7 +79,7 @@ int lua_Light__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -113,7 +113,7 @@ int lua_Light_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -159,7 +159,7 @@ int lua_Light_getColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -196,7 +196,7 @@ int lua_Light_getInnerAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getInnerAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -233,7 +233,7 @@ int lua_Light_getInnerAngleCos(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getInnerAngleCos - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -270,7 +270,7 @@ int lua_Light_getLightType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getLightType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -316,7 +316,7 @@ int lua_Light_getNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -353,7 +353,7 @@ int lua_Light_getOuterAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getOuterAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -390,7 +390,7 @@ int lua_Light_getOuterAngleCos(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getOuterAngleCos - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -427,7 +427,7 @@ int lua_Light_getRange(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getRange - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -464,7 +464,7 @@ int lua_Light_getRangeInverse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getRangeInverse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -501,7 +501,7 @@ int lua_Light_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -535,7 +535,7 @@ int lua_Light_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -573,7 +573,7 @@ int lua_Light_setColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_setColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -611,7 +611,7 @@ int lua_Light_setInnerAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_setInnerAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -649,7 +649,7 @@ int lua_Light_setOuterAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_setOuterAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -687,7 +687,7 @@ int lua_Light_setRange(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_setRange - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -735,7 +735,7 @@ int lua_Light_static_createDirectional(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_static_createDirectional - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -787,7 +787,7 @@ int lua_Light_static_createPoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_static_createPoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -847,7 +847,7 @@ int lua_Light_static_createSpot(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Light_static_createSpot - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

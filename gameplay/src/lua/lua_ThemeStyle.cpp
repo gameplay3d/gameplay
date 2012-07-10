@@ -60,7 +60,7 @@ int lua_ThemeStyle_getTheme(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ThemeStyle_getTheme - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

@@ -50,7 +50,13 @@ string FunctionBinding::getFunctionName() const
         else if (returnParam.type == Param::TYPE_DESTRUCTOR)
             functionName += "_gc";
         else
-            functionName += name;
+        {
+            size_t i = name.rfind("::");
+            if (i != name.npos)
+                functionName += name.substr(i + 2);
+            else
+                functionName += name;
+        }
     }
 
     return functionName;
@@ -368,7 +374,8 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
                 indent(o, 3);
                 o << "{\n";
                 indent(o, 4);
-                o << "lua_pushstring(state, \"Failed to match the given parameters to a valid function signature.\");\n";
+                o << "lua_pushstring(state, \"" << bindings[0].getFunctionName();
+                o << " - Failed to match the given parameters to a valid function signature.\");\n";
                 indent(o, 4);
                 o << "lua_error(state);\n";
                 indent(o, 3);
@@ -404,19 +411,41 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
 
 bool FunctionBinding::signaturesMatch(const FunctionBinding& b1, const FunctionBinding& b2)
 {
-    if (b1.name == b2.name &&
-        b1.type == b2.type)
+    if (b1.type == b2.type)
     {
-        if (b1.paramTypes.size() != b2.paramTypes.size())
-            return false;
+        bool namesMatch = b1.name == b2.name;
 
-        for (unsigned int i = 0, count = b1.paramTypes.size(); i < count; i++)
+        // Ignore class qualifiers on member function bindings (to support inherited overloaded bindings).
+        if (b1.type == FunctionBinding::MEMBER_CONSTANT ||
+            b1.type == FunctionBinding::MEMBER_FUNCTION ||
+            b1.type == FunctionBinding::MEMBER_VARIABLE)
         {
-            if (b1.paramTypes[i] != b2.paramTypes[i])
-                return false;
+            string b1name = b1.name;
+            string b2name = b2.name;
+            size_t i = b1name.rfind("::");
+            if (i != b1name.npos)
+                b1name = b1name.substr(i + 2);
+            i = b2name.rfind("::");
+            if (i != b2name.npos)
+                b2name = b2name.substr(i + 2);
+    
+            namesMatch = b1name == b2name;
         }
 
-        return true;
+        // Check the binding's name, parameter types and return value type.
+        if (namesMatch)
+        {
+            if (b1.paramTypes.size() != b2.paramTypes.size())
+                return false;
+
+            for (unsigned int i = 0, count = b1.paramTypes.size(); i < count; i++)
+            {
+                if (b1.paramTypes[i] != b2.paramTypes[i])
+                    return false;
+            }
+
+            return true;
+        }
     }
     return false;
 }

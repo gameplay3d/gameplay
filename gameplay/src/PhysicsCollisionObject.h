@@ -8,6 +8,7 @@ namespace gameplay
 {
 
 class Node;
+class ScriptListener;
 
 /**
  * Base class for all gameplay physics objects that support collision events.
@@ -199,6 +200,24 @@ public:
     void removeCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object = NULL);
 
     /**
+     * Adds a collision listener for this collision object.
+     * 
+     * Note: the given Lua function must match the function signature of PhysicsCollisionObject#CollisionListener#collisionEvent.
+     * 
+     * @param function The Lua script function to add as a listener callback.
+     * @param object Optional collision object used to filter the collision event.
+     */
+    void addCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
+
+    /**
+     * Removes a collision listener.
+     *
+     * @param function The Lua function (used as a listener callback) to remove.
+     * @param object Optional collision object used to filter the collision event.
+     */
+    void removeCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
+
+    /**
      * Checks if this collision object collides with the given object.
      * 
      * @param object The collision object to test for collision with.
@@ -288,6 +307,10 @@ protected:
      */
     bool _enabled;
 
+    /**
+     * Lua script collision listeners.
+     */
+    std::vector<ScriptListener*>* _scriptListeners;
 };
 
 }

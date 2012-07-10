@@ -72,7 +72,7 @@ int lua_Curve__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -106,7 +106,7 @@ int lua_Curve_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -148,7 +148,7 @@ int lua_Curve_evaluate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_evaluate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -185,7 +185,7 @@ int lua_Curve_getComponentCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_getComponentCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -222,7 +222,7 @@ int lua_Curve_getEndTime(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_getEndTime - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -259,7 +259,7 @@ int lua_Curve_getPointCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_getPointCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -296,7 +296,7 @@ int lua_Curve_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -333,7 +333,7 @@ int lua_Curve_getStartTime(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_getStartTime - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -367,7 +367,7 @@ int lua_Curve_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -417,7 +417,7 @@ int lua_Curve_setPoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_setPoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -457,7 +457,7 @@ int lua_Curve_setPoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_setPoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -507,7 +507,7 @@ int lua_Curve_setTangent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_setTangent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -559,7 +559,7 @@ int lua_Curve_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -606,7 +606,7 @@ int lua_Curve_static_lerp(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Curve_static_lerp - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

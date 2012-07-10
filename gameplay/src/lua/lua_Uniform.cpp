@@ -65,7 +65,7 @@ int lua_Uniform_getEffect(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Uniform_getEffect - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -102,7 +102,7 @@ int lua_Uniform_getName(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Uniform_getName - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -140,7 +140,7 @@ int lua_Uniform_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Uniform_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

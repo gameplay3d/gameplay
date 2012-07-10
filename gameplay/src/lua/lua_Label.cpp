@@ -9,6 +9,7 @@
 #include "Label.h"
 #include "Node.h"
 #include "Ref.h"
+#include "ScriptListener.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"
@@ -153,7 +154,7 @@ int lua_Label__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -193,9 +194,24 @@ int lua_Label_addListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Label* instance = getInstance(state);
+                instance->Control::addListener(param1, param2);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_addListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -229,7 +245,7 @@ int lua_Label_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -310,7 +326,7 @@ int lua_Label_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -362,7 +378,7 @@ int lua_Label_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -422,7 +438,7 @@ int lua_Label_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -492,7 +508,7 @@ int lua_Label_createAnimationFromBy(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -562,7 +578,7 @@ int lua_Label_createAnimationFromTo(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -596,7 +612,7 @@ int lua_Label_destroyAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_destroyAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -616,7 +632,7 @@ int lua_Label_destroyAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_destroyAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -650,7 +666,7 @@ int lua_Label_disable(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_disable - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -684,7 +700,7 @@ int lua_Label_enable(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_enable - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -721,7 +737,7 @@ int lua_Label_getAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -767,7 +783,7 @@ int lua_Label_getAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -799,7 +815,7 @@ int lua_Label_getAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -840,7 +856,7 @@ int lua_Label_getAnimationPropertyComponentCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -882,7 +898,7 @@ int lua_Label_getAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -919,7 +935,7 @@ int lua_Label_getAutoHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAutoHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -956,7 +972,7 @@ int lua_Label_getAutoWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getAutoWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1002,7 +1018,7 @@ int lua_Label_getBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1034,7 +1050,7 @@ int lua_Label_getBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1080,7 +1096,7 @@ int lua_Label_getBounds(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getBounds - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1126,7 +1142,7 @@ int lua_Label_getClip(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getClip - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1172,7 +1188,7 @@ int lua_Label_getClipBounds(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getClipBounds - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1209,7 +1225,7 @@ int lua_Label_getConsumeInputEvents(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1259,7 +1275,7 @@ int lua_Label_getCursorColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getCursorColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1309,7 +1325,7 @@ int lua_Label_getCursorRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getCursorRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1359,7 +1375,7 @@ int lua_Label_getCursorUVs(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getCursorUVs - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1396,7 +1412,7 @@ int lua_Label_getFocusIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getFocusIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1442,7 +1458,7 @@ int lua_Label_getFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1474,7 +1490,7 @@ int lua_Label_getFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1511,7 +1527,7 @@ int lua_Label_getFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1534,7 +1550,7 @@ int lua_Label_getFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1571,7 +1587,7 @@ int lua_Label_getHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1608,7 +1624,7 @@ int lua_Label_getId(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1662,7 +1678,7 @@ int lua_Label_getImageColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getImageColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1716,7 +1732,7 @@ int lua_Label_getImageRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getImageRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1770,7 +1786,7 @@ int lua_Label_getImageUVs(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getImageUVs - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1816,7 +1832,7 @@ int lua_Label_getMargin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getMargin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1853,7 +1869,7 @@ int lua_Label_getOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1876,7 +1892,7 @@ int lua_Label_getOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1922,7 +1938,7 @@ int lua_Label_getPadding(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getPadding - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1959,7 +1975,7 @@ int lua_Label_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2005,7 +2021,7 @@ int lua_Label_getSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2037,7 +2053,7 @@ int lua_Label_getSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2083,7 +2099,7 @@ int lua_Label_getSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2115,7 +2131,7 @@ int lua_Label_getSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2152,7 +2168,7 @@ int lua_Label_getState(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getState - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2198,7 +2214,7 @@ int lua_Label_getStyle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getStyle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2235,7 +2251,7 @@ int lua_Label_getText(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getText - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2272,7 +2288,7 @@ int lua_Label_getTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2295,7 +2311,7 @@ int lua_Label_getTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2341,7 +2357,7 @@ int lua_Label_getTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2373,7 +2389,7 @@ int lua_Label_getTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2410,7 +2426,7 @@ int lua_Label_getTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2433,7 +2449,7 @@ int lua_Label_getTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2470,7 +2486,7 @@ int lua_Label_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2507,7 +2523,7 @@ int lua_Label_getWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2544,7 +2560,7 @@ int lua_Label_getX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2581,7 +2597,7 @@ int lua_Label_getY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2618,7 +2634,7 @@ int lua_Label_getZIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_getZIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2655,7 +2671,7 @@ int lua_Label_isContainer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_isContainer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2692,7 +2708,7 @@ int lua_Label_isEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_isEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2726,7 +2742,7 @@ int lua_Label_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2764,7 +2780,7 @@ int lua_Label_setAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2806,7 +2822,7 @@ int lua_Label_setAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2834,7 +2850,7 @@ int lua_Label_setAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2872,7 +2888,7 @@ int lua_Label_setAutoHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setAutoHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2910,7 +2926,7 @@ int lua_Label_setAutoWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setAutoWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2960,7 +2976,7 @@ int lua_Label_setBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2996,7 +3012,7 @@ int lua_Label_setBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3034,7 +3050,7 @@ int lua_Label_setBounds(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setBounds - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3072,7 +3088,7 @@ int lua_Label_setConsumeInputEvents(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3114,7 +3130,7 @@ int lua_Label_setCursorColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setCursorColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3156,7 +3172,7 @@ int lua_Label_setCursorRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setCursorRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3194,7 +3210,7 @@ int lua_Label_setFocusIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setFocusIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3232,7 +3248,7 @@ int lua_Label_setFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3256,7 +3272,7 @@ int lua_Label_setFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3294,7 +3310,7 @@ int lua_Label_setFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3318,7 +3334,7 @@ int lua_Label_setFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3360,7 +3376,7 @@ int lua_Label_setImageColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setImageColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3388,7 +3404,7 @@ int lua_Label_setImageColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setImageColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3430,7 +3446,7 @@ int lua_Label_setImageRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setImageRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3458,7 +3474,7 @@ int lua_Label_setImageRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setImageRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3508,7 +3524,7 @@ int lua_Label_setMargin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setMargin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3546,7 +3562,7 @@ int lua_Label_setOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3570,7 +3586,7 @@ int lua_Label_setOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3620,7 +3636,7 @@ int lua_Label_setPadding(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setPadding - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3662,7 +3678,7 @@ int lua_Label_setPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3704,7 +3720,7 @@ int lua_Label_setSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3742,7 +3758,7 @@ int lua_Label_setSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3766,7 +3782,7 @@ int lua_Label_setSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3804,7 +3820,7 @@ int lua_Label_setSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3828,7 +3844,7 @@ int lua_Label_setSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3866,7 +3882,7 @@ int lua_Label_setState(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setState - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3904,7 +3920,7 @@ int lua_Label_setStyle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setStyle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3942,7 +3958,7 @@ int lua_Label_setText(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setText - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3980,7 +3996,7 @@ int lua_Label_setTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4004,7 +4020,7 @@ int lua_Label_setTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4042,7 +4058,7 @@ int lua_Label_setTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4066,7 +4082,7 @@ int lua_Label_setTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4104,7 +4120,7 @@ int lua_Label_setTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4128,7 +4144,7 @@ int lua_Label_setTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4166,7 +4182,7 @@ int lua_Label_setZIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_setZIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4337,7 +4353,7 @@ int lua_Label_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Label_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

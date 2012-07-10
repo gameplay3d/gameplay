@@ -56,7 +56,7 @@ int lua_AnimationValue_getFloat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationValue_getFloat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -84,7 +84,7 @@ int lua_AnimationValue_getFloat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationValue_getFloat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -126,7 +126,7 @@ int lua_AnimationValue_setFloat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationValue_setFloat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -154,7 +154,7 @@ int lua_AnimationValue_setFloat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationValue_setFloat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

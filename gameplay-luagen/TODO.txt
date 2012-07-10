@@ -4,24 +4,36 @@ Unsupported:
 - templates
 - variable arguments
 - Lua doesn't support as many types as C++ so if there are functions that overload on parameters with types that overlap in Lua, the overloading won't work properly (i.e. char, short, int, long, float, double and all corresponding unsigned variants overlap in Lua).
+- There is no reasonable way to unload a Lua script (one would have to parse the script completely to find all global function and variable names and then set those global table entries to nil and invoke the garbage collector).
+    - The recommended usage pattern is to put each script's variables and functions inside a table (see Lua technical note 7). i.e.
+
+    -- If you only want to load the module at most once, add a line like this.
+    if Module then return end
+    
+    -- Declare the module Module.
+    Module = {}
+    
+    -- Declare a variable within the module.
+    Module.a = 47
+    
+    -- Declare a function within the module.
+    function Module.myFunc()
+       return Module.a + 17
+    end
+- Note: you can't pass an enum to a function that doesn't explicitly take an enum (i.e. Control::setTextColor, which takes an unsigned char). In these cases, you need to go look up the enum values and pass them directly.
 
 
 Normal Priority List:
 =====================
-- Add support for listener callbacks.
+- Fix Doxygen warnings.
 - Fix memory leaks in gameplay-luagen and in generated code.
     - Add "@script{create}" to the appropriate gameplay functions.
     - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
-- Figure out a way to determine the proper needed include files (generate Doxygen XML for cpp files?); along with this do the following:
-    - Reduce compilation dependencies (remove Global.h from all lua_XXX.cpp files)
-    - Separate the enums into separate files and have generated files include the enum files they need.
+- Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).
 
 Future Feature List:
 ====================
 - Add support for users to generate bindings for their own classes.
-- Add support for std::vector.
-- Separate threads?
-
 
 Lua Tips
 ========

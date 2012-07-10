@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
+#include "ScriptListener.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
 #include "lua_PhysicsCollisionObjectType.h"
 #include "lua_PhysicsCollisionShapeType.h"
@@ -62,7 +63,7 @@ int lua_PhysicsCollisionObjectCollisionPair__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionPair__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -114,7 +115,7 @@ int lua_PhysicsCollisionObjectCollisionPair__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionPair__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

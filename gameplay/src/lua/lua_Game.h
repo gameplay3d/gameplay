@@ -31,6 +31,7 @@ int lua_Game_mouseEvent(lua_State* state);
 int lua_Game_pause(lua_State* state);
 int lua_Game_resume(lua_State* state);
 int lua_Game_run(lua_State* state);
+int lua_Game_schedule(lua_State* state);
 int lua_Game_setMultiTouch(lua_State* state);
 int lua_Game_setViewport(lua_State* state);
 int lua_Game_static_getAbsoluteTime(lua_State* state);

@@ -56,7 +56,7 @@ int lua_AudioController__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioController__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

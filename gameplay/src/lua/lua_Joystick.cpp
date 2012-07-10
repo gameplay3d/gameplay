@@ -9,6 +9,7 @@
 #include "Joystick.h"
 #include "Node.h"
 #include "Ref.h"
+#include "ScriptListener.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"
@@ -156,7 +157,7 @@ int lua_Joystick__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -196,9 +197,24 @@ int lua_Joystick_addListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Joystick* instance = getInstance(state);
+                instance->Control::addListener(param1, param2);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_addListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -232,7 +248,7 @@ int lua_Joystick_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -313,7 +329,7 @@ int lua_Joystick_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -365,7 +381,7 @@ int lua_Joystick_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -425,7 +441,7 @@ int lua_Joystick_createAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_createAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -495,7 +511,7 @@ int lua_Joystick_createAnimationFromBy(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -565,7 +581,7 @@ int lua_Joystick_createAnimationFromTo(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -599,7 +615,7 @@ int lua_Joystick_destroyAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_destroyAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -619,7 +635,7 @@ int lua_Joystick_destroyAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_destroyAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -653,7 +669,7 @@ int lua_Joystick_disable(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_disable - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -687,7 +703,7 @@ int lua_Joystick_enable(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_enable - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -724,7 +740,7 @@ int lua_Joystick_getAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -770,7 +786,7 @@ int lua_Joystick_getAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -802,7 +818,7 @@ int lua_Joystick_getAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -843,7 +859,7 @@ int lua_Joystick_getAnimationPropertyComponentCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -885,7 +901,7 @@ int lua_Joystick_getAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -922,7 +938,7 @@ int lua_Joystick_getAutoHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAutoHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -959,7 +975,7 @@ int lua_Joystick_getAutoWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getAutoWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1005,7 +1021,7 @@ int lua_Joystick_getBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1037,7 +1053,7 @@ int lua_Joystick_getBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1083,7 +1099,7 @@ int lua_Joystick_getBounds(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getBounds - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1129,7 +1145,7 @@ int lua_Joystick_getClip(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getClip - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1175,7 +1191,7 @@ int lua_Joystick_getClipBounds(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getClipBounds - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1212,7 +1228,7 @@ int lua_Joystick_getConsumeInputEvents(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1262,7 +1278,7 @@ int lua_Joystick_getCursorColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getCursorColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1312,7 +1328,7 @@ int lua_Joystick_getCursorRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getCursorRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1362,7 +1378,7 @@ int lua_Joystick_getCursorUVs(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getCursorUVs - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1399,7 +1415,7 @@ int lua_Joystick_getFocusIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getFocusIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1445,7 +1461,7 @@ int lua_Joystick_getFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1477,7 +1493,7 @@ int lua_Joystick_getFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1514,7 +1530,7 @@ int lua_Joystick_getFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1537,7 +1553,7 @@ int lua_Joystick_getFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1574,7 +1590,7 @@ int lua_Joystick_getHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1611,7 +1627,7 @@ int lua_Joystick_getId(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1665,7 +1681,7 @@ int lua_Joystick_getImageColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getImageColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1719,7 +1735,7 @@ int lua_Joystick_getImageRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getImageRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1773,7 +1789,7 @@ int lua_Joystick_getImageUVs(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getImageUVs - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1819,7 +1835,7 @@ int lua_Joystick_getMargin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getMargin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1856,7 +1872,7 @@ int lua_Joystick_getOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1879,7 +1895,7 @@ int lua_Joystick_getOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1925,7 +1941,7 @@ int lua_Joystick_getPadding(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getPadding - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1962,7 +1978,7 @@ int lua_Joystick_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2008,7 +2024,7 @@ int lua_Joystick_getRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2054,7 +2070,7 @@ int lua_Joystick_getSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2086,7 +2102,7 @@ int lua_Joystick_getSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2132,7 +2148,7 @@ int lua_Joystick_getSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2164,7 +2180,7 @@ int lua_Joystick_getSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2201,7 +2217,7 @@ int lua_Joystick_getState(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getState - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2247,7 +2263,7 @@ int lua_Joystick_getStyle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getStyle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2284,7 +2300,7 @@ int lua_Joystick_getTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2307,7 +2323,7 @@ int lua_Joystick_getTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2353,7 +2369,7 @@ int lua_Joystick_getTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2385,7 +2401,7 @@ int lua_Joystick_getTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2422,7 +2438,7 @@ int lua_Joystick_getTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2445,7 +2461,7 @@ int lua_Joystick_getTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2482,7 +2498,7 @@ int lua_Joystick_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2528,7 +2544,7 @@ int lua_Joystick_getValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2565,7 +2581,7 @@ int lua_Joystick_getWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2602,7 +2618,7 @@ int lua_Joystick_getX(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getX - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2639,7 +2655,7 @@ int lua_Joystick_getY(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getY - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2676,7 +2692,7 @@ int lua_Joystick_getZIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_getZIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2713,7 +2729,7 @@ int lua_Joystick_isAbsolute(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_isAbsolute - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2750,7 +2766,7 @@ int lua_Joystick_isContainer(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_isContainer - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2787,7 +2803,7 @@ int lua_Joystick_isEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_isEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2821,7 +2837,7 @@ int lua_Joystick_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2859,7 +2875,7 @@ int lua_Joystick_setAbsolute(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setAbsolute - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2897,7 +2913,7 @@ int lua_Joystick_setAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2939,7 +2955,7 @@ int lua_Joystick_setAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2967,7 +2983,7 @@ int lua_Joystick_setAnimationPropertyValue(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3005,7 +3021,7 @@ int lua_Joystick_setAutoHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setAutoHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3043,7 +3059,7 @@ int lua_Joystick_setAutoWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setAutoWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3093,7 +3109,7 @@ int lua_Joystick_setBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3129,7 +3145,7 @@ int lua_Joystick_setBorder(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setBorder - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3167,7 +3183,7 @@ int lua_Joystick_setBounds(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setBounds - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3205,7 +3221,7 @@ int lua_Joystick_setConsumeInputEvents(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3247,7 +3263,7 @@ int lua_Joystick_setCursorColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setCursorColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3289,7 +3305,7 @@ int lua_Joystick_setCursorRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setCursorRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3327,7 +3343,7 @@ int lua_Joystick_setFocusIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setFocusIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3365,7 +3381,7 @@ int lua_Joystick_setFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3389,7 +3405,7 @@ int lua_Joystick_setFont(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setFont - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3427,7 +3443,7 @@ int lua_Joystick_setFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3451,7 +3467,7 @@ int lua_Joystick_setFontSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setFontSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3493,7 +3509,7 @@ int lua_Joystick_setImageColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setImageColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3521,7 +3537,7 @@ int lua_Joystick_setImageColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setImageColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3563,7 +3579,7 @@ int lua_Joystick_setImageRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setImageRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3591,7 +3607,7 @@ int lua_Joystick_setImageRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setImageRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3641,7 +3657,7 @@ int lua_Joystick_setMargin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setMargin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3679,7 +3695,7 @@ int lua_Joystick_setOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3703,7 +3719,7 @@ int lua_Joystick_setOpacity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setOpacity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3753,7 +3769,7 @@ int lua_Joystick_setPadding(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setPadding - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3795,7 +3811,7 @@ int lua_Joystick_setPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3833,7 +3849,7 @@ int lua_Joystick_setRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3875,7 +3891,7 @@ int lua_Joystick_setSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3913,7 +3929,7 @@ int lua_Joystick_setSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3937,7 +3953,7 @@ int lua_Joystick_setSkinColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setSkinColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3975,7 +3991,7 @@ int lua_Joystick_setSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -3999,7 +4015,7 @@ int lua_Joystick_setSkinRegion(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setSkinRegion - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4037,7 +4053,7 @@ int lua_Joystick_setState(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setState - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4075,7 +4091,7 @@ int lua_Joystick_setStyle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setStyle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4113,7 +4129,7 @@ int lua_Joystick_setTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4137,7 +4153,7 @@ int lua_Joystick_setTextAlignment(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setTextAlignment - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4175,7 +4191,7 @@ int lua_Joystick_setTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4199,7 +4215,7 @@ int lua_Joystick_setTextColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setTextColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4237,7 +4253,7 @@ int lua_Joystick_setTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4261,7 +4277,7 @@ int lua_Joystick_setTextRightToLeft(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4299,7 +4315,7 @@ int lua_Joystick_setZIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_setZIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4470,7 +4486,7 @@ int lua_Joystick_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joystick_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

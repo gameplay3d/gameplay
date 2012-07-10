@@ -64,7 +64,7 @@ int lua_PhysicsSocketConstraint_getBreakingImpulse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_getBreakingImpulse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -101,7 +101,7 @@ int lua_PhysicsSocketConstraint_isEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_isEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -139,7 +139,7 @@ int lua_PhysicsSocketConstraint_setBreakingImpulse(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_setBreakingImpulse - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -177,7 +177,7 @@ int lua_PhysicsSocketConstraint_setEnabled(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_setEnabled - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -229,7 +229,7 @@ int lua_PhysicsSocketConstraint_static_centerOfMassMidpoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_static_centerOfMassMidpoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -281,7 +281,7 @@ int lua_PhysicsSocketConstraint_static_getRotationOffset(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_static_getRotationOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -333,7 +333,7 @@ int lua_PhysicsSocketConstraint_static_getTranslationOffset(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsSocketConstraint_static_getTranslationOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

@@ -76,7 +76,7 @@ int lua_Texture__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -110,7 +110,7 @@ int lua_Texture_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -144,7 +144,7 @@ int lua_Texture_generateMipmaps(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_generateMipmaps - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -181,7 +181,7 @@ int lua_Texture_getFormat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_getFormat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -227,7 +227,7 @@ int lua_Texture_getHandle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_getHandle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -264,7 +264,7 @@ int lua_Texture_getHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -301,7 +301,7 @@ int lua_Texture_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -338,7 +338,7 @@ int lua_Texture_getWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_getWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -375,7 +375,7 @@ int lua_Texture_isCompressed(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_isCompressed - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -412,7 +412,7 @@ int lua_Texture_isMipmapped(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_isMipmapped - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -446,7 +446,7 @@ int lua_Texture_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -488,7 +488,7 @@ int lua_Texture_setFilterMode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_setFilterMode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -530,7 +530,7 @@ int lua_Texture_setWrapMode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_setWrapMode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -599,7 +599,7 @@ int lua_Texture_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -658,7 +658,7 @@ int lua_Texture_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -700,7 +700,7 @@ int lua_Texture_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -746,7 +746,7 @@ int lua_Texture_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Texture_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

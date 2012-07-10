@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Quaternion.h"
 #include "Ref.h"
+#include "ScriptListener.h"
 #include "lua_AnimationClipListenerEventType.h"
 
 namespace gameplay
@@ -61,7 +62,7 @@ int lua_AnimationClipListener__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationClipListener__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -103,7 +104,7 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationClipListener_animationEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

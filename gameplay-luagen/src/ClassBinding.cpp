@@ -147,9 +147,9 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
         if (includes.find(include) == includes.end())
             o << "#include \"" << include << "\"\n";
 
-        for (set<string>::iterator iter = includes.begin(); iter != includes.end(); iter++)
+        for (set<string>::iterator includeIter = includes.begin(); includeIter != includes.end(); includeIter++)
         {
-            o << "#include \"" << *iter << "\"\n";
+            o << "#include \"" << *includeIter << "\"\n";
         }
         o << "\n";
         

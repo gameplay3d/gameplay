@@ -13,6 +13,7 @@
 #include "PhysicsRigidBody.h"
 #include "Ref.h"
 #include "Scene.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_NodeType.h"
@@ -71,7 +72,7 @@ int lua_NodeCloneContext__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_NodeCloneContext__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -158,7 +159,7 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_NodeCloneContext_findClonedAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -208,7 +209,7 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_NodeCloneContext_findClonedNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -250,7 +251,7 @@ int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_NodeCloneContext_registerClonedAnimation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -292,7 +293,7 @@ int lua_NodeCloneContext_registerClonedNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_NodeCloneContext_registerClonedNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

@@ -77,7 +77,7 @@ int lua_Properties__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -118,7 +118,7 @@ int lua_Properties_exists(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_exists - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -155,7 +155,7 @@ int lua_Properties_getBool(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getBool - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -178,7 +178,7 @@ int lua_Properties_getBool(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getBool - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -241,7 +241,7 @@ int lua_Properties_getColor(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getColor - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -278,7 +278,7 @@ int lua_Properties_getFloat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getFloat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -301,7 +301,7 @@ int lua_Properties_getFloat(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getFloat - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -338,7 +338,7 @@ int lua_Properties_getId(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -375,7 +375,7 @@ int lua_Properties_getInt(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getInt - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -398,7 +398,7 @@ int lua_Properties_getInt(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getInt - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -435,7 +435,7 @@ int lua_Properties_getLong(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getLong - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -458,7 +458,7 @@ int lua_Properties_getLong(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getLong - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -503,7 +503,7 @@ int lua_Properties_getMatrix(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getMatrix - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -540,7 +540,7 @@ int lua_Properties_getNamespace(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getNamespace - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -572,7 +572,7 @@ int lua_Properties_getNamespace(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getNamespace - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -608,7 +608,7 @@ int lua_Properties_getNamespace(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getNamespace - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -654,7 +654,7 @@ int lua_Properties_getNextNamespace(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getNextNamespace - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -699,7 +699,7 @@ int lua_Properties_getQuaternionFromAxisAngle(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getQuaternionFromAxisAngle - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -736,7 +736,7 @@ int lua_Properties_getString(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getString - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -759,7 +759,7 @@ int lua_Properties_getString(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getString - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -796,7 +796,7 @@ int lua_Properties_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -819,7 +819,7 @@ int lua_Properties_getType(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getType - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -864,7 +864,7 @@ int lua_Properties_getVector2(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getVector2 - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -909,7 +909,7 @@ int lua_Properties_getVector3(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getVector3 - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -954,7 +954,7 @@ int lua_Properties_getVector4(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_getVector4 - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -988,7 +988,7 @@ int lua_Properties_rewind(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_rewind - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1036,7 +1036,7 @@ int lua_Properties_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Properties_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

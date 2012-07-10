@@ -68,7 +68,7 @@ int lua_BoundingBox__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -135,7 +135,7 @@ int lua_BoundingBox__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -169,7 +169,7 @@ int lua_BoundingBox__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -215,7 +215,7 @@ int lua_BoundingBox_getCenter(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_getCenter - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -235,7 +235,7 @@ int lua_BoundingBox_getCenter(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_getCenter - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -273,7 +273,7 @@ int lua_BoundingBox_getCorners(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_getCorners - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -370,7 +370,7 @@ int lua_BoundingBox_intersects(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_intersects - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -407,7 +407,7 @@ int lua_BoundingBox_isEmpty(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_isEmpty - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -494,7 +494,7 @@ int lua_BoundingBox_merge(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_merge - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -581,7 +581,7 @@ int lua_BoundingBox_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -605,7 +605,7 @@ int lua_BoundingBox_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -680,7 +680,7 @@ int lua_BoundingBox_transform(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_BoundingBox_transform - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

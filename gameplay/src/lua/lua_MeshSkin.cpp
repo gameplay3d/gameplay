@@ -8,6 +8,7 @@
 #include "Joint.h"
 #include "MeshSkin.h"
 #include "Node.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 
@@ -77,7 +78,7 @@ int lua_MeshSkin_getBindShape(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getBindShape - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -150,7 +151,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getJoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -187,7 +188,7 @@ int lua_MeshSkin_getJointCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getJointCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -228,7 +229,7 @@ int lua_MeshSkin_getJointIndex(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getJointIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -274,7 +275,7 @@ int lua_MeshSkin_getMatrixPalette(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getMatrixPalette - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -311,7 +312,7 @@ int lua_MeshSkin_getMatrixPaletteSize(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getMatrixPaletteSize - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -357,7 +358,7 @@ int lua_MeshSkin_getModel(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getModel - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -403,7 +404,7 @@ int lua_MeshSkin_getRootJoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_getRootJoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -441,7 +442,7 @@ int lua_MeshSkin_setBindShape(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_setBindShape - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -479,7 +480,7 @@ int lua_MeshSkin_setRootJoint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_setRootJoint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -521,7 +522,7 @@ int lua_MeshSkin_transformChanged(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_MeshSkin_transformChanged - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

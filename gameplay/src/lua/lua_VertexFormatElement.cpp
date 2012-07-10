@@ -57,7 +57,7 @@ int lua_VertexFormatElement__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexFormatElement__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -128,7 +128,7 @@ int lua_VertexFormatElement__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexFormatElement__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

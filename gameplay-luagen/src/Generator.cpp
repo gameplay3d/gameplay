@@ -1113,6 +1113,8 @@ void Generator::resolveMembers(const ClassBinding& c)
                 bool addBinding;
                 for (unsigned int i = 0, iCount = iter->second.size(); i < iCount; i++)
                 {
+                    string name = iter->second[i].name;
+
                     addBinding = true;
                     if (findIter != cb->bindings.end())
                     {
@@ -1124,6 +1126,11 @@ void Generator::resolveMembers(const ClassBinding& c)
                                 break;
                             }
                         }
+
+                        // To call the base function, we have to qualify the call since
+                        // the derived class has a function with the same name and different parameters.
+                        if (addBinding)
+                            name = iter->second[i].classname + string("::") + iter->second[i].name;
                     }
                     if (hiddenIter != cb->hidden.end())
                     {
@@ -1140,7 +1147,8 @@ void Generator::resolveMembers(const ClassBinding& c)
                     if (addBinding)
                     {
                         FunctionBinding b = iter->second[i];
-                        b.name = iter->second[i].classname + string("::") + iter->second[i].name;
+                        b.name = name;
+                        b.functionName = findIter->first;
                         b.classname = cb->classname;
                         b.uniquename = getUniqueName(cb->classname);
 

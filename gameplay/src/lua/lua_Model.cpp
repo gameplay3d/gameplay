@@ -75,7 +75,7 @@ int lua_Model__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -109,7 +109,7 @@ int lua_Model_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -143,7 +143,7 @@ int lua_Model_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -163,7 +163,7 @@ int lua_Model_draw(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_draw - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -209,7 +209,7 @@ int lua_Model_getMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -241,7 +241,7 @@ int lua_Model_getMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -287,7 +287,7 @@ int lua_Model_getMesh(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getMesh - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -324,7 +324,7 @@ int lua_Model_getMeshPartCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getMeshPartCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -370,7 +370,7 @@ int lua_Model_getNode(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getNode - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -407,7 +407,7 @@ int lua_Model_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -453,7 +453,7 @@ int lua_Model_getSkin(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_getSkin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -494,7 +494,7 @@ int lua_Model_hasMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_hasMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -528,7 +528,7 @@ int lua_Model_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -589,7 +589,7 @@ int lua_Model_setMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_setMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -667,7 +667,7 @@ int lua_Model_setMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_setMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -707,7 +707,7 @@ int lua_Model_setMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_setMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -751,7 +751,7 @@ int lua_Model_setMaterial(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_setMaterial - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -799,7 +799,7 @@ int lua_Model_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Model_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

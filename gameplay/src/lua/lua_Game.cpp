@@ -8,6 +8,7 @@
 #include "Platform.h"
 #include "RenderState.h"
 #include "SceneLoader.h"
+#include "ScriptListener.h"
 #include "lua_GameClearFlags.h"
 #include "lua_GameState.h"
 #include "lua_GamepadGamepadEvent.h"
@@ -49,6 +50,7 @@ void luaRegister_Game()
         {"pause", lua_Game_pause},
         {"resume", lua_Game_resume},
         {"run", lua_Game_run},
+        {"schedule", lua_Game_schedule},
         {"setMultiTouch", lua_Game_setMultiTouch},
         {"setViewport", lua_Game_setViewport},
         {"touchEvent", lua_Game_touchEvent},
@@ -100,7 +102,7 @@ int lua_Game__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -150,7 +152,7 @@ int lua_Game_clear(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_clear - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -188,7 +190,7 @@ int lua_Game_displayKeyboard(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_displayKeyboard - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -222,7 +224,7 @@ int lua_Game_exit(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_exit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -256,7 +258,7 @@ int lua_Game_frame(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_frame - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -298,7 +300,7 @@ int lua_Game_gamepadEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_gamepadEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -340,7 +342,7 @@ int lua_Game_getAccelerometerValues(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getAccelerometerValues - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -386,7 +388,7 @@ int lua_Game_getAnimationController(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getAnimationController - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -432,7 +434,7 @@ int lua_Game_getAudioController(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getAudioController - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -478,7 +480,7 @@ int lua_Game_getAudioListener(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getAudioListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -524,7 +526,7 @@ int lua_Game_getConfig(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getConfig - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -561,7 +563,7 @@ int lua_Game_getFrameRate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getFrameRate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -607,7 +609,7 @@ int lua_Game_getGamepad(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getGamepad - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -639,7 +641,7 @@ int lua_Game_getGamepad(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getGamepad - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -676,7 +678,7 @@ int lua_Game_getGamepadCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getGamepadCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -713,7 +715,7 @@ int lua_Game_getHeight(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -759,7 +761,7 @@ int lua_Game_getPhysicsController(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getPhysicsController - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -796,7 +798,7 @@ int lua_Game_getState(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getState - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -842,7 +844,7 @@ int lua_Game_getViewport(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getViewport - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -879,7 +881,7 @@ int lua_Game_getWidth(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_getWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -916,7 +918,7 @@ int lua_Game_isMultiTouch(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_isMultiTouch - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -958,7 +960,7 @@ int lua_Game_keyEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_keyEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -992,7 +994,7 @@ int lua_Game_menu(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_menu - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1045,7 +1047,7 @@ int lua_Game_mouseEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_mouseEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1079,7 +1081,7 @@ int lua_Game_pause(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_pause - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1113,7 +1115,7 @@ int lua_Game_resume(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_resume - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1150,7 +1152,7 @@ int lua_Game_run(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_run - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1158,6 +1160,48 @@ int lua_Game_run(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_schedule(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = ScriptController::getInstance()->getString(3, false);
+
+                Game* instance = getInstance(state);
+                instance->schedule(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_schedule - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -1188,7 +1232,7 @@ int lua_Game_setMultiTouch(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_setMultiTouch - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1226,7 +1270,7 @@ int lua_Game_setViewport(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_setViewport - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1383,7 +1427,7 @@ int lua_Game_static_setVsync(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_static_setVsync - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1433,7 +1477,7 @@ int lua_Game_touchEvent(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_touchEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

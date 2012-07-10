@@ -47,10 +47,9 @@ public:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
-     *      - '<object-type>' - a pointer to an object of the given type (where the qualified type name is enclosed by angle brackets).
+     *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @return The return value of the executed Lua function.
-     * @script{ignore}
      */
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
@@ -98,10 +97,9 @@ public:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
-     *      - '<object-type>' - a pointer to an object of the given type (where the qualified type name is enclosed by angle brackets).
+     *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @return The return value of the executed Lua function.
-     * @script{ignore}
      */
     template<typename T> T* executeFunction(const Type& type, const char* func, const char* args, ...);
 
@@ -669,7 +667,7 @@ private:
      *      - 'uh' - unsigned short
      *      - 's' - string
      *      - 'p' - pointer
-     *      - '<object-type>' - a pointer to an object of the given type (where the qualified type name is enclosed by angle brackets).
+     *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @param list The variable argument list.
      */

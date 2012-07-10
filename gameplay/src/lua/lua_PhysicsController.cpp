@@ -8,6 +8,7 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
+#include "ScriptListener.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
@@ -67,9 +68,20 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                PhysicsController* instance = getInstance(state);
+                instance->addStatusListener(param1);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_addStatusListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -119,7 +131,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createFixedConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -155,7 +167,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createFixedConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -205,7 +217,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -241,7 +253,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -281,7 +293,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -325,7 +337,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -373,7 +385,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -425,7 +437,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -483,7 +495,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -527,7 +539,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -575,7 +587,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -627,7 +639,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -677,7 +689,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -740,7 +752,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -780,7 +792,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -824,7 +836,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -878,7 +890,7 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createSpringConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -930,7 +942,7 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_createSpringConstraint - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -968,7 +980,7 @@ int lua_PhysicsController_drawDebug(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_drawDebug - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1014,7 +1026,7 @@ int lua_PhysicsController_getGravity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_getGravity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1059,7 +1071,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1090,7 +1102,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1125,7 +1137,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1161,9 +1173,20 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptController::getInstance()->getString(2, false);
+
+                PhysicsController* instance = getInstance(state);
+                instance->removeStatusListener(param1);
+                
+                return 0;
+            }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_removeStatusListener - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1201,7 +1224,7 @@ int lua_PhysicsController_setGravity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_setGravity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1246,7 +1269,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1277,7 +1300,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1312,7 +1335,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

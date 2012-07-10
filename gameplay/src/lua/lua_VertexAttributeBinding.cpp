@@ -66,7 +66,7 @@ int lua_VertexAttributeBinding__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -100,7 +100,7 @@ int lua_VertexAttributeBinding_addRef(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding_addRef - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -134,7 +134,7 @@ int lua_VertexAttributeBinding_bind(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding_bind - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -171,7 +171,7 @@ int lua_VertexAttributeBinding_getRefCount(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding_getRefCount - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -205,7 +205,7 @@ int lua_VertexAttributeBinding_release(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding_release - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -257,7 +257,7 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -291,7 +291,7 @@ int lua_VertexAttributeBinding_unbind(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_VertexAttributeBinding_unbind - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

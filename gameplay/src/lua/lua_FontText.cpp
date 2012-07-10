@@ -61,7 +61,7 @@ int lua_FontText__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FontText__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -109,7 +109,7 @@ int lua_FontText__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FontText__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -146,7 +146,7 @@ int lua_FontText_getText(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_FontText_getText - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

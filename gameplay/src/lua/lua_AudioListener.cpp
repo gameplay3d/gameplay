@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "Node.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 
@@ -80,7 +81,7 @@ int lua_AudioListener_getCamera(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_getCamera - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -117,7 +118,7 @@ int lua_AudioListener_getGain(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_getGain - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -163,7 +164,7 @@ int lua_AudioListener_getOrientationForward(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_getOrientationForward - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -209,7 +210,7 @@ int lua_AudioListener_getOrientationUp(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_getOrientationUp - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -255,7 +256,7 @@ int lua_AudioListener_getPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_getPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -301,7 +302,7 @@ int lua_AudioListener_getVelocity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_getVelocity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -339,7 +340,7 @@ int lua_AudioListener_setCamera(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_setCamera - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -377,7 +378,7 @@ int lua_AudioListener_setGain(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_setGain - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -419,7 +420,7 @@ int lua_AudioListener_setOrientation(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_setOrientation - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -457,7 +458,7 @@ int lua_AudioListener_setPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_setPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -495,7 +496,7 @@ int lua_AudioListener_setVelocity(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AudioListener_setVelocity - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

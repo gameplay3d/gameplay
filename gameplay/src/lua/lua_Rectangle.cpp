@@ -72,7 +72,7 @@ int lua_Rectangle__gc(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle__gc - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -139,7 +139,7 @@ int lua_Rectangle__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -173,7 +173,7 @@ int lua_Rectangle__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -215,7 +215,7 @@ int lua_Rectangle__init(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle__init - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -252,7 +252,7 @@ int lua_Rectangle_bottom(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_bottom - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -293,7 +293,7 @@ int lua_Rectangle_contains(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_contains - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -320,7 +320,7 @@ int lua_Rectangle_contains(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_contains - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -355,7 +355,7 @@ int lua_Rectangle_contains(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_contains - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -426,7 +426,7 @@ int lua_Rectangle_inflate(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_inflate - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -467,7 +467,7 @@ int lua_Rectangle_intersects(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_intersects - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -502,7 +502,7 @@ int lua_Rectangle_intersects(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_intersects - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -539,7 +539,7 @@ int lua_Rectangle_isEmpty(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_isEmpty - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -576,7 +576,7 @@ int lua_Rectangle_left(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_left - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -613,7 +613,7 @@ int lua_Rectangle_right(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_right - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -651,7 +651,7 @@ int lua_Rectangle_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -683,7 +683,7 @@ int lua_Rectangle_set(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_set - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -725,7 +725,7 @@ int lua_Rectangle_setPosition(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_setPosition - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -769,7 +769,7 @@ int lua_Rectangle_static_combine(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_static_combine - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -843,7 +843,7 @@ int lua_Rectangle_top(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Rectangle_top - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
