@@ -211,6 +211,7 @@ private:
     struct HeightfieldData
     {
         float* heightData;
+        Vector3* normalData;
         unsigned int width;
         unsigned int height;
         mutable Matrix inverse;
