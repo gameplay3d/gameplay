@@ -7,17 +7,21 @@ namespace gameplay
 // Lua bindings for Platform.
 int lua_Platform__gc(lua_State* state);
 int lua_Platform_enterMessagePump(lua_State* state);
-int lua_Platform_static_create(lua_State* state);
 int lua_Platform_static_displayKeyboard(lua_State* state);
 int lua_Platform_static_getAbsoluteTime(lua_State* state);
 int lua_Platform_static_getAccelerometerValues(lua_State* state);
 int lua_Platform_static_getDisplayHeight(lua_State* state);
 int lua_Platform_static_getDisplayWidth(lua_State* state);
+int lua_Platform_static_hasMouse(lua_State* state);
+int lua_Platform_static_isCursorVisible(lua_State* state);
+int lua_Platform_static_isMouseCaptured(lua_State* state);
 int lua_Platform_static_isMultiTouch(lua_State* state);
 int lua_Platform_static_isVsync(lua_State* state);
 int lua_Platform_static_keyEventInternal(lua_State* state);
 int lua_Platform_static_mouseEventInternal(lua_State* state);
 int lua_Platform_static_setAbsoluteTime(lua_State* state);
+int lua_Platform_static_setCursorVisible(lua_State* state);
+int lua_Platform_static_setMouseCaptured(lua_State* state);
 int lua_Platform_static_setMultiTouch(lua_State* state);
 int lua_Platform_static_setVsync(lua_State* state);
 int lua_Platform_static_signalShutdown(lua_State* state);

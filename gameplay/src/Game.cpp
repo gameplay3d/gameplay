@@ -41,8 +41,11 @@ Game::~Game()
         SAFE_DELETE(_scriptListeners);
     }
 
-    _scriptController->finalize();
-    SAFE_DELETE(_scriptController);
+    if (_scriptController)
+    {
+        _scriptController->finalize();
+        SAFE_DELETE(_scriptController);
+    }
 
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.

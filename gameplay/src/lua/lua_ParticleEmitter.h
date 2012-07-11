@@ -8,7 +8,7 @@ namespace gameplay
 int lua_ParticleEmitter__gc(lua_State* state);
 int lua_ParticleEmitter_addRef(lua_State* state);
 int lua_ParticleEmitter_draw(lua_State* state);
-int lua_ParticleEmitter_emit(lua_State* state);
+int lua_ParticleEmitter_emitOnce(lua_State* state);
 int lua_ParticleEmitter_getAcceleration(lua_State* state);
 int lua_ParticleEmitter_getAccelerationVariance(lua_State* state);
 int lua_ParticleEmitter_getColorEnd(lua_State* state);
