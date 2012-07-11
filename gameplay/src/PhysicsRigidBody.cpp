@@ -258,7 +258,7 @@ void PhysicsRigidBody::setKinematic(bool kinematic)
     }
 }
 
-float PhysicsRigidBody::getHeight(float x, float y) const
+float PhysicsRigidBody::getHeight(float x, float y, Vector3* normal) const
 {
     GP_ASSERT(_collisionShape);
 
@@ -296,7 +296,8 @@ float PhysicsRigidBody::getHeight(float x, float y) const
         return 0.0f;
     }
 
-    return PhysicsController::calculateHeight(_collisionShape->_shapeData.heightfieldData->heightData, w, h, x, y);
+    return PhysicsController::calculateHeight(_collisionShape->_shapeData.heightfieldData->heightData, w, h, x, y,
+        &_node->getWorldMatrix(), _collisionShape->_shapeData.heightfieldData->normalData, normal);
 }
 
 void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)
