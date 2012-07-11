@@ -10,8 +10,8 @@ Vector2::Vector2()
 }
 
 Vector2::Vector2(float x, float y)
+    : x(x), y(y)
 {
-    set(x, y);
 }
 
 Vector2::Vector2(const float* array)
