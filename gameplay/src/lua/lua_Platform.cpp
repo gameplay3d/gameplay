@@ -20,17 +20,21 @@ void luaRegister_Platform()
     };
     const luaL_Reg lua_statics[] = 
     {
-        {"create", lua_Platform_static_create},
         {"displayKeyboard", lua_Platform_static_displayKeyboard},
         {"getAbsoluteTime", lua_Platform_static_getAbsoluteTime},
         {"getAccelerometerValues", lua_Platform_static_getAccelerometerValues},
         {"getDisplayHeight", lua_Platform_static_getDisplayHeight},
         {"getDisplayWidth", lua_Platform_static_getDisplayWidth},
+        {"hasMouse", lua_Platform_static_hasMouse},
+        {"isCursorVisible", lua_Platform_static_isCursorVisible},
+        {"isMouseCaptured", lua_Platform_static_isMouseCaptured},
         {"isMultiTouch", lua_Platform_static_isMultiTouch},
         {"isVsync", lua_Platform_static_isVsync},
         {"keyEventInternal", lua_Platform_static_keyEventInternal},
         {"mouseEventInternal", lua_Platform_static_mouseEventInternal},
         {"setAbsoluteTime", lua_Platform_static_setAbsoluteTime},
+        {"setCursorVisible", lua_Platform_static_setCursorVisible},
+        {"setMouseCaptured", lua_Platform_static_setMouseCaptured},
         {"setMultiTouch", lua_Platform_static_setMultiTouch},
         {"setVsync", lua_Platform_static_setVsync},
         {"signalShutdown", lua_Platform_static_signalShutdown},
@@ -114,54 +118,6 @@ int lua_Platform_enterMessagePump(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Platform_enterMessagePump - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Platform_static_create(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Game* param1 = ScriptController::getInstance()->getObjectPointer<Game>(1, "Game", false);
-
-                void* returnPtr = (void*)Platform::create(param1);
-                if (returnPtr)
-                {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Platform");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Platform_static_create - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -322,6 +278,90 @@ int lua_Platform_static_getDisplayWidth(lua_State* state)
 
             // Push the return value onto the stack.
             lua_pushunsigned(state, result);
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_hasMouse(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            bool result = Platform::hasMouse();
+
+            // Push the return value onto the stack.
+            lua_pushboolean(state, result);
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_isCursorVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            bool result = Platform::isCursorVisible();
+
+            // Push the return value onto the stack.
+            lua_pushboolean(state, result);
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_isMouseCaptured(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            bool result = Platform::isMouseCaptured();
+
+            // Push the return value onto the stack.
+            lua_pushboolean(state, result);
 
             return 1;
             break;
@@ -505,6 +545,78 @@ int lua_Platform_static_setAbsoluteTime(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Platform_static_setAbsoluteTime - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_setCursorVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptController::luaCheckBool(state, 1);
+
+                Platform::setCursorVisible(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Platform_static_setCursorVisible - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_setMouseCaptured(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if (lua_type(state, 1) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptController::luaCheckBool(state, 1);
+
+                Platform::setMouseCaptured(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Platform_static_setMouseCaptured - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

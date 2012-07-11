@@ -53,33 +53,6 @@ public:
      */
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
-    /** Template specialization. */
-    template<> void executeFunction<void>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> bool executeFunction<bool>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> char executeFunction<char>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> short executeFunction<short>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> int executeFunction<int>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> long executeFunction<long>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> unsigned char executeFunction<unsigned char>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> unsigned short executeFunction<unsigned short>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> unsigned int executeFunction<unsigned int>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> unsigned long executeFunction<unsigned long>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> float executeFunction<float>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> double executeFunction<double>(const char* func, const char* args, ...);
-    /** Template specialization. */
-    template<> std::string executeFunction<std::string>(const char* func, const char* args, ...);
-
     /**
      * Used to specify the pointer type for executing Lua functions that return pointers.
      * @script{ignore}
@@ -702,6 +675,33 @@ private:
     static ScriptController* __instance;
     std::string* _callbacks[CALLBACK_COUNT];
 };
+
+/** Template specialization. */
+template<> void ScriptController::executeFunction<void>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> char ScriptController::executeFunction<char>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> short ScriptController::executeFunction<short>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> int ScriptController::executeFunction<int>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> long ScriptController::executeFunction<long>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> float ScriptController::executeFunction<float>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> double ScriptController::executeFunction<double>(const char* func, const char* args, ...);
+/** Template specialization. */
+template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, ...);
 
 }
 

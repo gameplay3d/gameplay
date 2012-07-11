@@ -168,6 +168,7 @@ extern void printError(const char* format, ...);
 #include <png.h>
 
 // Scripting
+using std::va_list;
 #include <lua.hpp>
 
 #define WINDOW_VSYNC        1

@@ -25,10 +25,11 @@ Unsupported:
 
 Normal Priority List:
 =====================
+- Update project template.
+- Get all platforms working.
 - Fix memory leaks in gameplay-luagen and in generated code.
     - Add "@script{create}" to the appropriate gameplay functions.
     - Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
-- Get all platforms working.
 - Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).
 
 Future Feature List:
@@ -37,6 +38,9 @@ Future Feature List:
 
 Lua Tips
 ========
+- On any function in gameplay that returns a pointer that is owned by the user calling that function (i.e. a create() function), add @script{create} as the last line of its doxygen comments.
+- On any function, variable, class, struct, enum, etc. that should not be accessible from Lua (except for things that are static to a .cpp file, which is already ignored), add @script{ignore} to its doxygen comments.
+- On any functions, variables, classes, structs, enums, etc. that are local to a .cpp file, declare them as static 1) because it is good practice and 2) so that Lua does not generate bindings for them.
 - To get printf/GP_WARN-like functionality using gameplay and Lua, use printError(string.format("...", ...)).
 - To do integer like comparisons or casts on a number variable x in Lua, use math.floor(x)
 - Make sure all your member function calls use ':' instead of '.'

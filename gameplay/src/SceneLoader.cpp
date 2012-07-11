@@ -843,7 +843,7 @@ void SceneLoader::loadReferencedFiles()
             // Check if the referenced properties file has already been loaded.
             Properties* properties = NULL;
             std::map<std::string, Properties*>::iterator pffIter = _propertiesFromFile.find(fileString);
-            if (pffIter != _propertiesFromFile.end())
+            if (pffIter != _propertiesFromFile.end() && pffIter->second)
             {
                 properties = pffIter->second;
             }

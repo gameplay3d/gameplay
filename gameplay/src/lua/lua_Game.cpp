@@ -43,14 +43,20 @@ void luaRegister_Game()
         {"getState", lua_Game_getState},
         {"getViewport", lua_Game_getViewport},
         {"getWidth", lua_Game_getWidth},
+        {"hasMouse", lua_Game_hasMouse},
+        {"isCursorVisible", lua_Game_isCursorVisible},
+        {"isInitialized", lua_Game_isInitialized},
+        {"isMouseCaptured", lua_Game_isMouseCaptured},
         {"isMultiTouch", lua_Game_isMultiTouch},
         {"keyEvent", lua_Game_keyEvent},
-        {"menu", lua_Game_menu},
+        {"menuEvent", lua_Game_menuEvent},
         {"mouseEvent", lua_Game_mouseEvent},
         {"pause", lua_Game_pause},
         {"resume", lua_Game_resume},
         {"run", lua_Game_run},
         {"schedule", lua_Game_schedule},
+        {"setCursorVisible", lua_Game_setCursorVisible},
+        {"setMouseCaptured", lua_Game_setMouseCaptured},
         {"setMultiTouch", lua_Game_setMultiTouch},
         {"setViewport", lua_Game_setViewport},
         {"touchEvent", lua_Game_touchEvent},
@@ -586,34 +592,6 @@ int lua_Game_getGamepad(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Game* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getGamepad();
-                if (returnPtr)
-                {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Gamepad");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Game_getGamepad - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -648,7 +626,7 @@ int lua_Game_getGamepad(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -896,6 +874,154 @@ int lua_Game_getWidth(lua_State* state)
     return 0;
 }
 
+int lua_Game_hasMouse(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                bool result = instance->hasMouse();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_hasMouse - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_isCursorVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                bool result = instance->isCursorVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_isCursorVisible - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_isInitialized(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                bool result = instance->isInitialized();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_isInitialized - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_isMouseCaptured(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                bool result = instance->isMouseCaptured();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_isMouseCaptured - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Game_isMultiTouch(lua_State* state)
 {
     // Get the number of parameters.
@@ -975,7 +1101,7 @@ int lua_Game_keyEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_menu(lua_State* state)
+int lua_Game_menuEvent(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -988,13 +1114,13 @@ int lua_Game_menu(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 Game* instance = getInstance(state);
-                instance->menu();
+                instance->menuEvent();
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_Game_menu - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_menuEvent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1202,6 +1328,82 @@ int lua_Game_schedule(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_setCursorVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptController::luaCheckBool(state, 2);
+
+                Game* instance = getInstance(state);
+                instance->setCursorVisible(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_setCursorVisible - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_setMouseCaptured(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptController::luaCheckBool(state, 2);
+
+                Game* instance = getInstance(state);
+                instance->setMouseCaptured(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_setMouseCaptured - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

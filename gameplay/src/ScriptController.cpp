@@ -462,7 +462,7 @@ void ScriptController::setGlobalHierarchy(std::map<std::string, std::vector<std:
     _hierarchy = hierarchy;
 }
 
-ScriptController::ScriptController()
+ScriptController::ScriptController() : _lua(NULL)
 {
     memset(_callbacks, 0, sizeof(std::string*) * CALLBACK_COUNT);
     __instance = this;
@@ -492,7 +492,8 @@ void ScriptController::initializeGame()
 
 void ScriptController::finalize()
 {
-    lua_close(_lua);
+    if (_lua)
+        lua_close(_lua);
 }
 
 void ScriptController::finalizeGame()
@@ -680,6 +681,74 @@ bool ScriptController::luaCheckBool(lua_State* state, int n)
         return false;
     }
     return (lua_toboolean(state, n) != 0);
+}
+
+template<> void ScriptController::executeFunction<void>(const char* func, const char* args, ...)
+{
+    va_list list;
+    va_start(list, args);
+    executeFunctionHelper(0, func, args, list);
+    va_end(list);
+}
+
+template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(bool, luaCheckBool);
+}
+
+template<> char ScriptController::executeFunction<char>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(char, luaL_checkint);
+}
+
+template<> short ScriptController::executeFunction<short>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(short, luaL_checkint);
+}
+
+template<> int ScriptController::executeFunction<int>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(int, luaL_checkint);
+}
+
+template<> long ScriptController::executeFunction<long>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(long, luaL_checklong);
+}
+
+template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned char, luaL_checkunsigned);
+}
+
+template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned short, luaL_checkunsigned);
+}
+
+template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned int, luaL_checkunsigned);
+}
+
+template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned long, luaL_checkunsigned);
+}
+
+template<> float ScriptController::executeFunction<float>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(float, luaL_checknumber);
+}
+
+template<> double ScriptController::executeFunction<double>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(double, luaL_checknumber);
+}
+
+template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, ...)
+{
+    SCRIPT_EXECUTE_FUNCTION_PARAM(std::string, luaL_checkstring);
 }
 
 }

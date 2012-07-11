@@ -22,7 +22,7 @@ void luaRegister_ParticleEmitter()
     {
         {"addRef", lua_ParticleEmitter_addRef},
         {"draw", lua_ParticleEmitter_draw},
-        {"emit", lua_ParticleEmitter_emit},
+        {"emitOnce", lua_ParticleEmitter_emitOnce},
         {"getAcceleration", lua_ParticleEmitter_getAcceleration},
         {"getAccelerationVariance", lua_ParticleEmitter_getAccelerationVariance},
         {"getColorEnd", lua_ParticleEmitter_getColorEnd},
@@ -206,7 +206,7 @@ int lua_ParticleEmitter_draw(lua_State* state)
     return 0;
 }
 
-int lua_ParticleEmitter_emit(lua_State* state)
+int lua_ParticleEmitter_emitOnce(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -223,13 +223,13 @@ int lua_ParticleEmitter_emit(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
-                instance->emit(param1);
+                instance->emitOnce(param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_ParticleEmitter_emit - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_ParticleEmitter_emitOnce - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
