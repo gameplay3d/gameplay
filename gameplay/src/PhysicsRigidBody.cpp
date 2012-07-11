@@ -258,7 +258,7 @@ void PhysicsRigidBody::setKinematic(bool kinematic)
     }
 }
 
-float PhysicsRigidBody::getHeight(float x, float y, Vector3* normal /*=NULL*/) const
+float PhysicsRigidBody::getHeight(float x, float y, Vector3* normal) const
 {
     GP_ASSERT(_collisionShape);
 
