@@ -1020,6 +1020,7 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
 
     PhysicsCollisionShape::HeightfieldData* heightfieldData = new PhysicsCollisionShape::HeightfieldData();
     heightfieldData->heightData = NULL;
+    heightfieldData->normalData = NULL;
     heightfieldData->inverseIsDirty = true;
 
     unsigned int sizeWidth = width;
@@ -1031,17 +1032,52 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     heightfieldData->width = sizeWidth + 1;
     heightfieldData->height = sizeHeight + 1;
     heightfieldData->heightData = new float[heightfieldData->width * heightfieldData->height];
-    unsigned int heightIndex = 0;
+    heightfieldData->normalData = new Vector3[heightfieldData->width * heightfieldData->height];
+    unsigned int heightIndex = 0, prevRowIndex = 0, prevColIndex = 0;
     float widthImageFactor = (float)(image->getWidth() - 1) / sizeWidth;
     float heightImageFactor = (float)(image->getHeight() - 1) / sizeHeight;
     float x = 0.0f;
     float z = 0.0f;
-    for (unsigned int row = 0, z = 0.0f; row <= sizeHeight; row++, z += 1.0f)
+    const float horizStepsize = 1.0f;
+    for (unsigned int row = 0, z = 0.0f; row <= sizeHeight; row++, z += horizStepsize)
     {
-        for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += 1.0f)
+        for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += horizStepsize)
         {
             heightIndex = row * heightfieldData->width + col;
+            prevRowIndex = heightIndex - heightfieldData->width; // ignored if row<1
+            prevColIndex = heightIndex - 1; // ignored if col<1
+
             heightfieldData->heightData[heightIndex] = calculateHeight(heights, image->getWidth(), image->getHeight(), x * widthImageFactor, (sizeHeight - z) * heightImageFactor);
+
+            //
+            // Normal calculation based on height data using a backward difference.
+            //
+            if (row == 0 || col == 0)
+            {
+                // This is just a safe default value.
+                heightfieldData->normalData[heightIndex].set(Vector3::unitY());
+            }
+            else
+            {
+                heightfieldData->normalData[heightIndex].set(
+                    heightfieldData->heightData[prevColIndex] - heightfieldData->heightData[heightIndex],
+                    horizStepsize,
+                    heightfieldData->heightData[prevRowIndex] - heightfieldData->heightData[heightIndex]);
+                heightfieldData->normalData[heightIndex].normalize();
+            }
+
+            // For the starting row, just copy from the second row (i.e., a forward difference).
+            if (row == 1)
+            {
+                heightfieldData->normalData[prevRowIndex].set(heightfieldData->normalData[heightIndex]);
+            }
+
+            // For the starting column, just copy from the second column (i.e., a forward difference).
+            // (We don't care which of the 2 valid sources heightfieldData->normalData[0] ultimately comes from).
+            if (col == 1)
+            {
+                heightfieldData->normalData[prevColIndex].set(heightfieldData->normalData[heightIndex]);
+            }
         }
     }
     SAFE_DELETE_ARRAY(heights);
@@ -1239,7 +1275,8 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
     }
 }
 
-float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y)
+float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
+    const Matrix* worldMatrix /*=NULL*/, Vector3* normalData /*=NULL*/, Vector3* normalResult /*=NULL*/)
 {
     GP_ASSERT(data);
 
@@ -1248,28 +1285,25 @@ float PhysicsController::calculateHeight(float* data, unsigned int width, unsign
     unsigned int x2 = x1 + 1;
     unsigned int y2 = y1 + 1;
     float tmp;
-    float xFactor = modf(x, &tmp);
-    float yFactor = modf(y, &tmp);
+    float xFactor = x2 >= width ? 0.0f : modf(x, &tmp);
+    float yFactor = y2 >= height ? 0.0f : modf(y, &tmp);
     float xFactorI = 1.0f - xFactor;
     float yFactorI = 1.0f - yFactor;
 
-    if (x2 >= width && y2 >= height)
+    float a = xFactorI * yFactorI;
+    float b = xFactorI * yFactor;
+    float c = xFactor * yFactor;
+    float d = xFactor * yFactorI;
+
+    if (normalResult)
     {
-        return data[x1 + y1 * width];
+        normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b + 
+            normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
+        normalResult->normalize();
+        worldMatrix->transformVector(normalResult);
     }
-    else if (x2 >= width)
-    {
-        return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
-    }
-    else if (y2 >= height)
-    {
-        return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
-    }
-    else
-    {
-        return data[x1 + y1 * width] * xFactorI * yFactorI + data[x1 + y2 * width] * xFactorI * yFactor + 
-            data[x2 + y2 * width] * xFactor * yFactor + data[x2 + y1 * width] * xFactor * yFactorI;
-    }
+    return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b + 
+        data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
 }
 
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
