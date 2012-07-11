@@ -180,7 +180,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
 }
 
 // Computes the size of a PVRTC data chunk for a mipmap level of the given size.
-unsigned int computePVRTCDataSize(int width, int height, int bpp)
+static unsigned int computePVRTCDataSize(int width, int height, int bpp)
 {
     int blockSize;
     int widthBlocks;
@@ -734,6 +734,11 @@ Texture* Texture::createCompressedDDS(const char* path)
     SAFE_DELETE_ARRAY(mipLevels);
 
     return texture;
+}
+
+Texture::Format Texture::getFormat() const
+{
+    return _format;
 }
 
 unsigned int Texture::getWidth() const

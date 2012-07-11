@@ -7,7 +7,9 @@ namespace gameplay
 {
 
 // Utility functions (shared with SceneLoader).
+/** @script{ignore} */
 void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
+/** @script{ignore} */
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
 
 Properties::Properties()
@@ -598,7 +600,7 @@ bool Properties::exists(const char* name) const
     return _properties.find(name) != _properties.end();
 }
 
-const bool isStringNumeric(const char* str)
+static const bool isStringNumeric(const char* str)
 {
     GP_ASSERT(str);
 
