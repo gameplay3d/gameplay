@@ -1276,7 +1276,7 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
 }
 
 float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
-    const Matrix* worldMatrix /*=NULL*/, Vector3* normalData /*=NULL*/, Vector3* normalResult /*=NULL*/)
+    const Matrix* worldMatrix, Vector3* normalData, Vector3* normalResult)
 {
     GP_ASSERT(data);
 
