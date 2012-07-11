@@ -37,7 +37,7 @@ public:
     static const int INTERSECTS_BACK = -1;
 
     /**
-     * Constructor.
+     * Constructs a new plane with normal (0, 1, 0) and distance 0.
      */
     Plane();
 
