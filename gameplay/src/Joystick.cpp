@@ -8,10 +8,6 @@ Joystick::Joystick() : _absolute(true)
 {
 }
 
-Joystick::Joystick(const Joystick& copy)
-{
-}
-
 Joystick::~Joystick()
 {
 }
@@ -246,7 +242,7 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
             spriteBatch->draw(region.x, region.y, _region.width, _region.height, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
         }
     }
-    spriteBatch->end();
+    spriteBatch->finish();
 }
 
 const char* Joystick::getType() const

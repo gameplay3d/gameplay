@@ -9,11 +9,6 @@ CheckBox::CheckBox() : _checked(false), _image(NULL)
 {
 }
 
-CheckBox::CheckBox(const CheckBox& copy)
-{
-    // Hidden.
-}
-
 CheckBox::~CheckBox()
 {
 

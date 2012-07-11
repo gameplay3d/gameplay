@@ -1,4 +1,4 @@
-# Doxyfile 1.8.0
+# Doxyfile 1.8.1
 
 # This file describes the settings to be used by the documentation system
 # doxygen (www.doxygen.org) for a project
@@ -194,7 +194,7 @@ SEPARATE_MEMBER_PAGES  = NO
 # The TAB_SIZE tag can be used to set the number of spaces in a tab. 
 # Doxygen uses this value to replace tabs by spaces in code fragments.
 
-TAB_SIZE               = 8
+TAB_SIZE               = 4
 
 # This tag can be used to specify a number of aliases that acts 
 # as commands in the documentation. An alias has the form "name=value". 
@@ -203,7 +203,7 @@ TAB_SIZE               = 8
 # will result in a user-defined paragraph with heading "Side Effects:". 
 # You can put \n's in the value part of an alias to insert newlines.
 
-ALIASES                = 
+ALIASES                = "script{1} = \xmlonly <xmlonly>\1</xmlonly> \endxmlonly"
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only). 
 # A mapping has the form "name=value". For example adding 
@@ -563,12 +563,6 @@ MAX_INITIALIZER_LINES  = 30
 # list will mention the files that were used to generate the documentation.
 
 SHOW_USED_FILES        = NO
-
-# If the sources in your project are distributed over multiple directories 
-# then setting the SHOW_DIRECTORIES tag to YES will show the directory hierarchy 
-# in the documentation. The default is NO.
-
-SHOW_DIRECTORIES       = NO
 
 # Set the SHOW_FILES tag to NO to disable the generation of the Files page. 
 # This will remove the Files entry from the Quick Index and from the 
@@ -954,19 +948,22 @@ HTML_COLORSTYLE_GAMMA  = 80
 
 HTML_TIMESTAMP         = YES
 
-# If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes, 
-# files or namespaces will be aligned in HTML using tables. If set to 
-# NO a bullet list will be used.
-
-HTML_ALIGN_MEMBERS     = YES
-
 # If the HTML_DYNAMIC_SECTIONS tag is set to YES then the generated HTML 
 # documentation will contain sections that can be hidden and shown after the 
-# page has loaded. For this to work a browser that supports 
-# JavaScript and DHTML is required (for instance Mozilla 1.0+, Firefox 
-# Netscape 6.0+, Internet explorer 5.0+, Konqueror, or Safari).
+# page has loaded.
 
 HTML_DYNAMIC_SECTIONS  = NO
+
+# With HTML_INDEX_NUM_ENTRIES one can control the preferred number of 
+# entries shown in the various tree structured indices initially; the user 
+# can expand and collapse entries dynamically later on. Doxygen will expand 
+# the tree to such a level that at most the specified number of entries are 
+# visible (unless a fully collapsed tree already exceeds this amount). 
+# So setting the number of entries 1 will produce a full collapsed tree by 
+# default. 0 is a special value representing an infinite number of entries 
+# and will result in a full expanded tree by default.
+
+HTML_INDEX_NUM_ENTRIES = 100
 
 # If the GENERATE_DOCSET tag is set to YES, additional index files 
 # will be generated that can be used as input for Apple's Xcode 3 
@@ -1145,11 +1142,6 @@ GENERATE_TREEVIEW      = NO
 # values from appearing in the overview section.
 
 ENUM_VALUES_PER_LINE   = 4
-
-# By enabling USE_INLINE_TREES, doxygen will generate the Groups, Directories, 
-# and Class Hierarchy pages using a tree view instead of an ordered list.
-
-USE_INLINE_TREES       = NO
 
 # If the treeview is enabled (see GENERATE_TREEVIEW) then this tag can be 
 # used to set the initial width (in pixels) of the frame in which the tree 
@@ -1400,7 +1392,7 @@ MAN_LINKS              = NO
 # generate an XML file that captures the structure of 
 # the code including all documentation.
 
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 
 # The XML_OUTPUT tag is used to specify where the XML pages will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
@@ -1425,7 +1417,7 @@ XML_DTD                =
 # and cross-referencing information) to the XML output. Note that 
 # enabling this will significantly increase the size of the XML output.
 
-XML_PROGRAMLISTING     = YES
+XML_PROGRAMLISTING     = NO
 
 #---------------------------------------------------------------------------
 # configuration options for the AutoGen Definitions output
@@ -1713,7 +1705,7 @@ CALLER_GRAPH           = NO
 
 GRAPHICAL_HIERARCHY    = YES
 
-# If the DIRECTORY_GRAPH, SHOW_DIRECTORIES and HAVE_DOT tags are set to YES 
+# If the DIRECTORY_GRAPH and HAVE_DOT tags are set to YES 
 # then doxygen will show the dependencies a directory has on other directories 
 # in a graphical way. The dependency relations are determined by the #include 
 # relations between the files in the directories.
