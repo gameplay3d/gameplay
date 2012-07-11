@@ -435,7 +435,9 @@ private:
     void destroyShape(PhysicsCollisionShape* shape);
 
     // Helper function for calculating heights from heightmap (image) or heightfield data.
-    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
+    // The worldMatrix and normalData arguments are ignored if normalResult is NULL.
+    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
+        const Matrix* worldMatrix = NULL, Vector3* normalData = NULL, Vector3* normalResult = NULL);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
