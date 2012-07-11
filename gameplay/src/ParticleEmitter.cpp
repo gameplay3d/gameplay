@@ -356,6 +356,11 @@ void ParticleEmitter::setEllipsoid(bool ellipsoid)
     _ellipsoid = ellipsoid;
 }
 
+bool ParticleEmitter::isEllipsoid() const
+{
+    return _ellipsoid;
+}
+
 void ParticleEmitter::setSize(float startMin, float startMax, float endMin, float endMax)
 {
     _sizeStartMin = startMin;
@@ -808,7 +813,7 @@ void ParticleEmitter::update(float elapsedTime)
         {
             if ((int)_timePerEmission > 0)
             {
-                _timeRunning = fmodl(_timeRunning, _timePerEmission);
+                _timeRunning = fmod(_timeRunning, (double)_timePerEmission);
             }
             emitOnce(emitCount);
         }
@@ -956,7 +961,7 @@ void ParticleEmitter::draw()
         }
 
         // Render.
-        _spriteBatch->end();
+        _spriteBatch->finish();
     }
 }
 

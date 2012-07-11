@@ -472,7 +472,7 @@ void SpaceshipGame::drawSplash(void* param)
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
 
@@ -502,7 +502,7 @@ void SpaceshipGame::drawText()
     {
         _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
-    _font->end();
+    _font->finish();
 }
 
 void SpaceshipGame::keyEvent(Keyboard::KeyEvent evt, int key)

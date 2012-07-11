@@ -13,6 +13,8 @@
 namespace gameplay
 {
 
+class ScriptListener;
+
 /**
  * Defines a class for controlling game physics.
  */
@@ -150,6 +152,22 @@ public:
      * @param listener The listener to remove.
      */
     void removeStatusListener(Listener* listener);
+
+    /**
+     * Adds a listener to the physics controller.
+     * 
+     * Note: the given Lua function must have the same function signature as PhysicsController::Listener::statusEvent.
+     * 
+     * @param function The Lua script function to use as the listener callback.
+     */
+    void addStatusListener(const char* function);
+
+    /**
+     * Removes a listener to the physics controller.
+     * 
+     * @param function The Lua script function (used as a listener callback) to remove.
+     */
+    void removeStatusListener(const char* function);
 
     /**
      * Creates a fixed constraint.
@@ -435,7 +453,9 @@ private:
     void destroyShape(PhysicsCollisionShape* shape);
 
     // Helper function for calculating heights from heightmap (image) or heightfield data.
-    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
+    // The worldMatrix and normalData arguments are ignored if normalResult is NULL.
+    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
+        const Matrix* worldMatrix = NULL, Vector3* normalData = NULL, Vector3* normalResult = NULL);
 
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
@@ -446,13 +466,17 @@ private:
     // Removes the given constraint from the simulated physics world.
     void removeConstraint(PhysicsConstraint* constraint);
     
-    // Draws Bullet debug information.
+    /**
+     * Draws Bullet debug information.
+     * @script{ignore}
+     */
     class DebugDrawer : public btIDebugDraw
     {
     public:
 
         /** 
          * DebugVertex.
+         * @script{ignore}
          */
         struct DebugVertex
         {
@@ -534,7 +558,7 @@ private:
     Vector3 _gravity;
     std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo> _collisionStatus;
     CollisionCallback* _collisionCallback;
-
+    std::vector<ScriptListener*>* _scriptListeners;
 };
 
 }

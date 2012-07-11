@@ -63,6 +63,7 @@ public:
      * @param effect The effect.
      * 
      * @return A VertexAttributeBinding for the requested parameters.
+     * @script{ignore}
      */
     static VertexAttributeBinding* create(const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect);
 

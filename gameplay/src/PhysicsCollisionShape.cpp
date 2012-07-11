@@ -12,11 +12,6 @@ PhysicsCollisionShape::PhysicsCollisionShape(Type type, btCollisionShape* shape)
     memset(&_shapeData, 0, sizeof(_shapeData));
 }
 
-PhysicsCollisionShape::PhysicsCollisionShape(const PhysicsCollisionShape& copy)
-{
-    // hidden
-}
-
 PhysicsCollisionShape::~PhysicsCollisionShape()
 {
     if (_shape)
@@ -39,6 +34,7 @@ PhysicsCollisionShape::~PhysicsCollisionShape()
             if (_shapeData.heightfieldData)
             {
                 SAFE_DELETE_ARRAY(_shapeData.heightfieldData->heightData);
+                SAFE_DELETE_ARRAY(_shapeData.heightfieldData->normalData);
                 SAFE_DELETE(_shapeData.heightfieldData);
             }
             break;

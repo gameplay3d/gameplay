@@ -16,7 +16,6 @@ var searchData=
   ['addnode',['addNode',['../classgameplay_1_1_scene.html#ab1a97e4db3a60f86f9ec3e109499239a',1,'gameplay::Scene::addNode(const char *id=NULL)'],['../classgameplay_1_1_scene.html#af1d04119b3d7e2c227e76f7dee68274e',1,'gameplay::Scene::addNode(Node *node)']]],
   ['addpart',['addPart',['../classgameplay_1_1_mesh.html#a1eac134e6bbc66c01be9137fd321317d',1,'gameplay::Mesh']]],
   ['addref',['addRef',['../classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74',1,'gameplay::Ref']]],
-  ['addsingleresult',['addSingleResult',['../classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544',1,'gameplay::PhysicsController']]],
   ['addstatuslistener',['addStatusListener',['../classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a',1,'gameplay::PhysicsController']]],
   ['align',['align',['../classgameplay_1_1_layout.html#ab1ecfc89a89236d8cd3674376c1711ee',1,'gameplay::Layout']]],
   ['alignment',['Alignment',['../classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13',1,'gameplay::Control']]],
