@@ -164,6 +164,7 @@ public:
      * @param value Optional pointer to a const char* to store the value of the next property in.
      * 
      * @return The name of the next property, or NULL if there are no properties remaining.
+     * @script{ignore}
      */
     const char* getNextProperty(char** value = NULL);
 

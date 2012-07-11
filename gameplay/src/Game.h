@@ -9,6 +9,7 @@
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
+#include "ScriptController.h"
 #include "AudioListener.h"
 #include "Rectangle.h"
 #include "Vector4.h"
@@ -367,8 +368,21 @@ public:
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
      * @param timeListener The TimeListener that will receive the event.
      * @param cookie The cookie data that the time event will contain.
+     * @script{ignore}
      */
     void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
+
+    /**
+     * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.
+     * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
+     * 
+     * Note: the given Lua function must take a single floating point number, which is the difference between the
+     * current game time and the target time (see TimeListener::timeEvent).
+     * 
+     * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
+     * @param function The Lua script function that will receive the event.
+     */
+    void schedule(float timeOffset, const char* function);
 
 protected:
 
@@ -414,6 +428,14 @@ protected:
      */
     template <class T>
     void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
+
+    /**
+     * Renders a single frame once and then swaps it to the display.
+     * This calls the given Lua function, which should take no parameters and return nothing (void).
+     *
+     * This is useful for rendering splash screens.
+     */
+    inline void renderOnce(const char* function);
 
     /**
      * Updates the game's internal systems (audio, animation, physics) once.
@@ -476,8 +498,20 @@ private:
 
     /** 
      * Creates a Gamepad object from a .form file.
+     *
+     * @param gamepadId The gamepad id (typically equal to the corresponding player's number).
+     * @param gamepadFormPath The path to the .form file.
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
+
+    /**
+     * Converts the given string to a valid script callback enumeration value
+     * or to ScriptController::INVALID_CALLBACK if there is no valid conversion.
+     * 
+     * @param name The name of the callback.
+     * @return The corresponding callback enumeration value.
+     */
+    static ScriptController::ScriptCallback toCallback(const char* name);
 
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
@@ -497,8 +531,10 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AudioListener* _audioListener;              // The audio listener in 3D space.
+    ScriptController* _scriptController;        // Controls the scripting engine.
     std::vector<Gamepad*> _gamepads;            // The connected gamepads.
-    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
+    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
+    std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 

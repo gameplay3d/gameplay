@@ -49,7 +49,7 @@ public:
      * Sets the region within which the joystick will be spontaneously created on a user's touch.
      * 
      * Note: This does not actually enable spontaneous joystick creation on touch input.
-     * To enable (or disable) absolute position explicitly, use #setAbsolute.
+     * To enable (or disable) absolute position explicitly, use setAbsolute(bool).
      * 
      * @param region The region to use.
      */
@@ -60,7 +60,7 @@ public:
      * 
      * Note: just because the returned region is not empty does not mean that it is necessarily
      * being used. If absolute positioning is not enabled, then it will be used (to check if
-     * absolute positioning is enabled, call #isAbsolute).
+     * absolute positioning is enabled, call isAbsolute()).
      * 
      * @return The region within which the joystick will be spontaneously created on a user's touch.
      */

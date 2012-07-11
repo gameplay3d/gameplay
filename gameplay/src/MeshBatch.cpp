@@ -164,7 +164,7 @@ void MeshBatch::begin()
     _indicesPtr = _indices;
 }
 
-void MeshBatch::end()
+void MeshBatch::finish()
 {
 }
 

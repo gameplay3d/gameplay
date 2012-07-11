@@ -160,9 +160,9 @@ public:
     void begin();
 
     /**
-     * Ends text batching for this font and renders all drawn text.
+     * Finishes text batching for this font and renders all drawn text.
      */
-    void end();
+    void finish();
 
     /**
      * Draws the specified text in a solid color, with a scaling factor.

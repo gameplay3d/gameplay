@@ -311,7 +311,7 @@ void Form::setAutoHeight(bool autoHeight)
     }
 }
 
-Effect* createEffect()
+static Effect* createEffect()
 {
     Effect* effect = NULL;
     if (__formEffect == NULL)
@@ -566,7 +566,7 @@ void Form::draw()
         }
         _spriteBatch->begin();
         _spriteBatch->draw(_bounds.x, _bounds.y, 0, _bounds.width, _bounds.height, 0, _v1, _u2, 0, Vector4::one());
-        _spriteBatch->end();
+        _spriteBatch->finish();
     }
 }
 
