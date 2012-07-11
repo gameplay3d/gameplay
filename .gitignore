@@ -166,3 +166,7 @@ Thumbs.db
 /gameplay-samples/sample04-particles/android/proguard.cfg
 /gameplay-samples/sample04-particles/android/local.properties
 /gameplay-samples/sample04-particles/android/project.properties
+/gameplay-api/xml
+/gameplay-luagen/Release
+/gameplay-luagen/Debug
+/gameplay/android/proguard-project.txt

@@ -247,7 +247,7 @@ void BoundingBox::set(const Vector3& min, const Vector3& max)
     this->max = max;
 }
 
-void updateMinMax(Vector3* point, Vector3* min, Vector3* max)
+static void updateMinMax(Vector3* point, Vector3* min, Vector3* max)
 {
     GP_ASSERT(point);
     GP_ASSERT(min);

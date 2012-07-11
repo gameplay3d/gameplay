@@ -4,6 +4,8 @@
 #include "RenderState.h"
 #include "FileSystem.h"
 #include "FrameBuffer.h"
+#include "SceneLoader.h"
+#include "ScriptListener.h"
 
 GLenum __gl_error_code = GL_NO_ERROR;
 ALenum __al_error_code = AL_NO_ERROR;
@@ -19,19 +21,32 @@ Game::Game()
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
+      _animationController(NULL), _audioController(NULL), 
+      _physicsController(NULL), _audioListener(NULL), _scriptController(NULL),
+      _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
-Game::Game(const Game& copy)
-{
-}
-
 Game::~Game()
 {
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
+
+    if (_scriptController)
+    {
+        _scriptController->finalize();
+        SAFE_DELETE(_scriptController);
+    }
+
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
     SAFE_DELETE(_timeEvents);
@@ -106,6 +121,44 @@ bool Game::startup()
 
     loadGamepads();
     
+    _scriptController = new ScriptController();
+    _scriptController->initialize();
+
+    // Set the script callback functions.
+    if (_properties)
+    {
+        Properties* scripts = _properties->getNamespace("scripts", true);
+        if (scripts)
+        {
+            const char* name;
+            while ((name = scripts->getNextProperty()) != NULL)
+            {
+                ScriptController::ScriptCallback callback = toCallback(name);
+                if (callback != ScriptController::INVALID_CALLBACK)
+                {
+                    std::string url = scripts->getString();
+                    std::string file;
+                    std::string id;
+                    splitURL(url, &file, &id);
+
+                    if (file.size() <= 0 || id.size() <= 0)
+                    {
+                        GP_ERROR("Invalid %s script callback function '%s'.", name, url.c_str());
+                    }
+                    else
+                    {
+                        _scriptController->loadScript(file.c_str());
+                        _scriptController->registerCallback(callback, id);
+                    }
+                }
+                else
+                {
+                    // Ignore everything else.
+                }
+            }
+        }
+    }
+
     _state = RUNNING;
 
     return true;
@@ -122,6 +175,7 @@ void Game::shutdown()
 
         Platform::signalShutdown();
         finalize();
+
         
         for (std::vector<Gamepad*>::iterator itr = _gamepads.begin(); itr != _gamepads.end(); itr++)
         {
@@ -129,6 +183,8 @@ void Game::shutdown()
         }
         _gamepads.clear();
         
+        _scriptController->finalizeGame();
+
         _animationController->finalize();
         SAFE_DELETE(_animationController);
 
@@ -137,6 +193,9 @@ void Game::shutdown()
 
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
+
+        // Note: we do not clean up the script controller here
+        // because users can call Game::exit() from a script.
 
         SAFE_DELETE(_audioListener);
 
@@ -188,6 +247,7 @@ void Game::frame()
     if (!_initialized)
     {
         initialize();
+        _scriptController->initializeGame();
         _initialized = true;
     }
 
@@ -215,12 +275,18 @@ void Game::frame()
         // Application Update.
         update(elapsedTime);
 
+        // Run script update.
+        _scriptController->update(elapsedTime);
+
         // Audio Rendering.
         _audioController->update(elapsedTime);
 
         // Graphics Rendering.
         render(elapsedTime);
-        
+
+        // Run script render.
+        _scriptController->render(elapsedTime);
+
         // Update FPS.
         ++_frameCount;
         if ((Game::getGameTime() - _frameLastFPS) >= 1000)
@@ -235,8 +301,14 @@ void Game::frame()
         // Application Update.
         update(0);
 
+        // Script update.
+        _scriptController->update(0);
+
         // Graphics Rendering.
         render(0);
+
+        // Script render.
+        _scriptController->render(0);
     }
 }
 
@@ -256,6 +328,7 @@ void Game::updateOnce()
     _animationController->update(elapsedTime);
     _physicsController->update(elapsedTime);
     _audioController->update(elapsedTime);
+    _scriptController->update(elapsedTime);
 }
 
 void Game::setViewport(const Rectangle& viewport)
@@ -344,6 +417,16 @@ void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
     _timeEvents->push(timeEvent);
 }
 
+void Game::schedule(float timeOffset, const char* function)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    schedule(timeOffset, listener, NULL);
+}
+
 void Game::fireTimeEvents(double frameTime)
 {
     while (_timeEvents->size() > 0)
@@ -424,6 +507,28 @@ Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
     _gamepads.push_back(gamepad);
 
     return gamepad;
+}
+
+ScriptController::ScriptCallback Game::toCallback(const char* name)
+{
+    if (strcmp(name, "INITIALIZE") == 0)
+        return ScriptController::INITIALIZE;
+    else if (strcmp(name, "UPDATE") == 0)
+        return ScriptController::UPDATE;
+    else if (strcmp(name, "RENDER") == 0)
+        return ScriptController::RENDER;
+    else if (strcmp(name, "FINALIZE") == 0)
+        return ScriptController::FINALIZE;
+    else if (strcmp(name, "KEY_EVENT") == 0)
+        return ScriptController::KEY_EVENT;
+    else if (strcmp(name, "TOUCH_EVENT") == 0)
+        return ScriptController::TOUCH_EVENT;
+    else if (strcmp(name, "MOUSE_EVENT") == 0)
+        return ScriptController::MOUSE_EVENT;
+    else if (strcmp(name, "GAMEPAD_EVENT") == 0)
+        return ScriptController::GAMEPAD_EVENT;
+    else
+        return ScriptController::INVALID_CALLBACK;
 }
 
 }

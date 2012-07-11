@@ -68,6 +68,7 @@ void makepath(std::string path, int mode)
 }
 #endif
 
+/** @script{ignore} */
 static std::string __resourcePath("./");
 static std::map<std::string, std::string> __aliases;
 
