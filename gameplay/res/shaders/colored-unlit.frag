@@ -15,7 +15,7 @@ uniform sampler2D u_lightmapTexture;     	// Lightmap texture
 #if defined(MODULATE_COLOR)
 uniform vec4 u_modulateColor;               // Modulation color
 #endif
-#if defined(MODULTE_ALPHA)
+#if defined(MODULATE_ALPHA)
 uniform float u_modulateAlpha;              // Modulation alpha
 #endif
 
@@ -36,7 +36,7 @@ void main()
 	#if defined(MODULATE_COLOR)
 	gl_FragColor *= u_modulateColor;
 	#endif
-	#if defined(MODULTE_ALPHA)
+	#if defined(MODULATE_ALPHA)
     gl_FragColor.a *= u_modulateAlpha;
     #endif
 }
