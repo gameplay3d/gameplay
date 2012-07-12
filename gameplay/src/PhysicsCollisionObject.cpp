@@ -87,6 +87,7 @@ void PhysicsCollisionObject::setEnabled(bool enable)
         if (!_enabled)
         {
             Game::getInstance()->getPhysicsController()->addCollisionObject(this);
+            _motionState->updateTransformFromNode();
             _enabled = true;
         }
     }
@@ -94,7 +95,7 @@ void PhysicsCollisionObject::setEnabled(bool enable)
     {
         if (_enabled)
         {
-            Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+            Game::getInstance()->getPhysicsController()->removeCollisionObject(this, false);
             _enabled = false;
         }
     }

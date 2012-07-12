@@ -23,7 +23,7 @@ PhysicsController::PhysicsController()
   : _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
-    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL)
+    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL), _isUpdating(false)
 {
     // Default gravity is 9.8 along the negative Y axis.
     _collisionCallback = new CollisionCallback(this);
@@ -464,6 +464,7 @@ void PhysicsController::resume()
 void PhysicsController::update(float elapsedTime)
 {
     GP_ASSERT(_world);
+    _isUpdating = true;
 
     // Update the physics simulation, with a maximum
     // of 10 simulation steps being performed in a given frame.
@@ -575,6 +576,8 @@ void PhysicsController::update(float elapsedTime)
             iter->second._status &= ~COLLISION;
         }
     }
+
+    _isUpdating = false;
 }
 
 void PhysicsController::addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
@@ -634,10 +637,11 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     }
 }
 
-void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
+void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object, bool removeListeners)
 {
     GP_ASSERT(object);
     GP_ASSERT(_world);
+    GP_ASSERT(!_isUpdating);
 
     // Remove the collision object from the world.
     if (object->getCollisionObject())
@@ -660,11 +664,14 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
     }
 
     // Find all references to the object in the collision status cache and mark them for removal.
-    std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
-    for (; iter != _collisionStatus.end(); iter++)
+    if (removeListeners)
     {
-        if (iter->first.objectA == object || iter->first.objectB == object)
-            iter->second._status |= REMOVE;
+        std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+        for (; iter != _collisionStatus.end(); iter++)
+        {
+            if (iter->first.objectA == object || iter->first.objectB == object)
+                iter->second._status |= REMOVE;
+        }
     }
 }
 
