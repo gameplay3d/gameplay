@@ -110,6 +110,9 @@ public:
         /**
          * Called when a collision occurs between two objects in the physics world.
          * 
+         * NOTE: You are not permitted to disable physics objects from within this callback. Disabling physics on a collision object
+         *  removes the object from the physics world. This is not permitted during the PhysicsController::update.
+         *
          * @param type The type of collision event.
          * @param collisionPair The two collision objects involved in the collision.
          * @param contactPointA The contact point with the first object (in world space).
@@ -176,7 +179,7 @@ public:
     bool isEnabled() const;
 
     /**
-     * Sets the collision object be enabled or disabled.
+     * Sets the collision object to be enabled or disabled.
      *
      * @param enable true enables the collision object, false disables it.
      */

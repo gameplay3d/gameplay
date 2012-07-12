@@ -23,6 +23,7 @@ Game::Game()
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
+    _gamepads = new std::vector<Gamepad*>;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
@@ -148,11 +149,15 @@ void Game::shutdown()
         Platform::signalShutdown();
         finalize();
         
-        for (std::vector<Gamepad*>::iterator itr = _gamepads.begin(); itr != _gamepads.end(); itr++)
+        std::vector<Gamepad*>::iterator itr = _gamepads->begin();
+        std::vector<Gamepad*>::iterator end = _gamepads->end();
+        while (itr != end)
         {
-            SAFE_DELETE((*itr));
+            SAFE_DELETE(*itr);
+            itr++;
         }
-        _gamepads.clear();
+        _gamepads->clear();
+        SAFE_DELETE(_gamepads);
         
         _animationController->finalize();
         SAFE_DELETE(_animationController);
@@ -446,7 +451,7 @@ Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
     GP_ASSERT(gamepadFormPath);
     Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
     GP_ASSERT(gamepad);
-    _gamepads.push_back(gamepad);
+    _gamepads->push_back(gamepad);
 
     return gamepad;
 }
