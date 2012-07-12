@@ -1,4 +1,5 @@
 #include "Base.h"
+#include "FileSystem.h"
 #include "ScriptController.h"
 #include "lua/lua_all_bindings.h"
 
@@ -111,8 +112,11 @@ const char* ScriptController::getString(int index, bool isStdString)
 
 void ScriptController::loadScript(const char* path)
 {
-    if (luaL_dofile(_lua, path))
+    const char* scriptContents = FileSystem::readAll(path);
+    if (luaL_dostring(_lua, scriptContents))
         GP_ERROR("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+
+    SAFE_DELETE_ARRAY(scriptContents);
 }
 
 bool ScriptController::getBool(const char* name)
