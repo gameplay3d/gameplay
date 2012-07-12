@@ -34,6 +34,7 @@ public:
      * Gets the image's raw pixel data.
      * 
      * @return The image's pixel data.
+     * @script{ignore}
      */
     inline unsigned char* getData() const;
 

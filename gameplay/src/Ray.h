@@ -27,7 +27,7 @@ public:
     static const int INTERSECTS_NONE = -1;
 
     /**
-     * Constructor.
+     * Constructs a new ray initialized to origin(0,0,0) and direction(0,0,1).
      */
     Ray();
 

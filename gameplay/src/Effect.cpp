@@ -103,7 +103,7 @@ Effect* Effect::createFromSource(const char* vshSource, const char* fshSource, c
 }
 
 
-void replaceDefines(const char* defines, std::string& out)
+static void replaceDefines(const char* defines, std::string& out)
 {
     if (defines && strlen(defines) != 0)
     {
@@ -121,7 +121,7 @@ void replaceDefines(const char* defines, std::string& out)
 #endif
 }
 
-void replaceIncludes(const char* filepath, const char* source, std::string& out)
+static void replaceIncludes(const char* filepath, const char* source, std::string& out)
 {
     // Replace the #include "xxxx.xxx" with the sourced file contents of "filepath/xxxx.xxx"
     std::string str = source;
@@ -197,7 +197,7 @@ void replaceIncludes(const char* filepath, const char* source, std::string& out)
     }
 }
 
-void writeShaderToErrorFile(const char* filePath, const char* source)
+static void writeShaderToErrorFile(const char* filePath, const char* source)
 {
     std::string path = filePath;
     path += ".err";
@@ -565,11 +565,6 @@ Effect* Effect::getCurrentEffect()
 Uniform::Uniform() :
     _location(-1), _type(0), _index(0)
 {
-}
-
-Uniform::Uniform(const Uniform& copy)
-{
-    // hidden
 }
 
 Uniform::~Uniform()

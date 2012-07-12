@@ -46,9 +46,9 @@ using std::modf;
 #define NULL     0
 #endif
 
-// Print logging (implemented per platform)
 namespace gameplay
 {
+/** Print logging (implemented per platform). */
 extern void printError(const char* format, ...);
 }
 
@@ -167,6 +167,10 @@ extern void printError(const char* format, ...);
 // Image
 #include <png.h>
 
+// Scripting
+using std::va_list;
+#include <lua.hpp>
+
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)
@@ -242,11 +246,17 @@ extern void printError(const char* format, ...);
 // Hardware buffer
 namespace gameplay
 {
+/** Vertex attribute. */
 typedef GLint VertexAttribute;
+/** Vertex buffer handle. */
 typedef GLuint VertexBufferHandle;
+/** Index buffer handle. */
 typedef GLuint IndexBufferHandle;
+/** Texture handle. */
 typedef GLuint TextureHandle;
+/** Frame buffer handle. */
 typedef GLuint FrameBufferHandle;
+/** Render buffer handle. */
 typedef GLuint RenderBufferHandle;
 }
 

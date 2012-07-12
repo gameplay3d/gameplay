@@ -9,6 +9,7 @@ namespace gameplay
 {
 
 Ray::Ray()
+    : _direction(0, 0, 1)
 {
 }
 

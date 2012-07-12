@@ -196,7 +196,7 @@ private:
      *
      * @return The next highest power of two after x, or x if it is already a power of two.
      */
-    static unsigned int nextPowerOfTwo(unsigned int v);
+    static unsigned int nextPowerOfTwo(unsigned int x);
 
     /**
      * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.

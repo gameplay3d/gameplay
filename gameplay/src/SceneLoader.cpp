@@ -1,4 +1,5 @@
 #include "Base.h"
+#include "AudioSource.h"
 #include "Game.h"
 #include "Bundle.h"
 #include "SceneLoader.h"
@@ -842,7 +843,7 @@ void SceneLoader::loadReferencedFiles()
             // Check if the referenced properties file has already been loaded.
             Properties* properties = NULL;
             std::map<std::string, Properties*>::iterator pffIter = _propertiesFromFile.find(fileString);
-            if (pffIter != _propertiesFromFile.end())
+            if (pffIter != _propertiesFromFile.end() && pffIter->second)
             {
                 properties = pffIter->second;
             }
@@ -972,7 +973,7 @@ PhysicsConstraint* SceneLoader::loadSpringConstraint(const Properties* constrain
     return physicsConstraint;
 }
 
-void SceneLoader::splitURL(const std::string& url, std::string* file, std::string* id)
+void splitURL(const std::string& url, std::string* file, std::string* id)
 {
     if (url.empty())
     {

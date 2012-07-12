@@ -10,10 +10,6 @@ VerticalLayout::VerticalLayout() : _bottomToTop(false)
 {
 }
 
-VerticalLayout::VerticalLayout(const VerticalLayout& copy)
-{
-}
-
 VerticalLayout::~VerticalLayout()
 {
     __instance = NULL;
@@ -36,6 +32,11 @@ VerticalLayout* VerticalLayout::create()
 void VerticalLayout::setBottomToTop(bool bottomToTop)
 {
     _bottomToTop = bottomToTop;
+}
+
+bool VerticalLayout::getBottomToTop()
+{
+    return _bottomToTop;
 }
 
 Layout::Type VerticalLayout::getType()

@@ -21,6 +21,15 @@ static const long SCROLL_INERTIA_DELAY = 100L;
 // Factor to multiply friction by before applying to velocity.
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
 
+/**
+ * Sort function for use with _controls.sort(), based on Z-Order.
+ * 
+ * @param c1 The first control
+ * @param c2 The second control
+ * return true if the first controls z index is less than the second.
+ */
+static bool sortControlsByZOrder(Control* c1, Control* c2);
+
 Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
@@ -32,10 +41,6 @@ Container::Container()
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0)
-{
-}
-
-Container::Container(const Container& copy)
 {
 }
 
@@ -394,7 +399,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
     spriteBatch->begin();
     Control::drawBorder(spriteBatch, clip);
-    spriteBatch->end();
+    spriteBatch->finish();
 
     std::vector<Control*>::const_iterator it;
     Rectangle boundsUnion = Rectangle::empty();
@@ -480,7 +485,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, rightUVs.u1, rightUVs.v1, rightUVs.u2, rightUVs.v2, rightColor, clipRegion);
         }
 
-        spriteBatch->end();
+        spriteBatch->finish();
 
         if (_scrollingVelocity.isZero())
         {
@@ -1049,7 +1054,7 @@ Container::Scroll Container::getScroll(const char* scroll)
     return Container::SCROLL_NONE;
 }
 
-bool sortControlsByZOrder(Control* c1, Control* c2)
+static bool sortControlsByZOrder(Control* c1, Control* c2)
 {
     if (c1->getZIndex() < c2->getZIndex())
         return true;

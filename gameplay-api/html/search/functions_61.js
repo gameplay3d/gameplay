@@ -12,7 +12,6 @@ var searchData=
   ['addnode',['addNode',['../classgameplay_1_1_scene.html#ab1a97e4db3a60f86f9ec3e109499239a',1,'gameplay::Scene::addNode(const char *id=NULL)'],['../classgameplay_1_1_scene.html#af1d04119b3d7e2c227e76f7dee68274e',1,'gameplay::Scene::addNode(Node *node)']]],
   ['addpart',['addPart',['../classgameplay_1_1_mesh.html#a1eac134e6bbc66c01be9137fd321317d',1,'gameplay::Mesh']]],
   ['addref',['addRef',['../classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74',1,'gameplay::Ref']]],
-  ['addsingleresult',['addSingleResult',['../classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544',1,'gameplay::PhysicsController']]],
   ['addstatuslistener',['addStatusListener',['../classgameplay_1_1_physics_controller.html#a9c9c7800807569809a677be38873170a',1,'gameplay::PhysicsController']]],
   ['align',['align',['../classgameplay_1_1_layout.html#ab1ecfc89a89236d8cd3674376c1711ee',1,'gameplay::Layout']]],
   ['angle',['angle',['../classgameplay_1_1_vector2.html#a55ae0e0429c51c0d0c1303d2b0d5ca58',1,'gameplay::Vector2::angle()'],['../classgameplay_1_1_vector3.html#a35d5f5f75fff9e075f4b5f5e178d0e76',1,'gameplay::Vector3::angle()'],['../classgameplay_1_1_vector4.html#ae0489178f6a7a3d23bffe499d1a206e2',1,'gameplay::Vector4::angle()']]],

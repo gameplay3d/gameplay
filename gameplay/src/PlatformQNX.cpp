@@ -439,11 +439,6 @@ Platform::Platform(Game* game)
 {
 }
 
-Platform::Platform(const Platform& copy)
-{
-    // hidden
-}
-
 Platform::~Platform()
 {
     if (__eglDisplay != EGL_NO_DISPLAY)
@@ -1164,13 +1159,19 @@ void Platform::displayKeyboard(bool display)
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+        ScriptController::getInstance()->touchEvent(evt, x, y, contactIndex);
+    }
 }
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
     if (!Form::keyEventInternal(evt, key))
+    {
         Game::getInstance()->keyEvent(evt, key);
+        ScriptController::getInstance()->keyEvent(evt, key);
+    }
 }
 
 bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
@@ -1179,9 +1180,13 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     {
         return true;
     }
+    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
     else
     {
-        return Game::getInstance()->mouseEvent(evt, x, y, wheelDelta);
+        return ScriptController::getInstance()->mouseEvent(evt, x, y, wheelDelta);
     }
 }
 
