@@ -11,6 +11,7 @@ namespace gameplay
 
 class Animation;
 class AnimationValue;
+class ScriptListener;
 
 /**
  * Defines the runtime session of an Animation to be played.
@@ -227,6 +228,37 @@ public:
      */
     void addListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
+    /**
+     * Adds an animation begin listener.
+     * 
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
+     *
+     * @param function The Lua script function to be called when an AnimationClip begins.
+     */
+    void addBeginListener(const char* function);
+
+    /**
+     * Adds an animation end listener.
+     * 
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
+     *
+     * @param function The Lua script function to be called when an AnimationClip ends.
+     */
+    void addEndListener(const char* function);
+
+    /**
+     * Adds an animation listener to be called back at the specified eventTime during the playback 
+     * of the AnimationClip.
+     * 
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
+     * 
+     * @param function The Lua script function to be called when an AnimationClip reaches the 
+     *      specified time in its playback.
+     * @param eventTime The time the listener will be called during the playback of the AnimationClip. 
+     *      Must be between 0 and the duration of the AnimationClip.
+     */
+    void addListener(const char* function, unsigned long eventTime);
+
 private:
     
     static const unsigned char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
@@ -349,6 +381,7 @@ private:
     std::vector<Listener*>* _endListeners;              // Collection of end listeners on the clip.
     std::list<ListenerEvent*>* _listeners;              // Ordered collection of listeners on the clip.
     std::list<ListenerEvent*>::iterator* _listenerItr;  // Iterator that points to the next listener event to be triggered.
+    std::vector<ScriptListener*>* _scriptListeners;     // Collection of listeners that are bound to Lua script functions.
 };
 
 }

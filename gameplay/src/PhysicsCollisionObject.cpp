@@ -3,12 +3,14 @@
 #include "PhysicsController.h"
 #include "Game.h"
 #include "Node.h"
+#include "ScriptListener.h"
 
 namespace gameplay
 {
 
 /**
  * Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
+ * @script{ignore}
  */
 struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 {
@@ -28,13 +30,22 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 };
 
 PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
-    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true)
+    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true), _scriptListeners(NULL)
 {
 }
 
 PhysicsCollisionObject::~PhysicsCollisionObject()
 {
     SAFE_DELETE(_motionState);
+
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
 
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
@@ -111,6 +122,34 @@ void PhysicsCollisionObject::removeCollisionListener(CollisionListener* listener
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeCollisionListener(listener, this, object);
+}
+
+void PhysicsCollisionObject::addCollisionListener(const char* function, PhysicsCollisionObject* object)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addCollisionListener(listener, object);
+}
+
+void PhysicsCollisionObject::removeCollisionListener(const char* function, PhysicsCollisionObject* object)
+{
+    if (!_scriptListeners)
+        return;
+
+    std::string functionStr = function;
+    for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+    {
+        if ((*_scriptListeners)[i]->_function == functionStr)
+        {
+            removeCollisionListener((*_scriptListeners)[i], object);
+            SAFE_DELETE((*_scriptListeners)[i]);
+            _scriptListeners->erase(_scriptListeners->begin() + i);
+            return;
+        }
+    }
 }
 
 bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const

@@ -495,7 +495,7 @@ void RenderState::StateBlock::enableDepthWrite()
     }
 }
 
-bool parseBoolean(const char* value)
+static bool parseBoolean(const char* value)
 {
     GP_ASSERT(value);
 
@@ -511,7 +511,7 @@ bool parseBoolean(const char* value)
     return false;
 }
 
-RenderState::Blend parseBlend(const char* value)
+static RenderState::Blend parseBlend(const char* value)
 {
     GP_ASSERT(value);
 
