@@ -15,8 +15,8 @@
 		</comments>
       <source_data>file:///C:/code/git/GamePlay/gameplay-samples/sample05-lua/res/box.mb</source_data>
     </contributor>
-    <created>2012-07-13T18:08:30</created>
-    <modified>2012-07-13T18:08:30</modified>
+    <created>2012-07-13T18:33:54</created>
+    <modified>2012-07-13T18:33:54</modified>
     <unit name="centimeter" meter="0.01"/>
     <up_axis>Y_UP</up_axis>
   </asset>
@@ -274,7 +274,7 @@
   <library_visual_scenes>
     <visual_scene id="VisualSceneNode" name="box">
       <node id="camera1" name="camera1" type="NODE">
-        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 5 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 0.9807853 0.1950903 1 0 -0.1950903 0.9807853 5 0 0 0 1</matrix>
         <instance_camera url="#cameraShape1"/>
         <extra>
           <technique profile="OpenCOLLADAMaya">
