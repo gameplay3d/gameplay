@@ -37,14 +37,6 @@ public:
     BoundingSphere(const Vector3& center, float radius);
 
     /**
-     * Constructs a new bounding sphere that contains all of the specified points.
-     *
-     * @param points The points to enclose inside the new bounding sphere.
-     * @param count The number of points.
-     */
-    BoundingSphere(Vector3* points, unsigned int count);
-
-    /**
      * Constructs a bounding sphere from the given bounding sphere.
      *
      * @param copy The bounding sphere to copy.

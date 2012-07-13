@@ -256,7 +256,7 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     return true;
 }
 
-bool isMaterialKeyword(const char* str)
+static bool isMaterialKeyword(const char* str)
 {
     GP_ASSERT(str);
 
@@ -277,7 +277,7 @@ bool isMaterialKeyword(const char* str)
     return false;
 }
 
-Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultValue)
+static Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultValue)
 {
     if (str == NULL || strlen(str) == 0)
     {
@@ -315,7 +315,7 @@ Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultV
     }
 }
 
-Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
+static Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
 {
     if (str == NULL || strlen(str) == 0)
     {

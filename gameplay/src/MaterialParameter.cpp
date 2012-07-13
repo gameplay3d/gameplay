@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "MaterialParameter.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -292,6 +293,96 @@ void MaterialParameter::bind(Effect* effect)
     default:
         GP_ERROR("Unsupported material parameter type (%d).", _type);
         break;
+    }
+}
+
+void MaterialParameter::bindValue(Node* node, const char* binding)
+{
+    GP_ASSERT(binding);
+
+    if (strcmp(binding, "&Node::getBackVector") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getBackVector);
+    }
+    else if (strcmp(binding, "&Node::getDownVector") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getDownVector);
+    }
+    else if (strcmp(binding, "&Node::getTranslationWorld") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getTranslationWorld);
+    }
+    else if (strcmp(binding, "&Node::getTranslationView") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getTranslationView);
+    }
+    else if (strcmp(binding, "&Node::getForwardVector") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getForwardVector);
+    }
+    else if (strcmp(binding, "&Node::getForwardVectorWorld") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getForwardVectorWorld);
+    }
+    else if (strcmp(binding, "&Node::getForwardVectorView") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getForwardVectorView);
+    }
+    else if (strcmp(binding, "&Node::getLeftVector") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getLeftVector);
+    }
+    else if (strcmp(binding, "&Node::getRightVector") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getRightVector);
+    }
+    else if (strcmp(binding, "&Node::getRightVectorWorld") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getRightVectorWorld);
+    }
+    else if (strcmp(binding, "&Node::getUpVector") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getUpVector);
+    }
+    else if (strcmp(binding, "&Node::getUpVectorWorld") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getUpVectorWorld);
+    }
+    else if (strcmp(binding, "&Node::getActiveCameraTranslationWorld") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getActiveCameraTranslationWorld);
+    }
+    else if (strcmp(binding, "&Node::getActiveCameraTranslationView") == 0)
+    {
+        bindValue<Node, Vector3>(node, &Node::getActiveCameraTranslationView);
+    }
+    else if (strcmp(binding, "&Node::getScaleX") == 0)
+    {
+        bindValue<Node, float>(node, &Node::getScaleX);
+    }
+    else if (strcmp(binding, "&Node::getScaleY") == 0)
+    {
+        bindValue<Node, float>(node, &Node::getScaleY);
+    }
+    else if (strcmp(binding, "&Node::getScaleZ") == 0)
+    {
+        bindValue<Node, float>(node, &Node::getScaleZ);
+    }
+    else if (strcmp(binding, "&Node::getTranslationX") == 0)
+    {
+        bindValue<Node, float>(node, &Node::getTranslationX);
+    }
+    else if (strcmp(binding, "&Node::getTranslationY") == 0)
+    {
+        bindValue<Node, float>(node, &Node::getTranslationY);
+    }
+    else if (strcmp(binding, "&Node::getTranslationZ") == 0)
+    {
+        bindValue<Node, float>(node, &Node::getTranslationZ);
+    }
+    else
+    {
+        GP_ERROR("Unsupported material parameter binding '%s'.", binding);
     }
 }
 

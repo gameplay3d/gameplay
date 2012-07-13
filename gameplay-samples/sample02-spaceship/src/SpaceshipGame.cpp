@@ -470,9 +470,9 @@ void SpaceshipGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
-    batch->begin();
+    batch->start();
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
 
@@ -494,7 +494,7 @@ bool SpaceshipGame::drawScene(Node* node, void* cookie)
 
 void SpaceshipGame::drawText()
 {
-    _font->begin();
+    _font->start();
     char text[1024];
     sprintf(text, "%dsec.", (int)_time);
     _font->drawText(text, getWidth() - 120, 10, Vector4(1, 1, 0, 1), _font->getSize());
@@ -502,7 +502,7 @@ void SpaceshipGame::drawText()
     {
         _font->drawText("Click to Play Again", getWidth()/2 - 175, getHeight()/2 - 40, Vector4::one(), _font->getSize());
     }
-    _font->end();
+    _font->finish();
 }
 
 void SpaceshipGame::keyEvent(Keyboard::KeyEvent evt, int key)

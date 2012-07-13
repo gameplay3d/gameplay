@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4239E08715755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
 		4239E08815755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
+		42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7026215B0A8F2002BB8C3 /* liblua.a */; };
+		42B7026915B0B137002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7026815B0B137002BB8C3 /* game.config */; };
+		42B7026A15B0B15D002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7026815B0B137002BB8C3 /* game.config */; };
 		42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD570146EC4B300353661 /* Cocoa.framework */; };
 		42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A1146EC5BF00353661 /* OpenAL.framework */; };
 		42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD5A3146EC5C600353661 /* OpenGL.framework */; };
@@ -44,6 +47,8 @@
 /* Begin PBXFileReference section */
 		4239E08615755BDA005EA3F6 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
+		42B7026215B0A8F2002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
+		42B7026815B0B137002BB8C3 /* game.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932E61491A1AC0098216A /* sample03-character-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macosx.plist"; sourceTree = "<group>"; };
 		42CCD56C146EC4B300353661 /* sample03-character-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample03-character-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD570146EC4B300353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -89,6 +94,7 @@
 				42CCD5A6146EC5CE00353661 /* QuartzCore.framework in Frameworks */,
 				42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */,
 				42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */,
+				42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +127,7 @@
 			children = (
 				5B43D1E314C35F71008A5D9D /* libgameplay.a */,
 				42CD0EFA147D93560000361E /* libbullet.a */,
+				42B7026215B0A8F2002BB8C3 /* liblua.a */,
 				42CD0EFB147D93560000361E /* libogg.a */,
 				42CD0EFC147D93560000361E /* libvorbis.a */,
 				42CD0EFD147D93560000361E /* libvorbisenc.a */,
@@ -137,6 +144,7 @@
 				42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */,
 				42C932E61491A1AC0098216A /* sample03-character-macosx.plist */,
 				42CCD5B0146EC62A00353661 /* icon.png */,
+				42B7026815B0B137002BB8C3 /* game.config */,
 				DDBBAE861574040C00D39DE7 /* game.dxt.config */,
 				DDBBAE8B1574067600D39DE7 /* game.pvrtc.config */,
 				4239E08615755BDA005EA3F6 /* res */,
@@ -270,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CCD5B1146EC62A00353661 /* icon.png in Resources */,
+				42B7026A15B0B15D002BB8C3 /* game.config in Resources */,
 				4239E08715755BDA005EA3F6 /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -279,6 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B43D1D814C35F4C008A5D9D /* icon.png in Resources */,
+				42B7026915B0B137002BB8C3 /* game.config in Resources */,
 				4239E08815755BDA005EA3F6 /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +400,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -397,6 +408,7 @@
 				INFOPLIST_FILE = "sample03-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
@@ -418,6 +430,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -425,6 +438,7 @@
 				INFOPLIST_FILE = "sample03-character-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
@@ -447,6 +461,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -455,6 +470,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
@@ -480,6 +496,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -488,6 +505,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",

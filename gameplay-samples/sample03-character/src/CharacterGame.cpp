@@ -117,9 +117,9 @@ void CharacterGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
-    batch->begin();
+    batch->start();
     batch->draw(getWidth() * 0.5f, getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
 
@@ -298,11 +298,11 @@ void CharacterGame::render(float elapsedTime)
     _gamepad->draw();
 
     // Draw FPS
-    _font->begin();
+    _font->start();
     char fps[32];
     sprintf(fps, "%d", getFrameRate());
     _font->drawText(fps, 5, 5, Vector4(1,1,0,1), 20);
-    _font->end();
+    _font->finish();
 }
 
 void CharacterGame::keyEvent(Keyboard::KeyEvent evt, int key)

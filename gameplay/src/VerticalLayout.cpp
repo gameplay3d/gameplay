@@ -34,6 +34,11 @@ void VerticalLayout::setBottomToTop(bool bottomToTop)
     _bottomToTop = bottomToTop;
 }
 
+bool VerticalLayout::getBottomToTop()
+{
+    return _bottomToTop;
+}
+
 Layout::Type VerticalLayout::getType()
 {
     return Layout::LAYOUT_VERTICAL;

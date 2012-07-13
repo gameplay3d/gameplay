@@ -8,6 +8,7 @@ namespace gameplay
 {
 
 class Node;
+class ScriptListener;
 
 /**
  * Base class for all gameplay physics objects that support collision events.
@@ -110,6 +111,9 @@ public:
         /**
          * Called when a collision occurs between two objects in the physics world.
          * 
+         * NOTE: You are not permitted to disable physics objects from within this callback. Disabling physics on a collision object
+         *  removes the object from the physics world. This is not permitted during the PhysicsController::update.
+         *
          * @param type The type of collision event.
          * @param collisionPair The two collision objects involved in the collision.
          * @param contactPointA The contact point with the first object (in world space).
@@ -176,7 +180,7 @@ public:
     bool isEnabled() const;
 
     /**
-     * Sets the collision object be enabled or disabled.
+     * Sets the collision object to be enabled or disabled.
      *
      * @param enable true enables the collision object, false disables it.
      */
@@ -197,6 +201,24 @@ public:
      * @param object Optional collision object used to filter the collision event.
      */
     void removeCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object = NULL);
+
+    /**
+     * Adds a collision listener for this collision object.
+     * 
+     * Note: the given Lua function must match the function signature of PhysicsCollisionObject::CollisionListener::collisionEvent.
+     * 
+     * @param function The Lua script function to add as a listener callback.
+     * @param object Optional collision object used to filter the collision event.
+     */
+    void addCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
+
+    /**
+     * Removes a collision listener.
+     *
+     * @param function The Lua function (used as a listener callback) to remove.
+     * @param object Optional collision object used to filter the collision event.
+     */
+    void removeCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
 
     /**
      * Checks if this collision object collides with the given object.
@@ -235,12 +257,12 @@ protected:
         virtual ~PhysicsMotionState();
 
         /**
-         * @see btMotionState#getWorldTransform
+         * @see btMotionState::getWorldTransform
          */
         virtual void getWorldTransform(btTransform &transform) const;
 
         /**
-         * @see btMotionState#setWorldTransform
+         * @see btMotionState::setWorldTransform
          */
         virtual void setWorldTransform(const btTransform &transform);
 
@@ -288,6 +310,10 @@ protected:
      */
     bool _enabled;
 
+    /**
+     * Lua script collision listeners.
+     */
+    std::vector<ScriptListener*>* _scriptListeners;
 };
 
 }
