@@ -1,5 +1,5 @@
-#ifndef TEMPLATEGAME_H_
-#define TEMPLATEGAME_H_
+#ifndef LUAGAME_H_
+#define LUAGAME_H_
 
 #include "gameplay.h"
 
@@ -7,6 +7,8 @@ using namespace gameplay;
 
 /**
  * Main game class.
+ *
+ * This game has all the implementation code done in lua.
  */
 class LuaGame: public Game
 {

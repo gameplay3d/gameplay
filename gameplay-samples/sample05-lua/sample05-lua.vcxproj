@@ -16,7 +16,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -162,16 +163,20 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="bar-descriptor.xml" >
-        <SubType>Designer</SubType>
+    <None Include="bar-descriptor.xml">
+      <SubType>Designer</SubType>
     </None>
+    <None Include="game.config" />
     <None Include="icon.png" />
+    <None Include="res\arial.ttf" />
+    <None Include="res\arial40.gpb" />
+    <None Include="res\box-diffuse.png" />
     <None Include="res\box.dae" />
     <None Include="res\box.gpb" />
     <None Include="res\box.material" />
-    <None Include="res\colored.frag" />
-    <None Include="res\colored.vert" />
-  </ItemGroup> 
+    <None Include="res\grid.material" />
+    <None Include="res\script.lua" />
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LuaGame.cpp" />
   </ItemGroup>
