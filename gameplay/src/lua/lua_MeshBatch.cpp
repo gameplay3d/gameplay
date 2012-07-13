@@ -12,12 +12,12 @@ void luaRegister_MeshBatch()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"begin", lua_MeshBatch_begin},
         {"draw", lua_MeshBatch_draw},
         {"finish", lua_MeshBatch_finish},
         {"getCapacity", lua_MeshBatch_getCapacity},
         {"getMaterial", lua_MeshBatch_getMaterial},
         {"setCapacity", lua_MeshBatch_setCapacity},
+        {"start", lua_MeshBatch_start},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -63,40 +63,6 @@ int lua_MeshBatch__gc(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_MeshBatch__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_MeshBatch_begin(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                MeshBatch* instance = getInstance(state);
-                instance->begin();
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_begin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -293,6 +259,40 @@ int lua_MeshBatch_setCapacity(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MeshBatch_start(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                MeshBatch* instance = getInstance(state);
+                instance->start();
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_MeshBatch_start - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

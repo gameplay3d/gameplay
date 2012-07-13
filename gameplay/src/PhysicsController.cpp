@@ -1458,7 +1458,7 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 {
     GP_ASSERT(_meshBatch);
     _viewProjection = &viewProjection;
-    _meshBatch->begin();
+    _meshBatch->start();
 }
 
 void PhysicsController::DebugDrawer::end()

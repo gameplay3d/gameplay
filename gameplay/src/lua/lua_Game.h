@@ -21,6 +21,7 @@ int lua_Game_getGamepad(lua_State* state);
 int lua_Game_getGamepadCount(lua_State* state);
 int lua_Game_getHeight(lua_State* state);
 int lua_Game_getPhysicsController(lua_State* state);
+int lua_Game_getScriptController(lua_State* state);
 int lua_Game_getState(lua_State* state);
 int lua_Game_getViewport(lua_State* state);
 int lua_Game_getWidth(lua_State* state);
