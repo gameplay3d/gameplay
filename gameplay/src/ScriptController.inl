@@ -5,7 +5,8 @@ namespace gameplay
 
 template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull)
 {
-    if (lua_type(ScriptController::__instance->_lua, index) == LUA_TNIL)
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    if (lua_type(sc->_lua, index) == LUA_TNIL)
     {
         if (nonNull)
         {
@@ -14,11 +15,11 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
 
         return NULL;
     }
-    else if (lua_type(ScriptController::__instance->_lua, index) == LUA_TTABLE)
+    else if (lua_type(sc->_lua, index) == LUA_TTABLE)
     {
         // Get the size of the array.
-        lua_len(ScriptController::__instance->_lua, index);
-        int size = luaL_checkint(ScriptController::__instance->_lua, -1);
+        lua_len(sc->_lua, index);
+        int size = luaL_checkint(sc->_lua, -1);
 
         if (size <= 0)
             return NULL;
@@ -27,51 +28,51 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
         T* values = (T*)malloc(sizeof(T)*size);
         
         // Push the first key.
-        lua_pushnil(ScriptController::__instance->_lua);
+        lua_pushnil(sc->_lua);
         int i = 0;
-        for (; lua_next(ScriptController::__instance->_lua, index) != 0 && i < size; i++)
+        for (; lua_next(sc->_lua, index) != 0 && i < size; i++)
         {
-            void* p = lua_touserdata(ScriptController::__instance->_lua, -1);
+            void* p = lua_touserdata(sc->_lua, -1);
             if (p != NULL)
             {
-                if (lua_getmetatable(ScriptController::__instance->_lua, -1))
+                if (lua_getmetatable(sc->_lua, -1))
                 {
                     // Check if it matches the type's metatable.
-                    luaL_getmetatable(ScriptController::__instance->_lua, type);
-                    if (lua_rawequal(ScriptController::__instance->_lua, -1, -2))
+                    luaL_getmetatable(sc->_lua, type);
+                    if (lua_rawequal(sc->_lua, -1, -2))
                     {
-                        lua_pop(ScriptController::__instance->_lua, 2);
+                        lua_pop(sc->_lua, 2);
                         T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
                         if (ptr)
                             memcpy((void*)&values[i], (void*)ptr, sizeof(T));
                         else
                             memset((void*)&values[i], 0, sizeof(T));
 
-                        lua_pop(ScriptController::__instance->_lua, 1);
+                        lua_pop(sc->_lua, 1);
                         continue;
                     }
-                    lua_pop(ScriptController::__instance->_lua, 1);
+                    lua_pop(sc->_lua, 1);
 
                     // Check if it matches any of the derived types' metatables.
-                    const std::vector<std::string>& types = ScriptController::__instance->_hierarchy[type];
+                    const std::vector<std::string>& types = sc->_hierarchy[type];
                     for (unsigned int k = 0, count = types.size(); k < count; k++)
                     {
-                        luaL_getmetatable(ScriptController::__instance->_lua, types[k].c_str());
-                        if (lua_rawequal(ScriptController::__instance->_lua, -1, -2))
+                        luaL_getmetatable(sc->_lua, types[k].c_str());
+                        if (lua_rawequal(sc->_lua, -1, -2))
                         {
-                            lua_pop(ScriptController::__instance->_lua, 2);
+                            lua_pop(sc->_lua, 2);
                             T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
                             if (ptr)
                                 memcpy((void*)&values[i], (void*)ptr, sizeof(T));
                             else
                                 memset((void*)&values[i], 0, sizeof(T));
-                            lua_pop(ScriptController::__instance->_lua, 1);
+
+                            lua_pop(sc->_lua, 1);
                             continue;
                         }
-                        lua_pop(ScriptController::__instance->_lua, 1);
+                        lua_pop(sc->_lua, 1);
                     }
-            
-                    lua_pop(ScriptController::__instance->_lua, 1);
+                    lua_pop(sc->_lua, 1);
                 }
             }
         }
@@ -80,16 +81,16 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
     }
     else
     {
-        void* p = lua_touserdata(ScriptController::__instance->_lua, index);
+        void* p = lua_touserdata(sc->_lua, index);
         if (p != NULL)
         {
-            if (lua_getmetatable(ScriptController::__instance->_lua, index))
+            if (lua_getmetatable(sc->_lua, index))
             {
                 // Check if it matches the type's metatable.
-                luaL_getmetatable(ScriptController::__instance->_lua, type);
-                if (lua_rawequal(ScriptController::__instance->_lua, -1, -2))
+                luaL_getmetatable(sc->_lua, type);
+                if (lua_rawequal(sc->_lua, -1, -2))
                 {
-                    lua_pop(ScriptController::__instance->_lua, 2);
+                    lua_pop(sc->_lua, 2);
                     T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
                     if (ptr == NULL && nonNull)
                     {
@@ -97,16 +98,16 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                     }
                     return ptr;
                 }
-                lua_pop(ScriptController::__instance->_lua, 1);
+                lua_pop(sc->_lua, 1);
 
                 // Check if it matches any of the derived types' metatables.
-                const std::vector<std::string>& types = ScriptController::__instance->_hierarchy[type];
+                const std::vector<std::string>& types = sc->_hierarchy[type];
                 for (unsigned int i = 0, count = types.size(); i < count; i++)
                 {
-                    luaL_getmetatable(ScriptController::__instance->_lua, types[i].c_str());
-                    if (lua_rawequal(ScriptController::__instance->_lua, -1, -2))
+                    luaL_getmetatable(sc->_lua, types[i].c_str());
+                    if (lua_rawequal(sc->_lua, -1, -2))
                     {
-                        lua_pop(ScriptController::__instance->_lua, 2);
+                        lua_pop(sc->_lua, 2);
                         T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
                         if (ptr == NULL && nonNull)
                         {
@@ -114,10 +115,10 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                         }
                         return ptr;
                     }
-                    lua_pop(ScriptController::__instance->_lua, 1);
+                    lua_pop(sc->_lua, 1);
                 }
             
-                lua_pop(ScriptController::__instance->_lua, 1);
+                lua_pop(sc->_lua, 1);
             }
         }
 

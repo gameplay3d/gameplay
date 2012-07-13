@@ -991,7 +991,7 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
     }
 
-    spriteBatch->begin();
+    spriteBatch->start();
     drawBorder(spriteBatch, clip);
     drawImages(spriteBatch, clip);
     spriteBatch->finish();
