@@ -9,7 +9,6 @@
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
-#include "ScriptController.h"
 #include "AudioListener.h"
 #include "Rectangle.h"
 #include "Vector4.h"
@@ -18,6 +17,8 @@
 
 namespace gameplay
 {
+
+class ScriptController;
 
 /**
  * Defines the basic game initialization, logic and platform delegates.
@@ -217,6 +218,14 @@ public:
      * @return The physics controller for this game.
      */
     inline PhysicsController* getPhysicsController() const;
+
+    /**
+     * Gets the script controller for managing control of Lua scripts
+     * associated with the game.
+     * 
+     * @return The script controller for this game.
+     */
+    inline ScriptController* getScriptController() const;
 
     /**
      * Gets the audio listener for 3D audio.
@@ -435,7 +444,7 @@ protected:
      *
      * This is useful for rendering splash screens.
      */
-    inline void renderOnce(const char* function);
+    void renderOnce(const char* function);
 
     /**
      * Updates the game's internal systems (audio, animation, physics) once.
@@ -504,15 +513,6 @@ private:
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
 
-    /**
-     * Converts the given string to a valid script callback enumeration value
-     * or to ScriptController::INVALID_CALLBACK if there is no valid conversion.
-     * 
-     * @param name The name of the callback.
-     * @return The corresponding callback enumeration value.
-     */
-    static ScriptController::ScriptCallback toCallback(const char* name);
-
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     static double _pausedTimeLast;              // The last time paused.
@@ -531,9 +531,9 @@ private:
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    ScriptController* _scriptController;        // Controls the scripting engine.
-    std::vector<Gamepad*> _gamepads;            // The connected gamepads.
-    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
+    std::vector<Gamepad*>* _gamepads;           // The connected gamepads.
+    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
+    ScriptController* _scriptController;            // Controls the scripting engine.
     std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.

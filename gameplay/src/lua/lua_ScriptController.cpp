@@ -15,11 +15,7 @@ void luaRegister_ScriptController()
         {"loadScript", lua_ScriptController_loadScript},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"getInstance", lua_ScriptController_static_getInstance},
-        {NULL, NULL}
-    };
+    const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
     ScriptUtil::registerClass("ScriptController", lua_members, NULL, NULL, lua_statics, scopePath);
@@ -63,43 +59,6 @@ int lua_ScriptController_loadScript(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_ScriptController_static_getInstance(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 0:
-        {
-            void* returnPtr = (void*)ScriptController::getInstance();
-            if (returnPtr)
-            {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                object->instance = returnPtr;
-                object->owns = false;
-                luaL_getmetatable(state, "ScriptController");
-                lua_setmetatable(state, -2);
-            }
-            else
-            {
-                lua_pushnil(state);
-            }
-
-            return 1;
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

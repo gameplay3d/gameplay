@@ -49,6 +49,11 @@ inline PhysicsController* Game::getPhysicsController() const
     return _physicsController;
 }
 
+inline ScriptController* Game::getScriptController() const
+{
+    return _scriptController;
+}
+
 template <class T>
 void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
 {
@@ -57,11 +62,7 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
-void Game::renderOnce(const char* function)
-{
-    ScriptController::getInstance()->executeFunction<void>(function, NULL);
-    Platform::swapBuffers();
-}
+
 
 inline bool Game::hasMouse()
 {
@@ -110,15 +111,15 @@ inline void Game::displayKeyboard(bool display)
 
 inline unsigned int Game::getGamepadCount() const
 {
-    return _gamepads.size();
+    return _gamepads->size();
 }
 
 inline Gamepad* Game::getGamepad(unsigned int index) const
 {
-    GP_ASSERT(index < _gamepads.size());
+    GP_ASSERT(index < _gamepads->size());
 
-    if (!_gamepads.empty())
-        return _gamepads[index];
+    if (!_gamepads->empty())
+        return _gamepads->at(index);
     else
         return NULL;
 }
