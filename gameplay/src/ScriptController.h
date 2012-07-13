@@ -2,6 +2,7 @@
 #define SCRIPTCONTROLLER_H
 
 #include "Base.h"
+#include "Game.h"
 #include "Gamepad.h"
 
 namespace gameplay
@@ -230,14 +231,7 @@ class ScriptController
     friend class Game;
     friend class Platform;
 
-public:    
-    /**
-     * Gets the global instance of the script controller.
-     * 
-     * @return The global instance of the script controller (NULL if it hasn't yet been created).
-     */
-    static ScriptController* getInstance();
-
+public:
     /**
      * Loads the given script file and executes its global code.
      * 
@@ -278,237 +272,237 @@ public:
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
     /**
-     * Gets the global boolean variable with the given name.
+     * Gets the global boolean script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global boolean variable.
+     * @return The global boolean script variable.
      * @script{ignore}
      */
     bool getBool(const char* name);
 
     /**
-     * Gets the global char variable with the given name.
+     * Gets the global char script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global char variable.
+     * @return The global char script variable.
      * @script{ignore}
      */
     char getChar(const char* name);
 
     /**
-     * Gets the global short variable with the given name.
+     * Gets the global short script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global short variable.
+     * @return The global short script variable.
      * @script{ignore}
      */
     short getShort(const char* name);
 
     /**
-     * Gets the global int variable with the given name.
+     * Gets the global int script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global int variable.
+     * @return The global int script variable.
      * @script{ignore}
      */
     int getInt(const char* name);
 
     /**
-     * Gets the global long variable with the given name.
+     * Gets the global long script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global long variable.
+     * @return The global long script variable.
      * @script{ignore}
      */
     long getLong(const char* name);
 
     /**
-     * Gets the global unsigned char variable with the given name.
+     * Gets the global unsigned char script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global unsigned char variable.
+     * @return The global unsigned char script variable.
      * @script{ignore}
      */
     unsigned char getUnsignedChar(const char* name);
 
     /**
-     * Gets the global unsigned short variable with the given name.
+     * Gets the global unsigned short script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global unsigned short variable.
+     * @return The global unsigned short script variable.
      * @script{ignore}
      */
     unsigned short getUnsignedShort(const char* name);
 
     /**
-     * Gets the global unsigned int variable with the given name.
+     * Gets the global unsigned int script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global unsigned int variable.
+     * @return The global unsigned int script variable.
      * @script{ignore}
      */
     unsigned int getUnsignedInt(const char* name);
 
     /**
-     * Gets the global unsigned long variable with the given name.
+     * Gets the global unsigned long script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global unsigned long variable.
+     * @return The global unsigned long script variable.
      * @script{ignore}
      */
     unsigned long getUnsignedLong(const char* name);
 
     /**
-     * Gets the global float variable with the given name.
+     * Gets the global float script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global float variable.
+     * @return The global float script variable.
      * @script{ignore}
      */
     float getFloat(const char* name);
 
     /**
-     * Gets the global double variable with the given name.
+     * Gets the global double script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global double variable.
+     * @return The global double script variable.
      * @script{ignore}
      */
     double getDouble(const char* name);
 
     /**
-     * Gets the global string variable with the given name.
+     * Gets the global string script variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global string variable.
+     * @return The global string script variable.
      * @script{ignore}
      */
     const char* getString(const char* name);
 
     /**
-     * Gets the global pointer variable of the given type with the given name.
+     * Gets the global pointer script variable of the given type with the given name.
      * 
      * @param type The type of the variable in Lua.
      * @param name The name of the variable.
-     * @return The global pointer variable.
+     * @return The global pointer script variable.
      * @script{ignore}
      */
     template<typename T>T* getObjectPointer(const char* type, const char* name);
 
     /**
-     * Sets the global boolean variable with the given name.
+     * Sets the global boolean script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The boolean variable.
+     * @param name The name of the script variable.
+     * @param v The boolean value.
      * @script{ignore}
      */
     void setBool(const char* name, bool v);
 
     /**
-     * Sets the global char variable with the given name.
+     * Sets the global char script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The char variable.
+     * @param name The name of the script variable.
+     * @param v The char value.
      * @script{ignore}
      */
     void setChar(const char* name, char v);
 
     /**
-     * Sets the global short variable with the given name.
+     * Sets the global short script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The short variable.
+     * @param name The name of the script variable.
+     * @param v The short value.
      * @script{ignore}
      */
     void setShort(const char* name, short v);
 
     /**
-     * Sets the global int variable with the given name.
+     * Sets the global int script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The int variable.
+     * @param name The name of the script variable.
+     * @param v The int value.
      * @script{ignore}
      */
     void setInt(const char* name, int v);
 
     /**
-     * Sets the global long variable with the given name.
+     * Sets the global long script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The long variable.
+     * @param name The name of the script variable.
+     * @param v The long value.
      * @script{ignore}
      */
     void setLong(const char* name, long v);
 
     /**
-     * Gets the global unsigned char variable with the given name.
+     * Gets the global unsigned char script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The unsigned char variable.
+     * @param name The name of the script variable.
+     * @param v The unsigned char value.
      * @script{ignore}
      */
     void setUnsignedChar(const char* name, unsigned char v);
 
     /**
-     * Sets the global unsigned short variable with the given name.
+     * Sets the global unsigned short script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The unsigned short variable.
+     * @param name The name of the script variable.
+     * @param v The unsigned short value.
      * @script{ignore}
      */
     void setUnsignedShort(const char* name, unsigned short v);
 
     /**
-     * Sets the global unsigned int variable with the given name.
+     * Sets the global unsigned int script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The unsigned int variable.
+     * @param name The name of the script variable.
+     * @param v The unsigned int value.
      * @script{ignore}
      */
     void setUnsignedInt(const char* name, unsigned int v);
 
     /**
-     * Sets the global unsigned long variable with the given name.
+     * Sets the global unsigned long script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The unsigned long variable.
+     * @param name The name of the script variable.
+     * @param v The unsigned long value.
      * @script{ignore}
      */
     void setUnsignedLong(const char* name, unsigned long v);
 
     /**
-     * Sets the global float variable with the given name.
+     * Sets the global float script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The float variable.
+     * @param name The name of the script variable.
+     * @param v The float value.
      * @script{ignore}
      */
     void setFloat(const char* name, float v);
 
     /**
-     * Sets the global double variable with the given name.
+     * Sets the global double script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The double variable.
+     * @param name The name of the script variable.
+     * @param v The double value.
      * @script{ignore}
      */
     void setDouble(const char* name, double v);
 
     /**
-     * Sets the global string variable with the given name.
+     * Sets the global string script variable with the given name to the given value.
      * 
-     * @param name The name of the variable.
-     * @param v The string variable.
+     * @param name The name of the script variable.
+     * @param v The string value.
      * @script{ignore}
      */
     void setString(const char* name, const char* v);
 
     /**
-     * Sets the global pointer variable of the given type with the given name.
+     * Sets the global pointer script variable of the given type with the given name to the given value.
      * 
-     * @param type The type of the variable in Lua.
+     * @param type The type of the script variable.
      * @param name The name of the variable.
-     * @param v The pointer variable.
+     * @param v The pointer value.
      * @script{ignore}
      */
     template<typename T>void setObjectPointer(const char* type, const char* name, T* v);
@@ -658,6 +652,15 @@ private:
      */
     void registerCallback(ScriptCallback callback, std::string function);
 
+    /**
+     * Converts the given string to a valid script callback enumeration value
+     * or to ScriptController::INVALID_CALLBACK if there is no valid conversion.
+     * 
+     * @param name The name of the callback.
+     * @return The corresponding callback enumeration value.
+     */
+    static ScriptController::ScriptCallback toCallback(const char* name);
+
     // Friend functions (used by Lua script bindings).
     friend void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions);
     friend void ScriptUtil::registerConstantBool(std::string name, bool value, std::vector<std::string> scopePath);
@@ -683,7 +686,6 @@ private:
     lua_State* _lua;
     unsigned int _returnCount;
     std::map<std::string, std::vector<std::string> > _hierarchy;
-    static ScriptController* __instance;
     std::string* _callbacks[CALLBACK_COUNT];
 };
 
