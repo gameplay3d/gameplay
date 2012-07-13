@@ -20,29 +20,43 @@ public:
     ScreenDisplayer();
 
     /**
-     * Displays a screen using the {@link Game#renderOnce} mechanism for at least the given amount of time.
+     * Destructor.
+     */
+    ~ScreenDisplayer();
+
+    /**
+     * Displays a screen using the Game::renderOnce() mechanism for at least the given amount of time.
      * 
-     * @param instance See {@link Game#renderOnce}.
-     * @param method See {@link Game#renderOnce}.
-     * @param cookie See {@link Game#renderOnce}.
+     * @param instance See Game::renderOnce().
+     * @param method See Game::renderOnce().
+     * @param cookie See Game::renderOnce().
      * @param time The minimum amount of time to display the screen (in milliseconds).
      */
     template <typename T> void run(T* instance, void (T::*method) (void*), void* cookie, unsigned long time);
 
     /**
-     * Destructor.
+     * Starts a new screen displayer running; draws a screen using the {@link Game::renderOnce} mechanism for at least the given amount of time.
+     * 
+     * Note: this is intended for use from Lua scripts.
+     * 
+     * @param function See {@link Game::renderOnce(const char*)}.
+     * @param time The minimum amount of time to display the screen (in milliseconds).
      */
-    ~ScreenDisplayer();
+    static void start(const char* function, unsigned long time);
+
+    /**
+     * Finishes running the current screen displayer.
+     * 
+     * Note: this is intended for use from Lua scripts.
+     */
+    static void finish();
 
 private:
 
     long _time;
     double _startTime;
+    static ScreenDisplayer* __scriptInstance;
 };
-
-inline ScreenDisplayer::ScreenDisplayer() : _time(0L), _startTime(0)
-{
-}
 
 template <typename T> void ScreenDisplayer::run(T* instance, void (T::*method) (void*), void* cookie, unsigned long time)
 {
@@ -51,22 +65,15 @@ template <typename T> void ScreenDisplayer::run(T* instance, void (T::*method) (
     _startTime = Game::getInstance()->getGameTime();
 }
 
-inline ScreenDisplayer::~ScreenDisplayer()
-{
-    long elapsedTime = (long)(Game::getInstance()->getGameTime() - _startTime);
-    if (elapsedTime < _time)
-        Platform::sleep(_time - elapsedTime);
-}
-
 /**
- * Displays a screen using the {@link Game#renderOnce} mechanism for at least the given amount
+ * Displays a screen using the {@link gameplay::Game::renderOnce} mechanism for at least the given amount
  * of time. This function is intended to be called at the beginning of a block of code that is be 
  * executed while the screen is displayed (i.e. Game#initialize). This function will block 
  * at the end of the block of code in which it is called for the amount of time that has not yet elapsed.
  * 
- * @param instance See {@link Game#renderOnce}.
- * @param method See {@link Game#renderOnce}.
- * @param cookie See {@link Game#renderOnce}.
+ * @param instance See {@link gameplay::Game::renderOnce}.
+ * @param method See {@link gameplay::Game::renderOnce}.
+ * @param cookie See {@link gameplay::Game::renderOnce}.
  * @param time The minimum amount of time to display the screen (in milliseconds).
  */
 #define displayScreen(instance, method, cookie, time) \

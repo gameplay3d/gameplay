@@ -6,7 +6,6 @@
 #include "Light.h"
 #include "Model.h"
 #include "Form.h"
-#include "AudioSource.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCollisionObject.h"
@@ -17,6 +16,7 @@
 namespace gameplay
 {
 
+class AudioSource;
 class Bundle;
 class Scene;
 class Form;
@@ -174,6 +174,7 @@ public:
      *
      * @return The user pointer for this node.
      * @see setUserPointer(void*)
+     * @script{ignore}
      */
     void* getUserPointer() const;
 
@@ -195,6 +196,7 @@ public:
      *      Node is being destroyed (or when the user pointer changes),
      *      to allow the user to cleanup any memory associated with the
      *      user pointer.
+     * @script{ignore}
      */
     void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
 
@@ -231,6 +233,7 @@ public:
      *        or false if nodes that start with the given ID are returned.
      * 
      * @return The number of matches found.
+     * @script{ignore}
      */
     unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true) const;
 

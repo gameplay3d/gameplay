@@ -356,6 +356,11 @@ void ParticleEmitter::setEllipsoid(bool ellipsoid)
     _ellipsoid = ellipsoid;
 }
 
+bool ParticleEmitter::isEllipsoid() const
+{
+    return _ellipsoid;
+}
+
 void ParticleEmitter::setSize(float startMin, float startMax, float endMin, float endMax)
 {
     _sizeStartMin = startMin;
@@ -929,7 +934,7 @@ void ParticleEmitter::draw()
         }
 
         // Begin sprite batch drawing
-        _spriteBatch->begin();
+        _spriteBatch->start();
 
         // 2D Rotation.
         static const Vector2 pivot(0.5f, 0.5f);
@@ -956,7 +961,7 @@ void ParticleEmitter::draw()
         }
 
         // Render.
-        _spriteBatch->end();
+        _spriteBatch->finish();
     }
 }
 

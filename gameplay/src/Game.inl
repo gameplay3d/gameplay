@@ -49,6 +49,10 @@ inline PhysicsController* Game::getPhysicsController() const
     return _physicsController;
 }
 
+inline ScriptController* Game::getScriptController() const
+{
+    return _scriptController;
+}
 inline AIController* Game::getAIController() const
 {
     return _aiController;
@@ -61,6 +65,8 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     (instance->*method)(cookie);
     Platform::swapBuffers();
 }
+
+
 
 inline bool Game::hasMouse()
 {
@@ -109,15 +115,15 @@ inline void Game::displayKeyboard(bool display)
 
 inline unsigned int Game::getGamepadCount() const
 {
-    return _gamepads.size();
+    return _gamepads->size();
 }
 
 inline Gamepad* Game::getGamepad(unsigned int index) const
 {
-    GP_ASSERT(index < _gamepads.size());
+    GP_ASSERT(index < _gamepads->size());
 
-    if (!_gamepads.empty())
-        return _gamepads[index];
+    if (!_gamepads->empty())
+        return _gamepads->at(index);
     else
         return NULL;
 }

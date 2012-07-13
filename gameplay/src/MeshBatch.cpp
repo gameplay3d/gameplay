@@ -114,7 +114,7 @@ bool MeshBatch::resize(unsigned int capacity)
     // (we only know how many indices will be stored). Assume the worst case
     // for now, which is the same number of vertices as indices.
     unsigned int indexCapacity = vertexCapacity;
-    if (indexCapacity > USHRT_MAX)
+    if (_indexed && indexCapacity > USHRT_MAX)
     {
         GP_ERROR("Index capacity is greater than the maximum unsigned short value (%d > %d).", indexCapacity, USHRT_MAX);
         return false;
@@ -156,7 +156,7 @@ bool MeshBatch::resize(unsigned int capacity)
     return true;
 }
     
-void MeshBatch::begin()
+void MeshBatch::start()
 {
     _vertexCount = 0;
     _indexCount = 0;
@@ -164,7 +164,7 @@ void MeshBatch::begin()
     _indicesPtr = _indices;
 }
 
-void MeshBatch::end()
+void MeshBatch::finish()
 {
 }
 
