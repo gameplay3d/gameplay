@@ -52,7 +52,6 @@ string Generator::getUniqueNameFromRef(string refId)
 vector<string> Generator::getScopePath(string classname, string ns)
 {
     size_t i = classname.find("::");
-    int index = 0;
     vector<string> scopePath;
     while (i != classname.npos)
     {
@@ -201,8 +200,7 @@ void Generator::run(string inDir, string outDir)
             cout << "Parsing namespace " << name << "...\n";
             getNamespace(node, name);
         }
-        else if ((kind && strcmp(kind, "class") == 0 || strcmp(kind, "struct") == 0) &&
-            strcmp(node->Attribute("prot"), "public") == 0)
+        else if ( (kind && (strcmp(kind, "class") == 0 || strcmp(kind, "struct") == 0) ) && strcmp(node->Attribute("prot"), "public") == 0)
         {
             string name = getCompoundName(node);
             cout << "Parsing class/struct " << name << "...\n";
@@ -1326,14 +1324,16 @@ void Generator::resolveTypes()
 void Generator::generateBindings()
 {
     string* bindingNS = new string("gameplay");
-
-    ofstream luaAllH(_outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".h"));
+    
+    string luaAllHStr = _outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".h");
+    ofstream luaAllH(luaAllHStr.c_str());
     string includeGuard = string(LUA_ALL_BINDINGS_FILENAME) + string("_H_");
     transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
     luaAllH << "#ifndef " << includeGuard << "\n";
     luaAllH << "#define " << includeGuard << "\n\n";
     
-    ofstream luaAllCpp(_outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".cpp"));
+    string luaAllCppStr = _outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".cpp");
+    ofstream luaAllCpp(luaAllCppStr.c_str());
     luaAllCpp << "#include \"Base.h\"\n";
     luaAllCpp << "#include \"" << string(LUA_ALL_BINDINGS_FILENAME) << ".h\"\n\n";
     if (bindingNS)
@@ -1373,7 +1373,8 @@ void Generator::generateBindings()
         for (map<string, EnumBinding>::iterator iter = _enums.begin(); iter != _enums.end(); iter++)
         {
             // Header.
-            ofstream enumH(_outDir + string("lua_") + getUniqueName(iter->first) + string(".h"));
+            string enumHStr = _outDir + string("lua_") + getUniqueName(iter->first) + string(".h");
+            ofstream enumH(enumHStr.c_str());
             includeGuard = string("lua_") + getUniqueName(iter->first) + string("_H_");
             transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
             enumH << "#ifndef " << includeGuard << "\n";
@@ -1399,7 +1400,8 @@ void Generator::generateBindings()
             enumH.close();
 
             // Implementation.
-            ofstream enumCpp(_outDir + string("lua_") + getUniqueName(iter->first) + string(".cpp"));
+            string enumCppStr = _outDir + string("lua_") + getUniqueName(iter->first) + string(".cpp"); 
+            ofstream enumCpp(enumCppStr.c_str());
             enumCpp << "#include \"Base.h\"\n";
             enumCpp << "#include \"lua_" << getUniqueName(iter->first) << ".h\"\n\n";
 
@@ -1492,7 +1494,7 @@ void Generator::generateBindings()
         // Write out the header file.
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".h");
-            ofstream global(path);
+            ofstream global(path.c_str());
             if (!global)
             {
                 GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
@@ -1548,7 +1550,7 @@ void Generator::generateBindings()
         // Write out the implementation.
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".cpp");
-            ofstream global(path);
+            ofstream global(path.c_str());
             if (!global)
             {
                 GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
@@ -1823,9 +1825,7 @@ static bool getFileList(string directory, vector<string>& files, bool (*isWanted
                 string filename = dp->d_name;
                 if (isWantedFile(filename))
                 {
-                    if (includePath)
-                        filename = string(directory) + filename;
-
+                    filename = string(directory) + string("/") + filename;
                     files.push_back(filename);
                 }
             }

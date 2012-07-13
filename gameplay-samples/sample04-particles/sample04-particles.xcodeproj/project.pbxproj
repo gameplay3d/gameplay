@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
+		42B7026615B0A902002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7026515B0A902002BB8C3 /* liblua.a */; };
+		42B7027215B0B219002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7027115B0B219002BB8C3 /* game.config */; };
+		42B7027315B0B219002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7027115B0B219002BB8C3 /* game.config */; };
 		42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C932C01491A0DB0098216A /* Cocoa.framework */; };
 		42C932EE1491A4CB0098216A /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		42C932F11491A5160098216A /* ParticlesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* ParticlesGame.cpp */; };
@@ -43,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		42B7026515B0A902002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
+		42B7027115B0B219002BB8C3 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932BC1491A0DB0098216A /* sample04-particles-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample04-particles-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -87,6 +92,7 @@
 				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
 				42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */,
 				42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */,
+				42B7026615B0A902002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +126,7 @@
 				5B61611214CCC2200073B857 /* sample04-particles-macosx.plist */,
 				5B61612E14CCC24D0073B857 /* sample04-particles-ios.plist */,
 				42C932ED1491A4CB0098216A /* icon.png */,
+				42B7027115B0B219002BB8C3 /* game.config */,
 				42C932F21491A53E0098216A /* res */,
 				42C932C61491A0DB0098216A /* src */,
 				42C932DD1491A1050098216A /* Libraries */,
@@ -160,6 +167,7 @@
 			children = (
 				42438B521491AD2000D218B8 /* libgameplay.a */,
 				42C933201491A6C70098216A /* libbullet.a */,
+				42B7026515B0A902002BB8C3 /* liblua.a */,
 				42C933221491A6E50098216A /* libogg.a */,
 				42C933231491A6E50098216A /* libvorbis.a */,
 				42C933241491A6E50098216A /* libvorbisenc.a */,
@@ -265,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42C932EE1491A4CB0098216A /* icon.png in Resources */,
+				42B7027215B0B219002BB8C3 /* game.config in Resources */,
 				42C932F31491A53E0098216A /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B61612614CCC24C0073B857 /* icon.png in Resources */,
+				42B7027315B0B219002BB8C3 /* game.config in Resources */,
 				5B61612714CCC24C0073B857 /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,17 +400,20 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					"../..//gameplay/src",
-					"../..//external-deps/libpng/include",
-					"../..//external-deps/bullet/include",
-					"../..//external-deps/oggvorbis/include",
+					../../gameplay/src,
+					"../../external-deps/lua/include",
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../..//external-deps/libpng/lib/macosx\"",
-					"\"../..//external-deps/bullet/lib/macosx\"",
-					"\"../..//external-deps/oggvorbis/lib/macosx\"",
+					"\"../../external-deps/lua/lib/macosx\"",
+					"\"../../external-deps/libpng/lib/macosx\"",
+					"\"../../external-deps/bullet/lib/macosx\"",
+					"\"../../external-deps/oggvorbis/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 				);
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
@@ -415,17 +428,20 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					"../..//gameplay/src",
-					"../..//external-deps/libpng/include",
-					"../..//external-deps/bullet/include",
-					"../..//external-deps/oggvorbis/include",
+					../../gameplay/src,
+					"../../external-deps/lua/include",
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample04-particles-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../..//external-deps/libpng/lib/macosx\"",
-					"\"../..//external-deps/bullet/lib/macosx\"",
-					"\"../..//external-deps/oggvorbis/lib/macosx\"",
+					"\"../../external-deps/lua/lib/macosx\"",
+					"\"../../external-deps/libpng/lib/macosx\"",
+					"\"../../external-deps/bullet/lib/macosx\"",
+					"\"../../external-deps/oggvorbis/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 				);
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
@@ -440,18 +456,20 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					"../..//gameplay/src",
-					"../..//external-deps/libpng/include",
-					"../..//external-deps/bullet/include",
-					"../..//external-deps/oggvorbis/include",
+					../../gameplay/src,
+					"../../external-deps/lua/include",
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample04-particles-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../..//external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
-					"\"../..//external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
-					"\"../..//external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -469,18 +487,20 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					"../..//gameplay/src",
-					"../..//external-deps/libpng/include",
-					"../..//external-deps/bullet/include",
-					"../..//external-deps/oggvorbis/include",
+					../../gameplay/src,
+					"../../external-deps/lua/include",
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample04-particles-ios.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../..//external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
-					"\"../..//external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
-					"\"../..//external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
