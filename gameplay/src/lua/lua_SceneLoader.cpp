@@ -12,8 +12,6 @@ namespace gameplay
 
 void luaRegister_SceneLoader()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {NULL, NULL}
@@ -21,14 +19,14 @@ void luaRegister_SceneLoader()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("SceneLoader", lua_members, lua_SceneLoader__init, lua_SceneLoader__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("SceneLoader", lua_members, lua_SceneLoader__init, lua_SceneLoader__gc, lua_statics, scopePath);
 }
 
 static SceneLoader* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "SceneLoader");
     luaL_argcheck(state, userdata != NULL, 1, "'SceneLoader' expected.");
-    return (SceneLoader*)((ScriptController::LuaObject*)userdata)->instance;
+    return (SceneLoader*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_SceneLoader__gc(lua_State* state)
@@ -45,7 +43,7 @@ int lua_SceneLoader__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "SceneLoader");
                 luaL_argcheck(state, userdata != NULL, 1, "'SceneLoader' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     SceneLoader* instance = (SceneLoader*)object->instance;
@@ -84,7 +82,7 @@ int lua_SceneLoader__init(lua_State* state)
             void* returnPtr = (void*)new SceneLoader();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "SceneLoader");

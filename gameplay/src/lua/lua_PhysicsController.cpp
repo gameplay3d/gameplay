@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_PhysicsController()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addStatusListener", lua_PhysicsController_addStatusListener},
@@ -37,14 +35,14 @@ void luaRegister_PhysicsController()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("PhysicsController", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsController", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static PhysicsController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsController");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsController' expected.");
-    return (PhysicsController*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsController*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsController_addStatusListener(lua_State* state)
@@ -61,7 +59,7 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsController::Listener* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
+                PhysicsController::Listener* param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
 
                 PhysicsController* instance = getInstance(state);
                 instance->addStatusListener(param1);
@@ -72,7 +70,7 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 PhysicsController* instance = getInstance(state);
                 instance->addStatusListener(param1);
@@ -110,13 +108,13 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createFixedConstraint(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsFixedConstraint");
@@ -143,16 +141,16 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                PhysicsRigidBody* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createFixedConstraint(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsFixedConstraint");
@@ -196,13 +194,13 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createGenericConstraint(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -229,16 +227,16 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                PhysicsRigidBody* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createGenericConstraint(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -266,19 +264,19 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -307,22 +305,22 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -352,25 +350,25 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 // Get parameter 5 off the stack.
-                Quaternion* param5 = ScriptController::getInstance()->getObjectPointer<Quaternion>(6, "Quaternion", true);
+                Quaternion* param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -401,28 +399,28 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 // Get parameter 5 off the stack.
-                Quaternion* param5 = ScriptController::getInstance()->getObjectPointer<Quaternion>(6, "Quaternion", true);
+                Quaternion* param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
 
                 // Get parameter 6 off the stack.
-                Vector3* param6 = ScriptController::getInstance()->getObjectPointer<Vector3>(7, "Vector3", true);
+                Vector3* param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5, *param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -468,19 +466,19 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -509,22 +507,22 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -554,25 +552,25 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 // Get parameter 5 off the stack.
-                Quaternion* param5 = ScriptController::getInstance()->getObjectPointer<Quaternion>(6, "Quaternion", true);
+                Quaternion* param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4, *param5);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -603,28 +601,28 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 // Get parameter 5 off the stack.
-                Quaternion* param5 = ScriptController::getInstance()->getObjectPointer<Quaternion>(6, "Quaternion", true);
+                Quaternion* param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
 
                 // Get parameter 6 off the stack.
-                Vector3* param6 = ScriptController::getInstance()->getObjectPointer<Vector3>(7, "Vector3", true);
+                Vector3* param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4, *param5, *param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -668,13 +666,13 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSocketConstraint(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -701,16 +699,16 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                PhysicsRigidBody* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSocketConstraint(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -728,16 +726,16 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -765,19 +763,19 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                PhysicsRigidBody* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -806,22 +804,22 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                PhysicsRigidBody* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptController::getInstance()->getObjectPointer<Vector3>(5, "Vector3", true);
+                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3, *param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -866,16 +864,16 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                PhysicsRigidBody* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSpringConstraint(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSpringConstraint");
@@ -906,28 +904,28 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
                 (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsRigidBody* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                PhysicsRigidBody* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                PhysicsRigidBody* param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
 
                 // Get parameter 5 off the stack.
-                Quaternion* param5 = ScriptController::getInstance()->getObjectPointer<Quaternion>(6, "Quaternion", true);
+                Quaternion* param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
 
                 // Get parameter 6 off the stack.
-                Vector3* param6 = ScriptController::getInstance()->getObjectPointer<Vector3>(7, "Vector3", true);
+                Vector3* param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createSpringConstraint(param1, *param2, *param3, param4, *param5, *param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsSpringConstraint");
@@ -971,7 +969,7 @@ int lua_PhysicsController_drawDebug(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 PhysicsController* instance = getInstance(state);
                 instance->drawDebug(*param1);
@@ -1011,7 +1009,7 @@ int lua_PhysicsController_getGravity(lua_State* state)
                 void* returnPtr = (void*)&(instance->getGravity());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -1056,7 +1054,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(2, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -1084,13 +1082,13 @@ int lua_PhysicsController_rayTest(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(2, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                PhysicsController::HitResult* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                PhysicsController::HitResult* param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->rayTest(*param1, param2, param3);
@@ -1116,16 +1114,16 @@ int lua_PhysicsController_rayTest(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(2, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                PhysicsController::HitResult* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                PhysicsController::HitResult* param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
 
                 // Get parameter 4 off the stack.
-                PhysicsController::HitFilter* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false);
+                PhysicsController::HitFilter* param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false);
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->rayTest(*param1, param2, param3, param4);
@@ -1166,7 +1164,7 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsController::Listener* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
+                PhysicsController::Listener* param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
 
                 PhysicsController* instance = getInstance(state);
                 instance->removeStatusListener(param1);
@@ -1177,7 +1175,7 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 PhysicsController* instance = getInstance(state);
                 instance->removeStatusListener(param1);
@@ -1215,7 +1213,7 @@ int lua_PhysicsController_setGravity(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 instance->setGravity(*param1);
@@ -1254,10 +1252,10 @@ int lua_PhysicsController_sweepTest(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->sweepTest(param1, *param2);
@@ -1282,13 +1280,13 @@ int lua_PhysicsController_sweepTest(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                PhysicsController::HitResult* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                PhysicsController::HitResult* param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->sweepTest(param1, *param2, param3);
@@ -1314,16 +1312,16 @@ int lua_PhysicsController_sweepTest(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                PhysicsController::HitResult* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                PhysicsController::HitResult* param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
 
                 // Get parameter 4 off the stack.
-                PhysicsController::HitFilter* param4 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false);
+                PhysicsController::HitFilter* param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false);
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->sweepTest(param1, *param2, param3, param4);

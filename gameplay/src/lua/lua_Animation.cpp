@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_Animation()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Animation_addRef},
@@ -38,14 +36,14 @@ void luaRegister_Animation()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Animation", lua_members, NULL, lua_Animation__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Animation", lua_members, NULL, lua_Animation__gc, lua_statics, scopePath);
 }
 
 static Animation* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Animation");
     luaL_argcheck(state, userdata != NULL, 1, "'Animation' expected.");
-    return (Animation*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Animation*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Animation__gc(lua_State* state)
@@ -62,7 +60,7 @@ int lua_Animation__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Animation");
                 luaL_argcheck(state, userdata != NULL, 1, "'Animation' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Animation* instance = (Animation*)object->instance;
@@ -138,7 +136,7 @@ int lua_Animation_createClip(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
@@ -150,7 +148,7 @@ int lua_Animation_createClip(lua_State* state)
                 void* returnPtr = (void*)instance->createClip(param1, param2, param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AnimationClip");
@@ -194,7 +192,7 @@ int lua_Animation_createClips(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->createClips(param1);
@@ -234,7 +232,7 @@ int lua_Animation_getClip(lua_State* state)
                 void* returnPtr = (void*)instance->getClip();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AnimationClip");
@@ -260,13 +258,13 @@ int lua_Animation_getClip(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getClip(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AnimationClip");
@@ -289,7 +287,7 @@ int lua_Animation_getClip(lua_State* state)
                 void* returnPtr = (void*)instance->getClip(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AnimationClip");
@@ -497,7 +495,7 @@ int lua_Animation_pause(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->pause(param1);
@@ -551,7 +549,7 @@ int lua_Animation_play(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->play(param1);
@@ -639,7 +637,7 @@ int lua_Animation_stop(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->stop(param1);
@@ -677,7 +675,7 @@ int lua_Animation_targets(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AnimationTarget* param1 = ScriptController::getInstance()->getObjectPointer<AnimationTarget>(2, "AnimationTarget", false);
+                AnimationTarget* param1 = ScriptUtil::getObjectPointer<AnimationTarget>(2, "AnimationTarget", false);
 
                 Animation* instance = getInstance(state);
                 bool result = instance->targets(param1);

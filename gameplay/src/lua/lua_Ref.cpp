@@ -10,8 +10,6 @@ namespace gameplay
 
 void luaRegister_Ref()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Ref_addRef},
@@ -22,14 +20,14 @@ void luaRegister_Ref()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Ref", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("Ref", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static Ref* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Ref");
     luaL_argcheck(state, userdata != NULL, 1, "'Ref' expected.");
-    return (Ref*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Ref*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Ref_addRef(lua_State* state)

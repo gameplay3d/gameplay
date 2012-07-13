@@ -15,8 +15,6 @@ namespace gameplay
 
 void luaRegister_FontGlyph()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"code", lua_FontGlyph_code},
@@ -28,14 +26,14 @@ void luaRegister_FontGlyph()
     std::vector<std::string> scopePath;
     scopePath.push_back("Font");
 
-    sc->registerClass("FontGlyph", lua_members, lua_FontGlyph__init, lua_FontGlyph__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("FontGlyph", lua_members, lua_FontGlyph__init, lua_FontGlyph__gc, lua_statics, scopePath);
 }
 
 static Font::Glyph* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "FontGlyph");
     luaL_argcheck(state, userdata != NULL, 1, "'FontGlyph' expected.");
-    return (Font::Glyph*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Font::Glyph*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_FontGlyph__gc(lua_State* state)
@@ -52,7 +50,7 @@ int lua_FontGlyph__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "FontGlyph");
                 luaL_argcheck(state, userdata != NULL, 1, "'FontGlyph' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Font::Glyph* instance = (Font::Glyph*)object->instance;
@@ -91,7 +89,7 @@ int lua_FontGlyph__init(lua_State* state)
             void* returnPtr = (void*)new Font::Glyph();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "FontGlyph");
@@ -157,7 +155,7 @@ int lua_FontGlyph_uvs(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        float* param2 = ScriptController::getInstance()->getFloatPointer(2);
+        float* param2 = ScriptUtil::getFloatPointer(2);
 
         memcpy(instance->uvs, param2, sizeof(float) * 4);
         return 0;

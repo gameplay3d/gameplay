@@ -11,8 +11,6 @@ namespace gameplay
 
 void luaRegister_AnimationController()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"stopAllAnimations", lua_AnimationController_stopAllAnimations},
@@ -21,14 +19,14 @@ void luaRegister_AnimationController()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("AnimationController", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("AnimationController", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AnimationController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationController");
     luaL_argcheck(state, userdata != NULL, 1, "'AnimationController' expected.");
-    return (AnimationController*)((ScriptController::LuaObject*)userdata)->instance;
+    return (AnimationController*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AnimationController_stopAllAnimations(lua_State* state)

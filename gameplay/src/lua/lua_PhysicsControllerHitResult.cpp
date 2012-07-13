@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_PhysicsControllerHitResult()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"fraction", lua_PhysicsControllerHitResult_fraction},
@@ -30,14 +28,14 @@ void luaRegister_PhysicsControllerHitResult()
     std::vector<std::string> scopePath;
     scopePath.push_back("PhysicsController");
 
-    sc->registerClass("PhysicsControllerHitResult", lua_members, lua_PhysicsControllerHitResult__init, lua_PhysicsControllerHitResult__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsControllerHitResult", lua_members, lua_PhysicsControllerHitResult__init, lua_PhysicsControllerHitResult__gc, lua_statics, scopePath);
 }
 
 static PhysicsController::HitResult* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitResult");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerHitResult' expected.");
-    return (PhysicsController::HitResult*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsController::HitResult*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsControllerHitResult__gc(lua_State* state)
@@ -54,7 +52,7 @@ int lua_PhysicsControllerHitResult__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitResult");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerHitResult' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     PhysicsController::HitResult* instance = (PhysicsController::HitResult*)object->instance;
@@ -93,7 +91,7 @@ int lua_PhysicsControllerHitResult__init(lua_State* state)
             void* returnPtr = (void*)new PhysicsController::HitResult();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "PhysicsControllerHitResult");
@@ -159,7 +157,7 @@ int lua_PhysicsControllerHitResult_normal(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+        Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->normal = *param2;
         return 0;
@@ -169,7 +167,7 @@ int lua_PhysicsControllerHitResult_normal(lua_State* state)
         void* returnPtr = (void*)new Vector3(instance->normal);
         if (returnPtr)
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
             object->instance = returnPtr;
             object->owns = true;
             luaL_getmetatable(state, "Vector3");
@@ -197,7 +195,7 @@ int lua_PhysicsControllerHitResult_object(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+        PhysicsCollisionObject* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
         instance->object = param2;
         return 0;
@@ -207,7 +205,7 @@ int lua_PhysicsControllerHitResult_object(lua_State* state)
         void* returnPtr = (void*)instance->object;
         if (returnPtr)
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
             object->instance = returnPtr;
             object->owns = false;
             luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -235,7 +233,7 @@ int lua_PhysicsControllerHitResult_point(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+        Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->point = *param2;
         return 0;
@@ -245,7 +243,7 @@ int lua_PhysicsControllerHitResult_point(lua_State* state)
         void* returnPtr = (void*)new Vector3(instance->point);
         if (returnPtr)
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
             object->instance = returnPtr;
             object->owns = true;
             luaL_getmetatable(state, "Vector3");
