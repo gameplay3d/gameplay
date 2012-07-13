@@ -8,8 +8,6 @@ namespace gameplay
 
 void luaRegister_MathUtil()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {NULL, NULL}
@@ -17,14 +15,14 @@ void luaRegister_MathUtil()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("MathUtil", lua_members, NULL, lua_MathUtil__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("MathUtil", lua_members, NULL, lua_MathUtil__gc, lua_statics, scopePath);
 }
 
 static MathUtil* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MathUtil");
     luaL_argcheck(state, userdata != NULL, 1, "'MathUtil' expected.");
-    return (MathUtil*)((ScriptController::LuaObject*)userdata)->instance;
+    return (MathUtil*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MathUtil__gc(lua_State* state)
@@ -41,7 +39,7 @@ int lua_MathUtil__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "MathUtil");
                 luaL_argcheck(state, userdata != NULL, 1, "'MathUtil' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     MathUtil* instance = (MathUtil*)object->instance;

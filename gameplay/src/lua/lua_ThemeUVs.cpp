@@ -12,8 +12,6 @@ namespace gameplay
 
 void luaRegister_ThemeUVs()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"u1", lua_ThemeUVs_u1},
@@ -30,14 +28,14 @@ void luaRegister_ThemeUVs()
     std::vector<std::string> scopePath;
     scopePath.push_back("Theme");
 
-    sc->registerClass("ThemeUVs", lua_members, lua_ThemeUVs__init, lua_ThemeUVs__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("ThemeUVs", lua_members, lua_ThemeUVs__init, lua_ThemeUVs__gc, lua_statics, scopePath);
 }
 
 static Theme::UVs* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ThemeUVs");
     luaL_argcheck(state, userdata != NULL, 1, "'ThemeUVs' expected.");
-    return (Theme::UVs*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Theme::UVs*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_ThemeUVs__gc(lua_State* state)
@@ -54,7 +52,7 @@ int lua_ThemeUVs__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "ThemeUVs");
                 luaL_argcheck(state, userdata != NULL, 1, "'ThemeUVs' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Theme::UVs* instance = (Theme::UVs*)object->instance;
@@ -93,7 +91,7 @@ int lua_ThemeUVs__init(lua_State* state)
             void* returnPtr = (void*)new Theme::UVs();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "ThemeUVs");
@@ -129,7 +127,7 @@ int lua_ThemeUVs__init(lua_State* state)
                 void* returnPtr = (void*)new Theme::UVs(param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "ThemeUVs");
@@ -172,7 +170,7 @@ int lua_ThemeUVs_static_empty(lua_State* state)
             void* returnPtr = (void*)&(Theme::UVs::empty());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "ThemeUVs");

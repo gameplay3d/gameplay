@@ -13,8 +13,6 @@ namespace gameplay
 
 void luaRegister_Image()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Image_addRef},
@@ -32,14 +30,14 @@ void luaRegister_Image()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Image", lua_members, NULL, lua_Image__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Image", lua_members, NULL, lua_Image__gc, lua_statics, scopePath);
 }
 
 static Image* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Image");
     luaL_argcheck(state, userdata != NULL, 1, "'Image' expected.");
-    return (Image*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Image*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Image__gc(lua_State* state)
@@ -56,7 +54,7 @@ int lua_Image__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Image");
                 luaL_argcheck(state, userdata != NULL, 1, "'Image' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Image* instance = (Image*)object->instance;
@@ -311,12 +309,12 @@ int lua_Image_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Image::create(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Image");

@@ -15,8 +15,6 @@ namespace gameplay
 
 void luaRegister_AbsoluteLayout()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_AbsoluteLayout_addRef},
@@ -28,14 +26,14 @@ void luaRegister_AbsoluteLayout()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("AbsoluteLayout", lua_members, NULL, lua_AbsoluteLayout__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("AbsoluteLayout", lua_members, NULL, lua_AbsoluteLayout__gc, lua_statics, scopePath);
 }
 
 static AbsoluteLayout* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AbsoluteLayout");
     luaL_argcheck(state, userdata != NULL, 1, "'AbsoluteLayout' expected.");
-    return (AbsoluteLayout*)((ScriptController::LuaObject*)userdata)->instance;
+    return (AbsoluteLayout*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AbsoluteLayout__gc(lua_State* state)
@@ -52,7 +50,7 @@ int lua_AbsoluteLayout__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AbsoluteLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'AbsoluteLayout' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AbsoluteLayout* instance = (AbsoluteLayout*)object->instance;

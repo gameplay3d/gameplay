@@ -32,6 +32,12 @@ There are also prebuilt binaries in the gameplay/bin folder.
 - Note: you can't pass an enum to a function that doesn't explicitly take an enum (i.e. Control::setTextColor, which takes an unsigned char). In these cases, you need to go look up the enum values and pass them directly.
 
 
+
+Refactored ScriptController's interface to be more clean (moved utility functions that are only used by the generated bindings outside ScriptController into the ScriptUtil namespace).
+
+
+
+
 ## Unsupported Features
 - operators
 - templates
@@ -39,9 +45,10 @@ There are also prebuilt binaries in the gameplay/bin folder.
 - Lua doesn't support as many types as C++ so if there are functions that overload on parameters with types that overlap in Lua, the overloading won't work properly (i.e. char, short, int, long, float, double and all corresponding unsigned variants overlap in Lua).
 
 ### To Do List
-- Add instructions for luagen usage, etc.
-- Add built luagen to bin folder.
-- Update project template.
+- Change begin() functions to start()
+- Fix hierarchy inheritance
+- Remove getInstance
+- Make callback names same casing as actual functions (i.e. gamepadEvent).
 - Get all platforms working.
 - Fix memory leaks in gameplay-luagen and in generated code.
     * Add "@script{create}" to the appropriate gameplay functions.
@@ -50,6 +57,7 @@ There are also prebuilt binaries in the gameplay/bin folder.
 
 ### Future Feature List
 - Add support for users to generate bindings for their own classes.
+- Look into updating bindValue() to support binding to any Lua script function.
 
 
 ## Disclaimer

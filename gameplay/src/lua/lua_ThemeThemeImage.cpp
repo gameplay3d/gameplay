@@ -12,8 +12,6 @@ namespace gameplay
 
 void luaRegister_ThemeThemeImage()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_ThemeThemeImage_addRef},
@@ -29,14 +27,14 @@ void luaRegister_ThemeThemeImage()
     std::vector<std::string> scopePath;
     scopePath.push_back("Theme");
 
-    sc->registerClass("ThemeThemeImage", lua_members, NULL, lua_ThemeThemeImage__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("ThemeThemeImage", lua_members, NULL, lua_ThemeThemeImage__gc, lua_statics, scopePath);
 }
 
 static Theme::ThemeImage* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ThemeThemeImage");
     luaL_argcheck(state, userdata != NULL, 1, "'ThemeThemeImage' expected.");
-    return (Theme::ThemeImage*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Theme::ThemeImage*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_ThemeThemeImage__gc(lua_State* state)
@@ -53,7 +51,7 @@ int lua_ThemeThemeImage__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "ThemeThemeImage");
                 luaL_argcheck(state, userdata != NULL, 1, "'ThemeThemeImage' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Theme::ThemeImage* instance = (Theme::ThemeImage*)object->instance;
@@ -129,7 +127,7 @@ int lua_ThemeThemeImage_getColor(lua_State* state)
                 void* returnPtr = (void*)&(instance->getColor());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector4");
@@ -249,7 +247,7 @@ int lua_ThemeThemeImage_getRegion(lua_State* state)
                 void* returnPtr = (void*)&(instance->getRegion());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Rectangle");
@@ -295,7 +293,7 @@ int lua_ThemeThemeImage_getUVs(lua_State* state)
                 void* returnPtr = (void*)&(instance->getUVs());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "ThemeUVs");
