@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -110,6 +110,7 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab43f875eeb2925735fc61bef481d4f59"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ab43f875eeb2925735fc61bef481d4f59">~Game</a> ()</td></tr>
 <tr class="memitem:a1cdfd0352e709a0283cb1179d5a8ee99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_game.html#ab92abc94a6896257f0155f42533cda4c">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a1cdfd0352e709a0283cb1179d5a8ee99">getState</a> () const </td></tr>
+<tr class="memitem:af5b343706792c40e1e8d0339a5980ab2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#af5b343706792c40e1e8d0339a5980ab2">isInitialized</a> () const </td></tr>
 <tr class="memitem:a079f9a051bb4c5aee0f404afd8fbfe79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a079f9a051bb4c5aee0f404afd8fbfe79">getConfig</a> () const </td></tr>
 <tr class="memitem:a3283658c1130516f039209c2afbc64f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3283658c1130516f039209c2afbc64f6">run</a> ()</td></tr>
 <tr class="memitem:aa192a456ade74ed1ab502c062a7e0c92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aa192a456ade74ed1ab502c062a7e0c92">pause</a> ()</td></tr>
@@ -126,18 +127,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a71d1446883b0071469a2a3b1c2378d64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a71d1446883b0071469a2a3b1c2378d64">getAnimationController</a> () const </td></tr>
 <tr class="memitem:a4b8fb643c2ce70b29e139823f61d3201"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4b8fb643c2ce70b29e139823f61d3201">getPhysicsController</a> () const </td></tr>
 <tr class="memitem:a616975fdf2f3592980419dbe4839b13e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_listener.html">AudioListener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a616975fdf2f3592980419dbe4839b13e">getAudioListener</a> ()</td></tr>
-<tr class="memitem:a3e29aae61038a067e73c305ca8e40310"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3e29aae61038a067e73c305ca8e40310">menu</a> ()</td></tr>
+<tr class="memitem:afcaae61eaa0e0773499d869a6826e562"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#afcaae61eaa0e0773499d869a6826e562">menuEvent</a> ()</td></tr>
 <tr class="memitem:a092768704d671429dc791304f208c75c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a092768704d671429dc791304f208c75c">displayKeyboard</a> (bool display)</td></tr>
 <tr class="memitem:a13a086704042c967d04f97838ca076e8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a13a086704042c967d04f97838ca076e8">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr class="memitem:a5a6a1e2e2774f849a75b21a79a22deae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5a6a1e2e2774f849a75b21a79a22deae">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:a4ef49d4e96928f71d0db8d4d47f56ba7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4ef49d4e96928f71d0db8d4d47f56ba7">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
+<tr class="memitem:a691572c633a283712e15a5f5f4de48b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a691572c633a283712e15a5f5f4de48b7">hasMouse</a> ()</td></tr>
+<tr class="memitem:a154653c979b4da543ac9110f4dfb9a51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a154653c979b4da543ac9110f4dfb9a51">isMouseCaptured</a> ()</td></tr>
+<tr class="memitem:a7a63e56a8f4995cbc2eabc0a28c24937"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7a63e56a8f4995cbc2eabc0a28c24937">setMouseCaptured</a> (bool captured)</td></tr>
+<tr class="memitem:a1d483ce8404c0fc9662762b19e8abbf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a1d483ce8404c0fc9662762b19e8abbf3">setCursorVisible</a> (bool visible)</td></tr>
+<tr class="memitem:a299c4a1a679f593d8ab596ecaed4dcf9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a299c4a1a679f593d8ab596ecaed4dcf9">isCursorVisible</a> ()</td></tr>
 <tr class="memitem:a15ebb285ef4dfafbe1cc0875ca2593d2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a15ebb285ef4dfafbe1cc0875ca2593d2">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
+<tr class="memitem:a7f1b9a0142092d4f73bb159b93a37d7a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
+<tr class="memitem:a5805e7c99ade22092fb6059eb149e034"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5805e7c99ade22092fb6059eb149e034">getGamepad</a> (unsigned int index) const </td></tr>
 <tr class="memitem:ade96e57a1dbd20ab2dfb4203b4c0d6f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr class="memitem:a04720fabcd25eba03eaee2f81cfcdc16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
 <tr class="memitem:a11c781fe9845aa0e787f72844059e028"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr class="memitem:a3b8adb5a096f735bfcfec801f02ea0da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">schedule</a> (float timeOffset, <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> *timeListener, void *cookie=0)</td></tr>
-<tr class="memitem:a7f1b9a0142092d4f73bb159b93a37d7a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
-<tr class="memitem:a69b1dfb61bc67ce0968d7dbcbe6e8be7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a69b1dfb61bc67ce0968d7dbcbe6e8be7">getGamepad</a> (unsigned int index=0) const </td></tr>
+<tr class="memitem:aae0c5115535c01bcac52aae65b7f4bbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aae0c5115535c01bcac52aae65b7f4bbb">schedule</a> (float timeOffset, const char *function)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -593,7 +600,7 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a69b1dfb61bc67ce0968d7dbcbe6e8be7"></a>
+<a class="anchor" id="a5805e7c99ade22092fb6059eb149e034"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -604,7 +611,7 @@ Protected Member Functions</h2></td></tr>
           <td class="memname"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a>* gameplay::Game::getGamepad </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -617,7 +624,7 @@ Protected Member Functions</h2></td></tr>
 <p>Gets the gamepad at the specified index.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">index</td><td>The index to get the gamepad for (0 &lt;= index &lt;= <a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">Game::getGamepadCount</a>) </td></tr>
+    <tr><td class="paramname">index</td><td>The index to get the gamepad for: 0 &lt;= index &lt;= <a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">Game::getGamepadCount()</a> </td></tr>
   </table>
   </dd>
 </dl>
@@ -825,6 +832,31 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a691572c633a283712e15a5f5f4de48b7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Game::hasMouse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets whether the current platform supports mouse input.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if a mouse is supported, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a497397009f6221e3cc02a28e749a423d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -846,6 +878,81 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Initialize callback that is called just before the first frame when the game starts. </p>
+
+</div>
+</div>
+<a class="anchor" id="a299c4a1a679f593d8ab596ecaed4dcf9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Game::isCursorVisible </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Determines whether the platform cursor is currently visible.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if the platform cursor is visible, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af5b343706792c40e1e8d0339a5980ab2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Game::isInitialized </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Determines if the game has been initialized.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if the game initialization has completed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a154653c979b4da543ac9110f4dfb9a51"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool gameplay::Game::isMouseCaptured </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets whether mouse input is currently captured.</p>
+<dl class="section return"><dt>Returns:</dt><dd>is the mouse captured. </dd></dl>
 
 </div>
 </div>
@@ -944,7 +1051,7 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3e29aae61038a067e73c305ca8e40310"></a>
+<a class="anchor" id="afcaae61eaa0e0773499d869a6826e562"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -952,7 +1059,7 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void gameplay::Game::menu </td>
+          <td class="memname">virtual void gameplay::Game::menuEvent </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -964,7 +1071,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Menu callback on menu events. </p>
+<p>Menu callback on menu events for platforms with special menu keys or gestures. </p>
 
 </div>
 </div>
@@ -1218,6 +1325,104 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aae0c5115535c01bcac52aae65b7f4bbb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::schedule </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>timeOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Schedules a time event to be sent to the given <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> a given number of game milliseconds from now. <a class="el" href="classgameplay_1_1_game.html">Game</a> time stops while the game is paused. A time offset of zero will fire the time event in the next frame.</p>
+<p>Note: the given Lua function must take a single floating point number, which is the difference between the current game time and the target time (see <a class="el" href="classgameplay_1_1_time_listener.html#ae8c70a337ff59086e98e91f76644ceab">TimeListener::timeEvent</a>).</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeOffset</td><td>The number of game milliseconds in the future to schedule the event to be fired. </td></tr>
+    <tr><td class="paramname">function</td><td>The Lua script function that will receive the event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a1d483ce8404c0fc9662762b19e8abbf3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::setCursorVisible </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>visible</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the visibility of the platform cursor.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visible</td><td>true to show the platform cursor, false to hide it. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a7a63e56a8f4995cbc2eabc0a28c24937"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::Game::setMouseCaptured </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>captured</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Enables or disables mouse capture.</p>
+<p>On platforms that support a mouse, when mouse capture is enabled, the platform cursor will be hidden and the mouse will be warped to the center of the screen. While mouse capture is enabled, all mouse move events will then be delivered as deltas instead of absolute positions.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">captured</td><td>true to enable mouse capture mode, false to disable it. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ade96e57a1dbd20ab2dfb4203b4c0d6f6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1417,7 +1622,7 @@ template&lt;class T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

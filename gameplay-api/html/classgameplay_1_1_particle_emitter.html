@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -112,7 +112,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aafbbca12525c915b20753a2e7de7c878"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#aafbbca12525c915b20753a2e7de7c878">stop</a> ()</td></tr>
 <tr class="memitem:a37eccfc13be8b09815eaf5daeabf91c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a37eccfc13be8b09815eaf5daeabf91c7">isStarted</a> () const </td></tr>
 <tr class="memitem:afe8c4584bc4ecddff370214ca5bf6394"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#afe8c4584bc4ecddff370214ca5bf6394">isActive</a> () const </td></tr>
-<tr class="memitem:afa630f0ad9c29d089469d18b546eafcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit</a> (unsigned int particleCount)</td></tr>
+<tr class="memitem:a3b5cda21464c44613109c1174e251e68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a3b5cda21464c44613109c1174e251e68">emitOnce</a> (unsigned int particleCount)</td></tr>
 <tr class="memitem:a37a003d736bf37f70ab25f911c42649c"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a37a003d736bf37f70ab25f911c42649c">getParticlesCount</a> () const </td></tr>
 <tr class="memitem:a11f3889a0737f3dc92a503f6b4f142e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#a11f3889a0737f3dc92a503f6b4f142e5">setEllipsoid</a> (bool ellipsoid)</td></tr>
 <tr class="memitem:afd6bee509e6176467e0734804bb92516"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_particle_emitter.html#afd6bee509e6176467e0734804bb92516">isEllipsoid</a> () const </td></tr>
@@ -366,12 +366,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afa630f0ad9c29d089469d18b546eafcc"></a>
+<a class="anchor" id="a3b5cda21464c44613109c1174e251e68"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::ParticleEmitter::emit </td>
+          <td class="memname">void gameplay::ParticleEmitter::emitOnce </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>particleCount</em></td><td>)</td>
@@ -380,7 +380,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Generates an arbitrary number of particles all at once. Each newly emitted particle has its properties assigned within the ranges defined by its <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>.</p>
-<p>Note that the maximum number of particles that can be alive at once in a particle system is defined when a <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> is created and cannot be changed. A call to <a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit()</a> cannot cause the particle system to exceed this maximum, so fewer or zero particles will be emitted if the maximum is or has been reached.</p>
+<p>Note that the maximum number of particles that can be alive at once in a particle system is defined when a <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a> is created and cannot be changed. A call to emit() cannot cause the particle system to exceed this maximum, so fewer or zero particles will be emitted if the maximum is or has been reached.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
     <tr><td class="paramname">particleCount</td><td>The number of particles to emit immediately. </td></tr>
@@ -1592,7 +1592,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Starts emitting particles over time at this <a class="el" href="classgameplay_1_1_particle_emitter.html">ParticleEmitter</a>'s emission rate.</p>
-<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">ParticleEmitter::emit()</a> </dd></dl>
+<dl class="section see"><dt>See also:</dt><dd>ParticleEmitter::emit() </dd></dl>
 
 </div>
 </div>
@@ -1609,7 +1609,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Stops emitting particles over time.</p>
-<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">ParticleEmitter::emit()</a> </dd></dl>
+<dl class="section see"><dt>See also:</dt><dd>ParticleEmitter::emit() </dd></dl>
 
 </div>
 </div>
@@ -1639,7 +1639,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:33 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

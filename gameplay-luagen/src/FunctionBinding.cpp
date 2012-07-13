@@ -747,69 +747,69 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
     {
     case FunctionBinding::Param::TYPE_BOOL:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getBoolPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getBoolPointer(" << paramIndex << ");\n";
         else
-            o << "ScriptController::luaCheckBool(state, " << paramIndex << ");\n";
+            o << "ScriptUtil::luaCheckBool(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_CHAR:
         o << "(char)luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_SHORT:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getShortPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getShortPointer(" << paramIndex << ");\n";
         else
             o << "(short)luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_INT:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getIntPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getIntPointer(" << paramIndex << ");\n";
         else
             o << "(int)luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_LONG:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getLongPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getLongPointer(" << paramIndex << ");\n";
         else
             o << "(long)luaL_checklong(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_UCHAR:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getUnsignedCharPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getUnsignedCharPointer(" << paramIndex << ");\n";
         else
             o << "(unsigned char)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_USHORT:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getUnsignedShortPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getUnsignedShortPointer(" << paramIndex << ");\n";
         else
             o << "(unsigned short)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_UINT:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getUnsignedIntPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getUnsignedIntPointer(" << paramIndex << ");\n";
         else
             o << "(unsigned int)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_ULONG:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getUnsignedLongPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getUnsignedLongPointer(" << paramIndex << ");\n";
         else
             o << "(unsigned long)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_FLOAT:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getFloatPointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getFloatPointer(" << paramIndex << ");\n";
         else
             o << "(float)luaL_checknumber(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_DOUBLE:
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptController::getInstance()->getDoublePointer(" << paramIndex << ");\n";
+            o << "ScriptUtil::getDoublePointer(" << paramIndex << ");\n";
         else
             o << "(double)luaL_checknumber(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_STRING:
-        o << "ScriptController::getInstance()->getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
+        o << "ScriptUtil::getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
         o << "(" << p << ")lua_enumFromString_" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "(luaL_checkstring(state, " << paramIndex << "));\n";
@@ -824,7 +824,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         if (p.kind != FunctionBinding::Param::KIND_POINTER)
             o << "*";
         o << " param" << i + 1 << " = ";
-        o << "ScriptController::getInstance()->getObjectPointer<";
+        o << "ScriptUtil::getObjectPointer<";
         o << Generator::getInstance()->getIdentifier(p.info) << ">(" << paramIndex;
         o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
         o << ((p.kind != FunctionBinding::Param::KIND_POINTER) ? "true" : "false") << ");\n";

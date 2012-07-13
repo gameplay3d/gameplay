@@ -10,8 +10,6 @@ namespace gameplay
 
 void luaRegister_FileSystem()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {NULL, NULL}
@@ -28,14 +26,14 @@ void luaRegister_FileSystem()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("FileSystem", lua_members, NULL, lua_FileSystem__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("FileSystem", lua_members, NULL, lua_FileSystem__gc, lua_statics, scopePath);
 }
 
 static FileSystem* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "FileSystem");
     luaL_argcheck(state, userdata != NULL, 1, "'FileSystem' expected.");
-    return (FileSystem*)((ScriptController::LuaObject*)userdata)->instance;
+    return (FileSystem*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_FileSystem__gc(lua_State* state)
@@ -52,7 +50,7 @@ int lua_FileSystem__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "FileSystem");
                 luaL_argcheck(state, userdata != NULL, 1, "'FileSystem' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     FileSystem* instance = (FileSystem*)object->instance;
@@ -91,7 +89,7 @@ int lua_FileSystem_static_fileExists(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 bool result = FileSystem::fileExists(param1);
 
@@ -158,7 +156,7 @@ int lua_FileSystem_static_loadResourceAliases(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 FileSystem::loadResourceAliases(param1);
                 
@@ -167,7 +165,7 @@ int lua_FileSystem_static_loadResourceAliases(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Properties* param1 = ScriptController::getInstance()->getObjectPointer<Properties>(1, "Properties", false);
+                Properties* param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false);
 
                 FileSystem::loadResourceAliases(param1);
                 
@@ -203,7 +201,7 @@ int lua_FileSystem_static_readAll(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 const char* result = FileSystem::readAll(param1);
 
@@ -225,10 +223,10 @@ int lua_FileSystem_static_readAll(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                int* param2 = ScriptController::getInstance()->getIntPointer(2);
+                int* param2 = ScriptUtil::getIntPointer(2);
 
                 const char* result = FileSystem::readAll(param1, param2);
 
@@ -267,7 +265,7 @@ int lua_FileSystem_static_resolvePath(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 const char* result = FileSystem::resolvePath(param1);
 
@@ -306,7 +304,7 @@ int lua_FileSystem_static_setResourcePath(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 FileSystem::setResourcePath(param1);
                 

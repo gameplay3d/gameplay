@@ -10,8 +10,6 @@ namespace gameplay
 
 void luaRegister_BoundingSphere()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"center", lua_BoundingSphere_center},
@@ -30,14 +28,14 @@ void luaRegister_BoundingSphere()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("BoundingSphere", lua_members, lua_BoundingSphere__init, lua_BoundingSphere__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("BoundingSphere", lua_members, lua_BoundingSphere__init, lua_BoundingSphere__gc, lua_statics, scopePath);
 }
 
 static BoundingSphere* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "BoundingSphere");
     luaL_argcheck(state, userdata != NULL, 1, "'BoundingSphere' expected.");
-    return (BoundingSphere*)((ScriptController::LuaObject*)userdata)->instance;
+    return (BoundingSphere*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_BoundingSphere__gc(lua_State* state)
@@ -54,7 +52,7 @@ int lua_BoundingSphere__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "BoundingSphere");
                 luaL_argcheck(state, userdata != NULL, 1, "'BoundingSphere' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     BoundingSphere* instance = (BoundingSphere*)object->instance;
@@ -93,7 +91,7 @@ int lua_BoundingSphere__init(lua_State* state)
             void* returnPtr = (void*)new BoundingSphere();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "BoundingSphere");
@@ -112,12 +110,12 @@ int lua_BoundingSphere__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptController::getInstance()->getObjectPointer<BoundingSphere>(1, "BoundingSphere", true);
+                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(1, "BoundingSphere", true);
 
                 void* returnPtr = (void*)new BoundingSphere(*param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "BoundingSphere");
@@ -143,7 +141,7 @@ int lua_BoundingSphere__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -151,7 +149,7 @@ int lua_BoundingSphere__init(lua_State* state)
                 void* returnPtr = (void*)new BoundingSphere(*param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "BoundingSphere");
@@ -194,7 +192,7 @@ int lua_BoundingSphere_center(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+        Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->center = *param2;
         return 0;
@@ -204,7 +202,7 @@ int lua_BoundingSphere_center(lua_State* state)
         void* returnPtr = (void*)new Vector3(instance->center);
         if (returnPtr)
         {
-            ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+            ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
             object->instance = returnPtr;
             object->owns = true;
             luaL_getmetatable(state, "Vector3");
@@ -233,7 +231,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptController::getInstance()->getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 BoundingSphere* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -247,7 +245,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptController::getInstance()->getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 BoundingSphere* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -261,7 +259,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Frustum* param1 = ScriptController::getInstance()->getObjectPointer<Frustum>(2, "Frustum", true);
+                Frustum* param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
 
                 BoundingSphere* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -275,7 +273,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(2, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 BoundingSphere* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -289,7 +287,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(2, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 BoundingSphere* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -367,7 +365,7 @@ int lua_BoundingSphere_merge(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptController::getInstance()->getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 BoundingSphere* instance = getInstance(state);
                 instance->merge(*param1);
@@ -378,7 +376,7 @@ int lua_BoundingSphere_merge(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptController::getInstance()->getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 BoundingSphere* instance = getInstance(state);
                 instance->merge(*param1);
@@ -445,7 +443,7 @@ int lua_BoundingSphere_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptController::getInstance()->getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 BoundingSphere* instance = getInstance(state);
                 instance->set(*param1);
@@ -456,7 +454,7 @@ int lua_BoundingSphere_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptController::getInstance()->getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 BoundingSphere* instance = getInstance(state);
                 instance->set(*param1);
@@ -477,7 +475,7 @@ int lua_BoundingSphere_set(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -517,7 +515,7 @@ int lua_BoundingSphere_static_empty(lua_State* state)
             void* returnPtr = (void*)&(BoundingSphere::empty());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "BoundingSphere");
@@ -555,7 +553,7 @@ int lua_BoundingSphere_transform(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 BoundingSphere* instance = getInstance(state);
                 instance->transform(*param1);
