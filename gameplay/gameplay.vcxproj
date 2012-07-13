@@ -16,6 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AbsoluteLayout.cpp" />
+    <ClCompile Include="src\AIAgent.cpp" />
+    <ClCompile Include="src\AIController.cpp" />
+    <ClCompile Include="src\AIMessage.cpp" />
+    <ClCompile Include="src\AIState.cpp" />
+    <ClCompile Include="src\AIStateMachine.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationClip.cpp" />
     <ClCompile Include="src\AnimationController.cpp" />
@@ -108,6 +113,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
+    <ClInclude Include="src\AIAgent.h" />
+    <ClInclude Include="src\AIController.h" />
+    <ClInclude Include="src\AIMessage.h" />
+    <ClInclude Include="src\AIState.h" />
+    <ClInclude Include="src\AIStateMachine.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationClip.h" />
     <ClInclude Include="src\AnimationController.h" />
