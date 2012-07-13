@@ -6,6 +6,8 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <sys/types.h>
+#include <sys/stat.h>
 using namespace std;
 
 #define LUA_GLOBAL_FILENAME "lua_Global"
@@ -21,6 +23,8 @@ using namespace std;
 #pragma warning(disable : 4996)
 #pragma warning(disable : 4244)
 #pragma warning(disable : 4345)
+#else
+#include <dirent.h>
 #endif
 
 // Object deletion macro

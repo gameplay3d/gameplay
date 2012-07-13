@@ -282,7 +282,7 @@ extern void printMemoryLeaks()
             else
                 printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.\n", rec->address, rec->size, rec->line, rec->file);
 #else
-            gameplay::printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.\n", rec->address, rec->size, rec->line, rec->file);
+                printError("[memory] LEAK: HEAP allocation leak at address %#x of size %d from line %d in file '%s'.\n", rec->address, rec->size, rec->line, rec->file);
 #endif
             rec = rec->next;
         }

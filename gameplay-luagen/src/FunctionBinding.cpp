@@ -975,6 +975,7 @@ static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int i
         break;
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
     case FunctionBinding::Param::TYPE_VOID:
+    default:
         o << "\n";
         indent(o, indentLevel);
         o << "return 0;\n";

@@ -39,7 +39,7 @@ PhysicsGhostObject::~PhysicsGhostObject()
     _node->removeListener(this);
 
     GP_ASSERT(Game::getInstance()->getPhysicsController());
-    Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+    Game::getInstance()->getPhysicsController()->removeCollisionObject(this, true);
 
     SAFE_DELETE(_ghostObject);
 }

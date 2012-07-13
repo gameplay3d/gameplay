@@ -100,7 +100,7 @@ void Label::drawText(const Rectangle& clip)
     // Draw the text.
     if (_font)
     {
-        _font->begin();
+        _font->start();
         _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
         _font->finish();
     }

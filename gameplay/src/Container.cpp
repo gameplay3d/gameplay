@@ -397,7 +397,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         needsClear = true;
     }
 
-    spriteBatch->begin();
+    spriteBatch->start();
     Control::drawBorder(spriteBatch, clip);
     spriteBatch->finish();
 
@@ -419,7 +419,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         // Draw scroll bars.
         Rectangle clipRegion(_viewportClipBounds);
 
-        spriteBatch->begin();
+        spriteBatch->start();
 
         if (_scrollBarBounds.height > 0 &&
             ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
