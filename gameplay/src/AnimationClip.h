@@ -50,7 +50,7 @@ public:
         enum EventType 
         {
             /**
-             * Default event type.
+             * A timed event type.
              */
             DEFAULT,
 
