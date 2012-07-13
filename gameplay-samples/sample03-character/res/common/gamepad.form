@@ -10,14 +10,21 @@ form gamepadForm
 	{
 		style = joystickStyle
 		size = 200, 200
-	    alignment = ALIGN_BOTTOM_LEFT
-		radius = 100
+	    position = 40, 480
+		radius = 64
     }
 
     button
     {
-        style = buttonStyle
+        style = buttonAStyle
         size = 128, 128
-        alignment = ALIGN_BOTTOM_RIGHT
+        position = 1024, 580
+    }
+
+    button
+    {
+        style = buttonBStyle
+        size = 128, 128
+        position = 1140, 480
     }
 }
