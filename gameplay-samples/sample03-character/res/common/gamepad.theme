@@ -26,14 +26,24 @@ theme gamepad
 		}
 	}
 
-	skin buttonActiveSkin : base
+	skin buttonAActiveSkin : base
 	{
-		region = 300, 310, 160, 160
+		region = 0, 304, 160, 160
 	}
 	
-	skin buttonNormalSkin : base
+	skin buttonANormalSkin : base
 	{
-		region = 40, 310, 160, 160
+		region = 176, 304, 160, 160
+	}
+
+    skin buttonBActiveSkin : base
+	{
+		region = 383, 304, 160, 160
+	}
+	
+	skin buttonBNormalSkin : base
+	{
+		region = 561, 304, 160, 160
 	}
 
 	style joystickStyle
@@ -44,16 +54,29 @@ theme gamepad
 		}
 	}
 	
-	style buttonStyle
+	style buttonAStyle
 	{
 	    stateNormal
 		{
-			skin = buttonNormalSkin
+			skin = buttonANormalSkin
 		}
 		
 		stateActive
 		{
-			skin = buttonActiveSkin
+			skin = buttonAActiveSkin
+		}
+	}
+
+    style buttonBStyle
+	{
+	    stateNormal
+		{
+			skin = buttonBNormalSkin
+		}
+		
+		stateActive
+		{
+			skin = buttonBActiveSkin
 		}
 	}
 }
