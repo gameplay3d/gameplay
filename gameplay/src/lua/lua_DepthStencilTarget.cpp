@@ -12,8 +12,6 @@ namespace gameplay
 
 void luaRegister_DepthStencilTarget()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_DepthStencilTarget_addRef},
@@ -31,14 +29,14 @@ void luaRegister_DepthStencilTarget()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("DepthStencilTarget", lua_members, NULL, lua_DepthStencilTarget__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("DepthStencilTarget", lua_members, NULL, lua_DepthStencilTarget__gc, lua_statics, scopePath);
 }
 
 static DepthStencilTarget* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "DepthStencilTarget");
     luaL_argcheck(state, userdata != NULL, 1, "'DepthStencilTarget' expected.");
-    return (DepthStencilTarget*)((ScriptController::LuaObject*)userdata)->instance;
+    return (DepthStencilTarget*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_DepthStencilTarget__gc(lua_State* state)
@@ -55,7 +53,7 @@ int lua_DepthStencilTarget__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "DepthStencilTarget");
                 luaL_argcheck(state, userdata != NULL, 1, "'DepthStencilTarget' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     DepthStencilTarget* instance = (DepthStencilTarget*)object->instance;
@@ -276,7 +274,7 @@ int lua_DepthStencilTarget_static_create(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 DepthStencilTarget::Format param2 = (DepthStencilTarget::Format)lua_enumFromString_DepthStencilTargetFormat(luaL_checkstring(state, 2));
@@ -290,7 +288,7 @@ int lua_DepthStencilTarget_static_create(lua_State* state)
                 void* returnPtr = (void*)DepthStencilTarget::create(param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "DepthStencilTarget");
@@ -333,12 +331,12 @@ int lua_DepthStencilTarget_static_getDepthStencilTarget(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)DepthStencilTarget::getDepthStencilTarget(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "DepthStencilTarget");

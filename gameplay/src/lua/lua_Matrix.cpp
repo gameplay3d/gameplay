@@ -11,8 +11,6 @@ namespace gameplay
 
 void luaRegister_Matrix()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"add", lua_Matrix_add},
@@ -68,14 +66,14 @@ void luaRegister_Matrix()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Matrix", lua_members, lua_Matrix__init, lua_Matrix__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Matrix", lua_members, lua_Matrix__init, lua_Matrix__gc, lua_statics, scopePath);
 }
 
 static Matrix* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Matrix");
     luaL_argcheck(state, userdata != NULL, 1, "'Matrix' expected.");
-    return (Matrix*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Matrix*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Matrix__gc(lua_State* state)
@@ -92,7 +90,7 @@ int lua_Matrix__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Matrix");
                 luaL_argcheck(state, userdata != NULL, 1, "'Matrix' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Matrix* instance = (Matrix*)object->instance;
@@ -131,7 +129,7 @@ int lua_Matrix__init(lua_State* state)
             void* returnPtr = (void*)new Matrix();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "Matrix");
@@ -150,12 +148,12 @@ int lua_Matrix__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(1);
+                float* param1 = ScriptUtil::getFloatPointer(1);
 
                 void* returnPtr = (void*)new Matrix(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Matrix");
@@ -171,12 +169,12 @@ int lua_Matrix__init(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 void* returnPtr = (void*)new Matrix(*param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Matrix");
@@ -266,7 +264,7 @@ int lua_Matrix__init(lua_State* state)
                 void* returnPtr = (void*)new Matrix(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Matrix");
@@ -321,7 +319,7 @@ int lua_Matrix_add(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->add(*param1);
@@ -345,7 +343,7 @@ int lua_Matrix_add(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->add(param1, param2);
@@ -385,13 +383,13 @@ int lua_Matrix_decompose(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", false);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", false);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", false);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 bool result = instance->decompose(param1, param2, param3);
@@ -469,7 +467,7 @@ int lua_Matrix_getBackVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getBackVector(param1);
@@ -507,7 +505,7 @@ int lua_Matrix_getDownVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getDownVector(param1);
@@ -545,7 +543,7 @@ int lua_Matrix_getForwardVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getForwardVector(param1);
@@ -583,7 +581,7 @@ int lua_Matrix_getLeftVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getLeftVector(param1);
@@ -621,7 +619,7 @@ int lua_Matrix_getRightVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getRightVector(param1);
@@ -659,7 +657,7 @@ int lua_Matrix_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Matrix* instance = getInstance(state);
                 bool result = instance->getRotation(param1);
@@ -700,7 +698,7 @@ int lua_Matrix_getScale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getScale(param1);
@@ -738,7 +736,7 @@ int lua_Matrix_getTranslation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getTranslation(param1);
@@ -776,7 +774,7 @@ int lua_Matrix_getUpVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->getUpVector(param1);
@@ -833,7 +831,7 @@ int lua_Matrix_invert(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 bool result = instance->invert(param1);
@@ -910,7 +908,7 @@ int lua_Matrix_m(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        float* param2 = ScriptController::getInstance()->getFloatPointer(2);
+        float* param2 = ScriptUtil::getFloatPointer(2);
 
         memcpy(instance->m, param2, sizeof(float) * 16);
         return 0;
@@ -950,7 +948,7 @@ int lua_Matrix_multiply(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->multiply(*param1);
@@ -974,7 +972,7 @@ int lua_Matrix_multiply(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->multiply(param1, param2);
@@ -1028,7 +1026,7 @@ int lua_Matrix_negate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->negate(param1);
@@ -1066,7 +1064,7 @@ int lua_Matrix_rotate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Matrix* instance = getInstance(state);
                 instance->rotate(*param1);
@@ -1087,10 +1085,10 @@ int lua_Matrix_rotate(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotate(*param1, param2);
@@ -1102,7 +1100,7 @@ int lua_Matrix_rotate(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -1127,13 +1125,13 @@ int lua_Matrix_rotate(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
+                Matrix* param3 = ScriptUtil::getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotate(*param1, param2, param3);
@@ -1195,7 +1193,7 @@ int lua_Matrix_rotateX(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotateX(param1, param2);
@@ -1257,7 +1255,7 @@ int lua_Matrix_rotateY(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotateY(param1, param2);
@@ -1319,7 +1317,7 @@ int lua_Matrix_rotateZ(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->rotateZ(param1, param2);
@@ -1368,7 +1366,7 @@ int lua_Matrix_scale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(*param1);
@@ -1392,7 +1390,7 @@ int lua_Matrix_scale(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(param1, param2);
@@ -1404,10 +1402,10 @@ int lua_Matrix_scale(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(*param1, param2);
@@ -1467,7 +1465,7 @@ int lua_Matrix_scale(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
+                Matrix* param4 = ScriptUtil::getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->scale(param1, param2, param3, param4);
@@ -1505,7 +1503,7 @@ int lua_Matrix_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+                float* param1 = ScriptUtil::getFloatPointer(2);
 
                 Matrix* instance = getInstance(state);
                 instance->set(param1);
@@ -1516,7 +1514,7 @@ int lua_Matrix_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->set(*param1);
@@ -1703,13 +1701,13 @@ int lua_Matrix_static_add(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param3 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::add(*param1, *param2, param3);
                 
@@ -1748,16 +1746,16 @@ int lua_Matrix_static_createLookAt(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
+                Matrix* param4 = ScriptUtil::getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix::createLookAt(*param1, *param2, *param3, param4);
                 
@@ -1811,7 +1809,7 @@ int lua_Matrix_static_createLookAt(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 9);
 
                 // Get parameter 10 off the stack.
-                Matrix* param10 = ScriptController::getInstance()->getObjectPointer<Matrix>(10, "Matrix", false);
+                Matrix* param10 = ScriptUtil::getObjectPointer<Matrix>(10, "Matrix", false);
 
                 Matrix::createLookAt(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
                 
@@ -1863,7 +1861,7 @@ int lua_Matrix_static_createOrthographic(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 5 off the stack.
-                Matrix* param5 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
+                Matrix* param5 = ScriptUtil::getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix::createOrthographic(param1, param2, param3, param4, param5);
                 
@@ -1923,7 +1921,7 @@ int lua_Matrix_static_createOrthographicOffCenter(lua_State* state)
                 float param6 = (float)luaL_checknumber(state, 6);
 
                 // Get parameter 7 off the stack.
-                Matrix* param7 = ScriptController::getInstance()->getObjectPointer<Matrix>(7, "Matrix", false);
+                Matrix* param7 = ScriptUtil::getObjectPointer<Matrix>(7, "Matrix", false);
 
                 Matrix::createOrthographicOffCenter(param1, param2, param3, param4, param5, param6, param7);
                 
@@ -1975,7 +1973,7 @@ int lua_Matrix_static_createPerspective(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 5 off the stack.
-                Matrix* param5 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
+                Matrix* param5 = ScriptUtil::getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix::createPerspective(param1, param2, param3, param4, param5);
                 
@@ -2012,10 +2010,10 @@ int lua_Matrix_static_createRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(1, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotation(*param1, param2);
                 
@@ -2035,13 +2033,13 @@ int lua_Matrix_static_createRotation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param3 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::createRotation(*param1, param2, param3);
                 
@@ -2081,7 +2079,7 @@ int lua_Matrix_static_createRotationX(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotationX(param1, param2);
                 
@@ -2121,7 +2119,7 @@ int lua_Matrix_static_createRotationY(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotationY(param1, param2);
                 
@@ -2161,7 +2159,7 @@ int lua_Matrix_static_createRotationZ(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createRotationZ(param1, param2);
                 
@@ -2198,10 +2196,10 @@ int lua_Matrix_static_createScale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createScale(*param1, param2);
                 
@@ -2231,7 +2229,7 @@ int lua_Matrix_static_createScale(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
+                Matrix* param4 = ScriptUtil::getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix::createScale(param1, param2, param3, param4);
                 
@@ -2268,10 +2266,10 @@ int lua_Matrix_static_createTranslation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix::createTranslation(*param1, param2);
                 
@@ -2301,7 +2299,7 @@ int lua_Matrix_static_createTranslation(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(4, "Matrix", false);
+                Matrix* param4 = ScriptUtil::getObjectPointer<Matrix>(4, "Matrix", false);
 
                 Matrix::createTranslation(param1, param2, param3, param4);
                 
@@ -2337,7 +2335,7 @@ int lua_Matrix_static_identity(lua_State* state)
             void* returnPtr = (void*)&(Matrix::identity());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Matrix");
@@ -2376,13 +2374,13 @@ int lua_Matrix_static_multiply(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param3 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::multiply(*param1, param2, param3);
                 
@@ -2393,13 +2391,13 @@ int lua_Matrix_static_multiply(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param3 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::multiply(*param1, *param2, param3);
                 
@@ -2437,13 +2435,13 @@ int lua_Matrix_static_subtract(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(1, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                Matrix* param3 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param3 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix::subtract(*param1, *param2, param3);
                 
@@ -2479,7 +2477,7 @@ int lua_Matrix_static_zero(lua_State* state)
             void* returnPtr = (void*)&(Matrix::zero());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Matrix");
@@ -2517,7 +2515,7 @@ int lua_Matrix_subtract(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Matrix* instance = getInstance(state);
                 instance->subtract(*param1);
@@ -2555,7 +2553,7 @@ int lua_Matrix_transformPoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformPoint(param1);
@@ -2576,10 +2574,10 @@ int lua_Matrix_transformPoint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", false);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
@@ -2617,7 +2615,7 @@ int lua_Matrix_transformVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(param1);
@@ -2628,7 +2626,7 @@ int lua_Matrix_transformVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", false);
+                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(param1);
@@ -2649,10 +2647,10 @@ int lua_Matrix_transformVector(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", false);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
@@ -2664,10 +2662,10 @@ int lua_Matrix_transformVector(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptController::getInstance()->getObjectPointer<Vector4>(2, "Vector4", true);
+                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", false);
+                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
@@ -2703,7 +2701,7 @@ int lua_Matrix_transformVector(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 5 off the stack.
-                Vector3* param5 = ScriptController::getInstance()->getObjectPointer<Vector3>(6, "Vector3", false);
+                Vector3* param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
@@ -2741,7 +2739,7 @@ int lua_Matrix_translate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Matrix* instance = getInstance(state);
                 instance->translate(*param1);
@@ -2762,10 +2760,10 @@ int lua_Matrix_translate(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", false);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->translate(*param1, param2);
@@ -2825,7 +2823,7 @@ int lua_Matrix_translate(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                Matrix* param4 = ScriptController::getInstance()->getObjectPointer<Matrix>(5, "Matrix", false);
+                Matrix* param4 = ScriptUtil::getObjectPointer<Matrix>(5, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->translate(param1, param2, param3, param4);
@@ -2879,7 +2877,7 @@ int lua_Matrix_transpose(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Matrix* instance = getInstance(state);
                 instance->transpose(param1);

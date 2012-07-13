@@ -13,8 +13,6 @@ namespace gameplay
 
 void luaRegister_Light()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Light_addRef},
@@ -44,14 +42,14 @@ void luaRegister_Light()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Light", lua_members, NULL, lua_Light__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Light", lua_members, NULL, lua_Light__gc, lua_statics, scopePath);
 }
 
 static Light* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Light");
     luaL_argcheck(state, userdata != NULL, 1, "'Light' expected.");
-    return (Light*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Light*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Light__gc(lua_State* state)
@@ -68,7 +66,7 @@ int lua_Light__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Light");
                 luaL_argcheck(state, userdata != NULL, 1, "'Light' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Light* instance = (Light*)object->instance;
@@ -144,7 +142,7 @@ int lua_Light_getColor(lua_State* state)
                 void* returnPtr = (void*)&(instance->getColor());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -301,7 +299,7 @@ int lua_Light_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -564,7 +562,7 @@ int lua_Light_setColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Light* instance = getInstance(state);
                 instance->setColor(*param1);
@@ -715,12 +713,12 @@ int lua_Light_static_createDirectional(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 void* returnPtr = (void*)Light::createDirectional(*param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Light");
@@ -764,7 +762,7 @@ int lua_Light_static_createPoint(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -772,7 +770,7 @@ int lua_Light_static_createPoint(lua_State* state)
                 void* returnPtr = (void*)Light::createPoint(*param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Light");
@@ -818,7 +816,7 @@ int lua_Light_static_createSpot(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -832,7 +830,7 @@ int lua_Light_static_createSpot(lua_State* state)
                 void* returnPtr = (void*)Light::createSpot(*param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Light");

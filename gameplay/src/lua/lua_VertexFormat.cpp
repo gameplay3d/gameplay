@@ -10,8 +10,6 @@ namespace gameplay
 
 void luaRegister_VertexFormat()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getElement", lua_VertexFormat_getElement},
@@ -26,14 +24,14 @@ void luaRegister_VertexFormat()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("VertexFormat", lua_members, lua_VertexFormat__init, lua_VertexFormat__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("VertexFormat", lua_members, lua_VertexFormat__init, lua_VertexFormat__gc, lua_statics, scopePath);
 }
 
 static VertexFormat* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VertexFormat");
     luaL_argcheck(state, userdata != NULL, 1, "'VertexFormat' expected.");
-    return (VertexFormat*)((ScriptController::LuaObject*)userdata)->instance;
+    return (VertexFormat*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_VertexFormat__gc(lua_State* state)
@@ -50,7 +48,7 @@ int lua_VertexFormat__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "VertexFormat");
                 luaL_argcheck(state, userdata != NULL, 1, "'VertexFormat' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     VertexFormat* instance = (VertexFormat*)object->instance;
@@ -90,7 +88,7 @@ int lua_VertexFormat__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat::Element* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false);
+                VertexFormat::Element* param1 = ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -98,7 +96,7 @@ int lua_VertexFormat__init(lua_State* state)
                 void* returnPtr = (void*)new VertexFormat(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "VertexFormat");
@@ -148,7 +146,7 @@ int lua_VertexFormat_getElement(lua_State* state)
                 void* returnPtr = (void*)&(instance->getElement(param1));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "VertexFormatElement");
