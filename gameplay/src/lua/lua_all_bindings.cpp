@@ -6,6 +6,13 @@ namespace gameplay
 
 void lua_RegisterAllBindings()
 {
+    luaRegister_AIAgent();
+    luaRegister_AIAgentListener();
+    luaRegister_AIController();
+    luaRegister_AIMessage();
+    luaRegister_AIState();
+    luaRegister_AIStateListener();
+    luaRegister_AIStateMachine();
     luaRegister_AbsoluteLayout();
     luaRegister_Animation();
     luaRegister_AnimationClip();

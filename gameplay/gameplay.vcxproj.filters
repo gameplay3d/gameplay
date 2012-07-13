@@ -759,6 +759,30 @@
     <ClCompile Include="src\AIStateMachine.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_AIAgent.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIAgentListener.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIController.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIMessage.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIMessageParameterType.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIState.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIStateListener.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIStateMachine.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1510,6 +1534,30 @@
     </ClInclude>
     <ClInclude Include="src\AIState.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIAgent.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIAgentListener.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIController.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIMessage.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIMessageParameterType.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIState.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIStateListener.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIStateMachine.h">
+      <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
