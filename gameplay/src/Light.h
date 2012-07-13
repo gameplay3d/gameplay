@@ -239,8 +239,11 @@ private:
     
     union
     {
+        /** @script{ignore} */
         Directional* _directional;
+        /** @script{ignore} */
         Point* _point;
+        /** @script{ignore} */
         Spot* _spot;
     };
     Node* _node;

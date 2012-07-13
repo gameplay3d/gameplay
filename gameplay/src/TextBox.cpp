@@ -8,10 +8,6 @@ TextBox::TextBox() : _lastKeypress(0)
 {
 }
 
-TextBox::TextBox(const TextBox& copy)
-{
-}
-
 TextBox::~TextBox()
 {
 }

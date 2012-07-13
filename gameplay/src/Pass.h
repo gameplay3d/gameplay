@@ -37,6 +37,7 @@ public:
 
     /**
      * Get a list of properties to be auto-bound.
+     * @script{ignore}
      */
     const std::vector<std::string>* getAutoBindProperties() const;
 

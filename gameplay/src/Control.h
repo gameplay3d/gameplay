@@ -14,6 +14,8 @@
 namespace gameplay
 {
 
+class ScriptListener;
+
 /**
  * Base class for UI controls.
  */
@@ -83,6 +85,7 @@ public:
     };
 
     /**
+     * @script{ignore}
      * A constant used for setting themed attributes on all control states simultaneously.
      */
     static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
@@ -329,16 +332,6 @@ public:
      * @return The texture region of this control's skin.
      */
     const Rectangle& getSkinRegion(State state = NORMAL) const;
-
-    /**
-     * Get the texture coordinates of an area of this control's skin for a given state.
-     *
-     * @param area The area of the skin to get the coordinates of.
-     * @param state The state to get this property from.
-     *
-     * @return The texture coordinates of an area of this control's skin.
-     */
-    const Theme::UVs& getSkinUVs(Theme::Skin::SkinArea area, State state = NORMAL) const;
 
     /**
      * Set the blend color of this control's skin.
@@ -724,17 +717,31 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * Add a listener to be notified of specific events affecting
+     * this control.  Event types can be OR'ed together.
+     * E.g. To listen to touch-press and touch-release events,
+     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
+     * as the second parameter.
+     * 
+     * Note: the given Lua function must have the same function signature as Control::Listener::controlEvent.
+     *
+     * @param function The name of the Lua script function to add as a listener callback.
+     * @param eventFlags The events to listen for.
+     */
+    virtual void addListener(const char* function, int eventFlags);
+
+    /**
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
@@ -967,6 +974,11 @@ protected:
      * Listeners map of EventType's to a list of Listeners.
      */
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
+
+    /**
+     * Script listener objects.
+     */
+    std::vector<ScriptListener*>* _scriptListeners;
     
     /**
      * The Control's Theme::Style.

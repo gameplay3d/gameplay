@@ -278,6 +278,6 @@ void LongboardGame::drawSplash(void* param)
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
     batch->begin();
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
