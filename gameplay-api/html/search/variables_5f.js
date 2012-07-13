@@ -3,6 +3,7 @@ var searchData=
   ['_5fa',['_a',['../classgameplay_1_1_physics_constraint.html#a35a92c318b06bcab6aa3d59dd45a976f',1,'gameplay::PhysicsConstraint']]],
   ['_5fabsolutebounds',['_absoluteBounds',['../classgameplay_1_1_control.html#a239ea5f672518ac3daf2f5359d899763',1,'gameplay::Control']]],
   ['_5fabsoluteclipbounds',['_absoluteClipBounds',['../classgameplay_1_1_control.html#af610e9cad54639c424b90bbf6bd19e75',1,'gameplay::Control']]],
+  ['_5fagent',['_agent',['../classgameplay_1_1_node.html#a248ebe9a1818fbfd310ba363855547e7',1,'gameplay::Node']]],
   ['_5falignment',['_alignment',['../classgameplay_1_1_control.html#ae7b5d07de4a2e2d8cdb69ea94f6dd360',1,'gameplay::Control']]],
   ['_5faudiosource',['_audioSource',['../classgameplay_1_1_node.html#ac837c4ea233f97e5c6f1a8b7af82ca6d',1,'gameplay::Node']]],
   ['_5fautobindings',['_autoBindings',['../classgameplay_1_1_render_state.html#a3215ea61d94d05ee9bbe23b7a9630d44',1,'gameplay::RenderState']]],
