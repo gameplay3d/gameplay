@@ -11,8 +11,6 @@ namespace gameplay
 
 void luaRegister_RenderTarget()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_RenderTarget_addRef},
@@ -30,14 +28,14 @@ void luaRegister_RenderTarget()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("RenderTarget", lua_members, NULL, lua_RenderTarget__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("RenderTarget", lua_members, NULL, lua_RenderTarget__gc, lua_statics, scopePath);
 }
 
 static RenderTarget* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "RenderTarget");
     luaL_argcheck(state, userdata != NULL, 1, "'RenderTarget' expected.");
-    return (RenderTarget*)((ScriptController::LuaObject*)userdata)->instance;
+    return (RenderTarget*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_RenderTarget__gc(lua_State* state)
@@ -54,7 +52,7 @@ int lua_RenderTarget__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "RenderTarget");
                 luaL_argcheck(state, userdata != NULL, 1, "'RenderTarget' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     RenderTarget* instance = (RenderTarget*)object->instance;
@@ -204,7 +202,7 @@ int lua_RenderTarget_getTexture(lua_State* state)
                 void* returnPtr = (void*)instance->getTexture();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Texture");
@@ -283,7 +281,7 @@ int lua_RenderTarget_static_create(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -294,7 +292,7 @@ int lua_RenderTarget_static_create(lua_State* state)
                 void* returnPtr = (void*)RenderTarget::create(param1, param2, param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "RenderTarget");
@@ -337,12 +335,12 @@ int lua_RenderTarget_static_getRenderTarget(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)RenderTarget::getRenderTarget(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "RenderTarget");

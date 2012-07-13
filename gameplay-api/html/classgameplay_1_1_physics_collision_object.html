@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -123,6 +123,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8f4aeab962d1a1f1db4039de8a84b3bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a8f4aeab962d1a1f1db4039de8a84b3bc">setEnabled</a> (bool enable)</td></tr>
 <tr class="memitem:a68d67aa4485d13646b5a735b1264a6ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a68d67aa4485d13646b5a735b1264a6ce">addCollisionListener</a> (<a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html">CollisionListener</a> *listener, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object=NULL)</td></tr>
 <tr class="memitem:a39c1515bad6af4d4061363b52bb6ad84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a39c1515bad6af4d4061363b52bb6ad84">removeCollisionListener</a> (<a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html">CollisionListener</a> *listener, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object=NULL)</td></tr>
+<tr class="memitem:a7d5aa64d146597047f37ca1f41cbf21c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a7d5aa64d146597047f37ca1f41cbf21c">addCollisionListener</a> (const char *function, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object=NULL)</td></tr>
+<tr class="memitem:a2387d311b13f8bf70ab8908ef31343f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a2387d311b13f8bf70ab8908ef31343f7">removeCollisionListener</a> (const char *function, <a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object=NULL)</td></tr>
 <tr class="memitem:ac513d80d3c52b38bc6194ac190a7ae48"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#ac513d80d3c52b38bc6194ac190a7ae48">collidesWith</a> (<a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object) const </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pro-methods"></a>
@@ -136,6 +138,7 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a80a11ff90cb6e633eab481bebc7283cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object_1_1_physics_motion_state.html">PhysicsMotionState</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a80a11ff90cb6e633eab481bebc7283cb">_motionState</a></td></tr>
 <tr class="memitem:ab81c354d53e0cad80b064d5e9ad40bd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_shape.html">PhysicsCollisionShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#ab81c354d53e0cad80b064d5e9ad40bd9">_collisionShape</a></td></tr>
 <tr class="memitem:a8d5a2ea2f573d43542e590d40657cfb2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a8d5a2ea2f573d43542e590d40657cfb2">_enabled</a></td></tr>
+<tr class="memitem:a1dfa1f422906cfbbaa2a0f48f1e8dbdc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgameplay_1_1_script_listener.html">ScriptListener</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a1dfa1f422906cfbbaa2a0f48f1e8dbdc">_scriptListeners</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Base class for all gameplay physics objects that support collision events. </p>
@@ -247,6 +250,41 @@ Protected Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to add. </td></tr>
+    <tr><td class="paramname">object</td><td>Optional collision object used to filter the collision event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a7d5aa64d146597047f37ca1f41cbf21c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::PhysicsCollisionObject::addCollisionListener </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td>
+          <td class="paramname"><em>object</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds a collision listener for this collision object.</p>
+<p>Note: the given Lua function must match the function signature of <a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#a8a9c5c68b83a925eb0d160e99e683443">PhysicsCollisionObject::CollisionListener::collisionEvent</a>.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>The Lua script function to add as a listener callback. </td></tr>
     <tr><td class="paramname">object</td><td>Optional collision object used to filter the collision event. </td></tr>
   </table>
   </dd>
@@ -467,6 +505,40 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2387d311b13f8bf70ab8908ef31343f7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gameplay::PhysicsCollisionObject::removeCollisionListener </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td>
+          <td class="paramname"><em>object</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Removes a collision listener.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>The Lua function (used as a listener callback) to remove. </td></tr>
+    <tr><td class="paramname">object</td><td>Optional collision object used to filter the collision event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a8f4aeab962d1a1f1db4039de8a84b3bc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -483,7 +555,7 @@ Protected Attributes</h2></td></tr>
 <p>Sets the collision object be enabled or disabled.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">enable</td><td>true enables the collision object, false diables it. </td></tr>
+    <tr><td class="paramname">enable</td><td>true enables the collision object, false disables it. </td></tr>
   </table>
   </dd>
 </dl>
@@ -575,10 +647,31 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1dfa1f422906cfbbaa2a0f48f1e8dbdc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classgameplay_1_1_script_listener.html">ScriptListener</a>*&gt;* gameplay::PhysicsCollisionObject::_scriptListeners</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Lua script collision listeners. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:33 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

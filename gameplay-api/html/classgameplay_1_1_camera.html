@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -120,9 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a33597003be39ecdd56f9ba8648727732"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a33597003be39ecdd56f9ba8648727732">getViewProjectionMatrix</a> () const </td></tr>
 <tr class="memitem:a1185b45d35022716d4b281f07cc55263"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a1185b45d35022716d4b281f07cc55263">getInverseViewProjectionMatrix</a> () const </td></tr>
 <tr class="memitem:acdb9bdff60e8ba7be6b991ca70e5e233"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_frustum.html">Frustum</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#acdb9bdff60e8ba7be6b991ca70e5e233">getFrustum</a> () const </td></tr>
-<tr class="memitem:a56ce48df52e46c7c67770b3444cbd9cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a56ce48df52e46c7c67770b3444cbd9cc">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, float *x, float *y, float *depth=NULL)</td></tr>
-<tr class="memitem:a986d7d07bae94422d96c6302be1b1e90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a986d7d07bae94422d96c6302be1b1e90">unproject</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, float depth, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst)</td></tr>
-<tr class="memitem:a73d0c5b23bd6e4eb669772159145b08c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a73d0c5b23bd6e4eb669772159145b08c">pickRay</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, <a class="el" href="classgameplay_1_1_ray.html">Ray</a> *dst)</td></tr>
+<tr class="memitem:a3b013cddd2e40fbf2973a3ac07439dc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, float *x, float *y, float *depth=NULL) const </td></tr>
+<tr class="memitem:aad7e4fca47d80aa100a2d5b1cb3f1104"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aad7e4fca47d80aa100a2d5b1cb3f1104">unproject</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, float depth, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst) const </td></tr>
+<tr class="memitem:a8e253da4bd8ed477f19ca07e9934c328"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a8e253da4bd8ed477f19ca07e9934c328">pickRay</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, <a class="el" href="classgameplay_1_1_ray.html">Ray</a> *dst) const </td></tr>
 <tr class="inherit_header pub_methods_classgameplay_1_1_ref"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgameplay_1_1_ref')"><img src="closed.png" alt="-"/>&nbsp;Public Member Functions inherited from <a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td></tr>
 <tr class="memitem:a66e39f63477efb32cc190f6605ef0c74 inherit pub_methods_classgameplay_1_1_ref"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74">addRef</a> ()</td></tr>
 <tr class="memitem:aafd8a7a7934b33c8bf216756d04cf33b inherit pub_methods_classgameplay_1_1_ref"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a> ()</td></tr>
@@ -514,7 +514,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a73d0c5b23bd6e4eb669772159145b08c"></a>
+<a class="anchor" id="a8e253da4bd8ed477f19ca07e9934c328"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -545,7 +545,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -562,7 +562,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56ce48df52e46c7c67770b3444cbd9cc"></a>
+<a class="anchor" id="a3b013cddd2e40fbf2973a3ac07439dc1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -599,7 +599,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -755,7 +755,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a986d7d07bae94422d96c6302be1b1e90"></a>
+<a class="anchor" id="aad7e4fca47d80aa100a2d5b1cb3f1104"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -792,7 +792,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -814,7 +814,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:50 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:31 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

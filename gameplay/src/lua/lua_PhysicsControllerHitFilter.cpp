@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_PhysicsControllerHitFilter()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"filter", lua_PhysicsControllerHitFilter_filter},
@@ -28,14 +26,14 @@ void luaRegister_PhysicsControllerHitFilter()
     std::vector<std::string> scopePath;
     scopePath.push_back("PhysicsController");
 
-    sc->registerClass("PhysicsControllerHitFilter", lua_members, lua_PhysicsControllerHitFilter__init, lua_PhysicsControllerHitFilter__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsControllerHitFilter", lua_members, lua_PhysicsControllerHitFilter__init, lua_PhysicsControllerHitFilter__gc, lua_statics, scopePath);
 }
 
 static PhysicsController::HitFilter* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitFilter");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerHitFilter' expected.");
-    return (PhysicsController::HitFilter*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsController::HitFilter*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsControllerHitFilter__gc(lua_State* state)
@@ -52,7 +50,7 @@ int lua_PhysicsControllerHitFilter__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsControllerHitFilter");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerHitFilter' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     PhysicsController::HitFilter* instance = (PhysicsController::HitFilter*)object->instance;
@@ -91,7 +89,7 @@ int lua_PhysicsControllerHitFilter__init(lua_State* state)
             void* returnPtr = (void*)new PhysicsController::HitFilter();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "PhysicsControllerHitFilter");
@@ -129,7 +127,7 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->filter(param1);
@@ -170,7 +168,7 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsController::HitResult* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true);
+                PhysicsController::HitResult* param1 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true);
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->hit(*param1);

@@ -10,8 +10,6 @@ namespace gameplay
 
 void luaRegister_VertexFormatElement()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"size", lua_VertexFormatElement_size},
@@ -22,14 +20,14 @@ void luaRegister_VertexFormatElement()
     std::vector<std::string> scopePath;
     scopePath.push_back("VertexFormat");
 
-    sc->registerClass("VertexFormatElement", lua_members, lua_VertexFormatElement__init, lua_VertexFormatElement__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("VertexFormatElement", lua_members, lua_VertexFormatElement__init, lua_VertexFormatElement__gc, lua_statics, scopePath);
 }
 
 static VertexFormat::Element* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VertexFormatElement");
     luaL_argcheck(state, userdata != NULL, 1, "'VertexFormatElement' expected.");
-    return (VertexFormat::Element*)((ScriptController::LuaObject*)userdata)->instance;
+    return (VertexFormat::Element*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_VertexFormatElement__gc(lua_State* state)
@@ -46,7 +44,7 @@ int lua_VertexFormatElement__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "VertexFormatElement");
                 luaL_argcheck(state, userdata != NULL, 1, "'VertexFormatElement' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     VertexFormat::Element* instance = (VertexFormat::Element*)object->instance;
@@ -85,7 +83,7 @@ int lua_VertexFormatElement__init(lua_State* state)
             void* returnPtr = (void*)new VertexFormat::Element();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "VertexFormatElement");
@@ -113,7 +111,7 @@ int lua_VertexFormatElement__init(lua_State* state)
                 void* returnPtr = (void*)new VertexFormat::Element(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "VertexFormatElement");

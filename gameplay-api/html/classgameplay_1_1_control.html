@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -206,6 +206,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a86b7ce720dacec4d5e31c61a102630b7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a86b7ce720dacec4d5e31c61a102630b7">isContainer</a> () const </td></tr>
 <tr class="memitem:adc74e6fa5d73449369faf239b1fe8bc3"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">getType</a> () const </td></tr>
 <tr class="memitem:ac15ca1b3063f4ad9b0fc1b54a6e2f535"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac15ca1b3063f4ad9b0fc1b54a6e2f535">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
+<tr class="memitem:a447afa19ec76f20ba974f96ac7ce6825"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a447afa19ec76f20ba974f96ac7ce6825">addListener</a> (const char *function, int eventFlags)</td></tr>
 <tr class="memitem:a6d18739bdbd45718c043afb33245093b"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a6d18739bdbd45718c043afb33245093b">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
 <tr class="memitem:a3d0ea04fcf78d25124017c40c2846979"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3d0ea04fcf78d25124017c40c2846979">getAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value)</td></tr>
 <tr class="memitem:a62a89ccb93888f7258287b767cfae107"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a62a89ccb93888f7258287b767cfae107">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
@@ -238,6 +239,7 @@ Static Public Attributes</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a2eea715e20c37451a094fbe0ff046c24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2eea715e20c37451a094fbe0ff046c24">Control</a> ()</td></tr>
 <tr class="memitem:acd891b79153abcc9086fa2665ab98d7b"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#acd891b79153abcc9086fa2665ab98d7b">~Control</a> ()</td></tr>
+<tr class="memitem:a98c060a206b93133ace203c1f0c097ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_control.html">Control</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a98c060a206b93133ace203c1f0c097ea">operator=</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> &amp;)</td></tr>
 <tr class="memitem:aa2bd1d212858c06b24d0e245bde3c895"><td class="memItemLeft" align="right" valign="top">Theme::Style::OverlayType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aa2bd1d212858c06b24d0e245bde3c895">getOverlayType</a> () const </td></tr>
 <tr class="memitem:a4c9fdfd5a48360be13e7925323513d52"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4c9fdfd5a48360be13e7925323513d52">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr class="memitem:a24ffdbd2fd875c056ad9cce4f4dcf0f6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a24ffdbd2fd875c056ad9cce4f4dcf0f6">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
@@ -285,6 +287,7 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a3e881d2d3994afc23065a362c437e295"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3e881d2d3994afc23065a362c437e295">_autoHeight</a></td></tr>
 <tr class="memitem:a5159a7a6a2f42d60aaaee5e445f75ac2"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a>, <br class="typebreak"/>
 std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">Listener</a> * &gt; * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a5159a7a6a2f42d60aaaee5e445f75ac2">_listeners</a></td></tr>
+<tr class="memitem:af4de211f73396762e986fc1385580f44"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgameplay_1_1_script_listener.html">ScriptListener</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af4de211f73396762e986fc1385580f44">_scriptListeners</a></td></tr>
 <tr class="memitem:a8adea2635b544f38ca34162f11ec903d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8adea2635b544f38ca34162f11ec903d">_style</a></td></tr>
 <tr class="memitem:a1cf80f236ba38ce3d035b5ba62f6454c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1cf80f236ba38ce3d035b5ba62f6454c">_opacity</a></td></tr>
 <tr class="memitem:a91b4d0f28ac8beab3c30c79e5fd9cf74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a91b4d0f28ac8beab3c30c79e5fd9cf74">_zIndex</a></td></tr>
@@ -440,6 +443,49 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 
 <p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a9128c7978c37299194abe2c55d80bf93">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac317d5e1ce467855d0cc61b316337b30">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a3fab62ffe2814f687e9e21e31f161a9e">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">gameplay::Label</a>, <a class="el" href="classgameplay_1_1_text_box.html#ab45a02444a11fec50d2c8da17bd695b7">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_joystick.html#a29afacaedc89dcf6de0525a417edee8b">gameplay::Joystick</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a447afa19ec76f20ba974f96ac7ce6825"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void gameplay::Control::addListener </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>eventFlags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Add a listener to be notified of specific events affecting this control. Event types can be OR'ed together. E.g. To listen to touch-press and touch-release events, pass <code>Control::Listener::TOUCH | <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6d0d7568cba92935eb52fff947a985">Control::Listener::RELEASE</a></code> as the second parameter.</p>
+<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_control_1_1_listener.html#a66f6fda768f03da5a0d766766c75e636">Control::Listener::controlEvent</a>.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>The name of the Lua script function to add as a listener callback. </td></tr>
+    <tr><td class="paramname">eventFlags</td><td>The events to listen for. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1788,6 +1834,31 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a98c060a206b93133ace203c1f0c097ea"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_control.html">Control</a>&amp; gameplay::Control::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_control.html">Control</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Hidden copy assignment operator. </p>
 
 </div>
 </div>
@@ -3144,6 +3215,27 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af4de211f73396762e986fc1385580f44"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classgameplay_1_1_script_listener.html">ScriptListener</a>*&gt;* gameplay::Control::_scriptListeners</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Script listener objects. </p>
+
+</div>
+</div>
 <a class="anchor" id="a08e0c8e34c28edcddc7099281e9b423a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3441,7 +3533,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:50 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:31 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

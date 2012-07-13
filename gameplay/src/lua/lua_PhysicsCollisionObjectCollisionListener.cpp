@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_PhysicsCollisionObjectCollisionListener()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"collisionEvent", lua_PhysicsCollisionObjectCollisionListener_collisionEvent},
@@ -27,14 +25,14 @@ void luaRegister_PhysicsCollisionObjectCollisionListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("PhysicsCollisionObject");
 
-    sc->registerClass("PhysicsCollisionObjectCollisionListener", lua_members, NULL, lua_PhysicsCollisionObjectCollisionListener__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsCollisionObjectCollisionListener", lua_members, NULL, lua_PhysicsCollisionObjectCollisionListener__gc, lua_statics, scopePath);
 }
 
 static PhysicsCollisionObject::CollisionListener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionListener' expected.");
-    return (PhysicsCollisionObject::CollisionListener*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsCollisionObject::CollisionListener*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
@@ -51,7 +49,7 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionListener' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     PhysicsCollisionObject::CollisionListener* instance = (PhysicsCollisionObject::CollisionListener*)object->instance;
@@ -95,7 +93,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject::CollisionPair* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
+                PhysicsCollisionObject::CollisionPair* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2);
@@ -120,10 +118,10 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject::CollisionPair* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
+                PhysicsCollisionObject::CollisionPair* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2, *param3);
@@ -149,13 +147,13 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject::CollisionPair* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
+                PhysicsCollisionObject::CollisionPair* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptController::getInstance()->getObjectPointer<Vector3>(5, "Vector3", true);
+                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2, *param3, *param4);

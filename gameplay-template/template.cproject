@@ -30,10 +30,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1368017357" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.220599794" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.553483674" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -51,6 +55,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
@@ -65,6 +70,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
@@ -110,10 +116,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1438345058" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.145250449" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.2006281313" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -129,6 +139,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
@@ -143,6 +154,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
@@ -189,10 +201,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2039847498" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.1151876862" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.502016742" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -210,6 +226,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
@@ -224,6 +241,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
@@ -270,10 +288,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.197126708" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.383272251" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1630912693" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -292,6 +314,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
 								</option>
@@ -306,6 +329,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
@@ -350,10 +374,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.456477750" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.2030100054" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1374999439" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -371,6 +399,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/x86&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/x86&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/x86&quot;"/>
 								</option>
@@ -385,6 +414,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
@@ -430,10 +460,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.923690234" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.1329574373" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1843174104" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -449,11 +483,12 @@
 								<option id="com.qnx.qcc.option.linker.langcpp.634706544" name="C++ (-lang-c++)" superClass="com.qnx.qcc.option.linker.langcpp" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.security.1149202874" name="Enhanced Security (-Wl,-z,relro -Wl,-z,now)" superClass="com.qnx.qcc.option.linker.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.836471121" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1203875316" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -466,6 +501,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>
@@ -511,10 +547,14 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1486948386" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/src&quot;"/>
 								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.1418704610" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.785476179" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -530,11 +570,12 @@
 								<option id="com.qnx.qcc.option.linker.langcpp.1437332425" name="C++ (-lang-c++)" superClass="com.qnx.qcc.option.linker.langcpp" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.security.1625644976" name="Enhanced Security (-Wl,-z,relro -Wl,-z,now)" superClass="com.qnx.qcc.option.linker.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1870486762" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.2055007034" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -547,6 +588,7 @@
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
+                                    <listOptionValue builtIn="false" value="lua"/>
 									<listOptionValue builtIn="false" value="bullet"/>
 									<listOptionValue builtIn="false" value="vorbis"/>
 								</option>

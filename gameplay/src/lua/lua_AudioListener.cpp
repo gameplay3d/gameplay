@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_AudioListener()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getCamera", lua_AudioListener_getCamera},
@@ -40,14 +38,14 @@ void luaRegister_AudioListener()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("AudioListener", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("AudioListener", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AudioListener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AudioListener");
     luaL_argcheck(state, userdata != NULL, 1, "'AudioListener' expected.");
-    return (AudioListener*)((ScriptController::LuaObject*)userdata)->instance;
+    return (AudioListener*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AudioListener_getCamera(lua_State* state)
@@ -66,7 +64,7 @@ int lua_AudioListener_getCamera(lua_State* state)
                 void* returnPtr = (void*)instance->getCamera();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Camera");
@@ -149,7 +147,7 @@ int lua_AudioListener_getOrientationForward(lua_State* state)
                 void* returnPtr = (void*)&(instance->getOrientationForward());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -195,7 +193,7 @@ int lua_AudioListener_getOrientationUp(lua_State* state)
                 void* returnPtr = (void*)&(instance->getOrientationUp());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -241,7 +239,7 @@ int lua_AudioListener_getPosition(lua_State* state)
                 void* returnPtr = (void*)&(instance->getPosition());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -287,7 +285,7 @@ int lua_AudioListener_getVelocity(lua_State* state)
                 void* returnPtr = (void*)&(instance->getVelocity());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -331,7 +329,7 @@ int lua_AudioListener_setCamera(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Camera* param1 = ScriptController::getInstance()->getObjectPointer<Camera>(2, "Camera", false);
+                Camera* param1 = ScriptUtil::getObjectPointer<Camera>(2, "Camera", false);
 
                 AudioListener* instance = getInstance(state);
                 instance->setCamera(param1);
@@ -408,10 +406,10 @@ int lua_AudioListener_setOrientation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 AudioListener* instance = getInstance(state);
                 instance->setOrientation(*param1, *param2);
@@ -449,7 +447,7 @@ int lua_AudioListener_setPosition(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 AudioListener* instance = getInstance(state);
                 instance->setPosition(*param1);
@@ -487,7 +485,7 @@ int lua_AudioListener_setVelocity(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 AudioListener* instance = getInstance(state);
                 instance->setVelocity(*param1);
@@ -524,7 +522,7 @@ int lua_AudioListener_static_getInstance(lua_State* state)
             void* returnPtr = (void*)AudioListener::getInstance();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "AudioListener");

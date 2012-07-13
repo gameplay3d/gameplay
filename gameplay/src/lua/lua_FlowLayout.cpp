@@ -15,8 +15,6 @@ namespace gameplay
 
 void luaRegister_FlowLayout()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_FlowLayout_addRef},
@@ -28,14 +26,14 @@ void luaRegister_FlowLayout()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("FlowLayout", lua_members, NULL, lua_FlowLayout__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("FlowLayout", lua_members, NULL, lua_FlowLayout__gc, lua_statics, scopePath);
 }
 
 static FlowLayout* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "FlowLayout");
     luaL_argcheck(state, userdata != NULL, 1, "'FlowLayout' expected.");
-    return (FlowLayout*)((ScriptController::LuaObject*)userdata)->instance;
+    return (FlowLayout*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_FlowLayout__gc(lua_State* state)
@@ -52,7 +50,7 @@ int lua_FlowLayout__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "FlowLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'FlowLayout' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     FlowLayout* instance = (FlowLayout*)object->instance;

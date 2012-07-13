@@ -36,7 +36,7 @@ uniform vec4 u_modulateColor;               	// Modulation color
 #if defined(MODULATE_ALPHA)
 uniform float u_modulateAlpha;              	// Modulation alpha
 #endif
-#include "/lib/lighting.frag"
+#include "lib/lighting.frag"
 #if defined(POINT_LIGHT)
 #include "lib/lighting-point.frag"
 #elif defined(SPOT_LIGHT)
