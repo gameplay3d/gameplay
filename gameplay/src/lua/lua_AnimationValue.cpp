@@ -9,8 +9,6 @@ namespace gameplay
 
 void luaRegister_AnimationValue()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getFloat", lua_AnimationValue_getFloat},
@@ -20,14 +18,14 @@ void luaRegister_AnimationValue()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("AnimationValue", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("AnimationValue", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AnimationValue* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationValue");
     luaL_argcheck(state, userdata != NULL, 1, "'AnimationValue' expected.");
-    return (AnimationValue*)((ScriptController::LuaObject*)userdata)->instance;
+    return (AnimationValue*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AnimationValue_getFloat(lua_State* state)
@@ -69,7 +67,7 @@ int lua_AnimationValue_getFloat(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+                float* param1 = ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -139,7 +137,7 @@ int lua_AnimationValue_setFloat(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+                float* param1 = ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);

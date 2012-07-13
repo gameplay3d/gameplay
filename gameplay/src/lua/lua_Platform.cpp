@@ -11,8 +11,6 @@ namespace gameplay
 
 void luaRegister_Platform()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"enterMessagePump", lua_Platform_enterMessagePump},
@@ -45,14 +43,14 @@ void luaRegister_Platform()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Platform", lua_members, NULL, lua_Platform__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Platform", lua_members, NULL, lua_Platform__gc, lua_statics, scopePath);
 }
 
 static Platform* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Platform");
     luaL_argcheck(state, userdata != NULL, 1, "'Platform' expected.");
-    return (Platform*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Platform*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Platform__gc(lua_State* state)
@@ -69,7 +67,7 @@ int lua_Platform__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Platform");
                 luaL_argcheck(state, userdata != NULL, 1, "'Platform' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Platform* instance = (Platform*)object->instance;
@@ -145,7 +143,7 @@ int lua_Platform_static_displayKeyboard(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 1);
+                bool param1 = ScriptUtil::luaCheckBool(state, 1);
 
                 Platform::displayKeyboard(param1);
                 
@@ -210,10 +208,10 @@ int lua_Platform_static_getAccelerometerValues(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(1);
+                float* param1 = ScriptUtil::getFloatPointer(1);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptController::getInstance()->getFloatPointer(2);
+                float* param2 = ScriptUtil::getFloatPointer(2);
 
                 Platform::getAccelerometerValues(param1, param2);
                 
@@ -572,7 +570,7 @@ int lua_Platform_static_setCursorVisible(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 1);
+                bool param1 = ScriptUtil::luaCheckBool(state, 1);
 
                 Platform::setCursorVisible(param1);
                 
@@ -608,7 +606,7 @@ int lua_Platform_static_setMouseCaptured(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 1);
+                bool param1 = ScriptUtil::luaCheckBool(state, 1);
 
                 Platform::setMouseCaptured(param1);
                 
@@ -644,7 +642,7 @@ int lua_Platform_static_setMultiTouch(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 1);
+                bool param1 = ScriptUtil::luaCheckBool(state, 1);
 
                 Platform::setMultiTouch(param1);
                 
@@ -680,7 +678,7 @@ int lua_Platform_static_setVsync(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 1);
+                bool param1 = ScriptUtil::luaCheckBool(state, 1);
 
                 Platform::setVsync(param1);
                 

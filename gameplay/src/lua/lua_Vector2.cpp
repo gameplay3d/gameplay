@@ -9,8 +9,6 @@ namespace gameplay
 
 void luaRegister_Vector2()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"add", lua_Vector2_add},
@@ -47,14 +45,14 @@ void luaRegister_Vector2()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Vector2", lua_members, lua_Vector2__init, lua_Vector2__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Vector2", lua_members, lua_Vector2__init, lua_Vector2__gc, lua_statics, scopePath);
 }
 
 static Vector2* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Vector2");
     luaL_argcheck(state, userdata != NULL, 1, "'Vector2' expected.");
-    return (Vector2*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Vector2*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Vector2__gc(lua_State* state)
@@ -71,7 +69,7 @@ int lua_Vector2__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Vector2");
                 luaL_argcheck(state, userdata != NULL, 1, "'Vector2' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Vector2* instance = (Vector2*)object->instance;
@@ -110,7 +108,7 @@ int lua_Vector2__init(lua_State* state)
             void* returnPtr = (void*)new Vector2();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "Vector2");
@@ -129,12 +127,12 @@ int lua_Vector2__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(1);
+                float* param1 = ScriptUtil::getFloatPointer(1);
 
                 void* returnPtr = (void*)new Vector2(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector2");
@@ -150,12 +148,12 @@ int lua_Vector2__init(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 void* returnPtr = (void*)new Vector2(*param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector2");
@@ -189,7 +187,7 @@ int lua_Vector2__init(lua_State* state)
                 void* returnPtr = (void*)new Vector2(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector2");
@@ -206,15 +204,15 @@ int lua_Vector2__init(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 void* returnPtr = (void*)new Vector2(*param1, *param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector2");
@@ -258,7 +256,7 @@ int lua_Vector2_add(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->add(*param1);
@@ -297,10 +295,10 @@ int lua_Vector2_clamp(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->clamp(*param1, *param2);
@@ -338,7 +336,7 @@ int lua_Vector2_distance(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 float result = instance->distance(*param1);
@@ -379,7 +377,7 @@ int lua_Vector2_distanceSquared(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 float result = instance->distanceSquared(*param1);
@@ -420,7 +418,7 @@ int lua_Vector2_dot(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 float result = instance->dot(*param1);
@@ -645,7 +643,7 @@ int lua_Vector2_normalize(lua_State* state)
                 void* returnPtr = (void*)&(instance->normalize());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector2");
@@ -671,7 +669,7 @@ int lua_Vector2_normalize(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", false);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", false);
 
                 Vector2* instance = getInstance(state);
                 instance->normalize(param1);
@@ -710,7 +708,7 @@ int lua_Vector2_rotate(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -762,7 +760,7 @@ int lua_Vector2_scale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->scale(*param1);
@@ -800,7 +798,7 @@ int lua_Vector2_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+                float* param1 = ScriptUtil::getFloatPointer(2);
 
                 Vector2* instance = getInstance(state);
                 instance->set(param1);
@@ -811,7 +809,7 @@ int lua_Vector2_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->set(*param1);
@@ -847,10 +845,10 @@ int lua_Vector2_set(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->set(*param1, *param2);
@@ -889,13 +887,13 @@ int lua_Vector2_static_add(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", false);
+                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Vector2::add(*param1, *param2, param3);
                 
@@ -932,10 +930,10 @@ int lua_Vector2_static_angle(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 float result = Vector2::angle(*param1, *param2);
 
@@ -977,16 +975,16 @@ int lua_Vector2_static_clamp(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", true);
+                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", true);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptController::getInstance()->getObjectPointer<Vector2>(4, "Vector2", false);
+                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", false);
 
                 Vector2::clamp(*param1, *param2, *param3, param4);
                 
@@ -1023,10 +1021,10 @@ int lua_Vector2_static_dot(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 float result = Vector2::dot(*param1, *param2);
 
@@ -1065,7 +1063,7 @@ int lua_Vector2_static_one(lua_State* state)
             void* returnPtr = (void*)&(Vector2::one());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Vector2");
@@ -1104,13 +1102,13 @@ int lua_Vector2_static_subtract(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(1, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(1, "Vector2", true);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptController::getInstance()->getObjectPointer<Vector2>(3, "Vector2", false);
+                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Vector2::subtract(*param1, *param2, param3);
                 
@@ -1146,7 +1144,7 @@ int lua_Vector2_static_unitX(lua_State* state)
             void* returnPtr = (void*)&(Vector2::unitX());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Vector2");
@@ -1183,7 +1181,7 @@ int lua_Vector2_static_unitY(lua_State* state)
             void* returnPtr = (void*)&(Vector2::unitY());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Vector2");
@@ -1220,7 +1218,7 @@ int lua_Vector2_static_zero(lua_State* state)
             void* returnPtr = (void*)&(Vector2::zero());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Vector2");
@@ -1258,7 +1256,7 @@ int lua_Vector2_subtract(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector2* param1 = ScriptController::getInstance()->getObjectPointer<Vector2>(2, "Vector2", true);
+                Vector2* param1 = ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true);
 
                 Vector2* instance = getInstance(state);
                 instance->subtract(*param1);

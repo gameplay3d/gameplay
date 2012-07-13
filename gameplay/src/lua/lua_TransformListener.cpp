@@ -15,8 +15,6 @@ namespace gameplay
 
 void luaRegister_TransformListener()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"transformChanged", lua_TransformListener_transformChanged},
@@ -26,14 +24,14 @@ void luaRegister_TransformListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("Transform");
 
-    sc->registerClass("TransformListener", lua_members, NULL, lua_TransformListener__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("TransformListener", lua_members, NULL, lua_TransformListener__gc, lua_statics, scopePath);
 }
 
 static Transform::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "TransformListener");
     luaL_argcheck(state, userdata != NULL, 1, "'TransformListener' expected.");
-    return (Transform::Listener*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Transform::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_TransformListener__gc(lua_State* state)
@@ -50,7 +48,7 @@ int lua_TransformListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "TransformListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'TransformListener' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Transform::Listener* instance = (Transform::Listener*)object->instance;
@@ -91,7 +89,7 @@ int lua_TransformListener_transformChanged(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Transform* param1 = ScriptController::getInstance()->getObjectPointer<Transform>(2, "Transform", false);
+                Transform* param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);

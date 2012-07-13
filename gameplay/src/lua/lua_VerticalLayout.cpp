@@ -15,8 +15,6 @@ namespace gameplay
 
 void luaRegister_VerticalLayout()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_VerticalLayout_addRef},
@@ -34,14 +32,14 @@ void luaRegister_VerticalLayout()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
 }
 
 static VerticalLayout* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VerticalLayout");
     luaL_argcheck(state, userdata != NULL, 1, "'VerticalLayout' expected.");
-    return (VerticalLayout*)((ScriptController::LuaObject*)userdata)->instance;
+    return (VerticalLayout*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_VerticalLayout__gc(lua_State* state)
@@ -58,7 +56,7 @@ int lua_VerticalLayout__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "VerticalLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'VerticalLayout' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     VerticalLayout* instance = (VerticalLayout*)object->instance;
@@ -277,7 +275,7 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 VerticalLayout* instance = getInstance(state);
                 instance->setBottomToTop(param1);
@@ -314,7 +312,7 @@ int lua_VerticalLayout_static_create(lua_State* state)
             void* returnPtr = (void*)VerticalLayout::create();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "VerticalLayout");

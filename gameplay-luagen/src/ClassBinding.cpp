@@ -170,7 +170,6 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
         // Write out the function used to register the class with Lua.
         o << "void luaRegister_" << uniquename << "()\n";
         o << "{\n";
-        o << "    ScriptController* sc = ScriptController::getInstance();\n\n";
         
         // Get the member functions ready to bind.
         iter = bindings.begin();
@@ -273,7 +272,7 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
         }
 
         // Register the class (its member and static functions and constructor and destructor).
-        o << "\n    sc->registerClass(\"" << uniquename << "\", lua_members, ";
+        o << "\n    ScriptUtil::registerClass(\"" << uniquename << "\", lua_members, ";
         o << ((constructorUniqueName) ? *constructorUniqueName : "NULL") << ", ";
         o << ((destructorUniqueName) ? *destructorUniqueName : "NULL") << ", ";
         o << "lua_statics, scopePath);\n";

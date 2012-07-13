@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_PhysicsControllerListener()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"statusEvent", lua_PhysicsControllerListener_statusEvent},
@@ -27,14 +25,14 @@ void luaRegister_PhysicsControllerListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("PhysicsController");
 
-    sc->registerClass("PhysicsControllerListener", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsControllerListener", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static PhysicsController::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsControllerListener");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsControllerListener' expected.");
-    return (PhysicsController::Listener*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsController::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsControllerListener_statusEvent(lua_State* state)

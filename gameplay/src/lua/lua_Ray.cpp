@@ -13,8 +13,6 @@ namespace gameplay
 
 void luaRegister_Ray()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getDirection", lua_Ray_getDirection},
@@ -33,14 +31,14 @@ void luaRegister_Ray()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Ray", lua_members, lua_Ray__init, lua_Ray__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Ray", lua_members, lua_Ray__init, lua_Ray__gc, lua_statics, scopePath);
 }
 
 static Ray* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Ray");
     luaL_argcheck(state, userdata != NULL, 1, "'Ray' expected.");
-    return (Ray*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Ray*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Ray__gc(lua_State* state)
@@ -57,7 +55,7 @@ int lua_Ray__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Ray");
                 luaL_argcheck(state, userdata != NULL, 1, "'Ray' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Ray* instance = (Ray*)object->instance;
@@ -96,7 +94,7 @@ int lua_Ray__init(lua_State* state)
             void* returnPtr = (void*)new Ray();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "Ray");
@@ -115,12 +113,12 @@ int lua_Ray__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(1, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(1, "Ray", true);
 
                 void* returnPtr = (void*)new Ray(*param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Ray");
@@ -146,15 +144,15 @@ int lua_Ray__init(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new Ray(*param1, *param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Ray");
@@ -200,7 +198,7 @@ int lua_Ray_getDirection(lua_State* state)
                 void* returnPtr = (void*)&(instance->getDirection());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -246,7 +244,7 @@ int lua_Ray_getOrigin(lua_State* state)
                 void* returnPtr = (void*)&(instance->getOrigin());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -290,7 +288,7 @@ int lua_Ray_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptController::getInstance()->getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 Ray* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -304,7 +302,7 @@ int lua_Ray_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptController::getInstance()->getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 Ray* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -318,7 +316,7 @@ int lua_Ray_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Frustum* param1 = ScriptController::getInstance()->getObjectPointer<Frustum>(2, "Frustum", true);
+                Frustum* param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
 
                 Ray* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -332,7 +330,7 @@ int lua_Ray_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(2, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Ray* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -373,7 +371,7 @@ int lua_Ray_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(2, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 Ray* instance = getInstance(state);
                 instance->set(*param1);
@@ -394,10 +392,10 @@ int lua_Ray_set(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 Ray* instance = getInstance(state);
                 instance->set(*param1, *param2);
@@ -435,7 +433,7 @@ int lua_Ray_setDirection(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Ray* instance = getInstance(state);
                 instance->setDirection(*param1);
@@ -473,7 +471,7 @@ int lua_Ray_setOrigin(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Ray* instance = getInstance(state);
                 instance->setOrigin(*param1);
@@ -528,7 +526,7 @@ int lua_Ray_transform(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Ray* instance = getInstance(state);
                 instance->transform(*param1);

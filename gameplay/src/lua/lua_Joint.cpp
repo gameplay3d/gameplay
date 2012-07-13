@@ -25,8 +25,6 @@ namespace gameplay
 
 void luaRegister_Joint()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addChild", lua_Joint_addChild},
@@ -164,14 +162,14 @@ void luaRegister_Joint()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Joint", lua_members, NULL, lua_Joint__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Joint", lua_members, NULL, lua_Joint__gc, lua_statics, scopePath);
 }
 
 static Joint* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Joint");
     luaL_argcheck(state, userdata != NULL, 1, "'Joint' expected.");
-    return (Joint*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Joint*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Joint__gc(lua_State* state)
@@ -188,7 +186,7 @@ int lua_Joint__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Joint");
                 luaL_argcheck(state, userdata != NULL, 1, "'Joint' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Joint* instance = (Joint*)object->instance;
@@ -228,7 +226,7 @@ int lua_Joint_addChild(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
+                Node* param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 Joint* instance = getInstance(state);
                 instance->addChild(param1);
@@ -266,7 +264,7 @@ int lua_Joint_addListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Transform::Listener* param1 = ScriptController::getInstance()->getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+                Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
 
                 Joint* instance = getInstance(state);
                 instance->addListener(param1);
@@ -277,7 +275,7 @@ int lua_Joint_addListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 instance->addListener(param1);
@@ -298,7 +296,7 @@ int lua_Joint_addListener(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Transform::Listener* param1 = ScriptController::getInstance()->getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+                Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);
@@ -313,7 +311,7 @@ int lua_Joint_addListener(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);
@@ -390,7 +388,7 @@ int lua_Joint_clone(lua_State* state)
                 void* returnPtr = (void*)instance->clone();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -435,16 +433,16 @@ int lua_Joint_createAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptController::getInstance()->getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createAnimation(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -462,16 +460,16 @@ int lua_Joint_createAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Properties* param2 = ScriptController::getInstance()->getObjectPointer<Properties>(3, "Properties", false);
+                Properties* param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createAnimation(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -502,7 +500,7 @@ int lua_Joint_createAnimation(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -511,10 +509,10 @@ int lua_Joint_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                unsigned long* param4 = ScriptController::getInstance()->getUnsignedLongPointer(5);
+                unsigned long* param4 = ScriptUtil::getUnsignedLongPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptController::getInstance()->getFloatPointer(6);
+                float* param5 = ScriptUtil::getFloatPointer(6);
 
                 // Get parameter 6 off the stack.
                 Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
@@ -523,7 +521,7 @@ int lua_Joint_createAnimation(lua_State* state)
                 void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -556,7 +554,7 @@ int lua_Joint_createAnimation(lua_State* state)
                 (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -565,16 +563,16 @@ int lua_Joint_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                unsigned long* param4 = ScriptController::getInstance()->getUnsignedLongPointer(5);
+                unsigned long* param4 = ScriptUtil::getUnsignedLongPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptController::getInstance()->getFloatPointer(6);
+                float* param5 = ScriptUtil::getFloatPointer(6);
 
                 // Get parameter 6 off the stack.
-                float* param6 = ScriptController::getInstance()->getFloatPointer(7);
+                float* param6 = ScriptUtil::getFloatPointer(7);
 
                 // Get parameter 7 off the stack.
-                float* param7 = ScriptController::getInstance()->getFloatPointer(8);
+                float* param7 = ScriptUtil::getFloatPointer(8);
 
                 // Get parameter 8 off the stack.
                 Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
@@ -583,7 +581,7 @@ int lua_Joint_createAnimation(lua_State* state)
                 void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -632,16 +630,16 @@ int lua_Joint_createAnimationFromBy(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptController::getInstance()->getFloatPointer(4);
+                float* param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptController::getInstance()->getFloatPointer(5);
+                float* param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
                 Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
@@ -653,7 +651,7 @@ int lua_Joint_createAnimationFromBy(lua_State* state)
                 void* returnPtr = (void*)instance->createAnimationFromBy(param1, param2, param3, param4, param5, param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -702,16 +700,16 @@ int lua_Joint_createAnimationFromTo(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptController::getInstance()->getFloatPointer(4);
+                float* param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptController::getInstance()->getFloatPointer(5);
+                float* param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
                 Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
@@ -723,7 +721,7 @@ int lua_Joint_createAnimationFromTo(lua_State* state)
                 void* returnPtr = (void*)instance->createAnimationFromTo(param1, param2, param3, param4, param5, param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -783,7 +781,7 @@ int lua_Joint_destroyAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 instance->destroyAnimation(param1);
@@ -821,13 +819,13 @@ int lua_Joint_findNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -854,16 +852,16 @@ int lua_Joint_findNode(lua_State* state)
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = ScriptController::luaCheckBool(state, 3);
+                bool param2 = ScriptUtil::luaCheckBool(state, 3);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -891,19 +889,19 @@ int lua_Joint_findNode(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                bool param2 = ScriptController::luaCheckBool(state, 3);
+                bool param2 = ScriptUtil::luaCheckBool(state, 3);
 
                 // Get parameter 3 off the stack.
-                bool param3 = ScriptController::luaCheckBool(state, 4);
+                bool param3 = ScriptUtil::luaCheckBool(state, 4);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1, param2, param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -949,7 +947,7 @@ int lua_Joint_getActiveCameraTranslationView(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getActiveCameraTranslationView());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -995,7 +993,7 @@ int lua_Joint_getActiveCameraTranslationWorld(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getActiveCameraTranslationWorld());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1041,7 +1039,7 @@ int lua_Joint_getAnimation(lua_State* state)
                 void* returnPtr = (void*)instance->getAnimation();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -1067,13 +1065,13 @@ int lua_Joint_getAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -1162,7 +1160,7 @@ int lua_Joint_getAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Joint* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
@@ -1202,7 +1200,7 @@ int lua_Joint_getAudioSource(lua_State* state)
                 void* returnPtr = (void*)instance->getAudioSource();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AudioSource");
@@ -1248,7 +1246,7 @@ int lua_Joint_getBackVector(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getBackVector());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1274,7 +1272,7 @@ int lua_Joint_getBackVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getBackVector(param1);
@@ -1314,7 +1312,7 @@ int lua_Joint_getBoundingSphere(lua_State* state)
                 void* returnPtr = (void*)&(instance->getBoundingSphere());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "BoundingSphere");
@@ -1360,7 +1358,7 @@ int lua_Joint_getCamera(lua_State* state)
                 void* returnPtr = (void*)instance->getCamera();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Camera");
@@ -1443,7 +1441,7 @@ int lua_Joint_getCollisionObject(lua_State* state)
                 void* returnPtr = (void*)instance->getCollisionObject();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -1489,7 +1487,7 @@ int lua_Joint_getDownVector(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getDownVector());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1515,7 +1513,7 @@ int lua_Joint_getDownVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getDownVector(param1);
@@ -1555,7 +1553,7 @@ int lua_Joint_getFirstChild(lua_State* state)
                 void* returnPtr = (void*)instance->getFirstChild();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -1601,7 +1599,7 @@ int lua_Joint_getForm(lua_State* state)
                 void* returnPtr = (void*)instance->getForm();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Form");
@@ -1647,7 +1645,7 @@ int lua_Joint_getForwardVector(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getForwardVector());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1673,7 +1671,7 @@ int lua_Joint_getForwardVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getForwardVector(param1);
@@ -1713,7 +1711,7 @@ int lua_Joint_getForwardVectorView(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getForwardVectorView());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1759,7 +1757,7 @@ int lua_Joint_getForwardVectorWorld(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getForwardVectorWorld());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1842,7 +1840,7 @@ int lua_Joint_getInverseBindPose(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseBindPose());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -1888,7 +1886,7 @@ int lua_Joint_getInverseTransposeWorldMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseTransposeWorldMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -1934,7 +1932,7 @@ int lua_Joint_getInverseTransposeWorldViewMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseTransposeWorldViewMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -1980,7 +1978,7 @@ int lua_Joint_getInverseViewMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseViewMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -2026,7 +2024,7 @@ int lua_Joint_getInverseViewProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseViewProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -2072,7 +2070,7 @@ int lua_Joint_getLeftVector(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getLeftVector());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -2098,7 +2096,7 @@ int lua_Joint_getLeftVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getLeftVector(param1);
@@ -2138,7 +2136,7 @@ int lua_Joint_getLight(lua_State* state)
                 void* returnPtr = (void*)instance->getLight();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Light");
@@ -2184,7 +2182,7 @@ int lua_Joint_getMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -2230,7 +2228,7 @@ int lua_Joint_getModel(lua_State* state)
                 void* returnPtr = (void*)instance->getModel();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Model");
@@ -2276,7 +2274,7 @@ int lua_Joint_getNextSibling(lua_State* state)
                 void* returnPtr = (void*)instance->getNextSibling();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -2322,7 +2320,7 @@ int lua_Joint_getParent(lua_State* state)
                 void* returnPtr = (void*)instance->getParent();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -2368,7 +2366,7 @@ int lua_Joint_getParticleEmitter(lua_State* state)
                 void* returnPtr = (void*)instance->getParticleEmitter();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "ParticleEmitter");
@@ -2414,7 +2412,7 @@ int lua_Joint_getPreviousSibling(lua_State* state)
                 void* returnPtr = (void*)instance->getPreviousSibling();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -2460,7 +2458,7 @@ int lua_Joint_getProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -2543,7 +2541,7 @@ int lua_Joint_getRightVector(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getRightVector());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -2569,7 +2567,7 @@ int lua_Joint_getRightVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getRightVector(param1);
@@ -2609,7 +2607,7 @@ int lua_Joint_getRightVectorWorld(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getRightVectorWorld());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -2655,7 +2653,7 @@ int lua_Joint_getRootNode(lua_State* state)
                 void* returnPtr = (void*)instance->getRootNode();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -2701,7 +2699,7 @@ int lua_Joint_getRotation(lua_State* state)
                 void* returnPtr = (void*)&(instance->getRotation());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Quaternion");
@@ -2727,7 +2725,7 @@ int lua_Joint_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", false);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Joint* instance = getInstance(state);
                 instance->getRotation(param1);
@@ -2738,7 +2736,7 @@ int lua_Joint_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", false);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Joint* instance = getInstance(state);
                 instance->getRotation(param1);
@@ -2749,7 +2747,7 @@ int lua_Joint_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 float result = instance->getRotation(param1);
@@ -2792,7 +2790,7 @@ int lua_Joint_getScale(lua_State* state)
                 void* returnPtr = (void*)&(instance->getScale());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -2818,7 +2816,7 @@ int lua_Joint_getScale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getScale(param1);
@@ -2969,7 +2967,7 @@ int lua_Joint_getScene(lua_State* state)
                 void* returnPtr = (void*)instance->getScene();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Scene");
@@ -3015,7 +3013,7 @@ int lua_Joint_getTranslation(lua_State* state)
                 void* returnPtr = (void*)&(instance->getTranslation());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -3041,7 +3039,7 @@ int lua_Joint_getTranslation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getTranslation(param1);
@@ -3081,7 +3079,7 @@ int lua_Joint_getTranslationView(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getTranslationView());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -3127,7 +3125,7 @@ int lua_Joint_getTranslationWorld(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getTranslationWorld());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -3321,7 +3319,7 @@ int lua_Joint_getUpVector(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getUpVector());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -3347,7 +3345,7 @@ int lua_Joint_getUpVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->getUpVector(param1);
@@ -3387,7 +3385,7 @@ int lua_Joint_getUpVectorWorld(lua_State* state)
                 void* returnPtr = (void*)new Vector3(instance->getUpVectorWorld());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -3433,7 +3431,7 @@ int lua_Joint_getViewMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getViewMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -3479,7 +3477,7 @@ int lua_Joint_getViewProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getViewProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -3525,7 +3523,7 @@ int lua_Joint_getWorldMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getWorldMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -3571,7 +3569,7 @@ int lua_Joint_getWorldViewMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getWorldViewMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -3617,7 +3615,7 @@ int lua_Joint_getWorldViewProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getWorldViewProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -3840,7 +3838,7 @@ int lua_Joint_removeChild(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
+                Node* param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 Joint* instance = getInstance(state);
                 instance->removeChild(param1);
@@ -3878,7 +3876,7 @@ int lua_Joint_removeListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Transform::Listener* param1 = ScriptController::getInstance()->getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+                Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
 
                 Joint* instance = getInstance(state);
                 instance->removeListener(param1);
@@ -3889,7 +3887,7 @@ int lua_Joint_removeListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 instance->removeListener(param1);
@@ -3927,7 +3925,7 @@ int lua_Joint_rotate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Joint* instance = getInstance(state);
                 instance->rotate(*param1);
@@ -3938,7 +3936,7 @@ int lua_Joint_rotate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Joint* instance = getInstance(state);
                 instance->rotate(*param1);
@@ -3959,7 +3957,7 @@ int lua_Joint_rotate(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -4157,7 +4155,7 @@ int lua_Joint_scale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->scale(*param1);
@@ -4337,7 +4335,7 @@ int lua_Joint_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Transform* param1 = ScriptController::getInstance()->getObjectPointer<Transform>(2, "Transform", true);
+                Transform* param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", true);
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1);
@@ -4359,13 +4357,13 @@ int lua_Joint_set(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptController::getInstance()->getObjectPointer<Quaternion>(3, "Quaternion", true);
+                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
@@ -4378,13 +4376,13 @@ int lua_Joint_set(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptController::getInstance()->getObjectPointer<Matrix>(3, "Matrix", true);
+                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
@@ -4407,16 +4405,16 @@ int lua_Joint_set(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptController::getInstance()->getObjectPointer<Vector3>(5, "Vector3", true);
+                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1, *param2, param3, *param4);
@@ -4458,7 +4456,7 @@ int lua_Joint_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Joint* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
@@ -4483,7 +4481,7 @@ int lua_Joint_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptController::getInstance()->getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -4524,7 +4522,7 @@ int lua_Joint_setAudioSource(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AudioSource* param1 = ScriptController::getInstance()->getObjectPointer<AudioSource>(2, "AudioSource", false);
+                AudioSource* param1 = ScriptUtil::getObjectPointer<AudioSource>(2, "AudioSource", false);
 
                 Joint* instance = getInstance(state);
                 instance->setAudioSource(param1);
@@ -4562,7 +4560,7 @@ int lua_Joint_setCamera(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Camera* param1 = ScriptController::getInstance()->getObjectPointer<Camera>(2, "Camera", false);
+                Camera* param1 = ScriptUtil::getObjectPointer<Camera>(2, "Camera", false);
 
                 Joint* instance = getInstance(state);
                 instance->setCamera(param1);
@@ -4606,7 +4604,7 @@ int lua_Joint_setCollisionObject(lua_State* state)
                 void* returnPtr = (void*)instance->setCollisionObject(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -4623,13 +4621,13 @@ int lua_Joint_setCollisionObject(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -4646,13 +4644,13 @@ int lua_Joint_setCollisionObject(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Properties* param1 = ScriptController::getInstance()->getObjectPointer<Properties>(2, "Properties", false);
+                Properties* param1 = ScriptUtil::getObjectPointer<Properties>(2, "Properties", false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -4682,13 +4680,13 @@ int lua_Joint_setCollisionObject(lua_State* state)
                 PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionShape::Definition* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
+                PhysicsCollisionShape::Definition* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1, *param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -4719,16 +4717,16 @@ int lua_Joint_setCollisionObject(lua_State* state)
                 PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionShape::Definition* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
+                PhysicsCollisionShape::Definition* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
 
                 // Get parameter 3 off the stack.
-                PhysicsRigidBody::Parameters* param3 = ScriptController::getInstance()->getObjectPointer<PhysicsRigidBody::Parameters>(4, "PhysicsRigidBodyParameters", false);
+                PhysicsRigidBody::Parameters* param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody::Parameters>(4, "PhysicsRigidBodyParameters", false);
 
                 Joint* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1, *param2, param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionObject");
@@ -4772,7 +4770,7 @@ int lua_Joint_setDynamic(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Joint* instance = getInstance(state);
                 instance->setDynamic(param1);
@@ -4810,7 +4808,7 @@ int lua_Joint_setForm(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Form* param1 = ScriptController::getInstance()->getObjectPointer<Form>(2, "Form", false);
+                Form* param1 = ScriptUtil::getObjectPointer<Form>(2, "Form", false);
 
                 Joint* instance = getInstance(state);
                 instance->setForm(param1);
@@ -4848,7 +4846,7 @@ int lua_Joint_setId(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Joint* instance = getInstance(state);
                 instance->setId(param1);
@@ -4920,7 +4918,7 @@ int lua_Joint_setLight(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Light* param1 = ScriptController::getInstance()->getObjectPointer<Light>(2, "Light", false);
+                Light* param1 = ScriptUtil::getObjectPointer<Light>(2, "Light", false);
 
                 Joint* instance = getInstance(state);
                 instance->setLight(param1);
@@ -4958,7 +4956,7 @@ int lua_Joint_setModel(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Model* param1 = ScriptController::getInstance()->getObjectPointer<Model>(2, "Model", false);
+                Model* param1 = ScriptUtil::getObjectPointer<Model>(2, "Model", false);
 
                 Joint* instance = getInstance(state);
                 instance->setModel(param1);
@@ -4996,7 +4994,7 @@ int lua_Joint_setParticleEmitter(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ParticleEmitter* param1 = ScriptController::getInstance()->getObjectPointer<ParticleEmitter>(2, "ParticleEmitter", false);
+                ParticleEmitter* param1 = ScriptUtil::getObjectPointer<ParticleEmitter>(2, "ParticleEmitter", false);
 
                 Joint* instance = getInstance(state);
                 instance->setParticleEmitter(param1);
@@ -5034,7 +5032,7 @@ int lua_Joint_setRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Joint* instance = getInstance(state);
                 instance->setRotation(*param1);
@@ -5045,7 +5043,7 @@ int lua_Joint_setRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Joint* instance = getInstance(state);
                 instance->setRotation(*param1);
@@ -5066,7 +5064,7 @@ int lua_Joint_setRotation(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -5150,7 +5148,7 @@ int lua_Joint_setScale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->setScale(*param1);
@@ -5330,7 +5328,7 @@ int lua_Joint_setTranslation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->setTranslation(*param1);
@@ -5510,7 +5508,7 @@ int lua_Joint_setTransparent(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Joint* instance = getInstance(state);
                 instance->setTransparent(param1);
@@ -5548,7 +5546,7 @@ int lua_Joint_setVisible(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Joint* instance = getInstance(state);
                 instance->setVisible(param1);
@@ -5868,7 +5866,7 @@ int lua_Joint_transformPoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->transformPoint(param1);
@@ -5889,10 +5887,10 @@ int lua_Joint_transformPoint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", false);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
@@ -5930,7 +5928,7 @@ int lua_Joint_transformVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", false);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->transformVector(param1);
@@ -5951,10 +5949,10 @@ int lua_Joint_transformVector(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", false);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
@@ -5990,7 +5988,7 @@ int lua_Joint_transformVector(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 5 off the stack.
-                Vector3* param5 = ScriptController::getInstance()->getObjectPointer<Vector3>(6, "Vector3", false);
+                Vector3* param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false);
 
                 Joint* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
@@ -6028,7 +6026,7 @@ int lua_Joint_translate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Joint* instance = getInstance(state);
                 instance->translate(*param1);
