@@ -1577,7 +1577,6 @@ void Generator::generateBindings()
             // Write out the function used to register all global bindings with Lua.
             global << "void luaRegister_" << LUA_GLOBAL_FILENAME << "()\n";
             global << "{\n";
-            global << "    ScriptController* sc = ScriptController::getInstance();\n";
         
             if (_functions.size() > 0)
             {
@@ -1585,7 +1584,7 @@ void Generator::generateBindings()
                 // Bind the non-member functions.
                 for (map<string, vector<FunctionBinding> >::iterator iter = _functions.begin(); iter != _functions.end(); iter++)
                 {
-                    global << "    sc->registerFunction(\"" << iter->second[0].name << "\", " << iter->second[0].getFunctionName() << ");\n";
+                    global << "    ScriptUtil::registerFunction(\"" << iter->second[0].name << "\", " << iter->second[0].getFunctionName() << ");\n";
                 }
             }
 
@@ -1602,7 +1601,7 @@ void Generator::generateBindings()
                         global << "    hierarchy[\"" << baseClasses[i] << "\"].push_back(\"" << *iter << "\");\n";
                     }
                 }
-                global << "    sc->setGlobalHierarchy(hierarchy);\n";
+                global << "    ScriptUtil::setGlobalHierarchy(hierarchy);\n";
             }
 
             // Register all enums.
@@ -1622,7 +1621,7 @@ void Generator::generateBindings()
                     vector<string>::iterator enumIter = iter->second.values.begin();
                     for (; enumIter != iter->second.values.end(); enumIter++)
                     {
-                        global << "        sc->registerConstantString(\"" << *enumIter << "\", \"" << *enumIter << "\", scopePath);\n";
+                        global << "        ScriptUtil::registerConstantString(\"" << *enumIter << "\", \"" << *enumIter << "\", scopePath);\n";
                     }
 
                     global << "    }\n";

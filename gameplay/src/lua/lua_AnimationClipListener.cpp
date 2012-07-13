@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_AnimationClipListener()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"animationEvent", lua_AnimationClipListener_animationEvent},
@@ -27,14 +25,14 @@ void luaRegister_AnimationClipListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("AnimationClip");
 
-    sc->registerClass("AnimationClipListener", lua_members, NULL, lua_AnimationClipListener__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("AnimationClipListener", lua_members, NULL, lua_AnimationClipListener__gc, lua_statics, scopePath);
 }
 
 static AnimationClip::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationClipListener");
     luaL_argcheck(state, userdata != NULL, 1, "'AnimationClipListener' expected.");
-    return (AnimationClip::Listener*)((ScriptController::LuaObject*)userdata)->instance;
+    return (AnimationClip::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AnimationClipListener__gc(lua_State* state)
@@ -51,7 +49,7 @@ int lua_AnimationClipListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AnimationClipListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'AnimationClipListener' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AnimationClip::Listener* instance = (AnimationClip::Listener*)object->instance;
@@ -92,7 +90,7 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AnimationClip* param1 = ScriptController::getInstance()->getObjectPointer<AnimationClip>(2, "AnimationClip", false);
+                AnimationClip* param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false);
 
                 // Get parameter 2 off the stack.
                 AnimationClip::Listener::EventType param2 = (AnimationClip::Listener::EventType)lua_enumFromString_AnimationClipListenerEventType(luaL_checkstring(state, 3));

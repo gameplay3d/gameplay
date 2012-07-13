@@ -10,8 +10,6 @@ namespace gameplay
 
 void luaRegister_MeshBatch()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"begin", lua_MeshBatch_begin},
@@ -29,14 +27,14 @@ void luaRegister_MeshBatch()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("MeshBatch", lua_members, NULL, lua_MeshBatch__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("MeshBatch", lua_members, NULL, lua_MeshBatch__gc, lua_statics, scopePath);
 }
 
 static MeshBatch* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MeshBatch");
     luaL_argcheck(state, userdata != NULL, 1, "'MeshBatch' expected.");
-    return (MeshBatch*)((ScriptController::LuaObject*)userdata)->instance;
+    return (MeshBatch*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MeshBatch__gc(lua_State* state)
@@ -53,7 +51,7 @@ int lua_MeshBatch__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "MeshBatch");
                 luaL_argcheck(state, userdata != NULL, 1, "'MeshBatch' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     MeshBatch* instance = (MeshBatch*)object->instance;
@@ -234,7 +232,7 @@ int lua_MeshBatch_getMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->getMaterial();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -318,21 +316,21 @@ int lua_MeshBatch_static_create(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat>(1, "VertexFormat", true);
+                VertexFormat* param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
 
                 // Get parameter 2 off the stack.
                 Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptController::getInstance()->getString(3, false);
+                const char* param3 = ScriptUtil::getString(3, false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshBatch");
@@ -351,21 +349,21 @@ int lua_MeshBatch_static_create(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat>(1, "VertexFormat", true);
+                VertexFormat* param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
 
                 // Get parameter 2 off the stack.
                 Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                 // Get parameter 3 off the stack.
-                Material* param3 = ScriptController::getInstance()->getObjectPointer<Material>(3, "Material", false);
+                Material* param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshBatch");
@@ -394,16 +392,16 @@ int lua_MeshBatch_static_create(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat>(1, "VertexFormat", true);
+                VertexFormat* param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
 
                 // Get parameter 2 off the stack.
                 Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptController::getInstance()->getString(3, false);
+                const char* param3 = ScriptUtil::getString(3, false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -411,7 +409,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshBatch");
@@ -431,16 +429,16 @@ int lua_MeshBatch_static_create(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat>(1, "VertexFormat", true);
+                VertexFormat* param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
 
                 // Get parameter 2 off the stack.
                 Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                 // Get parameter 3 off the stack.
-                Material* param3 = ScriptController::getInstance()->getObjectPointer<Material>(3, "Material", false);
+                Material* param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -448,7 +446,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshBatch");
@@ -478,16 +476,16 @@ int lua_MeshBatch_static_create(lua_State* state)
                 lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat>(1, "VertexFormat", true);
+                VertexFormat* param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
 
                 // Get parameter 2 off the stack.
                 Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptController::getInstance()->getString(3, false);
+                const char* param3 = ScriptUtil::getString(3, false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -498,7 +496,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshBatch");
@@ -519,16 +517,16 @@ int lua_MeshBatch_static_create(lua_State* state)
                 lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat* param1 = ScriptController::getInstance()->getObjectPointer<VertexFormat>(1, "VertexFormat", true);
+                VertexFormat* param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
 
                 // Get parameter 2 off the stack.
                 Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                 // Get parameter 3 off the stack.
-                Material* param3 = ScriptController::getInstance()->getObjectPointer<Material>(3, "Material", false);
+                Material* param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -539,7 +537,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshBatch");

@@ -12,8 +12,6 @@ namespace gameplay
 
 void luaRegister_Uniform()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getEffect", lua_Uniform_getEffect},
@@ -24,14 +22,14 @@ void luaRegister_Uniform()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Uniform", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("Uniform", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static Uniform* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Uniform");
     luaL_argcheck(state, userdata != NULL, 1, "'Uniform' expected.");
-    return (Uniform*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Uniform*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Uniform_getEffect(lua_State* state)
@@ -50,7 +48,7 @@ int lua_Uniform_getEffect(lua_State* state)
                 void* returnPtr = (void*)instance->getEffect();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Effect");
