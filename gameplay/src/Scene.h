@@ -331,13 +331,13 @@ bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
 inline bool Scene::visitNode(Node* node, const char* visitMethod)
 {
     // Invoke the visit method for this node.
-    if (!ScriptController::getInstance()->executeFunction<bool>(visitMethod, "<Node>", node))
+    if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", node))
         return false;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!ScriptController::getInstance()->executeFunction<bool>(visitMethod, "<Node>", child))
+        if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", child))
             return false;
     }
 

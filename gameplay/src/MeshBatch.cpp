@@ -156,7 +156,7 @@ bool MeshBatch::resize(unsigned int capacity)
     return true;
 }
     
-void MeshBatch::begin()
+void MeshBatch::start()
 {
     _vertexCount = 0;
     _indexCount = 0;

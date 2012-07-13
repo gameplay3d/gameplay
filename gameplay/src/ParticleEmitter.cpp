@@ -934,7 +934,7 @@ void ParticleEmitter::draw()
         }
 
         // Begin sprite batch drawing
-        _spriteBatch->begin();
+        _spriteBatch->start();
 
         // 2D Rotation.
         static const Vector2 pivot(0.5f, 0.5f);
