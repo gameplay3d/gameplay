@@ -40,6 +40,58 @@
 		426878AF153F4BB300844500 /* FlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 426878AB153F4BB300844500 /* FlowLayout.h */; };
 		4271C08E15337C8200B89DA7 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4271C08D15337C8200B89DA7 /* Layout.cpp */; };
 		4271C08F15337C8200B89DA7 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4271C08D15337C8200B89DA7 /* Layout.cpp */; };
+		42789FCC15B0E83700866F5B /* AIAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC215B0E83700866F5B /* AIAgent.cpp */; };
+		42789FCD15B0E83700866F5B /* AIAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC215B0E83700866F5B /* AIAgent.cpp */; };
+		42789FCE15B0E83700866F5B /* AIAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC315B0E83700866F5B /* AIAgent.h */; };
+		42789FCF15B0E83700866F5B /* AIAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC315B0E83700866F5B /* AIAgent.h */; };
+		42789FD015B0E83700866F5B /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC415B0E83700866F5B /* AIController.cpp */; };
+		42789FD115B0E83700866F5B /* AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC415B0E83700866F5B /* AIController.cpp */; };
+		42789FD215B0E83700866F5B /* AIController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC515B0E83700866F5B /* AIController.h */; };
+		42789FD315B0E83700866F5B /* AIController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC515B0E83700866F5B /* AIController.h */; };
+		42789FD415B0E83700866F5B /* AIMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC615B0E83700866F5B /* AIMessage.cpp */; };
+		42789FD515B0E83700866F5B /* AIMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC615B0E83700866F5B /* AIMessage.cpp */; };
+		42789FD615B0E83700866F5B /* AIMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC715B0E83700866F5B /* AIMessage.h */; };
+		42789FD715B0E83700866F5B /* AIMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC715B0E83700866F5B /* AIMessage.h */; };
+		42789FD815B0E83700866F5B /* AIState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC815B0E83700866F5B /* AIState.cpp */; };
+		42789FD915B0E83700866F5B /* AIState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FC815B0E83700866F5B /* AIState.cpp */; };
+		42789FDA15B0E83700866F5B /* AIState.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC915B0E83700866F5B /* AIState.h */; };
+		42789FDB15B0E83700866F5B /* AIState.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FC915B0E83700866F5B /* AIState.h */; };
+		42789FDC15B0E83700866F5B /* AIStateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FCA15B0E83700866F5B /* AIStateMachine.cpp */; };
+		42789FDD15B0E83700866F5B /* AIStateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FCA15B0E83700866F5B /* AIStateMachine.cpp */; };
+		42789FDE15B0E83700866F5B /* AIStateMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FCB15B0E83700866F5B /* AIStateMachine.h */; };
+		42789FDF15B0E83700866F5B /* AIStateMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FCB15B0E83700866F5B /* AIStateMachine.h */; };
+		42789FF115B0E85500866F5B /* lua_AIAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE115B0E85500866F5B /* lua_AIAgent.cpp */; };
+		42789FF215B0E85500866F5B /* lua_AIAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE115B0E85500866F5B /* lua_AIAgent.cpp */; };
+		42789FF315B0E85500866F5B /* lua_AIAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE215B0E85500866F5B /* lua_AIAgent.h */; };
+		42789FF415B0E85500866F5B /* lua_AIAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE215B0E85500866F5B /* lua_AIAgent.h */; };
+		42789FF515B0E85500866F5B /* lua_AIAgentListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE315B0E85500866F5B /* lua_AIAgentListener.cpp */; };
+		42789FF615B0E85500866F5B /* lua_AIAgentListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE315B0E85500866F5B /* lua_AIAgentListener.cpp */; };
+		42789FF715B0E85500866F5B /* lua_AIAgentListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE415B0E85500866F5B /* lua_AIAgentListener.h */; };
+		42789FF815B0E85500866F5B /* lua_AIAgentListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE415B0E85500866F5B /* lua_AIAgentListener.h */; };
+		42789FF915B0E85500866F5B /* lua_AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE515B0E85500866F5B /* lua_AIController.cpp */; };
+		42789FFA15B0E85500866F5B /* lua_AIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE515B0E85500866F5B /* lua_AIController.cpp */; };
+		42789FFB15B0E85500866F5B /* lua_AIController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE615B0E85500866F5B /* lua_AIController.h */; };
+		42789FFC15B0E85500866F5B /* lua_AIController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE615B0E85500866F5B /* lua_AIController.h */; };
+		42789FFD15B0E85500866F5B /* lua_AIMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE715B0E85500866F5B /* lua_AIMessage.cpp */; };
+		42789FFE15B0E85500866F5B /* lua_AIMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE715B0E85500866F5B /* lua_AIMessage.cpp */; };
+		42789FFF15B0E85500866F5B /* lua_AIMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE815B0E85500866F5B /* lua_AIMessage.h */; };
+		4278A00015B0E85500866F5B /* lua_AIMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FE815B0E85500866F5B /* lua_AIMessage.h */; };
+		4278A00115B0E85500866F5B /* lua_AIMessageParameterType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE915B0E85500866F5B /* lua_AIMessageParameterType.cpp */; };
+		4278A00215B0E85500866F5B /* lua_AIMessageParameterType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FE915B0E85500866F5B /* lua_AIMessageParameterType.cpp */; };
+		4278A00315B0E85500866F5B /* lua_AIMessageParameterType.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FEA15B0E85500866F5B /* lua_AIMessageParameterType.h */; };
+		4278A00415B0E85500866F5B /* lua_AIMessageParameterType.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FEA15B0E85500866F5B /* lua_AIMessageParameterType.h */; };
+		4278A00515B0E85500866F5B /* lua_AIState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FEB15B0E85500866F5B /* lua_AIState.cpp */; };
+		4278A00615B0E85500866F5B /* lua_AIState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FEB15B0E85500866F5B /* lua_AIState.cpp */; };
+		4278A00715B0E85500866F5B /* lua_AIState.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FEC15B0E85500866F5B /* lua_AIState.h */; };
+		4278A00815B0E85500866F5B /* lua_AIState.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FEC15B0E85500866F5B /* lua_AIState.h */; };
+		4278A00915B0E85500866F5B /* lua_AIStateListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FED15B0E85500866F5B /* lua_AIStateListener.cpp */; };
+		4278A00A15B0E85500866F5B /* lua_AIStateListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FED15B0E85500866F5B /* lua_AIStateListener.cpp */; };
+		4278A00B15B0E85500866F5B /* lua_AIStateListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FEE15B0E85500866F5B /* lua_AIStateListener.h */; };
+		4278A00C15B0E85500866F5B /* lua_AIStateListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FEE15B0E85500866F5B /* lua_AIStateListener.h */; };
+		4278A00D15B0E85500866F5B /* lua_AIStateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FEF15B0E85500866F5B /* lua_AIStateMachine.cpp */; };
+		4278A00E15B0E85500866F5B /* lua_AIStateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42789FEF15B0E85500866F5B /* lua_AIStateMachine.cpp */; };
+		4278A00F15B0E85500866F5B /* lua_AIStateMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FF015B0E85500866F5B /* lua_AIStateMachine.h */; };
+		4278A01015B0E85500866F5B /* lua_AIStateMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FF015B0E85500866F5B /* lua_AIStateMachine.h */; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; };
 		42B7000015B08108002BB8C3 /* lua_ControlAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B7FEA315B08108002BB8C3 /* lua_ControlAlignment.h */; };
@@ -1030,6 +1082,32 @@
 		426878AA153F4BB300844500 /* FlowLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlowLayout.cpp; path = src/FlowLayout.cpp; sourceTree = SOURCE_ROOT; };
 		426878AB153F4BB300844500 /* FlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowLayout.h; path = src/FlowLayout.h; sourceTree = SOURCE_ROOT; };
 		4271C08D15337C8200B89DA7 /* Layout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Layout.cpp; path = src/Layout.cpp; sourceTree = SOURCE_ROOT; };
+		42789FC215B0E83700866F5B /* AIAgent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AIAgent.cpp; path = src/AIAgent.cpp; sourceTree = SOURCE_ROOT; };
+		42789FC315B0E83700866F5B /* AIAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIAgent.h; path = src/AIAgent.h; sourceTree = SOURCE_ROOT; };
+		42789FC415B0E83700866F5B /* AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AIController.cpp; path = src/AIController.cpp; sourceTree = SOURCE_ROOT; };
+		42789FC515B0E83700866F5B /* AIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIController.h; path = src/AIController.h; sourceTree = SOURCE_ROOT; };
+		42789FC615B0E83700866F5B /* AIMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AIMessage.cpp; path = src/AIMessage.cpp; sourceTree = SOURCE_ROOT; };
+		42789FC715B0E83700866F5B /* AIMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIMessage.h; path = src/AIMessage.h; sourceTree = SOURCE_ROOT; };
+		42789FC815B0E83700866F5B /* AIState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AIState.cpp; path = src/AIState.cpp; sourceTree = SOURCE_ROOT; };
+		42789FC915B0E83700866F5B /* AIState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIState.h; path = src/AIState.h; sourceTree = SOURCE_ROOT; };
+		42789FCA15B0E83700866F5B /* AIStateMachine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AIStateMachine.cpp; path = src/AIStateMachine.cpp; sourceTree = SOURCE_ROOT; };
+		42789FCB15B0E83700866F5B /* AIStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIStateMachine.h; path = src/AIStateMachine.h; sourceTree = SOURCE_ROOT; };
+		42789FE115B0E85500866F5B /* lua_AIAgent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIAgent.cpp; path = src/lua/lua_AIAgent.cpp; sourceTree = SOURCE_ROOT; };
+		42789FE215B0E85500866F5B /* lua_AIAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIAgent.h; path = src/lua/lua_AIAgent.h; sourceTree = SOURCE_ROOT; };
+		42789FE315B0E85500866F5B /* lua_AIAgentListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIAgentListener.cpp; path = src/lua/lua_AIAgentListener.cpp; sourceTree = SOURCE_ROOT; };
+		42789FE415B0E85500866F5B /* lua_AIAgentListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIAgentListener.h; path = src/lua/lua_AIAgentListener.h; sourceTree = SOURCE_ROOT; };
+		42789FE515B0E85500866F5B /* lua_AIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIController.cpp; path = src/lua/lua_AIController.cpp; sourceTree = SOURCE_ROOT; };
+		42789FE615B0E85500866F5B /* lua_AIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIController.h; path = src/lua/lua_AIController.h; sourceTree = SOURCE_ROOT; };
+		42789FE715B0E85500866F5B /* lua_AIMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIMessage.cpp; path = src/lua/lua_AIMessage.cpp; sourceTree = SOURCE_ROOT; };
+		42789FE815B0E85500866F5B /* lua_AIMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIMessage.h; path = src/lua/lua_AIMessage.h; sourceTree = SOURCE_ROOT; };
+		42789FE915B0E85500866F5B /* lua_AIMessageParameterType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIMessageParameterType.cpp; path = src/lua/lua_AIMessageParameterType.cpp; sourceTree = SOURCE_ROOT; };
+		42789FEA15B0E85500866F5B /* lua_AIMessageParameterType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIMessageParameterType.h; path = src/lua/lua_AIMessageParameterType.h; sourceTree = SOURCE_ROOT; };
+		42789FEB15B0E85500866F5B /* lua_AIState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIState.cpp; path = src/lua/lua_AIState.cpp; sourceTree = SOURCE_ROOT; };
+		42789FEC15B0E85500866F5B /* lua_AIState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIState.h; path = src/lua/lua_AIState.h; sourceTree = SOURCE_ROOT; };
+		42789FED15B0E85500866F5B /* lua_AIStateListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIStateListener.cpp; path = src/lua/lua_AIStateListener.cpp; sourceTree = SOURCE_ROOT; };
+		42789FEE15B0E85500866F5B /* lua_AIStateListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIStateListener.h; path = src/lua/lua_AIStateListener.h; sourceTree = SOURCE_ROOT; };
+		42789FEF15B0E85500866F5B /* lua_AIStateMachine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_AIStateMachine.cpp; path = src/lua/lua_AIStateMachine.cpp; sourceTree = SOURCE_ROOT; };
+		42789FF015B0E85500866F5B /* lua_AIStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_AIStateMachine.h; path = src/lua/lua_AIStateMachine.h; sourceTree = SOURCE_ROOT; };
 		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
 		42B701F615B08177002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
@@ -1622,6 +1700,16 @@
 			children = (
 				5BD52634150F822A004C9099 /* AbsoluteLayout.cpp */,
 				5BD52635150F822A004C9099 /* AbsoluteLayout.h */,
+				42789FC215B0E83700866F5B /* AIAgent.cpp */,
+				42789FC315B0E83700866F5B /* AIAgent.h */,
+				42789FC415B0E83700866F5B /* AIController.cpp */,
+				42789FC515B0E83700866F5B /* AIController.h */,
+				42789FC615B0E83700866F5B /* AIMessage.cpp */,
+				42789FC715B0E83700866F5B /* AIMessage.h */,
+				42789FC815B0E83700866F5B /* AIState.cpp */,
+				42789FC915B0E83700866F5B /* AIState.h */,
+				42789FCA15B0E83700866F5B /* AIStateMachine.cpp */,
+				42789FCB15B0E83700866F5B /* AIStateMachine.h */,
 				42CD0DB1147D8FF50000361E /* Animation.cpp */,
 				42CD0DB2147D8FF50000361E /* Animation.h */,
 				42CD0DB3147D8FF50000361E /* AnimationClip.cpp */,
@@ -1851,10 +1939,26 @@
 		42B7FE7115B080EE002BB8C3 /* lua */ = {
 			isa = PBXGroup;
 			children = (
-				42B7FE7215B08108002BB8C3 /* lua_AbsoluteLayout.cpp */,
-				42B7FE7315B08108002BB8C3 /* lua_AbsoluteLayout.h */,
 				42B7FE7415B08108002BB8C3 /* lua_all_bindings.cpp */,
 				42B7FE7515B08108002BB8C3 /* lua_all_bindings.h */,
+				42B7FE7215B08108002BB8C3 /* lua_AbsoluteLayout.cpp */,
+				42B7FE7315B08108002BB8C3 /* lua_AbsoluteLayout.h */,
+				42789FE115B0E85500866F5B /* lua_AIAgent.cpp */,
+				42789FE215B0E85500866F5B /* lua_AIAgent.h */,
+				42789FE315B0E85500866F5B /* lua_AIAgentListener.cpp */,
+				42789FE415B0E85500866F5B /* lua_AIAgentListener.h */,
+				42789FE515B0E85500866F5B /* lua_AIController.cpp */,
+				42789FE615B0E85500866F5B /* lua_AIController.h */,
+				42789FE715B0E85500866F5B /* lua_AIMessage.cpp */,
+				42789FE815B0E85500866F5B /* lua_AIMessage.h */,
+				42789FE915B0E85500866F5B /* lua_AIMessageParameterType.cpp */,
+				42789FEA15B0E85500866F5B /* lua_AIMessageParameterType.h */,
+				42789FEB15B0E85500866F5B /* lua_AIState.cpp */,
+				42789FEC15B0E85500866F5B /* lua_AIState.h */,
+				42789FED15B0E85500866F5B /* lua_AIStateListener.cpp */,
+				42789FEE15B0E85500866F5B /* lua_AIStateListener.h */,
+				42789FEF15B0E85500866F5B /* lua_AIStateMachine.cpp */,
+				42789FF015B0E85500866F5B /* lua_AIStateMachine.h */,
 				42B7FE7615B08108002BB8C3 /* lua_Animation.cpp */,
 				42B7FE7715B08108002BB8C3 /* lua_Animation.h */,
 				42B7FE7815B08108002BB8C3 /* lua_AnimationClip.cpp */,
@@ -2473,6 +2577,19 @@
 				42B701EC15B08109002BB8C3 /* lua_VertexFormatElement.h in Headers */,
 				42B701F015B08109002BB8C3 /* lua_VertexFormatUsage.h in Headers */,
 				42B701F415B08109002BB8C3 /* lua_VerticalLayout.h in Headers */,
+				42789FCE15B0E83700866F5B /* AIAgent.h in Headers */,
+				42789FD215B0E83700866F5B /* AIController.h in Headers */,
+				42789FD615B0E83700866F5B /* AIMessage.h in Headers */,
+				42789FDA15B0E83700866F5B /* AIState.h in Headers */,
+				42789FDE15B0E83700866F5B /* AIStateMachine.h in Headers */,
+				42789FF315B0E85500866F5B /* lua_AIAgent.h in Headers */,
+				42789FF715B0E85500866F5B /* lua_AIAgentListener.h in Headers */,
+				42789FFB15B0E85500866F5B /* lua_AIController.h in Headers */,
+				42789FFF15B0E85500866F5B /* lua_AIMessage.h in Headers */,
+				4278A00315B0E85500866F5B /* lua_AIMessageParameterType.h in Headers */,
+				4278A00715B0E85500866F5B /* lua_AIState.h in Headers */,
+				4278A00B15B0E85500866F5B /* lua_AIStateListener.h in Headers */,
+				4278A00F15B0E85500866F5B /* lua_AIStateMachine.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2724,6 +2841,19 @@
 				42B701ED15B08109002BB8C3 /* lua_VertexFormatElement.h in Headers */,
 				42B701F115B08109002BB8C3 /* lua_VertexFormatUsage.h in Headers */,
 				42B701F515B08109002BB8C3 /* lua_VerticalLayout.h in Headers */,
+				42789FCF15B0E83700866F5B /* AIAgent.h in Headers */,
+				42789FD315B0E83700866F5B /* AIController.h in Headers */,
+				42789FD715B0E83700866F5B /* AIMessage.h in Headers */,
+				42789FDB15B0E83700866F5B /* AIState.h in Headers */,
+				42789FDF15B0E83700866F5B /* AIStateMachine.h in Headers */,
+				42789FF415B0E85500866F5B /* lua_AIAgent.h in Headers */,
+				42789FF815B0E85500866F5B /* lua_AIAgentListener.h in Headers */,
+				42789FFC15B0E85500866F5B /* lua_AIController.h in Headers */,
+				4278A00015B0E85500866F5B /* lua_AIMessage.h in Headers */,
+				4278A00415B0E85500866F5B /* lua_AIMessageParameterType.h in Headers */,
+				4278A00815B0E85500866F5B /* lua_AIState.h in Headers */,
+				4278A00C15B0E85500866F5B /* lua_AIStateListener.h in Headers */,
+				4278A01015B0E85500866F5B /* lua_AIStateMachine.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3034,6 +3164,19 @@
 				42B701EA15B08109002BB8C3 /* lua_VertexFormatElement.cpp in Sources */,
 				42B701EE15B08109002BB8C3 /* lua_VertexFormatUsage.cpp in Sources */,
 				42B701F215B08109002BB8C3 /* lua_VerticalLayout.cpp in Sources */,
+				42789FCC15B0E83700866F5B /* AIAgent.cpp in Sources */,
+				42789FD015B0E83700866F5B /* AIController.cpp in Sources */,
+				42789FD415B0E83700866F5B /* AIMessage.cpp in Sources */,
+				42789FD815B0E83700866F5B /* AIState.cpp in Sources */,
+				42789FDC15B0E83700866F5B /* AIStateMachine.cpp in Sources */,
+				42789FF115B0E85500866F5B /* lua_AIAgent.cpp in Sources */,
+				42789FF515B0E85500866F5B /* lua_AIAgentListener.cpp in Sources */,
+				42789FF915B0E85500866F5B /* lua_AIController.cpp in Sources */,
+				42789FFD15B0E85500866F5B /* lua_AIMessage.cpp in Sources */,
+				4278A00115B0E85500866F5B /* lua_AIMessageParameterType.cpp in Sources */,
+				4278A00515B0E85500866F5B /* lua_AIState.cpp in Sources */,
+				4278A00915B0E85500866F5B /* lua_AIStateListener.cpp in Sources */,
+				4278A00D15B0E85500866F5B /* lua_AIStateMachine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3280,6 +3423,19 @@
 				42B701EB15B08109002BB8C3 /* lua_VertexFormatElement.cpp in Sources */,
 				42B701EF15B08109002BB8C3 /* lua_VertexFormatUsage.cpp in Sources */,
 				42B701F315B08109002BB8C3 /* lua_VerticalLayout.cpp in Sources */,
+				42789FCD15B0E83700866F5B /* AIAgent.cpp in Sources */,
+				42789FD115B0E83700866F5B /* AIController.cpp in Sources */,
+				42789FD515B0E83700866F5B /* AIMessage.cpp in Sources */,
+				42789FD915B0E83700866F5B /* AIState.cpp in Sources */,
+				42789FDD15B0E83700866F5B /* AIStateMachine.cpp in Sources */,
+				42789FF215B0E85500866F5B /* lua_AIAgent.cpp in Sources */,
+				42789FF615B0E85500866F5B /* lua_AIAgentListener.cpp in Sources */,
+				42789FFA15B0E85500866F5B /* lua_AIController.cpp in Sources */,
+				42789FFE15B0E85500866F5B /* lua_AIMessage.cpp in Sources */,
+				4278A00215B0E85500866F5B /* lua_AIMessageParameterType.cpp in Sources */,
+				4278A00615B0E85500866F5B /* lua_AIState.cpp in Sources */,
+				4278A00A15B0E85500866F5B /* lua_AIStateListener.cpp in Sources */,
+				4278A00E15B0E85500866F5B /* lua_AIStateMachine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

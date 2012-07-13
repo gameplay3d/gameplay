@@ -74,6 +74,12 @@
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
 
+// AI
+#include "AIController.h"
+#include "AIAgent.h"
+#include "AIState.h"
+#include "AIStateMachine.h"
+
 // UI
 #include "Theme.h"
 #include "Control.h"

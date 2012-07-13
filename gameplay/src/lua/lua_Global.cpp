@@ -63,6 +63,8 @@ void luaRegister_lua_Global()
     hierarchy["PhysicsGenericConstraint"].push_back("PhysicsFixedConstraint");
     hierarchy["PhysicsGenericConstraint"].push_back("PhysicsSpringConstraint");
     hierarchy["PhysicsGhostObject"].push_back("PhysicsCharacter");
+    hierarchy["Ref"].push_back("AIAgent");
+    hierarchy["Ref"].push_back("AIState");
     hierarchy["Ref"].push_back("AbsoluteLayout");
     hierarchy["Ref"].push_back("Animation");
     hierarchy["Ref"].push_back("AnimationClip");
@@ -127,6 +129,19 @@ void luaRegister_lua_Global()
     hierarchy["Transform::Listener"].push_back("PhysicsRigidBody");
     hierarchy["Transform::Listener"].push_back("classgameplay_1_1_script_listener");
     ScriptUtil::setGlobalHierarchy(hierarchy);
+
+    // Register enumeration AIMessage::ParameterType.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("AIMessage");
+        ScriptUtil::registerConstantString("UNDEFINED", "UNDEFINED", scopePath);
+        ScriptUtil::registerConstantString("INTEGER", "INTEGER", scopePath);
+        ScriptUtil::registerConstantString("LONG", "LONG", scopePath);
+        ScriptUtil::registerConstantString("FLOAT", "FLOAT", scopePath);
+        ScriptUtil::registerConstantString("DOUBLE", "DOUBLE", scopePath);
+        ScriptUtil::registerConstantString("BOOLEAN", "BOOLEAN", scopePath);
+        ScriptUtil::registerConstantString("STRING", "STRING", scopePath);
+    }
 
     // Register enumeration AnimationClip::Listener::EventType.
     {
@@ -848,6 +863,8 @@ static const char* enumStringEmpty = "";
 
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
 {
+    if (enumname == "AIMessage::ParameterType")
+        return lua_stringFromEnum_AIMessageParameterType((AIMessage::ParameterType)value);
     if (enumname == "AnimationClip::Listener::EventType")
         return lua_stringFromEnum_AnimationClipListenerEventType((AnimationClip::Listener::EventType)value);
     if (enumname == "AudioSource::State")
