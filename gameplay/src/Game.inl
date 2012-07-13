@@ -110,15 +110,15 @@ inline void Game::displayKeyboard(bool display)
 
 inline unsigned int Game::getGamepadCount() const
 {
-    return _gamepads.size();
+    return _gamepads->size();
 }
 
 inline Gamepad* Game::getGamepad(unsigned int index) const
 {
-    GP_ASSERT(index < _gamepads.size());
+    GP_ASSERT(index < _gamepads->size());
 
-    if (!_gamepads.empty())
-        return _gamepads[index];
+    if (!_gamepads->empty())
+        return _gamepads->at(index);
     else
         return NULL;
 }
