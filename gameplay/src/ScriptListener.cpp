@@ -46,7 +46,7 @@ void ScriptListener::timeEvent(long timeDiff, void* cookie)
 ScriptListener::ScriptListener(const char* function)
 {
     _function = function ? function : "";
-    _sc = ScriptController::getInstance();
+    _sc = Game::getInstance()->getScriptController();
 
     GP_ASSERT(_function.size() > 0);
     GP_ASSERT(_sc);

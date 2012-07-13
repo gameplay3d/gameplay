@@ -27,6 +27,7 @@ Game::Game()
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
+    _gamepads = new std::vector<Gamepad*>;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
@@ -133,7 +134,7 @@ bool Game::startup()
             const char* name;
             while ((name = scripts->getNextProperty()) != NULL)
             {
-                ScriptController::ScriptCallback callback = toCallback(name);
+                ScriptController::ScriptCallback callback = ScriptController::toCallback(name);
                 if (callback != ScriptController::INVALID_CALLBACK)
                 {
                     std::string url = scripts->getString();
@@ -177,11 +178,15 @@ void Game::shutdown()
         finalize();
 
         
-        for (std::vector<Gamepad*>::iterator itr = _gamepads.begin(); itr != _gamepads.end(); itr++)
+        std::vector<Gamepad*>::iterator itr = _gamepads->begin();
+        std::vector<Gamepad*>::iterator end = _gamepads->end();
+        while (itr != end)
         {
-            SAFE_DELETE((*itr));
+            SAFE_DELETE(*itr);
+            itr++;
         }
-        _gamepads.clear();
+        _gamepads->clear();
+        SAFE_DELETE(_gamepads);
         
         _scriptController->finalizeGame();
 
@@ -310,6 +315,12 @@ void Game::frame()
         // Script render.
         _scriptController->render(0);
     }
+}
+
+void Game::renderOnce(const char* function)
+{
+    _scriptController->executeFunction<void>(function, NULL);
+    Platform::swapBuffers();
 }
 
 void Game::updateOnce()
@@ -504,31 +515,9 @@ Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
     GP_ASSERT(gamepadFormPath);
     Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
     GP_ASSERT(gamepad);
-    _gamepads.push_back(gamepad);
+    _gamepads->push_back(gamepad);
 
     return gamepad;
-}
-
-ScriptController::ScriptCallback Game::toCallback(const char* name)
-{
-    if (strcmp(name, "INITIALIZE") == 0)
-        return ScriptController::INITIALIZE;
-    else if (strcmp(name, "UPDATE") == 0)
-        return ScriptController::UPDATE;
-    else if (strcmp(name, "RENDER") == 0)
-        return ScriptController::RENDER;
-    else if (strcmp(name, "FINALIZE") == 0)
-        return ScriptController::FINALIZE;
-    else if (strcmp(name, "KEY_EVENT") == 0)
-        return ScriptController::KEY_EVENT;
-    else if (strcmp(name, "TOUCH_EVENT") == 0)
-        return ScriptController::TOUCH_EVENT;
-    else if (strcmp(name, "MOUSE_EVENT") == 0)
-        return ScriptController::MOUSE_EVENT;
-    else if (strcmp(name, "GAMEPAD_EVENT") == 0)
-        return ScriptController::GAMEPAD_EVENT;
-    else
-        return ScriptController::INVALID_CALLBACK;
 }
 
 }

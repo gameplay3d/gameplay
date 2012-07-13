@@ -425,7 +425,7 @@ private:
     void addCollisionObject(PhysicsCollisionObject* object);
     
     // Removes the given collision object from the simulated physics world.
-    void removeCollisionObject(PhysicsCollisionObject* object);
+    void removeCollisionObject(PhysicsCollisionObject* object, bool removeListeners);
     
     // Gets the corresponding GamePlay object for the given Bullet object.
     PhysicsCollisionObject* getCollisionObject(const btCollisionObject* collisionObject) const;
@@ -545,6 +545,7 @@ private:
         MeshBatch* _meshBatch;
     };
 
+    bool _isUpdating;
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
     btBroadphaseInterface* _overlappingPairCache;

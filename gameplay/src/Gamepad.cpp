@@ -56,14 +56,15 @@ Gamepad::~Gamepad()
     {
         SAFE_RELEASE((*itr));
     }
+    _joysticks.clear();
 
     for (std::vector<Button*>::iterator itr = _buttons.begin(); itr!= _buttons.end(); itr++)
     {
         SAFE_RELEASE((*itr));
     }
+    _buttons.clear();
 
-    if (_gamepadForm)
-        SAFE_RELEASE(_gamepadForm);
+    SAFE_RELEASE(_gamepadForm);
 }
 
 const char* Gamepad::getId() const
