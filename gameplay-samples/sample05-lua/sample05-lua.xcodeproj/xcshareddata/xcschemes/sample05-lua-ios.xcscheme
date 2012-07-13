@@ -14,9 +14,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5B61611414CCC24C0073B857"
-               BuildableName = "sample04-particles-ios.app"
-               BlueprintName = "sample04-particles-ios"
-               ReferencedContainer = "container:sample04-particles.xcodeproj">
+               BuildableName = "sample05-lua-ios.app"
+               BlueprintName = "sample05-lua-ios"
+               ReferencedContainer = "container:sample05-lua.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,9 +32,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BuildableName = "sample05-lua-ios.app"
+            BlueprintName = "sample05-lua-ios"
+            ReferencedContainer = "container:sample05-lua.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BuildableName = "sample05-lua-ios.app"
+            BlueprintName = "sample05-lua-ios"
+            ReferencedContainer = "container:sample05-lua.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BuildableName = "sample05-lua-ios.app"
+            BlueprintName = "sample05-lua-ios"
+            ReferencedContainer = "container:sample05-lua.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
