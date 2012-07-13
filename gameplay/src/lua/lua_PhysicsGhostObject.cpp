@@ -21,8 +21,6 @@ namespace gameplay
 
 void luaRegister_PhysicsGhostObject()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addCollisionListener", lua_PhysicsGhostObject_addCollisionListener},
@@ -42,14 +40,14 @@ void luaRegister_PhysicsGhostObject()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("PhysicsGhostObject", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsGhostObject", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static PhysicsGhostObject* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsGhostObject");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsGhostObject' expected.");
-    return (PhysicsGhostObject*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsGhostObject*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsGhostObject_addCollisionListener(lua_State* state)
@@ -66,7 +64,7 @@ int lua_PhysicsGhostObject_addCollisionListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject::CollisionListener* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
+                PhysicsCollisionObject::CollisionListener* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->addCollisionListener(param1);
@@ -77,7 +75,7 @@ int lua_PhysicsGhostObject_addCollisionListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->addCollisionListener(param1);
@@ -98,10 +96,10 @@ int lua_PhysicsGhostObject_addCollisionListener(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject::CollisionListener* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
+                PhysicsCollisionObject::CollisionListener* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->addCollisionListener(param1, param2);
@@ -113,10 +111,10 @@ int lua_PhysicsGhostObject_addCollisionListener(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->addCollisionListener(param1, param2);
@@ -154,7 +152,7 @@ int lua_PhysicsGhostObject_collidesWith(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 bool result = instance->collidesWith(param1);
@@ -197,7 +195,7 @@ int lua_PhysicsGhostObject_getCollisionShape(lua_State* state)
                 void* returnPtr = (void*)instance->getCollisionShape();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsCollisionShape");
@@ -243,7 +241,7 @@ int lua_PhysicsGhostObject_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -472,7 +470,7 @@ int lua_PhysicsGhostObject_removeCollisionListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject::CollisionListener* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
+                PhysicsCollisionObject::CollisionListener* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->removeCollisionListener(param1);
@@ -483,7 +481,7 @@ int lua_PhysicsGhostObject_removeCollisionListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->removeCollisionListener(param1);
@@ -504,10 +502,10 @@ int lua_PhysicsGhostObject_removeCollisionListener(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject::CollisionListener* param1 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
+                PhysicsCollisionObject::CollisionListener* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionListener>(2, "PhysicsCollisionObjectCollisionListener", false);
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->removeCollisionListener(param1, param2);
@@ -519,10 +517,10 @@ int lua_PhysicsGhostObject_removeCollisionListener(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionObject* param2 = ScriptController::getInstance()->getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
+                PhysicsCollisionObject* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(3, "PhysicsCollisionObject", false);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->removeCollisionListener(param1, param2);
@@ -560,7 +558,7 @@ int lua_PhysicsGhostObject_setEnabled(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 PhysicsGhostObject* instance = getInstance(state);
                 instance->setEnabled(param1);
@@ -599,7 +597,7 @@ int lua_PhysicsGhostObject_transformChanged(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Transform* param1 = ScriptController::getInstance()->getObjectPointer<Transform>(2, "Transform", false);
+                Transform* param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);

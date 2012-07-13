@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -191,12 +191,12 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Displays a screen using the <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game#renderOnce</a> mechanism for at least the given amount of time.</p>
+<p>Displays a screen using the <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game::renderOnce()</a> mechanism for at least the given amount of time.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">instance</td><td>See <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game#renderOnce</a>. </td></tr>
-    <tr><td class="paramname">method</td><td>See <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game#renderOnce</a>. </td></tr>
-    <tr><td class="paramname">cookie</td><td>See <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game#renderOnce</a>. </td></tr>
+    <tr><td class="paramname">instance</td><td>See <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game::renderOnce()</a>. </td></tr>
+    <tr><td class="paramname">method</td><td>See <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game::renderOnce()</a>. </td></tr>
+    <tr><td class="paramname">cookie</td><td>See <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game::renderOnce()</a>. </td></tr>
     <tr><td class="paramname">time</td><td>The minimum amount of time to display the screen (in milliseconds). </td></tr>
   </table>
   </dd>
@@ -235,11 +235,11 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Starts a new screen displayer running; draws a screen using the <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game#renderOnce</a> mechanism for at least the given amount of time.</p>
+<p>Starts a new screen displayer running; draws a screen using the <a class="el" href="classgameplay_1_1_game.html#a65345d6dcfe7b0562fd8a98ec79b0151">Game::renderOnce</a> mechanism for at least the given amount of time.</p>
 <p>Note: this is intended for use from Lua scripts.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">function</td><td>See <a class="el" href="classgameplay_1_1_game.html#a682bf5d3640869d39103802cfe4fa484">Game#renderOnce(const char*)</a>. </td></tr>
+    <tr><td class="paramname">function</td><td>See <a class="el" href="classgameplay_1_1_game.html#a682bf5d3640869d39103802cfe4fa484">Game::renderOnce(const char*)</a>. </td></tr>
     <tr><td class="paramname">time</td><td>The minimum amount of time to display the screen (in milliseconds). </td></tr>
   </table>
   </dd>
@@ -250,7 +250,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:35 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

@@ -16,8 +16,6 @@ namespace gameplay
 
 void luaRegister_Model()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Model_addRef},
@@ -40,14 +38,14 @@ void luaRegister_Model()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Model", lua_members, NULL, lua_Model__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Model", lua_members, NULL, lua_Model__gc, lua_statics, scopePath);
 }
 
 static Model* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Model");
     luaL_argcheck(state, userdata != NULL, 1, "'Model' expected.");
-    return (Model*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Model*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Model__gc(lua_State* state)
@@ -64,7 +62,7 @@ int lua_Model__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Model");
                 luaL_argcheck(state, userdata != NULL, 1, "'Model' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Model* instance = (Model*)object->instance;
@@ -154,7 +152,7 @@ int lua_Model_draw(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Model* instance = getInstance(state);
                 instance->draw(param1);
@@ -194,7 +192,7 @@ int lua_Model_getMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->getMaterial();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -226,7 +224,7 @@ int lua_Model_getMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->getMaterial(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -272,7 +270,7 @@ int lua_Model_getMesh(lua_State* state)
                 void* returnPtr = (void*)instance->getMesh();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Mesh");
@@ -355,7 +353,7 @@ int lua_Model_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -438,7 +436,7 @@ int lua_Model_getSkin(lua_State* state)
                 void* returnPtr = (void*)instance->getSkin();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshSkin");
@@ -557,7 +555,7 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Material* param1 = ScriptController::getInstance()->getObjectPointer<Material>(2, "Material", false);
+                Material* param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false);
 
                 Model* instance = getInstance(state);
                 instance->setMaterial(param1);
@@ -568,13 +566,13 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Model* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setMaterial(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -601,7 +599,7 @@ int lua_Model_setMaterial(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Material* param1 = ScriptController::getInstance()->getObjectPointer<Material>(2, "Material", false);
+                Material* param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -616,16 +614,16 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptController::getInstance()->getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 Model* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setMaterial(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -643,7 +641,7 @@ int lua_Model_setMaterial(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -652,7 +650,7 @@ int lua_Model_setMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->setMaterial(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -680,19 +678,19 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptController::getInstance()->getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptController::getInstance()->getString(4, false);
+                const char* param3 = ScriptUtil::getString(4, false);
 
                 Model* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setMaterial(param1, param2, param3);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -721,13 +719,13 @@ int lua_Model_setMaterial(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptController::getInstance()->getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptController::getInstance()->getString(4, false);
+                const char* param3 = ScriptUtil::getString(4, false);
 
                 // Get parameter 4 off the stack.
                 int param4 = (int)luaL_checkint(state, 5);
@@ -736,7 +734,7 @@ int lua_Model_setMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->setMaterial(param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -779,12 +777,12 @@ int lua_Model_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Mesh* param1 = ScriptController::getInstance()->getObjectPointer<Mesh>(1, "Mesh", false);
+                Mesh* param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
 
                 void* returnPtr = (void*)Model::create(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Model");

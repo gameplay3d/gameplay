@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -88,7 +88,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a665a2091d832c2eca7a29a51228fe9e9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">create</a> (<a class="el" href="classgameplay_1_1_game.html">Game</a> *game)</td></tr>
+<tr class="memitem:a60e8f036665c1b3ab0f36f7cfb55622d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">create</a> (<a class="el" href="classgameplay_1_1_game.html">Game</a> *game, void *attachToWindow=NULL)</td></tr>
 <tr class="memitem:abbb42d7ac405bad0db3eb642495c84b3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abbb42d7ac405bad0db3eb642495c84b3">signalShutdown</a> ()</td></tr>
 <tr class="memitem:abf163f9db26aac12f9bb9fca70eb061a"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abf163f9db26aac12f9bb9fca70eb061a">getDisplayWidth</a> ()</td></tr>
 <tr class="memitem:ae041cb899960eda243f144dd8d1a917b"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ae041cb899960eda243f144dd8d1a917b">getDisplayHeight</a> ()</td></tr>
@@ -98,6 +98,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:acacf35e2782bd3253a231dd0bd459f64"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a> (bool enable)</td></tr>
 <tr class="memitem:a3a3f93c158269eb93949ba5d9b550c70"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70">setMultiTouch</a> (bool enabled)</td></tr>
 <tr class="memitem:aac96a0a5b3d2ff0b7aca92eaa6126a80"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aac96a0a5b3d2ff0b7aca92eaa6126a80">isMultiTouch</a> ()</td></tr>
+<tr class="memitem:a611399220693bdd2c3a147ba43997edc"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a611399220693bdd2c3a147ba43997edc">hasMouse</a> ()</td></tr>
+<tr class="memitem:a2b48a46607314f332a87f13b7a11cd32"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a2b48a46607314f332a87f13b7a11cd32">setMouseCaptured</a> (bool captured)</td></tr>
+<tr class="memitem:a501a32d43e25f6ce2c75598462a04303"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a501a32d43e25f6ce2c75598462a04303">isMouseCaptured</a> ()</td></tr>
+<tr class="memitem:a820e3651ea70acea92847610b5a3aed0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a820e3651ea70acea92847610b5a3aed0">setCursorVisible</a> (bool visible)</td></tr>
+<tr class="memitem:a0573a19fc0d2f0134e424186c888f7f7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a0573a19fc0d2f0134e424186c888f7f7">isCursorVisible</a> ()</td></tr>
 <tr class="memitem:a388195e784d2820c0d6158c4a10c8a97"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr class="memitem:a52ceea1e71f2c8d99310baa61a69223b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a> ()</td></tr>
 <tr class="memitem:aea3bd12f36c33c33824bc1ccdd4f32f3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3">displayKeyboard</a> (bool display)</td></tr>
@@ -126,7 +131,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a665a2091d832c2eca7a29a51228fe9e9"></a>
+<a class="anchor" id="a60e8f036665c1b3ab0f36f7cfb55622d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -137,8 +142,18 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a>* gameplay::Platform::create </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_game.html">Game</a> *&#160;</td>
-          <td class="paramname"><em>game</em></td><td>)</td>
+          <td class="paramname"><em>game</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>attachToWindow</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -150,11 +165,12 @@ Static Public Member Functions</h2></td></tr>
 <p>Creates a platform for the specified game which is will interacte with.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">game</td><td>The game to create a platform for.</td></tr>
+    <tr><td class="paramname">game</td><td>The game to create a platform for. </td></tr>
+    <tr><td class="paramname">attachToWindow</td><td>The native window handle to optionally attach to.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns:</dt><dd>The created platform interface. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>The created platform interface.  </dd></dl>
 
 </div>
 </div>
@@ -203,6 +219,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Begins processing the platform messages.</p>
 <p>This method handles all OS window messages and drives the game loop. It normally does not return until the application is closed.</p>
+<p>If a attachToWindow is passed to <a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">Platform::create</a> the message pump will instead attach to or allow the attachToWindow to drive the game loop on the platform.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The platform message pump return code. </dd></dl>
 
 </div>
@@ -321,6 +338,79 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Gets the display width.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The display width. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a611399220693bdd2c3a147ba43997edc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool gameplay::Platform::hasMouse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Whether the platform has mouse support. </p>
+
+</div>
+</div>
+<a class="anchor" id="a0573a19fc0d2f0134e424186c888f7f7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool gameplay::Platform::isCursorVisible </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Determines whether the platform cursor is currently visible.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if the platform cursor is visible, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a501a32d43e25f6ce2c75598462a04303"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool gameplay::Platform::isMouseCaptured </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Determines if mouse capture is currently enabled. </p>
 
 </div>
 </div>
@@ -507,6 +597,73 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a820e3651ea70acea92847610b5a3aed0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::Platform::setCursorVisible </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>visible</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the visibility of the platform cursor.</p>
+<p>On platforms that support a visible cursor, this method toggles the visibility of the cursor.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visible</td><td>true to show the platform cursor, false to hide it. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a2b48a46607314f332a87f13b7a11cd32"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void gameplay::Platform::setMouseCaptured </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>captured</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Enables or disabled mouse capture.</p>
+<p>When mouse capture is enabled, the platform cursor is hidden and mouse event points are delivered as position deltas instead of absolute positions.</p>
+<p>This is useful for games that wish to provide uninhibited mouse movement, such as when implementing free/mouse look in an FPS game.</p>
+<p>Disabling mouse capture moves the mouse back to the center of the screen and shows the platform cursor.</p>
+<p>Note that this method does nothing on platforms that do not support a mouse.</p>
+<dl class="params"><dt>Parameters:</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">captured</td><td>True to enable mouse capture, false to disable it. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a3a3f93c158269eb93949ba5d9b550c70"></a>
 <div class="memitem">
 <div class="memproto">
@@ -528,7 +685,8 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Set if multi-touch is enabled on the platform </p>
+<p>Set if multi-touch is enabled on the platform.</p>
+<p>Note that this method does nothing on platforms that do not support multi-touch. </p>
 
 </div>
 </div>
@@ -702,7 +860,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:34 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

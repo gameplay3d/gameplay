@@ -14,8 +14,6 @@ namespace gameplay
 
 void luaRegister_Layout()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Layout_addRef},
@@ -27,14 +25,14 @@ void luaRegister_Layout()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Layout", lua_members, NULL, lua_Layout__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Layout", lua_members, NULL, lua_Layout__gc, lua_statics, scopePath);
 }
 
 static Layout* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Layout");
     luaL_argcheck(state, userdata != NULL, 1, "'Layout' expected.");
-    return (Layout*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Layout*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Layout__gc(lua_State* state)
@@ -51,7 +49,7 @@ int lua_Layout__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Layout");
                 luaL_argcheck(state, userdata != NULL, 1, "'Layout' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Layout* instance = (Layout*)object->instance;

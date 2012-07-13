@@ -14,8 +14,6 @@ namespace gameplay
 
 void luaRegister_PhysicsSpringConstraint()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getBreakingImpulse", lua_PhysicsSpringConstraint_getBreakingImpulse},
@@ -57,14 +55,14 @@ void luaRegister_PhysicsSpringConstraint()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("PhysicsSpringConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsSpringConstraint", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static PhysicsSpringConstraint* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsSpringConstraint");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsSpringConstraint' expected.");
-    return (PhysicsSpringConstraint*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsSpringConstraint*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsSpringConstraint_getBreakingImpulse(lua_State* state)
@@ -120,7 +118,7 @@ int lua_PhysicsSpringConstraint_getRotationOffsetA(lua_State* state)
                 void* returnPtr = (void*)&(instance->getRotationOffsetA());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Quaternion");
@@ -166,7 +164,7 @@ int lua_PhysicsSpringConstraint_getRotationOffsetB(lua_State* state)
                 void* returnPtr = (void*)&(instance->getRotationOffsetB());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Quaternion");
@@ -212,7 +210,7 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetA(lua_State* state)
                 void* returnPtr = (void*)&(instance->getTranslationOffsetA());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -258,7 +256,7 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetB(lua_State* state)
                 void* returnPtr = (void*)&(instance->getTranslationOffsetB());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -453,7 +451,7 @@ int lua_PhysicsSpringConstraint_setAngularLowerLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setAngularLowerLimit(*param1);
@@ -605,7 +603,7 @@ int lua_PhysicsSpringConstraint_setAngularUpperLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setAngularUpperLimit(*param1);
@@ -681,7 +679,7 @@ int lua_PhysicsSpringConstraint_setEnabled(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setEnabled(param1);
@@ -833,7 +831,7 @@ int lua_PhysicsSpringConstraint_setLinearLowerLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setLinearLowerLimit(*param1);
@@ -985,7 +983,7 @@ int lua_PhysicsSpringConstraint_setLinearUpperLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setLinearUpperLimit(*param1);
@@ -1023,7 +1021,7 @@ int lua_PhysicsSpringConstraint_setRotationOffsetA(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setRotationOffsetA(*param1);
@@ -1061,7 +1059,7 @@ int lua_PhysicsSpringConstraint_setRotationOffsetB(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptController::getInstance()->getObjectPointer<Quaternion>(2, "Quaternion", true);
+                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setRotationOffsetB(*param1);
@@ -1099,7 +1097,7 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetA(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setTranslationOffsetA(*param1);
@@ -1137,7 +1135,7 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetB(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setTranslationOffsetB(*param1);
@@ -1175,15 +1173,15 @@ int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
+                Node* param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Node* param2 = ScriptController::getInstance()->getObjectPointer<Node>(2, "Node", false);
+                Node* param2 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 void* returnPtr = (void*)new Vector3(PhysicsSpringConstraint::centerOfMassMidpoint(param1, param2));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");
@@ -1227,15 +1225,15 @@ int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
+                Node* param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new Quaternion(PhysicsSpringConstraint::getRotationOffset(param1, *param2));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Quaternion");
@@ -1279,15 +1277,15 @@ int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptController::getInstance()->getObjectPointer<Node>(1, "Node", false);
+                Node* param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new Vector3(PhysicsSpringConstraint::getTranslationOffset(param1, *param2));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Vector3");

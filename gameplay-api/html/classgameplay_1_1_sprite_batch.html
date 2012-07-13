@@ -54,7 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -103,8 +103,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5b87358a17b8e7cbdfadee1add078c99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">RenderState::StateBlock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a5b87358a17b8e7cbdfadee1add078c99">getStateBlock</a> () const </td></tr>
 <tr class="memitem:ac0e593a836e20f43301f937885d5e379"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#ac0e593a836e20f43301f937885d5e379">getMaterial</a> () const </td></tr>
 <tr class="memitem:a03f381137640f9ad77e73b0c584f0749"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#a03f381137640f9ad77e73b0c584f0749">setProjectionMatrix</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
-<tr class="memitem:aa2a4c2cc045d53278a2bb67fe15caf4e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2a4c2cc045d53278a2bb67fe15caf4e"></a>
-const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getProjectionMatrix</b> () const </td></tr>
+<tr class="memitem:aa2a4c2cc045d53278a2bb67fe15caf4e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_sprite_batch.html#aa2a4c2cc045d53278a2bb67fe15caf4e">getProjectionMatrix</a> () const </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -1044,6 +1043,23 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 
 </div>
 </div>
+<a class="anchor" id="aa2a4c2cc045d53278a2bb67fe15caf4e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; gameplay::SpriteBatch::getProjectionMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the projection matrix for the <a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a>.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The projection matrix. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a5b87358a17b8e7cbdfadee1add078c99"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1089,7 +1105,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 5 2012 15:20:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 12 2012 16:16:35 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1
 </small></address>

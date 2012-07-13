@@ -15,8 +15,6 @@ namespace gameplay
 
 void luaRegister_Bundle()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Bundle_addRef},
@@ -38,14 +36,14 @@ void luaRegister_Bundle()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Bundle", lua_members, NULL, lua_Bundle__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Bundle", lua_members, NULL, lua_Bundle__gc, lua_statics, scopePath);
 }
 
 static Bundle* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Bundle");
     luaL_argcheck(state, userdata != NULL, 1, "'Bundle' expected.");
-    return (Bundle*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Bundle*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Bundle__gc(lua_State* state)
@@ -62,7 +60,7 @@ int lua_Bundle__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Bundle");
                 luaL_argcheck(state, userdata != NULL, 1, "'Bundle' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Bundle* instance = (Bundle*)object->instance;
@@ -136,7 +134,7 @@ int lua_Bundle_contains(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 bool result = instance->contains(param1);
@@ -292,13 +290,13 @@ int lua_Bundle_loadFont(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadFont(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Font");
@@ -342,13 +340,13 @@ int lua_Bundle_loadMesh(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadMesh(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Mesh");
@@ -392,13 +390,13 @@ int lua_Bundle_loadNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadNode(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -444,7 +442,7 @@ int lua_Bundle_loadScene(lua_State* state)
                 void* returnPtr = (void*)instance->loadScene();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Scene");
@@ -470,13 +468,13 @@ int lua_Bundle_loadScene(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadScene(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Scene");
@@ -553,12 +551,12 @@ int lua_Bundle_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Bundle::create(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Bundle");
