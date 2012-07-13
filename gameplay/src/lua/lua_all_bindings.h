@@ -1,6 +1,13 @@
 #ifndef LUA_ALL_BINDINGS_H_
 #define LUA_ALL_BINDINGS_H_
 
+#include "lua_AIAgent.h"
+#include "lua_AIAgentListener.h"
+#include "lua_AIController.h"
+#include "lua_AIMessage.h"
+#include "lua_AIState.h"
+#include "lua_AIStateListener.h"
+#include "lua_AIStateMachine.h"
 #include "lua_AbsoluteLayout.h"
 #include "lua_Animation.h"
 #include "lua_AnimationClip.h"

@@ -1,9 +1,7 @@
 /* The standard CSS for doxygen */
 
 body, table, div, p, dl {
-	font-family: Lucida Grande, Verdana, Geneva, Arial, sans-serif;
-	font-size: 13px;
-	line-height: 1.3;
+	font: 400 14px/19px Roboto,sans-serif;
 }
 
 /* @group Heading Levels */
@@ -19,7 +17,14 @@ h1 {
 }
 
 h2 {
-	font-size: 120%;
+	border-bottom: 1px solid #879ECB;
+	color: #354C7B;
+	font-size: 150%;
+	font-weight: normal;
+	margin-top: 1.75em;
+	padding-top: 8px;
+	padding-bottom: 4px;
+	width: 100%;
 }
 
 h3 {
@@ -172,6 +177,7 @@ div.fragment {
 div.line {
 	font-family: monospace, fixed;
         font-size: 13px;
+	min-height: 13px;
 	line-height: 1.0;
 	text-wrap: unrestricted;
 	white-space: -moz-pre-wrap; /* Moz */
@@ -183,7 +189,23 @@ div.line {
 	padding-left: 53px;
 	padding-bottom: 0px;
 	margin: 0px;
+	-webkit-transition-property: background-color, box-shadow;
+	-webkit-transition-duration: 0.5s;
+	-moz-transition-property: background-color, box-shadow;
+	-moz-transition-duration: 0.5s;
+	-ms-transition-property: background-color, box-shadow;
+	-ms-transition-duration: 0.5s;
+	-o-transition-property: background-color, box-shadow;
+	-o-transition-duration: 0.5s;
+	transition-property: background-color, box-shadow;
+	transition-duration: 0.5s;
 }
+
+div.line.glow {
+	background-color: cyan;
+	box-shadow: 0 0 10px cyan;
+}
+
 
 span.lineno {
 	padding-right: 4px;
@@ -401,7 +423,7 @@ table.memberdecls {
 	padding: 0px;
 }
 
-.memberdecls td {
+.memberdecls td, .fieldtable tr {
 	-webkit-transition-property: background-color, box-shadow;
 	-webkit-transition-duration: 0.5s;
 	-moz-transition-property: background-color, box-shadow;
@@ -414,7 +436,7 @@ table.memberdecls {
 	transition-duration: 0.5s;
 }
 
-.memberdecls td.glow {
+.memberdecls td.glow, .fieldtable tr.glow {
 	background-color: cyan;
 	box-shadow: 0 0 15px cyan;
 }
@@ -434,7 +456,7 @@ table.memberdecls {
 }
 
 .memItemLeft, .memItemRight, .memTemplParams {
-	border-top: 1px solid #C4CFE5;
+	border-bottom: 1px solid #DEE4F0;
 }
 
 .memItemLeft, .memTemplItemLeft {
@@ -485,6 +507,8 @@ table.memberdecls {
         -ms-transition: box-shadow 0.5s linear;
         -o-transition: box-shadow 0.5s linear;
         transition: box-shadow 0.5s linear;
+        display: table !important;
+        width: 100%;
 }
 
 .memitem.glow {
@@ -574,6 +598,9 @@ dl.reflist dd {
 .paramname em {
 	font-style: normal;
 }
+.paramname code {
+        line-height: 14px;
+}
 
 .params, .retval, .exception, .tparams {
         margin-left: 0px;
@@ -661,10 +688,15 @@ div.directory {
         outline:none;
 }
 
+.directory td.entry a img {
+        border: none;
+}
+
 .directory td.desc {
         width: 100%;
         padding-left: 6px;
 	padding-right: 6px;
+	padding-top: 3px;
 	border-left: 1px solid rgba(0,0,0,0.05);
 }
 
@@ -819,6 +851,7 @@ table.fieldtable {
 	display:block;
 	text-decoration: none;
 	outline: none;
+	font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
 }
 
 .navpath li.navelem a:hover
@@ -856,9 +889,7 @@ div.summary a
 
 div.ingroups
 {
-	margin-left: 5px;
 	font-size: 8pt;
-	padding-left: 5px;
 	width: 50%;
 	text-align: left;
 }
@@ -879,7 +910,7 @@ div.header
 
 div.headertitle
 {
-	padding: 5px 5px 5px 7px;
+	padding: 5px 5px 5px 10px;
 }
 
 dl

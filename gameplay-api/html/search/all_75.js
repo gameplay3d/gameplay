@@ -18,6 +18,6 @@ var searchData=
   ['usage',['Usage',['../classgameplay_1_1_vertex_format.html#a8ae70c40a5000a4e4b52cdca35923c26',1,'gameplay::VertexFormat::Usage()'],['../classgameplay_1_1_vertex_format_1_1_element.html#aedb2a6efcd033fe52fb3a9335697f760',1,'gameplay::VertexFormat::Element::usage()']]],
   ['userdata',['UserData',['../structgameplay_1_1_node_1_1_user_data.html',1,'gameplay::Node']]],
   ['userdata',['UserData',['../structgameplay_1_1_node_1_1_user_data.html#a95ad1d23e04b0b2724af31b2b05b9d99',1,'gameplay::Node::UserData']]],
-  ['uvs',['uvs',['../classgameplay_1_1_font_1_1_glyph.html#ac56073bbdffa51a95a5947c23ae82728',1,'gameplay::Font::Glyph::uvs()'],['../structgameplay_1_1_theme_1_1_u_vs.html#afe04c8b97ff1392a384ba5e5cdf28a7c',1,'gameplay::Theme::UVs::UVs()'],['../structgameplay_1_1_theme_1_1_u_vs.html#a0982b7c2fc3613b7dbb03b1d164b8f09',1,'gameplay::Theme::UVs::UVs(float u1, float v1, float u2, float v2)']]],
+  ['uvs',['UVs',['../structgameplay_1_1_theme_1_1_u_vs.html#afe04c8b97ff1392a384ba5e5cdf28a7c',1,'gameplay::Theme::UVs::UVs()'],['../structgameplay_1_1_theme_1_1_u_vs.html#a0982b7c2fc3613b7dbb03b1d164b8f09',1,'gameplay::Theme::UVs::UVs(float u1, float v1, float u2, float v2)'],['../classgameplay_1_1_font_1_1_glyph.html#ac56073bbdffa51a95a5947c23ae82728',1,'gameplay::Font::Glyph::uvs()']]],
   ['uvs',['UVs',['../structgameplay_1_1_theme_1_1_u_vs.html',1,'gameplay::Theme']]]
 ];
