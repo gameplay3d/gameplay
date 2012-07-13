@@ -113,7 +113,6 @@ private:
     Vector3 _oldBallPosition;
     bool _hasBall;
     bool _kicking;
-    bool _jumping;
 };
 
 #endif

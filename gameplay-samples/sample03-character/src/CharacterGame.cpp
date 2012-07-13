@@ -22,7 +22,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
       _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _wireframe(false), _gamepad(NULL), _hasBall(false), _kicking(false), _jumping(false)
+      _keyFlags(0), _drawDebug(0), _wireframe(false), _gamepad(NULL), _hasBall(false), _kicking(false)
 {
     _buttonPressed = new bool[2];
 }
@@ -176,7 +176,6 @@ void CharacterGame::jump()
 {
     if (isOnFloor() && !_kickClip->isPlaying())
     {
-        _jumping = true;
         play("jump", false, 0.55f);
         _character->jump(3.0f);
     }
@@ -324,18 +323,7 @@ void CharacterGame::update(float elapsedTime)
             force *= 250.0f;
             basketball->applyForce(force);
             schedule(50, this);
-        }/*
-        else if (_jumping)
-        {
-            releaseBall();
-
-            Vector3 force(-_characterNode->getForwardVectorWorld());
-            force.normalize();
-            force.y = 0.0f;
-            force *= 100.0f;
-            basketball->applyForce(force);
-            schedule(50, this);
-        }*/
+        }
         else
         {
             // Capture the basketball's old position, and then calculate the basketball's new position in front of the character
@@ -648,7 +636,5 @@ void CharacterGame::timeEvent(long timeDiff, void* cookie)
 
     if (_kicking)
         _kicking = false;
-    /*if (_jumping)
-        _jumping = false;*/
 }
 
