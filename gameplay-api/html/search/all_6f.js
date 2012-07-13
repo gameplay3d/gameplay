@@ -20,5 +20,5 @@ var searchData=
   ['overshoot_5fin_5fout',['OVERSHOOT_IN_OUT',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a5bc0cc2a6143a83c201ee4d5c70cf096',1,'gameplay::Curve']]],
   ['overshoot_5fout',['OVERSHOOT_OUT',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a192c7df56a210a78c5ce4cd565679a9c',1,'gameplay::Curve']]],
   ['overshoot_5fout_5fin',['OVERSHOOT_OUT_IN',['../classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1a99b9d687086eed175c69979a93c43e4a',1,'gameplay::Curve']]],
-  ['owns',['owns',['../structgameplay_1_1_script_controller_1_1_lua_object.html#a2aa272c3cb11dfa5f1c76c5bf4a863ae',1,'gameplay::ScriptController::LuaObject::owns()'],['../structgameplay_1_1_script_util_1_1_lua_object.html#a9dacae8f013276beea016252e700034f',1,'gameplay::ScriptUtil::LuaObject::owns()']]]
+  ['owns',['owns',['../structgameplay_1_1_script_util_1_1_lua_object.html#a9dacae8f013276beea016252e700034f',1,'gameplay::ScriptUtil::LuaObject']]]
 ];

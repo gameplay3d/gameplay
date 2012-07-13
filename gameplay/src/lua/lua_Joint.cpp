@@ -38,6 +38,7 @@ void luaRegister_Joint()
         {"findNode", lua_Joint_findNode},
         {"getActiveCameraTranslationView", lua_Joint_getActiveCameraTranslationView},
         {"getActiveCameraTranslationWorld", lua_Joint_getActiveCameraTranslationWorld},
+        {"getAgent", lua_Joint_getAgent},
         {"getAnimation", lua_Joint_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Joint_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_Joint_getAnimationPropertyValue},
@@ -108,6 +109,7 @@ void luaRegister_Joint()
         {"scaleY", lua_Joint_scaleY},
         {"scaleZ", lua_Joint_scaleZ},
         {"set", lua_Joint_set},
+        {"setAgent", lua_Joint_setAgent},
         {"setAnimationPropertyValue", lua_Joint_setAnimationPropertyValue},
         {"setAudioSource", lua_Joint_setAudioSource},
         {"setCamera", lua_Joint_setCamera},
@@ -1009,6 +1011,52 @@ int lua_Joint_getActiveCameraTranslationWorld(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Joint_getActiveCameraTranslationWorld - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_getAgent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joint* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getAgent();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AIAgent");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joint_getAgent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4431,6 +4479,44 @@ int lua_Joint_set(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2, 4 or 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joint_setAgent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                AIAgent* param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+
+                Joint* instance = getInstance(state);
+                instance->setAgent(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joint_setAgent - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

@@ -22,8 +22,8 @@ Game::Game()
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL), 
-      _physicsController(NULL), _audioListener(NULL), _scriptController(NULL),
-      _scriptListeners(NULL)
+      _physicsController(NULL), _aiController(NULL), _audioListener(NULL), 
+      _gamepads(NULL), _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -120,6 +120,9 @@ bool Game::startup()
     _physicsController = new PhysicsController();
     _physicsController->initialize();
 
+    _aiController = new AIController();
+    _aiController->initialize();
+
     loadGamepads();
     
     _scriptController = new ScriptController();
@@ -173,6 +176,7 @@ void Game::shutdown()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
+        GP_ASSERT(_aiController);
 
         Platform::signalShutdown();
         finalize();
@@ -198,6 +202,8 @@ void Game::shutdown()
 
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
+        _aiController->finalize();
+        SAFE_DELETE(_aiController);
 
         // Note: we do not clean up the script controller here
         // because users can call Game::exit() from a script.
@@ -219,11 +225,13 @@ void Game::pause()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
+        GP_ASSERT(_aiController);
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
         _audioController->pause();
         _physicsController->pause();
+        _aiController->pause();
     }
 }
 
@@ -234,11 +242,13 @@ void Game::resume()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
+        GP_ASSERT(_aiController);
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController->resume();
         _audioController->resume();
         _physicsController->resume();
+        _aiController->resume();
     }
 }
 
@@ -261,6 +271,7 @@ void Game::frame()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
+        GP_ASSERT(_aiController);
 
         // Update Time.
         static double lastFrameTime = Game::getGameTime();
@@ -276,7 +287,10 @@ void Game::frame()
     
         // Update the physics.
         _physicsController->update(elapsedTime);
-        
+
+        // Update AI.
+        _aiController->update(elapsedTime);
+
         // Application Update.
         update(elapsedTime);
 
@@ -328,6 +342,7 @@ void Game::updateOnce()
     GP_ASSERT(_animationController);
     GP_ASSERT(_audioController);
     GP_ASSERT(_physicsController);
+    GP_ASSERT(_aiController);
 
     // Update Time.
     static double lastFrameTime = getGameTime();
@@ -338,6 +353,7 @@ void Game::updateOnce()
     // Update the internal controllers.
     _animationController->update(elapsedTime);
     _physicsController->update(elapsedTime);
+    _aiController->update(elapsedTime);
     _audioController->update(elapsedTime);
     _scriptController->update(elapsedTime);
 }

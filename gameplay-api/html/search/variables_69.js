@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['instance',['instance',['../structgameplay_1_1_script_controller_1_1_lua_object.html#ac1c1a6e1b1804e486c87683c6d853176',1,'gameplay::ScriptController::LuaObject::instance()'],['../structgameplay_1_1_script_util_1_1_lua_object.html#ae5a31e341572e169c010d4990afe0ced',1,'gameplay::ScriptUtil::LuaObject::instance()']]],
+  ['instance',['instance',['../structgameplay_1_1_script_util_1_1_lua_object.html#ae5a31e341572e169c010d4990afe0ced',1,'gameplay::ScriptUtil::LuaObject']]],
   ['intersects_5fback',['INTERSECTS_BACK',['../classgameplay_1_1_plane.html#ae1efc1fd96443343d3a0a289ec8f3858',1,'gameplay::Plane']]],
   ['intersects_5ffront',['INTERSECTS_FRONT',['../classgameplay_1_1_plane.html#abb4fdfda5773a0d6e7c31d80e5f33a6e',1,'gameplay::Plane']]],
   ['intersects_5fintersecting',['INTERSECTS_INTERSECTING',['../classgameplay_1_1_plane.html#a4120d77f30efdb5274bc5a7a4ae87dd1',1,'gameplay::Plane']]],
