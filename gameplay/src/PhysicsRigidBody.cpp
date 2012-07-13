@@ -73,7 +73,7 @@ PhysicsRigidBody::~PhysicsRigidBody()
     }
 
     // Remove collision object from physics controller.
-    Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+    Game::getInstance()->getPhysicsController()->removeCollisionObject(this, true);
 
     // Clean up the rigid body and its related objects.
     SAFE_DELETE(_body);
@@ -256,6 +256,13 @@ void PhysicsRigidBody::setKinematic(bool kinematic)
         _body->setCollisionFlags(_body->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
         _body->setActivationState(ACTIVE_TAG);
     }
+}
+
+void PhysicsRigidBody::setEnabled(bool enable)
+{
+    PhysicsCollisionObject::setEnabled(enable);
+    if (enable)
+        _body->setMotionState(_motionState);
 }
 
 float PhysicsRigidBody::getHeight(float x, float y, Vector3* normal) const

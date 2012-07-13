@@ -21,7 +21,7 @@ const int PhysicsController::REGISTERED    = 0x04;
 const int PhysicsController::REMOVE        = 0x08;
 
 PhysicsController::PhysicsController()
-  : _collisionConfiguration(NULL), _dispatcher(NULL),
+  : _isUpdating(false), _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
     _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL), _scriptListeners(NULL)
@@ -502,6 +502,7 @@ void PhysicsController::resume()
 void PhysicsController::update(float elapsedTime)
 {
     GP_ASSERT(_world);
+    _isUpdating = true;
 
     // Update the physics simulation, with a maximum
     // of 10 simulation steps being performed in a given frame.
@@ -613,6 +614,8 @@ void PhysicsController::update(float elapsedTime)
             iter->second._status &= ~COLLISION;
         }
     }
+
+    _isUpdating = false;
 }
 
 void PhysicsController::addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
@@ -672,10 +675,11 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     }
 }
 
-void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
+void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object, bool removeListeners)
 {
     GP_ASSERT(object);
     GP_ASSERT(_world);
+    GP_ASSERT(!_isUpdating);
 
     // Remove the collision object from the world.
     if (object->getCollisionObject())
@@ -698,11 +702,14 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
     }
 
     // Find all references to the object in the collision status cache and mark them for removal.
-    std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
-    for (; iter != _collisionStatus.end(); iter++)
+    if (removeListeners)
     {
-        if (iter->first.objectA == object || iter->first.objectB == object)
-            iter->second._status |= REMOVE;
+        std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+        for (; iter != _collisionStatus.end(); iter++)
+        {
+            if (iter->first.objectA == object || iter->first.objectB == object)
+                iter->second._status |= REMOVE;
+        }
     }
 }
 
@@ -1323,25 +1330,56 @@ float PhysicsController::calculateHeight(float* data, unsigned int width, unsign
     unsigned int x2 = x1 + 1;
     unsigned int y2 = y1 + 1;
     float tmp;
-    float xFactor = x2 >= width ? 0.0f : modf(x, &tmp);
-    float yFactor = y2 >= height ? 0.0f : modf(y, &tmp);
+    float xFactor = modf(x, &tmp);
+    float yFactor = modf(y, &tmp);
     float xFactorI = 1.0f - xFactor;
     float yFactorI = 1.0f - yFactor;
 
-    float a = xFactorI * yFactorI;
-    float b = xFactorI * yFactor;
-    float c = xFactor * yFactor;
-    float d = xFactor * yFactorI;
-
-    if (normalResult)
+    if (x2 >= width && y2 >= height)
     {
-        normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b + 
-            normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
-        normalResult->normalize();
-        worldMatrix->transformVector(normalResult);
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width]);
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width];
     }
-    return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b + 
-        data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
+    else if (x2 >= width)
+    {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * yFactorI + normalData[x1 + y2 * width] * yFactor);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
+    }
+    else if (y2 >= height)
+    {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * xFactorI + normalData[x2 + y1 * width] * xFactor);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
+    }
+    else
+    {
+        float a = xFactorI * yFactorI;
+        float b = xFactorI * yFactor;
+        float c = xFactor * yFactor;
+        float d = xFactor * yFactorI;
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b +
+                normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b +
+            data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
+    }
 }
 
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
@@ -1451,7 +1489,7 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 {
     GP_ASSERT(_meshBatch);
     _viewProjection = &viewProjection;
-    _meshBatch->begin();
+    _meshBatch->start();
 }
 
 void PhysicsController::DebugDrawer::end()

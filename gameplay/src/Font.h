@@ -155,9 +155,9 @@ public:
     unsigned int getSize();
 
     /**
-     * Begins text drawing for this font.
+     * Starts text drawing for this font.
      */
-    void begin();
+    void start();
 
     /**
      * Finishes text batching for this font and renders all drawn text.

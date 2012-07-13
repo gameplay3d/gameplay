@@ -172,10 +172,10 @@ unsigned int Font::getSize()
     return _size;
 }
 
-void Font::begin()
+void Font::start()
 {
     GP_ASSERT(_batch);
-    _batch->begin();
+    _batch->start();
 }
 
 Font::Text* Font::createText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify,

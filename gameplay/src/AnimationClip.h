@@ -64,6 +64,11 @@ public:
              */
             END
         };
+        
+        /*
+         * Destructor.
+         */
+        virtual ~Listener() { }
 
         /**
          * Handles when animation event occurs.

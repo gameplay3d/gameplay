@@ -219,7 +219,18 @@ public:
     void setKinematic(bool kinematic);
 
     /**
+<<<<<<< HEAD
+     * Sets whether the rigid body is enabled or disabled in the physics world.
+     *
+     * @param enable true enables the collision object, false disables it.
+     */
+    void setEnabled(bool enable);
+
+    /**
+     * Gets the height at the given point (only for rigid bodies of type HEIGHTFIELD).
+=======
      * Gets the height and normal at the given point (only for rigid bodies of type HEIGHTFIELD).
+>>>>>>> 0d45c907dd0ead0b5318d9a32bc78b367c01e532
      * 
      * @param x The x position.
      * @param y The y position.
