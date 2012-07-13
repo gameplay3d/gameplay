@@ -49,6 +49,11 @@ inline PhysicsController* Game::getPhysicsController() const
     return _physicsController;
 }
 
+inline AIController* Game::getAIController() const
+{
+    return _aiController;
+}
+
 template <class T>
 void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
 {

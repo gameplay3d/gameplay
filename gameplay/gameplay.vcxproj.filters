@@ -285,6 +285,21 @@
     <ClCompile Include="src\Gamepad.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\AIController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIStateMachine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIAgent.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIMessage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -564,6 +579,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Gamepad.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIAgent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIStateMachine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIMessage.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
