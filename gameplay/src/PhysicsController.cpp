@@ -1330,25 +1330,56 @@ float PhysicsController::calculateHeight(float* data, unsigned int width, unsign
     unsigned int x2 = x1 + 1;
     unsigned int y2 = y1 + 1;
     float tmp;
-    float xFactor = x2 >= width ? 0.0f : modf(x, &tmp);
-    float yFactor = y2 >= height ? 0.0f : modf(y, &tmp);
+    float xFactor = modf(x, &tmp);
+    float yFactor = modf(y, &tmp);
     float xFactorI = 1.0f - xFactor;
     float yFactorI = 1.0f - yFactor;
 
-    float a = xFactorI * yFactorI;
-    float b = xFactorI * yFactor;
-    float c = xFactor * yFactor;
-    float d = xFactor * yFactorI;
-
-    if (normalResult)
+    if (x2 >= width && y2 >= height)
     {
-        normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b + 
-            normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
-        normalResult->normalize();
-        worldMatrix->transformVector(normalResult);
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width]);
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width];
     }
-    return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b + 
-        data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
+    else if (x2 >= width)
+    {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * yFactorI + normalData[x1 + y2 * width] * yFactor);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
+    }
+    else if (y2 >= height)
+    {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * xFactorI + normalData[x2 + y1 * width] * xFactor);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
+    }
+    else
+    {
+        float a = xFactorI * yFactorI;
+        float b = xFactorI * yFactor;
+        float c = xFactor * yFactor;
+        float d = xFactor * yFactorI;
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b +
+                normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b +
+            data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
+    }
 }
 
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
