@@ -14,8 +14,6 @@ namespace gameplay
 
 void luaRegister_PhysicsCollisionShape()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_PhysicsCollisionShape_addRef},
@@ -35,14 +33,14 @@ void luaRegister_PhysicsCollisionShape()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("PhysicsCollisionShape", lua_members, NULL, lua_PhysicsCollisionShape__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("PhysicsCollisionShape", lua_members, NULL, lua_PhysicsCollisionShape__gc, lua_statics, scopePath);
 }
 
 static PhysicsCollisionShape* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShape");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionShape' expected.");
-    return (PhysicsCollisionShape*)((ScriptController::LuaObject*)userdata)->instance;
+    return (PhysicsCollisionShape*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsCollisionShape__gc(lua_State* state)
@@ -59,7 +57,7 @@ int lua_PhysicsCollisionShape__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShape");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionShape' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     PhysicsCollisionShape* instance = (PhysicsCollisionShape*)object->instance;
@@ -240,7 +238,7 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
             void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -259,12 +257,12 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -290,15 +288,15 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -325,18 +323,18 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                bool param3 = ScriptController::luaCheckBool(state, 3);
+                bool param3 = ScriptUtil::luaCheckBool(state, 3);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2, param3));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -379,7 +377,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
             void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -407,7 +405,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -440,12 +438,12 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -479,15 +477,15 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptController::getInstance()->getObjectPointer<Vector3>(3, "Vector3", true);
+                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                bool param4 = ScriptController::luaCheckBool(state, 4);
+                bool param4 = ScriptUtil::luaCheckBool(state, 4);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3, param4));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -530,12 +528,12 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Image* param1 = ScriptController::getInstance()->getObjectPointer<Image>(1, "Image", false);
+                Image* param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::heightfield(param1));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -578,12 +576,12 @@ int lua_PhysicsCollisionShape_static_mesh(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Mesh* param1 = ScriptController::getInstance()->getObjectPointer<Mesh>(1, "Mesh", false);
+                Mesh* param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::mesh(param1));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -626,7 +624,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
             void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere());
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -650,7 +648,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -679,12 +677,12 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -714,15 +712,15 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                bool param3 = ScriptController::luaCheckBool(state, 3);
+                bool param3 = ScriptUtil::luaCheckBool(state, 3);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2, param3));
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");

@@ -11,8 +11,6 @@ namespace gameplay
 
 void luaRegister_MeshPart()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"getIndexBuffer", lua_MeshPart_getIndexBuffer},
@@ -26,14 +24,14 @@ void luaRegister_MeshPart()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    sc->registerClass("MeshPart", lua_members, NULL, lua_MeshPart__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("MeshPart", lua_members, NULL, lua_MeshPart__gc, lua_statics, scopePath);
 }
 
 static MeshPart* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MeshPart");
     luaL_argcheck(state, userdata != NULL, 1, "'MeshPart' expected.");
-    return (MeshPart*)((ScriptController::LuaObject*)userdata)->instance;
+    return (MeshPart*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MeshPart__gc(lua_State* state)
@@ -50,7 +48,7 @@ int lua_MeshPart__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "MeshPart");
                 luaL_argcheck(state, userdata != NULL, 1, "'MeshPart' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     MeshPart* instance = (MeshPart*)object->instance;
@@ -92,7 +90,7 @@ int lua_MeshPart_getIndexBuffer(lua_State* state)
                 void* returnPtr = (void*)new GLuint(instance->getIndexBuffer());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "GLuint");

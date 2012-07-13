@@ -13,8 +13,6 @@ namespace gameplay
 
 void luaRegister_Plane()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"distance", lua_Plane_distance},
@@ -38,14 +36,14 @@ void luaRegister_Plane()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Plane", lua_members, lua_Plane__init, lua_Plane__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Plane", lua_members, lua_Plane__init, lua_Plane__gc, lua_statics, scopePath);
 }
 
 static Plane* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Plane");
     luaL_argcheck(state, userdata != NULL, 1, "'Plane' expected.");
-    return (Plane*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Plane*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Plane__gc(lua_State* state)
@@ -62,7 +60,7 @@ int lua_Plane__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Plane");
                 luaL_argcheck(state, userdata != NULL, 1, "'Plane' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Plane* instance = (Plane*)object->instance;
@@ -101,7 +99,7 @@ int lua_Plane__init(lua_State* state)
             void* returnPtr = (void*)new Plane();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "Plane");
@@ -120,12 +118,12 @@ int lua_Plane__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(1, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true);
 
                 void* returnPtr = (void*)new Plane(*param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Plane");
@@ -151,7 +149,7 @@ int lua_Plane__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(1, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -159,7 +157,7 @@ int lua_Plane__init(lua_State* state)
                 void* returnPtr = (void*)new Plane(*param1, param2);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Plane");
@@ -203,7 +201,7 @@ int lua_Plane_distance(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->distance(*param1);
@@ -283,7 +281,7 @@ int lua_Plane_getNormal(lua_State* state)
                 void* returnPtr = (void*)&(instance->getNormal());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -327,7 +325,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptController::getInstance()->getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -341,7 +339,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptController::getInstance()->getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -355,7 +353,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Frustum* param1 = ScriptController::getInstance()->getObjectPointer<Frustum>(2, "Frustum", true);
+                Frustum* param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -369,7 +367,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(2, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -383,7 +381,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptController::getInstance()->getObjectPointer<Ray>(2, "Ray", true);
+                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -424,7 +422,7 @@ int lua_Plane_isParallel(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(2, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Plane* instance = getInstance(state);
                 bool result = instance->isParallel(*param1);
@@ -465,7 +463,7 @@ int lua_Plane_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(2, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Plane* instance = getInstance(state);
                 instance->set(*param1);
@@ -486,7 +484,7 @@ int lua_Plane_set(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -565,7 +563,7 @@ int lua_Plane_setNormal(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptController::getInstance()->getObjectPointer<Vector3>(2, "Vector3", true);
+                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Plane* instance = getInstance(state);
                 instance->setNormal(*param1);
@@ -656,16 +654,16 @@ int lua_Plane_static_intersection(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptController::getInstance()->getObjectPointer<Plane>(1, "Plane", true);
+                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true);
 
                 // Get parameter 2 off the stack.
-                Plane* param2 = ScriptController::getInstance()->getObjectPointer<Plane>(2, "Plane", true);
+                Plane* param2 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 // Get parameter 3 off the stack.
-                Plane* param3 = ScriptController::getInstance()->getObjectPointer<Plane>(3, "Plane", true);
+                Plane* param3 = ScriptUtil::getObjectPointer<Plane>(3, "Plane", true);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptController::getInstance()->getObjectPointer<Vector3>(4, "Vector3", false);
+                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", false);
 
                 Plane::intersection(*param1, *param2, *param3, param4);
                 
@@ -702,7 +700,7 @@ int lua_Plane_transform(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptController::getInstance()->getObjectPointer<Matrix>(2, "Matrix", true);
+                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Plane* instance = getInstance(state);
                 instance->transform(*param1);

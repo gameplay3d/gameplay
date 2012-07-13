@@ -21,8 +21,6 @@ namespace gameplay
 
 void luaRegister_Game()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"clear", lua_Game_clear},
@@ -73,14 +71,14 @@ void luaRegister_Game()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Game", lua_members, NULL, lua_Game__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Game", lua_members, NULL, lua_Game__gc, lua_statics, scopePath);
 }
 
 static Game* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Game");
     luaL_argcheck(state, userdata != NULL, 1, "'Game' expected.");
-    return (Game*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Game*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Game__gc(lua_State* state)
@@ -97,7 +95,7 @@ int lua_Game__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Game");
                 luaL_argcheck(state, userdata != NULL, 1, "'Game' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Game* instance = (Game*)object->instance;
@@ -143,7 +141,7 @@ int lua_Game_clear(lua_State* state)
                 Game::ClearFlags param1 = (Game::ClearFlags)lua_enumFromString_GameClearFlags(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptController::getInstance()->getObjectPointer<Vector4>(3, "Vector4", true);
+                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -187,7 +185,7 @@ int lua_Game_displayKeyboard(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Game* instance = getInstance(state);
                 instance->displayKeyboard(param1);
@@ -297,7 +295,7 @@ int lua_Game_gamepadEvent(lua_State* state)
                 Gamepad::GamepadEvent param1 = (Gamepad::GamepadEvent)lua_enumFromString_GamepadGamepadEvent(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                Gamepad* param2 = ScriptController::getInstance()->getObjectPointer<Gamepad>(3, "Gamepad", false);
+                Gamepad* param2 = ScriptUtil::getObjectPointer<Gamepad>(3, "Gamepad", false);
 
                 Game* instance = getInstance(state);
                 instance->gamepadEvent(param1, param2);
@@ -336,10 +334,10 @@ int lua_Game_getAccelerometerValues(lua_State* state)
                 (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptController::getInstance()->getFloatPointer(2);
+                float* param1 = ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptController::getInstance()->getFloatPointer(3);
+                float* param2 = ScriptUtil::getFloatPointer(3);
 
                 Game* instance = getInstance(state);
                 instance->getAccelerometerValues(param1, param2);
@@ -379,7 +377,7 @@ int lua_Game_getAnimationController(lua_State* state)
                 void* returnPtr = (void*)instance->getAnimationController();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AnimationController");
@@ -425,7 +423,7 @@ int lua_Game_getAudioController(lua_State* state)
                 void* returnPtr = (void*)instance->getAudioController();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AudioController");
@@ -471,7 +469,7 @@ int lua_Game_getAudioListener(lua_State* state)
                 void* returnPtr = (void*)instance->getAudioListener();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AudioListener");
@@ -517,7 +515,7 @@ int lua_Game_getConfig(lua_State* state)
                 void* returnPtr = (void*)instance->getConfig();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Properties");
@@ -604,7 +602,7 @@ int lua_Game_getGamepad(lua_State* state)
                 void* returnPtr = (void*)instance->getGamepad(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Gamepad");
@@ -724,7 +722,7 @@ int lua_Game_getPhysicsController(lua_State* state)
                 void* returnPtr = (void*)instance->getPhysicsController();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsController");
@@ -807,7 +805,7 @@ int lua_Game_getViewport(lua_State* state)
                 void* returnPtr = (void*)&(instance->getViewport());
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Rectangle");
@@ -1311,7 +1309,7 @@ int lua_Game_schedule(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptController::getInstance()->getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 Game* instance = getInstance(state);
                 instance->schedule(param1, param2);
@@ -1349,7 +1347,7 @@ int lua_Game_setCursorVisible(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Game* instance = getInstance(state);
                 instance->setCursorVisible(param1);
@@ -1387,7 +1385,7 @@ int lua_Game_setMouseCaptured(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Game* instance = getInstance(state);
                 instance->setMouseCaptured(param1);
@@ -1425,7 +1423,7 @@ int lua_Game_setMultiTouch(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 2);
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
 
                 Game* instance = getInstance(state);
                 instance->setMultiTouch(param1);
@@ -1463,7 +1461,7 @@ int lua_Game_setViewport(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptController::getInstance()->getObjectPointer<Rectangle>(2, "Rectangle", true);
+                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Game* instance = getInstance(state);
                 instance->setViewport(*param1);
@@ -1556,7 +1554,7 @@ int lua_Game_static_getInstance(lua_State* state)
             void* returnPtr = (void*)Game::getInstance();
             if (returnPtr)
             {
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "Game");
@@ -1621,7 +1619,7 @@ int lua_Game_static_setVsync(lua_State* state)
             if (lua_type(state, 1) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptController::luaCheckBool(state, 1);
+                bool param1 = ScriptUtil::luaCheckBool(state, 1);
 
                 Game::setVsync(param1);
                 

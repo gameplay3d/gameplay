@@ -12,8 +12,6 @@ namespace gameplay
 
 void luaRegister_Theme()
 {
-    ScriptController* sc = ScriptController::getInstance();
-
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Theme_addRef},
@@ -30,14 +28,14 @@ void luaRegister_Theme()
     };
     std::vector<std::string> scopePath;
 
-    sc->registerClass("Theme", lua_members, NULL, lua_Theme__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("Theme", lua_members, NULL, lua_Theme__gc, lua_statics, scopePath);
 }
 
 static Theme* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Theme");
     luaL_argcheck(state, userdata != NULL, 1, "'Theme' expected.");
-    return (Theme*)((ScriptController::LuaObject*)userdata)->instance;
+    return (Theme*)((ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Theme__gc(lua_State* state)
@@ -54,7 +52,7 @@ int lua_Theme__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Theme");
                 luaL_argcheck(state, userdata != NULL, 1, "'Theme' expected.");
-                ScriptController::LuaObject* object = (ScriptController::LuaObject*)userdata;
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Theme* instance = (Theme*)object->instance;
@@ -130,7 +128,7 @@ int lua_Theme_getEmptyStyle(lua_State* state)
                 void* returnPtr = (void*)instance->getEmptyStyle();
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "ThemeStyle");
@@ -211,13 +209,13 @@ int lua_Theme_getStyle(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Theme* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getStyle(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "ThemeStyle");
@@ -294,12 +292,12 @@ int lua_Theme_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptController::getInstance()->getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Theme::create(param1);
                 if (returnPtr)
                 {
-                    ScriptController::LuaObject* object = (ScriptController::LuaObject*)lua_newuserdata(state, sizeof(ScriptController::LuaObject));
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Theme");
