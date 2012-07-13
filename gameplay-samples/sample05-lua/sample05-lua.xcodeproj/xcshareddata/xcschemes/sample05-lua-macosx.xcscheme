@@ -13,10 +13,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5B61611414CCC24C0073B857"
-               BuildableName = "sample04-particles-ios.app"
-               BlueprintName = "sample04-particles-ios"
-               ReferencedContainer = "container:sample04-particles.xcodeproj">
+               BlueprintIdentifier = "42C932BB1491A0DB0098216A"
+               BuildableName = "sample05-lua-macosx.app"
+               BlueprintName = "sample05-lua-macosx"
+               ReferencedContainer = "container:sample05-lua.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,10 +31,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "42C932BB1491A0DB0098216A"
+            BuildableName = "sample05-lua-macosx.app"
+            BlueprintName = "sample05-lua-macosx"
+            ReferencedContainer = "container:sample05-lua.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -46,15 +46,14 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
-      enablesOpenGLESFrameCapture = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "42C932BB1491A0DB0098216A"
+            BuildableName = "sample05-lua-macosx.app"
+            BlueprintName = "sample05-lua-macosx"
+            ReferencedContainer = "container:sample05-lua.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,10 +68,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5B61611414CCC24C0073B857"
-            BuildableName = "sample04-particles-ios.app"
-            BlueprintName = "sample04-particles-ios"
-            ReferencedContainer = "container:sample04-particles.xcodeproj">
+            BlueprintIdentifier = "42C932BB1491A0DB0098216A"
+            BuildableName = "sample05-lua-macosx.app"
+            BlueprintName = "sample05-lua-macosx"
+            ReferencedContainer = "container:sample05-lua.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
