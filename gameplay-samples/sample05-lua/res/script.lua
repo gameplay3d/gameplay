@@ -1,3 +1,5 @@
+-- This lua script file represents an exact lua implementation translation of sample00-mesh with a box instead of a duck.
+
 DEG_TO_RAD = 0.0174532925
 
 function initialize()
