@@ -44,9 +44,9 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                         lua_pop(sc->_lua, 2);
                         T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
                         if (ptr)
-                            memcpy(&values[i], ptr, sizeof(T));
+                            memcpy((void*)&values[i], (void*)ptr, sizeof(T));
                         else
-                            memset(&values[i], 0, sizeof(T));
+                            memset((void*)&values[i], 0, sizeof(T));
 
                         lua_pop(sc->_lua, 1);
                         continue;
@@ -63,15 +63,15 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                             lua_pop(sc->_lua, 2);
                             T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
                             if (ptr)
-                                memcpy(&values[i], ptr, sizeof(T));
+                                memcpy((void*)&values[i], (void*)ptr, sizeof(T));
                             else
-                                memset(&values[i], 0, sizeof(T));
+                                memset((void*)&values[i], 0, sizeof(T));
+
                             lua_pop(sc->_lua, 1);
                             continue;
                         }
                         lua_pop(sc->_lua, 1);
                     }
-            
                     lua_pop(sc->_lua, 1);
                 }
             }

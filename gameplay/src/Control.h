@@ -140,6 +140,11 @@ public:
              */
             RIGHT_CLICK     = 0x40,
         };
+    
+        /*
+         * Destructor.
+         */
+        virtual ~Listener() { }
 
         /**
          * Method called by controls when an event is triggered.

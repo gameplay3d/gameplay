@@ -7,6 +7,7 @@ void printError(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
+#ifdef WIN32
     int sz = vfprintf(stderr, format, argptr);
     if (sz > 0)
     {
@@ -16,6 +17,9 @@ void printError(const char* format, ...)
         OutputDebugStringA(buf);
         SAFE_DELETE_ARRAY(buf);
     }
+#else
+    vfprintf(stderr, format, argptr);
+#endif
     va_end(argptr);
 }
 
