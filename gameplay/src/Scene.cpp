@@ -508,7 +508,7 @@ void Scene::drawDebug(unsigned int debugFlags)
         SAFE_RELEASE(material);
     }
 
-    _debugBatch->begin();
+    _debugBatch->start();
 
     for (Node* node = _firstNode; node != NULL; node = node->_nextSibling)
     {

@@ -12,13 +12,13 @@ void luaRegister_SpriteBatch()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"begin", lua_SpriteBatch_begin},
         {"draw", lua_SpriteBatch_draw},
         {"finish", lua_SpriteBatch_finish},
         {"getMaterial", lua_SpriteBatch_getMaterial},
         {"getProjectionMatrix", lua_SpriteBatch_getProjectionMatrix},
         {"getStateBlock", lua_SpriteBatch_getStateBlock},
         {"setProjectionMatrix", lua_SpriteBatch_setProjectionMatrix},
+        {"start", lua_SpriteBatch_start},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -64,40 +64,6 @@ int lua_SpriteBatch__gc(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_SpriteBatch__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_SpriteBatch_begin(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                SpriteBatch* instance = getInstance(state);
-                instance->begin();
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_SpriteBatch_begin - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -976,6 +942,40 @@ int lua_SpriteBatch_setProjectionMatrix(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteBatch_start(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                SpriteBatch* instance = getInstance(state);
+                instance->start();
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_SpriteBatch_start - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

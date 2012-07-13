@@ -49,6 +49,11 @@ inline PhysicsController* Game::getPhysicsController() const
     return _physicsController;
 }
 
+inline ScriptController* Game::getScriptController() const
+{
+    return _scriptController;
+}
+
 template <class T>
 void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
 {
@@ -57,11 +62,7 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
-void Game::renderOnce(const char* function)
-{
-    ScriptController::getInstance()->executeFunction<void>(function, NULL);
-    Platform::swapBuffers();
-}
+
 
 inline bool Game::hasMouse()
 {

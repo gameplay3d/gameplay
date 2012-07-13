@@ -195,7 +195,7 @@ void Joystick::update(const Control* container, const Vector2& offset)
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     GP_ASSERT(spriteBatch);
-    spriteBatch->begin();
+    spriteBatch->start();
 
     // If the joystick is not absolute, then only draw if it is active.
     if (_absolute || (!_absolute && _state == ACTIVE))

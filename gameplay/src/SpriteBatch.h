@@ -87,12 +87,12 @@ public:
     virtual ~SpriteBatch();
 
     /**
-     * Begins drawing sprites.
+     * Starts drawing sprites.
      *
      * This method must be called before drawing any sprites and it must eventually be
      * followed by a call to finish().
      */
-    void begin();
+    void start();
 
     /**
      * Draws a single sprite.
