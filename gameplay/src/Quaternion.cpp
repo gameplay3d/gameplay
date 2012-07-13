@@ -10,8 +10,8 @@ Quaternion::Quaternion()
 }
 
 Quaternion::Quaternion(float x, float y, float z, float w)
+    : x(x), y(y), z(z), w(w)
 {
-    set(x, y, z, w);
 }
 
 Quaternion::Quaternion(float* array)

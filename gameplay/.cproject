@@ -25,11 +25,15 @@
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2133604142" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.1968057343" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions"/>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1968057343" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1078137668" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
 								</option>
@@ -83,11 +87,16 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1670164593" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1122311163" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
+								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1770609643" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1380846613" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -138,11 +147,16 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1503059677" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1956270067" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
+								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1366354884" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.81809638" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -196,11 +210,16 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1769677874" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.47607907" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
+								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.146547607" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.2007171407" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -252,10 +271,15 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.847642559" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.ccoptions.1432778691" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList"/>
+								<option id="com.qnx.qcc.option.compiler.ccoptions.1432778691" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.245518255" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1038720310" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.521146732" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -306,10 +330,15 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.513622172" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.ccoptions.663337616" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList"/>
+								<option id="com.qnx.qcc.option.compiler.ccoptions.663337616" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.288926109" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1961855927" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1089440729" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -361,10 +390,15 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1685994750" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/oggvorbis/include&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.ccoptions.346770186" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList"/>
+								<option id="com.qnx.qcc.option.compiler.ccoptions.346770186" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1085566269" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-Wno-psabi"/>
+								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1658185881" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.746786008" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">

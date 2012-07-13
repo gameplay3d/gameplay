@@ -1,18 +1,15 @@
 #include "Base.h"
 #include "Game.h"
 #include "Control.h"
+#include "ScriptListener.h"
 
 namespace gameplay
 {
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _contactIndex(INVALID_CONTACT_INDEX),
-    _styleOverridden(false), _skin(NULL)
-{
-}
-
-Control::Control(const Control& copy)
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL), _scriptListeners(NULL),
+    _contactIndex(INVALID_CONTACT_INDEX), _styleOverridden(false), _skin(NULL)
 {
 }
 
@@ -26,6 +23,15 @@ Control::~Control()
             SAFE_DELETE(list);
         }
         SAFE_DELETE(_listeners);
+    }
+
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
     }
 
     if (_styleOverridden)
@@ -129,11 +135,6 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     }
 }
 
-void initialize(const char* id, Theme::Style* style, const Vector2& position, const Vector2& size)
-{
-
-}
-
 const char* Control::getId() const
 {
     return _id.c_str();
@@ -226,6 +227,11 @@ void Control::setAutoHeight(bool autoHeight)
     }
 }
 
+bool Control::getAutoHeight() const
+{
+    return _autoHeight;
+}
+
 void Control::setOpacity(float opacity, unsigned char states)
 {
     overrideStyle();
@@ -287,13 +293,6 @@ const Rectangle& Control::getSkinRegion(State state) const
     Theme::Style::Overlay* overlay = getOverlay(state);
     GP_ASSERT(overlay);
     return overlay->getSkinRegion();
-}
-
-const Theme::UVs& Control::getSkinUVs(Theme::Skin::SkinArea area, State state) const
-{
-    Theme::Style::Overlay* overlay = getOverlay(state);
-    GP_ASSERT(overlay);
-    return overlay->getSkinUVs(area);
 }
 
 void Control::setSkinColor(const Vector4& color, unsigned char states)
@@ -684,6 +683,16 @@ void Control::addListener(Control::Listener* listener, int eventFlags)
     }
 }
 
+void Control::addListener(const char* function, int eventFlags)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addListener(listener, eventFlags);
+}
+
 void Control::addSpecificListener(Control::Listener* listener, Listener::EventType eventType)
 {
     GP_ASSERT(listener);
@@ -985,7 +994,7 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     spriteBatch->begin();
     drawBorder(spriteBatch, clip);
     drawImages(spriteBatch, clip);
-    spriteBatch->end();
+    spriteBatch->finish();
 
     drawText(clip);
     _dirty = false;

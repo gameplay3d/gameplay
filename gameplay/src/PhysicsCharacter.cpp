@@ -13,6 +13,9 @@
 namespace gameplay
 {
 
+/**
+ * @script{ignore}
+ */
 class ClosestNotMeConvexResultCallback : public btCollisionWorld::ClosestConvexResultCallback
 {
 public:
@@ -560,7 +563,7 @@ void PhysicsCharacter::stepDown(btCollisionWorld* collisionWorld, btScalar time)
 /*
  * Returns the reflection direction of a ray going 'direction' hitting a surface with normal 'normal'.
  */
-btVector3 computeReflectionDirection(const btVector3& direction, const btVector3& normal)
+static btVector3 computeReflectionDirection(const btVector3& direction, const btVector3& normal)
 {
     return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
 }
@@ -568,7 +571,7 @@ btVector3 computeReflectionDirection(const btVector3& direction, const btVector3
 /*
  * Returns the portion of 'direction' that is parallel to 'normal'.
  */
-btVector3 parallelComponent(const btVector3& direction, const btVector3& normal)
+static btVector3 parallelComponent(const btVector3& direction, const btVector3& normal)
 {
     btScalar magnitude = direction.dot(normal);
     return normal * magnitude;
@@ -577,7 +580,7 @@ btVector3 parallelComponent(const btVector3& direction, const btVector3& normal)
 /*
  * Returns the portion of 'direction' that is perpindicular to 'normal'.
  */
-btVector3 perpindicularComponent(const btVector3& direction, const btVector3& normal)
+static btVector3 perpindicularComponent(const btVector3& direction, const btVector3& normal)
 {
     return direction - parallelComponent(direction, normal);
 }

@@ -11,10 +11,6 @@ Theme::Theme()
 {
 }
 
-Theme::Theme(const Theme& theme)
-{
-}
-
 Theme::~Theme()
 {
     // Destroy all the cursors, styles and , fonts.

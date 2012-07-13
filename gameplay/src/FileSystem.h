@@ -89,6 +89,7 @@ public:
      * @param files The vector to append the files to.
      * 
      * @return True if successful, false if error.
+     * @script{ignore}
      */
     static bool listFiles(const char* dirPath, std::vector<std::string>& files);
 
@@ -110,6 +111,7 @@ public:
      * @param mode The mode used to open the file, passed directly to fopen.
      * 
      * @see setResourcePath(const char*)
+     * @script{ignore}
      */
     static FILE* openFile(const char* filePath, const char* mode);
 

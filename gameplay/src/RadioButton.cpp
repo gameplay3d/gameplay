@@ -9,11 +9,6 @@ RadioButton::RadioButton() : _selected(false)
 {
 }
 
-RadioButton::RadioButton(const RadioButton& copy)
-{
-    // Hidden.
-}
-
 RadioButton::~RadioButton()
 {
     // Remove this RadioButton from the global list.

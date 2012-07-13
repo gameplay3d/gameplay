@@ -12,10 +12,6 @@ AbsoluteLayout::AbsoluteLayout()
 {
 }
 
-AbsoluteLayout::AbsoluteLayout(const AbsoluteLayout& copy)
-{
-}
-
 AbsoluteLayout::~AbsoluteLayout()
 {
     __instance = NULL;

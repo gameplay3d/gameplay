@@ -29,6 +29,7 @@ public:
      * @param attachToWindow The native window handle to optionally attach to.
      * 
      * @return The created platform interface.
+     * @script{ignore}
      */
     static Platform* create(Game* game, void* attachToWindow = NULL);
 
@@ -237,5 +238,7 @@ private:
 };
 
 }
+
+#include "Game.h"
 
 #endif
