@@ -161,6 +161,7 @@ public:
      * @param url The URL pointing to the Properties object defining the particle emitter.
      * 
      * @return An initialized ParticleEmitter.
+     * @script{create}
      */
     static ParticleEmitter* create(const char* url);
 
@@ -170,6 +171,7 @@ public:
      * @param properties The properties object defining the 
      *      particle emitter (must have namespace equal to 'particle').
      * @return The newly created particle emitter, or <code>NULL</code> if the particle emitter failed to load.
+     * @script{create}
      */
     static ParticleEmitter* create(Properties* properties);
 
@@ -179,6 +181,7 @@ public:
      * @param texturePath A path to the image to use as this ParticleEmitter's texture.
      * @param textureBlending The type of texture blending to be used for the particles emitted.
      * @param particleCountMax The maximum number of particles that can be alive at one time in this ParticleEmitter's system.
+     * @script{create}
      */
     static ParticleEmitter* create(const char* texturePath, TextureBlending textureBlending,  unsigned int particleCountMax);
 
