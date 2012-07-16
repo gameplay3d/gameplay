@@ -46,6 +46,7 @@ public:
      * @param style The control's style.
      *
      * @return The new radio button.
+     * @script{create}
      */
     static RadioButton* create(const char* id, Theme::Style* style);
 

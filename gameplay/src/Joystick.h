@@ -23,6 +23,7 @@ public:
      * @param style The control's style.
      *
      * @return The new joystick.
+     * @script{create}
      */
     static Joystick* create(const char* id, Theme::Style* style);
     

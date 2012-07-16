@@ -35,6 +35,7 @@ public:
      * @param url The URL pointing to the Properties object defining the material.
      * 
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(const char* url);
 
@@ -44,6 +45,7 @@ public:
      * @param materialProperties The properties object defining the 
      *      material (must have namespace equal to 'material').
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(Properties* materialProperties);
 
@@ -56,6 +58,7 @@ public:
      * @param effect Effect for the new material.
      * 
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(Effect* effect);
 
@@ -70,6 +73,7 @@ public:
      * @param defines New-line delimitted list of preprocessor defines.
      * 
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(const char* vshPath, const char* fshPath, const char* defines = NULL);
 

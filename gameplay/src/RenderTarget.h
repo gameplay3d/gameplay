@@ -25,6 +25,7 @@ public:
      * @param height The height of the new RenderTarget.
      *
      * @return A newly created RenderTarget.
+     * @script{create}
      */
     static RenderTarget* create(const char* id, unsigned int width, unsigned int height);
 

@@ -56,6 +56,7 @@ public:
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
      * 
      * @param url The URL pointing to the Properties object defining the form. 
+     * @script{create}
      */
     static Form* create(const char* url);
 
@@ -67,6 +68,7 @@ public:
      * @param layoutType The form's layout type.
      *
      * @return The new Form.
+     * @script{create}
      */
     static Form* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
 

@@ -280,6 +280,7 @@ public:
      * 
      * @param pointCount The number of points in the curve.
      * @param componentCount The number of float component values per key value.
+     * @script{create}
      */
     static Curve* create(unsigned int pointCount, unsigned int componentCount);
 
