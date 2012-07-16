@@ -5,7 +5,7 @@
 namespace gameplay
 {
 
-AIState AIState::_empty("");
+AIState* AIState::_empty = NULL;
 
 AIState::AIState(const char* id)
     : _id(id), _listener(NULL)
