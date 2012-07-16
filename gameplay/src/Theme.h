@@ -299,6 +299,7 @@ public:
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
      * 
      * @param url The URL pointing to the Properties object defining the theme. 
+     * @script{create}
      */
     static Theme* create(const char* url);
 

@@ -366,9 +366,6 @@
     <ClCompile Include="src\lua\lua_Font.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_FontGlyph.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_FontText.cpp">
       <Filter>lua</Filter>
     </ClCompile>
@@ -538,9 +535,6 @@
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Scene.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_SceneLoader.cpp">
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp">
@@ -1145,9 +1139,6 @@
     <ClInclude Include="src\lua\lua_Font.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_FontGlyph.h">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_FontText.h">
       <Filter>lua</Filter>
     </ClInclude>
@@ -1317,9 +1308,6 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Scene.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_SceneLoader.h">
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h">

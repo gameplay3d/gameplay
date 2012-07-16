@@ -46,6 +46,7 @@ public:
      * @param effect The effect.
      * 
      * @return A VertexAttributeBinding for the requested parameters.
+     * @script{create}
      */
     static VertexAttributeBinding* create(Mesh* mesh, Effect* effect);
 

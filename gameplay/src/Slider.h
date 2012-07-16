@@ -42,6 +42,7 @@ public:
      * @param style The control's style.
      *
      * @return The new slider.
+     * @script{create}
      */
     static Slider* create(const char* id, Theme::Style* style);
 
