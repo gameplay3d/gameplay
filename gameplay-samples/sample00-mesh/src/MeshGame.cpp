@@ -58,7 +58,7 @@ void MeshGame::update(float elapsedTime)
 {
     // Rotate model
     if (!_touched)
-        _modelNode->rotateY(MATH_DEG_TO_RAD(0.5f));
+        _modelNode->rotateY(elapsedTime * MATH_DEG_TO_RAD(0.03f));
 }
 
 void MeshGame::render(float elapsedTime)
