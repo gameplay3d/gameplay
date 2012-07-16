@@ -93,7 +93,6 @@
 #include "lua_RenderStateStateBlock.h"
 #include "lua_RenderTarget.h"
 #include "lua_Scene.h"
-#include "lua_SceneLoader.h"
 #include "lua_ScreenDisplayer.h"
 #include "lua_ScriptController.h"
 #include "lua_Slider.h"

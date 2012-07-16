@@ -31,23 +31,22 @@ There are also prebuilt binaries in the gameplay/bin folder.
     end
 - Note: you can't pass an enum to a function that doesn't explicitly take an enum (i.e. Control::setTextColor, which takes an unsigned char). In these cases, you need to go look up the enum values and pass them directly.
 
+
 ## Unsupported Features
 - operators
 - templates
 - variable arguments
 - Lua doesn't support as many types as C++ so if there are functions that overload on parameters with types that overlap in Lua, the overloading won't work properly (i.e. char, short, int, long, float, double and all corresponding unsigned variants overlap in Lua).
 
+
 ### To Do List
 - Get Mac OS X and iOS working.
-- Fix hierarchy inheritance
-- Fix memory leaks in gameplay-luagen and in generated code.
-    * Add "@script{create}" to the appropriate gameplay functions.
+- Fix memory leaks in generated code.
     * Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
-- Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).
-
-### Future Feature List
 - Add support for users to generate bindings for their own classes.
 - Look into updating bindValue() to support binding to any Lua script function.
+- Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).
+- Currently ignored: there is one memory leak in gameplay-luagen that is very difficult to fix (it appears to be a locale related leak-something leaks the first time an ofstream is created-doesn't matter the ofstream).
 
 
 ## Disclaimer

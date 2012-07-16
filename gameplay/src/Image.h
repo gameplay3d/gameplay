@@ -27,6 +27,7 @@ public:
      * 
      * @param path The path to the image file.
      * @return The newly created image.
+     * @script{create}
      */
     static Image* create(const char* path);
 

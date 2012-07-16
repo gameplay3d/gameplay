@@ -72,6 +72,7 @@ public:
      * @param layoutType The container's layout type.
      *
      * @return The new container.
+     * @script{create}
      */
     static Container* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
 
