@@ -102,7 +102,6 @@
     <ClCompile Include="src\lua\lua_FileSystem.cpp" />
     <ClCompile Include="src\lua\lua_FlowLayout.cpp" />
     <ClCompile Include="src\lua\lua_Font.cpp" />
-    <ClCompile Include="src\lua\lua_FontGlyph.cpp" />
     <ClCompile Include="src\lua\lua_FontJustify.cpp" />
     <ClCompile Include="src\lua\lua_FontStyle.cpp" />
     <ClCompile Include="src\lua\lua_FontText.cpp" />
@@ -186,7 +185,6 @@
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
     <ClCompile Include="src\lua\lua_Scene.cpp" />
     <ClCompile Include="src\lua\lua_SceneDebugFlags.cpp" />
-    <ClCompile Include="src\lua\lua_SceneLoader.cpp" />
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp" />
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
     <ClCompile Include="src\lua\lua_Slider.cpp" />
@@ -360,7 +358,6 @@
     <ClInclude Include="src\lua\lua_FileSystem.h" />
     <ClInclude Include="src\lua\lua_FlowLayout.h" />
     <ClInclude Include="src\lua\lua_Font.h" />
-    <ClInclude Include="src\lua\lua_FontGlyph.h" />
     <ClInclude Include="src\lua\lua_FontJustify.h" />
     <ClInclude Include="src\lua\lua_FontStyle.h" />
     <ClInclude Include="src\lua\lua_FontText.h" />
@@ -444,7 +441,6 @@
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
     <ClInclude Include="src\lua\lua_Scene.h" />
     <ClInclude Include="src\lua\lua_SceneDebugFlags.h" />
-    <ClInclude Include="src\lua\lua_SceneLoader.h" />
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h" />
     <ClInclude Include="src\lua\lua_ScriptController.h" />
     <ClInclude Include="src\lua\lua_Slider.h" />

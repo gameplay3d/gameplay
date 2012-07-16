@@ -40,9 +40,7 @@ There are also prebuilt binaries in the gameplay/bin folder.
 
 
 ### To Do List
-- Get Mac OS X and iOS working.
-- Fix memory leaks in generated code.
-    * Add "@script{own}" to array parameters that are owned by the function or class they are passed to?
+- ScriptTarget class (remove ScriptListener class).
 - Add support for users to generate bindings for their own classes.
 - Look into updating bindValue() to support binding to any Lua script function.
 - Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).

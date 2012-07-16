@@ -8,7 +8,6 @@
 #include "Game.h"
 #include "Ref.h"
 #include "lua_FontJustify.h"
-#include "lua_FontStyle.h"
 
 namespace gameplay
 {
