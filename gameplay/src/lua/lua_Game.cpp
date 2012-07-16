@@ -28,6 +28,7 @@ void luaRegister_Game()
         {"exit", lua_Game_exit},
         {"frame", lua_Game_frame},
         {"gamepadEvent", lua_Game_gamepadEvent},
+        {"getAIController", lua_Game_getAIController},
         {"getAccelerometerValues", lua_Game_getAccelerometerValues},
         {"getAnimationController", lua_Game_getAnimationController},
         {"getAudioController", lua_Game_getAudioController},
@@ -313,6 +314,52 @@ int lua_Game_gamepadEvent(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_getAIController(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getAIController();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AIController");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_getAIController - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

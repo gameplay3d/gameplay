@@ -366,9 +366,6 @@
     <ClCompile Include="src\lua\lua_Font.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_FontGlyph.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_FontText.cpp">
       <Filter>lua</Filter>
     </ClCompile>
@@ -538,9 +535,6 @@
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_Scene.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_SceneLoader.cpp">
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp">
@@ -743,6 +737,45 @@
     </ClCompile>
     <ClCompile Include="src\ScriptListener.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIAgent.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIMessage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIState.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AIStateMachine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIAgent.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIAgentListener.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIController.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIMessage.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIMessageParameterType.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIState.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIStateListener.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_AIStateMachine.cpp">
+      <Filter>lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1106,9 +1139,6 @@
     <ClInclude Include="src\lua\lua_Font.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_FontGlyph.h">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_FontText.h">
       <Filter>lua</Filter>
     </ClInclude>
@@ -1278,9 +1308,6 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_Scene.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_SceneLoader.h">
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h">
@@ -1480,6 +1507,45 @@
     </ClInclude>
     <ClInclude Include="src\ScriptListener.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIStateMachine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIAgent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIMessage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AIState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIAgent.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIAgentListener.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIController.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIMessage.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIMessageParameterType.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIState.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIStateListener.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_AIStateMachine.h">
+      <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

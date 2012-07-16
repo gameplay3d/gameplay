@@ -11,6 +11,7 @@
 #include "PhysicsCollisionObject.h"
 #include "PhysicsCollisionShape.h"
 #include "BoundingBox.h"
+#include "AIAgent.h"
 
 namespace gameplay
 {
@@ -44,6 +45,7 @@ public:
      * Creates a new node with the specified ID.
      *
      * @param id The ID for the new node.
+     * @script{create}
      */
     static Node* create(const char* id = NULL);
 
@@ -558,6 +560,20 @@ public:
     PhysicsCollisionObject* setCollisionObject(Properties* properties);
 
     /**
+     * Returns the AI agent assigned to this node.
+     *
+     * @return The AI agent for this node.
+     */
+    AIAgent* getAgent() const;
+
+    /**
+     * Sets the AI agent for this node.
+     *
+     * @param agent The AI agent to set.
+     */
+    void setAgent(AIAgent* agent);
+
+    /**
      * Returns the bounding sphere for the Node, in world space.
      *
      * The bounding sphere for a node represents the area, in world
@@ -753,6 +769,11 @@ protected:
      */
     PhysicsCollisionObject* _collisionObject;
     
+    /**
+     * Pointer to the AI agent attached to the Node.
+     */
+    AIAgent* _agent;
+
     /**
      * World Matrix representation of the Node.
      */

@@ -1,6 +1,13 @@
 #ifndef LUA_ALL_BINDINGS_H_
 #define LUA_ALL_BINDINGS_H_
 
+#include "lua_AIAgent.h"
+#include "lua_AIAgentListener.h"
+#include "lua_AIController.h"
+#include "lua_AIMessage.h"
+#include "lua_AIState.h"
+#include "lua_AIStateListener.h"
+#include "lua_AIStateMachine.h"
 #include "lua_AbsoluteLayout.h"
 #include "lua_Animation.h"
 #include "lua_AnimationClip.h"
@@ -27,7 +34,6 @@
 #include "lua_FileSystem.h"
 #include "lua_FlowLayout.h"
 #include "lua_Font.h"
-#include "lua_FontGlyph.h"
 #include "lua_FontText.h"
 #include "lua_Form.h"
 #include "lua_FrameBuffer.h"
@@ -86,7 +92,6 @@
 #include "lua_RenderStateStateBlock.h"
 #include "lua_RenderTarget.h"
 #include "lua_Scene.h"
-#include "lua_SceneLoader.h"
 #include "lua_ScreenDisplayer.h"
 #include "lua_ScriptController.h"
 #include "lua_Slider.h"

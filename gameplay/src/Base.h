@@ -115,7 +115,7 @@ extern void printError(const char* format, ...);
 #define SAFE_RELEASE(x) \
     if (x) \
     { \
-        x->release(); \
+        (x)->release(); \
         x = NULL; \
     }
 

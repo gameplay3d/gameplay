@@ -1,6 +1,7 @@
 #ifndef LUA_GLOBAL_H_
 #define LUA_GLOBAL_H_
 
+#include "lua_AIMessageParameterType.h"
 #include "lua_AnimationClipListenerEventType.h"
 #include "lua_AudioSourceState.h"
 #include "lua_CameraType.h"

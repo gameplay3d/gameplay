@@ -37,6 +37,7 @@ void luaRegister_Node()
         {"findNode", lua_Node_findNode},
         {"getActiveCameraTranslationView", lua_Node_getActiveCameraTranslationView},
         {"getActiveCameraTranslationWorld", lua_Node_getActiveCameraTranslationWorld},
+        {"getAgent", lua_Node_getAgent},
         {"getAnimation", lua_Node_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Node_getAnimationPropertyComponentCount},
         {"getAnimationPropertyValue", lua_Node_getAnimationPropertyValue},
@@ -106,6 +107,7 @@ void luaRegister_Node()
         {"scaleY", lua_Node_scaleY},
         {"scaleZ", lua_Node_scaleZ},
         {"set", lua_Node_set},
+        {"setAgent", lua_Node_setAgent},
         {"setAnimationPropertyValue", lua_Node_setAnimationPropertyValue},
         {"setAudioSource", lua_Node_setAudioSource},
         {"setCamera", lua_Node_setCamera},
@@ -1008,6 +1010,52 @@ int lua_Node_getActiveCameraTranslationWorld(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Node_getActiveCameraTranslationWorld - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Node_getAgent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Node* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getAgent();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "AIAgent");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Node_getAgent - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4391,6 +4439,44 @@ int lua_Node_set(lua_State* state)
     return 0;
 }
 
+int lua_Node_setAgent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                AIAgent* param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+
+                Node* instance = getInstance(state);
+                instance->setAgent(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Node_setAgent - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Node_setAnimationPropertyValue(lua_State* state)
 {
     // Get the number of parameters.
@@ -5742,7 +5828,7 @@ int lua_Node_static_create(lua_State* state)
             {
                 ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
-                object->owns = false;
+                object->owns = true;
                 luaL_getmetatable(state, "Node");
                 lua_setmetatable(state, -2);
             }
@@ -5766,7 +5852,7 @@ int lua_Node_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Node");
                     lua_setmetatable(state, -2);
                 }
