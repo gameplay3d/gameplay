@@ -45,6 +45,7 @@ public:
      * Creates a new node with the specified ID.
      *
      * @param id The ID for the new node.
+     * @script{create}
      */
     static Node* create(const char* id = NULL);
 

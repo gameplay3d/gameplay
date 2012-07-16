@@ -129,6 +129,7 @@ public:
      * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
      * 
      * @return The specified font.
+     * @script{create}
      */
     static Font* create(const char* path, const char* id = NULL);
 
@@ -146,6 +147,7 @@ public:
      * @param texture A texture map containing rendered glyphs.
      * 
      * @return The new Font.
+     * @script{create}
      */
     static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 

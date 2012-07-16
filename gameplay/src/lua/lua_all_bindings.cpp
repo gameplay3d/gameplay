@@ -98,7 +98,6 @@ void lua_RegisterAllBindings()
     luaRegister_RenderStateStateBlock();
     luaRegister_RenderTarget();
     luaRegister_Scene();
-    luaRegister_SceneLoader();
     luaRegister_ScreenDisplayer();
     luaRegister_ScriptController();
     luaRegister_Slider();
