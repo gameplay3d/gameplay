@@ -8,9 +8,14 @@ namespace gameplay
 {
 
 AIStateMachine::AIStateMachine(AIAgent* agent)
-    : _agent(agent), _currentState(&AIState::_empty)
+    : _agent(agent)
 {
     GP_ASSERT(agent);
+    if (AIState::_empty)
+        AIState::_empty->addRef();
+    else
+        AIState::_empty = new AIState("");
+    _currentState = AIState::_empty;
 }
 
 AIStateMachine::~AIStateMachine()
@@ -20,6 +25,7 @@ AIStateMachine::~AIStateMachine()
     {
         (*itr)->release();
     }
+    SAFE_RELEASE(AIState::_empty);
 }
 
 AIAgent* AIStateMachine::getAgent() const

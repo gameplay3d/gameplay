@@ -128,7 +128,7 @@ private:
     Listener* _listener;
 
     // The default/empty state.
-    static AIState _empty;
+    static AIState* _empty;
 
 };
 
