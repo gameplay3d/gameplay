@@ -1510,11 +1510,6 @@ void Generator::generateBindings()
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".h");
             ofstream global(path.c_str());
-            if (!global)
-            {
-                GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
-                goto end;
-            }
             includeGuard = string(LUA_GLOBAL_FILENAME) + string("_H_");
             transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
             global << "#ifndef " << includeGuard << "\n";
@@ -1565,13 +1560,7 @@ void Generator::generateBindings()
         // Write out the implementation.
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".cpp");
-            ofstream global(path.c_str());
-            if (!global)
-            {
-                GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
-                goto end;
-            }
-            
+            ofstream global(path.c_str());            
             global << "#include \"ScriptController.h\"\n";
             global << "#include \"" << LUA_GLOBAL_FILENAME << ".h\"\n";
             map<string, set<string> >::iterator iter = _includes.find(string(LUA_GLOBAL_FILENAME) + string(".h"));

@@ -197,3 +197,4 @@ Thumbs.db
 /gameplay-samples/sample05-lua/android/project.properties
 
 /gameplay-internal
+/gameplay\android/proguard-project.txt
