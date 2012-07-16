@@ -142,7 +142,6 @@ LOCAL_SRC_FILES := \
     lua/lua_FileSystem.cpp \
     lua/lua_FlowLayout.cpp \
     lua/lua_Font.cpp \
-    lua/lua_FontGlyph.cpp \
     lua/lua_FontJustify.cpp \
     lua/lua_FontStyle.cpp \
     lua/lua_FontText.cpp \
@@ -226,7 +225,6 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderTarget.cpp \
     lua/lua_Scene.cpp \
     lua/lua_SceneDebugFlags.cpp \
-    lua/lua_SceneLoader.cpp \
     lua/lua_ScreenDisplayer.cpp \
     lua/lua_ScriptController.cpp \
     lua/lua_Slider.cpp \

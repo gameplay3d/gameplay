@@ -40,6 +40,7 @@ public:
      * 
      * @param url The relative location on disk of the sound file or a URL specifying a Properties object defining an audio source.
      * @return The newly created audio source, or NULL if an audio source cannot be created.
+     * @script{create}
      */
     static AudioSource* create(const char* url);
 
@@ -48,6 +49,7 @@ public:
      * 
      * @param properties The properties object defining the audio source (must have namespace equal to 'audio').
      * @return The newly created audio source, or <code>NULL</code> if the audio source failed to load.
+     * @script{create}
      */
     static AudioSource* create(Properties* properties);
 

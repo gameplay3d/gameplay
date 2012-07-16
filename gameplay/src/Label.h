@@ -40,6 +40,7 @@ public:
      * @param style The control's style.
      *
      * @return The new label.
+     * @script{create}
      */
     static Label* create(const char*id, Theme::Style* style);
 

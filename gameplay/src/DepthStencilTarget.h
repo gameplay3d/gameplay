@@ -45,6 +45,7 @@ public:
      * @param height Height of the new DepthStencilTarget.
      *
      * @return A newly created DepthStencilTarget.
+     * @script{create}
      */
     static DepthStencilTarget* create(const char* id, Format format, unsigned int width, unsigned int height);
 
