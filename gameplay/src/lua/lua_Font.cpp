@@ -8,7 +8,6 @@
 #include "Game.h"
 #include "Ref.h"
 #include "lua_FontJustify.h"
-#include "lua_FontStyle.h"
 
 namespace gameplay
 {
@@ -1607,7 +1606,7 @@ int lua_Font_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Font");
                     lua_setmetatable(state, -2);
                 }
@@ -1641,57 +1640,7 @@ int lua_Font_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Font");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        case 6:
-        {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
-
-                // Get parameter 2 off the stack.
-                Font::Style param2 = (Font::Style)lua_enumFromString_FontStyle(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
-
-                // Get parameter 4 off the stack.
-                Font::Glyph* param4 = ScriptUtil::getObjectPointer<Font::Glyph>(4, "FontGlyph", false);
-
-                // Get parameter 5 off the stack.
-                int param5 = (int)luaL_checkint(state, 5);
-
-                // Get parameter 6 off the stack.
-                Texture* param6 = ScriptUtil::getObjectPointer<Texture>(6, "Texture", false);
-
-                void* returnPtr = (void*)Font::create(param1, param2, param3, param4, param5, param6);
-                if (returnPtr)
-                {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Font");
                     lua_setmetatable(state, -2);
                 }
@@ -1711,7 +1660,7 @@ int lua_Font_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1, 2 or 6).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }

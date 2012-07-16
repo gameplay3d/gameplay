@@ -44,6 +44,7 @@ public:
      * @param style The control's style.
      *
      * @return The new check box.
+     * @script{create}
      */
     static CheckBox* create(const char* id, Theme::Style* style);
 

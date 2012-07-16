@@ -55,28 +55,6 @@ public:
     };
 
     /**
-     * Defines a font glyph within the texture map for a font.
-     */
-    class Glyph
-    {
-    public:
-        /**
-         * Glyph character code (decimal value).
-         */
-        unsigned int code;
-
-        /**
-         * Glyph width (in pixels).
-         */
-        unsigned int width;
-
-        /**
-         * Glyph texture coordinates.
-         */
-        float uvs[4];
-    };
-
-    /**
      * Vertex coordinates, UVs and indices can be computed and stored in a Text object.
      * For static text labels that do not change frequently, this means these computations
      * need not be performed every frame.
@@ -129,25 +107,9 @@ public:
      * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
      * 
      * @return The specified font.
+     * @script{create}
      */
     static Font* create(const char* path, const char* id = NULL);
-
-    /**
-     * Creates a font with the given characteristics from the specified glyph array and texture map.
-     *
-     * This method will create a new Font object regardless of whether another Font is already
-     * created with the same attributes.
-     *
-     * @param family The font family name.
-     * @param style The font style.
-     * @param size The font size.
-     * @param glyphs An array of font glyphs, defining each character in the font within the texture map.
-     * @param glyphCount The number of items in the glyph array.
-     * @param texture A texture map containing rendered glyphs.
-     * 
-     * @return The new Font.
-     */
-    static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 
     /**
      * Returns the font size (max height of glyphs) in pixels.
@@ -275,6 +237,27 @@ public:
 
 
 private:
+    /**
+     * Defines a font glyph within the texture map for a font.
+     */
+    class Glyph
+    {
+    public:
+        /**
+         * Glyph character code (decimal value).
+         */
+        unsigned int code;
+
+        /**
+         * Glyph width (in pixels).
+         */
+        unsigned int width;
+
+        /**
+         * Glyph texture coordinates.
+         */
+        float uvs[4];
+    };
 
     /**
      * Constructor.
@@ -295,6 +278,24 @@ private:
      * Hidden copy assignment operator.
      */
     Font& operator=(const Font&);
+
+    /**
+     * Creates a font with the given characteristics from the specified glyph array and texture map.
+     *
+     * This method will create a new Font object regardless of whether another Font is already
+     * created with the same attributes.
+     *
+     * @param family The font family name.
+     * @param style The font style.
+     * @param size The font size.
+     * @param glyphs An array of font glyphs, defining each character in the font within the texture map.
+     * @param glyphCount The number of items in the glyph array.
+     * @param texture A texture map containing rendered glyphs.
+     * 
+     * @return The new Font.
+     * @script{create}
+     */
+    static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 
     void getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
                             std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);

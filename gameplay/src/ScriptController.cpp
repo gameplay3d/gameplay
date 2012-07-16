@@ -488,6 +488,10 @@ ScriptController::ScriptController() : _lua(NULL)
 
 ScriptController::~ScriptController()
 {
+    for (unsigned int i = 0; i < CALLBACK_COUNT; i++)
+    {
+        SAFE_DELETE(_callbacks[i]);
+    }
 }
 
 void ScriptController::initialize()
@@ -519,6 +523,9 @@ void ScriptController::finalizeGame()
     {
         executeFunction<void>(_callbacks[FINALIZE]->c_str());
     }
+
+    // Perform a full garbage collection cycle.
+    lua_gc(_lua, LUA_GCCOLLECT, 0);
 }
 
 void ScriptController::update(float elapsedTime)

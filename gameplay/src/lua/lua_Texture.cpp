@@ -563,7 +563,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Texture");
                     lua_setmetatable(state, -2);
                 }
@@ -584,7 +584,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Texture");
                     lua_setmetatable(state, -2);
                 }
@@ -618,7 +618,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Texture");
                     lua_setmetatable(state, -2);
                 }
@@ -643,7 +643,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Texture");
                     lua_setmetatable(state, -2);
                 }
@@ -685,7 +685,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Texture");
                     lua_setmetatable(state, -2);
                 }
@@ -731,7 +731,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Texture");
                     lua_setmetatable(state, -2);
                 }

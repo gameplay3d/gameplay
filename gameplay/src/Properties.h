@@ -150,6 +150,7 @@ public:
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
      * 
      * @param url The URL to create the properties from.
+     * @script{create}
      */
     static Properties* create(const char* url);
 
