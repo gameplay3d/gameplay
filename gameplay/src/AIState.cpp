@@ -8,7 +8,7 @@ namespace gameplay
 AIState AIState::_empty("");
 
 AIState::AIState(const char* id)
-    : _id(id)
+    : _id(id), _listener(NULL)
 {
 }
 
