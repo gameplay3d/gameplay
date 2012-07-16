@@ -574,7 +574,7 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
 
 void CharacterGame::clone()
 {
-    Node* clone = _scene->findNode("boycharacter")->clone();
+    Node* clone = _scene->findNode("boyRotation")->clone();
     Animation* cloneAnimation = clone->getAnimation();
 
     // Find the current clip and have the clone play that clip repeatedly.
