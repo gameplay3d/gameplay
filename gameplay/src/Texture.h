@@ -69,6 +69,7 @@ public:
          * @param texture The texture.
          *
          * @return The new sampler.
+         * @script{create}
          */
         static Sampler* create(Texture* texture);
 
@@ -79,6 +80,7 @@ public:
          * @param generateMipmaps True to force a full mipmap chain to be generated for the texture, false otherwise.
          *
          * @return The new sampler.
+         * @script{create}
          */
         static Sampler* create(const char* path, bool generateMipmaps = false);
 
@@ -138,16 +140,19 @@ public:
      * @param generateMipmaps true to auto-generate a full mipmap chain, false otherwise.
      * 
      * @return The new texture, or NULL if the texture could not be loaded/created.
+     * @script{create}
      */
     static Texture* create(const char* path, bool generateMipmaps = false);
 
     /**
      * Creates a texture from the given image.
+     * @script{create}
      */
     static Texture* create(Image* image, bool generateMipmaps = false);
 
     /**
      * Creates a texture from the given texture data.
+     * @script{create}
      */
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
 

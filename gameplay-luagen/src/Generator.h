@@ -199,6 +199,7 @@ private:
     map<string, EnumBinding> _enums;
     map<string, vector<string> > _namespaces;
     map<string, TypedefBinding> _typedefs;
+    set<string> __warnings;
 };
 
 #endif

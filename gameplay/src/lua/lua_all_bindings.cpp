@@ -39,7 +39,6 @@ void lua_RegisterAllBindings()
     luaRegister_FileSystem();
     luaRegister_FlowLayout();
     luaRegister_Font();
-    luaRegister_FontGlyph();
     luaRegister_FontText();
     luaRegister_Form();
     luaRegister_FrameBuffer();
@@ -98,7 +97,6 @@ void lua_RegisterAllBindings()
     luaRegister_RenderStateStateBlock();
     luaRegister_RenderTarget();
     luaRegister_Scene();
-    luaRegister_SceneLoader();
     luaRegister_ScreenDisplayer();
     luaRegister_ScriptController();
     luaRegister_Slider();

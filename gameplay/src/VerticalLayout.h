@@ -20,6 +20,7 @@ public:
      * Create a VerticalLayout.
      *
      * @return a VerticalLayout object.
+     * @script{create}
      */
     static VerticalLayout* create();
 
