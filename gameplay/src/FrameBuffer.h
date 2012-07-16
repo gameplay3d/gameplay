@@ -33,6 +33,7 @@ public:
      * @param height The height of the RenderTarget to be created and attached.
      *
      * @return A newly created FrameBuffer.
+     * @script{create}
      */
     static FrameBuffer* create(const char* id, unsigned int width, unsigned int height);
 

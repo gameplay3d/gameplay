@@ -24,7 +24,7 @@ namespace gameplay
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
     _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
-    _collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
+    _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
     {
@@ -52,6 +52,8 @@ Node::~Node()
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
     SAFE_DELETE(_collisionObject);
+
+    setAgent(NULL);
 
     // Cleanup user data
     if (_userData)
@@ -1088,8 +1090,35 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         GP_ERROR("Failed to load collision object from properties object; required attribute 'type' is missing.");
         return NULL;
     }
-    
+
     return _collisionObject;
+}
+
+AIAgent* Node::getAgent() const
+{
+    return _agent;
+}
+
+void Node::setAgent(AIAgent* agent)
+{
+    if (agent != _agent)
+    {
+        if (_agent)
+        {
+            Game::getInstance()->getAIController()->removeAgent(_agent);
+            _agent->_node = NULL;
+            SAFE_RELEASE(_agent);
+        }
+
+        _agent = agent;
+
+        if (_agent)
+        {
+            _agent->addRef();
+            _agent->_node = this;
+            Game::getInstance()->getAIController()->addAgent(_agent);
+        }
+    }
 }
 
 NodeCloneContext::NodeCloneContext()

@@ -2,8 +2,6 @@
 
 Generator* Generator::__instance = NULL;
 
-set<string> __warnings;
-
 // Warning flags.
 static bool __printTemplateWarning = false;
 static bool __printVarargWarning = false;
@@ -14,6 +12,7 @@ static string trim(const string& str);
 static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind);
 static inline bool isWantedFileNormal(const string& s);
 static inline bool isNamespaceFile(const string& s);
+static inline bool isGeneratedBindingFile(const string& s);
 static bool getFileList(string directory, vector<string>& files, bool (*isWantedFile)(const string& s));
 static bool isReservedKeyword(string name);
 
@@ -103,12 +102,17 @@ bool Generator::isDerived(const ClassBinding& c, string classname)
 {
     for (unsigned int i = 0; i < c.derived.size(); i++)
     {
-        const string& derivedClassName = getIdentifier(c.derived[i]);
-        if (derivedClassName == classname || 
-            (_classes.find(derivedClassName) != _classes.end() &&
-            isDerived(_classes[derivedClassName], classname)))
+        // If the derived class is not in the ref ID table, then it
+        // is a hidden (protected, private, etc.) class, so don't consider it.
+        if (_refIds.find(c.derived[i]) != _refIds.end())
         {
-            return true;
+            const string& derivedClassName = getIdentifier(c.derived[i]);
+            if (derivedClassName == classname || 
+                (_classes.find(derivedClassName) != _classes.end() &&
+                isDerived(_classes[derivedClassName], classname)))
+            {
+                return true;
+            }
         }
     }
     return false;
@@ -150,6 +154,18 @@ void Generator::run(string inDir, string outDir)
 {
     // Set the output directory.
     _outDir = outDir;
+
+    // Get a list of all .cpp and .h files in the output directory so
+    // we can delete them before generating new bindings.
+    vector<string> oldBindingsFiles;
+    getFileList(outDir, oldBindingsFiles, isGeneratedBindingFile);
+
+    // Delete the old bindings.
+    for (unsigned int i = 0; i < oldBindingsFiles.size(); i++)
+    {
+        remove(oldBindingsFiles[i].c_str());
+    }
+
 
     // Get a list of the Doxygen XML files that specify a namespace.
     // Note: we must do this before adding the normal files so that
@@ -370,10 +386,6 @@ void Generator::getNamespace(XMLElement* nsNode, const string& name)
 
 void Generator::getClass(XMLElement* classNode, const string& name)
 {
-    // Check if we should ignore this class.
-    if (getScriptFlag(classNode) == "ignore")
-        return;
-
     // Get the ref id for the class.
     string refId = classNode->Attribute("id");
 
@@ -382,6 +394,10 @@ void Generator::getClass(XMLElement* classNode, const string& name)
 
     // Store the mapping between the ref id and the class's fully qualified name.
     Generator::getInstance()->setIdentifier(refId, classBinding.classname);
+
+    // Check if we should ignore this class.
+    if (getScriptFlag(classNode) == "ignore")
+        return;
 
     // Get the include header for the original class declaration.
     XMLElement* includeElement = classNode->FirstChildElement("includes");
@@ -856,7 +872,6 @@ string Generator::getScriptFlag(XMLElement* e)
     
     return flag;
 }
-
 
 void Generator::getCreateFlag(XMLElement* e, FunctionBinding& b)
 {
@@ -1495,11 +1510,6 @@ void Generator::generateBindings()
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".h");
             ofstream global(path.c_str());
-            if (!global)
-            {
-                GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
-                goto end;
-            }
             includeGuard = string(LUA_GLOBAL_FILENAME) + string("_H_");
             transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
             global << "#ifndef " << includeGuard << "\n";
@@ -1550,13 +1560,7 @@ void Generator::generateBindings()
         // Write out the implementation.
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".cpp");
-            ofstream global(path.c_str());
-            if (!global)
-            {
-                GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
-                goto end;
-            }
-            
+            ofstream global(path.c_str());            
             global << "#include \"ScriptController.h\"\n";
             global << "#include \"" << LUA_GLOBAL_FILENAME << ".h\"\n";
             map<string, set<string> >::iterator iter = _includes.find(string(LUA_GLOBAL_FILENAME) + string(".h"));
@@ -1658,7 +1662,6 @@ void Generator::generateBindings()
         }
     }
 
-end:
     luaAllCpp << "}\n\n";
     if (bindingNS)
         luaAllCpp << "}\n\n";
@@ -1682,9 +1685,14 @@ void Generator::getAllDerived(set<string>& derived, string classname)
 {
     for (unsigned int i = 0, count = _classes[classname].derived.size(); i < count; i++)
     {
-        string derivedClassName = getIdentifier(_classes[classname].derived[i]);
-        derived.insert(derivedClassName);
-        getAllDerived(derived, derivedClassName);
+        // If the derived class is not in the ref ID table, then it
+        // is a hidden (protected, private, etc.) class, so don't include it.
+        if (_refIds.find(_classes[classname].derived[i]) != _refIds.end())
+        {
+            string derivedClassName = getIdentifier(_classes[classname].derived[i]);
+            derived.insert(derivedClassName);
+            getAllDerived(derived, derivedClassName);
+        }
     }
 }
 
@@ -1765,6 +1773,11 @@ static inline bool isNamespaceFile(const string& s)
             return true;
     }
     return false;
+}
+
+static inline bool isGeneratedBindingFile(const string& s)
+{
+    return ( (s.find(".cpp") == s.size() - 4) || (s.find(".h") == s.size() - 2) );
 }
 
 static bool getFileList(string directory, vector<string>& files, bool (*isWantedFile)(const string& s))

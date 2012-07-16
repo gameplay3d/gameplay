@@ -12,7 +12,7 @@ void luaRegister_lua_Global()
     ScriptUtil::registerFunction("printError", lua__printError);
 
     std::map<std::string, std::vector<std::string> > hierarchy;
-    hierarchy["AnimationClip::Listener"].push_back("classgameplay_1_1_script_listener");
+    hierarchy["AnimationClip::Listener"].push_back("ScriptListener");
     hierarchy["AnimationTarget"].push_back("Button");
     hierarchy["AnimationTarget"].push_back("CheckBox");
     hierarchy["AnimationTarget"].push_back("Container");
@@ -27,7 +27,6 @@ void luaRegister_lua_Global()
     hierarchy["AnimationTarget"].push_back("Slider");
     hierarchy["AnimationTarget"].push_back("TextBox");
     hierarchy["AnimationTarget"].push_back("Transform");
-    hierarchy["AnimationTarget"].push_back("classgameplay_1_1_theme_1_1_style_1_1_overlay");
     hierarchy["Button"].push_back("CheckBox");
     hierarchy["Button"].push_back("RadioButton");
     hierarchy["Container"].push_back("Form");
@@ -40,7 +39,7 @@ void luaRegister_lua_Global()
     hierarchy["Control"].push_back("RadioButton");
     hierarchy["Control"].push_back("Slider");
     hierarchy["Control"].push_back("TextBox");
-    hierarchy["Control::Listener"].push_back("classgameplay_1_1_script_listener");
+    hierarchy["Control::Listener"].push_back("ScriptListener");
     hierarchy["Label"].push_back("Button");
     hierarchy["Label"].push_back("CheckBox");
     hierarchy["Label"].push_back("RadioButton");
@@ -53,16 +52,18 @@ void luaRegister_lua_Global()
     hierarchy["PhysicsCollisionObject"].push_back("PhysicsCharacter");
     hierarchy["PhysicsCollisionObject"].push_back("PhysicsGhostObject");
     hierarchy["PhysicsCollisionObject"].push_back("PhysicsRigidBody");
-    hierarchy["PhysicsCollisionObject::CollisionListener"].push_back("classgameplay_1_1_script_listener");
+    hierarchy["PhysicsCollisionObject::CollisionListener"].push_back("ScriptListener");
     hierarchy["PhysicsConstraint"].push_back("PhysicsFixedConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsGenericConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsHingeConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsSocketConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsSpringConstraint");
-    hierarchy["PhysicsController::Listener"].push_back("classgameplay_1_1_script_listener");
+    hierarchy["PhysicsController::Listener"].push_back("ScriptListener");
     hierarchy["PhysicsGenericConstraint"].push_back("PhysicsFixedConstraint");
     hierarchy["PhysicsGenericConstraint"].push_back("PhysicsSpringConstraint");
     hierarchy["PhysicsGhostObject"].push_back("PhysicsCharacter");
+    hierarchy["Ref"].push_back("AIAgent");
+    hierarchy["Ref"].push_back("AIState");
     hierarchy["Ref"].push_back("AbsoluteLayout");
     hierarchy["Ref"].push_back("Animation");
     hierarchy["Ref"].push_back("AnimationClip");
@@ -109,10 +110,6 @@ void luaRegister_lua_Global()
     hierarchy["Ref"].push_back("Theme::ThemeImage");
     hierarchy["Ref"].push_back("VertexAttributeBinding");
     hierarchy["Ref"].push_back("VerticalLayout");
-    hierarchy["Ref"].push_back("classgameplay_1_1_material_parameter_1_1_method_binding");
-    hierarchy["Ref"].push_back("classgameplay_1_1_theme_1_1_image_list");
-    hierarchy["Ref"].push_back("classgameplay_1_1_theme_1_1_skin");
-    hierarchy["Ref"].push_back("classgameplay_1_1_theme_1_1_style_1_1_overlay");
     hierarchy["RenderState"].push_back("Material");
     hierarchy["RenderState"].push_back("Pass");
     hierarchy["RenderState"].push_back("Technique");
@@ -125,8 +122,21 @@ void luaRegister_lua_Global()
     hierarchy["Transform::Listener"].push_back("PhysicsCharacter");
     hierarchy["Transform::Listener"].push_back("PhysicsGhostObject");
     hierarchy["Transform::Listener"].push_back("PhysicsRigidBody");
-    hierarchy["Transform::Listener"].push_back("classgameplay_1_1_script_listener");
+    hierarchy["Transform::Listener"].push_back("ScriptListener");
     ScriptUtil::setGlobalHierarchy(hierarchy);
+
+    // Register enumeration AIMessage::ParameterType.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("AIMessage");
+        ScriptUtil::registerConstantString("UNDEFINED", "UNDEFINED", scopePath);
+        ScriptUtil::registerConstantString("INTEGER", "INTEGER", scopePath);
+        ScriptUtil::registerConstantString("LONG", "LONG", scopePath);
+        ScriptUtil::registerConstantString("FLOAT", "FLOAT", scopePath);
+        ScriptUtil::registerConstantString("DOUBLE", "DOUBLE", scopePath);
+        ScriptUtil::registerConstantString("BOOLEAN", "BOOLEAN", scopePath);
+        ScriptUtil::registerConstantString("STRING", "STRING", scopePath);
+    }
 
     // Register enumeration AnimationClip::Listener::EventType.
     {
@@ -848,6 +858,8 @@ static const char* enumStringEmpty = "";
 
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
 {
+    if (enumname == "AIMessage::ParameterType")
+        return lua_stringFromEnum_AIMessageParameterType((AIMessage::ParameterType)value);
     if (enumname == "AnimationClip::Listener::EventType")
         return lua_stringFromEnum_AnimationClipListenerEventType((AnimationClip::Listener::EventType)value);
     if (enumname == "AudioSource::State")

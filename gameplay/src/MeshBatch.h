@@ -25,6 +25,7 @@ public:
      * @param growSize Amount to grow the batch by when it overflows (a value of zero prevents batch growing).
      *
      * @return A new mesh batch.
+     * @script{create}
      */
     static MeshBatch* create(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, const char* materialPath, bool indexed, unsigned int initialCapacity = 1024, unsigned int growSize = 1024);
 
@@ -39,6 +40,7 @@ public:
      * @param growSize Amount to grow the batch by when it overflows (a value of zero prevents batch growing).
      *
      * @return A new mesh batch.
+     * @script{create}
      */
     static MeshBatch* create(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity = 1024, unsigned int growSize = 1024);
 
