@@ -52,6 +52,7 @@ public:
      * @param initialCapacity An optional initial capacity of the batch (number of sprites).
      * 
      * @return A new SpriteBatch for drawing sprites using the given texture.
+     * @script{create}
      */
     static SpriteBatch* create(const char* texturePath, Effect* effect = NULL, unsigned int initialCapacity = 0);
 
@@ -78,6 +79,7 @@ public:
      * @param initialCapacity An optional initial capacity of the batch (number of sprites).
      * 
      * @return A new SpriteBatch for drawing sprites using the given texture.
+     * @script{create}
      */
     static SpriteBatch* create(Texture* texture, Effect* effect = NULL, unsigned int initialCapacity = 0);
 

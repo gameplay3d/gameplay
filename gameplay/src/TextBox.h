@@ -46,6 +46,7 @@ public:
      * @param style The control's style.
      *
      * @return The new text box.
+     * @script{create}
      */
     static TextBox* create(const char* id, Theme::Style* style);
 

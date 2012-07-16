@@ -27,6 +27,7 @@ public:
 
     /**
      * Creates a new Model.
+     * @script{create}
      */
     static Model* create(Mesh* mesh);
 

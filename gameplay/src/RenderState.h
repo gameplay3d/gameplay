@@ -120,6 +120,7 @@ public:
 
         /**
          * Creates a new StateBlock with default render state settings.
+         * @script{create}
          */
         static StateBlock* create();
 

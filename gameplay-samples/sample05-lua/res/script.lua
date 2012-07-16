@@ -56,7 +56,7 @@ function render(elapsedTime)
     _scene:visit("drawScene");
     
     -- Draw the fps.
-    buffer = string.format("%u", Game.getInstance():getFrameRate());
+    local buffer = string.format("%u", Game.getInstance():getFrameRate());
     _font:start()
     _font:drawText(buffer, 5, 1, textColor, _font:getSize())
     _font:finish()
@@ -68,7 +68,7 @@ function finalize()
 end
 
 function drawScene(node)
-    model = node:getModel()
+    local model = node:getModel()
     if model then
         model:draw()
     end
@@ -82,7 +82,6 @@ function drawSplash()
     batch:start()
     batch:draw(game:getWidth() * 0.5, game:getHeight() * 0.5, 0.0, 512.0, 512.0, 0.0, 1.0, 1.0, 0.0, Vector4.one(), true)
     batch:finish()
-    batch = nil
 end
 
 function keyEvent(evt, key)
@@ -197,18 +196,18 @@ function createGridModel()
         value = value + 1.0
     end
 
-    elements = { 
+    local elements = { 
         VertexFormat.Element.new(VertexFormat.POSITION, 3),
         VertexFormat.Element.new(VertexFormat.COLOR, 3)
     }
-    mesh = Mesh.createMesh(VertexFormat.new(elements, 2), pointCount, false)
+    local mesh = Mesh.createMesh(VertexFormat.new(elements, 2), pointCount, false)
     if mesh == nil then
         return nil
     end
     mesh:setPrimitiveType(Mesh.LINES)
     mesh:setVertexData(vertices, 0, pointCount)
 
-    model = Model.create(mesh)
+    local model = Model.create(mesh)
     model:setMaterial("res/grid.material")
     mesh:release()
     return model
