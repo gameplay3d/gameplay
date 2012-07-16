@@ -41,7 +41,7 @@ end
 
 function update(elapsedTime)
     if not _touched then
-        _modelNode:rotateY(0.5 * 0.0174532925)
+        _modelNode:rotateY(elapsedTime * 0.03 * DEG_TO_RAD)
     end
 end
 
