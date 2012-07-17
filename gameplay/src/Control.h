@@ -10,16 +10,15 @@
 #include "Touch.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
 
-class ScriptListener;
-
 /**
  * Base class for UI controls.
  */
-class Control : public Ref, public AnimationTarget
+class Control : public Ref, public AnimationTarget, public ScriptTarget
 {
     friend class Form;
     friend class Container;
@@ -722,20 +721,6 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
     /**
-     * Add a listener to be notified of specific events affecting
-     * this control.  Event types can be OR'ed together.
-     * E.g. To listen to touch-press and touch-release events,
-     * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
-     * as the second parameter.
-     * 
-     * Note: the given Lua function must have the same function signature as Control::Listener::controlEvent.
-     *
-     * @param function The name of the Lua script function to add as a listener callback.
-     * @param eventFlags The events to listen for.
-     */
-    virtual void addListener(const char* function, int eventFlags);
-
-    /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
@@ -979,11 +964,6 @@ protected:
      * Listeners map of EventType's to a list of Listeners.
      */
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
-
-    /**
-     * Script listener objects.
-     */
-    std::vector<ScriptListener*>* _scriptListeners;
     
     /**
      * The Control's Theme::Style.

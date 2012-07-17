@@ -9,6 +9,7 @@
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsCollisionObject.h"
 #include "MeshBatch.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -18,7 +19,7 @@ class ScriptListener;
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController
+class PhysicsController : public ScriptTarget
 {
     friend class Game;
     friend class PhysicsConstraint;
@@ -152,22 +153,6 @@ public:
      * @param listener The listener to remove.
      */
     void removeStatusListener(Listener* listener);
-
-    /**
-     * Adds a listener to the physics controller.
-     * 
-     * Note: the given Lua function must have the same function signature as PhysicsController::Listener::statusEvent.
-     * 
-     * @param function The Lua script function to use as the listener callback.
-     */
-    void addStatusListener(const char* function);
-
-    /**
-     * Removes a listener to the physics controller.
-     * 
-     * @param function The Lua script function (used as a listener callback) to remove.
-     */
-    void removeStatusListener(const char* function);
 
     /**
      * Creates a fixed constraint.
@@ -559,7 +544,6 @@ private:
     Vector3 _gravity;
     std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo> _collisionStatus;
     CollisionCallback* _collisionCallback;
-    std::vector<ScriptListener*>* _scriptListeners;
 };
 
 }

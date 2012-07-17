@@ -8,7 +8,6 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
-#include "ScriptListener.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay

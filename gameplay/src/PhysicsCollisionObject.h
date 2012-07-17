@@ -8,7 +8,6 @@ namespace gameplay
 {
 
 class Node;
-class ScriptListener;
 
 /**
  * Base class for all gameplay physics objects that support collision events.
@@ -231,6 +230,27 @@ public:
 
 
 protected:
+    /**
+     * Handles collision event callbacks to Lua script functions.
+     */
+    struct ScriptListener : public CollisionListener
+    {
+        /**
+         * Constructor.
+         */
+        ScriptListener(const char* url);
+
+        /**
+         * @see PhysicsColliionObject::CollisionListener
+         */
+        void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type, const PhysicsCollisionObject::CollisionPair& collisionPair,
+                                    const Vector3& contactPointA, const Vector3& contactPointB);
+
+        /** The URL to the Lua script function to use as the callback. */
+        std::string url;
+        /** The name of the Lua script function to use as the callback. */
+        std::string function;
+    };
 
     /**
      * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
@@ -311,7 +331,7 @@ protected:
     bool _enabled;
 
     /**
-     * Lua script collision listeners.
+     * The list of script listeners.
      */
     std::vector<ScriptListener*>* _scriptListeners;
 };

@@ -11,7 +11,7 @@
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
-#include "ScriptListener.h"
+#include "ScriptController.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"

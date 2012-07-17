@@ -303,6 +303,25 @@ private:
     };
 
     /**
+     * Listener implementation for script callbacks.
+     */
+    struct ScriptListener : public AnimationClip::Listener
+    {
+        /**
+         * Constructor.
+         */
+        ScriptListener(const std::string& function);
+
+        /**
+         * @see AnimationClip::Listener::animationEvent
+         */
+        void animationEvent(AnimationClip* clip, EventType type);
+
+        /** The function to call back when an animation event occurs. */
+        std::string function;
+    };
+
+    /**
      * Constructor.
      */
     AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime);
