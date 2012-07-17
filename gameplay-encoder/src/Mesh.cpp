@@ -225,10 +225,14 @@ void Mesh::generateHeightmap(const char* filename)
             // Write height value normalized between 0-255 (between min and max height)
             float h = heights[y*width + x];
             float nh = (h - minHeight) / maxHeight;
-            png_byte b = (png_byte)(nh * 255.0f);
-            
+            int bits = (int)(nh * 16777215.0f); // 2^24-1
+
             int pos = x*3;
-            row[pos] = row[pos+1] = row[pos+2] = b;
+            row[pos+2] = (png_byte)(bits & 0xff);
+            bits >>= 8;
+            row[pos+1] = (png_byte)(bits & 0xff);
+            bits >>= 8;
+            row[pos] = (png_byte)(bits & 0xff);
         }
         png_write_row(png_ptr, row);
     }
