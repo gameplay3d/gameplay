@@ -5,7 +5,6 @@
 #include "FileSystem.h"
 #include "FrameBuffer.h"
 #include "SceneLoader.h"
-#include "ScriptListener.h"
 
 GLenum __gl_error_code = GL_NO_ERROR;
 ALenum __al_error_code = AL_NO_ERROR;
@@ -469,6 +468,16 @@ void Game::fireTimeEvents(double frameTime)
         }
         _timeEvents->pop();
     }
+}
+
+Game::ScriptListener::ScriptListener(const char* url)
+{
+    function = Game::getInstance()->getScriptController()->loadUrl(url);
+}
+
+void Game::ScriptListener::timeEvent(long timeDiff, void* cookie)
+{
+    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), "l", timeDiff);
 }
 
 Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)

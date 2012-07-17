@@ -735,9 +735,6 @@
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\ScriptListener.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\AIAgent.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -776,6 +773,9 @@
     </ClCompile>
     <ClCompile Include="src\lua\lua_AIStateMachine.cpp">
       <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScriptTarget.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1505,9 +1505,6 @@
     <ClInclude Include="src\lua\lua_VertexFormatUsage.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\ScriptListener.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\AIStateMachine.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1546,6 +1543,9 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_AIStateMachine.h">
       <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ScriptTarget.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
