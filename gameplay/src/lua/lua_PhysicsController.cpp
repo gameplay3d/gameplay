@@ -8,6 +8,8 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
@@ -17,6 +19,7 @@ void luaRegister_PhysicsController()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addCallback", lua_PhysicsController_addCallback},
         {"addStatusListener", lua_PhysicsController_addStatusListener},
         {"createFixedConstraint", lua_PhysicsController_createFixedConstraint},
         {"createGenericConstraint", lua_PhysicsController_createGenericConstraint},
@@ -26,6 +29,7 @@ void luaRegister_PhysicsController()
         {"drawDebug", lua_PhysicsController_drawDebug},
         {"getGravity", lua_PhysicsController_getGravity},
         {"rayTest", lua_PhysicsController_rayTest},
+        {"removeCallback", lua_PhysicsController_removeCallback},
         {"removeStatusListener", lua_PhysicsController_removeStatusListener},
         {"setGravity", lua_PhysicsController_setGravity},
         {"sweepTest", lua_PhysicsController_sweepTest},
@@ -42,6 +46,48 @@ static PhysicsController* getInstance(lua_State* state)
     void* userdata = luaL_checkudata(state, 1, "PhysicsController");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsController' expected.");
     return (PhysicsController*)((ScriptUtil::LuaObject*)userdata)->instance;
+}
+
+int lua_PhysicsController_addCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                PhysicsController* instance = getInstance(state);
+                instance->addCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsController_addCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
 }
 
 int lua_PhysicsController_addStatusListener(lua_State* state)
@@ -1131,6 +1177,48 @@ int lua_PhysicsController_rayTest(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3, 4 or 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsController_removeCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                PhysicsController* instance = getInstance(state);
+                instance->removeCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsController_removeCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

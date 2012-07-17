@@ -7,6 +7,8 @@
 #include "Base.h"
 #include "Game.h"
 #include "Node.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 
