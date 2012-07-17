@@ -425,7 +425,7 @@ bool AnimationClip::update(float elapsedTime)
                 GP_ASSERT(**_listenerItr);
                 GP_ASSERT((**_listenerItr)->_listener);
 
-                (**_listenerItr)->_listener->animationEvent(this, Listener::DEFAULT);
+                (**_listenerItr)->_listener->animationEvent(this, Listener::TIME);
                 ++*_listenerItr;
             }
         }
@@ -437,7 +437,7 @@ bool AnimationClip::update(float elapsedTime)
                 GP_ASSERT(**_listenerItr);
                 GP_ASSERT((**_listenerItr)->_listener);
 
-                (**_listenerItr)->_listener->animationEvent(this, Listener::DEFAULT);
+                (**_listenerItr)->_listener->animationEvent(this, Listener::TIME);
                 --*_listenerItr;
             }
         }
