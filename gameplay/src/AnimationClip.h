@@ -50,11 +50,6 @@ public:
         enum EventType 
         {
             /**
-             * A timed event type.
-             */
-            DEFAULT,
-
-            /**
              * Event fired when the clip begins.
              */
             BEGIN,
@@ -62,7 +57,12 @@ public:
             /**
              * Event fired when the clip ends.
              */
-            END
+            END,
+
+            /**
+             * Event fired at a specified time during a clip update.
+             */
+            TIME
         };
         
         /*
