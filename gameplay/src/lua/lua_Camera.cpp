@@ -9,6 +9,8 @@
 #include "Node.h"
 #include "PhysicsController.h"
 #include "Ref.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "Transform.h"
 #include "lua_CameraType.h"
 #include "lua_CurveInterpolationType.h"

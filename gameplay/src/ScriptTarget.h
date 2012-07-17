@@ -8,8 +8,6 @@ namespace gameplay
 
 /**
  * Generic base class for supporting script callbacks.
- * 
- * @script{ignore}
  */
 class ScriptTarget
 {
@@ -33,20 +31,23 @@ public:
      * @param function The name of the Lua script function to call when the event is fired; can either be
      *      just the name of a function (if the function's script file has already been loaded), or can be
      *      a URL of the form scriptFile.lua#functionName.
-     * @param data Optional data for the callback.
      */
-    virtual void addCallback(const std::string& eventName, const std::string& function, void* data = NULL);
+    virtual void addCallback(const std::string& eventName, const std::string& function);
 
     /**
      * Removes the given Lua script function as a callback for the given event.
      * 
      * @param eventName The name of the event.
      * @param function The name of the Lua script function.
-     * @param data Optional data for the callback.
      */
-    virtual void removeCallback(const std::string& eventName, const std::string& function, void* data = NULL);
+    virtual void removeCallback(const std::string& eventName, const std::string& function);
 
 protected:
+    /**
+     * Hidden constructor.
+     */
+    ScriptTarget() {}
+
     /**
      * Adds the given event with the given Lua script parameter string ({@link ScriptController::executeFunction})
      * as a supported event for this script target.
@@ -60,12 +61,10 @@ protected:
     struct Callback
     {
         /** Constructor. */
-        Callback(const std::string& string, void* data);
+        Callback(const std::string& string);
 
         /** Holds the Lua script callback function. */
         std::string function;
-        /** Generic data storage. */
-        void* data;
     };
 
     /** Holds the supported events for this script target. */
