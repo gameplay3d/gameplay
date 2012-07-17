@@ -143,9 +143,9 @@ void luaRegister_lua_Global()
         std::vector<std::string> scopePath;
         scopePath.push_back("AnimationClip");
         scopePath.push_back("Listener");
-        ScriptUtil::registerConstantString("DEFAULT", "DEFAULT", scopePath);
         ScriptUtil::registerConstantString("BEGIN", "BEGIN", scopePath);
         ScriptUtil::registerConstantString("END", "END", scopePath);
+        ScriptUtil::registerConstantString("TIME", "TIME", scopePath);
     }
 
     // Register enumeration AudioSource::State.
