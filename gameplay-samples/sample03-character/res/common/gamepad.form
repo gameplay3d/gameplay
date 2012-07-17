@@ -1,30 +1,44 @@
 form gamepadForm
 {
-	theme = res/common/gamepad.theme
-    layout = LAYOUT_ABSOLUTE
-	position = 0, 0
+    theme = res/common/gamepad.theme
     autoWidth = true
     autoHeight = true
 
-    joystick
-	{
-		style = joystickStyle
-		size = 200, 200
-	    position = 40, 480
-		radius = 64
+    container left
+    {
+        alignment = ALIGN_BOTTOM_LEFT
+        size = 300, 300
+        joystick
+        {
+            style = joystickStyle
+            alignment = ALIGN_VCENTER_HCENTER
+            size = 200, 200
+            radius = 64
+        }
     }
 
-    button
+    container right
     {
-        style = buttonAStyle
-        size = 128, 128
-        position = 1024, 580
-    }
+        alignment = ALIGN_BOTTOM_RIGHT
+        size = 256, 256
 
-    button
-    {
-        style = buttonBStyle
-        size = 128, 128
-        position = 1140, 480
+        container inner
+        {
+            size = 230, 230
+            alignment = ALIGN_VCENTER_HCENTER
+            button
+            {
+                style = buttonAStyle
+                size = 128, 128
+                alignment = ALIGN_BOTTOM_LEFT
+            }
+
+            button
+            {
+                style = buttonBStyle
+                size = 128, 128
+                alignment = ALIGN_TOP_RIGHT
+            }
+        }
     }
 }

@@ -201,7 +201,7 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     if (_absolute || (!_absolute && _state == ACTIVE))
     {
         if (_absolute)
-            _region = _bounds;
+            _region = _viewportClipBounds;
 
         // Draw the outer image.
         Theme::ThemeImage* outer = getImage("outer", _state);
