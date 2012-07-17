@@ -2,7 +2,6 @@
 #include "Transform.h"
 #include "Game.h"
 #include "Node.h"
-#include "ScriptListener.h"
 
 namespace gameplay
 {
@@ -11,44 +10,40 @@ int Transform::_suspendTransformChanged(0);
 std::vector<Transform*> Transform::_transformsChanged;
 
 Transform::Transform()
-    : _matrixDirtyBits(0), _listeners(NULL), _scriptListeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     _scale.set(Vector3::one());
+    addEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
-    : _matrixDirtyBits(0), _listeners(NULL), _scriptListeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
+    addEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
-    : _matrixDirtyBits(0), _listeners(NULL), _scriptListeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
+    addEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Transform& copy)
-    : _matrixDirtyBits(0), _listeners(NULL), _scriptListeners(NULL)
+    : _matrixDirtyBits(0), _listeners(NULL)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(copy);
+    addEvent("transformChanged", "<Transform>");
 }
 
 Transform::~Transform()
 {
     SAFE_DELETE(_listeners);
-    if (_scriptListeners)
-    {
-        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
-        {
-            SAFE_DELETE((*_scriptListeners)[i]);
-        }
-        SAFE_DELETE(_scriptListeners);
-    }
 }
 
 void Transform::suspendTransformChanged()
@@ -841,34 +836,6 @@ void Transform::removeListener(Transform::Listener* listener)
     }
 }
 
-void Transform::addListener(const char* function, long cookie)
-{
-    if (!_scriptListeners)
-        _scriptListeners = new std::vector<ScriptListener*>();
-
-    ScriptListener* listener = new ScriptListener(function);
-    _scriptListeners->push_back(listener);
-    addListener(listener, cookie);
-}
-
-void Transform::removeListener(const char* function)
-{
-    if (!_scriptListeners)
-        return;
-
-    std::string functionStr = function;
-    for (unsigned int i = 0; i < _scriptListeners->size(); i++)
-    {
-        if ((*_scriptListeners)[i]->_function == functionStr)
-        {
-            removeListener((*_scriptListeners)[i]);
-            SAFE_DELETE((*_scriptListeners)[i]);
-            _scriptListeners->erase(_scriptListeners->begin() + i);
-            return;
-        }
-    }
-}
-
 void Transform::transformChanged()
 {
     if (_listeners)
@@ -880,6 +847,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
+    fireEvent<void>("transformChanged", this);
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const

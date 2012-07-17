@@ -8,7 +8,6 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
-#include "ScriptListener.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
@@ -60,17 +59,6 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 PhysicsController::Listener* param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
-
-                PhysicsController* instance = getInstance(state);
-                instance->addStatusListener(param1);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
 
                 PhysicsController* instance = getInstance(state);
                 instance->addStatusListener(param1);
@@ -1165,17 +1153,6 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 PhysicsController::Listener* param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
-
-                PhysicsController* instance = getInstance(state);
-                instance->removeStatusListener(param1);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
 
                 PhysicsController* instance = getInstance(state);
                 instance->removeStatusListener(param1);
