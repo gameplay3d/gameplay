@@ -10,6 +10,7 @@
 #include "PhysicsController.h"
 #include "PhysicsGhostObject.h"
 #include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"

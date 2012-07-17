@@ -9,6 +9,8 @@
 #include "Label.h"
 #include "Node.h"
 #include "Ref.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "TextBox.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlListenerEventType.h"
@@ -23,6 +25,7 @@ void luaRegister_TextBox()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addCallback", lua_TextBox_addCallback},
         {"addListener", lua_TextBox_addListener},
         {"addRef", lua_TextBox_addRef},
         {"createAnimation", lua_TextBox_createAnimation},
@@ -74,6 +77,7 @@ void luaRegister_TextBox()
         {"isContainer", lua_TextBox_isContainer},
         {"isEnabled", lua_TextBox_isEnabled},
         {"release", lua_TextBox_release},
+        {"removeCallback", lua_TextBox_removeCallback},
         {"setAlignment", lua_TextBox_setAlignment},
         {"setAnimationPropertyValue", lua_TextBox_setAnimationPropertyValue},
         {"setAutoHeight", lua_TextBox_setAutoHeight},
@@ -161,6 +165,48 @@ int lua_TextBox__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_addCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                TextBox* instance = getInstance(state);
+                instance->addCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_TextBox_addCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -2771,6 +2817,48 @@ int lua_TextBox_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_removeCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                TextBox* instance = getInstance(state);
+                instance->removeCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_TextBox_removeCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
