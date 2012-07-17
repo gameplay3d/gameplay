@@ -13,7 +13,6 @@
 #include "PhysicsRigidBody.h"
 #include "Ref.h"
 #include "Scene.h"
-#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_NodeType.h"
