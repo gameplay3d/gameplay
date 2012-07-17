@@ -13,6 +13,10 @@
 		4208DEEA14A4079F00D3C511 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEE714A4079F00D3C511 /* Image.h */; };
 		4208DEEC14A407B900D3C511 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
 		4208DEEE14A407D500D3C511 /* Touch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEED14A407D500D3C511 /* Touch.h */; };
+		421230D515B6121C00F0EC76 /* lua_ScriptTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421230D315B6121C00F0EC76 /* lua_ScriptTarget.cpp */; };
+		421230D615B6121C00F0EC76 /* lua_ScriptTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421230D315B6121C00F0EC76 /* lua_ScriptTarget.cpp */; };
+		421230D715B6121C00F0EC76 /* lua_ScriptTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 421230D415B6121C00F0EC76 /* lua_ScriptTarget.h */; };
+		421230D815B6121C00F0EC76 /* lua_ScriptTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 421230D415B6121C00F0EC76 /* lua_ScriptTarget.h */; };
 		421A233415B600E8004F97C3 /* ScriptTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421A233215B600E8004F97C3 /* ScriptTarget.cpp */; };
 		421A233515B600E8004F97C3 /* ScriptTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421A233215B600E8004F97C3 /* ScriptTarget.cpp */; };
 		421A233615B600E8004F97C3 /* ScriptTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 421A233315B600E8004F97C3 /* ScriptTarget.h */; };
@@ -1056,6 +1060,8 @@
 		4208DEE814A4079F00D3C511 /* Image.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Image.inl; path = src/Image.inl; sourceTree = SOURCE_ROOT; };
 		4208DEEB14A407B900D3C511 /* Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Keyboard.h; path = src/Keyboard.h; sourceTree = SOURCE_ROOT; };
 		4208DEED14A407D500D3C511 /* Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Touch.h; path = src/Touch.h; sourceTree = SOURCE_ROOT; };
+		421230D315B6121C00F0EC76 /* lua_ScriptTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lua_ScriptTarget.cpp; path = src/lua/lua_ScriptTarget.cpp; sourceTree = SOURCE_ROOT; };
+		421230D415B6121C00F0EC76 /* lua_ScriptTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_ScriptTarget.h; path = src/lua/lua_ScriptTarget.h; sourceTree = SOURCE_ROOT; };
 		421A233215B600E8004F97C3 /* ScriptTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScriptTarget.cpp; path = src/ScriptTarget.cpp; sourceTree = SOURCE_ROOT; };
 		421A233315B600E8004F97C3 /* ScriptTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScriptTarget.h; path = src/ScriptTarget.h; sourceTree = SOURCE_ROOT; };
 		422260D41537790F0011E3AB /* Bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bundle.cpp; path = src/Bundle.cpp; sourceTree = SOURCE_ROOT; };
@@ -2185,6 +2191,8 @@
 				42B7FF6515B08108002BB8C3 /* lua_ScreenDisplayer.h */,
 				42B7FF6615B08108002BB8C3 /* lua_ScriptController.cpp */,
 				42B7FF6715B08108002BB8C3 /* lua_ScriptController.h */,
+				421230D315B6121C00F0EC76 /* lua_ScriptTarget.cpp */,
+				421230D415B6121C00F0EC76 /* lua_ScriptTarget.h */,
 				42B7FF6815B08108002BB8C3 /* lua_Slider.cpp */,
 				42B7FF6915B08108002BB8C3 /* lua_Slider.h */,
 				42B7FF6A15B08108002BB8C3 /* lua_SpriteBatch.cpp */,
@@ -2572,6 +2580,7 @@
 				4278A00B15B0E85500866F5B /* lua_AIStateListener.h in Headers */,
 				4278A00F15B0E85500866F5B /* lua_AIStateMachine.h in Headers */,
 				421A233615B600E8004F97C3 /* ScriptTarget.h in Headers */,
+				421230D715B6121C00F0EC76 /* lua_ScriptTarget.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2834,6 +2843,7 @@
 				4278A00C15B0E85500866F5B /* lua_AIStateListener.h in Headers */,
 				4278A01015B0E85500866F5B /* lua_AIStateMachine.h in Headers */,
 				421A233715B600E8004F97C3 /* ScriptTarget.h in Headers */,
+				421230D815B6121C00F0EC76 /* lua_ScriptTarget.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3155,6 +3165,7 @@
 				4278A00915B0E85500866F5B /* lua_AIStateListener.cpp in Sources */,
 				4278A00D15B0E85500866F5B /* lua_AIStateMachine.cpp in Sources */,
 				421A233415B600E8004F97C3 /* ScriptTarget.cpp in Sources */,
+				421230D515B6121C00F0EC76 /* lua_ScriptTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3412,6 +3423,7 @@
 				4278A00A15B0E85500866F5B /* lua_AIStateListener.cpp in Sources */,
 				4278A00E15B0E85500866F5B /* lua_AIStateMachine.cpp in Sources */,
 				421A233515B600E8004F97C3 /* ScriptTarget.cpp in Sources */,
+				421230D615B6121C00F0EC76 /* lua_ScriptTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
