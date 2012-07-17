@@ -6,6 +6,7 @@ namespace gameplay
 
 // Lua bindings for Node.
 int lua_Node__gc(lua_State* state);
+int lua_Node_addCallback(lua_State* state);
 int lua_Node_addChild(lua_State* state);
 int lua_Node_addListener(lua_State* state);
 int lua_Node_addRef(lua_State* state);
@@ -76,6 +77,7 @@ int lua_Node_isTransparent(lua_State* state);
 int lua_Node_isVisible(lua_State* state);
 int lua_Node_release(lua_State* state);
 int lua_Node_removeAllChildren(lua_State* state);
+int lua_Node_removeCallback(lua_State* state);
 int lua_Node_removeChild(lua_State* state);
 int lua_Node_removeListener(lua_State* state);
 int lua_Node_rotate(lua_State* state);

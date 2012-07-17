@@ -777,6 +777,9 @@
     <ClCompile Include="src\ScriptTarget.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1546,6 +1549,9 @@
     </ClInclude>
     <ClInclude Include="src\ScriptTarget.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ScriptTarget.h">
+      <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
