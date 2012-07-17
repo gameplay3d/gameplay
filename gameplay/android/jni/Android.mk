@@ -91,7 +91,7 @@ LOCAL_SRC_FILES := \
     SceneLoader.cpp \
     ScreenDisplayer.cpp \
     ScriptController.cpp \
-    ScriptListener.cpp \
+    ScriptTarget.cpp \
     Slider.cpp \
     SpriteBatch.cpp \
     Technique.cpp \
@@ -227,6 +227,7 @@ LOCAL_SRC_FILES := \
     lua/lua_SceneDebugFlags.cpp \
     lua/lua_ScreenDisplayer.cpp \
     lua/lua_ScriptController.cpp \
+    lua/lua_ScriptTarget.cpp \
     lua/lua_Slider.cpp \
     lua/lua_SpriteBatch.cpp \
     lua/lua_Technique.cpp \
