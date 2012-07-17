@@ -17,6 +17,8 @@
 #include "Node.h"
 #include "RadioButton.h"
 #include "Ref.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "Slider.h"
 #include "TextBox.h"
 #include "VerticalLayout.h"
@@ -35,6 +37,7 @@ void luaRegister_Container()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addCallback", lua_Container_addCallback},
         {"addControl", lua_Container_addControl},
         {"addListener", lua_Container_addListener},
         {"addRef", lua_Container_addRef},
@@ -90,6 +93,7 @@ void luaRegister_Container()
         {"isEnabled", lua_Container_isEnabled},
         {"isScrollBarsAutoHide", lua_Container_isScrollBarsAutoHide},
         {"release", lua_Container_release},
+        {"removeCallback", lua_Container_removeCallback},
         {"removeControl", lua_Container_removeControl},
         {"setAlignment", lua_Container_setAlignment},
         {"setAnimationPropertyValue", lua_Container_setAnimationPropertyValue},
@@ -180,6 +184,48 @@ int lua_Container__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_addCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                Container* instance = getInstance(state);
+                instance->addCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_addCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -2992,6 +3038,48 @@ int lua_Container_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_removeCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                Container* instance = getInstance(state);
+                instance->removeCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_removeCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
