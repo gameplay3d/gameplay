@@ -94,8 +94,6 @@ void CharacterGame::initializeCharacter()
 
     _floorLevel = _basketballNode->getTranslationY();
 
-    _scene->findNode("greenchair1")->getCollisionObject()->setEnabled(false);
-
     // Store the alpha material parameter from the character's model.
     _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_modulateAlpha");
 
