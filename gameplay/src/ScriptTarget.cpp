@@ -83,7 +83,7 @@ template<> bool ScriptTarget::fireEvent<bool>(const char* eventName, ...)
     return false;
 }
 
-void ScriptTarget::addCallback(const std::string& eventName, const std::string& function, void* data)
+void ScriptTarget::addCallback(const std::string& eventName, const std::string& function)
 {
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
     if (iter != _callbacks.end())
@@ -93,7 +93,7 @@ void ScriptTarget::addCallback(const std::string& eventName, const std::string& 
 
         // Add the function to the list of callbacks.
         std::string functionName = Game::getInstance()->getScriptController()->loadUrl(function.c_str());
-        iter->second->push_back(Callback(functionName, data));
+        iter->second->push_back(Callback(functionName));
     }
     else
     {
@@ -101,7 +101,7 @@ void ScriptTarget::addCallback(const std::string& eventName, const std::string& 
     }
 }
 
-void ScriptTarget::removeCallback(const std::string& eventName, const std::string& function, void* data)
+void ScriptTarget::removeCallback(const std::string& eventName, const std::string& function)
 {
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
     if (iter != _callbacks.end())
@@ -120,7 +120,7 @@ void ScriptTarget::removeCallback(const std::string& eventName, const std::strin
         // Remove the function from the list of callbacks.
         for (unsigned int i = 0; i < iter->second->size(); i++)
         {
-            if ((*iter->second)[i].data == data && (*iter->second)[i].function == id)
+            if ((*iter->second)[i].function == id)
             {
                 iter->second->erase(iter->second->begin() + i);
                 return;
@@ -139,7 +139,7 @@ void ScriptTarget::addEvent(const std::string& eventName, const char* argsString
     _callbacks[eventName] = NULL;
 }
 
-ScriptTarget::Callback::Callback(const std::string& function, void* data) : function(function), data(data)
+ScriptTarget::Callback::Callback(const std::string& function) : function(function)
 {
 }
 

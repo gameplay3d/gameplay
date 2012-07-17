@@ -8,6 +8,8 @@
 #include "Game.h"
 #include "Node.h"
 #include "Ref.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"

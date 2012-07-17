@@ -6,6 +6,7 @@ namespace gameplay
 
 // Lua bindings for Control.
 int lua_Control__gc(lua_State* state);
+int lua_Control_addCallback(lua_State* state);
 int lua_Control_addListener(lua_State* state);
 int lua_Control_addRef(lua_State* state);
 int lua_Control_createAnimation(lua_State* state);
@@ -55,6 +56,7 @@ int lua_Control_getZIndex(lua_State* state);
 int lua_Control_isContainer(lua_State* state);
 int lua_Control_isEnabled(lua_State* state);
 int lua_Control_release(lua_State* state);
+int lua_Control_removeCallback(lua_State* state);
 int lua_Control_setAlignment(lua_State* state);
 int lua_Control_setAnimationPropertyValue(lua_State* state);
 int lua_Control_setAutoHeight(lua_State* state);

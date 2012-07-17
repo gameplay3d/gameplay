@@ -8,6 +8,8 @@
 #include "Joint.h"
 #include "MeshSkin.h"
 #include "Node.h"
+#include "ScriptController.h"
+#include "ScriptTarget.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 
