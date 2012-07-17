@@ -94,8 +94,6 @@ void CharacterGame::initializeCharacter()
 
     _floorLevel = _basketballNode->getTranslationY();
 
-    _scene->findNode("greenchair1")->getCollisionObject()->setEnabled(false);
-
     // Store the alpha material parameter from the character's model.
     _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_modulateAlpha");
 
@@ -319,8 +317,8 @@ void CharacterGame::update(float elapsedTime)
             // apply force from kick.
             Vector3 force(-_characterNode->getForwardVectorWorld());
             force.normalize();
-            force.y += 1.5f;
-            force *= 250.0f;
+            force.y += 1.25f; // add some loft to the kick
+            force *= 200.0f;
             basketball->applyForce(force);
             schedule(50, this);
         }
