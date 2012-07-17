@@ -457,6 +457,12 @@ private:
     static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
         const Matrix* worldMatrix = NULL, Vector3* normalData = NULL, Vector3* normalResult = NULL);
 
+    // Legacy method for grayscale heightmaps: r + g + b, normalized.
+    static float normalizedHeightGrayscale(float r, float g, float b);
+
+    // Higher precision method for heightmaps: 65536*r + 256*g + b, normalized.
+    static float normalizedHeightPacked(float r, float g, float b);
+
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
 
