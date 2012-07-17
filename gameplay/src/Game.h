@@ -467,6 +467,25 @@ protected:
 private:
 
     /**
+     * Allows time listener interaction from Lua scripts.
+     */
+    struct ScriptListener : public TimeListener
+    {
+        /**
+         * Constructor.
+         */
+        ScriptListener(const char* url);
+
+        /**
+         * @see TimeListener#timeEvent(long, void*)
+         */
+        void timeEvent(long timeDiff, void* cookie);
+
+        /** Holds the name of the Lua script function to call back. */
+        std::string function;
+    };
+
+    /**
      * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().
      */
     class TimeEvent

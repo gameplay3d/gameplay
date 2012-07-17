@@ -8,7 +8,6 @@
 #include "Platform.h"
 #include "RenderState.h"
 #include "SceneLoader.h"
-#include "ScriptListener.h"
 #include "lua_GameClearFlags.h"
 #include "lua_GameState.h"
 #include "lua_GamepadGamepadEvent.h"

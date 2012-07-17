@@ -2,6 +2,7 @@
 #define AISTATE_H_
 
 #include "Ref.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -18,7 +19,7 @@ class AIStateMachine;
  *
  * 
  */
-class AIState : public Ref
+class AIState : public Ref, public ScriptTarget
 {
     friend class AIStateMachine;
 

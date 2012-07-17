@@ -9,7 +9,6 @@
 #include "Joystick.h"
 #include "Node.h"
 #include "Ref.h"
-#include "ScriptListener.h"
 #include "lua_ControlAlignment.h"
 #include "lua_ControlListenerEventType.h"
 #include "lua_ControlState.h"
@@ -192,21 +191,6 @@ int lua_Joystick_addListener(lua_State* state)
 
                 Joystick* instance = getInstance(state);
                 instance->addListener(param1, param2);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                Joystick* instance = getInstance(state);
-                instance->Control::addListener(param1, param2);
                 
                 return 0;
             }
