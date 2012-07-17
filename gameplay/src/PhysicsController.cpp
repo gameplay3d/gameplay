@@ -5,7 +5,6 @@
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"
-#include "ScriptListener.h"
 
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
@@ -24,10 +23,12 @@ PhysicsController::PhysicsController()
   : _isUpdating(false), _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
-    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL), _scriptListeners(NULL)
+    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL)
 {
     // Default gravity is 9.8 along the negative Y axis.
     _collisionCallback = new CollisionCallback(this);
+
+    addEvent("statusEvent", "[PhysicsController::Listener::EventType]");
 }
 
 PhysicsController::~PhysicsController()
@@ -36,15 +37,6 @@ PhysicsController::~PhysicsController()
     SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
-
-    if (_scriptListeners)
-    {
-        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
-        {
-            SAFE_DELETE((*_scriptListeners)[i]);
-        }
-        SAFE_DELETE(_scriptListeners);
-    }
 }
 
 void PhysicsController::addStatusListener(Listener* listener)
@@ -67,34 +59,6 @@ void PhysicsController::removeStatusListener(Listener* listener)
         if (*iter == listener)
         {
             _listeners->erase(iter);
-            return;
-        }
-    }
-}
-
-void PhysicsController::addStatusListener(const char* function)
-{
-    if (!_scriptListeners)
-        _scriptListeners = new std::vector<ScriptListener*>();
-
-    ScriptListener* listener = new ScriptListener(function);
-    _scriptListeners->push_back(listener);
-    addStatusListener(listener);
-}
-
-void PhysicsController::removeStatusListener(const char* function)
-{
-    if (!_scriptListeners)
-        return;
-
-    std::string functionStr = function;
-    for (unsigned int i = 0; i < _scriptListeners->size(); i++)
-    {
-        if ((*_scriptListeners)[i]->_function == functionStr)
-        {
-            removeStatusListener((*_scriptListeners)[i]);
-            SAFE_DELETE((*_scriptListeners)[i]);
-            _scriptListeners->erase(_scriptListeners->begin() + i);
             return;
         }
     }
@@ -512,7 +476,7 @@ void PhysicsController::update(float elapsedTime)
     _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
-    if (_listeners)
+    if (_listeners || _callbacks["statusEvent"])
     {
         Listener::EventType oldStatus = _status;
 
@@ -548,11 +512,16 @@ void PhysicsController::update(float elapsedTime)
         // If the status has changed, notify our listeners.
         if (oldStatus != _status)
         {
-            for (unsigned int k = 0; k < _listeners->size(); k++)
+            if (_listeners)
             {
-                GP_ASSERT((*_listeners)[k]);
-                (*_listeners)[k]->statusEvent(_status);
+                for (unsigned int k = 0; k < _listeners->size(); k++)
+                {
+                    GP_ASSERT((*_listeners)[k]);
+                    (*_listeners)[k]->statusEvent(_status);
+                }
             }
+
+            fireEvent<void>("statusEvent", _status);
         }
     }
 

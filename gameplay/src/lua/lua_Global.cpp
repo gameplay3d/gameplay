@@ -12,7 +12,6 @@ void luaRegister_lua_Global()
     ScriptUtil::registerFunction("printError", lua__printError);
 
     std::map<std::string, std::vector<std::string> > hierarchy;
-    hierarchy["AnimationClip::Listener"].push_back("ScriptListener");
     hierarchy["AnimationTarget"].push_back("Button");
     hierarchy["AnimationTarget"].push_back("CheckBox");
     hierarchy["AnimationTarget"].push_back("Container");
@@ -39,7 +38,6 @@ void luaRegister_lua_Global()
     hierarchy["Control"].push_back("RadioButton");
     hierarchy["Control"].push_back("Slider");
     hierarchy["Control"].push_back("TextBox");
-    hierarchy["Control::Listener"].push_back("ScriptListener");
     hierarchy["Label"].push_back("Button");
     hierarchy["Label"].push_back("CheckBox");
     hierarchy["Label"].push_back("RadioButton");
@@ -52,13 +50,11 @@ void luaRegister_lua_Global()
     hierarchy["PhysicsCollisionObject"].push_back("PhysicsCharacter");
     hierarchy["PhysicsCollisionObject"].push_back("PhysicsGhostObject");
     hierarchy["PhysicsCollisionObject"].push_back("PhysicsRigidBody");
-    hierarchy["PhysicsCollisionObject::CollisionListener"].push_back("ScriptListener");
     hierarchy["PhysicsConstraint"].push_back("PhysicsFixedConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsGenericConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsHingeConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsSocketConstraint");
     hierarchy["PhysicsConstraint"].push_back("PhysicsSpringConstraint");
-    hierarchy["PhysicsController::Listener"].push_back("ScriptListener");
     hierarchy["PhysicsGenericConstraint"].push_back("PhysicsFixedConstraint");
     hierarchy["PhysicsGenericConstraint"].push_back("PhysicsSpringConstraint");
     hierarchy["PhysicsGhostObject"].push_back("PhysicsCharacter");
@@ -122,7 +118,6 @@ void luaRegister_lua_Global()
     hierarchy["Transform::Listener"].push_back("PhysicsCharacter");
     hierarchy["Transform::Listener"].push_back("PhysicsGhostObject");
     hierarchy["Transform::Listener"].push_back("PhysicsRigidBody");
-    hierarchy["Transform::Listener"].push_back("ScriptListener");
     ScriptUtil::setGlobalHierarchy(hierarchy);
 
     // Register enumeration AIMessage::ParameterType.
