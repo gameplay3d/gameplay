@@ -13,6 +13,7 @@ void luaRegister_ScriptController()
     const luaL_Reg lua_members[] = 
     {
         {"loadScript", lua_ScriptController_loadScript},
+        {"loadUrl", lua_ScriptController_loadUrl},
         {NULL, NULL}
     };
     const luaL_Reg* lua_statics = NULL;
@@ -52,6 +53,71 @@ int lua_ScriptController_loadScript(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_ScriptController_loadScript - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                bool param2 = ScriptUtil::luaCheckBool(state, 3);
+
+                ScriptController* instance = getInstance(state);
+                instance->loadScript(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_ScriptController_loadScript - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ScriptController_loadUrl(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                ScriptController* instance = getInstance(state);
+                std::string result = instance->loadUrl(param1);
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result.c_str());
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_ScriptController_loadUrl - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

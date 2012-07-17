@@ -10,7 +10,6 @@
 #include "Game.h"
 #include "Node.h"
 #include "Ref.h"
-#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_AudioSourceState.h"
 #include "lua_CurveInterpolationType.h"

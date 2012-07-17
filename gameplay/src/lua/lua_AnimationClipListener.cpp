@@ -8,7 +8,7 @@
 #include "Game.h"
 #include "Quaternion.h"
 #include "Ref.h"
-#include "ScriptListener.h"
+#include "ScriptController.h"
 #include "lua_AnimationClipListenerEventType.h"
 
 namespace gameplay
