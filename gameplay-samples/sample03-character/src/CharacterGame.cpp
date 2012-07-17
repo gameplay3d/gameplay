@@ -317,8 +317,8 @@ void CharacterGame::update(float elapsedTime)
             // apply force from kick.
             Vector3 force(-_characterNode->getForwardVectorWorld());
             force.normalize();
-            force.y += 1.5f;
-            force *= 250.0f;
+            force.y += 1.25f; // add some loft to the kick
+            force *= 200.0f;
             basketball->applyForce(force);
             schedule(50, this);
         }
