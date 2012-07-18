@@ -32,6 +32,28 @@ There are also prebuilt binaries in the gameplay/bin folder.
 - Note: you can't pass an enum to a function that doesn't explicitly take an enum (i.e. Control::setTextColor, which takes an unsigned char). In these cases, you need to go look up the enum values and pass them directly.
 
 
+## Generating Script Bindings for Your Own Project
+
+Note: This requires doxygen to be installed.
+
+1. Copy the gameplay-luagen.doxyfile file to your project's root directory (and rename it). Then, either manually using a text editor or using the Doxywizard tool, go to the INPUT section and ensure both that the path to gameplay's 'src' folder is valid (relative to where the doxyfile is) and that your own source folder is added.
+
+2. Run doxygen using the above doxyfile from your project's root directory. For example, run 'doxygen my-project.doxyfile' from the command line or run Doxygen using the Doxywizard application.
+
+3. Create a 'lua' folder inside your source folder.
+
+4. Run gameplay-luagen using the following command (make sure you have a trailing '/' for the output directory (second) parameter):
+    "path-to-gameplay/bin/your-platform/gameplay-luagen.exe" ./xml path-to-your-source/lua/ <your-project-name-here>
+    
+    Note: The parameter <your-project-name-here> is used as the namespace that the bindings are generated within. This can be anything you want *except* for "gameplay".
+    
+5. Ensure that your project has "path-to-gameplay/gameplay/src/lua" in its include path.
+
+6. Add the generated Lua script files from path-to-your-source/lua to your project.
+
+7. Compile and run - now you can use your own classes from Lua scripts
+
+
 ## Unsupported Features
 - operators
 - templates
@@ -40,7 +62,6 @@ There are also prebuilt binaries in the gameplay/bin folder.
 
 
 ### To Do List
-- Add support for users to generate bindings for their own classes.
 - Look into updating bindValue() to support binding to any Lua script function.
 - Add a global function that implements casting for use from Lua scripts (i.e. to downcast from a Control to a Button).
 - Currently ignored: there is one memory leak in gameplay-luagen that is very difficult to fix (it appears to be a locale related leak-something leaks the first time an ofstream is created-doesn't matter the ofstream).
