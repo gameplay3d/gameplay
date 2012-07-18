@@ -1038,9 +1038,9 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
             // which is just under 0.4%.
             //
             heights[x + y * w] = normalizedHeightPacked(
-                data[(x + y * h) * pixelSize + 0],
-                data[(x + y * h) * pixelSize + 1],
-                data[(x + y * h) * pixelSize + 2]) * (maxHeight - minHeight) + minHeight;
+                data[(x + y * w) * pixelSize + 0],
+                data[(x + y * w) * pixelSize + 1],
+                data[(x + y * w) * pixelSize + 2]) * (maxHeight - minHeight) + minHeight;
         }
     }
 
