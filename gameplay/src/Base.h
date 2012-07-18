@@ -299,7 +299,8 @@ typedef GLuint RenderBufferHandle;
         } \
     } while(0)
 
-// Global variable to hold GL errors
+/** Global variable to hold GL errors
+ * @script{ignore} */
 extern GLenum __gl_error_code;
 
 /**
@@ -325,7 +326,8 @@ extern GLenum __gl_error_code;
         } \
     } while(0)
 
-// Global variable to hold AL errors
+/** Global variable to hold AL errors
+ * @script{ignore} */
 extern ALenum __al_error_code;
 
 /**

@@ -14,11 +14,8 @@ static void generateInstanceGetter(ostream& o, const string& classname, const st
 ClassBinding::ClassBinding(string classname, string refId) : classname(classname),
     refId(refId), inaccessibleConstructor(false), inaccessibleDestructor(false)
 {
-    // If specified, remove the namespace from the class name.
-    if (REMOVE_NAMESPACE)
-    {
-        this->classname = Generator::getInstance()->getClassNameWithoutNamespace(classname);
-    }
+    // Get the class's name and namespace.
+    this->classname = Generator::getInstance()->getClassNameAndNamespace(classname, &ns);
 
     // Calculate the unique name for the class.
     uniquename = Generator::getUniqueName(this->classname);
