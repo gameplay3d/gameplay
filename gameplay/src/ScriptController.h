@@ -8,6 +8,9 @@
 namespace gameplay
 {
 
+/** Function pointer typedef for string-from-enum conversion functions. */
+typedef const char* (*luaStringEnumConversionFunction)(std::string&, unsigned int);
+
 /**
  * Functions and structures used by the generated Lua script bindings.
  */
@@ -89,13 +92,21 @@ void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newF
 void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
 
 /**
- * Sets the global inheritance hierarchy.
+ * Sets an inheritance pair within the global inheritance hierarchy (base, derived).
  * 
- * @param hierarchy The inheritance hierarchy stored as a map of class names
- *      to a list of all derived class names.
+ * @param base The base class of the inheritance pair.
+ * @param derived The derived class of the inheritance pair.
  * @script{ignore}
  */
-void setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy);
+void setGlobalHierarchyPair(std::string base, std::string derived);
+
+/**
+ * Adds the given function as a string-from-enumerated value conversion function.
+ * 
+ * @param stringFromEnum The pointer to the string-from-enum conversion function.
+ * @script{ignore}
+ */
+void addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
 
 /**
  * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -703,7 +714,8 @@ private:
     friend void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction,
         lua_CFunction deleteFunction, const luaL_Reg* statics, std::vector<std::string> scopePath);
     friend void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction);
-    friend void ScriptUtil::setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy);
+    friend void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived);
+    friend void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
     friend bool* ScriptUtil::getBoolPointer(int index);
     friend short* ScriptUtil::getShortPointer(int index);
     friend int* ScriptUtil::getIntPointer(int index);
@@ -722,6 +734,7 @@ private:
     std::map<std::string, std::vector<std::string> > _hierarchy;
     std::string* _callbacks[CALLBACK_COUNT];
     std::set<std::string> _loadedScripts;
+    std::vector<luaStringEnumConversionFunction> _stringFromEnum;
 };
 
 /** Template specialization. */

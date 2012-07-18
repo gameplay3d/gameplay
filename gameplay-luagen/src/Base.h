@@ -16,7 +16,6 @@ using namespace std;
 #define SCOPE_REPLACEMENT ""
 #define SCOPE_REPLACEMENT_SIZE strlen(SCOPE_REPLACEMENT)
 #define REF_CLASS_NAME "Ref"
-#define REMOVE_NAMESPACE true
 
 #ifdef WIN32
 #include <windows.h>
