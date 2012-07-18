@@ -26,14 +26,16 @@ void printError(const char* format, ...)
 int main(int argc, char** argv)
 {
     // Ensure the user is calling the program correctly.
-    if (argc < 2 || argc > 3)
+    if (argc < 2 || argc > 4)
     {
-        GP_ERROR("Usage: luagen <input-directory> [output-directory]");
+        GP_ERROR("Usage: luagen <input-directory> [output-directory] [binding-namespace]");
     }
 
     // Generate the bindings.
-    Generator::getInstance()->run(argv[1], (argc == 3) ? argv[2] : argv[1]);
+    string* bindingNS = (argc >= 4) ? new string(argv[3]) : NULL;
+    Generator::getInstance()->run(argv[1], (argc >= 3) ? argv[2] : argv[1], bindingNS);
     Generator::releaseInstance();
+    SAFE_DELETE(bindingNS);
 
     system("pause");
     return 0;

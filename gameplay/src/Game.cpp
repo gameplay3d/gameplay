@@ -6,7 +6,9 @@
 #include "FrameBuffer.h"
 #include "SceneLoader.h"
 
+/** @script{ignore} */
 GLenum __gl_error_code = GL_NO_ERROR;
+/** @script{ignore} */
 ALenum __al_error_code = AL_NO_ERROR;
 
 namespace gameplay

@@ -250,9 +250,14 @@ void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunc
     lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
 }
 
-void ScriptUtil::setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy)
+void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived)
 {
-    Game::getInstance()->getScriptController()->_hierarchy = hierarchy;
+    Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
+}
+
+void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum)
+{
+    Game::getInstance()->getScriptController()->_stringFromEnum.push_back(stringFromEnum);
 }
 
 bool* ScriptUtil::getBoolPointer(int index)
@@ -524,6 +529,12 @@ ScriptController::~ScriptController()
     }
 }
 
+static const char* lua_print_function = 
+    "function print(str, ...)\n"
+    "    local arg = {...}\n"
+    "    printError(string.format(str, table.unpack(arg)))\n"
+    "end\n";
+
 void ScriptController::initialize()
 {
     _lua = luaL_newstate();
@@ -531,6 +542,10 @@ void ScriptController::initialize()
         GP_ERROR("Failed to initialize Lua scripting engine.");
     luaL_openlibs(_lua);
     lua_RegisterAllBindings();
+
+    // Create our own print() function that uses gameplay::printError.
+    if (luaL_dostring(_lua, lua_print_function))
+        GP_ERROR("Failed to load custom print() function with error: '%s'.", lua_tostring(_lua, -1));
 }
 
 void ScriptController::initializeGame()
@@ -669,7 +684,14 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
                 // Skip past the closing ']' (the semi-colon here is intentional-do not remove).
                 while (*sig++ != ']');
 
-                lua_pushstring(_lua, lua_stringFromEnumGlobal(type, va_arg(*list, int)));
+                unsigned int value = va_arg(*list, int);
+                std::string enumStr = "";
+                for (unsigned int i = 0; enumStr.size() == 0 && i < _stringFromEnum.size(); i++)
+                {
+                    enumStr = (*_stringFromEnum[i])(type, value);
+                }
+
+                lua_pushstring(_lua, enumStr.c_str());
                 break;
             }
             // Object references/pointers (Lua userdata).
