@@ -64,12 +64,13 @@ public:
     string getIdentifier(string refId);
 
     /**
-     * Gets the given class name without the namespace.
+     * Gets the given class name (without the namespace) and stores the class's namespace in the given string pointer (if non-null).
      * 
      * @param classname The fully qualified name of the class.
+     * @param ns Output variable for the namespace of the class.
      * @return The class name without the namespace.
      */
-    string getClassNameWithoutNamespace(string classname);
+    string getClassNameAndNamespace(string classname, string* ns);
 
     /**
      * Sets the given ref id and class/struct/enum name pair.
@@ -87,8 +88,9 @@ public:
      * 
      * @param inDir The input directory (must contain Doxygen XML output files).
      * @param outDir The output directory.
+     * @param bindingNS The namespace to generate the bindings within.
      */
-    void run(string inDir, string outDir);
+    void run(string inDir, string outDir, string* bindingNS = NULL);
 
     /**
      * Retrieves whether the given class is derived from Ref.
@@ -115,8 +117,8 @@ protected:
     // Gets the name of the namespace, file, class, or struct.
     string getCompoundName(XMLElement* node);
 
-    // Parses the non-member functions and adds them to the list.
-    void getFunctions(XMLElement* classNode);
+    // Parses the non-member functions and adds them to the list (optionally within the given namespace).
+    void getFunctions(XMLElement* classNode, string ns = "");
 
     // Parses the namespace (with the given name).
     void getNamespace(XMLElement* nsNode, const string& name);
@@ -178,7 +180,7 @@ protected:
     void resolveTypes();
 
     // Generates the bindings to C++ header and source files.
-    void generateBindings();
+    void generateBindings(string* bindingNS);
     
     // Gets the set off all classes that derives from the given class.
     void getAllDerived(set<string>& derived, string classname);
@@ -197,7 +199,7 @@ private:
     map<string, set<string> > _includes;
     map<string, vector<FunctionBinding> > _functions;
     map<string, EnumBinding> _enums;
-    map<string, vector<string> > _namespaces;
+    map<string, set<string> > _namespaces;
     map<string, TypedefBinding> _typedefs;
     set<string> __warnings;
 };
