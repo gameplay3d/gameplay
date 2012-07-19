@@ -51,7 +51,7 @@ template<> bool ScriptTarget::fireEvent<bool>(const char* eventName, ...)
     va_start(list, eventName);
 
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
-    if (iter != _callbacks.end())
+    if (iter != _callbacks.end() && iter->second)
     {
         ScriptController* sc = Game::getInstance()->getScriptController();
 
