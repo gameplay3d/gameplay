@@ -8,9 +8,6 @@
 namespace gameplay
 {
 
-/** Function pointer typedef for string-from-enum conversion functions. */
-typedef const char* (*luaStringEnumConversionFunction)(std::string&, unsigned int);
-
 /**
  * Functions and structures used by the generated Lua script bindings.
  */
@@ -92,21 +89,13 @@ void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newF
 void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
 
 /**
- * Sets an inheritance pair within the global inheritance hierarchy (base, derived).
+ * Sets the global inheritance hierarchy.
  * 
- * @param base The base class of the inheritance pair.
- * @param derived The derived class of the inheritance pair.
+ * @param hierarchy The inheritance hierarchy stored as a map of class names
+ *      to a list of all derived class names.
  * @script{ignore}
  */
-void setGlobalHierarchyPair(std::string base, std::string derived);
-
-/**
- * Adds the given function as a string-from-enumerated value conversion function.
- * 
- * @param stringFromEnum The pointer to the string-from-enum conversion function.
- * @script{ignore}
- */
-void addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
+void setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy);
 
 /**
  * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -247,17 +236,8 @@ public:
      * Loads the given script file and executes its global code.
      * 
      * @param path The path to the script.
-     * @param forceReload Whether the script should be reloaded if it has already been loaded.
      */
-    void loadScript(const char* path, bool forceReload = false);
-
-    /**
-     * Given a URL, loads the referenced file and returns the referenced function name.
-     * 
-     * @param url The url to load.
-     * @return The function that the URL references.
-     */
-    std::string loadUrl(const char* url);
+    void loadScript(const char* path);
 
     /**
      * Calls the specifed no-parameter Lua function.
@@ -290,31 +270,6 @@ public:
      * @return The return value of the executed Lua function.
      */
     template<typename T> T executeFunction(const char* func, const char* args, ...);
-
-    /**
-     * Calls the specifed Lua function using the given parameters.
-     * 
-     * @param func The name of the function to call.
-     * @param args The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:
-     *      - 'b' - bool
-     *      - 'c' - char
-     *      - 'h' - short
-     *      - 'i' - int
-     *      - 'l' - long
-     *      - 'f' - float
-     *      - 'd' - double
-     *      - 'ui' - unsigned int
-     *      - 'ul' - unsigned long
-     *      - 'uc' - unsigned char
-     *      - 'uh' - unsigned short
-     *      - 's' - string
-     *      - 'p' - pointer
-     *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
-     *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
-     * @param list The variable argument list containing the function's parameters.
-     * @return The return value of the executed Lua function.
-     */
-    template<typename T> T executeFunction(const char* func, const char* args, va_list* list);
 
     /**
      * Gets the global boolean script variable with the given name.
@@ -714,8 +669,7 @@ private:
     friend void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction,
         lua_CFunction deleteFunction, const luaL_Reg* statics, std::vector<std::string> scopePath);
     friend void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction);
-    friend void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived);
-    friend void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
+    friend void ScriptUtil::setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy);
     friend bool* ScriptUtil::getBoolPointer(int index);
     friend short* ScriptUtil::getShortPointer(int index);
     friend int* ScriptUtil::getIntPointer(int index);
@@ -733,8 +687,6 @@ private:
     unsigned int _returnCount;
     std::map<std::string, std::vector<std::string> > _hierarchy;
     std::string* _callbacks[CALLBACK_COUNT];
-    std::set<std::string> _loadedScripts;
-    std::vector<luaStringEnumConversionFunction> _stringFromEnum;
 };
 
 /** Template specialization. */
@@ -790,33 +742,6 @@ template<> float ScriptController::executeFunction<float>(const char* func, cons
 template<> double ScriptController::executeFunction<double>(const char* func, const char* args, ...);
 /** Template specialization. */
 template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, ...);
-
-/** Template specialization. */
-template<> void ScriptController::executeFunction<void>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> char ScriptController::executeFunction<char>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> short ScriptController::executeFunction<short>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> int ScriptController::executeFunction<int>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> long ScriptController::executeFunction<long>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> float ScriptController::executeFunction<float>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list);
-/** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list);
 
 }
 

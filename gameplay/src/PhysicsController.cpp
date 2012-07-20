@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"
+#include "ScriptListener.h"
 
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
@@ -23,12 +24,10 @@ PhysicsController::PhysicsController()
   : _isUpdating(false), _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
-    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL)
+    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL), _scriptListeners(NULL)
 {
     // Default gravity is 9.8 along the negative Y axis.
     _collisionCallback = new CollisionCallback(this);
-
-    addEvent("statusEvent", "[PhysicsController::Listener::EventType]");
 }
 
 PhysicsController::~PhysicsController()
@@ -37,6 +36,15 @@ PhysicsController::~PhysicsController()
     SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
+
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
 }
 
 void PhysicsController::addStatusListener(Listener* listener)
@@ -59,6 +67,34 @@ void PhysicsController::removeStatusListener(Listener* listener)
         if (*iter == listener)
         {
             _listeners->erase(iter);
+            return;
+        }
+    }
+}
+
+void PhysicsController::addStatusListener(const char* function)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addStatusListener(listener);
+}
+
+void PhysicsController::removeStatusListener(const char* function)
+{
+    if (!_scriptListeners)
+        return;
+
+    std::string functionStr = function;
+    for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+    {
+        if ((*_scriptListeners)[i]->_function == functionStr)
+        {
+            removeStatusListener((*_scriptListeners)[i]);
+            SAFE_DELETE((*_scriptListeners)[i]);
+            _scriptListeners->erase(_scriptListeners->begin() + i);
             return;
         }
     }
@@ -476,7 +512,7 @@ void PhysicsController::update(float elapsedTime)
     _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
-    if (_listeners || _callbacks["statusEvent"])
+    if (_listeners)
     {
         Listener::EventType oldStatus = _status;
 
@@ -512,16 +548,11 @@ void PhysicsController::update(float elapsedTime)
         // If the status has changed, notify our listeners.
         if (oldStatus != _status)
         {
-            if (_listeners)
+            for (unsigned int k = 0; k < _listeners->size(); k++)
             {
-                for (unsigned int k = 0; k < _listeners->size(); k++)
-                {
-                    GP_ASSERT((*_listeners)[k]);
-                    (*_listeners)[k]->statusEvent(_status);
-                }
+                GP_ASSERT((*_listeners)[k]);
+                (*_listeners)[k]->statusEvent(_status);
             }
-
-            fireEvent<void>("statusEvent", _status);
         }
     }
 
@@ -1026,21 +1057,9 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     {
         for (unsigned int y = 0, h = image->getHeight(); y < h; ++y)
         {
-            //
-            // Orignially in GamePlay this was normalizedHeightGrayscale which generally yielded
-            // only 8-bit precision. This has been replaced by normalizedHeightPacked (with a
-            // corresponding change in gameplay-encoder).
-            //
-            // BACKWARD COMPATIBILITY
-            // In grayscale images where r=g=b this will maintain some degree of compatibility,
-            // to within 0.4%. This can be seen by setting r=g=b=x and comparing the grayscale
-            // height expression to the packed height expression: the error is 2^-8 + 2^-16
-            // which is just under 0.4%.
-            //
-            heights[x + y * w] = normalizedHeightPacked(
-                data[(x + y * w) * pixelSize + 0],
-                data[(x + y * w) * pixelSize + 1],
-                data[(x + y * w) * pixelSize + 2]) * (maxHeight - minHeight) + minHeight;
+            heights[x + y * w] = ((((float)data[(x + y * h) * pixelSize + 0]) +
+                ((float)data[(x + y * h) * pixelSize + 1]) +
+                ((float)data[(x + y * h) * pixelSize + 2])) / 768.0f) * (maxHeight - minHeight) + minHeight;
         }
     }
 
@@ -1361,16 +1380,6 @@ float PhysicsController::calculateHeight(float* data, unsigned int width, unsign
         return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b +
             data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
     }
-}
-
-float PhysicsController::normalizedHeightGrayscale(float r, float g, float b)
-{
-    return (r + g + b) / 768.0f;
-}
-
-float PhysicsController::normalizedHeightPacked(float r, float g, float b)
-{
-    return (256.0f*r + g + 0.00390625f*b) / 65536.0f;
 }
 
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)

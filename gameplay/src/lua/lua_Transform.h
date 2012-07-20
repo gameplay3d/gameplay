@@ -7,7 +7,6 @@ namespace gameplay
 // Lua bindings for Transform.
 int lua_Transform__gc(lua_State* state);
 int lua_Transform__init(lua_State* state);
-int lua_Transform_addCallback(lua_State* state);
 int lua_Transform_addListener(lua_State* state);
 int lua_Transform_createAnimation(lua_State* state);
 int lua_Transform_createAnimationFromBy(lua_State* state);
@@ -32,7 +31,6 @@ int lua_Transform_getTranslationX(lua_State* state);
 int lua_Transform_getTranslationY(lua_State* state);
 int lua_Transform_getTranslationZ(lua_State* state);
 int lua_Transform_getUpVector(lua_State* state);
-int lua_Transform_removeCallback(lua_State* state);
 int lua_Transform_removeListener(lua_State* state);
 int lua_Transform_rotate(lua_State* state);
 int lua_Transform_rotateX(lua_State* state);

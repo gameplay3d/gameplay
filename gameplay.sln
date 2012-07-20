@@ -28,7 +28,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample00-mesh", "gameplay-s
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample05-lua", "gameplay-samples\sample05-lua\sample05-lua.vcxproj", "{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample05-lua", "gameplay-samples\sample05-lua\sample05-lua.vcxproj", "{C6121A62-AA46-BA6D-A1CE-8000544456AA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
@@ -76,12 +76,12 @@ Global
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.ActiveCfg = Release|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.Build.0 = Release|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|Win32.Build.0 = Debug|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.ActiveCfg = Release|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.Build.0 = Release|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Debug|Win32.Build.0 = Debug|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.DebugMem|Win32.Build.0 = DebugMem|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Release|Win32.ActiveCfg = Release|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

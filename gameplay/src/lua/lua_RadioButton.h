@@ -6,7 +6,6 @@ namespace gameplay
 
 // Lua bindings for RadioButton.
 int lua_RadioButton__gc(lua_State* state);
-int lua_RadioButton_addCallback(lua_State* state);
 int lua_RadioButton_addListener(lua_State* state);
 int lua_RadioButton_addRef(lua_State* state);
 int lua_RadioButton_createAnimation(lua_State* state);
@@ -59,7 +58,6 @@ int lua_RadioButton_isContainer(lua_State* state);
 int lua_RadioButton_isEnabled(lua_State* state);
 int lua_RadioButton_isSelected(lua_State* state);
 int lua_RadioButton_release(lua_State* state);
-int lua_RadioButton_removeCallback(lua_State* state);
 int lua_RadioButton_setAlignment(lua_State* state);
 int lua_RadioButton_setAnimationPropertyValue(lua_State* state);
 int lua_RadioButton_setAutoHeight(lua_State* state);

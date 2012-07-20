@@ -9,7 +9,6 @@
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsCollisionObject.h"
 #include "MeshBatch.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -19,7 +18,7 @@ class ScriptListener;
 /**
  * Defines a class for controlling game physics.
  */
-class PhysicsController : public ScriptTarget
+class PhysicsController
 {
     friend class Game;
     friend class PhysicsConstraint;
@@ -153,6 +152,22 @@ public:
      * @param listener The listener to remove.
      */
     void removeStatusListener(Listener* listener);
+
+    /**
+     * Adds a listener to the physics controller.
+     * 
+     * Note: the given Lua function must have the same function signature as PhysicsController::Listener::statusEvent.
+     * 
+     * @param function The Lua script function to use as the listener callback.
+     */
+    void addStatusListener(const char* function);
+
+    /**
+     * Removes a listener to the physics controller.
+     * 
+     * @param function The Lua script function (used as a listener callback) to remove.
+     */
+    void removeStatusListener(const char* function);
 
     /**
      * Creates a fixed constraint.
@@ -442,12 +457,6 @@ private:
     static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
         const Matrix* worldMatrix = NULL, Vector3* normalData = NULL, Vector3* normalResult = NULL);
 
-    // Legacy method for grayscale heightmaps: r + g + b, normalized.
-    static float normalizedHeightGrayscale(float r, float g, float b);
-
-    // Higher precision method for heightmaps: 65536*r + 256*g + b, normalized.
-    static float normalizedHeightPacked(float r, float g, float b);
-
     // Sets up the given constraint for the given two rigid bodies.
     void addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint);
 
@@ -550,6 +559,7 @@ private:
     Vector3 _gravity;
     std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo> _collisionStatus;
     CollisionCallback* _collisionCallback;
+    std::vector<ScriptListener*>* _scriptListeners;
 };
 
 }

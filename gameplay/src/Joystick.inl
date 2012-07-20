@@ -8,27 +8,44 @@ inline const Vector2& Joystick::getValue() const
     return _value;
 }
 
-inline void Joystick::setRegion(const Rectangle& region)
+inline void Joystick::setInnerSize(const Vector2& size)
 {
-    if (_region.isEmpty())
-        _region = _bounds;
-
-    _bounds = region;
+    if (_innerSize)
+        _innerSize->set(size);
 }
 
-inline const Rectangle& Joystick::getRegion() const
+inline const Vector2& Joystick::getInnerSize() const
 {
-    return _bounds;
+    Vector2 size(0, 0);
+    if (_innerSize)
+        size.set(*_innerSize);
+    
+    return size;
 }
 
-inline void Joystick::setAbsolute(bool absolute)
+inline void Joystick::setOuterSize(const Vector2& size)
 {
-    _absolute = absolute;
+    if (_outerSize)
+        _outerSize->set(size);
 }
 
-inline bool Joystick::isAbsolute() const
+inline const Vector2& Joystick::getOuterSize() const
 {
-    return _absolute;
+    Vector2 size(0, 0);
+    if (_outerSize)
+        size.set(*_outerSize);
+    
+    return size;
+}
+
+inline void Joystick::setRelative(bool relative)
+{
+    _relative = relative;
+}
+
+inline bool Joystick::isRelative() const
+{
+    return _relative;
 }
 
 }
