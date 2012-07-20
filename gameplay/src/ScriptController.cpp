@@ -41,8 +41,6 @@
 namespace gameplay
 {
 
-extern void splitURL(const std::string& url, std::string* file, std::string* id);
-
 void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
@@ -250,14 +248,9 @@ void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunc
     lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
 }
 
-void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived)
+void ScriptUtil::setGlobalHierarchy(std::map<std::string, std::vector<std::string> > hierarchy)
 {
-    Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
-}
-
-void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum)
-{
-    Game::getInstance()->getScriptController()->_stringFromEnum.push_back(stringFromEnum);
+    Game::getInstance()->getScriptController()->_hierarchy = hierarchy;
 }
 
 bool* ScriptUtil::getBoolPointer(int index)
@@ -335,41 +328,13 @@ bool ScriptUtil::luaCheckBool(lua_State* state, int n)
 }
 
 
-void ScriptController::loadScript(const char* path, bool forceReload)
+void ScriptController::loadScript(const char* path)
 {
-    std::set<std::string>::iterator iter = _loadedScripts.find(path);
-    if (iter == _loadedScripts.end() || forceReload)
-    {
-        const char* scriptContents = FileSystem::readAll(path);
-        if (luaL_dostring(_lua, scriptContents))
-            GP_ERROR("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+    const char* scriptContents = FileSystem::readAll(path);
+    if (luaL_dostring(_lua, scriptContents))
+        GP_ERROR("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
 
-        SAFE_DELETE_ARRAY(scriptContents);
-
-        if (iter == _loadedScripts.end())
-            _loadedScripts.insert(path);
-    }
-}
-
-std::string ScriptController::loadUrl(const char* url)
-{
-    std::string file;
-    std::string id;
-    splitURL(url, &file, &id);
-
-    // Make sure the function isn't empty.
-    if (id.size() <= 0)
-    {
-        GP_ERROR("Got an empty function name when parsing function url '%s'.", url);
-        return std::string();
-    }
-
-    // Ensure the script is loaded.
-    if (file.size() > 0)
-        Game::getInstance()->getScriptController()->loadScript(file.c_str());
-
-    // Return the function name.
-    return id;
+    SAFE_DELETE_ARRAY(scriptContents);
 }
 
 bool ScriptController::getBool(const char* name)
@@ -529,12 +494,6 @@ ScriptController::~ScriptController()
     }
 }
 
-static const char* lua_print_function = 
-    "function print(str, ...)\n"
-    "    local arg = {...}\n"
-    "    printError(string.format(str, table.unpack(arg)))\n"
-    "end\n";
-
 void ScriptController::initialize()
 {
     _lua = luaL_newstate();
@@ -542,10 +501,6 @@ void ScriptController::initialize()
         GP_ERROR("Failed to initialize Lua scripting engine.");
     luaL_openlibs(_lua);
     lua_RegisterAllBindings();
-
-    // Create our own print() function that uses gameplay::printError.
-    if (luaL_dostring(_lua, lua_print_function))
-        GP_ERROR("Failed to load custom print() function with error: '%s'.", lua_tostring(_lua, -1));
 }
 
 void ScriptController::initializeGame()
@@ -684,14 +639,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
                 // Skip past the closing ']' (the semi-colon here is intentional-do not remove).
                 while (*sig++ != ']');
 
-                unsigned int value = va_arg(*list, int);
-                std::string enumStr = "";
-                for (unsigned int i = 0; enumStr.size() == 0 && i < _stringFromEnum.size(); i++)
-                {
-                    enumStr = (*_stringFromEnum[i])(type, value);
-                }
-
-                lua_pushstring(_lua, enumStr.c_str());
+                lua_pushstring(_lua, lua_stringFromEnumGlobal(type, va_arg(*list, int)));
                 break;
             }
             // Object references/pointers (Lua userdata).
@@ -770,6 +718,7 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
         return ScriptController::INVALID_CALLBACK;
 }
 
+
 // Helper macros.
 #define SCRIPT_EXECUTE_FUNCTION_NO_PARAM(type, checkfunc) \
     executeFunctionHelper(1, func, NULL, NULL); \
@@ -784,12 +733,6 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
     type value = (type)checkfunc(_lua, -1); \
     lua_pop(_lua, -1); \
     va_end(list); \
-    return value;
-
-#define SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(type, checkfunc) \
-    executeFunctionHelper(1, func, args, list); \
-    type value = (type)checkfunc(_lua, -1); \
-    lua_pop(_lua, -1); \
     return value;
 
 template<> void ScriptController::executeFunction<void>(const char* func)
@@ -857,7 +800,6 @@ template<> std::string ScriptController::executeFunction<std::string>(const char
     SCRIPT_EXECUTE_FUNCTION_NO_PARAM(std::string, luaL_checkstring);
 }
 
-/** Template specialization. */
 template<> void ScriptController::executeFunction<void>(const char* func, const char* args, ...)
 {
     va_list list;
@@ -866,154 +808,64 @@ template<> void ScriptController::executeFunction<void>(const char* func, const 
     va_end(list);
 }
 
-/** Template specialization. */
 template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(bool, ScriptUtil::luaCheckBool);
 }
 
-/** Template specialization. */
 template<> char ScriptController::executeFunction<char>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(char, luaL_checkint);
 }
 
-/** Template specialization. */
 template<> short ScriptController::executeFunction<short>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(short, luaL_checkint);
 }
 
-/** Template specialization. */
 template<> int ScriptController::executeFunction<int>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(int, luaL_checkint);
 }
 
-/** Template specialization. */
 template<> long ScriptController::executeFunction<long>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(long, luaL_checklong);
 }
 
-/** Template specialization. */
 template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned char, luaL_checkunsigned);
 }
 
-/** Template specialization. */
 template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned short, luaL_checkunsigned);
 }
 
-/** Template specialization. */
 template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned int, luaL_checkunsigned);
 }
 
-/** Template specialization. */
 template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(unsigned long, luaL_checkunsigned);
 }
 
-/** Template specialization. */
 template<> float ScriptController::executeFunction<float>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(float, luaL_checknumber);
 }
 
-/** Template specialization. */
 template<> double ScriptController::executeFunction<double>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(double, luaL_checknumber);
 }
 
-/** Template specialization. */
 template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, ...)
 {
     SCRIPT_EXECUTE_FUNCTION_PARAM(std::string, luaL_checkstring);
-}
-
-/** Template specialization. */
-template<> void ScriptController::executeFunction<void>(const char* func, const char* args, va_list* list)
-{
-    executeFunctionHelper(0, func, args, list);
-}
-
-/** Template specialization. */
-template<> bool ScriptController::executeFunction<bool>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(bool, ScriptUtil::luaCheckBool);
-}
-
-/** Template specialization. */
-template<> char ScriptController::executeFunction<char>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(char, luaL_checkint);
-}
-
-/** Template specialization. */
-template<> short ScriptController::executeFunction<short>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(short, luaL_checkint);
-}
-
-/** Template specialization. */
-template<> int ScriptController::executeFunction<int>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(int, luaL_checkint);
-}
-
-/** Template specialization. */
-template<> long ScriptController::executeFunction<long>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(long, luaL_checklong);
-}
-
-/** Template specialization. */
-template<> unsigned char ScriptController::executeFunction<unsigned char>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned char, luaL_checkunsigned);
-}
-
-/** Template specialization. */
-template<> unsigned short ScriptController::executeFunction<unsigned short>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned short, luaL_checkunsigned);
-}
-
-/** Template specialization. */
-template<> unsigned int ScriptController::executeFunction<unsigned int>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned int, luaL_checkunsigned);
-}
-
-/** Template specialization. */
-template<> unsigned long ScriptController::executeFunction<unsigned long>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(unsigned long, luaL_checkunsigned);
-}
-
-/** Template specialization. */
-template<> float ScriptController::executeFunction<float>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(float, luaL_checknumber);
-}
-
-/** Template specialization. */
-template<> double ScriptController::executeFunction<double>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(double, luaL_checknumber);
-}
-
-/** Template specialization. */
-template<> std::string ScriptController::executeFunction<std::string>(const char* func, const char* args, va_list* list)
-{
-    SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(std::string, luaL_checkstring);
 }
 
 }

@@ -4,7 +4,6 @@
 #include "Ref.h"
 #include "AIStateMachine.h"
 #include "AIMessage.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -19,7 +18,7 @@ class Node;
  * such as state machines. By default, an AIAgent has an empty state 
  * machine.
  */
-class AIAgent : public Ref, public ScriptTarget
+class AIAgent : public Ref
 {
     friend class Node;
     friend class AIController;

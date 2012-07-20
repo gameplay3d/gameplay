@@ -150,15 +150,6 @@ template<typename T> T ScriptController::executeFunction(const char* func, const
     return value;
 }
 
-template<typename T> T ScriptController::executeFunction(const char* func, const char* args, va_list* list)
-{
-    executeFunctionHelper(1, func, args, list);
-
-    T value = (T)((ScriptUtil::LuaObject*)lua_touserdata(_lua, -1))->instance;
-    lua_pop(_lua, -1);
-    return value;
-}
-
 template<typename T>T* ScriptController::getObjectPointer(const char* type, const char* name)
 {
     lua_getglobal(_lua, name);

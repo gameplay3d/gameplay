@@ -6,130 +6,124 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
+
+    ScriptUtil::registerFunction("__al_error_code", lua____al_error_code);
+    ScriptUtil::registerFunction("__gl_error_code", lua____gl_error_code);
     ScriptUtil::registerFunction("printError", lua__printError);
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Control");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Form");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joint");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joystick");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Label");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "MaterialParameter");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Node");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "RadioButton");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Slider");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "TextBox");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
-    ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
-    ScriptUtil::setGlobalHierarchyPair("Container", "Form");
-    ScriptUtil::setGlobalHierarchyPair("Control", "Button");
-    ScriptUtil::setGlobalHierarchyPair("Control", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("Control", "Container");
-    ScriptUtil::setGlobalHierarchyPair("Control", "Form");
-    ScriptUtil::setGlobalHierarchyPair("Control", "Joystick");
-    ScriptUtil::setGlobalHierarchyPair("Control", "Label");
-    ScriptUtil::setGlobalHierarchyPair("Control", "RadioButton");
-    ScriptUtil::setGlobalHierarchyPair("Control", "Slider");
-    ScriptUtil::setGlobalHierarchyPair("Control", "TextBox");
-    ScriptUtil::setGlobalHierarchyPair("Label", "Button");
-    ScriptUtil::setGlobalHierarchyPair("Label", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("Label", "RadioButton");
-    ScriptUtil::setGlobalHierarchyPair("Label", "Slider");
-    ScriptUtil::setGlobalHierarchyPair("Label", "TextBox");
-    ScriptUtil::setGlobalHierarchyPair("Layout", "AbsoluteLayout");
-    ScriptUtil::setGlobalHierarchyPair("Layout", "FlowLayout");
-    ScriptUtil::setGlobalHierarchyPair("Layout", "VerticalLayout");
-    ScriptUtil::setGlobalHierarchyPair("Node", "Joint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsCharacter");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsGhostObject");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsRigidBody");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsFixedConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsGenericConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsHingeConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsSocketConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsSpringConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsGenericConstraint", "PhysicsFixedConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsGenericConstraint", "PhysicsSpringConstraint");
-    ScriptUtil::setGlobalHierarchyPair("PhysicsGhostObject", "PhysicsCharacter");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "AIAgent");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "AIState");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "AbsoluteLayout");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Animation");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "AnimationClip");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "AudioBuffer");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "AudioSource");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Bundle");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Button");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Camera");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Container");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Control");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Curve");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "DepthStencilTarget");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Effect");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "FlowLayout");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Font");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Form");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "FrameBuffer");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Label");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Layout");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Light");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Material");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "MaterialParameter");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Mesh");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Model");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Node");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "ParticleEmitter");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Pass");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "PhysicsCollisionShape");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "RadioButton");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "RenderState");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "RenderState::StateBlock");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "RenderTarget");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Scene");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Slider");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Technique");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "TextBox");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Texture");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Texture::Sampler");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Theme");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Theme::ThemeImage");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "VertexAttributeBinding");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "VerticalLayout");
-    ScriptUtil::setGlobalHierarchyPair("RenderState", "Material");
-    ScriptUtil::setGlobalHierarchyPair("RenderState", "Pass");
-    ScriptUtil::setGlobalHierarchyPair("RenderState", "Technique");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIAgent");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "AIState");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Button");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Container");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Control");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Form");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joint");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joystick");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Label");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Node");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "PhysicsController");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "RadioButton");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Slider");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "TextBox");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Transform");
-    ScriptUtil::setGlobalHierarchyPair("Transform", "Joint");
-    ScriptUtil::setGlobalHierarchyPair("Transform", "Node");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioListener");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "AudioSource");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Camera");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "MeshSkin");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsCharacter");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsGhostObject");
-    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsRigidBody");
-    ScriptUtil::addStringFromEnumConversionFunction(&gameplay::lua_stringFromEnumGlobal);
+
+    std::map<std::string, std::vector<std::string> > hierarchy;
+    hierarchy["AnimationClip::Listener"].push_back("ScriptListener");
+    hierarchy["AnimationTarget"].push_back("Button");
+    hierarchy["AnimationTarget"].push_back("CheckBox");
+    hierarchy["AnimationTarget"].push_back("Container");
+    hierarchy["AnimationTarget"].push_back("Control");
+    hierarchy["AnimationTarget"].push_back("Form");
+    hierarchy["AnimationTarget"].push_back("Joint");
+    hierarchy["AnimationTarget"].push_back("Joystick");
+    hierarchy["AnimationTarget"].push_back("Label");
+    hierarchy["AnimationTarget"].push_back("MaterialParameter");
+    hierarchy["AnimationTarget"].push_back("Node");
+    hierarchy["AnimationTarget"].push_back("RadioButton");
+    hierarchy["AnimationTarget"].push_back("Slider");
+    hierarchy["AnimationTarget"].push_back("TextBox");
+    hierarchy["AnimationTarget"].push_back("Transform");
+    hierarchy["Button"].push_back("CheckBox");
+    hierarchy["Button"].push_back("RadioButton");
+    hierarchy["Container"].push_back("Form");
+    hierarchy["Control"].push_back("Button");
+    hierarchy["Control"].push_back("CheckBox");
+    hierarchy["Control"].push_back("Container");
+    hierarchy["Control"].push_back("Form");
+    hierarchy["Control"].push_back("Joystick");
+    hierarchy["Control"].push_back("Label");
+    hierarchy["Control"].push_back("RadioButton");
+    hierarchy["Control"].push_back("Slider");
+    hierarchy["Control"].push_back("TextBox");
+    hierarchy["Control::Listener"].push_back("ScriptListener");
+    hierarchy["Label"].push_back("Button");
+    hierarchy["Label"].push_back("CheckBox");
+    hierarchy["Label"].push_back("RadioButton");
+    hierarchy["Label"].push_back("Slider");
+    hierarchy["Label"].push_back("TextBox");
+    hierarchy["Layout"].push_back("AbsoluteLayout");
+    hierarchy["Layout"].push_back("FlowLayout");
+    hierarchy["Layout"].push_back("VerticalLayout");
+    hierarchy["Node"].push_back("Joint");
+    hierarchy["PhysicsCollisionObject"].push_back("PhysicsCharacter");
+    hierarchy["PhysicsCollisionObject"].push_back("PhysicsGhostObject");
+    hierarchy["PhysicsCollisionObject"].push_back("PhysicsRigidBody");
+    hierarchy["PhysicsCollisionObject::CollisionListener"].push_back("ScriptListener");
+    hierarchy["PhysicsConstraint"].push_back("PhysicsFixedConstraint");
+    hierarchy["PhysicsConstraint"].push_back("PhysicsGenericConstraint");
+    hierarchy["PhysicsConstraint"].push_back("PhysicsHingeConstraint");
+    hierarchy["PhysicsConstraint"].push_back("PhysicsSocketConstraint");
+    hierarchy["PhysicsConstraint"].push_back("PhysicsSpringConstraint");
+    hierarchy["PhysicsController::Listener"].push_back("ScriptListener");
+    hierarchy["PhysicsGenericConstraint"].push_back("PhysicsFixedConstraint");
+    hierarchy["PhysicsGenericConstraint"].push_back("PhysicsSpringConstraint");
+    hierarchy["PhysicsGhostObject"].push_back("PhysicsCharacter");
+    hierarchy["Ref"].push_back("AIAgent");
+    hierarchy["Ref"].push_back("AIState");
+    hierarchy["Ref"].push_back("AbsoluteLayout");
+    hierarchy["Ref"].push_back("Animation");
+    hierarchy["Ref"].push_back("AnimationClip");
+    hierarchy["Ref"].push_back("AudioBuffer");
+    hierarchy["Ref"].push_back("AudioSource");
+    hierarchy["Ref"].push_back("Bundle");
+    hierarchy["Ref"].push_back("Button");
+    hierarchy["Ref"].push_back("Camera");
+    hierarchy["Ref"].push_back("CheckBox");
+    hierarchy["Ref"].push_back("Container");
+    hierarchy["Ref"].push_back("Control");
+    hierarchy["Ref"].push_back("Curve");
+    hierarchy["Ref"].push_back("DepthStencilTarget");
+    hierarchy["Ref"].push_back("Effect");
+    hierarchy["Ref"].push_back("FlowLayout");
+    hierarchy["Ref"].push_back("Font");
+    hierarchy["Ref"].push_back("Form");
+    hierarchy["Ref"].push_back("FrameBuffer");
+    hierarchy["Ref"].push_back("Image");
+    hierarchy["Ref"].push_back("Joint");
+    hierarchy["Ref"].push_back("Joystick");
+    hierarchy["Ref"].push_back("Label");
+    hierarchy["Ref"].push_back("Layout");
+    hierarchy["Ref"].push_back("Light");
+    hierarchy["Ref"].push_back("Material");
+    hierarchy["Ref"].push_back("MaterialParameter");
+    hierarchy["Ref"].push_back("Mesh");
+    hierarchy["Ref"].push_back("Model");
+    hierarchy["Ref"].push_back("Node");
+    hierarchy["Ref"].push_back("ParticleEmitter");
+    hierarchy["Ref"].push_back("Pass");
+    hierarchy["Ref"].push_back("PhysicsCollisionShape");
+    hierarchy["Ref"].push_back("RadioButton");
+    hierarchy["Ref"].push_back("RenderState");
+    hierarchy["Ref"].push_back("RenderState::StateBlock");
+    hierarchy["Ref"].push_back("RenderTarget");
+    hierarchy["Ref"].push_back("Scene");
+    hierarchy["Ref"].push_back("Slider");
+    hierarchy["Ref"].push_back("Technique");
+    hierarchy["Ref"].push_back("TextBox");
+    hierarchy["Ref"].push_back("Texture");
+    hierarchy["Ref"].push_back("Texture::Sampler");
+    hierarchy["Ref"].push_back("Theme");
+    hierarchy["Ref"].push_back("Theme::ThemeImage");
+    hierarchy["Ref"].push_back("VertexAttributeBinding");
+    hierarchy["Ref"].push_back("VerticalLayout");
+    hierarchy["RenderState"].push_back("Material");
+    hierarchy["RenderState"].push_back("Pass");
+    hierarchy["RenderState"].push_back("Technique");
+    hierarchy["Transform"].push_back("Joint");
+    hierarchy["Transform"].push_back("Node");
+    hierarchy["Transform::Listener"].push_back("AudioListener");
+    hierarchy["Transform::Listener"].push_back("AudioSource");
+    hierarchy["Transform::Listener"].push_back("Camera");
+    hierarchy["Transform::Listener"].push_back("MeshSkin");
+    hierarchy["Transform::Listener"].push_back("PhysicsCharacter");
+    hierarchy["Transform::Listener"].push_back("PhysicsGhostObject");
+    hierarchy["Transform::Listener"].push_back("PhysicsRigidBody");
+    hierarchy["Transform::Listener"].push_back("ScriptListener");
+    ScriptUtil::setGlobalHierarchy(hierarchy);
 
     // Register enumeration AIMessage::ParameterType.
     {
@@ -761,6 +755,66 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("TEXCOORD5", "TEXCOORD5", scopePath);
         ScriptUtil::registerConstantString("TEXCOORD6", "TEXCOORD6", scopePath);
         ScriptUtil::registerConstantString("TEXCOORD7", "TEXCOORD7", scopePath);
+    }
+}
+
+int lua____al_error_code(lua_State* state)
+{
+    // Validate the number of parameters.
+    if (lua_gettop(state) > 1)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
+        lua_error(state);
+    }
+
+    if (lua_gettop(state) == 1)
+    {
+        // Get parameter 1 off the stack.
+        GP_WARN("Attempting to get parameter 1 with unrecognized type ALenum as an unsigned integer.");
+        ALenum param1 = (ALenum)luaL_checkunsigned(state, 1);
+
+        __al_error_code = param1;
+        return 0;
+    }
+    else
+    {
+        ALenum result = __al_error_code;
+
+        // Push the return value onto the stack.
+        GP_WARN("Attempting to return value with unrecognized type ALenum as an unsigned integer.");
+        lua_pushunsigned(state, result);
+
+        return 1;
+    }
+}
+
+int lua____gl_error_code(lua_State* state)
+{
+    // Validate the number of parameters.
+    if (lua_gettop(state) > 1)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
+        lua_error(state);
+    }
+
+    if (lua_gettop(state) == 1)
+    {
+        // Get parameter 1 off the stack.
+        GP_WARN("Attempting to get parameter 1 with unrecognized type GLenum as an unsigned integer.");
+        GLenum param1 = (GLenum)luaL_checkunsigned(state, 1);
+
+        __gl_error_code = param1;
+        return 0;
+    }
+    else
+    {
+        GLenum result = __gl_error_code;
+
+        // Push the return value onto the stack.
+        GP_WARN("Attempting to return value with unrecognized type GLenum as an unsigned integer.");
+        lua_pushunsigned(state, result);
+
+        return 1;
     }
 }
 

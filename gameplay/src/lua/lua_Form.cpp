@@ -19,8 +19,7 @@
 #include "RadioButton.h"
 #include "Ref.h"
 #include "Scene.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
+#include "ScriptListener.h"
 #include "Slider.h"
 #include "TextBox.h"
 #include "Theme.h"
@@ -40,7 +39,6 @@ void luaRegister_Form()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"addCallback", lua_Form_addCallback},
         {"addControl", lua_Form_addControl},
         {"addListener", lua_Form_addListener},
         {"addRef", lua_Form_addRef},
@@ -98,7 +96,6 @@ void luaRegister_Form()
         {"isEnabled", lua_Form_isEnabled},
         {"isScrollBarsAutoHide", lua_Form_isScrollBarsAutoHide},
         {"release", lua_Form_release},
-        {"removeCallback", lua_Form_removeCallback},
         {"removeControl", lua_Form_removeControl},
         {"setAlignment", lua_Form_setAlignment},
         {"setAnimationPropertyValue", lua_Form_setAnimationPropertyValue},
@@ -199,48 +196,6 @@ int lua_Form__gc(lua_State* state)
     return 0;
 }
 
-int lua_Form_addCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Form* instance = getInstance(state);
-                instance->addCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_addCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Form_addControl(lua_State* state)
 {
     // Get the number of parameters.
@@ -298,6 +253,21 @@ int lua_Form_addListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 Control::Listener* param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                Form* instance = getInstance(state);
+                instance->addListener(param1, param2);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -3126,48 +3096,6 @@ int lua_Form_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Form_removeCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Form* instance = getInstance(state);
-                instance->removeCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_removeCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

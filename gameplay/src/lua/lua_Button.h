@@ -6,7 +6,6 @@ namespace gameplay
 
 // Lua bindings for Button.
 int lua_Button__gc(lua_State* state);
-int lua_Button_addCallback(lua_State* state);
 int lua_Button_addListener(lua_State* state);
 int lua_Button_addRef(lua_State* state);
 int lua_Button_createAnimation(lua_State* state);
@@ -56,7 +55,6 @@ int lua_Button_getZIndex(lua_State* state);
 int lua_Button_isContainer(lua_State* state);
 int lua_Button_isEnabled(lua_State* state);
 int lua_Button_release(lua_State* state);
-int lua_Button_removeCallback(lua_State* state);
 int lua_Button_setAlignment(lua_State* state);
 int lua_Button_setAnimationPropertyValue(lua_State* state);
 int lua_Button_setAutoHeight(lua_State* state);

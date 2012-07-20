@@ -37,7 +37,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.220599794" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.553483674" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -123,7 +123,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.145250449" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.2006281313" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -208,7 +208,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.1151876862" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.502016742" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -295,7 +295,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.383272251" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1630912693" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -381,7 +381,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.2030100054" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1374999439" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -467,7 +467,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.1329574373" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1843174104" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
@@ -554,7 +554,7 @@
 								</option>
 								<option id="com.qnx.qcc.option.compiler.qccoptions.552975054" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
-								</option>
+								</option
 								<inputType id="com.qnx.qcc.inputType.compiler.1418704610" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.785476179" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">

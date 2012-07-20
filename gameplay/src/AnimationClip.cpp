@@ -4,7 +4,7 @@
 #include "AnimationTarget.h"
 #include "Game.h"
 #include "Quaternion.h"
-#include "ScriptController.h"
+#include "ScriptListener.h"
 
 namespace gameplay
 {
@@ -13,7 +13,7 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), 
       _stateBits(0x00), _repeatCount(1.0f), _activeDuration(_duration * _repeatCount), _speed(1.0f), _timeStarted(0), 
       _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
-      _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL), _scriptListeners(NULL)
+      _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _scriptListeners(NULL), _listenerItr(NULL)
 {
     GP_ASSERT(_animation);
     GP_ASSERT(0 <= startTime && startTime <= _animation->_duration && 0 <= endTime && endTime <= _animation->_duration);
@@ -534,7 +534,7 @@ void AnimationClip::onBegin()
         _elapsedTime = (Game::getGameTime() - _timeStarted) * _speed;
 
         if (_listeners)
-            *_listenerItr = _listeners->begin();
+            *_listenerItr = _listeners->begin(); 
     }
     else
     {
@@ -614,17 +614,5 @@ AnimationClip* AnimationClip::clone(Animation* animation) const
     }
     return newClip;
 }
-
-AnimationClip::ScriptListener::ScriptListener(const std::string& function)
-{
-    // Store the function name.
-    this->function = Game::getInstance()->getScriptController()->loadUrl(function.c_str());
-}
-
-void AnimationClip::ScriptListener::animationEvent(AnimationClip* clip, EventType type)
-{
-    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), "<AnimationClip>[AnimationClip::Listener::EventType]", clip, type);
-}
-
 
 }

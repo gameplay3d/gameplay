@@ -56,7 +56,7 @@ public:
      *
      * @return A new AIMessage.
      */
-    static AIMessage* create(unsigned int id, const char* sender, const char* receiver, unsigned int parameterCount);
+    static AIMessage* create(unsigned int id, const char* sender, const char* receiver, unsigned int paramterCount);
 
     /**
      * Returns the message ID.
