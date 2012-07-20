@@ -64,8 +64,10 @@
     <target name="-post-compile">
         <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
         <copy file="../res/box.material" tofile="assets/res/box.material"/>
-        <copy file="../res/colored.vert" tofile="assets/res/colored.vert"/>
-        <copy file="../res/colored.frag" tofile="assets/res/colored.frag"/>
+        <copy file="../res/grid.material" tofile="assets/res/grid.material"/>
+        <copy file="../res/box-diffuse.png" tofile="assets/res/box-diffuse.png"/>
+        <copy file="../res/arial40.gpb" tofile="assets/res/arial40.gpb"/>
+        <copy file="../res/script.lua" tofile="assets/res/script.lua"/>
     </target>
 
     <!-- Import the actual build file.
