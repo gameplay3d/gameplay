@@ -777,9 +777,6 @@
     <ClCompile Include="src\lua\lua_AIStateMachine.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1548,9 +1545,6 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_AIStateMachine.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_ScriptTarget.h">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>

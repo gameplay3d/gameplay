@@ -202,6 +202,7 @@ using std::va_list;
     #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
+    #define GLEW_STATIC
     #include <GL/glew.h>
     #define USE_VAO
 #elif __APPLE__
