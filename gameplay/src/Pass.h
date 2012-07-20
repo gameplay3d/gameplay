@@ -54,7 +54,7 @@ public:
     /**
      * Sets a vertex attribute binding for this pass.
      *
-     * @return The vertextu attribute binding for this pass.
+     * @return The vertex attribute binding for this pass.
      */
     VertexAttributeBinding* getVertexAttributeBinding() const;
 

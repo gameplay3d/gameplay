@@ -20,7 +20,7 @@ public:
      * @param vertexFormat The format of vertices in the new batch.
      * @param primitiveType The type of primitives that will be added to the batch.
      * @param materialPath Path to a material file to be used for drawing the batch.
-     * @param indexed True if the batched primivites will contain index data, false otherwise.
+     * @param indexed True if the batched primitives will contain index data, false otherwise.
      * @param initialCapacity The initial capacity of the batch, in triangles.
      * @param growSize Amount to grow the batch by when it overflows (a value of zero prevents batch growing).
      *
@@ -35,7 +35,7 @@ public:
      * @param vertexFormat The format of vertices in the new batch.
      * @param primitiveType The type of primitives that will be added to the batch.
      * @param material Material to be used for drawing the batch.
-     * @param indexed True if the batched primivites will contain index data, false otherwise.
+     * @param indexed True if the batched primitives will contain index data, false otherwise.
      * @param initialCapacity The initial capacity of the batch, in triangles.
      * @param growSize Amount to grow the batch by when it overflows (a value of zero prevents batch growing).
      *
@@ -50,7 +50,7 @@ public:
     ~MeshBatch();
 
     /**
-     * Returs the current capacity of the batch.
+     * Returns the current capacity of the batch.
      *
      * @return The batch capacity.
      */
@@ -77,12 +77,12 @@ public:
      * the format of a single vertex (e.g. {x,y,z,u,v}).
      *
      * If the batch was created with 'indexed' set to true, then valid index data should be
-     * passed in this method. However, if 'indxed' was set to false, the indices and indexCount
+     * passed in this method. However, if 'indexed' was set to false, the indices and indexCount
      * parameters can be omitted since only vertex data will be used.
      *
      * If the batch created to draw triangle strips, this method assumes that separate calls to
-     * add specify seprate triangle strips. In this case, this method will automatically stitch
-     * seperate triangle strips together using degenerate (zero-area) triangles.
+     * add specify separate triangle strips. In this case, this method will automatically stitch
+     * separate triangle strips together using degenerate (zero-area) triangles.
      *
      * @param vertices Array of vertices.
      * @param vertexCount Number of vertices.

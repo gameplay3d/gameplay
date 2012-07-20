@@ -10,7 +10,7 @@ class MeshSkin;
 class Bundle;
 
 /**
- * Defines a basic hierachial structure of transformation spaces.
+ * Defines a basic hierarchical structure of transformation spaces.
  */
 class Joint : public Node
 {

@@ -50,7 +50,7 @@ public:
     };
     
     /**
-     * Defnies a texture sampler.
+     * Defines a texture sampler.
      *
      * A texture sampler is basically an instance of a texture that can be
      * used to sample a texture from a material. In addition to the texture
@@ -206,7 +206,7 @@ public:
     bool isMipmapped() const;
 
     /**
-     * Determines if this texture is a compressed teture.
+     * Determines if this texture is a compressed texture.
      */
     bool isCompressed() const;
 

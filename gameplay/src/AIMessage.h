@@ -50,7 +50,7 @@ public:
      * the message pointer.
      *
      * @param id The message ID.
-     * @param sender AIAgent sender ID (can be empty or null for an annoymous message).
+     * @param sender AIAgent sender ID (can be empty or null for an anonymous message).
      * @param receiver AIAgent receiver ID (can be empty or null for a broadcast message).
      * @param parameterCount Number of parameters for this message.
      *
@@ -82,7 +82,7 @@ public:
     /**
      * Returns the value of the specified parameter as an integer.
      *
-     * @param index Index of the paramter to get.
+     * @param index Index of the parameter to get.
      *
      * @return The parameter value.
      */
@@ -99,7 +99,7 @@ public:
     /**
      * Returns the value of the specified parameter as a long integer.
      *
-     * @param index Index of the paramter to get.
+     * @param index Index of the parameter to get.
      *
      * @return The parameter value.
      */
@@ -116,7 +116,7 @@ public:
     /**
      * Returns the value of the specified parameter as a float.
      *
-     * @param index Index of the paramter to get.
+     * @param index Index of the parameter to get.
      *
      * @return The parameter value.
      */
@@ -133,7 +133,7 @@ public:
     /**
      * Returns the value of the specified parameter as a double.
      *
-     * @param index Index of the paramter to get.
+     * @param index Index of the parameter to get.
      *
      * @return The parameter value.
      */
@@ -150,7 +150,7 @@ public:
     /**
      * Returns the value of the specified parameter as a boolean.
      *
-     * @param index Index of the paramter to get.
+     * @param index Index of the parameter to get.
      *
      * @return The parameter value.
      */
@@ -167,7 +167,7 @@ public:
     /**
      * Returns the value of the specified parameter as a string.
      *
-     * @param index Index of the paramter to get.
+     * @param index Index of the parameter to get.
      *
      * @return The parameter value.
      */
@@ -238,7 +238,7 @@ private:
     AIMessage();
 
     /**
-     * Hidden copy construcotr.
+     * Hidden copy constructor.
      */
     AIMessage(const AIMessage&);
 
