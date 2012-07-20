@@ -68,14 +68,23 @@
         <copy file="../res/propulsion_glow.png" tofile="assets/res/propulsion_glow.png"/>
         <copy file="../res/spaceship.gpb" tofile="assets/res/spaceship.gpb"/>
         <copy file="../res/spaceship.wav" tofile="assets/res/spaceship.wav"/>
-        <copy file="../../../gameplay/res/shaders/textured.vsh" tofile="assets/res/shaders/textured.vsh"/>
-        <copy file="../../../gameplay/res/shaders/textured.fsh" tofile="assets/res/shaders/textured.fsh"/>
-        <copy file="../../../gameplay/res/shaders/diffuse.vsh" tofile="assets/res/shaders/diffuse.vsh"/>
-        <copy file="../../../gameplay/res/shaders/diffuse.fsh" tofile="assets/res/shaders/diffuse.fsh"/>
-        <copy file="../../../gameplay/res/shaders/colored-specular.vsh" tofile="assets/res/shaders/colored-specular.vsh"/>
-        <copy file="../../../gameplay/res/shaders/colored-specular.fsh" tofile="assets/res/shaders/colored-specular.fsh"/>
-        <copy file="../../../gameplay/res/shaders/diffuse-specular.vsh" tofile="assets/res/shaders/diffuse-specular.vsh"/>
-        <copy file="../../../gameplay/res/shaders/diffuse-specular.fsh" tofile="assets/res/shaders/diffuse-specular.fsh"/>
+        <copy file="../../../gameplay/res/shaders/textured.vert" tofile="assets/res/shaders/textured.vert"/>
+        <copy file="../../../gameplay/res/shaders/textured.frag" tofile="assets/res/shaders/textured.frag"/>
+		<copy file="../../../gameplay/res/shaders/textured-unlit.vert" tofile="assets/res/shaders/textured-unlit.vert"/>
+        <copy file="../../../gameplay/res/shaders/textured-unlit.frag" tofile="assets/res/shaders/textured-unlit.frag"/>
+        <copy file="../../../gameplay/res/shaders/colored.vert" tofile="assets/res/shaders/colored.vert"/>
+        <copy file="../../../gameplay/res/shaders/colored.frag" tofile="assets/res/shaders/colored.frag"/>
+		
+        <copy file="../../../gameplay/res/shaders/lib/lighting.frag" tofile="assets/res/shaders/lib/lighting.frag"/>
+        <copy file="../../../gameplay/res/shaders/lib/attributes.vert" tofile="assets/res/shaders/lib/attributes.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/attributes-skinning.vert" tofile="assets/res/shaders/lib/attributes-skinning.vert"/>
+		<copy file="../../../gameplay/res/shaders/lib/lighting-directional.vert" tofile="assets/res/shaders/lib/lighting-directional.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/lighting-directional.frag" tofile="assets/res/shaders/lib/lighting-directional.frag"/>
+		<copy file="../../../gameplay/res/shaders/lib/lighting-point.vert" tofile="assets/res/shaders/lib/lighting-point.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/lighting-point.frag" tofile="assets/res/shaders/lib/lighting-point.frag"/>
+		<copy file="../../../gameplay/res/shaders/lib/lighting-spot.vert" tofile="assets/res/shaders/lib/lighting-spot.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/lighting-spot.frag" tofile="assets/res/shaders/lib/lighting-spot.frag"/>
+		
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 

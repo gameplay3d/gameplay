@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="sample05-lua" default="help">
+<project name="LuaGame" default="help">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
@@ -62,10 +62,30 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
+		<copy file="../res/arial40.gpb" tofile="assets/res/arial40.gpb"/>
+        <copy file="../res/box-diffuse.png" tofile="assets/res/box-diffuse.png"/>
         <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
         <copy file="../res/box.material" tofile="assets/res/box.material"/>
-        <copy file="../res/colored.vert" tofile="assets/res/colored.vert"/>
-        <copy file="../res/colored.frag" tofile="assets/res/colored.frag"/>
+        <copy file="../res/grid.material" tofile="assets/res/grid.material"/>
+		<copy file="../res/script.lua" tofile="assets/res/script.lua"/>
+        <copy file="../game.config" tofile="assets/game.config"/>
+		
+		<copy file="../../../gameplay/res/shaders/colored-unlit.vert" tofile="assets/res/shaders/colored-unlit.vert"/>
+		<copy file="../../../gameplay/res/shaders/colored-unlit.frag" tofile="assets/res/shaders/colored-unlit.frag"/>
+		<copy file="../../../gameplay/res/shaders/textured.vert" tofile="assets/res/shaders/textured.vert"/>
+		<copy file="../../../gameplay/res/shaders/textured.frag" tofile="assets/res/shaders/textured.frag"/>
+		
+		<copy file="../../../gameplay/res/shaders/lib/lighting.frag" tofile="assets/res/shaders/lib/lighting.frag"/>
+        <copy file="../../../gameplay/res/shaders/lib/attributes.vert" tofile="assets/res/shaders/lib/attributes.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/attributes-skinning.vert" tofile="assets/res/shaders/lib/attributes-skinning.vert"/>
+		<copy file="../../../gameplay/res/shaders/lib/lighting-directional.vert" tofile="assets/res/shaders/lib/lighting-directional.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/lighting-directional.frag" tofile="assets/res/shaders/lib/lighting-directional.frag"/>
+		<copy file="../../../gameplay/res/shaders/lib/lighting-point.vert" tofile="assets/res/shaders/lib/lighting-point.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/lighting-point.frag" tofile="assets/res/shaders/lib/lighting-point.frag"/>
+		<copy file="../../../gameplay/res/shaders/lib/lighting-spot.vert" tofile="assets/res/shaders/lib/lighting-spot.vert"/>
+        <copy file="../../../gameplay/res/shaders/lib/lighting-spot.frag" tofile="assets/res/shaders/lib/lighting-spot.frag"/>
+		
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
     <!-- Import the actual build file.
