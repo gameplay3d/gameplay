@@ -4,12 +4,16 @@
 namespace gameplay
 {
 
-Joystick::Joystick() : _absolute(true)
+Joystick::Joystick() : _relative(true), _innerSize(NULL), _outerSize(NULL)
 {
 }
 
 Joystick::~Joystick()
 {
+    if (_innerSize)
+        SAFE_DELETE(_innerSize);
+    if (_outerSize)
+        SAFE_DELETE(_outerSize);
 }
 
 Joystick* Joystick::create(const char* id, Theme::Style* style)
@@ -28,8 +32,6 @@ Joystick* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);
-    joystick->_consumeInputEvents = false;
-
     return joystick;
 }
 
@@ -46,20 +48,62 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
     }
     _radius = properties->getFloat("radius");
 
-    if (properties->exists("absolute"))
+    if (properties->exists("relative"))
     {
-        setAbsolute(properties->getBool("absolute"));
+        setRelative(properties->getBool("relative"));
+    }
+    else
+    {
+        setRelative(false);
     }
 
-    Vector4 v;
-    if (properties->getVector4("region", &v))
+    Theme::ThemeImage* inner = getImage("inner", _state);
+    if (inner)
     {
-        _absolute = false;
-        _region = _bounds;
-        _bounds.x = v.x;
-        _bounds.y = v.y;
-        _bounds.width = v.z;
-        _bounds.height = v.w;
+        _innerSize = new Vector2();
+        Vector2 innerSize;
+        if (properties->getVector2("innerRegion", &innerSize))
+        {
+            _innerSize->set(innerSize.x, innerSize.y);
+        }
+        else
+        {
+            const Rectangle& rect = inner->getRegion();
+            _innerSize->set(rect.width, rect.height);
+        }
+    }
+
+    Theme::ThemeImage* outer = getImage("outer", _state);
+    if (outer)
+    {
+        _outerSize = new Vector2();
+        Vector2 outerSize;
+        if (properties->getVector2("outerRegion", &outerSize))
+        {
+            _outerSize->set(outerSize.x, outerSize.y);
+        }
+        else
+        {
+            const Rectangle& rect = outer->getRegion();
+            _outerSize->set(rect.width, rect.height);
+        }
+        _screenRegion.width = _outerSize->x;
+        _screenRegion.height = _outerSize->y;
+    }
+    else
+    {
+        if (inner)
+        {
+            const Rectangle& rect = inner->getRegion();
+            float radiusx2 = _radius * 2;;
+            _screenRegion.width = rect.width;
+            _screenRegion.height = rect.height;
+        }
+        else
+        {
+            _screenRegion.width = _radius * 2.0f;
+            _screenRegion.height = _screenRegion.width;
+        }
     }
 }
 
@@ -84,74 +128,76 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
             float dx = 0.0f;
             float dy = 0.0f;
 
-            if (_absolute)
+            _contactIndex = (int) contactIndex;
+            notifyListeners(Listener::PRESS);
+
+            // Get the displacement of the touch from the centre.
+            if (!_relative)
             {
-                dx = x - _bounds.width * 0.5f;
-                dy = _bounds.height * 0.5f - y;
+                dx = x - _screenRegion.width * 0.5f;
+                dy = _screenRegion.height * 0.5f - y;
             }
             else
             {
-                _region.x = x + _bounds.x - _region.width * 0.5f;
-                _region.y = y + _bounds.y - _region.height * 0.5f;
-            }
-
-            if ((dx >= -_radius && dx <= _radius) && (dy >= -_radius && dy <= _radius))
-            {
-                _contactIndex = (int) contactIndex;
-
-                notifyListeners(Listener::PRESS);
-
-                _displacement.set(dx, dy);
-                
-                Vector2 value(dx, dy);
-                if (_value != value)
-                {
-                    _value.set(value);
-                    _dirty = true;
-                    notifyListeners(Listener::VALUE_CHANGED);
-                }
-
-                _state = ACTIVE;
-
-                return _consumeInputEvents;
-            }
-            else
-            {
-                _state = NORMAL;
-            }
-            break;
-        }
-        case Touch::TOUCH_MOVE:
-        {
-            float dx = x - ((!_absolute) ? _region.x - _bounds.x : 0.0f) - _region.width * 0.5f;
-            float dy = -(y - ((!_absolute) ? _region.y - _bounds.y : 0.0f) - _region.height * 0.5f);
-            if (((dx * dx) + (dy * dy)) <= (_radius * _radius))
-            {
-                GP_ASSERT(_radius);
-                Vector2 value(dx, dy);
-                value.scale(1.0f / _radius);
-                if (_value != value)
-                {
-                    _value.set(value);
-                    _dirty = true;
-                    notifyListeners(Listener::VALUE_CHANGED);
-                }
-            }
-            else
-            {
-                Vector2 value(dx, dy);
-                value.normalize();
-                value.scale(_radius);
-                value.normalize();
-                if (_value != value)
-                {
-                    _value.set(value);
-                    _dirty = true;
-                    notifyListeners(Listener::VALUE_CHANGED);
-                }
+                _screenRegion.x = x + _bounds.x - _screenRegion.width * 0.5f;
+                _screenRegion.y = y + _bounds.y - _screenRegion.height * 0.5f;
             }
 
             _displacement.set(dx, dy);
+
+            // If the displacement is greater than the radius, then cap the displacement to the
+            // radius.
+            
+            Vector2 value;
+            if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
+            {
+                _displacement.normalize();
+                value.set(_displacement);
+                _displacement.scale(_radius);
+            }
+            else
+            {
+                value.set(_displacement);
+                value.normalize();
+            }
+
+            // Check if the value has changed. Won't this always be the case?
+            if (_value != value)
+            {
+                _value.set(value);
+                _dirty = true;
+                notifyListeners(Listener::VALUE_CHANGED);
+            }
+
+            _state = ACTIVE;
+            return _consumeInputEvents;
+        }
+        case Touch::TOUCH_MOVE:
+        {
+            float dx = x - ((_relative) ? _screenRegion.x - _bounds.x : 0.0f) - _screenRegion.width * 0.5f;
+            float dy = -(y - ((_relative) ? _screenRegion.y - _bounds.y : 0.0f) - _screenRegion.height * 0.5f);
+            
+            _displacement.set(dx, dy);
+            
+            Vector2 value;
+            if (fabs(_displacement.x) > _radius || fabs(_displacement.y) > _radius)
+            {
+                _displacement.normalize();
+                value.set(_displacement);
+                _displacement.scale(_radius);
+            }
+            else
+            {
+                value.set(_displacement);
+                value.normalize();
+            }
+
+            if (_value != value)
+            {
+                _value.set(value);
+                _dirty = true;
+                notifyListeners(Listener::VALUE_CHANGED);
+            }
 
             return _consumeInputEvents;
         }
@@ -163,8 +209,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 
             // Reset displacement and direction vectors.
             _displacement.set(0.0f, 0.0f);
-
-            Vector2 value(0.0f, 0.0f);
+            Vector2 value(_displacement);
             if (_value != value)
             {
                 _value.set(value);
@@ -181,65 +226,49 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
     return false;
 }
 
-void Joystick::update(const Control* container, const Vector2& offset)
-{
-    Control::update(container, offset);
-
-    _clearBounds.x -= _radius;
-    _clearBounds.y -= _radius;
-    float radiusx2 = _radius + _radius;
-    _clearBounds.width += radiusx2;
-    _clearBounds.height += radiusx2;
-}
-
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     GP_ASSERT(spriteBatch);
     spriteBatch->start();
 
     // If the joystick is not absolute, then only draw if it is active.
-    if (_absolute || (!_absolute && _state == ACTIVE))
+    if (!_relative || (_relative && _state == ACTIVE))
     {
-        if (_absolute)
-            _region = _viewportClipBounds;
+        if (!_relative)
+        {
+            _screenRegion.x = _viewportClipBounds.x + (_viewportClipBounds.width - _screenRegion.width) / 2.0f;
+            _screenRegion.y = _viewportClipBounds.y + (_viewportClipBounds.height - _screenRegion.height) / 2.0f;
+        }
 
         // Draw the outer image.
         Theme::ThemeImage* outer = getImage("outer", _state);
         if (outer)
         {
-            // Get the uvs and color and draw.
             const Theme::UVs& uvs = outer->getUVs();
             const Vector4& color = outer->getColor();
-            spriteBatch->draw(_region.x, _region.y, _region.width, _region.height, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            if (_relative)
+                spriteBatch->draw(_screenRegion.x, _screenRegion.y, _outerSize->x, _outerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            else
+                spriteBatch->draw(_screenRegion.x, _screenRegion.y, _outerSize->x, _outerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
         }
 
         // Draw the inner image.
         Theme::ThemeImage* inner = getImage("inner", _state);
         if (inner)
         {
-            Rectangle region = _region;
-
+            Vector2 position(_screenRegion.x, _screenRegion.y);
+            
             // Adjust position to reflect displacement.
-            if (((_displacement.x * _displacement.x) + (_displacement.y * _displacement.y)) <= (_radius * _radius))
-            {
-                region.x += _displacement.x;
-                region.y += -_displacement.y;
-            }
-            else
-            {
-                // Find the point on the joystick's circular bound where the
-                // vector intersects. This is the position of the inner image.
-                Vector2 delta = Vector2(_displacement.x, -_displacement.y);
-                delta.normalize();
-                delta.scale(_radius);
-                region.x += delta.x;
-                region.y += delta.y;
-            }
-        
+            position.x += _displacement.x;
+            position.y += -_displacement.y;
+            
             // Get the uvs and color and draw.
             const Theme::UVs& uvs = inner->getUVs();
             const Vector4& color = inner->getColor();
-            spriteBatch->draw(region.x, region.y, _region.width, _region.height, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            if (_relative)
+                spriteBatch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color);
+            else
+                spriteBatch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
         }
     }
     spriteBatch->finish();
@@ -249,7 +278,5 @@ const char* Joystick::getType() const
 {
     return "joystick";
 }
-
-
 
 }
