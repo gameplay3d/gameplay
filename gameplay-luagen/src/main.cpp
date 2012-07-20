@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     // Ensure the user is calling the program correctly.
     if (argc < 2 || argc > 3)
     {
-        GP_ERROR("Usage: luagen <input-directory> [output-directory]");
+        GP_ERROR("Usage: gameplay-luagen <doxygen-xml-input-directory> [bindings-output-directory]");
     }
 
     // Generate the bindings.
