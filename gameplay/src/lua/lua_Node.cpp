@@ -13,8 +13,7 @@
 #include "PhysicsRigidBody.h"
 #include "Ref.h"
 #include "Scene.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_NodeType.h"
@@ -27,7 +26,6 @@ void luaRegister_Node()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"addCallback", lua_Node_addCallback},
         {"addChild", lua_Node_addChild},
         {"addListener", lua_Node_addListener},
         {"addRef", lua_Node_addRef},
@@ -98,7 +96,6 @@ void luaRegister_Node()
         {"isVisible", lua_Node_isVisible},
         {"release", lua_Node_release},
         {"removeAllChildren", lua_Node_removeAllChildren},
-        {"removeCallback", lua_Node_removeCallback},
         {"removeChild", lua_Node_removeChild},
         {"removeListener", lua_Node_removeListener},
         {"rotate", lua_Node_rotate},
@@ -216,48 +213,6 @@ int lua_Node__gc(lua_State* state)
     return 0;
 }
 
-int lua_Node_addCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Node* instance = getInstance(state);
-                instance->addCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Node_addCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Node_addChild(lua_State* state)
 {
     // Get the number of parameters.
@@ -317,6 +272,17 @@ int lua_Node_addListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                Node* instance = getInstance(state);
+                instance->addListener(param1);
+                
+                return 0;
+            }
             else
             {
                 lua_pushstring(state, "lua_Node_addListener - Failed to match the given parameters to a valid function signature.");
@@ -332,6 +298,21 @@ int lua_Node_addListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+
+                // Get parameter 2 off the stack.
+                long param2 = (long)luaL_checklong(state, 3);
+
+                Node* instance = getInstance(state);
+                instance->addListener(param1, param2);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);
@@ -3844,48 +3825,6 @@ int lua_Node_removeAllChildren(lua_State* state)
     return 0;
 }
 
-int lua_Node_removeCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Node* instance = getInstance(state);
-                instance->removeCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Node_removeCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Node_removeChild(lua_State* state)
 {
     // Get the number of parameters.
@@ -3939,6 +3878,17 @@ int lua_Node_removeListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+
+                Node* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 instance->removeListener(param1);

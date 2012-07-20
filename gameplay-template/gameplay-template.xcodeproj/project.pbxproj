@@ -434,7 +434,6 @@
 					"GAMEPLAY_PATH/external-deps/libpng/include",
 					"GAMEPLAY_PATH/external-deps/bullet/include",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
-					"GAMEPLAY_PATH/external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -461,7 +460,6 @@
 					"GAMEPLAY_PATH/external-deps/libpng/include",
 					"GAMEPLAY_PATH/external-deps/bullet/include",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
-					"GAMEPLAY_PATH/external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -489,7 +487,6 @@
 					"GAMEPLAY_PATH/external-deps/libpng/include",
 					"GAMEPLAY_PATH/external-deps/bullet/include",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
-					"GAMEPLAY_PATH/external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
                 IPHONEOS_DEPLOYMENT_TARGET = 5.1;
@@ -519,7 +516,6 @@
 					"GAMEPLAY_PATH/external-deps/libpng/include",
 					"GAMEPLAY_PATH/external-deps/bullet/include",
 					"GAMEPLAY_PATH/external-deps/oggvorbis/include",
-					"GAMEPLAY_PATH/external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
                 IPHONEOS_DEPLOYMENT_TARGET = 5.1;

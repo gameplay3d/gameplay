@@ -13,9 +13,6 @@
     <Filter Include="lua">
       <UniqueIdentifier>{21cf31c6-9c10-44cb-a864-d46a0e7bfe5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\shaders\lib">
-      <UniqueIdentifier>{d42defb1-22e2-4573-8077-9bd23e61494c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp">
@@ -738,6 +735,9 @@
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\ScriptListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\AIAgent.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -775,12 +775,6 @@
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_AIStateMachine.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ScriptTarget.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
       <Filter>lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1511,6 +1505,9 @@
     <ClInclude Include="src\lua\lua_VertexFormatUsage.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\ScriptListener.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\AIStateMachine.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1548,12 +1545,6 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_AIStateMachine.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ScriptTarget.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lua\lua_ScriptTarget.h">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1603,10 +1594,10 @@
     <None Include="src\ScriptController.inl">
       <Filter>src</Filter>
     </None>
-    <None Include="res\shaders\colored.frag">
+    <None Include="res\shaders\lib\attributes-skinning.vert">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\colored.vert">
+    <None Include="res\shaders\lib\attributes.vert">
       <Filter>res\shaders</Filter>
     </None>
     <None Include="res\shaders\colored-unlit.frag">
@@ -1615,10 +1606,31 @@
     <None Include="res\shaders\colored-unlit.vert">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\textured.frag">
+    <None Include="res\shaders\colored.frag">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\textured.vert">
+    <None Include="res\shaders\colored.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting-directional.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting-directional.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting-point.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting-point.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting-spot.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting-spot.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lib\lighting.frag">
       <Filter>res\shaders</Filter>
     </None>
     <None Include="res\shaders\textured-bumped.frag">
@@ -1633,32 +1645,11 @@
     <None Include="res\shaders\textured-unlit.vert">
       <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\lib\attributes.vert">
-      <Filter>res\shaders\lib</Filter>
+    <None Include="res\shaders\textured.frag">
+      <Filter>res\shaders</Filter>
     </None>
-    <None Include="res\shaders\lib\attributes-skinning.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-directional.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-directional.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-point.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-point.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-spot.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-spot.vert">
-      <Filter>res\shaders\lib</Filter>
+    <None Include="res\shaders\textured.vert">
+      <Filter>res\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

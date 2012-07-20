@@ -9,8 +9,6 @@ AIAgent::AIAgent()
     : _stateMachine(NULL), _node(NULL), _enabled(true), _next(NULL)
 {
     _stateMachine = new AIStateMachine(this);
-
-    addEvent("message", "<AIMessage>");
 }
 
 AIAgent::~AIAgent()
@@ -84,8 +82,7 @@ bool AIAgent::processMessage(AIMessage* message)
     if (_listener && _listener->messageReceived(message))
         return true;
     
-    if (fireEvent<bool>("message", message))
-        return true;
+    // TODO: Fire script listener
     
     return false;
 }

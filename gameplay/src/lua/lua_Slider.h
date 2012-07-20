@@ -6,7 +6,6 @@ namespace gameplay
 
 // Lua bindings for Slider.
 int lua_Slider__gc(lua_State* state);
-int lua_Slider_addCallback(lua_State* state);
 int lua_Slider_addListener(lua_State* state);
 int lua_Slider_addRef(lua_State* state);
 int lua_Slider_createAnimation(lua_State* state);
@@ -61,7 +60,6 @@ int lua_Slider_getZIndex(lua_State* state);
 int lua_Slider_isContainer(lua_State* state);
 int lua_Slider_isEnabled(lua_State* state);
 int lua_Slider_release(lua_State* state);
-int lua_Slider_removeCallback(lua_State* state);
 int lua_Slider_setAlignment(lua_State* state);
 int lua_Slider_setAnimationPropertyValue(lua_State* state);
 int lua_Slider_setAutoHeight(lua_State* state);

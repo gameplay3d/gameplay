@@ -6,8 +6,6 @@
 #include "Base.h"
 #include "Game.h"
 #include "Ref.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
 
 namespace gameplay
 {

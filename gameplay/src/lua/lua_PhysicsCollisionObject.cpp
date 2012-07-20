@@ -6,7 +6,7 @@
 #include "Node.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
-#include "ScriptController.h"
+#include "ScriptListener.h"
 #include "lua_PhysicsCollisionObjectCollisionListenerEventType.h"
 #include "lua_PhysicsCollisionObjectType.h"
 #include "lua_PhysicsCollisionShapeType.h"

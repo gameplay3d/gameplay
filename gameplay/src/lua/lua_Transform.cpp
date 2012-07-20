@@ -6,8 +6,7 @@
 #include "Base.h"
 #include "Game.h"
 #include "Node.h"
-#include "ScriptController.h"
-#include "ScriptTarget.h"
+#include "ScriptListener.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 
@@ -18,7 +17,6 @@ void luaRegister_Transform()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"addCallback", lua_Transform_addCallback},
         {"addListener", lua_Transform_addListener},
         {"createAnimation", lua_Transform_createAnimation},
         {"createAnimationFromBy", lua_Transform_createAnimationFromBy},
@@ -43,7 +41,6 @@ void luaRegister_Transform()
         {"getTranslationY", lua_Transform_getTranslationY},
         {"getTranslationZ", lua_Transform_getTranslationZ},
         {"getUpVector", lua_Transform_getUpVector},
-        {"removeCallback", lua_Transform_removeCallback},
         {"removeListener", lua_Transform_removeListener},
         {"rotate", lua_Transform_rotate},
         {"rotateX", lua_Transform_rotateX},
@@ -281,48 +278,6 @@ int lua_Transform__init(lua_State* state)
     return 0;
 }
 
-int lua_Transform_addCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Transform* instance = getInstance(state);
-                instance->addCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Transform_addCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Transform_addListener(lua_State* state)
 {
     // Get the number of parameters.
@@ -344,6 +299,17 @@ int lua_Transform_addListener(lua_State* state)
                 
                 return 0;
             }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                Transform* instance = getInstance(state);
+                instance->addListener(param1);
+                
+                return 0;
+            }
             else
             {
                 lua_pushstring(state, "lua_Transform_addListener - Failed to match the given parameters to a valid function signature.");
@@ -359,6 +325,21 @@ int lua_Transform_addListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+
+                // Get parameter 2 off the stack.
+                long param2 = (long)luaL_checklong(state, 3);
+
+                Transform* instance = getInstance(state);
+                instance->addListener(param1, param2);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);
@@ -1820,48 +1801,6 @@ int lua_Transform_getUpVector(lua_State* state)
     return 0;
 }
 
-int lua_Transform_removeCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Transform* instance = getInstance(state);
-                instance->removeCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Transform_removeCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Transform_removeListener(lua_State* state)
 {
     // Get the number of parameters.
@@ -1877,6 +1816,17 @@ int lua_Transform_removeListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+
+                Transform* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Transform* instance = getInstance(state);
                 instance->removeListener(param1);

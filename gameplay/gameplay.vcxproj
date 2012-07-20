@@ -187,7 +187,6 @@
     <ClCompile Include="src\lua\lua_SceneDebugFlags.cpp" />
     <ClCompile Include="src\lua\lua_ScreenDisplayer.cpp" />
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
-    <ClCompile Include="src\lua\lua_ScriptTarget.cpp" />
     <ClCompile Include="src\lua\lua_Slider.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
@@ -255,7 +254,7 @@
     <ClCompile Include="src\SceneLoader.cpp" />
     <ClCompile Include="src\ScreenDisplayer.cpp" />
     <ClCompile Include="src\ScriptController.cpp" />
-    <ClCompile Include="src\ScriptTarget.cpp" />
+    <ClCompile Include="src\ScriptListener.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
@@ -444,7 +443,6 @@
     <ClInclude Include="src\lua\lua_SceneDebugFlags.h" />
     <ClInclude Include="src\lua\lua_ScreenDisplayer.h" />
     <ClInclude Include="src\lua\lua_ScriptController.h" />
-    <ClInclude Include="src\lua\lua_ScriptTarget.h" />
     <ClInclude Include="src\lua\lua_Slider.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
@@ -512,7 +510,7 @@
     <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\ScreenDisplayer.h" />
     <ClInclude Include="src\ScriptController.h" />
-    <ClInclude Include="src\ScriptTarget.h" />
+    <ClInclude Include="src\ScriptListener.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />

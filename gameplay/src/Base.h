@@ -202,6 +202,7 @@ using std::va_list;
     #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
+    #define GLEW_STATIC
     #include <GL/glew.h>
     #define USE_VAO
 #elif __APPLE__
@@ -299,8 +300,7 @@ typedef GLuint RenderBufferHandle;
         } \
     } while(0)
 
-/** Global variable to hold GL errors
- * @script{ignore} */
+// Global variable to hold GL errors
 extern GLenum __gl_error_code;
 
 /**
@@ -326,8 +326,7 @@ extern GLenum __gl_error_code;
         } \
     } while(0)
 
-/** Global variable to hold AL errors
- * @script{ignore} */
+// Global variable to hold AL errors
 extern ALenum __al_error_code;
 
 /**

@@ -5,7 +5,6 @@ namespace gameplay
 {
 
 // Lua bindings for PhysicsController.
-int lua_PhysicsController_addCallback(lua_State* state);
 int lua_PhysicsController_addStatusListener(lua_State* state);
 int lua_PhysicsController_createFixedConstraint(lua_State* state);
 int lua_PhysicsController_createGenericConstraint(lua_State* state);
@@ -15,7 +14,6 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state);
 int lua_PhysicsController_drawDebug(lua_State* state);
 int lua_PhysicsController_getGravity(lua_State* state);
 int lua_PhysicsController_rayTest(lua_State* state);
-int lua_PhysicsController_removeCallback(lua_State* state);
 int lua_PhysicsController_removeStatusListener(lua_State* state);
 int lua_PhysicsController_setGravity(lua_State* state);
 int lua_PhysicsController_sweepTest(lua_State* state);

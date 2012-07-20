@@ -3,7 +3,7 @@
 #include "PhysicsController.h"
 #include "Game.h"
 #include "Node.h"
-#include "ScriptController.h"
+#include "ScriptListener.h"
 
 namespace gameplay
 {
@@ -139,10 +139,10 @@ void PhysicsCollisionObject::removeCollisionListener(const char* function, Physi
     if (!_scriptListeners)
         return;
 
-    std::string url = function;
+    std::string functionStr = function;
     for (unsigned int i = 0; i < _scriptListeners->size(); i++)
     {
-        if ((*_scriptListeners)[i]->url == url)
+        if ((*_scriptListeners)[i]->_function == functionStr)
         {
             removeCollisionListener((*_scriptListeners)[i], object);
             SAFE_DELETE((*_scriptListeners)[i]);
@@ -249,20 +249,6 @@ void PhysicsCollisionObject::PhysicsMotionState::updateTransformFromNode() const
     {
         _worldTransform = btTransform(BQ(rotation), btVector3(m.m[12], m.m[13], m.m[14]));
     }
-}
-
-PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)
-{
-    this->url = url;
-    function = Game::getInstance()->getScriptController()->loadUrl(url);
-}
-
-void PhysicsCollisionObject::ScriptListener::collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
-    const PhysicsCollisionObject::CollisionPair& collisionPair, const Vector3& contactPointA, const Vector3& contactPointB)
-{
-    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), 
-        "[PhysicsCollisionObject::CollisionListener::EventType]<PhysicsCollisionObject::CollisionPair><Vector3><Vector3>",
-        type, &collisionPair, &contactPointA, &contactPointB);
 }
 
 }
