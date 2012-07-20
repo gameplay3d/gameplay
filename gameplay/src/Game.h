@@ -115,7 +115,7 @@ public:
      * This method returns a Properties object containing the contents
      * of the game.config file.
      *
-     * @return The game conifguration Properties object.
+     * @return The game configuration Properties object.
      */
     Properties* getConfig() const;
 
@@ -142,7 +142,7 @@ public:
     void exit();
 
     /**
-     * Platform frame delagate.
+     * Platform frame delegate.
      *
      * This is called every frame from the platform.
      * This in turn calls back on the user implemented game methods: update() then render()
@@ -221,7 +221,7 @@ public:
     inline PhysicsController* getPhysicsController() const;
 
     /** 
-     * Gets the AI controller for managing control of artifical
+     * Gets the AI controller for managing control of artificial
      * intelligence associated with the game.
      *
      * @return The AI controller for this game.
@@ -258,7 +258,7 @@ public:
     /**
      * Keyboard callback on keyPress events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
@@ -558,7 +558,7 @@ private:
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
-    AIController* _aiController;                // Controls AI siulation.
+    AIController* _aiController;                // Controls AI simulation.
     AudioListener* _audioListener;              // The audio listener in 3D space.
     std::vector<Gamepad*>* _gamepads;           // The connected gamepads.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.

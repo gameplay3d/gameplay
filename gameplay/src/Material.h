@@ -70,7 +70,7 @@ public:
      *
      * @param vshPath Path to the vertex shader file.
      * @param fshPath Path to the fragment shader file.
-     * @param defines New-line delimitted list of preprocessor defines.
+     * @param defines New-line delimited list of preprocessor defines.
      * 
      * @return A new Material.
      * @script{create}
