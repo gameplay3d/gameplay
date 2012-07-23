@@ -48,13 +48,14 @@ namespace gameplay
 static Effect* __spriteEffect = NULL;
 
 SpriteBatch::SpriteBatch()
-    : _batch(NULL), _textureWidthRatio(0.0f), _textureHeightRatio(0.0f)
+    : _batch(NULL), _sampler(NULL), _textureWidthRatio(0.0f), _textureHeightRatio(0.0f)
 {
 }
 
 SpriteBatch::~SpriteBatch()
 {
     SAFE_DELETE(_batch);
+    SAFE_RELEASE(_sampler);
     if (!_customEffect)
     {
         if (__spriteEffect && __spriteEffect->getRefCount() == 1)
@@ -131,8 +132,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     // Bind the texture to the material as a sampler
     Texture::Sampler* sampler = Texture::Sampler::create(texture); // +ref texture
     material->getParameter(samplerUniform->getName())->setValue(sampler);
-    SAFE_RELEASE(sampler);
-
+    
     // Define the vertex format for the batch
     VertexFormat::Element vertexElements[] =
     {
@@ -148,6 +148,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
 
     // Create the batch
     SpriteBatch* batch = new SpriteBatch();
+    batch->_sampler = sampler;
     batch->_customEffect = customEffect;
     batch->_batch = meshBatch;
     batch->_textureWidthRatio = 1.0f / (float)texture->getWidth();
@@ -393,6 +394,11 @@ void SpriteBatch::finish()
 RenderState::StateBlock* SpriteBatch::getStateBlock() const
 {
     return _batch->getMaterial()->getStateBlock();
+}
+
+Texture::Sampler* SpriteBatch::getSampler() const
+{
+    return _sampler;
 }
 
 Material* SpriteBatch::getMaterial() const
