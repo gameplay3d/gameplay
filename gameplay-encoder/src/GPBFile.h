@@ -103,6 +103,11 @@ public:
     void adjust();
 
     /**
+     * Groups the animations of all mesh skins to be under one animation per mesh skin.
+     */
+    void groupMeshSkinAnimations();
+
+    /**
      * Renames the animations in the list of animation ids to the new animation id.
      * 
      * @param animationIds The list of animations to rename.
@@ -125,6 +130,14 @@ private:
      */
     void decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel);
 
+    /**
+     * Moves the animation channels that target the given node and its children to be under the given animation.
+     * 
+     * @param node The node to recursively search from.
+     * @param animation The animation to move the channels to.
+     */
+    void moveAnimationChannels(Node* node, Animation* animation);
+
 private:
 
     FILE* _file;
@@ -132,6 +145,9 @@ private:
     std::list<Camera*> _cameras;
     std::list<Light*> _lights;
     std::list<Mesh*> _geometry;
+    /**
+     * The flat list of all nodes.
+     */
     std::list<Node*> _nodes;
     Animations _animations;
     bool _animationsAdded;
