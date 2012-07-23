@@ -11,9 +11,9 @@ form gamepadForm
         joystick
         {
             style = joystickStyle
+            size = 256, 256
             alignment = ALIGN_VCENTER_HCENTER
-            size = 200, 200
-            radius = 64
+            radius = 32
         }
     }
 
