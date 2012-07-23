@@ -64,6 +64,11 @@ public:
     public:
 
         /**
+         * Destructor.
+         */
+        virtual ~Sampler();
+
+        /**
          * Creates a sampler for the specified texture.
          *
          * @param texture The texture.
@@ -114,9 +119,10 @@ public:
 
     private:
 
+        /**
+         * Constructor.
+         */
         Sampler(Texture* texture);
-
-        ~Sampler();
 
         /**
          * Hidden copy assignment operator.
