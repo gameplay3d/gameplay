@@ -340,7 +340,7 @@ void MeshSkin::computeBounds()
     DEBUGPRINT("\n");
 
     // Compute a total combined bounding volume for the MeshSkin that contains all possible
-    // vertex positions for all animations targetting the skin. This rough approximation allows
+    // vertex positions for all animations targeting the skin. This rough approximation allows
     // us to store a volume that can be used for rough intersection tests (such as for visibility
     // determination) efficiently at runtime.
 
