@@ -11,9 +11,10 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 - Apple MacOS X (using Apple XCode 4.3.2)
 
 ## Roadmap for 'next' branch
-- PhysicsVehicle
-- Terrain
-- ShadowMap
+- Linux support
+- Vehicle physics
+- Shadow mapping
+- AI NavMesh
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.
