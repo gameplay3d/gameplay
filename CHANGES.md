@@ -1,15 +1,15 @@
 ## v1.4.0
 
-- Adds pre-genereted Lua script bindings for all gameplay interfaces.
-- Adds gameplay-luagen tool for generating gameplay Lua bindings and users Lua bindings from doxygen xml output.
-- Adds AIController, AIAgent, AIStateMachine, AIState and AIMessage clases for scripted AI support.
-- Adds very basic sample05-lua sample to demonstrate Lua with AI scripting.
-- Adds Gamepad class for virtual gamepad support.
-- Adds pre-built versions gameplay-encoder added to bin folder with TTF, DAE and FBX support built-in.
-- Adds new improved modular shaders with support for #include in shaders. (breaks compat. for shaders)
-- Adds LightMap support into colored-unlit.frag and textured-unlit.frag shaders.
-- Adds the ability for cloning and wireframing of the boy in sample03-character.
-- Adds kick the ball on the sample03-character to dedemonstrate 2 buttons and more physics.
+- Lua script bindings for all gameplay interfaces.
+- Lua script binding generator tool (gameplay-luagen) for generating gameplay Lua bindings from doxygen xml output.
+- AIController, AIAgent, AIStateMachine, AIState and AIMessage clases for scripted AI support.
+- Sample for sample05-lua to demonstrate basic Lua with AI scripting.
+- Gamepad class with virtual gamepad support.
+- Pre-built versions gameplay-encoder added to bin folder with TTF, DAE and FBX support built-in.
+- Improved modular shaders with support for #include in shaders. (breaks compat. for shaders)
+- LightMap support into colored-unlit.frag and textured-unlit.frag shaders.
+- Adds cloning and wireframing features to sample03-character.
+- Adds kick the ball on the sample03-character to demonstrate 2 buttons and more physics.
 - Fixes missing mouse events on UI controls.
 - Fixes to gameplay-encoder to prompt user for font size if not specified.
 - Fixes to add "-g" as short form argument for grouping animations.
@@ -18,6 +18,7 @@
 - Fixes to FrameBuffer, RenderTarget and DepthStencilTarget.
 - Fixes user switching in MacOSX to other applications with Apple-Tab.
 - Fixes measureText with empty string to be proper size.
+- Fixed for aliased text by applying linear filtering by default on Fonts.
 - Fixes RenderState::StateBlock::bindNoRestore() issue where blend function was not restored to the proper defaults.
 - Fixes some inconsistencies in Game event method names for menuEvent. (breaks compat. in Game)
 - Fixes some inconsistencies with AnimationClip::getID() to be same as Node::getId() and other classes. (breaks compat. in AnimationClip)
@@ -49,7 +50,7 @@
 - Bluetooth keyboard/mouse support on BlackBerry platform.
 - Developer guide.
 - Sample/turorial for sample03-character.
-- Sample for sample04-particles.
+- Sample for sample04-particles to demonstrate particle emitters.
 - Fixes for loading properties from URL.
 - Fixes on Win32/MacOSX for when mouse pointer leaves the window and returns.
 - Fixes to accelerometer for Android.
