@@ -38,9 +38,11 @@ public:
 
     void setVertexInfluenceCount(unsigned int count);
 
+    const std::vector<std::string>& getJointNames();
+
     void setJointNames(const std::vector<std::string>& list);
 
-    const std::vector<std::string>& getJointNames();
+    const std::vector<Node*>& getJoints() const;
 
     void setJoints(const std::vector<Node*>& list);
 
