@@ -62,8 +62,6 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-		<copy file="../res/arial9.gpb" tofile="assets/res/arial9.gpb"/>
-        <copy file="../res/arial13.gpb" tofile="assets/res/arial13.gpb"/>
         <copy file="../res/arial18.gpb" tofile="assets/res/arial18.gpb"/>
         <copy file="../res/editor.form" tofile="assets/res/editor.form"/>
         <copy file="../res/editor.png" tofile="assets/res/editor.png"/>
