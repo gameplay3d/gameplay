@@ -47,39 +47,54 @@ public:
     inline const Vector2& getValue() const;
 
     /**
-     * Sets the region within which the joystick will be spontaneously created on a user's touch.
+     * Sets the image size of the inner region of the joystick. Does not do anything if there is no
+     * inner image region defined.
      * 
-     * Note: This does not actually enable spontaneous joystick creation on touch input.
-     * To enable (or disable) absolute position explicitly, use setAbsolute(bool).
-     * 
-     * @param region The region to use.
+     * @param region The size of the inner region of the joystick. (x, y) == (width, height)
      */
-    inline void setRegion(const Rectangle& region);
+    inline void setInnerRegionSize(const Vector2& size);
 
     /**
-     * Gets the region within which the joystick will be spontaneously created on a user's touch.
+     * Gets the image size of the inner region of the joystick. Returns (0,0) if there is no inner image
+     * region defined.
      * 
-     * Note: just because the returned region is not empty does not mean that it is necessarily
-     * being used. If absolute positioning is not enabled, then it will be used (to check if
-     * absolute positioning is enabled, call isAbsolute()).
-     * 
-     * @return The region within which the joystick will be spontaneously created on a user's touch.
+     * @return The image size of the inner region of the joystick. (x, y) == (width, height)
      */
-    inline const Rectangle& getRegion() const;
+    inline const Vector2& getInnerRegionSize() const;
 
     /**
-     * Sets whether absolute positioning is enabled or not.
+     * Sets the image size of the outer region of the joystick. Does not do anything if there is no
+     * outer image region defined.
      * 
-     * @param absolute Whether absolute positioning should be enabled or not.
+     * @param region The size of the outer region of the joystick. (x, y) == (width, height)
      */
-    inline void setAbsolute(bool absolute);
+    inline void setOuterRegionSize(const Vector2& size);
+
+    /**
+     * Gets the image size of the outer region of the joystick. Returns (0,0) if there is no outer image
+     * region defined.
+     * 
+     * @return The image size of the outer region of the joystick. (x, y) == (width, height)
+     */
+    inline const Vector2& getOuterRegionSize() const;
+
+    /**
+     * Sets whether relative positioning is enabled or not.
+     * 
+     * Note: The default behavior is absolute positioning, and not relative.
+     *
+     * @param relative Whether relative positioning should be enabled or not.
+     */
+    inline void setRelative(bool relative);
 
     /**
      * Retrieves whether absolute positioning is enabled or not.
      * 
-     * @return <code>true</code> if absolute positioning is enabled; <code>false</code> otherwise.
+     * Note: The default behavior is absolute positioning, and not relative.
+     *
+     * @return <code>true</code> if relative positioning is enabled; <code>false</code> otherwise.
      */
-    inline bool isAbsolute() const;
+    inline bool isRelative() const;
 
     /**
      * @see Control::getType
@@ -128,15 +143,6 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
-     * Called when a control's properties change.  Updates this control's internal rendering
-     * properties, such as its text viewport.
-     *
-     * @param container This control's parent container.
-     * @param offset Positioning offset to add to the control's position.
-     */
-    void update(const Control* container, const Vector2& offset);
-
-    /**
      * Draw the images associated with this control.
      *
      * @param spriteBatch The sprite batch containing this control's icons.
@@ -151,11 +157,13 @@ private:
      */
     Joystick(const Joystick& copy);
 
-    float _radius;
-    bool _absolute;
-    Vector2 _displacement;
+    float _radius; 
+    bool _relative;
+    Rectangle _screenRegion;
     Vector2 _value;
-    Rectangle _region;
+    Vector2 _displacement;
+    Vector2* _innerSize;
+    Vector2* _outerSize;
 };
 
 }

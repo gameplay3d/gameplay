@@ -971,9 +971,8 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
 
         Control::State currentState = control->getState();
-        if ((control->isContainer() && currentState == Control::FOCUS) ||
-            (currentState != Control::NORMAL && control->_contactIndex == data) ||
-            ((evt == Touch::TOUCH_PRESS ||
+        if ((currentState != Control::NORMAL && control->_contactIndex == data) ||
+            ((control->isContainer() || evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
               evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
@@ -985,9 +984,9 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         {
             // Pass on the event's clip relative to the control.
             if (mouse)
-                eventConsumed |= control->mouseEvent((Mouse::MouseEvent)evt, x - xPos - boundsX, y - yPos - boundsY, data);
+                eventConsumed = control->mouseEvent((Mouse::MouseEvent)evt, x - xPos - boundsX, y - yPos - boundsY, data);
             else
-                eventConsumed |= control->touchEvent((Touch::TouchEvent)evt, x - xPos - boundsX, y - yPos - boundsY, (unsigned int)data);
+                eventConsumed = control->touchEvent((Touch::TouchEvent)evt, x - xPos - boundsX, y - yPos - boundsY, (unsigned int)data);
         }
     }
 
