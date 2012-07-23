@@ -141,7 +141,7 @@ public:
      *
      * This overloads the setBinding method to provide support for array parameters.
      * The valueMethod parameter should return an array (pointer) of a supported
-     * material parameter type, such as Matirx* for an array of matrices. The
+     * material parameter type, such as Matrix* for an array of matrices. The
      * countMethod should point to a method that returns the number of entries in
      * the value returned from valueMethod.
      *

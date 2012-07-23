@@ -204,6 +204,8 @@ private:
     float* _vertexBlendWeights;
     unsigned int* _vertexBlendIndices;
 
+    std::vector<std::string> _tempGroupAnimationIds;
+
     clock_t _begin;
 };
 

@@ -15,7 +15,7 @@ class Node;
  * Defines an AI agent that can be added to nodes in a scene.
  *
  * Agents represent a unit of intelligence in a game and can be used
- * to program logic for a character or object in a game, using constrcuts
+ * to program logic for a character or object in a game, using constructs
  * such as state machines. By default, an AIAgent has an empty state 
  * machine.
  */

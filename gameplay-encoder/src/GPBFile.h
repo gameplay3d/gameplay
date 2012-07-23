@@ -102,6 +102,14 @@ public:
      */
     void adjust();
 
+    /**
+     * Renames the animations in the list of animation ids to the new animation id.
+     * 
+     * @param animationIds The list of animations to rename.
+     * @param newId The new animation id.
+     */
+    void renameAnimations(std::vector<std::string>& animationIds, const char* newId);
+
 private:
     /**
      * Computes the bounds of all meshes in the node hierarchy.
