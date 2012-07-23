@@ -246,7 +246,16 @@ public:
     void finish();
 
     /**
-     * Returns the StateBlock for the SpriteBatch.
+     * Gets the texture sampler. 
+     *
+     * This return texture sampler is used when sampling the texture in the
+     * effect. This can be modified for controlling sampler setting such as
+     * filtering modes.
+     */
+    Texture::Sampler* getSampler() const;
+
+    /**
+     * Gets the StateBlock for the SpriteBatch.
      *
      * The returned state block controls the renderer state used when drawing items
      * with this sprite batch. Modification can be made to the returned state block
@@ -363,6 +372,7 @@ private:
     bool clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2);
 
     MeshBatch* _batch;
+    Texture::Sampler* _sampler;
     bool _customEffect;
     float _textureWidthRatio;
     float _textureHeightRatio;
