@@ -67,7 +67,7 @@ public:
         bool kinematic;
 
         /**
-         * The ansitropic friction term for the rigid body.
+         * The anisotropic friction term for the rigid body.
          */
         Vector3 anisotropicFriction;
 

@@ -20,13 +20,13 @@ class AIController
 public:
 
     /**
-     * Routes the secified message to its intended recipient(s).
+     * Routes the specified message to its intended recipient(s).
      *
      * Messages are arbitrary packets of data that are sent either to a single or to multiple
      * recipients in the game.
      *
      * Once the specified message has been delivered, it is automatically destroyed by the AIController.
-     * For this reason, AIMessage pointers should NOT be held or explicity destroyed by any code after
+     * For this reason, AIMessage pointers should NOT be held or explicitly destroyed by any code after
      * they are sent through the AIController.
      *
      * @param message The message to send.

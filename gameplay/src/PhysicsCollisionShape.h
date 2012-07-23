@@ -55,7 +55,7 @@ public:
         Definition();
 
         /** 
-         * Constructs a new Defintion that is a copy of the specified Definition.
+         * Constructs a new Definition that is a copy of the specified Definition.
          *
          * @param definition The Definition to copy.
          */ 
@@ -143,7 +143,7 @@ public:
      *
      * @param extents Extents of the box shape along the x, y and z axes.
      * @param center Center point of the box.
-     * @param absolute True to specifiy that the given center point is an absolute position.
+     * @param absolute True to specify that the given center point is an absolute position.
      *        By default the center point is treated as relative to the location of the node
      *        that the shape is attached to.
      *
@@ -163,7 +163,7 @@ public:
      *
      * @param radius Radius of the sphere.
      * @param center Center point of the sphere.
-     * @param absolute True to specifiy that the given center point is an absolute position.
+     * @param absolute True to specify that the given center point is an absolute position.
      *        By default the center point is treated as relative to the location of the node
      *        that the shape is attached to.
      *
@@ -184,7 +184,7 @@ public:
      * @param radius Radius of the capsule.
      * @param height Height of the capsule.
      * @param center Center point of the capsule.
-     * @param absolute True to specifiy that the given center point is an absolute position.
+     * @param absolute True to specify that the given center point is an absolute position.
      *        By default the center point is treated as relative to the location of the node
      *        that the shape is attached to.
      *
@@ -200,7 +200,7 @@ public:
     static PhysicsCollisionShape::Definition heightfield(Image* image);
 
     /**
-     * Defines a mesh shape using the specified mehs.
+     * Defines a mesh shape using the specified mesh.
      *
      * @return Definition of a mesh shape.
      */

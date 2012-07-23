@@ -23,7 +23,7 @@ public:
     ~Platform();
 
     /**
-     * Creates a platform for the specified game which is will interacte with.
+     * Creates a platform for the specified game which it will interact with.
      *
      * @param game The game to create a platform for.
      * @param attachToWindow The native window handle to optionally attach to.
@@ -191,7 +191,7 @@ public:
     /**
      * Keyboard callback on keyPress events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
