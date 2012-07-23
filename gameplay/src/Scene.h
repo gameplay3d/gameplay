@@ -183,7 +183,7 @@ public:
      * 
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts two parameters: a Node pointer and a cookie of a
-     * user-specified type. The scene travesal continues while visitMethod return
+     * user-specified type. The scene traversal continues while visitMethod return
      * true. Returning false will cause the traversal to stop.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.

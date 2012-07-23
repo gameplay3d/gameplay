@@ -139,7 +139,7 @@ public:
      *
      * This method binds the vertex buffer and index buffers for the Mesh and
      * all of its MeshParts and draws the mesh geometry. Any other state
-     * neccessary to render the Mesh, such as rendering states, shader state,
+     * necessary to render the Mesh, such as rendering states, shader state,
      * and so on, should be set up before calling this method.
      *
      * @param wireframe If true, draw the model in wireframe mode.

@@ -56,7 +56,7 @@ public:
      * Loads a set of filesystem aliases from the given Properties object.
      *
      * The specified properties object contains a single namespace with a list
-     * of fielsystem aliases that will be used to establish soft links to files
+     * of filesystem aliases that will be used to establish soft links to files
      * when reading files through this class.
      *
      * This can be helpful for managing loading of resources that may change

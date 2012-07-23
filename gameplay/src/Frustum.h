@@ -21,7 +21,7 @@ namespace gameplay
  *
  * You can query a Frustum object for any one of its bounding planes,
  * for its corners, and for whether it intersects with a given object.
- * Since objects that don't intersect with your view frustrum generally
+ * Since objects that don't intersect with your view frustum generally
  * don't need to be rendered, culling them quickly can save you a lot of
  * rendering time.
  */

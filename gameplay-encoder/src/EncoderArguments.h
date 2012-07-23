@@ -76,7 +76,7 @@ public:
     const std::vector<std::string>& getHeightmapNodeIds() const;
 
     /**
-     * Returns true if an error occured while parsing the command line arguments.
+     * Returns true if an error occurred while parsing the command line arguments.
      */
     bool parseErrorOccured() const;
 

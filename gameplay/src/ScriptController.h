@@ -204,7 +204,7 @@ double* getDoublePointer(int index);
  * @param type The type of object pointer to retrieve.
  * @param index The stack index.
  * @param nonNull Whether the pointer must be non-null (e.g. if the parameter we 
- *      are retreiving is actually a reference or by-value parameter).
+ *      are retrieving is actually a reference or by-value parameter).
  * @return The object pointer or <code>NULL</code> if the data at the stack index
  *      is not an object or if the object is not derived from the given type.
  * @script{ignore}
@@ -260,7 +260,7 @@ public:
     std::string loadUrl(const char* url);
 
     /**
-     * Calls the specifed no-parameter Lua function.
+     * Calls the specified no-parameter Lua function.
      * 
      * @param func The name of the function to call.
      * @return The return value of the executed Lua function.
@@ -268,7 +268,7 @@ public:
     template<typename T> T executeFunction(const char* func);
 
     /**
-     * Calls the specifed Lua function using the given parameters.
+     * Calls the specified Lua function using the given parameters.
      * 
      * @param func The name of the function to call.
      * @param args The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:
@@ -292,7 +292,7 @@ public:
     template<typename T> T executeFunction(const char* func, const char* args, ...);
 
     /**
-     * Calls the specifed Lua function using the given parameters.
+     * Calls the specified Lua function using the given parameters.
      * 
      * @param func The name of the function to call.
      * @param args The argument signature of the function. Of the form 'xxx', where each 'x' is a parameter type and must be one of:
@@ -619,7 +619,7 @@ private:
     /**
      * Script keyboard callback on key events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
@@ -664,7 +664,7 @@ private:
     void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
-     * Calls the specifed Lua function using the given parameters.
+     * Calls the specified Lua function using the given parameters.
      * 
      * @param resultCount The expected number of returned values.
      * @param func The name of the function to call.

@@ -180,7 +180,7 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"  -i <id>\t\tFilter by node ID.\n");
     fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
     fprintf(stderr,"  -g <node id> <animation id>\n" \
-        "\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
+        "\t\t\tGroup all animation channels targeting the nodes into a new animation.\n");
     fprintf(stderr,"  -h \"<node ids>\"\n" \
         "\t\t\tList of nodes to generate heightmaps for.\n" \
         "\t\t\tNode id list should be in quotes with a space between each id.\n" \

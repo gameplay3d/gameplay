@@ -84,7 +84,7 @@ public:
          *
          * @param e The vertex element to compare.
          *
-         * @return true if this element does not matche the specified one, false otherwise.
+         * @return true if this element does not match the specified one, false otherwise.
          */
         bool operator != (const Element& e) const;
     };
@@ -107,7 +107,7 @@ public:
     /**
      * Gets the vertex element at the specified index.
      *
-     * @param index The index of the element to retreive.
+     * @param index The index of the element to retrieve.
      */
     const Element& getElement(unsigned int index) const;
 

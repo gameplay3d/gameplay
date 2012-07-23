@@ -163,7 +163,7 @@ public:
     /**
      * Returns the squared distance between this vector and v.
      *
-     * When it is not neccessary to get the exact distance between
+     * When it is not necessary to get the exact distance between
      * two vectors (for example, when simply comparing the
      * distance between different vectors), it is advised to use
      * this method instead of distance.
@@ -207,7 +207,7 @@ public:
     /**
      * Returns the squared length of this vector.
      *
-     * When it is not neccessary to get the exact length of a
+     * When it is not necessary to get the exact length of a
      * vector (for example, when simply comparing the lengths of
      * different vectors), it is advised to use this method
      * instead of length.

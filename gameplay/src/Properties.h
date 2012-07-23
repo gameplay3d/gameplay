@@ -221,7 +221,7 @@ public:
     /**
      * Returns the type of a property.
      *
-     * @param name The name of hte property to interpret, or NULL to return the current property's type.
+     * @param name The name of the property to interpret, or NULL to return the current property's type.
      *
      * @return The type of the property.
      */

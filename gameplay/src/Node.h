@@ -22,7 +22,7 @@ class Scene;
 class Form;
 
 /**
- * Defines a basic hierachial structure of transformation spaces.
+ * Defines a basic hierarchical structure of transformation spaces.
  */
 class Node : public Transform, public Ref
 {
