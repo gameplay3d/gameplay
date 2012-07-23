@@ -62,4 +62,9 @@ Animation* Animations::getAnimation(unsigned int index) const
     return _animations[index];
 }
 
+void Animations::removeAnimation(unsigned int index)
+{
+    _animations.erase(_animations.begin() + index);
+}
+
 }
