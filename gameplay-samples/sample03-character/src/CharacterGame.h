@@ -7,7 +7,7 @@ using namespace gameplay;
 /**
  * This is a mesh demo game for rendering Mesh.
  */
-class CharacterGame: public Game, public AnimationClip::Listener, public PhysicsCollisionObject::CollisionListener, public TimeListener
+class CharacterGame: public Game, public AnimationClip::Listener, public PhysicsCollisionObject::CollisionListener
 {
 public:
     
@@ -43,11 +43,6 @@ public:
                                     const PhysicsCollisionObject::CollisionPair& collisionPair,
                                     const Vector3& contactPointA = Vector3::zero(),
                                     const Vector3& contactPointB = Vector3::zero());
-
-    /**
-     * @see TimeListener::timeEvent
-     */
-    void timeEvent(long timeDiff, void* cookie);
 
 protected:
 
@@ -95,6 +90,7 @@ private:
     Node* _characterMeshNode;
     Node* _characterShadowNode;
     Node* _basketballNode;
+    Node* _ceiling;
     float _floorLevel;
     Animation* _animation;
     AnimationClip* _currentClip;
@@ -112,7 +108,8 @@ private:
     
     Vector3 _oldBallPosition;
     bool _hasBall;
-    bool _kicking;
+    bool _applyKick;
+
 };
 
 #endif

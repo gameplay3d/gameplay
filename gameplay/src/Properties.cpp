@@ -574,7 +574,7 @@ Properties* Properties::getNamespace(const char* id, bool searchNames) const
         }
         
         // Search recursively.
-        ret = ret->getNamespace(id);
+        ret = ret->getNamespace(id, searchNames);
         if (ret != NULL)
         {
             return ret;

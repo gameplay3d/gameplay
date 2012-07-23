@@ -18,6 +18,11 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := \
     AbsoluteLayout.cpp \
+    AIAgent.cpp \
+    AIController.cpp \
+    AIMessage.cpp \
+    AIState.cpp \
+    AIStateMachine.cpp \
     Animation.cpp \
     AnimationClip.cpp \
     AnimationController.cpp \
@@ -107,6 +112,14 @@ LOCAL_SRC_FILES := \
     VertexFormat.cpp \
     VerticalLayout.cpp \
     lua/lua_AbsoluteLayout.cpp \
+    lua/lua_AIAgent.cpp \
+    lua/lua_AIAgentListener.cpp \
+    lua/lua_AIController.cpp \
+    lua/lua_AIMessage.cpp \
+    lua/lua_AIMessageParameterType.cpp \
+    lua/lua_AIState.cpp \
+    lua/lua_AIStateListener.cpp \
+    lua/lua_AIStateMachine.cpp \
     lua/lua_all_bindings.cpp \
     lua/lua_Animation.cpp \
     lua/lua_AnimationClip.cpp \

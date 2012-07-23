@@ -22,7 +22,7 @@ CharacterGame game;
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
       _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _wireframe(false), _gamepad(NULL), _hasBall(false), _kicking(false)
+      _keyFlags(0), _drawDebug(0), _wireframe(false), _gamepad(NULL), _hasBall(false), _applyKick(false)
 {
     _buttonPressed = new bool[2];
 }
@@ -43,12 +43,25 @@ void CharacterGame::initialize()
 
     // Update the aspect ratio for our scene's camera to match the current device resolution.
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
-
+    
     // Initialize the physics character.
     initializeCharacter();
 
     // Initialize the gamepad.
     initializeGamepad();
+
+    // Adds a ceiling collision object to the scene.
+    _scene->addNode("ceiling");
+    _ceiling = Node::create("ceiling");
+    _ceiling->setTranslationY(14.5f);
+
+    PhysicsRigidBody::Parameters rbParams;
+    rbParams.mass = 0.0f;
+    rbParams.friction = 0.5f;
+    rbParams.restitution = 0.75f;
+    rbParams.linearDamping = 0.025f;
+    rbParams.angularDamping = 0.16f;
+    _ceiling->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, PhysicsCollisionShape::box(Vector3(49.5f, 1.0f, 49.5f)), &rbParams);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initializeScene);
@@ -192,6 +205,18 @@ bool CharacterGame::isOnFloor() const
 
 void CharacterGame::update(float elapsedTime)
 {
+    if (_applyKick)
+    {
+        // apply force from kick.
+        Vector3 force(-_characterNode->getForwardVectorWorld());
+        force.normalize();
+        force.y = 1.0f; // add some loft to kick
+        force.scale(1000.0f); //scale the force.
+        ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyForce(force);
+        _hasBall = false;
+        _applyKick = false;
+    }
+
     _gamepad->update(elapsedTime);
 
     if (_gamepad->getButtonState(BUTTON_1) == Gamepad::BUTTON_PRESSED)
@@ -308,44 +333,27 @@ void CharacterGame::update(float elapsedTime)
         if (basketball->isEnabled())
             grabBall();
 
-        if (_kicking)
+        // Capture the basketball's old position, and then calculate the basketball's new position in front of the character
+        _oldBallPosition = _basketballNode->getTranslationWorld();
+        Vector3 characterForwardVector(_characterNode->getForwardVectorWorld());
+        Vector3 translation(_characterNode->getTranslationWorld() + characterForwardVector.normalize() * -2.2f);
+        translation.y = _floorLevel;
+
+        // Calculates rotation to be applied to the basketball.
+        Vector3 rotationVector(0.0f, -_basketballNode->getBoundingSphere().radius, 0.0f);
+        Vector3::cross(rotationVector, _oldBallPosition - translation, &rotationVector);
+        if (!rotationVector.isZero())
         {
-            // Reset the physics character's bounding capsule to the original size.
-            // And re-enable physics on the basketball.
-            releaseBall();
-            
-            // apply force from kick.
-            Vector3 force(-_characterNode->getForwardVectorWorld());
-            force.normalize();
-            force.y += 1.25f; // add some loft to the kick
-            force *= 200.0f;
-            basketball->applyForce(force);
-            schedule(50, this);
+            Matrix m;
+            _basketballNode->getWorldMatrix().transpose(&m);
+
+            Vector3 rotNorm;
+            m.transformVector(rotationVector, &rotNorm);
+            rotNorm.normalize();
+            _basketballNode->rotate(rotNorm, rotationVector.length());
         }
-        else
-        {
-            // Capture the basketball's old position, and then calculate the basketball's new position in front of the character
-            _oldBallPosition = _basketballNode->getTranslationWorld();
-            Vector3 characterForwardVector(_characterNode->getForwardVectorWorld());
-            Vector3 translation(_characterNode->getTranslationWorld() + characterForwardVector.normalize() * -2.2f);
-            translation.y = _floorLevel;
-
-            // Calculates rotation to be applied to the basketball.
-            Vector3 rotationVector(0.0f, -_basketballNode->getBoundingSphere().radius, 0.0f);
-            Vector3::cross(rotationVector, _oldBallPosition - translation, &rotationVector);
-            if (!rotationVector.isZero())
-            {
-                Matrix m;
-                _basketballNode->getWorldMatrix().transpose(&m);
-
-                Vector3 rotNorm;
-                m.transformVector(rotationVector, &rotNorm);
-                rotNorm.normalize();
-                _basketballNode->rotate(rotNorm, rotationVector.length());
-            }
         
-            _basketballNode->setTranslation(translation.x, _floorLevel, translation.z);
-        }
+        _basketballNode->setTranslation(translation.x, _floorLevel, translation.z);
     }
 }
 
@@ -556,10 +564,13 @@ void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener:
 {
     if (clip == _kickClip)
     {
-        if (!_kicking)
+        if (!_applyKick)
         {
             if (_hasBall)
-                _kicking = true;
+            {
+                _applyKick = true;
+                releaseBall();
+            }
         }
         else
             clip->crossFade(_currentClip, 150);
@@ -623,16 +634,7 @@ void CharacterGame::releaseBall()
     _character->setVelocity(velocity);
     _character->setMaxSlopeAngle(0.0f);
     _character->setMaxStepHeight(0.0f);
-
+    
     PhysicsRigidBody* basketball = (PhysicsRigidBody*) _basketballNode->getCollisionObject();
     basketball->setEnabled(true);
 }
-
-void CharacterGame::timeEvent(long timeDiff, void* cookie)
-{
-    _hasBall = false;
-
-    if (_kicking)
-        _kicking = false;
-}
-
