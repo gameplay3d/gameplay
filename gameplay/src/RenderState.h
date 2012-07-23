@@ -279,7 +279,7 @@ public:
      *
      * It is legal to pass the returned StateBlock to another RenderState object.
      * In this case, the StateBlock will be referenced by both RenderState objects
-     * and any changes to the StateBlock will be refelcted in all objects
+     * and any changes to the StateBlock will be reflected in all objects
      * that reference it.
      *
      * @return The StateBlock for this RenderState.

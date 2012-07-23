@@ -20,7 +20,7 @@ class AIAgent;
  * and then the stateUpdate event will begin to be called each frame
  * while the new state is active.
  *
- * Communication of state changes is facilated through the AIMessage class.
+ * Communication of state changes is facilitated through the AIMessage class.
  * Messages are dispatched by the AIController and can be used for purposes
  * other than state changes as well. Messages may be sent to the state
  * machines of any other agents in a game and can contain any arbitrary

@@ -67,7 +67,7 @@ public:
     };
 
     /**
-     * Stucture that stores hit test results for ray and sweep tests.
+     * Structure that stores hit test results for ray and sweep tests.
      */
     struct HitResult
     {
@@ -134,7 +134,7 @@ public:
          *
          * @param result HitResult object containing information about the hit.
          * 
-         * @return True (default) to continue with defautl behavior where closer
+         * @return True (default) to continue with default behavior where closer
          *      objects are processed, false to process all intersecting objects.
          */
         virtual bool hit(const HitResult& result);
@@ -300,7 +300,7 @@ public:
      * @param result Optional pointer to a HitTest structure to store the hit test result information in.
      *      When using a default (or no) filter, this will always be the closest object hit. Otherwise, if 
      *      using a custom filter, it will be the last object passed to the HitFilter::hit method (which
-     *      is not neccessarily the closest or furthest).
+     *      is not necessarily the closest or furthest).
      * @param filter Optional filter pointer used to control which objects are tested.
      *
      * @return True if the ray test collided with a physics object, false otherwise.
@@ -318,7 +318,7 @@ public:
      * @param result Optional pointer to a HitTest structure to store the hit test result information in.
      *      When using a default (or no) filter, this will always be the closest object hit. Otherwise, if 
      *      using a custom filter, it will be the last object passed to the HitFilter::hit method (which
-     *      is not neccessarily the closest or furthest).
+     *      is not necessarily the closest or furthest).
      * @param filter Optional filter pointer used to control which objects are tested.
      * 
      * @return True if the object intersects any other physics objects, false otherwise.

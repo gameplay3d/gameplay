@@ -300,8 +300,23 @@ void GPBFile::adjust()
     //
     // merge animations if possible
     //   Search for animations that have the same target and key times and see if they can be merged.
-    //   Blender will output a simple translation animation to 3 separate animations with the same key times but targetting X, Y and Z.
+    //   Blender will output a simple translation animation to 3 separate animations with the same key times but targeting X, Y and Z.
     //   This can be merged into one animation. Same for scale animations.
+}
+
+void GPBFile::renameAnimations(std::vector<std::string>& animationIds, const char* newId)
+{
+    const unsigned int animationCount = _animations.getAnimationCount();
+    for (unsigned int animationIndex = 0; animationIndex < animationCount; ++animationIndex)
+    {
+        Animation* animation = _animations.getAnimation(animationIndex);
+        assert(animation);
+        std::vector<std::string>::const_iterator it = find(animationIds.begin(), animationIds.end(), animation->getId());
+        if (it != animationIds.end())
+        {
+            animation->setId(newId);
+        }
+    }
 }
 
 void GPBFile::computeBounds(Node* node)

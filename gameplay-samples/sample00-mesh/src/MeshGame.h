@@ -13,7 +13,7 @@ class MeshGame: public Game
 public:
 
     /**
-     * Constructror.
+     * Constructor.
      */
     MeshGame();
 
