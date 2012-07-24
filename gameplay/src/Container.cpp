@@ -40,7 +40,8 @@ Container::Container()
       _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
-      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0)
+      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0),
+      _contactIndices(0)
 {
 }
 
@@ -971,8 +972,9 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
 
         Control::State currentState = control->getState();
-        if ((currentState != Control::NORMAL && control->_contactIndex == data) ||
-            ((control->isContainer() || evt == Touch::TOUCH_PRESS ||
+        if ((control->isContainer() && currentState == Control::FOCUS) || 
+            (currentState != Control::NORMAL && control->_contactIndex == data) ||
+            ((evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
               evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
@@ -984,9 +986,9 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         {
             // Pass on the event's clip relative to the control.
             if (mouse)
-                eventConsumed = control->mouseEvent((Mouse::MouseEvent)evt, x - xPos - boundsX, y - yPos - boundsY, data);
+                eventConsumed |= control->mouseEvent((Mouse::MouseEvent)evt, x - xPos - boundsX, y - yPos - boundsY, data);
             else
-                eventConsumed = control->touchEvent((Touch::TouchEvent)evt, x - xPos - boundsX, y - yPos - boundsY, (unsigned int)data);
+                eventConsumed |= control->touchEvent((Touch::TouchEvent)evt, x - xPos - boundsX, y - yPos - boundsY, (unsigned int)data);
         }
     }
 
@@ -994,17 +996,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     {
         return (_consumeInputEvents | eventConsumed);
     }
-
-    if (!eventConsumed && _scroll != SCROLL_NONE)
-    {
-        if ((mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data)) ||
-            (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
-        {
-            _dirty = true;
-            eventConsumed = true;
-        }
-    }
-
+    
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -1012,13 +1004,34 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
             setState(Control::FOCUS);
+            if (eventConsumed)
+                _contactIndices++;
         }
-        else
+        else if (_contactIndices == 0)
         {
             setState(Control::NORMAL);
             return false;
         }
         break;
+    case Touch::TOUCH_RELEASE:
+        {
+            if (eventConsumed)
+            {
+                if (_contactIndices > 0)
+                    _contactIndices--;
+            }
+        }
+        break;
+    }
+
+    if (!eventConsumed && _scroll != SCROLL_NONE && getState() == Control::FOCUS)
+    {
+        if ((mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data)) ||
+            (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
+        {
+            _dirty = true;
+            eventConsumed = true;
+        }
     }
 
     return (_consumeInputEvents | eventConsumed);

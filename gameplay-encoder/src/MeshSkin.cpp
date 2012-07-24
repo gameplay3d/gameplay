@@ -109,6 +109,11 @@ const std::vector<std::string>& MeshSkin::getJointNames()
     return _jointNames;
 }
 
+const std::vector<Node*>& MeshSkin::getJoints() const
+{
+    return _joints;
+}
+
 void MeshSkin::setJoints(const std::vector<Node*>& list)
 {
     _joints = list;

@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "GPBFile.h"
 #include "Transform.h"
+#include "StringUtil.h"
 
 #define EPSILON 1.2e-7f;
 
@@ -13,6 +14,26 @@ static GPBFile* __instance = NULL;
  * Returns true if the given value is close to one.
  */
 static bool isAlmostOne(float value);
+
+/**
+ * Gets the common node ancestor for the given list of nodes.
+ * This function assumes that the nodes share a common ancestor.
+ * 
+ * @param nodes The list of nodes.
+ * 
+ * @return The common node ancestor or NULL if the list of was empty.
+ */
+static Node* getCommonNodeAncestor(const std::vector<Node*>& nodes);
+
+/**
+ * Gets the list of node ancestors for the given node.
+ * 
+ * @param node The node to get the ancestors for.
+ * @param ancestors The output list of ancestors. 
+ *                  The first element is the root node and the last element is the direct parent of the node.
+ */
+static void getNodeAncestors(Node* node, std::list<Node*>& ancestors);
+
 
 GPBFile::GPBFile(void)
     : _file(NULL), _animationsAdded(false)
@@ -304,6 +325,30 @@ void GPBFile::adjust()
     //   This can be merged into one animation. Same for scale animations.
 }
 
+void GPBFile::groupMeshSkinAnimations()
+{
+    for (std::list<Node*>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+    {
+        if (Model* model = (*it)->getModel())
+        {
+            if (MeshSkin* skin = model->getSkin())
+            {
+                const std::vector<Node*>& joints = skin->getJoints();
+                Node* commonAncestor = getCommonNodeAncestor(joints);
+                if (commonAncestor)
+                {
+                    // group the animation channels that target this common ancestor and its child nodes
+                    Animation* animation = new Animation();
+                    animation->setId("animations");
+
+                    moveAnimationChannels(commonAncestor, animation);
+                    _animations.add(animation);
+                }
+            }
+        }
+    }
+}
+
 void GPBFile::renameAnimations(std::vector<std::string>& animationIds, const char* newId)
 {
     const unsigned int animationCount = _animations.getAnimationCount();
@@ -328,14 +373,6 @@ void GPBFile::computeBounds(Node* node)
         {
             mesh->computeBounds();
         }
-        if (MeshSkin* skin = model->getSkin())
-        {
-            skin->computeBounds();
-        }
-    }
-    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
-    {
-        computeBounds(child);
     }
 }
 
@@ -442,9 +479,69 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const Ani
     animation->add(translateChannel);
 }
 
-static bool isAlmostOne(float value)
+void GPBFile::moveAnimationChannels(Node* node, Animation* dstAnimation)
+{
+    // Loop through the animations and channels backwards because they will be removed when found.
+    int animationCount = _animations.getAnimationCount();
+    for (int i = animationCount - 1; i >= 0; --i)
+    {
+        Animation* animation = _animations.getAnimation(i);
+        int channelCount = animation->getAnimationChannelCount();
+        for (int j = channelCount - 1; j >= 0; --j)
+        {
+            AnimationChannel* channel = animation->getAnimationChannel(j);
+            if (equals(channel->getTargetId(), node->getId()))
+            {
+                animation->remove(channel);
+                dstAnimation->add(channel);
+            }
+        }
+        if (animation->getAnimationChannelCount() == 0)
+        {
+            _animations.removeAnimation(i);
+        }
+    }
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        moveAnimationChannels(child, dstAnimation);
+    }
+}
+
+bool isAlmostOne(float value)
 {
     return std::fabs(value - 1.0f) < EPSILON;
+}
+
+Node* getCommonNodeAncestor(const std::vector<Node*>& nodes)
+{
+    if (nodes.empty())
+        return NULL;
+    if (nodes.size() == 1)
+        return nodes.front();
+
+    std::list<Node*> ancestors;
+    size_t minAncestorCount = INT_MAX;
+    for (std::vector<Node*>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        Node* node = *it;
+        getNodeAncestors(node, ancestors);
+        ancestors.push_back(node);
+        minAncestorCount = std::min(minAncestorCount, ancestors.size());
+    }
+    ancestors.resize(minAncestorCount);
+
+    return ancestors.back();
+}
+
+void getNodeAncestors(Node* node, std::list<Node*>& ancestors)
+{
+    ancestors.clear();
+    Node* parent = node->getParent();
+    while (parent != NULL)
+    {
+        ancestors.push_front(parent);
+        parent = parent->getParent();
+    }
 }
 
 }
