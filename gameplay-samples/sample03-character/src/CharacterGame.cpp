@@ -21,8 +21,8 @@ CharacterGame game;
 
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
-      _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
-      _keyFlags(0), _drawDebug(0), _wireframe(false), _gamepad(NULL), _hasBall(false), _applyKick(false)
+      _ceiling(NULL), _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
+      _keyFlags(0), _drawDebug(0), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
 {
     _buttonPressed = new bool[2];
 }
@@ -50,11 +50,10 @@ void CharacterGame::initialize()
     // Initialize the gamepad.
     initializeGamepad();
 
-    // Adds a ceiling collision object to the scene.
+    // Create a collision object for the ceiling.
     _scene->addNode("ceiling");
     _ceiling = Node::create("ceiling");
     _ceiling->setTranslationY(14.5f);
-
     PhysicsRigidBody::Parameters rbParams;
     rbParams.mass = 0.0f;
     rbParams.friction = 0.5f;
@@ -102,6 +101,7 @@ void CharacterGame::initializeCharacter()
     _characterMeshNode = _scene->findNode("boymesh");
     _characterShadowNode = _scene->findNode("boyshadow");
 
+    // Get the basketball node.
     _basketballNode = _scene->findNode("basketball");
     _basketballNode->getCollisionObject()->addCollisionListener(this);
 
@@ -562,18 +562,13 @@ void CharacterGame::adjustCamera(float elapsedTime)
 
 void CharacterGame::animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type)
 {
-    if (clip == _kickClip)
+    if (clip == _kickClip && !_applyKick)
     {
-        if (!_applyKick)
+        if (_hasBall)
         {
-            if (_hasBall)
-            {
-                _applyKick = true;
-                releaseBall();
-            }
+            _applyKick = true;
+            releaseBall();
         }
-        else
-            clip->crossFade(_currentClip, 150);
     }
     else
     {
@@ -604,13 +599,14 @@ void CharacterGame::collisionEvent(PhysicsCollisionObject::CollisionListener::Ev
                                     const Vector3& contactPointB)
 {
     // objectA -> basketball
-    // Only care about collisions with physics character.
+    // Only care about collisions between the physics character and the basketball.
     if (type == PhysicsCollisionObject::CollisionListener::COLLIDING && collisionPair.objectB == _character)
         _hasBall = true;
 }
 
 void CharacterGame::grabBall()
 {
+    // Disables physics on the basketball, and increases the size of the character's collison object to include the basketball.
     _basketballNode->getCollisionObject()->setEnabled(false);
     PhysicsRigidBody::Parameters rbParams;
     rbParams.mass = 20.0f;
@@ -625,6 +621,7 @@ void CharacterGame::grabBall()
 
 void CharacterGame::releaseBall()
 {
+    // Decreases the size of the character's collision object and re-enables physics simulation on the basketball.
     PhysicsRigidBody::Parameters rbParams;
     rbParams.mass = 20.0f;
     Vector3 velocity = _character->getCurrentVelocity();

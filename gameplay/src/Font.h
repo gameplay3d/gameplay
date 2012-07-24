@@ -32,17 +32,12 @@ public:
      */
     enum Justify
     {
-        // Specify horizontal alignment, use default vertical alignment (ALIGN_TOP).
         ALIGN_LEFT = 0x01,
         ALIGN_HCENTER = 0x02,
         ALIGN_RIGHT = 0x04,
-    
-        // Specify vertical alignment, use default horizontal alignment (ALIGN_LEFT).
         ALIGN_TOP = 0x10,
         ALIGN_VCENTER = 0x20,
         ALIGN_BOTTOM = 0x40,
-
-        // Specify both vertical and horizontal alignment.
         ALIGN_TOP_LEFT = ALIGN_TOP | ALIGN_LEFT,
         ALIGN_VCENTER_LEFT = ALIGN_VCENTER | ALIGN_LEFT,
         ALIGN_BOTTOM_LEFT = ALIGN_BOTTOM | ALIGN_LEFT,
@@ -122,11 +117,6 @@ public:
     void start();
 
     /**
-     * Finishes text batching for this font and renders all drawn text.
-     */
-    void finish();
-
-    /**
      * Draws the specified text in a solid color, with a scaling factor.
      *
      * @param text The text to draw.
@@ -182,6 +172,11 @@ public:
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
+     * Finishes text batching for this font and renders all drawn text.
+     */
+    void finish();
+
+    /**
      * Measures a string's width and height without alignment, wrapping or clipping.
      *
      * @param text The text to measure.
@@ -235,8 +230,8 @@ public:
      */
     static Justify getJustify(const char* justify);
 
-
 private:
+
     /**
      * Defines a font glyph within the texture map for a font.
      */

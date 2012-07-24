@@ -101,14 +101,12 @@ private:
     unsigned int _keyFlags;
     int _drawDebug;
     bool _wireframe;
-    
-    bool* _buttonPressed;
-    Gamepad* _gamepad;
-    Vector2 _currentDirection;
-    
     Vector3 _oldBallPosition;
     bool _hasBall;
     bool _applyKick;
+    bool* _buttonPressed;
+    Gamepad* _gamepad;
+    Vector2 _currentDirection;
 
 };
 

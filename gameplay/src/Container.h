@@ -504,6 +504,8 @@ private:
 
     float _totalWidth;
     float _totalHeight;
+
+    int _contactIndices;
 };
 
 }
