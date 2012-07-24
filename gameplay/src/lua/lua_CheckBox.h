@@ -6,9 +6,9 @@ namespace gameplay
 
 // Lua bindings for CheckBox.
 int lua_CheckBox__gc(lua_State* state);
-int lua_CheckBox_addCallback(lua_State* state);
 int lua_CheckBox_addListener(lua_State* state);
 int lua_CheckBox_addRef(lua_State* state);
+int lua_CheckBox_addScriptCallback(lua_State* state);
 int lua_CheckBox_createAnimation(lua_State* state);
 int lua_CheckBox_createAnimationFromBy(lua_State* state);
 int lua_CheckBox_createAnimationFromTo(lua_State* state);
@@ -59,7 +59,7 @@ int lua_CheckBox_isChecked(lua_State* state);
 int lua_CheckBox_isContainer(lua_State* state);
 int lua_CheckBox_isEnabled(lua_State* state);
 int lua_CheckBox_release(lua_State* state);
-int lua_CheckBox_removeCallback(lua_State* state);
+int lua_CheckBox_removeScriptCallback(lua_State* state);
 int lua_CheckBox_setAlignment(lua_State* state);
 int lua_CheckBox_setAnimationPropertyValue(lua_State* state);
 int lua_CheckBox_setAutoHeight(lua_State* state);
