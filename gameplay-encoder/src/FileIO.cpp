@@ -184,4 +184,23 @@ void writeVectorText(const Vector4& v, FILE* file)
     fprintf(file, "%f %f %f %f\n", v.x, v.y, v.z, v.w);
 }
 
+bool promptUserGroupAnimations()
+{
+    char buffer[80];
+    for (;;)
+    {
+        printf("Do you want to group animations? (y/n)\n");
+        std::cin.getline(buffer, 80);
+        
+        if (buffer[0] == 'y' || buffer[0] == 'Y' || buffer[0] == '\0')
+        {
+            return true;
+        }
+        else if (buffer[0] == 'n' || buffer[0] == 'N')
+        {
+            return false;
+        }
+    }
+}
+
 }
