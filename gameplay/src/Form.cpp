@@ -40,6 +40,7 @@ static std::vector<Form*> __forms;
 
 Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL), _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
 {
+	_consumeInputEvents = false;
 }
 
 Form::~Form()
@@ -166,6 +167,8 @@ Form* Form::create(const char* url)
         style = theme->getEmptyStyle();
     }
     form->initialize(style, formProperties);
+
+    form->_consumeInputEvents = formProperties->getBool("consumeInputs");
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)

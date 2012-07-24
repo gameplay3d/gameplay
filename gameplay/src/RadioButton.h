@@ -30,6 +30,7 @@ namespace gameplay
          text        = <string>
          group       = <string>
          iconSize    = <width, height>   // The size to draw the radio button icon, if different from its size in the texture.
+         consumeEvents = <bool>          // Whether the radio button propogates input events to the Game's input event handler. Default is true.
     }
  @endverbatim
  */
