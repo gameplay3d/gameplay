@@ -8,6 +8,8 @@ form gamepadForm
     {
         alignment = ALIGN_BOTTOM_LEFT
         size = 300, 300
+        consumeEvents = false
+        
         joystick
         {
             style = joystickStyle
@@ -21,14 +23,18 @@ form gamepadForm
     {
         alignment = ALIGN_BOTTOM_RIGHT
         size = 256, 256
-
+		consumeEvents = false
+		
         container inner
         {
             size = 230, 230
             alignment = ALIGN_VCENTER_HCENTER
+            consumeEvents = false
+            
             button
             {
                 style = buttonAStyle
+                consumeEvents = false
                 size = 128, 128
                 alignment = ALIGN_BOTTOM_LEFT
             }
@@ -36,6 +42,7 @@ form gamepadForm
             button
             {
                 style = buttonBStyle
+                consumeEvents = false
                 size = 128, 128
                 alignment = ALIGN_TOP_RIGHT
             }

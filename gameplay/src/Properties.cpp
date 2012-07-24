@@ -689,7 +689,7 @@ const char* Properties::getString(const char* name) const
     return NULL;
 }
 
-bool Properties::getBool(const char* name) const
+bool Properties::getBool(const char* name, bool defaultValue) const
 {
     const char* valueString = getString(name);
     if (valueString)
@@ -697,7 +697,7 @@ bool Properties::getBool(const char* name) const
         return (strcmp(valueString, "true") == 0);
     }
 
-    return false;
+    return defaultValue;
 }
 
 int Properties::getInt(const char* name) const
