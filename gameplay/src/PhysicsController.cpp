@@ -28,7 +28,7 @@ PhysicsController::PhysicsController()
     // Default gravity is 9.8 along the negative Y axis.
     _collisionCallback = new CollisionCallback(this);
 
-    addEvent("statusEvent", "[PhysicsController::Listener::EventType]");
+    addScriptEvent("statusEvent", "[PhysicsController::Listener::EventType]");
 }
 
 PhysicsController::~PhysicsController()
@@ -521,7 +521,7 @@ void PhysicsController::update(float elapsedTime)
                 }
             }
 
-            fireEvent<void>("statusEvent", _status);
+            fireScriptEvent<void>("statusEvent", _status);
         }
     }
 

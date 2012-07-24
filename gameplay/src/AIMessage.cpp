@@ -26,6 +26,11 @@ AIMessage* AIMessage::create(unsigned int id, const char* sender, const char* re
     return message;
 }
 
+void AIMessage::destroy(AIMessage* message)
+{
+    SAFE_DELETE(message);
+}
+
 unsigned int AIMessage::getId() const
 {
     return _id;

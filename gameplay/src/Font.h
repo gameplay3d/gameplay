@@ -293,7 +293,6 @@ private:
      * @param texture A texture map containing rendered glyphs.
      * 
      * @return The new Font.
-     * @script{create}
      */
     static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 
