@@ -10,9 +10,9 @@ AIState* AIState::_empty = NULL;
 AIState::AIState(const char* id)
     : _id(id), _listener(NULL)
 {
-    addEvent("enter", "<AIAgent><AIState>");
-    addEvent("exit", "<AIAgent><AIState>");
-    addEvent("update", "<AIAgent><AIState>f");
+    addScriptEvent("enter", "<AIAgent><AIState>");
+    addScriptEvent("exit", "<AIAgent><AIState>");
+    addScriptEvent("update", "<AIAgent><AIState>f");
 }
 
 AIState::~AIState()
@@ -39,7 +39,7 @@ void AIState::enter(AIStateMachine* stateMachine)
     if (_listener)
         _listener->stateEnter(stateMachine->getAgent(), this);
 
-    fireEvent<void>("enter", stateMachine->getAgent(), this);
+    fireScriptEvent<void>("enter", stateMachine->getAgent(), this);
 }
 
 void AIState::exit(AIStateMachine* stateMachine)
@@ -47,7 +47,7 @@ void AIState::exit(AIStateMachine* stateMachine)
     if (_listener)
         _listener->stateExit(stateMachine->getAgent(), this);
 
-    fireEvent<void>("exit", stateMachine->getAgent(), this);
+    fireScriptEvent<void>("exit", stateMachine->getAgent(), this);
 }
 
 void AIState::update(AIStateMachine* stateMachine, float elapsedTime)
@@ -55,7 +55,7 @@ void AIState::update(AIStateMachine* stateMachine, float elapsedTime)
     if (_listener)
         _listener->stateUpdate(stateMachine->getAgent(), this, elapsedTime);
 
-    fireEvent<void>("update", stateMachine->getAgent(), this);
+    fireScriptEvent<void>("update", stateMachine->getAgent(), this, elapsedTime);
 }
 
 AIState::Listener::~Listener()

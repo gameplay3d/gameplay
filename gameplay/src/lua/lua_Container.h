@@ -6,10 +6,10 @@ namespace gameplay
 
 // Lua bindings for Container.
 int lua_Container__gc(lua_State* state);
-int lua_Container_addCallback(lua_State* state);
 int lua_Container_addControl(lua_State* state);
 int lua_Container_addListener(lua_State* state);
 int lua_Container_addRef(lua_State* state);
+int lua_Container_addScriptCallback(lua_State* state);
 int lua_Container_createAnimation(lua_State* state);
 int lua_Container_createAnimationFromBy(lua_State* state);
 int lua_Container_createAnimationFromTo(lua_State* state);
@@ -62,8 +62,8 @@ int lua_Container_isContainer(lua_State* state);
 int lua_Container_isEnabled(lua_State* state);
 int lua_Container_isScrollBarsAutoHide(lua_State* state);
 int lua_Container_release(lua_State* state);
-int lua_Container_removeCallback(lua_State* state);
 int lua_Container_removeControl(lua_State* state);
+int lua_Container_removeScriptCallback(lua_State* state);
 int lua_Container_setAlignment(lua_State* state);
 int lua_Container_setAnimationPropertyValue(lua_State* state);
 int lua_Container_setAutoHeight(lua_State* state);

@@ -12,7 +12,6 @@ int lua_VerticalLayout_getRefCount(lua_State* state);
 int lua_VerticalLayout_getType(lua_State* state);
 int lua_VerticalLayout_release(lua_State* state);
 int lua_VerticalLayout_setBottomToTop(lua_State* state);
-int lua_VerticalLayout_static_create(lua_State* state);
 
 void luaRegister_VerticalLayout();
 

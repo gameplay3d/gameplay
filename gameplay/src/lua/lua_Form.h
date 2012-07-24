@@ -6,10 +6,10 @@ namespace gameplay
 
 // Lua bindings for Form.
 int lua_Form__gc(lua_State* state);
-int lua_Form_addCallback(lua_State* state);
 int lua_Form_addControl(lua_State* state);
 int lua_Form_addListener(lua_State* state);
 int lua_Form_addRef(lua_State* state);
+int lua_Form_addScriptCallback(lua_State* state);
 int lua_Form_createAnimation(lua_State* state);
 int lua_Form_createAnimationFromBy(lua_State* state);
 int lua_Form_createAnimationFromTo(lua_State* state);
@@ -64,8 +64,8 @@ int lua_Form_isContainer(lua_State* state);
 int lua_Form_isEnabled(lua_State* state);
 int lua_Form_isScrollBarsAutoHide(lua_State* state);
 int lua_Form_release(lua_State* state);
-int lua_Form_removeCallback(lua_State* state);
 int lua_Form_removeControl(lua_State* state);
+int lua_Form_removeScriptCallback(lua_State* state);
 int lua_Form_setAlignment(lua_State* state);
 int lua_Form_setAnimationPropertyValue(lua_State* state);
 int lua_Form_setAutoHeight(lua_State* state);

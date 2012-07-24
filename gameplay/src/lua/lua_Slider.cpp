@@ -25,9 +25,9 @@ void luaRegister_Slider()
 {
     const luaL_Reg lua_members[] = 
     {
-        {"addCallback", lua_Slider_addCallback},
         {"addListener", lua_Slider_addListener},
         {"addRef", lua_Slider_addRef},
+        {"addScriptCallback", lua_Slider_addScriptCallback},
         {"createAnimation", lua_Slider_createAnimation},
         {"createAnimationFromBy", lua_Slider_createAnimationFromBy},
         {"createAnimationFromTo", lua_Slider_createAnimationFromTo},
@@ -80,7 +80,7 @@ void luaRegister_Slider()
         {"isContainer", lua_Slider_isContainer},
         {"isEnabled", lua_Slider_isEnabled},
         {"release", lua_Slider_release},
-        {"removeCallback", lua_Slider_removeCallback},
+        {"removeScriptCallback", lua_Slider_removeScriptCallback},
         {"setAlignment", lua_Slider_setAlignment},
         {"setAnimationPropertyValue", lua_Slider_setAnimationPropertyValue},
         {"setAutoHeight", lua_Slider_setAutoHeight},
@@ -179,48 +179,6 @@ int lua_Slider__gc(lua_State* state)
     return 0;
 }
 
-int lua_Slider_addCallback(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
-
-                // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
-
-                Slider* instance = getInstance(state);
-                instance->addCallback(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Slider_addCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Slider_addListener(lua_State* state)
 {
     // Get the number of parameters.
@@ -290,6 +248,48 @@ int lua_Slider_addRef(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_addScriptCallback(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                std::string param1 = ScriptUtil::getString(2, true);
+
+                // Get parameter 2 off the stack.
+                std::string param2 = ScriptUtil::getString(3, true);
+
+                Slider* instance = getInstance(state);
+                instance->addScriptCallback(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Slider_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -2942,7 +2942,7 @@ int lua_Slider_release(lua_State* state)
     return 0;
 }
 
-int lua_Slider_removeCallback(lua_State* state)
+int lua_Slider_removeScriptCallback(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -2963,13 +2963,13 @@ int lua_Slider_removeCallback(lua_State* state)
                 std::string param2 = ScriptUtil::getString(3, true);
 
                 Slider* instance = getInstance(state);
-                instance->removeCallback(param1, param2);
+                instance->removeScriptCallback(param1, param2);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_Slider_removeCallback - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Slider_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

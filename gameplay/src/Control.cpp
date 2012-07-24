@@ -10,7 +10,7 @@ Control::Control()
     _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL),
     _contactIndex(INVALID_CONTACT_INDEX), _styleOverridden(false), _skin(NULL)
 {
-    addEvent("controlEvent", "<Control>[Control::Listener::EventType]");
+    addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
 
 Control::~Control()
@@ -790,7 +790,7 @@ void Control::notifyListeners(Listener::EventType eventType)
         }
     }
 
-    fireEvent<void>("controlEvent", this, eventType);
+    fireScriptEvent<void>("controlEvent", this, eventType);
 }
 
 void Control::update(const Control* container, const Vector2& offset)

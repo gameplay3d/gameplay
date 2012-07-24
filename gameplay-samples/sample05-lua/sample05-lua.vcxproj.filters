@@ -28,10 +28,13 @@
     <None Include="res\grid.material">
       <Filter>res</Filter>
     </None>
-    <None Include="res\script.lua">
+    <None Include="res\arial.ttf">
       <Filter>res</Filter>
     </None>
-    <None Include="res\arial.ttf">
+    <None Include="res\ai.lua">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\game.lua">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
