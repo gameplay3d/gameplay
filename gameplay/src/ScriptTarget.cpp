@@ -7,6 +7,10 @@ namespace gameplay
 
 extern void splitURL(const std::string& url, std::string* file, std::string* id);
 
+ScriptTarget::ScriptTarget()
+{
+}
+
 ScriptTarget::~ScriptTarget()
 {
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.begin();
@@ -16,7 +20,7 @@ ScriptTarget::~ScriptTarget()
     }
 }
 
-template<> void ScriptTarget::fireEvent<void>(const char* eventName, ...)
+template<> void ScriptTarget::fireScriptEvent<void>(const char* eventName, ...)
 {
     va_list list;
     va_start(list, eventName);
@@ -45,7 +49,7 @@ template<> void ScriptTarget::fireEvent<void>(const char* eventName, ...)
     va_end(list);
 }
 
-template<> bool ScriptTarget::fireEvent<bool>(const char* eventName, ...)
+template<> bool ScriptTarget::fireScriptEvent<bool>(const char* eventName, ...)
 {
     va_list list;
     va_start(list, eventName);
@@ -83,7 +87,7 @@ template<> bool ScriptTarget::fireEvent<bool>(const char* eventName, ...)
     return false;
 }
 
-void ScriptTarget::addCallback(const std::string& eventName, const std::string& function)
+void ScriptTarget::addScriptCallback(const std::string& eventName, const std::string& function)
 {
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
     if (iter != _callbacks.end())
@@ -101,7 +105,7 @@ void ScriptTarget::addCallback(const std::string& eventName, const std::string& 
     }
 }
 
-void ScriptTarget::removeCallback(const std::string& eventName, const std::string& function)
+void ScriptTarget::removeScriptCallback(const std::string& eventName, const std::string& function)
 {
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
     if (iter != _callbacks.end())
@@ -133,7 +137,7 @@ void ScriptTarget::removeCallback(const std::string& eventName, const std::strin
     }
 }
 
-void ScriptTarget::addEvent(const std::string& eventName, const char* argsString)
+void ScriptTarget::addScriptEvent(const std::string& eventName, const char* argsString)
 {
     _events[eventName] = (argsString ? argsString : "");
     _callbacks[eventName] = NULL;
