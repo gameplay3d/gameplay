@@ -114,8 +114,6 @@ void Joystick::addListener(Control::Listener* listener, int eventFlags)
         GP_ERROR("TEXT_CHANGED event is not applicable to this control.");
     }
 
-    _consumeInputEvents = true;
-
     Control::addListener(listener, eventFlags);
 }
 

@@ -41,6 +41,8 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
 
+    _consumeInputEvents = properties->getBool("consumeEvents", true);
+
     if (properties->exists("zIndex"))
     {
         _zIndex = properties->getInt("zIndex");
