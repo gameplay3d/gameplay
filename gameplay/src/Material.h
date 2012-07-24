@@ -100,7 +100,7 @@ public:
      * 
      * @return The specified technique.
      */
-    Technique* getTechnique(unsigned int index) const;
+    Technique* getTechniqueByIndex(unsigned int index) const;
 
     /**
      * Returns the technique with the specified ID in this material.
@@ -117,13 +117,6 @@ public:
      * @return The current technique.
      */
     Technique* getTechnique() const;
-
-    /**
-     * Sets the current material technique.
-     *
-     * @param index Index of the technique to set.
-     */
-    void setTechnique(unsigned int index);
 
     /**
      * Sets the current material technique. 

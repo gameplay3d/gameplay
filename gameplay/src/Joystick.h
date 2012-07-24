@@ -50,7 +50,7 @@ public:
      * Sets the image size of the inner region of the joystick. Does not do anything if there is no
      * inner image region defined.
      * 
-     * @param region The size of the inner region of the joystick. (x, y) == (width, height)
+     * @param size The size of the inner region of the joystick. (x, y) == (width, height)
      */
     inline void setInnerRegionSize(const Vector2& size);
 
@@ -66,7 +66,7 @@ public:
      * Sets the image size of the outer region of the joystick. Does not do anything if there is no
      * outer image region defined.
      * 
-     * @param region The size of the outer region of the joystick. (x, y) == (width, height)
+     * @param size The size of the outer region of the joystick. (x, y) == (width, height)
      */
     inline void setOuterRegionSize(const Vector2& size);
 

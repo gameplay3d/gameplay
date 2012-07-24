@@ -108,7 +108,7 @@ void CharacterGame::initializeCharacter()
     _floorLevel = _basketballNode->getTranslationY();
 
     // Store the alpha material parameter from the character's model.
-    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechnique((unsigned int)0)->getPass((unsigned int)0)->getParameter("u_modulateAlpha");
+    _materialParameterAlpha = _characterMeshNode->getModel()->getMaterial()->getTechniqueByIndex(0)->getPassByIndex(0)->getParameter("u_modulateAlpha");
 
     // Load character animations.
     _animation = node->getAnimation("animations");
@@ -117,7 +117,7 @@ void CharacterGame::initializeCharacter()
     _jumpClip->addListener(this, _jumpClip->getDuration() - 250);
     _kickClip = _animation->getClip("kick");
     _kickClip->addListener(this, _kickClip->getDuration() - 250); // when to cross fade
-    _kickClip->addListener(this, 416);                            // when to turn on _isKicking.
+    _kickClip->addListener(this, 416);  // when to turn on _isKicking.
 
     // Start playing the idle animation when we load.
     play("idle", true);
@@ -544,8 +544,7 @@ void CharacterGame::adjustCamera(float elapsedTime)
         }
     } while (true);
 
-    // If the character is closer than 10 world units to the camera, apply transparency to the character
-    // so he does not obstruct the view.
+    // If the character is closer than 10 world units to the camera, apply transparency to the character so he does not obstruct the view.
     if (occlusion)
     {
         float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
@@ -598,8 +597,7 @@ void CharacterGame::collisionEvent(PhysicsCollisionObject::CollisionListener::Ev
                                     const Vector3& contactPointA,
                                     const Vector3& contactPointB)
 {
-    // objectA -> basketball
-    // Only care about collisions between the physics character and the basketball.
+    // objectA -> basketball, only care about collisions between the physics character and the basketball.
     if (type == PhysicsCollisionObject::CollisionListener::COLLIDING && collisionPair.objectB == _character)
         _hasBall = true;
 }
