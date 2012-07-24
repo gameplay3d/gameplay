@@ -106,7 +106,7 @@ function touchEvent(evt, x, y, contactIndex)
     elseif evt == Touch.TOUCH_MOVE then
         local deltaX = x - _touchX
         _touchX = x
-        _modelNode:rotateY(math.rad(deltaX * 0.03))
+        _modelNode:rotateY(math.rad(deltaX * 0.5))
     end    
 end
 
