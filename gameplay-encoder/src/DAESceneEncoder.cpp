@@ -74,7 +74,7 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
                     // In COLLADA, ids must be unique but they don't have to be unique in GPB.
                     // Save the animation id as "animations___#" and then rename it once the GPB objects are created
                     // but before the GPB is written to file.
-                    sprintf(buffer, "animations___%d", i);
+                    sprintf(buffer, "animations___%lu", i);
                     std::string animationId(buffer);
                     _tempGroupAnimationIds.push_back(animationId);
                     optimizer.combineAnimations(nodeIds[i], animationId);
