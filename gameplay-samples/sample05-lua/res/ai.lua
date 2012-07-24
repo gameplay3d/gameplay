@@ -72,7 +72,7 @@ function bouncingExit(agent, state)
     _bouncingClip:pause()
 end
 
--- scale state handlers
+-- SCALE state handlers
 function scaleEnter(agent, state)
     _scaleClip:play()
 end
