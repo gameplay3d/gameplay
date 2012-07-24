@@ -12,6 +12,7 @@ int lua_Material_getParameter(lua_State* state);
 int lua_Material_getRefCount(lua_State* state);
 int lua_Material_getStateBlock(lua_State* state);
 int lua_Material_getTechnique(lua_State* state);
+int lua_Material_getTechniqueByIndex(lua_State* state);
 int lua_Material_getTechniqueCount(lua_State* state);
 int lua_Material_release(lua_State* state);
 int lua_Material_setParameterAutoBinding(lua_State* state);

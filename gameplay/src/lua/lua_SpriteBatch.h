@@ -10,6 +10,7 @@ int lua_SpriteBatch_draw(lua_State* state);
 int lua_SpriteBatch_finish(lua_State* state);
 int lua_SpriteBatch_getMaterial(lua_State* state);
 int lua_SpriteBatch_getProjectionMatrix(lua_State* state);
+int lua_SpriteBatch_getSampler(lua_State* state);
 int lua_SpriteBatch_getStateBlock(lua_State* state);
 int lua_SpriteBatch_setProjectionMatrix(lua_State* state);
 int lua_SpriteBatch_start(lua_State* state);

@@ -49,11 +49,11 @@ void MeshBatch::updateVertexAttributeBinding()
     // Update our vertex attribute bindings.
     for (unsigned int i = 0, techniqueCount = _material->getTechniqueCount(); i < techniqueCount; ++i)
     {
-        Technique* t = _material->getTechnique(i);
+        Technique* t = _material->getTechniqueByIndex(i);
         GP_ASSERT(t);
         for (unsigned int j = 0, passCount = t->getPassCount(); j < passCount; ++j)
         {
-            Pass* p = t->getPass(j);
+            Pass* p = t->getPassByIndex(j);
             GP_ASSERT(p);
             VertexAttributeBinding* b = VertexAttributeBinding::create(_vertexFormat, _vertices, p->getEffect());
             p->setVertexAttributeBinding(b);
@@ -187,7 +187,7 @@ void MeshBatch::draw()
     unsigned int passCount = technique->getPassCount();
     for (unsigned int i = 0; i < passCount; ++i)
     {
-        Pass* pass = technique->getPass(i);
+        Pass* pass = technique->getPassByIndex(i);
         GP_ASSERT(pass);
         pass->bind();
 
