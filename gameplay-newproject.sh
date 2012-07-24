@@ -145,7 +145,11 @@ common_path=$projPath
 back=
 while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
 	common_path=$(dirname $common_path)
-	back="../${back}"
+	if [ -z "$back" ]; then
+		back=".."
+	else
+		back="../${back}"
+	fi
 done
 gpPath=${back}${gpPathAbs#$common_path/}
 if [[ ${gpPathAbs} == ${common_path} ]]; then
