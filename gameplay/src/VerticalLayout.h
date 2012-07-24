@@ -13,16 +13,10 @@ namespace gameplay
  */
 class VerticalLayout : public Layout
 {
+    friend class Form;
+    friend class Container;
 
 public:
-
-    /**
-     * Create a VerticalLayout.
-     *
-     * @return a VerticalLayout object.
-     * @script{create}
-     */
-    static VerticalLayout* create();
 
     /**
      * Set whether this layout will start laying out controls from the bottom of the container.
@@ -81,6 +75,14 @@ private:
      * Constructor.
      */
     VerticalLayout(const VerticalLayout& copy);
+
+    /**
+     * Create a VerticalLayout.
+     *
+     * @return a VerticalLayout object.
+     */
+    static VerticalLayout* create();
+
 };
 
 }

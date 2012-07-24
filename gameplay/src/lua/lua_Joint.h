@@ -6,10 +6,10 @@ namespace gameplay
 
 // Lua bindings for Joint.
 int lua_Joint__gc(lua_State* state);
-int lua_Joint_addCallback(lua_State* state);
 int lua_Joint_addChild(lua_State* state);
 int lua_Joint_addListener(lua_State* state);
 int lua_Joint_addRef(lua_State* state);
+int lua_Joint_addScriptCallback(lua_State* state);
 int lua_Joint_clone(lua_State* state);
 int lua_Joint_createAnimation(lua_State* state);
 int lua_Joint_createAnimationFromBy(lua_State* state);
@@ -78,9 +78,9 @@ int lua_Joint_isTransparent(lua_State* state);
 int lua_Joint_isVisible(lua_State* state);
 int lua_Joint_release(lua_State* state);
 int lua_Joint_removeAllChildren(lua_State* state);
-int lua_Joint_removeCallback(lua_State* state);
 int lua_Joint_removeChild(lua_State* state);
 int lua_Joint_removeListener(lua_State* state);
+int lua_Joint_removeScriptCallback(lua_State* state);
 int lua_Joint_rotate(lua_State* state);
 int lua_Joint_rotateX(lua_State* state);
 int lua_Joint_rotateY(lua_State* state);
