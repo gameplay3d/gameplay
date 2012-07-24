@@ -6,9 +6,9 @@ namespace gameplay
 
 // Lua bindings for Joystick.
 int lua_Joystick__gc(lua_State* state);
-int lua_Joystick_addCallback(lua_State* state);
 int lua_Joystick_addListener(lua_State* state);
 int lua_Joystick_addRef(lua_State* state);
+int lua_Joystick_addScriptCallback(lua_State* state);
 int lua_Joystick_createAnimation(lua_State* state);
 int lua_Joystick_createAnimationFromBy(lua_State* state);
 int lua_Joystick_createAnimationFromTo(lua_State* state);
@@ -60,7 +60,7 @@ int lua_Joystick_isContainer(lua_State* state);
 int lua_Joystick_isEnabled(lua_State* state);
 int lua_Joystick_isRelative(lua_State* state);
 int lua_Joystick_release(lua_State* state);
-int lua_Joystick_removeCallback(lua_State* state);
+int lua_Joystick_removeScriptCallback(lua_State* state);
 int lua_Joystick_setAlignment(lua_State* state);
 int lua_Joystick_setAnimationPropertyValue(lua_State* state);
 int lua_Joystick_setAutoHeight(lua_State* state);

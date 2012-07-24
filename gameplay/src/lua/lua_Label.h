@@ -6,9 +6,9 @@ namespace gameplay
 
 // Lua bindings for Label.
 int lua_Label__gc(lua_State* state);
-int lua_Label_addCallback(lua_State* state);
 int lua_Label_addListener(lua_State* state);
 int lua_Label_addRef(lua_State* state);
+int lua_Label_addScriptCallback(lua_State* state);
 int lua_Label_createAnimation(lua_State* state);
 int lua_Label_createAnimationFromBy(lua_State* state);
 int lua_Label_createAnimationFromTo(lua_State* state);
@@ -57,7 +57,7 @@ int lua_Label_getZIndex(lua_State* state);
 int lua_Label_isContainer(lua_State* state);
 int lua_Label_isEnabled(lua_State* state);
 int lua_Label_release(lua_State* state);
-int lua_Label_removeCallback(lua_State* state);
+int lua_Label_removeScriptCallback(lua_State* state);
 int lua_Label_setAlignment(lua_State* state);
 int lua_Label_setAnimationPropertyValue(lua_State* state);
 int lua_Label_setAutoHeight(lua_State* state);

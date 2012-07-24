@@ -71,6 +71,7 @@ public:
      * @param id The ID of the new AIState.
      *
      * @return The new AIState.
+     * @script{create}
      */
     static AIState* create(const char* id);
 

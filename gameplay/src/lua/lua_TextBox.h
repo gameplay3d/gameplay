@@ -6,9 +6,9 @@ namespace gameplay
 
 // Lua bindings for TextBox.
 int lua_TextBox__gc(lua_State* state);
-int lua_TextBox_addCallback(lua_State* state);
 int lua_TextBox_addListener(lua_State* state);
 int lua_TextBox_addRef(lua_State* state);
+int lua_TextBox_addScriptCallback(lua_State* state);
 int lua_TextBox_createAnimation(lua_State* state);
 int lua_TextBox_createAnimationFromBy(lua_State* state);
 int lua_TextBox_createAnimationFromTo(lua_State* state);
@@ -58,7 +58,7 @@ int lua_TextBox_getZIndex(lua_State* state);
 int lua_TextBox_isContainer(lua_State* state);
 int lua_TextBox_isEnabled(lua_State* state);
 int lua_TextBox_release(lua_State* state);
-int lua_TextBox_removeCallback(lua_State* state);
+int lua_TextBox_removeScriptCallback(lua_State* state);
 int lua_TextBox_setAlignment(lua_State* state);
 int lua_TextBox_setAnimationPropertyValue(lua_State* state);
 int lua_TextBox_setAutoHeight(lua_State* state);

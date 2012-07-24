@@ -34,11 +34,12 @@ void luaRegister_AIMessage()
     const luaL_Reg lua_statics[] = 
     {
         {"create", lua_AIMessage_static_create},
+        {"destroy", lua_AIMessage_static_destroy},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AIMessage", lua_members, NULL, lua_AIMessage__gc, lua_statics, scopePath);
+    ScriptUtil::registerClass("AIMessage", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AIMessage* getInstance(lua_State* state)
@@ -46,46 +47,6 @@ static AIMessage* getInstance(lua_State* state)
     void* userdata = luaL_checkudata(state, 1, "AIMessage");
     luaL_argcheck(state, userdata != NULL, 1, "'AIMessage' expected.");
     return (AIMessage*)((ScriptUtil::LuaObject*)userdata)->instance;
-}
-
-int lua_AIMessage__gc(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                void* userdata = luaL_checkudata(state, 1, "AIMessage");
-                luaL_argcheck(state, userdata != NULL, 1, "'AIMessage' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
-                if (object->owns)
-                {
-                    AIMessage* instance = (AIMessage*)object->instance;
-                    SAFE_DELETE(instance);
-                }
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_AIMessage__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
 }
 
 int lua_AIMessage_getBoolean(lua_State* state)
@@ -828,6 +789,42 @@ int lua_AIMessage_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AIMessage_static_destroy(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                AIMessage* param1 = ScriptUtil::getObjectPointer<AIMessage>(1, "AIMessage", false);
+
+                AIMessage::destroy(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_AIMessage_static_destroy - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

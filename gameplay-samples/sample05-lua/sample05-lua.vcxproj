@@ -168,14 +168,15 @@
     </None>
     <None Include="game.config" />
     <None Include="icon.png" />
+    <None Include="res\ai.lua" />
     <None Include="res\arial.ttf" />
     <None Include="res\arial40.gpb" />
     <None Include="res\box-diffuse.png" />
     <None Include="res\box.dae" />
     <None Include="res\box.gpb" />
     <None Include="res\box.material" />
+    <None Include="res\game.lua" />
     <None Include="res\grid.material" />
-    <None Include="res\script.lua" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LuaGame.cpp" />
