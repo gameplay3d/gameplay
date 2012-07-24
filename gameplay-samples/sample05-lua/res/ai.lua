@@ -51,7 +51,7 @@ end
 
 -- SPINNING state handlers
 function spinningUpdate(agent, state, elapsedTime)
-    _modelNode:rotateY(math.rad(elapsedTime * 0.125))
+    _modelNode:rotateY(elapsedTime * math.rad(0.05))
 end
 
 -- SLIDING state handlers
