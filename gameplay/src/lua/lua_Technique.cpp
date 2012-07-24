@@ -23,6 +23,7 @@ void luaRegister_Technique()
         {"getId", lua_Technique_getId},
         {"getParameter", lua_Technique_getParameter},
         {"getPass", lua_Technique_getPass},
+        {"getPassByIndex", lua_Technique_getPassByIndex},
         {"getPassCount", lua_Technique_getPassCount},
         {"getRefCount", lua_Technique_getRefCount},
         {"getStateBlock", lua_Technique_getStateBlock},
@@ -216,29 +217,6 @@ int lua_Technique_getPass(lua_State* state)
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                Technique* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getPass(param1);
-                if (returnPtr)
-                {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Pass");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
@@ -264,6 +242,56 @@ int lua_Technique_getPass(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Technique_getPass - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Technique_getPassByIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                Technique* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getPassByIndex(param1);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Pass");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Technique_getPassByIndex - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
