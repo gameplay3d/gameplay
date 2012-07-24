@@ -34,31 +34,6 @@ unsigned int getMaxOffset(domInputLocalOffset_Array& inputArray)
     return maxOffset;
 }
 
-/**
- * Prompts the user if they want to group animations automatically.
- * If the user enters an invalid response, the question is asked again.
- * 
- * @return True if the user wants to group animations, false otherwise.
- */
-bool promptUserGroupAnimations()
-{
-    char buffer[80];
-    for (;;)
-    {
-        printf("Do you want to group animations ? (y/n)\n");
-        std::cin.getline(buffer, 80);
-        
-        if (buffer[0] == 'y' || buffer[0] == 'Y' || buffer[0] == '\0')
-        {
-            return true;
-        }
-        else if (buffer[0] == 'n' || buffer[0] == 'N')
-        {
-            return false;
-        }
-    }
-}
-
 void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLLADA* dom)
 {
     const std::vector<std::string>& groupAnimatioNodeIds = arguments.getGroupAnimationNodeId();
@@ -99,7 +74,7 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
                     // In COLLADA, ids must be unique but they don't have to be unique in GPB.
                     // Save the animation id as "animations___#" and then rename it once the GPB objects are created
                     // but before the GPB is written to file.
-                    sprintf(buffer, "animations___%d", i);
+                    sprintf(buffer, "animations___%lu", i);
                     std::string animationId(buffer);
                     _tempGroupAnimationIds.push_back(animationId);
                     optimizer.combineAnimations(nodeIds[i], animationId);

@@ -14,7 +14,7 @@ Transform::Transform()
 {
     _targetType = AnimationTarget::TRANSFORM;
     _scale.set(Vector3::one());
-    addEvent("transformChanged", "<Transform>");
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
@@ -22,7 +22,7 @@ Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vec
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
-    addEvent("transformChanged", "<Transform>");
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
@@ -30,7 +30,7 @@ Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
-    addEvent("transformChanged", "<Transform>");
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Transform& copy)
@@ -38,7 +38,7 @@ Transform::Transform(const Transform& copy)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(copy);
-    addEvent("transformChanged", "<Transform>");
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::~Transform()
@@ -847,7 +847,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
-    fireEvent<void>("transformChanged", this);
+    fireScriptEvent<void>("transformChanged", this);
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const

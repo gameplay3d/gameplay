@@ -44,6 +44,7 @@ public:
      * @param style The control's style.
      *
      * @return The new button.
+     * @script{create}
      */
     static Button* create(const char* id, Theme::Style* style);
 

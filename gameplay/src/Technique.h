@@ -23,22 +23,22 @@ class Technique : public RenderState
 public:
 
     /**
-     * Returns the Id of this Material technique.
+     * Gets the Id of this Material technique.
      */ 
     const char* getId() const;
 
     /**
-     * Returns the number of passes in this technique.
+     * Gets the number of passes in this technique.
      */
     unsigned int getPassCount() const;
 
     /**
-     * Returns the pass at the specified index.
+     * Gets the pass at the specified index.
      */
-    Pass* getPass(unsigned int index) const;
+    Pass* getPassByIndex(unsigned int index) const;
 
     /**
-     * Returns the pass with the specified ID.
+     * Gets the pass with the specified ID.
      */
     Pass* getPass(const char* id) const;
 

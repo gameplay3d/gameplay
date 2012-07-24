@@ -215,9 +215,14 @@ private:
     std::map<FbxUInt64, Mesh*> _meshes;
 
     /**
-     * The animation that channels should be added to it the user is using the -groupAnimation command line argument. May be NULL.
+     * The animation that channels should be added to if the user is using the -groupAnimation command line argument. May be NULL.
      */
     Animation* _groupAnimation;
+
+    /**
+     * Indicates if the animations for mesh skins should be grouped before writing out the GPB file.
+     */
+    bool _autoGroupAnimations;
 };
 
 #endif

@@ -77,9 +77,12 @@ Material* Material::create(Properties* materialProperties)
     // Set the current technique to the first found technique.
     if (material->getTechniqueCount() > 0)
     {
-        material->setTechnique((unsigned int)0);
+        Technique* t = material->getTechniqueByIndex(0);
+        if (t)
+        {
+            material->_currentTechnique = t;
+        }
     }
-
     return material;
 }
 
@@ -148,7 +151,7 @@ unsigned int Material::getTechniqueCount() const
     return _techniques.size();
 }
 
-Technique* Material::getTechnique(unsigned int index) const
+Technique* Material::getTechniqueByIndex(unsigned int index) const
 {
     GP_ASSERT(index < _techniques.size());
     return _techniques[index];
@@ -178,15 +181,6 @@ Technique* Material::getTechnique() const
 void Material::setTechnique(const char* id)
 {
     Technique* t = getTechnique(id);
-    if (t)
-    {
-        _currentTechnique = t;
-    }
-}
-
-void Material::setTechnique(unsigned int index)
-{
-    Technique* t = getTechnique(index);
     if (t)
     {
         _currentTechnique = t;
@@ -346,7 +340,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
     properties->rewind();
 
     const char* name;
-    while (name = properties->getNextProperty())
+    while ((name = properties->getNextProperty()))
     {
         if (isMaterialKeyword(name))
             continue; // keyword - skip
@@ -408,7 +402,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
 
     // Iterate through all child namespaces searching for samplers and render state blocks.
     Properties* ns;
-    while (ns = properties->getNextNamespace())
+    while ((ns = properties->getNextNamespace()))
     {
         if (strcmp(ns->getNamespace(), "sampler") == 0)
         {
@@ -446,7 +440,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
         }
         else if (strcmp(ns->getNamespace(), "renderState") == 0)
         {
-            while (name = ns->getNextProperty())
+            while ((name = ns->getNextProperty()))
             {
                 GP_ASSERT(renderState->getStateBlock());
                 renderState->getStateBlock()->setState(name, ns->getString());

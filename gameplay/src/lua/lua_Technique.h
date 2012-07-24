@@ -10,6 +10,7 @@ int lua_Technique_addRef(lua_State* state);
 int lua_Technique_getId(lua_State* state);
 int lua_Technique_getParameter(lua_State* state);
 int lua_Technique_getPass(lua_State* state);
+int lua_Technique_getPassByIndex(lua_State* state);
 int lua_Technique_getPassCount(lua_State* state);
 int lua_Technique_getRefCount(lua_State* state);
 int lua_Technique_getStateBlock(lua_State* state);

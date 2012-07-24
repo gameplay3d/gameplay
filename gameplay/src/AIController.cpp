@@ -2,17 +2,6 @@
 #include "AIController.h"
 #include "Game.h"
 
-// TODO:
-//
-// 1) Is std::string OK for message sender/receiver?
-// 2) Is AIMessage ok and is "dobule" ok for message parameters?
-// 3) Design of creating and deleting message (AIController deletes them)??
-// 4) Is setListener(Listener*) OK for AIState and AIStateMachine, or do we need addListener(Listener*)???
-
-// TODO: Add a way to snif messages on AIController??
-
-// TODO: only dispatch messages to agents that are in this list AND enabled. If not in the list, discard the message (and log) and if they are in the list and DISABLED, just hold on to the message until they are re-enabled.
-
 namespace gameplay
 {
 
@@ -47,7 +36,7 @@ void AIController::finalize()
     {
         AIMessage* temp = message;
         message = message->_next;
-        SAFE_DELETE(temp);
+        AIMessage::destroy(temp);
     }
     _firstMessage = NULL;
 }
@@ -93,7 +82,7 @@ void AIController::sendMessage(AIMessage* message, float delay)
         }
 
         // Delete the message, since it is finished being processed
-        SAFE_DELETE(message);
+        AIMessage::destroy(message);
     }
     else
     {
