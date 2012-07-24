@@ -34,11 +34,6 @@ public:
         STRING
     };
 
-    /** 
-     * Destructor.
-     */
-    ~AIMessage();
-
     /**
      * Creates a new message.
      *
@@ -57,6 +52,17 @@ public:
      * @return A new AIMessage.
      */
     static AIMessage* create(unsigned int id, const char* sender, const char* receiver, unsigned int parameterCount);
+
+    /**
+     * Destroys an AIMessage.
+     *
+     * Under normal circumstances this method does not need to be called since the
+     * AIController will automatically destroy an AIMessage once it has been 
+     * sent. However, in the rare case where an AIMessage is constructed and not
+     * passed to AIController::sendMessage, this method should be called to destroy
+     * the message.
+     */
+    static void destroy(AIMessage* message);
 
     /**
      * Returns the message ID.
@@ -246,6 +252,11 @@ private:
      * Hidden copy assignment operator.
      */
     AIMessage& operator=(const AIMessage&);
+
+    /**
+     * Destructor (hidden - use AIMessage::destroy instead).
+     */
+    ~AIMessage();
 
     /**
      * Returns the delivery time for the message.

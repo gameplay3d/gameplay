@@ -6,11 +6,11 @@ namespace gameplay
 {
 
 AIAgent::AIAgent()
-    : _stateMachine(NULL), _node(NULL), _enabled(true), _next(NULL)
+    : _stateMachine(NULL), _node(NULL), _enabled(true), _listener(NULL), _next(NULL)
 {
     _stateMachine = new AIStateMachine(this);
 
-    addEvent("message", "<AIMessage>");
+    addScriptEvent("message", "<AIMessage>");
 }
 
 AIAgent::~AIAgent()
@@ -84,7 +84,7 @@ bool AIAgent::processMessage(AIMessage* message)
     if (_listener && _listener->messageReceived(message))
         return true;
     
-    if (fireEvent<bool>("message", message))
+    if (fireScriptEvent<bool>("message", message))
         return true;
     
     return false;

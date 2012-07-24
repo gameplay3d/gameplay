@@ -25,11 +25,7 @@ void luaRegister_VerticalLayout()
         {"setBottomToTop", lua_VerticalLayout_setBottomToTop},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"create", lua_VerticalLayout_static_create},
-        {NULL, NULL}
-    };
+    const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
     ScriptUtil::registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
@@ -292,43 +288,6 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_VerticalLayout_static_create(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 0:
-        {
-            void* returnPtr = (void*)VerticalLayout::create();
-            if (returnPtr)
-            {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                object->instance = returnPtr;
-                object->owns = true;
-                luaL_getmetatable(state, "VerticalLayout");
-                lua_setmetatable(state, -2);
-            }
-            else
-            {
-                lua_pushnil(state);
-            }
-
-            return 1;
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

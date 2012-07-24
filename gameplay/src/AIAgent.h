@@ -59,11 +59,16 @@ public:
      * Creates a new AIAgent.
      *
      * @return A new AIAgent.
+     * @script{create}
      */
     static AIAgent* create();
 
     /**
      * Returns the identifier for the AIAgent.
+     *
+     * This method simply returns the ID of the Node which this AIAgent
+     * is bound to. If this AIAgent is not bound to a Node, this method
+     * returns an empty string.
      *
      * @return The identifier for the agent.
      */
