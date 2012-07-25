@@ -13,8 +13,8 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 ## Roadmap for 'next' branch
 - Linux support
 - Vehicle physics
-- Shadow mapping
-- AI NavMesh
+- Shadows
+- AI pathfinding
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.
