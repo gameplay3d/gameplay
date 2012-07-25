@@ -126,11 +126,77 @@ bool isEmptyAnimation(domAnimationRef& animation);
 /**
  * Gets the visual scene from the given COLLADA dom scene.
  * 
- * @param COLLADA dom scene.
+ * @param domScene The dom scene.
  * 
  * @return The visual scene or NULL if not found.
  */
 domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene);
+
+/**
+ * Returns the parent node of the given node or NULL if there is no parent.
+ * 
+ * @param node The node to get the parent for.
+ * 
+ * @return The parent node or NULL if the node does not have a parent node.
+ */
+domNode* getParent(domNodeRef node);
+
+/**
+ * Returns the animation for the given channel.
+ * 
+ * @param channel The animation channel to get the animation for.
+ * 
+ * @return The animation of the channel or NULL if the channel does not belong to an animation.
+ */
+domAnimation* getAnimation(domChannelRef channel);
+
+/**
+ * Gets the common node ancestor for the given list of nodes.
+ * This function assumes that the nodes share a common ancestor.
+ * 
+ * @param nodes The list of nodes.
+ * 
+ * @return The common node ancestor or NULL if the list of was empty.
+ */
+domNode* getCommonNodeAncestor(std::list<domNodeRef>& nodes);
+
+/**
+ * Gets the list of node ancestors for the given node.
+ * 
+ * @param node The node to get the ancestors for.
+ * @param ancestors The output list of ancestors. 
+ *                  The first element is the root node and the last element is the direct parent of the node.
+ */
+void getNodeAncestors(domNodeRef& node, std::list<domNode*>& ancestors);
+
+/**
+ * Finds the nodes that can be automatically grouped because there is a mesh skin that has joints 
+ * that are being targetted by animations that are not grouped.
+ * 
+ * @param dom The COLLADA dom.
+ * @param nodesToGroup The list of node IDs that can have their animations automatically grouped under.
+ * 
+ * @return True if there are mesh skins that can have their animations grouped, false otherwise.
+ */
+bool findGroupAnimationNodes(domCOLLADA* dom, std::vector<std::string>& nodesToGroup);
+
+/**
+ * Returns true if the list of animation channels share the same animation.
+ * 
+ * @param channels The list of channels.
+ * 
+ * @return True if the channels share the same animation, false otherwis.
+ */ 
+bool sameAnimation(std::list<domChannelRef>& channels);
+
+/**
+ * Finds the animation channels that target the given joints and the list of nodes that are targetted by those channels.
+ * 
+ * @param source The source element to get the list of joints from.
+ * @param channels The output list of channels.
+ * @param nodes The output list of nodes.
+ */
+void findChannelsTargetingJoints(const domSourceRef& source, std::list<domChannelRef>& channels, std::list<domNodeRef>& nodes);
 
 }
 

@@ -5,6 +5,7 @@
 #include "FileSystem.h"
 #include "Game.h"
 #include "Form.h"
+#include "ScriptController.h"
 #include <GL/wglew.h>
 #include <windowsx.h>
 
@@ -14,16 +15,20 @@ using gameplay::printError;
 static int __width = 1280;
 static int __height = 720;
 
-static long __timeTicksPerMillis;
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeTicksPerMillis;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __roll;
 static float __pitch;
 static HINSTANCE __hinstance = 0;
+static HWND __attachToWindow = 0;
 static HWND __hwnd = 0;
 static HDC __hdc = 0;
 static HGLRC __hrc = 0;
+static bool __mouseCaptured = false;
+static POINT __mouseCapturePoint = { 0, 0 };
+static bool __cursorVisible = true;
 
 static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
 {
@@ -255,9 +260,18 @@ void UpdateCapture(LPARAM lParam)
         ReleaseCapture();
 }
 
+void WarpMouse(int clientX, int clientY)
+{
+    POINT p = { clientX, clientY };
+    ClientToScreen(__hwnd, &p);
+    SetCursorPos(p.x, p.y);
+}
+
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if (hwnd != __hwnd)
+    static gameplay::Game* game = gameplay::Game::getInstance();
+
+    if (!game->isInitialized() || hwnd != __hwnd)
     {
         // Ignore messages that are not for our game window.
         return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -290,7 +304,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int y = GET_Y_LPARAM(lParam);
 
         UpdateCapture(wParam);
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
         }
@@ -301,7 +315,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
         {
             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
         }
@@ -312,21 +326,21 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         UpdateCapture(wParam);
         lx = GET_X_LPARAM(lParam);
         ly = GET_Y_LPARAM(lParam);
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
         break;
 
     case WM_RBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         UpdateCapture(wParam);
         break;
 
     case WM_MBUTTONDOWN:
         UpdateCapture(wParam);
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_MBUTTONUP:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON,  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         UpdateCapture(wParam);
         break;
 
@@ -335,8 +349,23 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
 
+        if (__mouseCaptured)
+        {
+            // If the incoming position is the mouse capture point, ignore this event
+            // since this is the event that warped the cursor back.
+            if (x == __mouseCapturePoint.x && y == __mouseCapturePoint.y)
+                break;
+
+            // Convert to deltas
+            x -= __mouseCapturePoint.x;
+            y -= __mouseCapturePoint.y;
+
+            // Warp mouse back to center of screen.
+            WarpMouse(__mouseCapturePoint.x, __mouseCapturePoint.y);
+        }
+
         // Allow Game::mouseEvent a chance to handle (and possibly consume) the event.
-        if (!gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
+        if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
         {
             if ((wParam & MK_LBUTTON) == MK_LBUTTON)
             {
@@ -363,7 +392,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     case WM_MOUSEWHEEL:
-        gameplay::Game::getInstance()->mouseEvent(gameplay::Mouse::MOUSE_WHEEL, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), GET_WHEEL_DELTA_WPARAM(wParam) / 120);
+        tagPOINT point;
+        point.x = GET_X_LPARAM(lParam);
+        point.y = GET_Y_LPARAM(lParam);
+        ScreenToClient(__hwnd, &point);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, point.x, point.y, GET_WHEEL_DELTA_WPARAM(wParam) / 120);
         break;
 
     case WM_KEYDOWN:
@@ -432,11 +465,6 @@ Platform::Platform(Game* game)
 {
 }
 
-Platform::Platform(const Platform& copy)
-{
-    // hidden
-}
-
 Platform::~Platform()
 {
     if (__hwnd)
@@ -446,112 +474,8 @@ Platform::~Platform()
     }
 }
 
-Platform* Platform::create(Game* game)
+bool initializeGL()
 {
-    GP_ASSERT(game);
-
-    FileSystem::setResourcePath("./");
-
-    Platform* platform = new Platform(game);
-
-    // Get the application module handle.
-    __hinstance = ::GetModuleHandle(NULL);
-
-    LPCTSTR windowClass = L"gameplay";
-    std::wstring windowName;
-    bool fullscreen = false;
-    
-    // Read window settings from config.
-    if (game->getConfig())
-    {
-        Properties* config = game->getConfig()->getNamespace("window", true);
-        if (config)
-        {
-            // Read window title.
-            const char* title = config->getString("title");
-            if (title)
-            {
-                int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
-                wchar_t* wtitle = new wchar_t[len];
-                MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
-                windowName = wtitle;
-                SAFE_DELETE_ARRAY(wtitle);
-            }
-
-            // Read window size.
-            int width = config->getInt("width");
-            if (width != 0)
-                __width = width;
-            int height = config->getInt("height");
-            if (height != 0)
-                __height = height;
-
-            // Read fullscreen state.
-            fullscreen = config->getBool("fullscreen");
-        }
-    }
-
-    RECT rect = { 0, 0, __width, __height };
-
-    // Register our window class.
-    WNDCLASSEX wc;
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wc.lpfnWndProc    = (WNDPROC)__WndProc;
-    wc.cbClsExtra     = 0;
-    wc.cbWndExtra     = 0;
-    wc.hInstance      = __hinstance;
-    wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hIconSm        = NULL;
-    wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
-    wc.lpszMenuName   = NULL;  // No default menu
-    wc.lpszClassName  = windowClass;
-
-    if (!::RegisterClassEx(&wc))
-    {
-        GP_ERROR("Failed to register window class.");
-        goto error;
-    }
-
-    if (fullscreen)
-    {
-        DEVMODE dm;
-        memset(&dm, 0, sizeof(dm));
-        dm.dmSize= sizeof(dm);
-        dm.dmPelsWidth	= __width;
-        dm.dmPelsHeight	= __height;
-        dm.dmBitsPerPel	= 32;
-        dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
-        // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
-        if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-        {
-            fullscreen = false;
-            GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
-            goto error;
-        }
-    }
-
-    // Set the window style.
-    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    //DWORD style   = (fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
-
-    // Adjust the window rectangle so the client size is the requested size.
-    AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-
-    // Create the native Windows window.
-    __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
-
-    // Get the drawing context.
-    __hdc = GetDC(__hwnd);
-
-    // Center the window
-    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
-    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
-    ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-
     // Choose pixel format. 32-bit. RGBA.
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
@@ -568,12 +492,12 @@ Platform* Platform::create(Game* game)
     if (pixelFormat == 0)
     {
         GP_ERROR("Failed to choose a pixel format.");
-        goto error;
+        return false;
     }
     if (!SetPixelFormat (__hdc, pixelFormat, &pfd))
     {
         GP_ERROR("Failed to set the pixel format.");
-        goto error;
+        return false;
     }
 
     HGLRC tempContext = wglCreateContext(__hdc);
@@ -582,7 +506,7 @@ Platform* Platform::create(Game* game)
     if (GLEW_OK != glewInit())
     {
         GP_ERROR("Failed to initialize GLEW.");
-        goto error;
+        return false;
     }
 
     int attribs[] =
@@ -596,21 +520,146 @@ Platform* Platform::create(Game* game)
     {
         wglDeleteContext(tempContext);
         GP_ERROR("Failed to create OpenGL context.");
-        goto error;
+        return false;
     }
     wglDeleteContext(tempContext);
 
     if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
     {
         GP_ERROR("Failed to make the window current.");
-        goto error;
+        return false;
     }
 
     // Vertical sync.
     wglSwapIntervalEXT(__vsync ? 1 : 0);
 
-    // Show the window.
-    ShowWindow(__hwnd, SW_SHOW);
+    return true;
+}
+
+Platform* Platform::create(Game* game, void* attachToWindow)
+{
+    GP_ASSERT(game);
+
+    FileSystem::setResourcePath("./");
+    Platform* platform = new Platform(game);
+
+    // Get the application module handle.
+    __hinstance = ::GetModuleHandle(NULL);
+
+    __attachToWindow = (HWND)attachToWindow;
+    if (!__attachToWindow)
+    {
+        LPCTSTR windowClass = L"gameplay";
+        std::wstring windowName;
+        bool fullscreen = false;
+    
+        // Read window settings from config.
+        if (game->getConfig())
+        {
+            Properties* config = game->getConfig()->getNamespace("window", true);
+            if (config)
+            {
+                // Read window title.
+                const char* title = config->getString("title");
+                if (title)
+                {
+                    int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
+                    wchar_t* wtitle = new wchar_t[len];
+                    MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+                    windowName = wtitle;
+                    SAFE_DELETE_ARRAY(wtitle);
+                }
+
+                // Read window size.
+                int width = config->getInt("width");
+                if (width != 0)
+                    __width = width;
+                int height = config->getInt("height");
+                if (height != 0)
+                    __height = height;
+
+                // Read fullscreen state.
+                fullscreen = config->getBool("fullscreen");
+            }
+        }
+
+        RECT rect = { 0, 0, __width, __height };
+
+        // Register our window class.
+        WNDCLASSEX wc;
+        wc.cbSize = sizeof(WNDCLASSEX);
+        wc.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+        wc.lpfnWndProc    = (WNDPROC)__WndProc;
+        wc.cbClsExtra     = 0;
+        wc.cbWndExtra     = 0;
+        wc.hInstance      = __hinstance;
+        wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
+        wc.hIconSm        = NULL;
+        wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
+        wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
+        wc.lpszMenuName   = NULL;  // No default menu
+        wc.lpszClassName  = windowClass;
+
+        if (!::RegisterClassEx(&wc))
+        {
+            GP_ERROR("Failed to register window class.");
+            goto error;
+        }
+
+        if (fullscreen)
+        {
+            DEVMODE dm;
+            memset(&dm, 0, sizeof(dm));
+            dm.dmSize= sizeof(dm);
+            dm.dmPelsWidth	= __width;
+            dm.dmPelsHeight	= __height;
+            dm.dmBitsPerPel	= 32;
+            dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+            // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
+            if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+            {
+                fullscreen = false;
+                GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
+                goto error;
+            }
+        }
+
+        // Set the window style.
+        DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+        DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+
+        // Adjust the window rectangle so the client size is the requested size.
+        AdjustWindowRectEx(&rect, style, FALSE, styleEx);
+
+        // Create the native Windows window.
+        __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
+
+        // Get the drawing context.
+        __hdc = GetDC(__hwnd);
+
+        // Center the window
+        const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
+        const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
+        ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+        if (!initializeGL())
+            goto error;
+
+        // Show the window.
+        ShowWindow(__hwnd, SW_SHOW);
+    }
+    else
+    {
+        // Attach to a previous windows
+        __hwnd = (HWND)__attachToWindow;
+        __hdc = GetDC(__hwnd);
+
+        SetWindowLongPtr(__hwnd, GWL_WNDPROC, (LONG)(WNDPROC)__WndProc);
+        
+        if (!initializeGL())
+            goto error;
+    }
 
     return platform;
 
@@ -628,7 +677,7 @@ int Platform::enterMessagePump()
     // Get the initial time.
     LARGE_INTEGER tps;
     QueryPerformanceFrequency(&tps);
-    __timeTicksPerMillis = (long)(tps.QuadPart / 1000L);
+    __timeTicksPerMillis = (double)(tps.QuadPart / 1000L);
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
     GP_ASSERT(__timeTicksPerMillis);
@@ -642,6 +691,9 @@ int Platform::enterMessagePump()
 
     if (_game->getState() != Game::RUNNING)
         _game->run();
+
+    if (__attachToWindow)
+        return 0;
 
     // Enter event dispatch loop.
     MSG msg;
@@ -668,7 +720,6 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
     }
-
     return msg.wParam;
 }
 
@@ -686,8 +737,8 @@ unsigned int Platform::getDisplayHeight()
 {
     return __height;
 }
-    
-long Platform::getAbsoluteTime()
+
+double Platform::getAbsoluteTime()
 {
     LARGE_INTEGER queryTime;
     QueryPerformanceCounter(&queryTime);
@@ -697,7 +748,7 @@ long Platform::getAbsoluteTime()
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }
@@ -715,6 +766,7 @@ void Platform::setVsync(bool enable)
 
 void Platform::setMultiTouch(bool enabled)
 {
+    // not supported
 }
 
 bool Platform::isMultiTouch()
@@ -729,6 +781,54 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
 
     *pitch = __pitch;
     *roll = __roll;
+}
+
+bool Platform::hasMouse()
+{
+    return true;
+}
+
+void Platform::setMouseCaptured(bool captured)
+{
+    if (captured != __mouseCaptured)
+    {
+        if (captured)
+        {
+            // Hide the cursor and warp it to the center of the screen
+            __mouseCapturePoint.x = getDisplayWidth() / 2;
+            __mouseCapturePoint.y = getDisplayHeight() / 2;
+
+            ShowCursor(FALSE);
+            WarpMouse(__mouseCapturePoint.x, __mouseCapturePoint.y);
+        }
+        else
+        {
+            // Restore cursor
+            WarpMouse(__mouseCapturePoint.x, __mouseCapturePoint.y);
+            ShowCursor(TRUE);
+        }
+
+        __mouseCaptured = captured;
+    }
+}
+
+bool Platform::isMouseCaptured()
+{
+    return __mouseCaptured;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    if (visible != __cursorVisible)
+    {
+        ShowCursor(visible ? TRUE : FALSE);
+        __cursorVisible = visible;
+    }
+}
+
+bool Platform::isCursorVisible()
+{
+    return __cursorVisible;
 }
 
 void Platform::swapBuffers()
@@ -747,13 +847,33 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
     {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
     }
 }
 
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
+    if (!Form::keyEventInternal(evt, key))
+    {
+        Game::getInstance()->keyEvent(evt, key);
+        Game::getInstance()->getScriptController()->keyEvent(evt, key);
+    }
+}
+
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
+    }
 }
 
 void Platform::sleep(long ms)

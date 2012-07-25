@@ -13,7 +13,7 @@ class Node;
 class NodeCloneContext;
 
 /**
- *  Declares an audio source in 3D space.
+ * Declares an audio source in 3D space.
  */
 class AudioSource : public Ref, public Transform::Listener
 {
@@ -40,6 +40,7 @@ public:
      * 
      * @param url The relative location on disk of the sound file or a URL specifying a Properties object defining an audio source.
      * @return The newly created audio source, or NULL if an audio source cannot be created.
+     * @script{create}
      */
     static AudioSource* create(const char* url);
 
@@ -48,6 +49,7 @@ public:
      * 
      * @param properties The properties object defining the audio source (must have namespace equal to 'audio').
      * @return The newly created audio source, or <code>NULL</code> if the audio source failed to load.
+     * @script{create}
      */
     static AudioSource* create(Properties* properties);
 
@@ -157,6 +159,11 @@ private:
      * Destructor.
      */
     virtual ~AudioSource();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    AudioSource& operator=(const AudioSource&);
 
     /**
      * Sets the node for this audio source.

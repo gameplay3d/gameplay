@@ -52,7 +52,7 @@ private:
     /**
      * Controller update.
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
 
     ALCdevice* _alcDevice;

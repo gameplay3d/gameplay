@@ -203,7 +203,7 @@ public:
      * @param y The returned viewport y coordinate.
      * @param depth The returned pixel depth (can be NULL).
      */
-    void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = NULL);
+    void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = NULL) const;
 
     /**
      * Converts a viewport-space coordinate to a world-space position for the given depth value.
@@ -217,7 +217,7 @@ public:
      * @param depth The depth range.
      * @param dst The world space position.
      */
-    void unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst);
+    void unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst) const;
 
     /**
      * Picks a ray that can be used for picking given the specified viewport-space coordinates.
@@ -227,7 +227,7 @@ public:
      * @param y The viewport y-coordinate.
      * @param dst The computed pick ray.
      */
-    void pickRay(const Rectangle& viewport, float x, float y, Ray* dst);
+    void pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const;
 
 private:
 
@@ -245,6 +245,11 @@ private:
      * Destructor.
      */
     virtual ~Camera();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Camera& operator=(const Camera&);
 
     /**
      * Clones the camera and returns a new camera.

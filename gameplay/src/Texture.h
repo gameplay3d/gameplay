@@ -10,10 +10,6 @@ class Image;
 
 /**
  * Represents a texture.
- *
- * TODO: Addd support for the following: 
- * COMPRESSED_RGBA_ATITC = GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,
- * COMPRESSED_RGBA_DXT1 = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
  */
 class Texture : public Ref
 {
@@ -28,8 +24,7 @@ public:
     {
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
-        ALPHA   = GL_ALPHA,
-        DEPTH   = GL_DEPTH_COMPONENT
+        ALPHA   = GL_ALPHA
     };
 
     /**
@@ -55,7 +50,7 @@ public:
     };
     
     /**
-     * Defnies a texture sampler.
+     * Defines a texture sampler.
      *
      * A texture sampler is basically an instance of a texture that can be
      * used to sample a texture from a material. In addition to the texture
@@ -69,11 +64,17 @@ public:
     public:
 
         /**
+         * Destructor.
+         */
+        virtual ~Sampler();
+
+        /**
          * Creates a sampler for the specified texture.
          *
          * @param texture The texture.
          *
          * @return The new sampler.
+         * @script{create}
          */
         static Sampler* create(Texture* texture);
 
@@ -84,6 +85,7 @@ public:
          * @param generateMipmaps True to force a full mipmap chain to be generated for the texture, false otherwise.
          *
          * @return The new sampler.
+         * @script{create}
          */
         static Sampler* create(const char* path, bool generateMipmaps = false);
 
@@ -104,7 +106,9 @@ public:
         void setFilterMode(Filter minificationFilter, Filter magnificationFilter);
 
         /**
-         * Returns the texture for this sampler.
+         * Gets the texture for this sampler.
+         *
+         * @return The texture for this sampler.
          */
         Texture* getTexture() const;
 
@@ -115,8 +119,15 @@ public:
 
     private:
 
+        /**
+         * Constructor.
+         */
         Sampler(Texture* texture);
-        ~Sampler();
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        Sampler& operator=(const Sampler&);
 
         Texture* _texture;
         Wrap _wrapS;
@@ -135,26 +146,40 @@ public:
      * @param generateMipmaps true to auto-generate a full mipmap chain, false otherwise.
      * 
      * @return The new texture, or NULL if the texture could not be loaded/created.
+     * @script{create}
      */
     static Texture* create(const char* path, bool generateMipmaps = false);
 
     /**
      * Creates a texture from the given image.
+     * @script{create}
      */
     static Texture* create(Image* image, bool generateMipmaps = false);
 
     /**
      * Creates a texture from the given texture data.
+     * @script{create}
      */
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
 
     /**
-     * Returns the texture width.
+     * Gets the format of the texture.
+     *
+     * @return The texture format.
+     */
+    Format getFormat() const;
+
+    /**
+     * Gets the texture width.
+     *
+     * @return The texture width.
      */
     unsigned int getWidth() const;
 
     /**
-     * Returns the texture height.
+     * Gets the texture height.
+     *
+     * @return The texture height.
      */
     unsigned int getHeight() const;
 
@@ -187,7 +212,7 @@ public:
     bool isMipmapped() const;
 
     /**
-     * Determines if this texture is a compressed teture.
+     * Determines if this texture is a compressed texture.
      */
     bool isCompressed() const;
 
@@ -215,14 +240,22 @@ private:
      */
     virtual ~Texture();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    Texture& operator=(const Texture&);
+
     static Texture* createCompressedPVRTC(const char* path);
+
     static Texture* createCompressedDDS(const char* path);
 
     static GLubyte* readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+
     static GLubyte* readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
 
     std::string _path;
     TextureHandle _handle;
+    Format _format;
     unsigned int _width;
     unsigned int _height;
     bool _mipmapped;

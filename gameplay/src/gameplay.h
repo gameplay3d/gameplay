@@ -7,6 +7,7 @@
 #include "Mouse.h"
 #include "FileSystem.h"
 #include "Bundle.h"
+#include "Gamepad.h"
 
 // Math
 #include "Rectangle.h"
@@ -73,6 +74,12 @@
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
 
+// AI
+#include "AIController.h"
+#include "AIAgent.h"
+#include "AIState.h"
+#include "AIStateMachine.h"
+
 // UI
 #include "Theme.h"
 #include "Control.h"
@@ -84,8 +91,8 @@
 #include "TextBox.h"
 #include "RadioButton.h"
 #include "Slider.h"
+#include "Joystick.h"
 #include "Layout.h"
 #include "AbsoluteLayout.h"
 #include "VerticalLayout.h"
-#include "Joystick.h"
 

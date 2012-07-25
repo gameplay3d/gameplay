@@ -8,6 +8,7 @@
 #include "FrameBuffer.h"
 #include "Touch.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 namespace gameplay
 {
@@ -31,6 +32,7 @@ class Theme;
         size       = <width, height>       // Size of the form, measured in pixels.
         width      = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
         height     = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
+        consumeEvents = <bool>             // Whether the form propogates input events to the Game's input event handler. Default is false
       
         // All the nested controls within this form.
         container { }
@@ -54,9 +56,22 @@ public:
      * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
      * 
-     * @param url The URL pointing to the Properties object defining the animation data. 
+     * @param url The URL pointing to the Properties object defining the form. 
+     * @script{create}
      */
     static Form* create(const char* url);
+
+    /**
+     * Create a new Form.
+     *
+     * @param id The Form's ID.
+     * @param style The Form's style.
+     * @param layoutType The form's layout type.
+     *
+     * @return The new Form.
+     * @script{create}
+     */
+    static Form* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
 
     /**
      * Get a form from its ID.
@@ -66,6 +81,13 @@ public:
      * @return A form with the given ID, or null if one was not found.
      */
     static Form* getForm(const char* id);
+    
+    /**
+     * Gets the theme for the form.
+     *
+     * @return The theme for the form.
+     */
+    Theme* getTheme() const;
 
     /**
      * Set the desired size of this form.
@@ -97,30 +119,6 @@ public:
     virtual void setAutoHeight(bool autoHeight);
 
     /**
-     * Create a 3D quad to texture with this Form.
-     *
-     * The specified points should describe a triangle strip with the first 3 points
-     * forming a triangle wound in counter-clockwise direction, with the second triangle
-     * formed from the last three points in clockwise direction.
-     *
-     * @param p1 The first point.
-     * @param p2 The second point.
-     * @param p3 The third point.
-     * @param p4 The fourth point.
-     */
-    void setQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4);
-
-    /**
-     * Create a 2D quad to texture with this Form.
-     *
-     * @param x The x coordinate.
-     * @param y The y coordinate.
-     * @param width The width of the quad.
-     * @param height The height of the quad.
-     */
-    void setQuad(float x, float y, float width, float height);
-
-    /**
      * Attach this form to a node.
      *
      * A form can be drawn as part of the 3-dimensional world if it is attached to a node.
@@ -135,12 +133,17 @@ public:
     /**
      * Updates each control within this form, and positions them according to its layout.
      */
-    void update();
+    void update(float elapsedTime);
 
     /**
      * Draws this form.
      */
     void draw();
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
 private:
     
@@ -175,21 +178,50 @@ private:
 
     /**
      * Propagate key events to enabled forms.
+     *
+     * @return Whether the key event was consumed by a form.
      */
-    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
+    static bool keyEventInternal(Keyboard::KeyEvent evt, int key);
 
-    static int nextHighestPowerOfTwo(int x);
+    /**
+     * Propagate mouse events to enabled forms.
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
-    Theme* _theme;              // The Theme applied to this Form.
-    Model* _quad;               // Quad for rendering this Form in world-space.
-    Node* _node;                // Node for transforming this Form in world-space.
-    FrameBuffer* _frameBuffer;  // FBO the Form is rendered into for texturing the quad.
-    Matrix _projectionMatrix;   // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Matrix _defaultProjectionMatrix;
+    /**
+     * Get the next highest power of two of an integer.  Used when creating framebuffers.
+     *
+     * @param x The number to start with.
+     *
+     * @return The next highest power of two after x, or x if it is already a power of two.
+     */
+    static unsigned int nextPowerOfTwo(unsigned int x);
+
+    /**
+     * Unproject a point (from a mouse or touch event) into the scene and then project it onto the form.
+     *
+     * @param x The x coordinate of the mouse/touch point.
+     * @param y The y coordinate of the mouse/touch point.
+     * @param point A destination vector to populate with the projected point, in the form's plane.
+     *
+     * @return True if the projected point lies within the form's plane, false otherwise.
+     */
+    bool projectPoint(int x, int y, Vector3* point);
+
+    Theme* _theme;                      // The Theme applied to this Form.
+    FrameBuffer* _frameBuffer;          // FBO the Form is rendered into for texturing the quad. 
     SpriteBatch* _spriteBatch;
-
+    Node* _node;                        // Node for transforming this Form in world-space.
+    Model* _nodeQuad;                   // Quad for rendering this Form in 3d space.
+    Material* _nodeMaterial;            // Material for rendering this Form in 3d space.
     float _u2;
     float _v1;
+    Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
+    Matrix _defaultProjectionMatrix;   
 };
 
 }

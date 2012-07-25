@@ -25,6 +25,7 @@ public:
      * @param height The height of the new RenderTarget.
      *
      * @return A newly created RenderTarget.
+     * @script{create}
      */
     static RenderTarget* create(const char* id, unsigned int width, unsigned int height);
 
@@ -42,7 +43,7 @@ public:
      *
      * @return The ID of this RenderTarget.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Get the backing texture of this RenderTarget.
@@ -62,6 +63,11 @@ private:
      * Destructor.
      */
     ~RenderTarget();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    RenderTarget& operator=(const RenderTarget&);
 
     std::string _id;
     Texture* _texture;

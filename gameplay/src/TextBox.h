@@ -40,6 +40,17 @@ class TextBox : public Label
 public:
 
     /**
+     * Create a new text box control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new text box.
+     * @script{create}
+     */
+    static TextBox* create(const char* id, Theme::Style* style);
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -57,6 +68,11 @@ public:
      * @return The last key pressed within this text box.
      */
     int getLastKeypress();
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
 protected:
 
@@ -97,14 +113,14 @@ protected:
     /**
      * Keyboard callback on key events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
-    void keyEvent(Keyboard::KeyEvent evt, int key);
+    bool keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
      * Called when a control's properties change.  Updates this control's internal rendering

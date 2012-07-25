@@ -243,7 +243,7 @@ const Frustum& Camera::getFrustum() const
     return _bounds;
 }
 
-void Camera::project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth)
+void Camera::project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth) const
 {
     GP_ASSERT(x);
     GP_ASSERT(y);
@@ -267,7 +267,7 @@ void Camera::project(const Rectangle& viewport, const Vector3& position, float* 
     }
 }
 
-void Camera::unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst)
+void Camera::unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst) const
 {
     GP_ASSERT(dst);
     
@@ -294,7 +294,7 @@ void Camera::unproject(const Rectangle& viewport, float x, float y, float depth,
     dst->set(screen.x, screen.y, screen.z);
 }
 
-void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst)
+void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const
 {
     GP_ASSERT(dst);
 

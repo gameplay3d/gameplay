@@ -26,16 +26,14 @@ public:
     enum Format
     {
         /**
-         * A target with 24-bits of depth data.
-         *
-         * This format may be internally stored as a 32-bit buffer with 8 bits of unused data.
+         * A target with depth data.
          */
-        DEPTH24,
+        DEPTH,
 
         /**
-         * A target with 24 bits of depth data and 8 bits stencil data.
+         * A target with depth data and stencil data.
          */
-        DEPTH24_STENCIL8
+        DEPTH_STENCIL
     };
 
     /**
@@ -47,6 +45,7 @@ public:
      * @param height Height of the new DepthStencilTarget.
      *
      * @return A newly created DepthStencilTarget.
+     * @script{create}
      */
     static DepthStencilTarget* create(const char* id, Format format, unsigned int width, unsigned int height);
 
@@ -64,7 +63,7 @@ public:
      *
      * @return The ID of this DepthStencilTarget.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Returns the format of the DepthStencilTarget.
@@ -72,13 +71,6 @@ public:
      * @return The format.
      */
     Format getFormat() const;
-
-    /**
-     * Returns the depth texture for this DepthStencilTarget.
-     *
-     * @return The depth texture for this DepthStencilTarget.
-     */
-    Texture* getTexture() const;
 
 private:
 
@@ -92,10 +84,14 @@ private:
      */
     ~DepthStencilTarget();
 
+    /**
+     * Hidden copy assignment operator.
+     */
+    DepthStencilTarget& operator=(const DepthStencilTarget&);
+
     std::string _id;
     Format _format;
-    Texture* _depthTexture;
-    RenderBufferHandle _stencilBuffer;
+    RenderBufferHandle _renderBuffer;
 };
 
 }

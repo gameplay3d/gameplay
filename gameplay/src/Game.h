@@ -9,13 +9,17 @@
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
+#include "AIController.h"
 #include "AudioListener.h"
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
+#include "Gamepad.h"
 
 namespace gameplay
 {
+
+class ScriptController;
 
 /**
  * Defines the basic game initialization, logic and platform delegates.
@@ -23,7 +27,7 @@ namespace gameplay
 class Game
 {
 public:
-
+    
     /**
      * The game states.
      */
@@ -79,7 +83,7 @@ public:
      * 
      * @return The total absolute running time (in milliseconds).
      */
-    static long getAbsoluteTime();
+    static double getAbsoluteTime();
 
     /**
      * Gets the total game time (in milliseconds). This is the total accumulated game time (unpaused).
@@ -89,7 +93,7 @@ public:
      * 
      * @return The total game time (in milliseconds).
      */
-    static long getGameTime();
+    static double getGameTime();
 
     /**
      * Gets the game state.
@@ -99,12 +103,19 @@ public:
     inline State getState() const;
 
     /**
+     * Determines if the game has been initialized.
+     *
+     * @return true if the game initialization has completed, false otherwise.
+     */
+    inline bool isInitialized() const;
+
+    /**
      * Returns the game configuration object.
      *
      * This method returns a Properties object containing the contents
      * of the game.config file.
      *
-     * @return The game conifguration Properties object.
+     * @return The game configuration Properties object.
      */
     Properties* getConfig() const;
 
@@ -131,7 +142,7 @@ public:
     void exit();
 
     /**
-     * Platform frame delagate.
+     * Platform frame delegate.
      *
      * This is called every frame from the platform.
      * This in turn calls back on the user implemented game methods: update() then render()
@@ -209,6 +220,22 @@ public:
      */
     inline PhysicsController* getPhysicsController() const;
 
+    /** 
+     * Gets the AI controller for managing control of artificial
+     * intelligence associated with the game.
+     *
+     * @return The AI controller for this game.
+     */
+    inline AIController* getAIController() const;
+
+    /**
+     * Gets the script controller for managing control of Lua scripts
+     * associated with the game.
+     * 
+     * @return The script controller for this game.
+     */
+    inline ScriptController* getScriptController() const;
+
     /**
      * Gets the audio listener for 3D audio.
      * 
@@ -217,9 +244,9 @@ public:
     AudioListener* getAudioListener();
 
     /**
-     * Menu callback on menu events.
+     * Menu callback on menu events for platforms with special menu keys or gestures.
      */
-    virtual void menu();
+    virtual void menuEvent();
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -231,7 +258,7 @@ public:
     /**
      * Keyboard callback on keyPress events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
@@ -266,6 +293,69 @@ public:
      * @see Mouse::MouseEvent
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    
+    /** 
+     * Gets whether the current platform supports mouse input.
+     *
+     * @return true if a mouse is supported, false otherwise.
+     */
+    inline bool hasMouse();
+    
+    /**
+     * Gets whether mouse input is currently captured.
+     *
+     * @return is the mouse captured.
+     */
+    inline bool isMouseCaptured();
+    
+    /**
+     * Enables or disables mouse capture.
+     *
+     * On platforms that support a mouse, when mouse capture is enabled,
+     * the platform cursor will be hidden and the mouse will be warped
+     * to the center of the screen. While mouse capture is enabled,
+     * all mouse move events will then be delivered as deltas instead
+     * of absolute positions.
+     *
+     * @param captured true to enable mouse capture mode, false to disable it.
+     */
+    inline void setMouseCaptured(bool captured);
+    
+    /**
+     * Sets the visibility of the platform cursor.
+     *
+     * @param visible true to show the platform cursor, false to hide it.
+     */
+    inline void setCursorVisible(bool visible);
+    
+    /**
+     * Determines whether the platform cursor is currently visible.
+     *
+     * @return true if the platform cursor is visible, false otherwise.
+     */
+    inline bool isCursorVisible();
+
+    /**
+     * Gamepad callback on gamepad events.
+     *
+     * @param evt The gamepad event that occurred.
+     * @param gamepad the gamepad the event occurred on
+     */
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
+    /**
+     * Gets the number of gamepad's connected to the game.
+     * 
+     * @return The number of gamepad's connected to the game.
+     */
+    inline unsigned int getGamepadCount() const;
+
+    /**
+     * Gets the gamepad at the specified index.
+     *
+     * @param index The index to get the gamepad for: 0 <= index <= Game::getGamepadCount()
+     */
+    inline Gamepad* getGamepad(unsigned int index) const;
 
     /**
      * Sets muli-touch is to be enabled/disabled. Default is disabled.
@@ -290,14 +380,27 @@ public:
     inline void getAccelerometerValues(float* pitch, float* roll);
 
     /**
-     * Schedules a time event to be sent to the given TimeListener a given of game milliseconds from now.
+     * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.
      * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
      * 
      * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
      * @param timeListener The TimeListener that will receive the event.
      * @param cookie The cookie data that the time event will contain.
+     * @script{ignore}
      */
-    void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
+    void schedule(float timeOffset, TimeListener* timeListener, void* cookie = 0);
+
+    /**
+     * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.
+     * Game time stops while the game is paused. A time offset of zero will fire the time event in the next frame.
+     * 
+     * Note: the given Lua function must take a single floating point number, which is the difference between the
+     * current game time and the target time (see TimeListener::timeEvent).
+     * 
+     * @param timeOffset The number of game milliseconds in the future to schedule the event to be fired.
+     * @param function The Lua script function that will receive the event.
+     */
+    void schedule(float timeOffset, const char* function);
 
 protected:
 
@@ -324,7 +427,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void update(long elapsedTime) = 0;
+    virtual void update(float elapsedTime) = 0;
 
     /**
      * Render callback for handling rendering routines.
@@ -334,7 +437,7 @@ protected:
      *
      * @param elapsedTime The elapsed game time.
      */
-    virtual void render(long elapsedTime) = 0;
+    virtual void render(float elapsedTime) = 0;
 
     /**
      * Renders a single frame once and then swaps it to the display.
@@ -343,6 +446,14 @@ protected:
      */
     template <class T>
     void renderOnce(T* instance, void (T::*method)(void*), void* cookie);
+
+    /**
+     * Renders a single frame once and then swaps it to the display.
+     * This calls the given Lua function, which should take no parameters and return nothing (void).
+     *
+     * This is useful for rendering splash screens.
+     */
+    void renderOnce(const char* function);
 
     /**
      * Updates the game's internal systems (audio, animation, physics) once.
@@ -356,22 +467,34 @@ protected:
 private:
 
     /**
-     * TimeEvent represents the event that is sent to TimeListeners as a result of 
-     * calling Game::schedule().
+     * Allows time listener interaction from Lua scripts.
+     */
+    struct ScriptListener : public TimeListener
+    {
+        /**
+         * Constructor.
+         */
+        ScriptListener(const char* url);
+
+        /**
+         * @see TimeListener#timeEvent(long, void*)
+         */
+        void timeEvent(long timeDiff, void* cookie);
+
+        /** Holds the name of the Lua script function to call back. */
+        std::string function;
+    };
+
+    /**
+     * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().
      */
     class TimeEvent
     {
     public:
 
-        TimeEvent(long time, TimeListener* timeListener, void* cookie);
-        // The comparator is used to determine the order of time events in the priority queue.
+        TimeEvent(double time, TimeListener* timeListener, void* cookie);
         bool operator<(const TimeEvent& v) const;
-        
-        /**
-         * The game time.
-         * @see Game::getGameTime()
-         */
-        long time;
+        double time;
         TimeListener* listener;
         void* cookie;
     };
@@ -384,7 +507,7 @@ private:
     Game(const Game& copy);
 
     /**
-     * Starts core game.
+     * Starts the game.
      */
     bool startup();
 
@@ -398,18 +521,31 @@ private:
      * 
      * @param frameTime The current game frame time. Used to determine which time events need to be fired.
      */
-    void fireTimeEvents(long frameTime);
+    void fireTimeEvents(double frameTime);
 
     /**
      * Loads the game configuration.
      */
     void loadConfig();
 
+    /**
+     * Loads the gamepads from the configuration file.
+     */
+    void loadGamepads();
+
+    /** 
+     * Creates a Gamepad object from a .form file.
+     *
+     * @param gamepadId The gamepad id (typically equal to the corresponding player's number).
+     * @param gamepadFormPath The path to the .form file.
+     */
+    Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
-    static long _pausedTimeLast;                // The last time paused.
-    static long _pausedTimeTotal;               // The total time paused.
-    long _frameLastFPS;                         // The last time the frame count was updated.
+    static double _pausedTimeLast;              // The last time paused.
+    static double _pausedTimeTotal;             // The total time paused.
+    double _frameLastFPS;                       // The last time the frame count was updated.
     unsigned int _frameCount;                   // The current frame count.
     unsigned int _frameRate;                    // The current frame rate.
     unsigned int _width;                        // The game's display width.
@@ -422,8 +558,12 @@ private:
     AnimationController* _animationController;  // Controls the scheduling and running of animations.
     AudioController* _audioController;          // Controls audio sources that are playing in the game.
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
+    AIController* _aiController;                // Controls AI simulation.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents; // Contains the scheduled time events.
+    std::vector<Gamepad*>* _gamepads;           // The connected gamepads.
+    std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
+    ScriptController* _scriptController;            // Controls the scripting engine.
+    std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 

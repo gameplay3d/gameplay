@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include "MeshBatch.h"
+#include "ScriptController.h"
 
 namespace gameplay
 {
@@ -75,6 +76,7 @@ public:
      *      or false if nodes that start with the given ID are returned.
      * 
      * @return The number of matches found.
+     * @script{ignore}
      */
     unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true) const;
 
@@ -181,7 +183,7 @@ public:
      * 
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts two parameters: a Node pointer and a cookie of a
-     * user-specified type. The scene travesal continues while visitMethod return
+     * user-specified type. The scene traversal continues while visitMethod return
      * true. Returning false will cause the traversal to stop.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.
@@ -190,6 +192,20 @@ public:
      */
     template <class T, class C>
     void visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
+
+    /**
+     * Visits each node in the scene and calls the specified Lua function.
+     *
+     * Calling this method invokes the specified Lua function for each node
+     * in the scene hierarchy.
+     *
+     * The visitMethod parameter must be a string containing the name of a
+     * valid Lua function that has a boolean return type and accepts a 
+     * single parameter of type Node*.
+     *
+     * @param visitMethod The name of the Lua function to call for each node in the scene.
+     */
+    inline void visit(const char* visitMethod);
 
     /**
      * Draws debugging information (bounding volumes, etc.) for the scene.
@@ -217,6 +233,11 @@ private:
     virtual ~Scene();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Scene& operator=(const Scene&);
+
+    /**
      * Visits the given node and all of its children recursively.
      */
     template <class T>
@@ -227,6 +248,11 @@ private:
      */
     template <class T, class C>
     bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
+
+    /**
+     * Visits the given node and all of its children recursively.
+     */
+    inline bool visitNode(Node* node, const char* visitMethod);
 
     std::string _id;
     Camera* _activeCamera;
@@ -259,6 +285,15 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
     }
 }
 
+inline void Scene::visit(const char* visitMethod)
+{
+    for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
+    {
+        if (!visitNode(node, visitMethod))
+            return;
+    }
+}
+
 template <class T>
 bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
 {
@@ -287,6 +322,22 @@ bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         if (!visitNode(child, instance, visitMethod, cookie))
+            return false;
+    }
+
+    return true;
+}
+
+inline bool Scene::visitNode(Node* node, const char* visitMethod)
+{
+    // Invoke the visit method for this node.
+    if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", node))
+        return false;
+
+    // Recurse for all children.
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", child))
             return false;
     }
 

@@ -3,6 +3,7 @@
 
 #include "Touch.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 namespace gameplay
 {
@@ -22,13 +23,15 @@ public:
     ~Platform();
 
     /**
-     * Creates a platform for the specified game which is will interacte with.
+     * Creates a platform for the specified game which it will interact with.
      *
      * @param game The game to create a platform for.
+     * @param attachToWindow The native window handle to optionally attach to.
      * 
      * @return The created platform interface.
+     * @script{ignore}
      */
-    static Platform* create(Game* game);
+    static Platform* create(Game* game, void* attachToWindow = NULL);
 
     /**
      * Begins processing the platform messages.
@@ -36,6 +39,9 @@ public:
      * This method handles all OS window messages and drives the game loop.
      * It normally does not return until the application is closed.
      * 
+     * If a attachToWindow is passed to Platform::create the message pump will instead attach
+     * to or allow the attachToWindow to drive the game loop on the platform.
+     *
      * @return The platform message pump return code.
      */
     int enterMessagePump();
@@ -66,14 +72,14 @@ public:
      *
      * @return The absolute platform time. (in milliseconds)
      */
-    static long getAbsoluteTime();
+    static double getAbsoluteTime();
 
     /**
      * Sets the absolute platform time since the start of the message pump.
      *
      * @param time The time to set (in milliseconds).
      */
-    static void setAbsoluteTime(long time);
+    static void setAbsoluteTime(double time);
 
     /**
      * Gets whether vertical sync is enabled for the game display.
@@ -90,7 +96,10 @@ public:
     static void setVsync(bool enable);
 
     /**
-     * Set if multi-touch is enabled on the platform
+     * Set if multi-touch is enabled on the platform.
+     *
+     * Note that this method does nothing on platforms that do not
+     * support multi-touch.
      */
     static void setMultiTouch(bool enabled);
 
@@ -98,6 +107,54 @@ public:
     * Is multi-touch mode enabled.
     */
     static bool isMultiTouch();
+
+    /**
+     * Whether the platform has mouse support.
+     */
+    static bool hasMouse();
+    
+    /**
+     * Enables or disabled mouse capture.
+     *
+     * When mouse capture is enabled, the platform cursor is hidden
+     * and mouse event points are delivered as position deltas instead
+     * of absolute positions.
+     *
+     * This is useful for games that wish to provide uninhibited mouse
+     * movement, such as when implementing free/mouse look in an FPS
+     * game.
+     *
+     * Disabling mouse capture moves the mouse back to the center of the
+     * screen and shows the platform cursor.
+     *
+     * Note that this method does nothing on platforms that do not
+     * support a mouse.
+     *
+     * @param captured True to enable mouse capture, false to disable it.
+     */
+    static void setMouseCaptured(bool captured);
+
+    /**
+     * Determines if mouse capture is currently enabled.
+     */
+    static bool isMouseCaptured();
+
+    /**
+     * Sets the visibility of the platform cursor.
+     *
+     * On platforms that support a visible cursor, this method
+     * toggles the visibility of the cursor.
+     *
+     * @param visible true to show the platform cursor, false to hide it.
+     */
+    static void setCursorVisible(bool visible);
+
+    /**
+     * Determines whether the platform cursor is currently visible.
+     *
+     * @return true if the platform cursor is visible, false otherwise.
+     */
+    static bool isCursorVisible();
 
     /**
      * Gets the platform accelerometer values.
@@ -134,7 +191,7 @@ public:
     /**
      * Keyboard callback on keyPress events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
      * 
@@ -142,6 +199,21 @@ public:
      * @see Keyboard::Key
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
+     * then it is interpreted as a touch event instead.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Sleeps synchronously for the given amount of time (in milliseconds).
@@ -166,5 +238,7 @@ private:
 };
 
 }
+
+#include "Game.h"
 
 #endif

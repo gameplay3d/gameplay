@@ -1,4 +1,4 @@
-## gameplay v1.3.0
+## gameplay v1.4.0
 An open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
@@ -11,12 +11,10 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 - Apple MacOS X (using Apple XCode 4.3.2)
 
 ## Roadmap for 'next' branch
-- Lua script bindings
-- Gamepad support
+- Linux support
 - Vehicle physics
-- Terrain
-- Lightmaps
 - Shadows
+- AI pathfinding
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.

@@ -4,38 +4,27 @@
 namespace gameplay
 {
 
-static VerticalLayout* __instance;
-
 VerticalLayout::VerticalLayout() : _bottomToTop(false)
-{
-}
-
-VerticalLayout::VerticalLayout(const VerticalLayout& copy)
 {
 }
 
 VerticalLayout::~VerticalLayout()
 {
-    __instance = NULL;
 }
 
 VerticalLayout* VerticalLayout::create()
 {
-    if (!__instance)
-    {
-        __instance = new VerticalLayout();
-    }
-    else
-    {
-        __instance->addRef();
-    }
-
-    return __instance;
+    return new VerticalLayout();
 }
 
 void VerticalLayout::setBottomToTop(bool bottomToTop)
 {
     _bottomToTop = bottomToTop;
+}
+
+bool VerticalLayout::getBottomToTop()
+{
+    return _bottomToTop;
 }
 
 Layout::Type VerticalLayout::getType()
