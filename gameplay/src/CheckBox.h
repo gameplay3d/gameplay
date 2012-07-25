@@ -28,6 +28,7 @@ namespace gameplay
          text        = <string>
          checked     = <bool>
          iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
+         consumeEvents = <bool>  // Whether the checkbox propogates input events to the Game's input event handler. Default is true.
     }
  @endverbatim
  */
@@ -36,6 +37,17 @@ class CheckBox : public Button
     friend class Container;
 
 public:
+
+    /**
+     * Create a new check box control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new check box.
+     * @script{create}
+     */
+    static CheckBox* create(const char* id, Theme::Style* style);
 
     /**
      * Gets whether this checkbox is checked.
@@ -65,6 +77,11 @@ public:
      * @return The size of the checkbox icon.
      */
     const Vector2& getImageSize() const;
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
     /**
      * Add a listener to be notified of specific events affecting

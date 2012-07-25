@@ -1,4 +1,5 @@
 #include "Base.h"
+#include "AudioSource.h"
 #include "Game.h"
 #include "Bundle.h"
 #include "SceneLoader.h"
@@ -131,7 +132,7 @@ void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::
 
     // If there is a non-GPB file that needs to be loaded later, add an 
     // empty entry to the properties table to signify it.
-    if (urlStr.length() > 0 && urlStr.find(".gpb") == urlStr.npos && _properties.count(urlStr) == 0)
+    if (urlStr.length() > 0 && urlStr.find(".") != urlStr.npos && urlStr.find(".gpb") == urlStr.npos && _properties.count(urlStr) == 0)
         _properties[urlStr] = NULL;
 
     // Add the node property to the list of node properties to be resolved later.
@@ -176,6 +177,9 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             GP_ERROR("The referenced node data at url '%s' failed to load.", snp._url.c_str());
             return;
         }
+
+        // If the URL didn't specify a particular namespace within the file, pick the first one.
+        p = (strlen(p->getNamespace()) > 0) ? p : p->getNextNamespace();
 
         switch (snp._type)
         {
@@ -839,7 +843,7 @@ void SceneLoader::loadReferencedFiles()
             // Check if the referenced properties file has already been loaded.
             Properties* properties = NULL;
             std::map<std::string, Properties*>::iterator pffIter = _propertiesFromFile.find(fileString);
-            if (pffIter != _propertiesFromFile.end())
+            if (pffIter != _propertiesFromFile.end() && pffIter->second)
             {
                 properties = pffIter->second;
             }
@@ -969,7 +973,7 @@ PhysicsConstraint* SceneLoader::loadSpringConstraint(const Properties* constrain
     return physicsConstraint;
 }
 
-void SceneLoader::splitURL(const std::string& url, std::string* file, std::string* id)
+void splitURL(const std::string& url, std::string* file, std::string* id)
 {
     if (url.empty())
     {

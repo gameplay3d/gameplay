@@ -2,7 +2,6 @@
 #include "PhysicsController.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCharacter.h"
-#include "PhysicsMotionState.h"
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"
@@ -21,16 +20,20 @@ const int PhysicsController::REGISTERED    = 0x04;
 const int PhysicsController::REMOVE        = 0x08;
 
 PhysicsController::PhysicsController()
-  : _collisionConfiguration(NULL), _dispatcher(NULL),
+  : _isUpdating(false), _collisionConfiguration(NULL), _dispatcher(NULL),
     _overlappingPairCache(NULL), _solver(NULL), _world(NULL), _ghostPairCallback(NULL),
     _debugDrawer(NULL), _status(PhysicsController::Listener::DEACTIVATED), _listeners(NULL),
-    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0))
+    _gravity(btScalar(0.0), btScalar(-9.8), btScalar(0.0)), _collisionCallback(NULL)
 {
     // Default gravity is 9.8 along the negative Y axis.
+    _collisionCallback = new CollisionCallback(this);
+
+    addScriptEvent("statusEvent", "[PhysicsController::Listener::EventType]");
 }
 
 PhysicsController::~PhysicsController()
 {
+    SAFE_DELETE(_collisionCallback);
     SAFE_DELETE(_ghostPairCallback);
     SAFE_DELETE(_debugDrawer);
     SAFE_DELETE(_listeners);
@@ -154,12 +157,64 @@ void PhysicsController::drawDebug(const Matrix& viewProjection)
     _debugDrawer->end();
 }
 
-bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result)
+bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsController::HitResult* result, PhysicsController::HitFilter* filter)
 {
+    class RayTestCallback : public btCollisionWorld::ClosestRayResultCallback
+    {
+    private:
+
+        HitFilter* filter;
+        HitResult hitResult;
+
+    public:
+
+        RayTestCallback(const btVector3& rayFromWorld, const btVector3& rayToWorld, PhysicsController::HitFilter* filter)
+            : btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld), filter(filter)
+        {
+        }
+
+		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+		{
+            if (!btCollisionWorld::ClosestRayResultCallback::needsCollision(proxy0))
+                return false;
+
+            btCollisionObject* co = reinterpret_cast<btCollisionObject*>(proxy0->m_clientObject);
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(co->getUserPointer());
+            if (object == NULL)
+                return false;
+
+            return filter ? !filter->filter(object) : true;
+        }
+
+        btScalar addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace)
+        {
+            GP_ASSERT(rayResult.m_collisionObject);
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(rayResult.m_collisionObject->getUserPointer());
+
+            if (object == NULL)
+                return 1.0f; // ignore
+
+            float result = btCollisionWorld::ClosestRayResultCallback::addSingleResult(rayResult, normalInWorldSpace);
+
+            hitResult.object = object;
+            hitResult.point.set(m_hitPointWorld.x(), m_hitPointWorld.y(), m_hitPointWorld.z());
+            hitResult.fraction = m_closestHitFraction;
+            hitResult.normal.set(m_hitNormalWorld.x(), m_hitNormalWorld.y(), m_hitNormalWorld.z());
+
+            if (filter && !filter->hit(hitResult))
+                return 1.0f; // process next collision
+
+            return result; // continue normally
+        }
+    };
+
     GP_ASSERT(_world);
 
-    btCollisionWorld::ClosestRayResultCallback callback(BV(ray.getOrigin()), BV(distance * ray.getDirection()));
-    _world->rayTest(BV(ray.getOrigin()), BV(distance * ray.getDirection()), callback);
+    btVector3 rayFromWorld(BV(ray.getOrigin()));
+    btVector3 rayToWorld(rayFromWorld + BV(ray.getDirection() * distance));
+
+    RayTestCallback callback(rayFromWorld, rayToWorld, filter);
+    _world->rayTest(rayFromWorld, rayToWorld, callback);
     if (callback.hasHit())
     {
         if (result)
@@ -176,15 +231,34 @@ bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsControlle
     return false;
 }
 
-bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result)
+bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3& endPosition, PhysicsController::HitResult* result, PhysicsController::HitFilter* filter)
 {
     class SweepTestCallback : public btCollisionWorld::ClosestConvexResultCallback
     {
+    private:
+
+        PhysicsCollisionObject* me;
+        PhysicsController::HitFilter* filter;
+        PhysicsController::HitResult hitResult;
+
     public:
 
-        SweepTestCallback(PhysicsCollisionObject* me)
-            : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), me(me)
+        SweepTestCallback(PhysicsCollisionObject* me, PhysicsController::HitFilter* filter)
+            : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0)), me(me), filter(filter)
         {
+        }
+
+		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+		{
+            if (!btCollisionWorld::ClosestConvexResultCallback::needsCollision(proxy0))
+                return false;
+
+            btCollisionObject* co = reinterpret_cast<btCollisionObject*>(proxy0->m_clientObject);
+            PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(co->getUserPointer());
+            if (object == NULL || object == me)
+                return false;
+
+            return filter ? !filter->filter(object) : true;
         }
 
         btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
@@ -192,13 +266,21 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
             GP_ASSERT(convexResult.m_hitCollisionObject);
             PhysicsCollisionObject* object = reinterpret_cast<PhysicsCollisionObject*>(convexResult.m_hitCollisionObject->getUserPointer());
 
-            if (object == me)
+            if (object == NULL)
                 return 1.0f;
 
-            return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
-        }
+            float result = ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
 
-        PhysicsCollisionObject* me;
+            hitResult.object = object;
+            hitResult.point.set(m_hitPointWorld.x(), m_hitPointWorld.y(), m_hitPointWorld.z());
+            hitResult.fraction = m_closestHitFraction;
+            hitResult.normal.set(m_hitNormalWorld.x(), m_hitNormalWorld.y(), m_hitNormalWorld.z());
+
+            if (filter && !filter->hit(hitResult))
+                return 1.0f;
+
+            return result;
+        }
     };
 
     GP_ASSERT(object && object->getCollisionShape());
@@ -228,7 +310,7 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     end.setOrigin(BV(endPosition));
 
     // Perform bullet convex sweep test.
-    SweepTestCallback callback(object);
+    SweepTestCallback callback(object, filter);
 
     // If the object is represented by a ghost object, use the ghost object's convex sweep test
     // since it is much faster than the world's version.
@@ -265,14 +347,14 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     return false;
 }
 
-btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
+btScalar PhysicsController::CollisionCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
     const btCollisionObject* b, int partIdB, int indexB)
 {
-    GP_ASSERT(Game::getInstance()->getPhysicsController());
+    GP_ASSERT(_pc);
 
     // Get pointers to the PhysicsCollisionObject objects.
-    PhysicsCollisionObject* objectA = Game::getInstance()->getPhysicsController()->getCollisionObject(a);
-    PhysicsCollisionObject* objectB = Game::getInstance()->getPhysicsController()->getCollisionObject(b);
+    PhysicsCollisionObject* objectA = _pc->getCollisionObject(a);
+    PhysicsCollisionObject* objectB = _pc->getCollisionObject(b);
 
     // If the given collision object pair has collided in the past, then
     // we notify the listeners only if the pair was not colliding
@@ -281,20 +363,20 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
     PhysicsCollisionObject::CollisionPair pair(objectA, objectB);
 
     CollisionInfo* collisionInfo;
-    if (_collisionStatus.count(pair) > 0)
+    if (_pc->_collisionStatus.count(pair) > 0)
     {
-        collisionInfo = &_collisionStatus[pair];
+        collisionInfo = &_pc->_collisionStatus[pair];
     }
     else
     {
         // Add a new collision pair for these objects.
-        collisionInfo = &_collisionStatus[pair];
+        collisionInfo = &_pc->_collisionStatus[pair];
 
         // Add the appropriate listeners.
         PhysicsCollisionObject::CollisionPair p1(pair.objectA, NULL);
-        if (_collisionStatus.count(p1) > 0)
+        if (_pc->_collisionStatus.count(p1) > 0)
         {
-            const CollisionInfo& ci = _collisionStatus[p1];
+            const CollisionInfo& ci = _pc->_collisionStatus[p1];
             std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = ci._listeners.begin();
             for (; iter != ci._listeners.end(); iter++)
             {
@@ -303,9 +385,9 @@ btScalar PhysicsController::addSingleResult(btManifoldPoint& cp, const btCollisi
             }
         }
         PhysicsCollisionObject::CollisionPair p2(pair.objectB, NULL);
-        if (_collisionStatus.count(p2) > 0)
+        if (_pc->_collisionStatus.count(p2) > 0)
         {
-            const CollisionInfo& ci = _collisionStatus[p2];
+            const CollisionInfo& ci = _pc->_collisionStatus[p2];
             std::vector<PhysicsCollisionObject::CollisionListener*>::const_iterator iter = ci._listeners.begin();
             for (; iter != ci._listeners.end(); iter++)
             {
@@ -381,19 +463,20 @@ void PhysicsController::resume()
     // Unused
 }
 
-void PhysicsController::update(long elapsedTime)
+void PhysicsController::update(float elapsedTime)
 {
     GP_ASSERT(_world);
+    _isUpdating = true;
 
     // Update the physics simulation, with a maximum
     // of 10 simulation steps being performed in a given frame.
     //
     // Note that stepSimulation takes elapsed time in seconds
     // so we divide by 1000 to convert from milliseconds.
-    _world->stepSimulation((float)elapsedTime * 0.001, 10);
+    _world->stepSimulation(elapsedTime * 0.001f, 10);
 
     // If we have status listeners, then check if our status has changed.
-    if (_listeners)
+    if (_listeners || _callbacks["statusEvent"])
     {
         Listener::EventType oldStatus = _status;
 
@@ -429,11 +512,16 @@ void PhysicsController::update(long elapsedTime)
         // If the status has changed, notify our listeners.
         if (oldStatus != _status)
         {
-            for (unsigned int k = 0; k < _listeners->size(); k++)
+            if (_listeners)
             {
-                GP_ASSERT((*_listeners)[k]);
-                (*_listeners)[k]->statusEvent(_status);
+                for (unsigned int k = 0; k < _listeners->size(); k++)
+                {
+                    GP_ASSERT((*_listeners)[k]);
+                    (*_listeners)[k]->statusEvent(_status);
+                }
             }
+
+            fireScriptEvent<void>("statusEvent", _status);
         }
     }
 
@@ -471,9 +559,9 @@ void PhysicsController::update(long elapsedTime)
         if ((iter->second._status & REGISTERED) != 0 && (iter->second._status & REMOVE) == 0)
         {
             if (iter->first.objectB)
-                _world->contactPairTest(iter->first.objectA->getCollisionObject(), iter->first.objectB->getCollisionObject(), *this);
+                _world->contactPairTest(iter->first.objectA->getCollisionObject(), iter->first.objectB->getCollisionObject(), *_collisionCallback);
             else
-                _world->contactTest(iter->first.objectA->getCollisionObject(), *this);
+                _world->contactTest(iter->first.objectA->getCollisionObject(), *_collisionCallback);
         }
     }
 
@@ -495,6 +583,8 @@ void PhysicsController::update(long elapsedTime)
             iter->second._status &= ~COLLISION;
         }
     }
+
+    _isUpdating = false;
 }
 
 void PhysicsController::addCollisionListener(PhysicsCollisionObject::CollisionListener* listener, PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
@@ -554,10 +644,11 @@ void PhysicsController::addCollisionObject(PhysicsCollisionObject* object)
     }
 }
 
-void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
+void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object, bool removeListeners)
 {
     GP_ASSERT(object);
     GP_ASSERT(_world);
+    GP_ASSERT(!_isUpdating);
 
     // Remove the collision object from the world.
     if (object->getCollisionObject())
@@ -580,11 +671,14 @@ void PhysicsController::removeCollisionObject(PhysicsCollisionObject* object)
     }
 
     // Find all references to the object in the collision status cache and mark them for removal.
-    std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
-    for (; iter != _collisionStatus.end(); iter++)
+    if (removeListeners)
     {
-        if (iter->first.objectA == object || iter->first.objectB == object)
-            iter->second._status |= REMOVE;
+        std::map<PhysicsCollisionObject::CollisionPair, CollisionInfo>::iterator iter = _collisionStatus.begin();
+        for (; iter != _collisionStatus.end(); iter++)
+        {
+            if (iter->first.objectA == object || iter->first.objectB == object)
+                iter->second._status |= REMOVE;
+        }
     }
 }
 
@@ -595,7 +689,7 @@ PhysicsCollisionObject* PhysicsController::getCollisionObject(const btCollisionO
     return reinterpret_cast<PhysicsCollisionObject*>(collisionObject->getUserPointer());
 }
 
-void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
+static void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
 {
     GP_ASSERT(node);
     GP_ASSERT(out);
@@ -621,7 +715,7 @@ void getBoundingBox(Node* node, BoundingBox* out, bool merge = false)
     }
 }
 
-void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
+static void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
 {
     GP_ASSERT(node);
     GP_ASSERT(out);
@@ -647,7 +741,7 @@ void getBoundingSphere(Node* node, BoundingSphere* out, bool merge = false)
     }
 }
 
-void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* centerOfMassOffset)
+static void computeCenterOfMass(const Vector3& center, const Vector3& scale, Vector3* centerOfMassOffset)
 {
     GP_ASSERT(centerOfMassOffset);
 
@@ -932,14 +1026,27 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     {
         for (unsigned int y = 0, h = image->getHeight(); y < h; ++y)
         {
-            heights[x + y * w] = ((((float)data[(x + y * h) * pixelSize + 0]) +
-                ((float)data[(x + y * h) * pixelSize + 1]) +
-                ((float)data[(x + y * h) * pixelSize + 2])) / 768.0f) * (maxHeight - minHeight) + minHeight;
+            //
+            // Orignially in GamePlay this was normalizedHeightGrayscale which generally yielded
+            // only 8-bit precision. This has been replaced by normalizedHeightPacked (with a
+            // corresponding change in gameplay-encoder).
+            //
+            // BACKWARD COMPATIBILITY
+            // In grayscale images where r=g=b this will maintain some degree of compatibility,
+            // to within 0.4%. This can be seen by setting r=g=b=x and comparing the grayscale
+            // height expression to the packed height expression: the error is 2^-8 + 2^-16
+            // which is just under 0.4%.
+            //
+            heights[x + y * w] = normalizedHeightPacked(
+                data[(x + y * w) * pixelSize + 0],
+                data[(x + y * w) * pixelSize + 1],
+                data[(x + y * w) * pixelSize + 2]) * (maxHeight - minHeight) + minHeight;
         }
     }
 
     PhysicsCollisionShape::HeightfieldData* heightfieldData = new PhysicsCollisionShape::HeightfieldData();
     heightfieldData->heightData = NULL;
+    heightfieldData->normalData = NULL;
     heightfieldData->inverseIsDirty = true;
 
     unsigned int sizeWidth = width;
@@ -951,17 +1058,52 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
     heightfieldData->width = sizeWidth + 1;
     heightfieldData->height = sizeHeight + 1;
     heightfieldData->heightData = new float[heightfieldData->width * heightfieldData->height];
-    unsigned int heightIndex = 0;
+    heightfieldData->normalData = new Vector3[heightfieldData->width * heightfieldData->height];
+    unsigned int heightIndex = 0, prevRowIndex = 0, prevColIndex = 0;
     float widthImageFactor = (float)(image->getWidth() - 1) / sizeWidth;
     float heightImageFactor = (float)(image->getHeight() - 1) / sizeHeight;
     float x = 0.0f;
     float z = 0.0f;
-    for (unsigned int row = 0, z = 0.0f; row <= sizeHeight; row++, z += 1.0f)
+    const float horizStepsize = 1.0f;
+    for (unsigned int row = 0, z = 0.0f; row <= sizeHeight; row++, z += horizStepsize)
     {
-        for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += 1.0f)
+        for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += horizStepsize)
         {
             heightIndex = row * heightfieldData->width + col;
+            prevRowIndex = heightIndex - heightfieldData->width; // ignored if row<1
+            prevColIndex = heightIndex - 1; // ignored if col<1
+
             heightfieldData->heightData[heightIndex] = calculateHeight(heights, image->getWidth(), image->getHeight(), x * widthImageFactor, (sizeHeight - z) * heightImageFactor);
+
+            //
+            // Normal calculation based on height data using a backward difference.
+            //
+            if (row == 0 || col == 0)
+            {
+                // This is just a safe default value.
+                heightfieldData->normalData[heightIndex].set(Vector3::unitY());
+            }
+            else
+            {
+                heightfieldData->normalData[heightIndex].set(
+                    heightfieldData->heightData[prevColIndex] - heightfieldData->heightData[heightIndex],
+                    horizStepsize,
+                    heightfieldData->heightData[prevRowIndex] - heightfieldData->heightData[heightIndex]);
+                heightfieldData->normalData[heightIndex].normalize();
+            }
+
+            // For the starting row, just copy from the second row (i.e., a forward difference).
+            if (row == 1)
+            {
+                heightfieldData->normalData[prevRowIndex].set(heightfieldData->normalData[heightIndex]);
+            }
+
+            // For the starting column, just copy from the second column (i.e., a forward difference).
+            // (We don't care which of the 2 valid sources heightfieldData->normalData[0] ultimately comes from).
+            if (col == 1)
+            {
+                heightfieldData->normalData[prevColIndex].set(heightfieldData->normalData[heightIndex]);
+            }
         }
     }
     SAFE_DELETE_ARRAY(heights);
@@ -1159,7 +1301,8 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
     }
 }
 
-float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y)
+float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
+    const Matrix* worldMatrix, Vector3* normalData, Vector3* normalResult)
 {
     GP_ASSERT(data);
 
@@ -1175,21 +1318,59 @@ float PhysicsController::calculateHeight(float* data, unsigned int width, unsign
 
     if (x2 >= width && y2 >= height)
     {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width]);
+            worldMatrix->transformVector(normalResult);
+        }
         return data[x1 + y1 * width];
     }
     else if (x2 >= width)
     {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * yFactorI + normalData[x1 + y2 * width] * yFactor);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
         return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
     }
     else if (y2 >= height)
     {
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * xFactorI + normalData[x2 + y1 * width] * xFactor);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
         return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
     }
     else
     {
-        return data[x1 + y1 * width] * xFactorI * yFactorI + data[x1 + y2 * width] * xFactorI * yFactor + 
-            data[x2 + y2 * width] * xFactor * yFactor + data[x2 + y1 * width] * xFactor * yFactorI;
+        float a = xFactorI * yFactorI;
+        float b = xFactorI * yFactor;
+        float c = xFactor * yFactor;
+        float d = xFactor * yFactorI;
+        if (normalResult)
+        {
+            normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b +
+                normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
+            normalResult->normalize();
+            worldMatrix->transformVector(normalResult);
+        }
+        return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b +
+            data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
     }
+}
+
+float PhysicsController::normalizedHeightGrayscale(float r, float g, float b)
+{
+    return (r + g + b) / 768.0f;
+}
+
+float PhysicsController::normalizedHeightPacked(float r, float g, float b)
+{
+    return (256.0f*r + g + 0.00390625f*b) / 65536.0f;
 }
 
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
@@ -1299,13 +1480,13 @@ void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 {
     GP_ASSERT(_meshBatch);
     _viewProjection = &viewProjection;
-    _meshBatch->begin();
+    _meshBatch->start();
 }
 
 void PhysicsController::DebugDrawer::end()
 {
     GP_ASSERT(_meshBatch && _meshBatch->getMaterial() && _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix"));
-    _meshBatch->end();
+    _meshBatch->finish();
     _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_viewProjection);
     _meshBatch->draw();
 }
@@ -1370,6 +1551,24 @@ PhysicsController::Listener::~Listener()
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeStatusListener(this);
+}
+
+PhysicsController::HitFilter::HitFilter()
+{
+}
+
+PhysicsController::HitFilter::~HitFilter()
+{
+}
+
+bool PhysicsController::HitFilter::filter(PhysicsCollisionObject* object)
+{
+    return false;
+}
+
+bool PhysicsController::HitFilter::hit(const PhysicsController::HitResult& result)
+{
+    return true;
 }
 
 }

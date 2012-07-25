@@ -27,7 +27,8 @@ namespace gameplay
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
          scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
-  
+         consumeEvents = <bool>             // Whether the container propogates input events to the Game's input event handler. Default is true.
+
          // All the nested controls within this container.
          container 
          { 
@@ -45,6 +46,7 @@ namespace gameplay
  */
 class Container : public Control
 {
+
 public:
 
     /**
@@ -62,6 +64,18 @@ public:
         SCROLL_VERTICAL    = 0x02,
         SCROLL_BOTH = SCROLL_HORIZONTAL | SCROLL_VERTICAL
     };
+
+    /**
+     * Create a new container.
+     *
+     * @param id The container's ID.
+     * @param style The container's style.
+     * @param layoutType The container's layout type.
+     *
+     * @return The new container.
+     * @script{create}
+     */
+    static Container* create(const char* id, Theme::Style* style, Layout::Type layoutType = Layout::LAYOUT_ABSOLUTE);
 
     /**
      * Get this container's layout.
@@ -129,6 +143,7 @@ public:
      * Get the vector of controls within this container.
      *
      * @return The vector of the controls within this container.
+     * @script{ignore}
      */
     const std::vector<Control*>& getControls() const;
 
@@ -161,22 +176,32 @@ public:
     bool isScrollBarsAutoHide() const;
 
     /**
-     * @see AnimationTarget#getAnimation
+     * @see AnimationTarget::getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * @see Control::isContainer
+     */
+    bool isContainer() const;
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
+    /**
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
@@ -238,14 +263,30 @@ protected:
     /**
      * Keyboard callback on key events.  Passes key events on to the currently focused control.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
+     *
+     * @return Whether the key event was consumed by this control.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Mouse callback on mouse events.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -253,14 +294,7 @@ protected:
      * @param layoutString The layout string to parse
      */
     static Layout::Type getLayoutType(const char* layoutString);
-
-    /**
-     * Returns whether this control is a container.
-     * 
-     * @return true if this is a container, false if not.
-     */
-    bool isContainer();
-
+    
     /**
      * Returns whether this container or any of its controls have been modified and require an update.
      * 
@@ -308,6 +342,36 @@ protected:
     bool touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
+     * Mouse scroll event callback.
+     *
+     * @param evt The mouse scroll event that occurred.
+     * @param x The x position of the scroll in pixels. Left edge is zero.
+     * @param y The y position of the scroll in pixels. Top edge is zero.
+     * @param wheelDelta The value change of the mouse's scroll wheel.
+     *
+     * @return Whether the scroll event was consumed by scrolling within this container.
+     *
+     * @see Mouse::MouseEvent
+     */
+    bool mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Mouse pointer event callback.
+     *
+     * @param mouse Whether to treat the event as a mouse event or a touch event.
+     * @param evt The pointer event (either a Mouse::MouseEvent or a Touch::TouchEvent).
+     * @param x The x position of the pointer event in pixels. Left edge is zero.
+     * @param y The y position of the pointer event in pixels. Top edge is zero.
+     * @param data The event's data (depends on whether it is a mouse event or a touch event).
+     *
+     * @return Whether the pointer event was consumed by this container.
+     * 
+     * @see Mouse::MouseEvent
+     * @see Touch::TouchEvent
+     */
+    bool pointerEvent(bool mouse, char evt, int x, int y, int data);
+
+    /**
      * Get a Scroll enum from a matching string.
      *
      * @param scroll A string representing a Scroll enum.
@@ -329,7 +393,7 @@ protected:
      */
     Theme::ThemeImage* _scrollBarTopCap;
     /**
-     * Scrollbar verticle image.
+     * Scrollbar vertical image.
      */
     Theme::ThemeImage* _scrollBarVertical;
     /**
@@ -391,15 +455,15 @@ protected:
     /** 
      * Time we started scrolling in the x
      */ 
-    long _scrollingStartTimeX;
+    double _scrollingStartTimeX;
     /** 
      * Time we started scrolling in the y
      */ 
-    long _scrollingStartTimeY;
+    double _scrollingStartTimeY;
     /** 
      * The last time we were scrolling
      */
-    long _scrollingLastTime;
+    double _scrollingLastTime;
     /** 
      * Speed to continue scrolling at after touch release.
      */ 
@@ -417,6 +481,16 @@ protected:
      */ 
     bool _scrollingDown;
 
+    /**
+     * Locked to scrolling vertically by grabbing the scrollbar with the mouse.
+     */
+    bool _scrollingMouseVertically;
+
+    /**
+     * Locked to scrolling horizontally by grabbing the scrollbar with the mouse.
+     */
+    bool _scrollingMouseHorizontally;
+
 private:
 
     /**
@@ -426,17 +500,14 @@ private:
 
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
+    int _focusIndexDefault;
+    int _focusIndexMax;
+
+    float _totalWidth;
+    float _totalHeight;
+
+    int _contactIndices;
 };
-
-
-/**
- * Sort funtion for use with _controls.sort(), based on Z-Order.
- * 
- * @param c1 The first control
- * @param c2 The second control
- * return true if the first controls z index is less than the second.
- */
-bool sortControlsByZOrder(Control* c1, Control* c2);
 
 }
 

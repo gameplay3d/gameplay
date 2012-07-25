@@ -32,6 +32,7 @@ public:
     void add(Animation* animation);
     unsigned int getAnimationCount() const;
     Animation* getAnimation(unsigned int index) const;
+    void removeAnimation(unsigned int index);
 
 private:
 

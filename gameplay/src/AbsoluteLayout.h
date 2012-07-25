@@ -27,13 +27,6 @@ public:
 protected:
 
     /**
-     * Create an AbsoluteLayout.
-     *
-     * @return An AbsoluteLayout object.
-     */
-    static AbsoluteLayout* create();
-
-    /**
      * Update the controls contained by the specified container.
      *
      * An AbsoluteLayout does nothing to modify the layout of controls.
@@ -60,6 +53,14 @@ private:
      * Destructor.
      */
     virtual ~AbsoluteLayout();
+
+    /**
+     * Create an AbsoluteLayout.
+     *
+     * @return An AbsoluteLayout object.
+     */
+    static AbsoluteLayout* create();
+
 };
 
 }

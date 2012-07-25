@@ -3,7 +3,6 @@
 
 #include "Vector3.h"
 #include "PhysicsCollisionShape.h"
-#include "PhysicsMotionState.h"
 
 namespace gameplay
 {
@@ -111,6 +110,9 @@ public:
         /**
          * Called when a collision occurs between two objects in the physics world.
          * 
+         * NOTE: You are not permitted to disable physics objects from within this callback. Disabling physics on a collision object
+         *  removes the object from the physics world. This is not permitted during the PhysicsController::update.
+         *
          * @param type The type of collision event.
          * @param collisionPair The two collision objects involved in the collision.
          * @param contactPointA The contact point with the first object (in world space).
@@ -177,9 +179,9 @@ public:
     bool isEnabled() const;
 
     /**
-     * Sets the collision object be enabled or disabled.
+     * Sets the collision object to be enabled or disabled.
      *
-     * @param enable true enables the collision object, false diables it.
+     * @param enable true enables the collision object, false disables it.
      */
     void setEnabled(bool enable);
 
@@ -200,6 +202,24 @@ public:
     void removeCollisionListener(CollisionListener* listener, PhysicsCollisionObject* object = NULL);
 
     /**
+     * Adds a collision listener for this collision object.
+     * 
+     * Note: the given Lua function must match the function signature of PhysicsCollisionObject::CollisionListener::collisionEvent.
+     * 
+     * @param function The Lua script function to add as a listener callback.
+     * @param object Optional collision object used to filter the collision event.
+     */
+    void addCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
+
+    /**
+     * Removes a collision listener.
+     *
+     * @param function The Lua function (used as a listener callback) to remove.
+     * @param object Optional collision object used to filter the collision event.
+     */
+    void removeCollisionListener(const char* function, PhysicsCollisionObject* object = NULL);
+
+    /**
      * Checks if this collision object collides with the given object.
      * 
      * @param object The collision object to test for collision with.
@@ -210,6 +230,73 @@ public:
 
 
 protected:
+    /**
+     * Handles collision event callbacks to Lua script functions.
+     */
+    struct ScriptListener : public CollisionListener
+    {
+        /**
+         * Constructor.
+         */
+        ScriptListener(const char* url);
+
+        /**
+         * @see PhysicsColliionObject::CollisionListener
+         */
+        void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type, const PhysicsCollisionObject::CollisionPair& collisionPair,
+                                    const Vector3& contactPointA, const Vector3& contactPointB);
+
+        /** The URL to the Lua script function to use as the callback. */
+        std::string url;
+        /** The name of the Lua script function to use as the callback. */
+        std::string function;
+    };
+
+    /**
+     * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
+     * 
+     * @see btMotionState
+     */
+    class PhysicsMotionState : public btMotionState
+    {
+        friend class PhysicsConstraint;
+
+    public:
+
+        /**
+         * Creates a physics motion state for a rigid body.
+         * 
+         * @param node The node that owns the rigid body that the motion state is being created for.
+         * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
+         */
+        PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset = NULL);
+
+        /**
+         * Destructor.
+         */
+        virtual ~PhysicsMotionState();
+
+        /**
+         * @see btMotionState::getWorldTransform
+         */
+        virtual void getWorldTransform(btTransform &transform) const;
+
+        /**
+         * @see btMotionState::setWorldTransform
+         */
+        virtual void setWorldTransform(const btTransform &transform);
+
+        /**
+         * Updates the motion state's world transform from the GamePlay Node object's world transform.
+         */
+        void updateTransformFromNode() const;
+
+    private:
+
+        Node* _node;
+        btTransform _centerOfMassOffset;
+        mutable btTransform _worldTransform;
+    };
 
     /**
      * Constructor.
@@ -222,13 +309,6 @@ protected:
      * @return The Bullet collision object.
      */
     virtual btCollisionObject* getCollisionObject() const = 0;
-
-    /**
-     * Returns the physics motion state.
-     *
-     * @return The motion state object.
-     */
-    PhysicsMotionState* getMotionState() const;
 
     /**
      * Pointer to Node contained by this collision object.
@@ -250,6 +330,10 @@ protected:
      */
     bool _enabled;
 
+    /**
+     * The list of script listeners.
+     */
+    std::vector<ScriptListener*>* _scriptListeners;
 };
 
 }

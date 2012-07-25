@@ -67,29 +67,33 @@ public:
         bool kinematic;
 
         /**
-         * The ansitropic friction term for the rigid body.
+         * The anisotropic friction term for the rigid body.
          */
         Vector3 anisotropicFriction;
 
         /**
-         * The gravity acceleration factor for the rigid body.
+         * Constructor.
          */
-        Vector3 gravity;
+        Parameters() : mass(0.0f), friction(0.5f), restitution(0.0f),
+            linearDamping(0.0f), angularDamping(0.0f),
+            kinematic(false), anisotropicFriction(Vector3::one())
+        {
+        }
 
         /**
          * Constructor.
          */
-        Parameters(float mass = 0.0f, float friction = 0.5f, float resititution = 0.0f,
+        Parameters(float mass, float friction = 0.5f, float resititution = 0.0f,
             float linearDamping = 0.0f, float angularDamping = 0.0f, bool kinematic = false,
-            const Vector3& anisotropicFriction = Vector3::one(), const Vector3& gravity = Vector3::zero())
+            const Vector3& anisotropicFriction = Vector3::one())
             : mass(mass), friction(friction), restitution(restitution), linearDamping(linearDamping), angularDamping(angularDamping),
-              kinematic(kinematic), anisotropicFriction(anisotropicFriction), gravity(gravity)
+              kinematic(kinematic), anisotropicFriction(anisotropicFriction)
         {
         }
     };
 
     /**
-     * @see PhysicsCollisionObject#getType
+     * @see PhysicsCollisionObject::getType
      */
     PhysicsCollisionObject::Type getType() const;
 
@@ -194,7 +198,7 @@ public:
 
     /**
      * Gets the gravity that affects the rigid body (this can
-     * be different from the global gravity; @see #setGravity).
+     * be different from the global gravity; @see setGravity(Vector3)).
      * 
      * @return The gravity.
      */
@@ -215,13 +219,21 @@ public:
     void setKinematic(bool kinematic);
 
     /**
-     * Gets the height at the given point (only for rigid bodies of type HEIGHTFIELD).
+     * Sets whether the rigid body is enabled or disabled in the physics world.
+     *
+     * @param enable true enables the collision object, false disables it.
+     */
+    void setEnabled(bool enable);
+
+    /**
+     * Gets the height and normal at the given point (only for rigid bodies of type HEIGHTFIELD).
      * 
      * @param x The x position.
      * @param y The y position.
+     * @param normal If non-null, the surface normal at the given point.
      * @return The height at the given point, or zero if this is not a heightfield rigid body.
      */
-    float getHeight(float x, float y) const;
+    float getHeight(float x, float y, Vector3* normal = NULL) const;
 
     /**
      * Gets whether the rigid body is a static rigid body or not.

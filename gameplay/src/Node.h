@@ -6,22 +6,23 @@
 #include "Light.h"
 #include "Model.h"
 #include "Form.h"
-#include "AudioSource.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsCollisionShape.h"
 #include "BoundingBox.h"
+#include "AIAgent.h"
 
 namespace gameplay
 {
 
+class AudioSource;
 class Bundle;
 class Scene;
 class Form;
 
 /**
- * Defines a basic hierachial structure of transformation spaces.
+ * Defines a basic hierarchical structure of transformation spaces.
  */
 class Node : public Transform, public Ref
 {
@@ -44,6 +45,7 @@ public:
      * Creates a new node with the specified ID.
      *
      * @param id The ID for the new node.
+     * @script{create}
      */
     static Node* create(const char* id = NULL);
 
@@ -173,6 +175,7 @@ public:
      *
      * @return The user pointer for this node.
      * @see setUserPointer(void*)
+     * @script{ignore}
      */
     void* getUserPointer() const;
 
@@ -194,6 +197,7 @@ public:
      *      Node is being destroyed (or when the user pointer changes),
      *      to allow the user to cleanup any memory associated with the
      *      user pointer.
+     * @script{ignore}
      */
     void setUserPointer(void* pointer, void (*cleanupCallback)(void*) = NULL);
 
@@ -230,6 +234,7 @@ public:
      *        or false if nodes that start with the given ID are returned.
      * 
      * @return The number of matches found.
+     * @script{ignore}
      */
     unsigned int findNodes(const char* id, std::vector<Node*>& nodes, bool recursive = true, bool exactMatch = true) const;
 
@@ -341,13 +346,31 @@ public:
 
     /**
      * Returns the forward vector of the Node in world space.
+     *
+     * @return The forward vector in world space.
      */
     Vector3 getForwardVectorWorld() const;
 
     /**
-     *  Returns the forward vector of the Node in view space.
+     * Returns the forward vector of the Node in view space.
+     *
+     * @return The forwward vector in view space.
      */
     Vector3 getForwardVectorView() const;
+
+    /**
+     * Returns the right vector of the Node in world space.
+     *
+     * @return The right vector in world space.
+     */
+    Vector3 getRightVectorWorld() const;
+
+    /**
+     * Returns the up vector of the Node in world space.
+     *
+     * @return The up vector in world space.
+     */
+    Vector3 getUpVectorWorld() const;
 
     /**
      * Returns the translation vector of the currently active camera for this node's scene.
@@ -535,6 +558,20 @@ public:
      * @param properties The properties object defining the collision ojbect.
      */
     PhysicsCollisionObject* setCollisionObject(Properties* properties);
+
+    /**
+     * Returns the AI agent assigned to this node.
+     *
+     * @return The AI agent for this node.
+     */
+    AIAgent* getAgent() const;
+
+    /**
+     * Sets the AI agent for this node.
+     *
+     * @param agent The AI agent to set.
+     */
+    void setAgent(AIAgent* agent);
 
     /**
      * Returns the bounding sphere for the Node, in world space.
@@ -733,6 +770,11 @@ protected:
     PhysicsCollisionObject* _collisionObject;
     
     /**
+     * Pointer to the AI agent attached to the Node.
+     */
+    AIAgent* _agent;
+
+    /**
      * World Matrix representation of the Node.
      */
     mutable Matrix _world;
@@ -823,12 +865,8 @@ private:
      */
     NodeCloneContext& operator=(const NodeCloneContext&);
 
-private:
-    typedef std::map<const Animation*, Animation*> AnimationMap;
-    typedef std::map<const Node*, Node*> NodeMap;
-
-    AnimationMap _clonedAnimations;
-    NodeMap _clonedNodes;
+    std::map<const Animation*, Animation*> _clonedAnimations;
+    std::map<const Node*, Node*> _clonedNodes;
 };
 
 }

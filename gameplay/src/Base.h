@@ -40,14 +40,15 @@ using std::min;
 using std::max;
 using std::modf;
 
+
 // Common
 #ifndef NULL
 #define NULL     0
 #endif
 
-// Print logging (implemented per platform)
 namespace gameplay
 {
+/** Print logging (implemented per platform). */
 extern void printError(const char* format, ...);
 }
 
@@ -114,7 +115,7 @@ extern void printError(const char* format, ...);
 #define SAFE_RELEASE(x) \
     if (x) \
     { \
-        x->release(); \
+        (x)->release(); \
         x = NULL; \
     }
 
@@ -166,6 +167,10 @@ extern void printError(const char* format, ...);
 // Image
 #include <png.h>
 
+// Scripting
+using std::va_list;
+#include <lua.hpp>
+
 #define WINDOW_VSYNC        1
 
 // Graphics (OpenGL)
@@ -177,6 +182,7 @@ extern void printError(const char* format, ...);
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
     #define USE_PVRTC
@@ -191,6 +197,7 @@ extern void printError(const char* format, ...);
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
     extern PFNGLISVERTEXARRAYOESPROC glIsVertexArray;
+    #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
     #define glClearDepth glClearDepthf
     #define OPENGL_ES
 #elif WIN32
@@ -206,6 +213,7 @@ extern void printError(const char* format, ...);
         #define glDeleteVertexArrays glDeleteVertexArraysOES
         #define glGenVertexArrays glGenVertexArraysOES
         #define glIsVertexArray glIsVertexArrayOES
+        #define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
         #define glClearDepth glClearDepthf
         #define OPENGL_ES
         #define USE_VAO
@@ -238,11 +246,17 @@ extern void printError(const char* format, ...);
 // Hardware buffer
 namespace gameplay
 {
+/** Vertex attribute. */
 typedef GLint VertexAttribute;
+/** Vertex buffer handle. */
 typedef GLuint VertexBufferHandle;
+/** Index buffer handle. */
 typedef GLuint IndexBufferHandle;
+/** Texture handle. */
 typedef GLuint TextureHandle;
+/** Frame buffer handle. */
 typedef GLuint FrameBufferHandle;
+/** Render buffer handle. */
 typedef GLuint RenderBufferHandle;
 }
 
@@ -285,7 +299,8 @@ typedef GLuint RenderBufferHandle;
         } \
     } while(0)
 
-// Global variable to hold GL errors
+/** Global variable to hold GL errors
+ * @script{ignore} */
 extern GLenum __gl_error_code;
 
 /**
@@ -311,7 +326,8 @@ extern GLenum __gl_error_code;
         } \
     } while(0)
 
-// Global variable to hold AL errors
+/** Global variable to hold AL errors
+ * @script{ignore} */
 extern ALenum __al_error_code;
 
 /**

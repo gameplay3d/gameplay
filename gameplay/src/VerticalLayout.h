@@ -53,13 +53,6 @@ protected:
     virtual ~VerticalLayout();
 
     /**
-     * Create a VerticalLayout.
-     *
-     * @return a VerticalLayout object.
-     */
-    static VerticalLayout* create();
-
-    /**
      * Update the controls contained by the specified container.
      *
      * Controls are placed next to one another vertically until
@@ -82,6 +75,14 @@ private:
      * Constructor.
      */
     VerticalLayout(const VerticalLayout& copy);
+
+    /**
+     * Create a VerticalLayout.
+     *
+     * @return a VerticalLayout object.
+     */
+    static VerticalLayout* create();
+
 };
 
 }

@@ -55,7 +55,7 @@ public:
         Definition();
 
         /** 
-         * Constructs a new Defintion that is a copy of the specified Definition.
+         * Constructs a new Definition that is a copy of the specified Definition.
          *
          * @param definition The Definition to copy.
          */ 
@@ -76,11 +76,11 @@ public:
     private:
 
         /**
-         * Creates a PhysicsCollisionShape#Definition object from the given properties object (for the given node).
+         * Creates a PhysicsCollisionShape::Definition object from the given properties object (for the given node).
          * 
          * @param node The node to create the PhysicsCollisionShape::Definition object for.
-         * @param properties The properties object to create the PhysicsCollisionShape#Definition object from.
-         * @return A PhysicsCollisionShape#Definition object.
+         * @param properties The properties object to create the PhysicsCollisionShape::Definition object from.
+         * @return A PhysicsCollisionShape::Definition object.
          */
         static Definition* create(Node* node, Properties* properties);
 
@@ -94,10 +94,15 @@ public:
 
         union
         {
+            /** @script{ignore} */
             BoxData box;
+            /** @script{ignore} */
             SphereData sphere;
+            /** @script{ignore} */
             CapsuleData capsule;
+            /** @script{ignore} */
             Image* heightfield;
+            /** @script{ignore} */
             Mesh* mesh;
         } data;
 
@@ -119,6 +124,7 @@ public:
      * Returns the internal bullet physics shape object.
      *
      * @return The bullet shape object.
+     * @script{ignore}
      */
     btCollisionShape* getShape() const
     {
@@ -137,7 +143,7 @@ public:
      *
      * @param extents Extents of the box shape along the x, y and z axes.
      * @param center Center point of the box.
-     * @param absolute True to specifiy that the given center point is an absolute position.
+     * @param absolute True to specify that the given center point is an absolute position.
      *        By default the center point is treated as relative to the location of the node
      *        that the shape is attached to.
      *
@@ -157,7 +163,7 @@ public:
      *
      * @param radius Radius of the sphere.
      * @param center Center point of the sphere.
-     * @param absolute True to specifiy that the given center point is an absolute position.
+     * @param absolute True to specify that the given center point is an absolute position.
      *        By default the center point is treated as relative to the location of the node
      *        that the shape is attached to.
      *
@@ -178,7 +184,7 @@ public:
      * @param radius Radius of the capsule.
      * @param height Height of the capsule.
      * @param center Center point of the capsule.
-     * @param absolute True to specifiy that the given center point is an absolute position.
+     * @param absolute True to specify that the given center point is an absolute position.
      *        By default the center point is treated as relative to the location of the node
      *        that the shape is attached to.
      *
@@ -194,7 +200,7 @@ public:
     static PhysicsCollisionShape::Definition heightfield(Image* image);
 
     /**
-     * Defines a mesh shape using the specified mehs.
+     * Defines a mesh shape using the specified mesh.
      *
      * @return Definition of a mesh shape.
      */
@@ -211,6 +217,7 @@ private:
     struct HeightfieldData
     {
         float* heightData;
+        Vector3* normalData;
         unsigned int width;
         unsigned int height;
         mutable Matrix inverse;
@@ -241,7 +248,9 @@ private:
     // Shape specific cached data
     union
     {
+        /** @script{ignore} */
         MeshData* meshData;
+        /** @script{ignore} */
         HeightfieldData* heightfieldData;
     } _shapeData;
 

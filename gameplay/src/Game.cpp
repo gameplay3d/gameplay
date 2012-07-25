@@ -4,35 +4,51 @@
 #include "RenderState.h"
 #include "FileSystem.h"
 #include "FrameBuffer.h"
+#include "SceneLoader.h"
 
-// Extern global variables
+/** @script{ignore} */
 GLenum __gl_error_code = GL_NO_ERROR;
+/** @script{ignore} */
 ALenum __al_error_code = AL_NO_ERROR;
 
 namespace gameplay
 {
 
 static Game* __gameInstance = NULL;
-long Game::_pausedTimeLast = 0L;
-long Game::_pausedTimeTotal = 0L;
+double Game::_pausedTimeLast = 0.0;
+double Game::_pausedTimeTotal = 0.0;
 
 Game::Game() 
     : _initialized(false), _state(UNINITIALIZED), 
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), _physicsController(NULL), _audioListener(NULL)
+      _animationController(NULL), _audioController(NULL), 
+      _physicsController(NULL), _aiController(NULL), _audioListener(NULL), 
+      _gamepads(NULL), _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
+    _gamepads = new std::vector<Gamepad*>;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
-}
-
-Game::Game(const Game& copy)
-{
 }
 
 Game::~Game()
 {
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
+
+    if (_scriptController)
+    {
+        _scriptController->finalize();
+        SAFE_DELETE(_scriptController);
+    }
+
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
     SAFE_DELETE(_timeEvents);
@@ -48,12 +64,12 @@ Game* Game::getInstance()
     return __gameInstance;
 }
 
-long Game::getAbsoluteTime()
+double Game::getAbsoluteTime()
 {
     return Platform::getAbsoluteTime();
 }
 
-long Game::getGameTime()
+double Game::getGameTime()
 {
     return Platform::getAbsoluteTime() - _pausedTimeTotal;
 }
@@ -95,7 +111,7 @@ bool Game::startup()
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
     RenderState::initialize();
     FrameBuffer::initialize();
-
+    
     _animationController = new AnimationController();
     _animationController->initialize();
 
@@ -104,6 +120,49 @@ bool Game::startup()
 
     _physicsController = new PhysicsController();
     _physicsController->initialize();
+
+    _aiController = new AIController();
+    _aiController->initialize();
+
+    loadGamepads();
+    
+    _scriptController = new ScriptController();
+    _scriptController->initialize();
+
+    // Set the script callback functions.
+    if (_properties)
+    {
+        Properties* scripts = _properties->getNamespace("scripts", true);
+        if (scripts)
+        {
+            const char* name;
+            while ((name = scripts->getNextProperty()) != NULL)
+            {
+                ScriptController::ScriptCallback callback = ScriptController::toCallback(name);
+                if (callback != ScriptController::INVALID_CALLBACK)
+                {
+                    std::string url = scripts->getString();
+                    std::string file;
+                    std::string id;
+                    splitURL(url, &file, &id);
+
+                    if (file.size() <= 0 || id.size() <= 0)
+                    {
+                        GP_ERROR("Invalid %s script callback function '%s'.", name, url.c_str());
+                    }
+                    else
+                    {
+                        _scriptController->loadScript(file.c_str());
+                        _scriptController->registerCallback(callback, id);
+                    }
+                }
+                else
+                {
+                    // Ignore everything else.
+                }
+            }
+        }
+    }
 
     _state = RUNNING;
 
@@ -118,9 +177,23 @@ void Game::shutdown()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
+        GP_ASSERT(_aiController);
 
         Platform::signalShutdown();
         finalize();
+
+        
+        std::vector<Gamepad*>::iterator itr = _gamepads->begin();
+        std::vector<Gamepad*>::iterator end = _gamepads->end();
+        while (itr != end)
+        {
+            SAFE_DELETE(*itr);
+            itr++;
+        }
+        _gamepads->clear();
+        SAFE_DELETE(_gamepads);
+        
+        _scriptController->finalizeGame();
 
         _animationController->finalize();
         SAFE_DELETE(_animationController);
@@ -130,6 +203,11 @@ void Game::shutdown()
 
         _physicsController->finalize();
         SAFE_DELETE(_physicsController);
+        _aiController->finalize();
+        SAFE_DELETE(_aiController);
+
+        // Note: we do not clean up the script controller here
+        // because users can call Game::exit() from a script.
 
         SAFE_DELETE(_audioListener);
 
@@ -148,12 +226,13 @@ void Game::pause()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
-
+        GP_ASSERT(_aiController);
         _state = PAUSED;
         _pausedTimeLast = Platform::getAbsoluteTime();
         _animationController->pause();
         _audioController->pause();
         _physicsController->pause();
+        _aiController->pause();
     }
 }
 
@@ -164,12 +243,13 @@ void Game::resume()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
-
+        GP_ASSERT(_aiController);
         _state = RUNNING;
         _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
         _animationController->resume();
         _audioController->resume();
         _physicsController->resume();
+        _aiController->resume();
     }
 }
 
@@ -183,6 +263,7 @@ void Game::frame()
     if (!_initialized)
     {
         initialize();
+        _scriptController->initializeGame();
         _initialized = true;
     }
 
@@ -191,11 +272,12 @@ void Game::frame()
         GP_ASSERT(_animationController);
         GP_ASSERT(_audioController);
         GP_ASSERT(_physicsController);
+        GP_ASSERT(_aiController);
 
         // Update Time.
-        static long lastFrameTime = Game::getGameTime();
-        long frameTime = Game::getGameTime();
-        long elapsedTime = (frameTime - lastFrameTime);
+        static double lastFrameTime = Game::getGameTime();
+        double frameTime = getGameTime();
+        float elapsedTime = (frameTime - lastFrameTime);
         lastFrameTime = frameTime;
 
         // Update the scheduled and running animations.
@@ -206,13 +288,24 @@ void Game::frame()
     
         // Update the physics.
         _physicsController->update(elapsedTime);
+
+        // Update AI.
+        _aiController->update(elapsedTime);
+
         // Application Update.
         update(elapsedTime);
 
+        // Run script update.
+        _scriptController->update(elapsedTime);
+
         // Audio Rendering.
         _audioController->update(elapsedTime);
+
         // Graphics Rendering.
         render(elapsedTime);
+
+        // Run script render.
+        _scriptController->render(elapsedTime);
 
         // Update FPS.
         ++_frameCount;
@@ -220,7 +313,7 @@ void Game::frame()
         {
             _frameRate = _frameCount;
             _frameCount = 0;
-            _frameLastFPS = Game::getGameTime();
+            _frameLastFPS = getGameTime();
         }
     }
     else
@@ -228,9 +321,42 @@ void Game::frame()
         // Application Update.
         update(0);
 
+        // Script update.
+        _scriptController->update(0);
+
         // Graphics Rendering.
         render(0);
+
+        // Script render.
+        _scriptController->render(0);
     }
+}
+
+void Game::renderOnce(const char* function)
+{
+    _scriptController->executeFunction<void>(function, NULL);
+    Platform::swapBuffers();
+}
+
+void Game::updateOnce()
+{
+    GP_ASSERT(_animationController);
+    GP_ASSERT(_audioController);
+    GP_ASSERT(_physicsController);
+    GP_ASSERT(_aiController);
+
+    // Update Time.
+    static double lastFrameTime = getGameTime();
+    double frameTime = getGameTime();
+    float elapsedTime = (frameTime - lastFrameTime);
+    lastFrameTime = frameTime;
+
+    // Update the internal controllers.
+    _animationController->update(elapsedTime);
+    _physicsController->update(elapsedTime);
+    _aiController->update(elapsedTime);
+    _audioController->update(elapsedTime);
+    _scriptController->update(elapsedTime);
 }
 
 void Game::setViewport(const Rectangle& viewport)
@@ -291,7 +417,7 @@ AudioListener* Game::getAudioListener()
     return _audioListener;
 }
 
-void Game::menu()
+void Game::menuEvent()
 {
 }
 
@@ -303,34 +429,68 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 {
 }
 
-void Game::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
+bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    return false;
+}
+
+void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+}
+
+void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
 {
     GP_ASSERT(_timeEvents);
     TimeEvent timeEvent(getGameTime() + timeOffset, timeListener, cookie);
     _timeEvents->push(timeEvent);
 }
 
-bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+void Game::schedule(float timeOffset, const char* function)
 {
-    return false;
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    schedule(timeOffset, listener, NULL);
 }
 
-void Game::updateOnce()
+void Game::fireTimeEvents(double frameTime)
 {
-    GP_ASSERT(_animationController);
-    GP_ASSERT(_audioController);
-    GP_ASSERT(_physicsController);
+    while (_timeEvents->size() > 0)
+    {
+        const TimeEvent* timeEvent = &_timeEvents->top();
+        if (timeEvent->time > frameTime)
+        {
+            break;
+        }
+        if (timeEvent->listener)
+        {
+            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
+        }
+        _timeEvents->pop();
+    }
+}
 
-    // Update Time.
-    static long lastFrameTime = Game::getGameTime();
-    long frameTime = Game::getGameTime();
-    long elapsedTime = (frameTime - lastFrameTime);
-    lastFrameTime = frameTime;
+Game::ScriptListener::ScriptListener(const char* url)
+{
+    function = Game::getInstance()->getScriptController()->loadUrl(url);
+}
 
-    // Update the internal controllers.
-    _animationController->update(elapsedTime);
-    _physicsController->update(elapsedTime);
-    _audioController->update(elapsedTime);
+void Game::ScriptListener::timeEvent(long timeDiff, void* cookie)
+{
+    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), "l", timeDiff);
+}
+
+Game::TimeEvent::TimeEvent(double time, TimeListener* timeListener, void* cookie)
+    : time(time), listener(timeListener), cookie(cookie)
+{
+}
+
+bool Game::TimeEvent::operator<(const TimeEvent& v) const
+{
+    // The first element of std::priority_queue is the greatest.
+    return time > v.time;
 }
 
 Properties* Game::getConfig() const
@@ -353,35 +513,38 @@ void Game::loadConfig()
             // Load filesystem aliases.
             Properties* aliases = _properties->getNamespace("aliases", true);
             if (aliases)
+            {
                 FileSystem::loadResourceAliases(aliases);
+            }
         }
     }
 }
 
-void Game::fireTimeEvents(long frameTime)
+void Game::loadGamepads()
 {
-    while (_timeEvents->size() > 0)
+    if (_properties)
     {
-        const TimeEvent* timeEvent = &_timeEvents->top();
-        if (timeEvent->time > frameTime)
+        // Check if there is a virtual keyboard included in the .config file.
+        // If there is, try to create it and assign it to "player one".
+        Properties* gamepadProperties = _properties->getNamespace("gamepads", true);
+        if (gamepadProperties && gamepadProperties->exists("form"))
         {
-            break;
+            const char* gamepadFormPath = gamepadProperties->getString("form");
+            GP_ASSERT(gamepadFormPath);
+            Gamepad* gamepad = createGamepad(gamepadProperties->getId(), gamepadFormPath);
+            GP_ASSERT(gamepad);
         }
-        if (timeEvent->listener)
-            timeEvent->listener->timeEvent(frameTime - timeEvent->time, timeEvent->cookie);
-        _timeEvents->pop();
     }
 }
 
-Game::TimeEvent::TimeEvent(long time, TimeListener* timeListener, void* cookie)
-            : time(time), listener(timeListener), cookie(cookie)
+Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
 {
-}
+    GP_ASSERT(gamepadFormPath);
+    Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
+    GP_ASSERT(gamepad);
+    _gamepads->push_back(gamepad);
 
-bool Game::TimeEvent::operator<(const TimeEvent& v) const
-{
-    // The first element of std::priority_queue is the greatest.
-    return time > v.time;
+    return gamepad;
 }
 
 }

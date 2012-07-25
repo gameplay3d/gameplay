@@ -280,6 +280,7 @@ public:
      * 
      * @param pointCount The number of points in the curve.
      * @param componentCount The number of float component values per key value.
+     * @script{create}
      */
     static Curve* create(unsigned int pointCount, unsigned int componentCount);
 
@@ -385,6 +386,11 @@ private:
          * Destructor.
          */
         ~Point();
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        Point& operator=(const Point&);
     };
 
     /**
@@ -411,7 +417,7 @@ private:
     ~Curve();
 
     /**
-     * Copy assignment operator.
+     * Hidden copy assignment operator.
      */
     Curve& operator=(const Curve&);
 
@@ -480,20 +486,6 @@ private:
     Point* _points;                     // The points on the curve.
 };
 
-inline static float bezier(float eq0, float eq1, float eq2, float eq3, float from, float out, float to, float in);
-
-inline static float bspline(float eq0, float eq1, float eq2, float eq3, float c0, float c1, float c2, float c3);
-
-inline static float hermite(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
-
-inline static float hermiteFlat(float h00, float h01, float from, float to);
-
-inline static float hermiteSmooth(float h00, float h01, float h10, float h11, float from, float out, float to, float in);
-
-inline static float lerpInl(float s, float from, float to);
-
 }
-
-#include "Curve.inl"
 
 #endif

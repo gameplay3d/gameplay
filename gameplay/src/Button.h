@@ -26,12 +26,27 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          text        = <string>
+         consumeEvents = <bool>  // Whether the button propogates input events to the Game's input event handler. Defualt is true.
     }
  @endverbatim
  */
 class Button : public Label
 {
     friend class Container;
+    friend class Gamepad;
+
+public:
+
+    /**
+     * Create a new button control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new button.
+     * @script{create}
+     */
+    static Button* create(const char* id, Theme::Style* style);
 
 protected:
 
@@ -69,12 +84,18 @@ protected:
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
+
 private:
 
-    /*
+    /**
      * Constructor.
      */
     Button(const Button& copy);
+
 };
 
 }

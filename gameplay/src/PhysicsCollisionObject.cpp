@@ -2,12 +2,15 @@
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
 #include "Game.h"
+#include "Node.h"
+#include "ScriptController.h"
 
 namespace gameplay
 {
 
 /**
  * Internal class used to implement the collidesWith(PhysicsCollisionObject*) function.
+ * @script{ignore}
  */
 struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 {
@@ -27,13 +30,22 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 };
 
 PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
-    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true)
+    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true), _scriptListeners(NULL)
 {
 }
 
 PhysicsCollisionObject::~PhysicsCollisionObject()
 {
     SAFE_DELETE(_motionState);
+
+    if (_scriptListeners)
+    {
+        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        {
+            SAFE_DELETE((*_scriptListeners)[i]);
+        }
+        SAFE_DELETE(_scriptListeners);
+    }
 
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->destroyShape(_collisionShape);
@@ -53,11 +65,6 @@ Node* PhysicsCollisionObject::getNode() const
 PhysicsCollisionShape* PhysicsCollisionObject::getCollisionShape() const
 {
     return _collisionShape;
-}
-
-PhysicsMotionState* PhysicsCollisionObject::getMotionState() const
-{
-    return _motionState;
 }
 
 bool PhysicsCollisionObject::isKinematic() const
@@ -91,6 +98,7 @@ void PhysicsCollisionObject::setEnabled(bool enable)
         if (!_enabled)
         {
             Game::getInstance()->getPhysicsController()->addCollisionObject(this);
+            _motionState->updateTransformFromNode();
             _enabled = true;
         }
     }
@@ -98,7 +106,7 @@ void PhysicsCollisionObject::setEnabled(bool enable)
     {
         if (_enabled)
         {
-            Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+            Game::getInstance()->getPhysicsController()->removeCollisionObject(this, false);
             _enabled = false;
         }
     }
@@ -114,6 +122,34 @@ void PhysicsCollisionObject::removeCollisionListener(CollisionListener* listener
 {
     GP_ASSERT(Game::getInstance()->getPhysicsController());
     Game::getInstance()->getPhysicsController()->removeCollisionListener(listener, this, object);
+}
+
+void PhysicsCollisionObject::addCollisionListener(const char* function, PhysicsCollisionObject* object)
+{
+    if (!_scriptListeners)
+        _scriptListeners = new std::vector<ScriptListener*>();
+
+    ScriptListener* listener = new ScriptListener(function);
+    _scriptListeners->push_back(listener);
+    addCollisionListener(listener, object);
+}
+
+void PhysicsCollisionObject::removeCollisionListener(const char* function, PhysicsCollisionObject* object)
+{
+    if (!_scriptListeners)
+        return;
+
+    std::string url = function;
+    for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+    {
+        if ((*_scriptListeners)[i]->url == url)
+        {
+            removeCollisionListener((*_scriptListeners)[i], object);
+            SAFE_DELETE((*_scriptListeners)[i]);
+            _scriptListeners->erase(_scriptListeners->begin() + i);
+            return;
+        }
+    }
 }
 
 bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
@@ -149,6 +185,84 @@ bool PhysicsCollisionObject::CollisionPair::operator < (const CollisionPair& col
         return objectB < collisionPair.objectB;
 
     return false;
+}
+
+PhysicsCollisionObject::PhysicsMotionState::PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset) : _node(node),
+    _centerOfMassOffset(btTransform::getIdentity())
+{
+    if (centerOfMassOffset)
+    {
+        // Store the center of mass offset.
+        _centerOfMassOffset.setOrigin(BV(*centerOfMassOffset));
+    }
+
+    updateTransformFromNode();
+}
+
+PhysicsCollisionObject::PhysicsMotionState::~PhysicsMotionState()
+{
+}
+
+void PhysicsCollisionObject::PhysicsMotionState::getWorldTransform(btTransform &transform) const
+{
+    GP_ASSERT(_node);
+    if (_node->getCollisionObject() && _node->getCollisionObject()->isKinematic())
+        updateTransformFromNode();
+
+    transform = _centerOfMassOffset.inverse() * _worldTransform;
+}
+
+void PhysicsCollisionObject::PhysicsMotionState::setWorldTransform(const btTransform &transform)
+{
+    GP_ASSERT(_node);
+
+    _worldTransform = transform * _centerOfMassOffset;
+        
+    const btQuaternion& rot = _worldTransform.getRotation();
+    const btVector3& pos = _worldTransform.getOrigin();
+
+    _node->setRotation(rot.x(), rot.y(), rot.z(), rot.w());
+    _node->setTranslation(pos.x(), pos.y(), pos.z());
+}
+
+void PhysicsCollisionObject::PhysicsMotionState::updateTransformFromNode() const
+{
+    GP_ASSERT(_node);
+
+    // Store the initial world transform (minus the scale) for use by Bullet later on.
+    Quaternion rotation;
+    const Matrix& m = _node->getWorldMatrix();
+    m.getRotation(&rotation);
+
+    if (!_centerOfMassOffset.getOrigin().isZero())
+    {
+        // When there is a center of mass offset, we modify the initial world transformation
+        // so that when physics is initially applied, the object is in the correct location.
+        btTransform offset = btTransform(BQ(rotation), btVector3(0.0f, 0.0f, 0.0f)) * _centerOfMassOffset.inverse();
+
+        btVector3 origin(m.m[12] + _centerOfMassOffset.getOrigin().getX() + offset.getOrigin().getX(), 
+                         m.m[13] + _centerOfMassOffset.getOrigin().getY() + offset.getOrigin().getY(), 
+                         m.m[14] + _centerOfMassOffset.getOrigin().getZ() + offset.getOrigin().getZ());
+        _worldTransform = btTransform(BQ(rotation), origin);
+    }
+    else
+    {
+        _worldTransform = btTransform(BQ(rotation), btVector3(m.m[12], m.m[13], m.m[14]));
+    }
+}
+
+PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)
+{
+    this->url = url;
+    function = Game::getInstance()->getScriptController()->loadUrl(url);
+}
+
+void PhysicsCollisionObject::ScriptListener::collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
+    const PhysicsCollisionObject::CollisionPair& collisionPair, const Vector3& contactPointA, const Vector3& contactPointB)
+{
+    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), 
+        "[PhysicsCollisionObject::CollisionListener::EventType]<PhysicsCollisionObject::CollisionPair><Vector3><Vector3>",
+        type, &collisionPair, &contactPointA, &contactPointB);
 }
 
 }

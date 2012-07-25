@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "TTFFontEncoder.h"
 #include "GPBFile.h"
+#include "StringUtil.h"
 
 namespace gameplay
 {
@@ -33,7 +34,7 @@ static void writeString(FILE* fp, const char* str)
     }
 }
 
-int writeFont(const char* filename, unsigned int fontSize, const char* id, bool fontpreview = false)
+int writeFont(const char* inFilePath, const char* outFilePath, unsigned int fontSize, const char* id, bool fontpreview = false)
 {
     Glyph glyphArray[END_INDEX - START_INDEX];
     
@@ -48,7 +49,7 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     
     // Initialize font face.
     FT_Face face;
-    error = FT_New_Face(library, filename, 0, &face);
+    error = FT_New_Face(library, inFilePath, 0, &face);
     if (error)
     {
         fprintf(stderr, "FT_New_Face error: %d \n", error);
@@ -249,15 +250,9 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
         penX += advance; // Move X to next glyph position
         i++;
     }
-    
-    unsigned int idlen = strlen(id);
 
-    // Write it to the id.gpb file.
-    char* fileName = (char*)malloc(idlen + 4);
-    strcpy(fileName, id);
-    strcat(fileName, ".gpb");
 
-    FILE *gpbFp = fopen(fileName, "wb");
+    FILE *gpbFp = fopen(outFilePath, "wb");
     
     // File header and version.
     char fileHeader[9]     = {'«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n'};
@@ -303,15 +298,14 @@ int writeFont(const char* filename, unsigned int fontSize, const char* id, bool 
     // Close file.
     fclose(gpbFp);
 
-    printf("%s.gpb created successfully! \n", id);
+    printf("%s.gpb created successfully. \n", getBaseName(outFilePath).c_str());
 
     if (fontpreview)
     {
         // Write out font map to an image.
-        strcpy(fileName, id);
-        strcat(fileName, ".pgm");
-
-        FILE *imageFp = fopen(fileName, "wb");
+        std::string pgmFilePath = getFilenameNoExt(outFilePath);
+        pgmFilePath.append(".pgm");
+        FILE *imageFp = fopen(pgmFilePath.c_str(), "wb");
         fprintf(imageFp, "P5 %d %d 255\n", imageWidth, imageHeight);
         fwrite((const char *)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, imageFp);
         fclose(imageFp);

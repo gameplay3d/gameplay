@@ -9,11 +9,6 @@ RadioButton::RadioButton() : _selected(false)
 {
 }
 
-RadioButton::RadioButton(const RadioButton& copy)
-{
-    // Hidden.
-}
-
 RadioButton::~RadioButton()
 {
     // Remove this RadioButton from the global list.
@@ -22,6 +17,18 @@ RadioButton::~RadioButton()
     {
         __radioButtons.erase(it);
     }
+}
+
+RadioButton* RadioButton::create(const char* id, Theme::Style* style)
+{
+    GP_ASSERT(style);
+
+    RadioButton* radioButton = new RadioButton();
+    if (id)
+        radioButton->_id = id;
+    radioButton->setStyle(style);
+
+    return radioButton;
 }
 
 RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
@@ -184,6 +191,11 @@ void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
     spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+}
+
+const char* RadioButton::getType() const
+{
+    return "radioButton";
 }
 
 }

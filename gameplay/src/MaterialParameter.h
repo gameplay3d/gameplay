@@ -11,6 +11,7 @@
 
 namespace gameplay
 {
+    class Node;
 
 /**
  * Defines a material parameter.
@@ -140,7 +141,7 @@ public:
      *
      * This overloads the setBinding method to provide support for array parameters.
      * The valueMethod parameter should return an array (pointer) of a supported
-     * material parameter type, such as Matirx* for an array of matrices. The
+     * material parameter type, such as Matrix* for an array of matrices. The
      * countMethod should point to a method that returns the number of entries in
      * the value returned from valueMethod.
      *
@@ -152,17 +153,48 @@ public:
     void bindValue(ClassType* classInstance, ParameterType (ClassType::*valueMethod)() const, unsigned int (ClassType::*countMethod)() const);
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * Binds the return value of the supported class method for the given node to this material parameter.
+     * 
+     * Note: intended for use from Lua scripts.
+     * 
+     * @param node The node containing the the member method to bind.
+     * @param binding The name of the class method to bind (in the format '&class::method').
+     *      Note: this name must be one of the following supported methods:
+     *      - "&Node::getBackVector"
+     *      - "&Node::getDownVector"
+     *      - "&Node::getTranslationWorld"
+     *      - "&Node::getTranslationView"
+     *      - "&Node::getForwardVector"
+     *      - "&Node::getForwardVectorWorld"
+     *      - "&Node::getForwardVectorView"
+     *      - "&Node::getLeftVector"
+     *      - "&Node::getRightVector"
+     *      - "&Node::getRightVectorWorld"
+     *      - "&Node::getUpVector"
+     *      - "&Node::getUpVectorWorld"
+     *      - "&Node::getActiveCameraTranslationWorld"
+     *      - "&Node::getActiveCameraTranslationView"
+     *      - "&Node::getScaleX"
+     *      - "&Node::getScaleY"
+     *      - "&Node::getScaleZ"
+     *      - "&Node::getTranslationX"
+     *      - "&Node::getTranslationY"
+     *      - "&Node::getTranslationZ"
+     */
+    void bindValue(Node* node, const char* binding);
+
+    /**
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
@@ -177,6 +209,11 @@ private:
      * Destructor.
      */
     ~MaterialParameter();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    MaterialParameter& operator=(const MaterialParameter&);
     
     /**
      * Interface implemented by templated method bindings for simple storage and iteration.
@@ -191,6 +228,11 @@ private:
          * Destructor.
          */
         virtual ~MethodBinding() { }
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        MethodBinding& operator=(const MethodBinding&);
     };
 
     /**
@@ -238,11 +280,17 @@ private:
     
     union
     {
+        /** @script{ignore} */
         float floatValue;
+        /** @script{ignore} */
         int intValue;
+        /** @script{ignore} */
         float* floatPtrValue;
+        /** @script{ignore} */
         int* intPtrValue;
+        /** @script{ignore} */
         const Texture::Sampler* samplerValue;
+        /** @script{ignore} */
         MethodBinding* method;
     } _value;
     

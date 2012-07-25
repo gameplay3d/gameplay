@@ -11,6 +11,7 @@ namespace gameplay
 
 class Animation;
 class AnimationValue;
+class ScriptListener;
 
 /**
  * Defines the runtime session of an Animation to be played.
@@ -49,11 +50,6 @@ public:
         enum EventType 
         {
             /**
-             * Default event type.
-             */
-            DEFAULT,
-
-            /**
              * Event fired when the clip begins.
              */
             BEGIN,
@@ -61,8 +57,18 @@ public:
             /**
              * Event fired when the clip ends.
              */
-            END
+            END,
+
+            /**
+             * Event fired at a specified time during a clip update.
+             */
+            TIME
         };
+        
+        /*
+         * Destructor.
+         */
+        virtual ~Listener() { }
 
         /**
          * Handles when animation event occurs.
@@ -75,7 +81,7 @@ public:
      *
      * @return The AnimationClip's ID.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Gets the Animation that this AnimationClip was created from.
@@ -103,7 +109,7 @@ public:
      *
      * @return The elapsed time of the AnimationClip (in milliseconds).
      */
-    unsigned long getElaspedTime() const;
+    float getElaspedTime() const;
 
     /**
      * Sets the AnimationClip's repeat count. Overrides repeat duration.
@@ -126,7 +132,7 @@ public:
      *
      * Use REPEAT_INDEFINITE to play the AnimationClip indefinitely.
      *
-     * @param duration The active duration that is set on the AnimationClip.
+     * @param duration The active duration that is set on the AnimationClip, in milliseconds.
      */
     void setActiveDuration(unsigned long duration);
 
@@ -140,7 +146,7 @@ public:
     /**
      * Gets the AnimationClip's duration.
      *
-     * @return the AnimationClip's duration.
+     * @return the AnimationClip's duration, in milliseconds.
      */
     unsigned long getDuration() const;
 
@@ -227,6 +233,37 @@ public:
      */
     void addListener(AnimationClip::Listener* listener, unsigned long eventTime);
 
+    /**
+     * Adds an animation begin listener.
+     * 
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
+     *
+     * @param function The Lua script function to be called when an AnimationClip begins.
+     */
+    void addBeginListener(const char* function);
+
+    /**
+     * Adds an animation end listener.
+     * 
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
+     *
+     * @param function The Lua script function to be called when an AnimationClip ends.
+     */
+    void addEndListener(const char* function);
+
+    /**
+     * Adds an animation listener to be called back at the specified eventTime during the playback 
+     * of the AnimationClip.
+     * 
+     * Note: the given Lua function must have the same function signature as AnimationClip::Listener::animationEvent.
+     * 
+     * @param function The Lua script function to be called when an AnimationClip reaches the 
+     *      specified time in its playback.
+     * @param eventTime The time the listener will be called during the playback of the AnimationClip. 
+     *      Must be between 0 and the duration of the AnimationClip.
+     */
+    void addListener(const char* function, unsigned long eventTime);
+
 private:
     
     static const unsigned char CLIP_IS_PLAYING_BIT = 0x01;             // Bit representing whether AnimationClip is a running clip in AnimationController
@@ -256,8 +293,32 @@ private:
          */
         ~ListenerEvent();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        ListenerEvent& operator=(const ListenerEvent&);
+
         Listener* _listener;        // This listener to call back when this event is triggered.
         unsigned long _eventTime;   // The time at which the listener will be called back at during the playback of the AnimationClip.
+    };
+
+    /**
+     * Listener implementation for script callbacks.
+     */
+    struct ScriptListener : public AnimationClip::Listener
+    {
+        /**
+         * Constructor.
+         */
+        ScriptListener(const std::string& function);
+
+        /**
+         * @see AnimationClip::Listener::animationEvent
+         */
+        void animationEvent(AnimationClip* clip, EventType type);
+
+        /** The function to call back when an animation event occurs. */
+        std::string function;
     };
 
     /**
@@ -281,9 +342,14 @@ private:
     ~AnimationClip();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    AnimationClip& operator=(const AnimationClip&);
+
+    /**
      * Updates the animation with the elapsed time.
      */
-    bool update(unsigned long elapsedTime);
+    bool update(float elapsedTime);
 
     /**
      * Handles when the AnimationClip begins.
@@ -310,6 +376,15 @@ private:
      */
     void resetClipStateBit(unsigned char bit);
 
+    /**
+     * Clones the animation clip.
+     * 
+     * @param animation The animation that the new clip belongs to.
+     * 
+     * @return The newly created animation clip.
+     */
+    AnimationClip* clone(Animation* animation) const;
+
     std::string _id;                                    // AnimationClip ID.
     Animation* _animation;                              // The Animation this clip is created from.
     unsigned long _startTime;                           // Start time of the clip.
@@ -319,10 +394,10 @@ private:
     float _repeatCount;                                 // The clip's repeat count.
     unsigned long _activeDuration;                      // The active duration of the clip.
     float _speed;                                       // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
-    unsigned long _timeStarted;                         // The game time when this clip was actually started.
-    long _elapsedTime;                                  // Time elapsed while the clip is running.
+    double _timeStarted;                                // The game time when this clip was actually started.
+    float _elapsedTime;                                 // Time elapsed while the clip is running.
     AnimationClip* _crossFadeToClip;                    // The clip to cross fade to.
-    unsigned long _crossFadeOutElapsed;                 // The amount of time that has elapsed for the crossfade.
+    float _crossFadeOutElapsed;                         // The amount of time that has elapsed for the crossfade.
     unsigned long _crossFadeOutDuration;                // The duration of the cross fade.
     float _blendWeight;                                 // The clip's blendweight.
     std::vector<AnimationValue*> _values;               // AnimationValue holder.
@@ -330,7 +405,9 @@ private:
     std::vector<Listener*>* _endListeners;              // Collection of end listeners on the clip.
     std::list<ListenerEvent*>* _listeners;              // Ordered collection of listeners on the clip.
     std::list<ListenerEvent*>::iterator* _listenerItr;  // Iterator that points to the next listener event to be triggered.
+    std::vector<ScriptListener*>* _scriptListeners;     // Collection of listeners that are bound to Lua script functions.
 };
 
 }
+
 #endif

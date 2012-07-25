@@ -73,6 +73,7 @@ public:
      * Orientation is represented as 6 floats. (forward.x, forward.y, forward.z, up.x, up.y, up.z).
      * 
      * @return Pointer to the 6 orientation float values.
+     * @script{ignore}
      */
     const float* getOrientation() const;
 

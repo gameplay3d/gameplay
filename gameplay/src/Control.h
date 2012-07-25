@@ -9,6 +9,8 @@
 #include "ThemeStyle.h"
 #include "Touch.h"
 #include "Keyboard.h"
+#include "Mouse.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -16,7 +18,7 @@ namespace gameplay
 /**
  * Base class for UI controls.
  */
-class Control : public Ref, public AnimationTarget
+class Control : public Ref, public AnimationTarget, public ScriptTarget
 {
     friend class Form;
     friend class Container;
@@ -82,6 +84,7 @@ public:
     };
 
     /**
+     * @script{ignore}
      * A constant used for setting themed attributes on all control states simultaneously.
      */
     static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
@@ -124,8 +127,23 @@ public:
             /**
              * Event triggered when the contents of a text box are modified.
              */
-            TEXT_CHANGED    = 0x10
+            TEXT_CHANGED    = 0x10,
+
+            /**
+             * Event triggered when a control is clicked with the middle mouse button.
+             */
+            MIDDLE_CLICK    = 0x20,
+
+            /**
+             * Event triggered when a control is clicked with the right mouse button.
+             */
+            RIGHT_CLICK     = 0x40,
         };
+    
+        /*
+         * Destructor.
+         */
+        virtual ~Listener() { }
 
         /**
          * Method called by controls when an event is triggered.
@@ -176,7 +194,7 @@ public:
      *
      * @return This control's ID.
      */
-    const char* getID() const;
+    const char* getId() const;
 
     /**
      * Set the position of this control relative to its parent container.
@@ -318,16 +336,6 @@ public:
      * @return The texture region of this control's skin.
      */
     const Rectangle& getSkinRegion(State state = NORMAL) const;
-
-    /**
-     * Get the texture coordinates of an area of this control's skin for a given state.
-     *
-     * @param area The area of the skin to get the coordinates of.
-     * @param state The state to get this property from.
-     *
-     * @return The texture coordinates of an area of this control's skin.
-     */
-    const Theme::UVs& getSkinUVs(Theme::Skin::SkinArea area, State state = NORMAL) const;
 
     /**
      * Set the blend color of this control's skin.
@@ -630,19 +638,19 @@ public:
     bool isEnabled();
 
     /**
-     * Set whether this control consumes touch events,
+     * Set whether this control consumes input events,
      * preventing them from being passed to the game.
      *
-     * @param consume Whether this control consumes touch events.
+     * @param consume Whether this control consumes input events.
      */
-    void setConsumeTouchEvents(bool consume);
+    void setConsumeInputEvents(bool consume);
 
     /**
      * Get whether this control consumes touch events.
      *
      * @return Whether this control consumes touch events.
      */
-    bool getConsumeTouchEvents();
+    bool getConsumeInputEvents();
 
     /**
      * Set the style this control will use when rendering.
@@ -673,6 +681,34 @@ public:
     void setZIndex(int zIndex);
 
     /**
+     * Get this control's focus index.
+     *
+     * @return This control's focus index.
+     */
+    int getFocusIndex() const;
+
+    /**
+     * Set this control's focus index.
+     *
+     * @param focusIndex The new focus index.
+     */
+    void setFocusIndex(int focusIndex);
+
+    /**
+     * Returns whether this Control object is a Container or not.
+     *
+     * @return true if this object is of class Container, false otherwise.
+     */
+    virtual bool isContainer() const;
+
+    /**
+     * Gets the type of the Control and returns it as a string.
+     *
+     * @return The string of the Control type, all in lower-case.
+     */
+    virtual const char* getType() const;
+
+    /**
      * Add a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
@@ -685,21 +721,26 @@ public:
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     virtual void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
 protected:
+
+    /**
+     *  Constant value representing an unset or invalid contact index.
+     */
+    static const int INVALID_CONTACT_INDEX = -1;
 
     /**
      * Constructor.
@@ -710,6 +751,11 @@ protected:
      * Destructor.
      */
     virtual ~Control();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Control& operator=(const Control&);
 
     /**
      * Get the overlay type corresponding to this control's current state.
@@ -735,14 +781,30 @@ protected:
     /**
      * Keyboard callback on key events.
      *
-     * @param evt The key event that occured.
+     * @param evt The key event that occurred.
      * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
      *            If evt is KEY_CHAR then key is the unicode value of the character.
+     *
+     * @return Whether the key event was consumed by this control.
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
      */
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Mouse callback on mouse events.
+     *
+     * @param evt The mouse event that occurred.
+     * @param x The x position of the mouse in pixels. Left edge is zero.
+     * @param y The y position of the mouse in pixels. Top edge is zero.
+     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
+     *
+     * @return True if the mouse event is consumed or false if it is not consumed.
+     *
+     * @see Mouse::MouseEvent
+     */
+    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * Called when a control's properties change.  Updates this control's internal rendering
@@ -780,16 +842,12 @@ protected:
     virtual void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
 
     /**
-     * Initialize properties common to STATE_ALL Controls.
+     * Initialize properties common to all Controls from a Properties object.
+     *
+     * @param style The style to apply to this control.
+     * @param properties The properties to set on this control.
      */
     virtual void initialize(Theme::Style* style, Properties* properties);
-
-    /**
-     * Container and classes that extend it should implement this and return true.
-     *
-     * @return true if this object is of class Container, false otherwise.
-     */
-    virtual bool isContainer();
 
     /**
      * Returns whether this control has been modified and requires an update.
@@ -883,12 +941,12 @@ protected:
     bool _dirty;
     
     /**
-     * Flag for whether the Control consume's touch events.
+     * Flag for whether the Control consumes input events.
      */
-    bool _consumeTouchEvents;
+    bool _consumeInputEvents;
     
     /**
-     * The Control's Alignmnet
+     * The Control's Alignment
      */
     Alignment _alignment;
     
@@ -903,14 +961,14 @@ protected:
     bool _autoHeight;
     
     /**
-     * The Control's Theme::Style.
-     */
-    Theme::Style* _style;
-    
-    /**
      * Listeners map of EventType's to a list of Listeners.
      */
     std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
+    
+    /**
+     * The Control's Theme::Style.
+     */
+    Theme::Style* _style;
 
     /**
      * The current opacity of the control.
@@ -921,6 +979,16 @@ protected:
      * The z-order of the control.
      */
     int _zIndex;
+
+    /**
+     * The contact index assigned to this control.
+     */
+    int _contactIndex;
+
+    /**
+     * The focus order of the control.
+     */
+    int _focusIndex;
 
 private:
 

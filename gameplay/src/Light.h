@@ -66,6 +66,11 @@ public:
     virtual ~Light();
 
     /**
+     * Hidden copy assignment operator.
+     */
+    Light& operator=(const Light&);
+
+    /**
      * Returns the light type.
      * 
      * @return The light type.
@@ -234,8 +239,11 @@ private:
     
     union
     {
+        /** @script{ignore} */
         Directional* _directional;
+        /** @script{ignore} */
         Point* _point;
+        /** @script{ignore} */
         Spot* _spot;
     };
     Node* _node;
