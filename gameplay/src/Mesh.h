@@ -197,7 +197,7 @@ public:
      * @param vertexStart The index of the starting vertex (0 by default).
      * @param vertexCount The number of vertices to be set (default is 0, for all vertices).
      */
-    void setVertexData(void* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
+    void setVertexData(float* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
 
     /**
      * Creates and adds a new part of primitive data defining how the vertices are connected.
@@ -237,10 +237,10 @@ public:
      * local bounds.
      *
      * Meshes that are attached to a Model with a MeshSkin will have
-     * a bounding volume that is not neccessarily tight fighting on the
+     * a bounding volume that is not necessarily tight fighting on the
      * Mesh vertices. Instead, the bounding volume will be an approximation
      * that contains all possible vertex positions in all possible poses after
-     * skinning is applied. This is neccessary since skinning vertices 
+     * skinning is applied. This is necessary since skinning vertices 
      * result in vertex positions that lie outside the original mesh bounds
      * and could otherwise result in a bounding volume that does not fully
      * contain an animated/skinned mesh.
@@ -266,10 +266,10 @@ public:
      * local bounds.
      *
      * Meshes that are attached to a Model with a MeshSkin will have
-     * a bounding volume that is not neccessarily tight fighting on the
+     * a bounding volume that is not necessarily tight fighting on the
      * Mesh vertices. Instead, the bounding volume will be an approximation
      * that contains all possible vertex positions in all possible poses after
-     * skinning is applied. This is neccessary since skinning vertices 
+     * skinning is applied. This is necessary since skinning vertices 
      * result in vertex positions that lie outside the original mesh bounds
      * and could otherwise result in a bounding volume that does not fully
      * contain an animated/skinned mesh.
@@ -301,6 +301,11 @@ private:
      * Constructor.
      */
     Mesh(const Mesh& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Mesh& operator=(const Mesh&);
 
     std::string _url;
     const VertexFormat _vertexFormat;

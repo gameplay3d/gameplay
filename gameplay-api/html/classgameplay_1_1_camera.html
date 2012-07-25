@@ -77,8 +77,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Camera Class Reference</div>  </div>
 </div><!--header-->
@@ -125,17 +124,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a33597003be39ecdd56f9ba8648727732"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a33597003be39ecdd56f9ba8648727732">getViewProjectionMatrix</a> () const </td></tr>
 <tr class="memitem:a1185b45d35022716d4b281f07cc55263"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a1185b45d35022716d4b281f07cc55263">getInverseViewProjectionMatrix</a> () const </td></tr>
 <tr class="memitem:acdb9bdff60e8ba7be6b991ca70e5e233"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_frustum.html">Frustum</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#acdb9bdff60e8ba7be6b991ca70e5e233">getFrustum</a> () const </td></tr>
-<tr class="memitem:a56ce48df52e46c7c67770b3444cbd9cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a56ce48df52e46c7c67770b3444cbd9cc">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, float *x, float *y, float *depth=NULL)</td></tr>
-<tr class="memitem:a986d7d07bae94422d96c6302be1b1e90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a986d7d07bae94422d96c6302be1b1e90">unproject</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, float depth, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst)</td></tr>
-<tr class="memitem:a73d0c5b23bd6e4eb669772159145b08c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a73d0c5b23bd6e4eb669772159145b08c">pickRay</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, <a class="el" href="classgameplay_1_1_ray.html">Ray</a> *dst)</td></tr>
+<tr class="memitem:a3b013cddd2e40fbf2973a3ac07439dc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, float *x, float *y, float *depth=NULL) const </td></tr>
+<tr class="memitem:aad7e4fca47d80aa100a2d5b1cb3f1104"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aad7e4fca47d80aa100a2d5b1cb3f1104">unproject</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, float depth, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst) const </td></tr>
+<tr class="memitem:a8e253da4bd8ed477f19ca07e9934c328"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a8e253da4bd8ed477f19ca07e9934c328">pickRay</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, <a class="el" href="classgameplay_1_1_ray.html">Ray</a> *dst) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7e4474862a8153e821e4aa1e5a8b7dbb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a7e4474862a8153e821e4aa1e5a8b7dbb">createPerspective</a> (float fieldOfView, float aspectRatio, float nearPlane, float farPlane)</td></tr>
 <tr class="memitem:abeaa87b56e1e5b81cea6988e552a69fe"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#abeaa87b56e1e5b81cea6988e552a69fe">createOrthographic</a> (float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane)</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a6db9d28bd448a131448276ee03de1e6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6db9d28bd448a131448276ee03de1e6d"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a camera which acts as a view of a scene to be rendered. </p>
@@ -512,12 +507,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a73d0c5b23bd6e4eb669772159145b08c"></a>
+<a class="anchor" id="a8e253da4bd8ed477f19ca07e9934c328"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a73d0c5b23bd6e4eb669772159145b08c">gameplay::Camera::pickRay</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a8e253da4bd8ed477f19ca07e9934c328">gameplay::Camera::pickRay</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
           <td class="paramname"><em>viewport</em>, </td>
@@ -543,7 +538,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div>
@@ -561,12 +556,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56ce48df52e46c7c67770b3444cbd9cc"></a>
+<a class="anchor" id="a3b013cddd2e40fbf2973a3ac07439dc1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a56ce48df52e46c7c67770b3444cbd9cc">gameplay::Camera::project</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">gameplay::Camera::project</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
           <td class="paramname"><em>viewport</em>, </td>
@@ -598,7 +593,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div>
@@ -761,12 +756,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a986d7d07bae94422d96c6302be1b1e90"></a>
+<a class="anchor" id="aad7e4fca47d80aa100a2d5b1cb3f1104"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a986d7d07bae94422d96c6302be1b1e90">gameplay::Camera::unproject</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#aad7e4fca47d80aa100a2d5b1cb3f1104">gameplay::Camera::unproject</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
           <td class="paramname"><em>viewport</em>, </td>
@@ -798,7 +793,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div>
@@ -822,7 +817,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

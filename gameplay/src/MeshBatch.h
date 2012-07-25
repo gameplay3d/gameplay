@@ -20,11 +20,12 @@ public:
      * @param vertexFormat The format of vertices in the new batch.
      * @param primitiveType The type of primitives that will be added to the batch.
      * @param materialPath Path to a material file to be used for drawing the batch.
-     * @param indexed True if the batched primivites will contain index data, false otherwise.
+     * @param indexed True if the batched primitives will contain index data, false otherwise.
      * @param initialCapacity The initial capacity of the batch, in triangles.
      * @param growSize Amount to grow the batch by when it overflows (a value of zero prevents batch growing).
      *
      * @return A new mesh batch.
+     * @script{create}
      */
     static MeshBatch* create(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, const char* materialPath, bool indexed, unsigned int initialCapacity = 1024, unsigned int growSize = 1024);
 
@@ -34,11 +35,12 @@ public:
      * @param vertexFormat The format of vertices in the new batch.
      * @param primitiveType The type of primitives that will be added to the batch.
      * @param material Material to be used for drawing the batch.
-     * @param indexed True if the batched primivites will contain index data, false otherwise.
+     * @param indexed True if the batched primitives will contain index data, false otherwise.
      * @param initialCapacity The initial capacity of the batch, in triangles.
      * @param growSize Amount to grow the batch by when it overflows (a value of zero prevents batch growing).
      *
      * @return A new mesh batch.
+     * @script{create}
      */
     static MeshBatch* create(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity = 1024, unsigned int growSize = 1024);
 
@@ -48,7 +50,7 @@ public:
     ~MeshBatch();
 
     /**
-     * Returs the current capacity of the batch.
+     * Returns the current capacity of the batch.
      *
      * @return The batch capacity.
      */
@@ -75,12 +77,12 @@ public:
      * the format of a single vertex (e.g. {x,y,z,u,v}).
      *
      * If the batch was created with 'indexed' set to true, then valid index data should be
-     * passed in this method. However, if 'indxed' was set to false, the indices and indexCount
+     * passed in this method. However, if 'indexed' was set to false, the indices and indexCount
      * parameters can be omitted since only vertex data will be used.
      *
      * If the batch created to draw triangle strips, this method assumes that separate calls to
-     * add specify seprate triangle strips. In this case, this method will automatically stitch
-     * seperate triangle strips together using degenerate (zero-area) triangles.
+     * add specify separate triangle strips. In this case, this method will automatically stitch
+     * separate triangle strips together using degenerate (zero-area) triangles.
      *
      * @param vertices Array of vertices.
      * @param vertexCount Number of vertices.
@@ -91,21 +93,21 @@ public:
     void add(T* vertices, unsigned int vertexCount, unsigned short* indices = NULL, unsigned int indexCount = 0);
 
     /**
-     * Begins batching.
+     * Starts batching.
      *
      * This method should be called before calling add() to add primitives to the batch.
-     * After all primitives have been added to the batch, call the end() method to
+     * After all primitives have been added to the batch, call the finish() method to
      * complete the batch.
      *
      * Calling this method will clear any primitives currently in the batch and set the
      * position of the batch back to the beginning.
      */
-    void begin();
+    void start();
 
     /**
      * Indicates that batching is complete and prepares the batch for drawing.
      */
-    void end();
+    void finish();
 
     /**
      * Draws the primitives currently in batch.
@@ -120,9 +122,14 @@ private:
     MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primitiveType, Material* material, bool indexed, unsigned int initialCapacity, unsigned int growSize);
 
     /**
-     * Constructor.
+     * Hidden copy constructor.
      */
     MeshBatch(const MeshBatch& copy);
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    MeshBatch& operator=(const MeshBatch&);
 
     void updateVertexAttributeBinding();
 

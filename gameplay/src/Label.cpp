@@ -8,19 +8,30 @@ Label::Label() : _text(""), _font(NULL)
 {
 }
 
-Label::Label(const Label& copy)
+Label::~Label()
 {
 }
 
-Label::~Label()
+Label* Label::create(const char* id, Theme::Style* style)
 {
+    GP_ASSERT(style);
+
+    Label* label = new Label();
+    if (id)
+        label->_id = id;
+    label->setStyle(style);
+
+    return label;
 }
 
 Label* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
     label->initialize(style, properties);
-    label->_consumeTouchEvents = false;
+    label->_consumeInputEvents = false;
+    
+    // Ensure that labels cannot receive focus.
+    label->_focusIndex = -2;
 
     return label;
 }
@@ -49,7 +60,7 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
         GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
     }
 
-    _consumeTouchEvents = true;
+    _consumeInputEvents = true;
 
     Control::addListener(listener, eventFlags);
 }
@@ -89,12 +100,17 @@ void Label::drawText(const Rectangle& clip)
     // Draw the text.
     if (_font)
     {
-        _font->begin();
+        _font->start();
         _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
-        _font->end();
+        _font->finish();
     }
 
     _dirty = false;
+}
+
+const char* Label::getType() const
+{
+    return "label";
 }
 
 }

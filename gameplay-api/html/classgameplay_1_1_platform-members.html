@@ -79,17 +79,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a>, including all inherited members.<table>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a665a2091d832c2eca7a29a51228fe9e9">create</a>(Game *game)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">create</a>(Game *game, void *attachToWindow=NULL)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3">displayKeyboard</a>(bool display)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aebc82fa22dfec7cc8cba5b28aff04d00">getAbsoluteTime</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a59244b6b8ac83ea029339e3974a40282">getAbsoluteTime</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a>(float *pitch, float *roll)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ae041cb899960eda243f144dd8d1a917b">getDisplayHeight</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#abf163f9db26aac12f9bb9fca70eb061a">getDisplayWidth</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a611399220693bdd2c3a147ba43997edc">hasMouse</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a0573a19fc0d2f0134e424186c888f7f7">isCursorVisible</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a501a32d43e25f6ce2c75598462a04303">isMouseCaptured</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aac96a0a5b3d2ff0b7aca92eaa6126a80">isMultiTouch</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aa7936bf90741ee305184f2b38467923b">isVsync</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a8b1b7b370d990cf54d22653b308b9497">keyEventInternal</a>(Keyboard::KeyEvent evt, int key)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a45d449a6b5d17f1ed9d75512de8374a1">setAbsoluteTime</a>(long time)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a8c4044ab61f9be5853b3cf9d97530e43">mouseEventInternal</a>(Mouse::MouseEvent evt, int x, int y, int wheelDelta)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ac4152c4765c6dc0d44b0a78050d17a84">setAbsoluteTime</a>(double time)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a820e3651ea70acea92847610b5a3aed0">setCursorVisible</a>(bool visible)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a2b48a46607314f332a87f13b7a11cd32">setMouseCaptured</a>(bool captured)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a3a3f93c158269eb93949ba5d9b550c70">setMultiTouch</a>(bool enabled)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#acacf35e2782bd3253a231dd0bd459f64">setVsync</a>(bool enable)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#abbb42d7ac405bad0db3eb642495c84b3">signalShutdown</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
@@ -101,7 +107,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:44:00 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

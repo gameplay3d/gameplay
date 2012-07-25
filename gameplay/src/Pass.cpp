@@ -54,6 +54,11 @@ void Pass::setVertexAttributeBinding(VertexAttributeBinding* binding)
     }
 }
 
+ VertexAttributeBinding* Pass::getVertexAttributeBinding() const
+ {
+     return _vaBinding;
+ }
+
 void Pass::bind()
 {
     GP_ASSERT(_effect);

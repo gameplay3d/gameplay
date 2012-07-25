@@ -13,7 +13,7 @@ class MeshGame: public Game
 public:
 
     /**
-     * Constructror.
+     * Constructor.
      */
     MeshGame();
 
@@ -47,12 +47,12 @@ protected:
     /**
      * @see Game::update
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     /**
      * @see Game::render
      */
-    void render(long elapsedTime);
+    void render(float elapsedTime);
 
 private:
 
@@ -62,13 +62,6 @@ private:
 
     void drawSplash(void* param);
 
-    /**
-     * Creates a grid model.
-     * 
-     * @param lineCount The number of lines wide to create the grid.
-     * 
-     * @return A newly created model that contains the mesh.
-     */
     Model* createGridModel(unsigned int lineCount = 41);
 
     Font* _font;

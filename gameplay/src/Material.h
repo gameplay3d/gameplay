@@ -35,6 +35,7 @@ public:
      * @param url The URL pointing to the Properties object defining the material.
      * 
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(const char* url);
 
@@ -44,6 +45,7 @@ public:
      * @param materialProperties The properties object defining the 
      *      material (must have namespace equal to 'material').
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(Properties* materialProperties);
 
@@ -56,6 +58,7 @@ public:
      * @param effect Effect for the new material.
      * 
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(Effect* effect);
 
@@ -67,9 +70,10 @@ public:
      *
      * @param vshPath Path to the vertex shader file.
      * @param fshPath Path to the fragment shader file.
-     * @param defines New-line delimitted list of preprocessor defines.
+     * @param defines New-line delimited list of preprocessor defines.
      * 
      * @return A new Material.
+     * @script{create}
      */
     static Material* create(const char* vshPath, const char* fshPath, const char* defines = NULL);
 
@@ -96,7 +100,7 @@ public:
      * 
      * @return The specified technique.
      */
-    Technique* getTechnique(unsigned int index) const;
+    Technique* getTechniqueByIndex(unsigned int index) const;
 
     /**
      * Returns the technique with the specified ID in this material.
@@ -113,13 +117,6 @@ public:
      * @return The current technique.
      */
     Technique* getTechnique() const;
-
-    /**
-     * Sets the current material technique.
-     *
-     * @param index Index of the technique to set.
-     */
-    void setTechnique(unsigned int index);
 
     /**
      * Sets the current material technique. 

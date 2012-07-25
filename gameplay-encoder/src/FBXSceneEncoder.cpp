@@ -154,13 +154,24 @@ void addScaleChannel(Animation* animation, FbxNode* fbxNode, float startTime, fl
 
 void addTranslateChannel(Animation* animation, FbxNode* fbxNode, float startTime, float stopTime);
 
+/**
+ * Determines if it is possible to automatically group animations for mesh skins.
+ * 
+ * @param fbxScene The FBX scene to search.
+ * 
+ * @return True if there is at least one mesh skin that has animations that can be grouped.
+ */
+bool isGroupAnimationPossible(FbxScene* fbxScene);
+bool isGroupAnimationPossible(FbxNode* fbxNode);
+bool isGroupAnimationPossible(FbxMesh* fbxMesh);
+
 
 ////////////////////////////////////
 // Member Functions
 ////////////////////////////////////
 
 FBXSceneEncoder::FBXSceneEncoder()
-    : _groupAnimation(NULL)
+    : _groupAnimation(NULL), _autoGroupAnimations(false)
 {
 }
 
@@ -187,6 +198,16 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
     print("Loading FBX file.");
     importer->Import(fbxScene);
     importer->Destroy();
+
+    // Determine if animations should be grouped.
+    if (arguments.getGroupAnimationAnimationId().empty() && isGroupAnimationPossible(fbxScene))
+    {
+        if (promptUserGroupAnimations())
+        {
+            _autoGroupAnimations = true;
+        }
+    }
+
     print("Loading Scene.");
     loadScene(fbxScene);
     print("Loading animations.");
@@ -195,6 +216,10 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
 
     print("Optimizing GamePlay Binary.");
     _gamePlayFile.adjust();
+    if (_autoGroupAnimations)
+    {
+        _gamePlayFile.groupMeshSkinAnimations();
+    }
     
     std::string outputFilePath = arguments.getOutputFilePath();
 
@@ -1471,6 +1496,55 @@ void copyMatrix(const FbxMatrix& fbxMatrix, Matrix& matrix)
             matrix.m[i++] = (float)fbxMatrix.Get(row, col);
         }
     }
+}
+
+bool isGroupAnimationPossible(FbxScene* fbxScene)
+{
+    FbxNode* rootNode = fbxScene->GetRootNode();
+    if (rootNode)
+    {
+        if (isGroupAnimationPossible(rootNode))
+            return true;
+    }
+    return false;
+}
+
+bool isGroupAnimationPossible(FbxNode* fbxNode)
+{
+    if (fbxNode)
+    {
+        FbxMesh* fbxMesh = fbxNode->GetMesh();
+        if (isGroupAnimationPossible(fbxMesh))
+            return true;
+        const int childCount = fbxNode->GetChildCount();
+        for (int i = 0; i < childCount; ++i)
+        {
+            if (isGroupAnimationPossible(fbxNode->GetChild(i)))
+                return true;
+        }
+    }
+    return false;
+}
+
+bool isGroupAnimationPossible(FbxMesh* fbxMesh)
+{
+    if (fbxMesh)
+    {
+        const int deformerCount = fbxMesh->GetDeformerCount();
+        for (int i = 0; i < deformerCount; ++i)
+        {
+            FbxDeformer* deformer = fbxMesh->GetDeformer(i);
+            if (deformer->GetDeformerType() == FbxDeformer::eSkin)
+            {
+                FbxSkin* fbxSkin = static_cast<FbxSkin*>(deformer);
+                if (fbxSkin)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 #endif

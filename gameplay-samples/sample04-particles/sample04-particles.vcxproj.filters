@@ -45,17 +45,11 @@
     <None Include="res\explosion.png">
       <Filter>res</Filter>
     </None>
-    <None Include="..\..\test\bar-descriptor.xml" />
     <None Include="..\..\test\icon.png" />
     <None Include="game.config" />
-    <None Include="res\arial9.gpb">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\arial13.gpb">
-      <Filter>res</Filter>
-    </None>
     <None Include="res\arial18.gpb">
       <Filter>res</Filter>
     </None>
+    <None Include="bar-descriptor.xml" />
   </ItemGroup>
 </Project>

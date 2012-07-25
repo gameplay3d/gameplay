@@ -1,6 +1,5 @@
 #include "Base.h"
 #include "PhysicsRigidBody.h"
-#include "PhysicsMotionState.h"
 #include "PhysicsController.h"
 #include "Game.h"
 #include "Image.h"
@@ -44,7 +43,6 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
     // Set other initially defined properties.
     setKinematic(parameters.kinematic);
     setAnisotropicFriction(parameters.anisotropicFriction);
-    setGravity(parameters.gravity);
 
     // Add ourself to the physics world.
     Game::getInstance()->getPhysicsController()->addCollisionObject(this);
@@ -75,7 +73,7 @@ PhysicsRigidBody::~PhysicsRigidBody()
     }
 
     // Remove collision object from physics controller.
-    Game::getInstance()->getPhysicsController()->removeCollisionObject(this);
+    Game::getInstance()->getPhysicsController()->removeCollisionObject(this, true);
 
     // Clean up the rigid body and its related objects.
     SAFE_DELETE(_body);
@@ -185,6 +183,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
 
     // Set the rigid body parameters to their defaults.
     Parameters parameters;
+    Vector3* gravity = NULL;
 
     // Load the defined rigid body parameters.
     properties->rewind();
@@ -221,7 +220,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
         }
         else if (strcmp(name, "gravity") == 0)
         {
-            properties->getVector3(NULL, &parameters.gravity);
+            gravity = new Vector3();
+            properties->getVector3(NULL, gravity);
         }
         else
         {
@@ -232,6 +232,12 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
     // Create the rigid body.
     PhysicsRigidBody* body = new PhysicsRigidBody(node, *shape, parameters);
     SAFE_DELETE(shape);
+
+    if (gravity)
+    {
+        body->setGravity(*gravity);
+        SAFE_DELETE(gravity);
+    }
 
     return body;
 }
@@ -252,7 +258,14 @@ void PhysicsRigidBody::setKinematic(bool kinematic)
     }
 }
 
-float PhysicsRigidBody::getHeight(float x, float y) const
+void PhysicsRigidBody::setEnabled(bool enable)
+{
+    PhysicsCollisionObject::setEnabled(enable);
+    if (enable)
+        _body->setMotionState(_motionState);
+}
+
+float PhysicsRigidBody::getHeight(float x, float y, Vector3* normal) const
 {
     GP_ASSERT(_collisionShape);
 
@@ -290,7 +303,8 @@ float PhysicsRigidBody::getHeight(float x, float y) const
         return 0.0f;
     }
 
-    return PhysicsController::calculateHeight(_collisionShape->_shapeData.heightfieldData->heightData, w, h, x, y);
+    return PhysicsController::calculateHeight(_collisionShape->_shapeData.heightfieldData->heightData, w, h, x, y,
+        &_node->getWorldMatrix(), _collisionShape->_shapeData.heightfieldData->normalData, normal);
 }
 
 void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)

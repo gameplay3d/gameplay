@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42B7026015B0A8D5002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7025F15B0A8D5002BB8C3 /* liblua.a */; };
+		42B7026F15B0B202002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7026E15B0B202002BB8C3 /* game.config */; };
+		42B7027015B0B202002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7026E15B0B202002BB8C3 /* game.config */; };
 		42CCD51B146EBF3600353661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD51A146EBF3600353661 /* Cocoa.framework */; };
 		42CCD549146EC0AE00353661 /* SpaceshipGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CCD547146EC0AE00353661 /* SpaceshipGame.cpp */; };
 		42CCD54B146EC10200353661 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD54A146EC10200353661 /* QuartzCore.framework */; };
@@ -43,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-ios.plist"; sourceTree = "<group>"; };
+		42B7025F15B0A8D5002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
+		42B7026E15B0B202002BB8C3 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932E31491A18F0098216A /* sample02-spaceship-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample02-spaceship-macosx.plist"; sourceTree = "<group>"; };
 		42CCD516146EBF3600353661 /* sample02-spaceship-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample02-spaceship-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CCD51A146EBF3600353661 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -87,6 +92,7 @@
 				42CCD54B146EC10200353661 /* QuartzCore.framework in Frameworks */,
 				42CCD54F146EC11600353661 /* OpenGL.framework in Frameworks */,
 				42CCD54D146EC10E00353661 /* OpenAL.framework in Frameworks */,
+				42B7026015B0A8D5002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +125,7 @@
 			children = (
 				5B43D1B714C35A65008A5D9D /* libgameplay.a */,
 				42CD0EEE147D932B0000361E /* libbullet.a */,
+				42B7025F15B0A8D5002BB8C3 /* liblua.a */,
 				42CD0EEF147D932B0000361E /* libogg.a */,
 				42CD0EF0147D932B0000361E /* libvorbis.a */,
 				42CD0EF1147D932B0000361E /* libvorbisenc.a */,
@@ -132,6 +139,7 @@
 		42CCD50B146EBF3600353661 = {
 			isa = PBXGroup;
 			children = (
+				42B7026E15B0B202002BB8C3 /* game.config */,
 				42458CBA14C3AB4D00EFFB61 /* sample02-spaceship-ios.plist */,
 				42C932E31491A18F0098216A /* sample02-spaceship-macosx.plist */,
 				42CCD55D146EC24F00353661 /* icon.png */,
@@ -266,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CCD55E146EC24F00353661 /* icon.png in Resources */,
+				42B7026F15B0B202002BB8C3 /* game.config in Resources */,
 				42CCD560146EC27A00353661 /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B43D1AF14C35A0E008A5D9D /* icon.png in Resources */,
+				42B7027015B0B202002BB8C3 /* game.config in Resources */,
 				5B43D1B014C35A0E008A5D9D /* res in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,7 +303,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B43D1AD14C35A0E008A5D9D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -306,7 +316,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -386,6 +396,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -393,6 +404,7 @@
 				INFOPLIST_FILE = "sample02-spaceship-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
@@ -414,6 +426,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -421,6 +434,7 @@
 				INFOPLIST_FILE = "sample02-spaceship-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/macosx\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/macosx\"",
@@ -443,6 +457,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -451,6 +466,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
@@ -476,6 +492,7 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
+					"../../external-deps/lua/include",
 					"../../external-deps/libpng/include",
 					"../../external-deps/bullet/include",
 					"../../external-deps/oggvorbis/include",
@@ -484,6 +501,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",

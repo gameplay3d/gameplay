@@ -1,4 +1,5 @@
 #include "Base.h"
+#include "AudioSource.h"
 #include "Node.h"
 #include "Scene.h"
 #include "Joint.h"
@@ -21,9 +22,9 @@ namespace gameplay
 {
 
 Node::Node(const char* id)
-    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(NULL),
+    : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
     _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
-    _collisionObject(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
+    _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
     {
@@ -51,6 +52,8 @@ Node::~Node()
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
     SAFE_DELETE(_collisionObject);
+
+    setAgent(NULL);
 
     // Cleanup user data
     if (_userData)
@@ -544,6 +547,20 @@ Vector3 Node::getForwardVectorView() const
     Vector3 vector;
     getWorldMatrix().getForwardVector(&vector);
     getViewMatrix().transformVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getRightVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getRightVector(&vector);
+    return vector;
+}
+
+Vector3 Node::getUpVectorWorld() const
+{
+    Vector3 vector;
+    getWorldMatrix().getUpVector(&vector);
     return vector;
 }
 
@@ -1073,25 +1090,50 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         GP_ERROR("Failed to load collision object from properties object; required attribute 'type' is missing.");
         return NULL;
     }
-    
+
     return _collisionObject;
+}
+
+AIAgent* Node::getAgent() const
+{
+    return _agent;
+}
+
+void Node::setAgent(AIAgent* agent)
+{
+    if (agent != _agent)
+    {
+        if (_agent)
+        {
+            Game::getInstance()->getAIController()->removeAgent(_agent);
+            _agent->_node = NULL;
+            SAFE_RELEASE(_agent);
+        }
+
+        _agent = agent;
+
+        if (_agent)
+        {
+            _agent->addRef();
+            _agent->_node = this;
+            Game::getInstance()->getAIController()->addAgent(_agent);
+        }
+    }
 }
 
 NodeCloneContext::NodeCloneContext()
 {
-    
 }
 
 NodeCloneContext::~NodeCloneContext()
 {
-
 }
 
 Animation* NodeCloneContext::findClonedAnimation(const Animation* animation)
 {
     GP_ASSERT(animation);
 
-    AnimationMap::iterator it = _clonedAnimations.find(animation);
+    std::map<const Animation*, Animation*>::iterator it = _clonedAnimations.find(animation);
     return it != _clonedAnimations.end() ? it->second : NULL;
 }
 
@@ -1107,7 +1149,7 @@ Node* NodeCloneContext::findClonedNode(const Node* node)
 {
     GP_ASSERT(node);
 
-    NodeMap::iterator it = _clonedNodes.find(node);
+    std::map<const Node*, Node*>::iterator it = _clonedNodes.find(node);
     return it != _clonedNodes.end() ? it->second : NULL;
 }
 

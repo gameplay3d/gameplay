@@ -7,12 +7,10 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _dirty(true), _consumeTouchEvents(true), _listeners(NULL), _styleOverridden(false), _skin(NULL), _clearBounds(Rectangle::empty())
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL),
+    _contactIndex(INVALID_CONTACT_INDEX), _styleOverridden(false), _skin(NULL)
 {
-}
-
-Control::Control(const Control& copy)
-{
+    addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
 
 Control::~Control()
@@ -43,6 +41,8 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
 
+    _consumeInputEvents = properties->getBool("consumeEvents", true);
+
     if (properties->exists("zIndex"))
     {
         _zIndex = properties->getInt("zIndex");
@@ -50,6 +50,15 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     else
     {
         _zIndex = -1;
+    }
+
+    if (properties->exists("focusIndex"))
+    {
+        _focusIndex = properties->getInt("focusIndex");
+    }
+    else
+    {
+        _focusIndex = -1;
     }
 
     Vector2 position;
@@ -74,8 +83,6 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         size.y = properties->getFloat("height");
     }
     setBounds(Rectangle(position.x, position.y, size.x, size.y));
-
-    _state = Control::getState(properties->getString("state"));
 
     const char* id = properties->getId();
     if (id)
@@ -121,7 +128,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     }
 }
 
-const char* Control::getID() const
+const char* Control::getId() const
 {
     return _id.c_str();
 }
@@ -213,6 +220,11 @@ void Control::setAutoHeight(bool autoHeight)
     }
 }
 
+bool Control::getAutoHeight() const
+{
+    return _autoHeight;
+}
+
 void Control::setOpacity(float opacity, unsigned char states)
 {
     overrideStyle();
@@ -274,13 +286,6 @@ const Rectangle& Control::getSkinRegion(State state) const
     Theme::Style::Overlay* overlay = getOverlay(state);
     GP_ASSERT(overlay);
     return overlay->getSkinRegion();
-}
-
-const Theme::UVs& Control::getSkinUVs(Theme::Skin::SkinArea area, State state) const
-{
-    Theme::Style::Overlay* overlay = getOverlay(state);
-    GP_ASSERT(overlay);
-    return overlay->getSkinUVs(area);
 }
 
 void Control::setSkinColor(const Vector4& color, unsigned char states)
@@ -607,14 +612,14 @@ Theme::Style::OverlayType Control::getOverlayType() const
     }
 }
 
-void Control::setConsumeTouchEvents(bool consume)
+void Control::setConsumeInputEvents(bool consume)
 {
-    _consumeTouchEvents = consume;
+    _consumeInputEvents = consume;
 }
     
-bool Control::getConsumeTouchEvents()
+bool Control::getConsumeInputEvents()
 {
-    return _consumeTouchEvents;
+    return _consumeInputEvents;
 }
 
 int Control::getZIndex() const
@@ -629,6 +634,16 @@ void Control::setZIndex(int zIndex)
         _zIndex = zIndex;
         _dirty = true;
     }
+}
+
+int Control::getFocusIndex() const
+{
+    return _focusIndex;
+}
+
+void Control::setFocusIndex(int focusIndex)
+{
+    _focusIndex = focusIndex;
 }
 
 void Control::addListener(Control::Listener* listener, int eventFlags)
@@ -684,34 +699,81 @@ void Control::addSpecificListener(Control::Listener* listener, Listener::EventTy
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     if (!isEnabled())
-    {
         return false;
-    }
 
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-        notifyListeners(Listener::PRESS);
+        // Controls that don't have an ACTIVE state go to the FOCUS state when pressed.
+        // (Other controls, such as buttons and sliders, become ACTIVE when pressed and go to the FOCUS state on release.)
+        // Labels are never any state other than NORMAL.
+        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        {
+            _contactIndex = (int) contactIndex;
+
+            notifyListeners(Listener::PRESS);
+
+            return _consumeInputEvents;
+        }
+        else
+        {
+            // If this control was in focus, it's not any more.
+            _state = NORMAL;
+            _contactIndex = INVALID_CONTACT_INDEX;
+        }
         break;
             
     case Touch::TOUCH_RELEASE:
+
+        _contactIndex = INVALID_CONTACT_INDEX;
+
         // Always trigger Listener::RELEASE
         notifyListeners(Listener::RELEASE);
 
         // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-        if (x > 0 && x <= _bounds.width &&
-            y > 0 && y <= _bounds.height)
+        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
+            // Leave this control in the FOCUS state.
             notifyListeners(Listener::CLICK);
         }
+
+        return _consumeInputEvents;
+    }
+
+    return false;
+}
+
+bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    return false;
+}
+
+bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (!isEnabled())
+    {
+        return false;
+    }
+
+    // By default, mouse events are either interpreted as touch events or ignored.
+    switch (evt)
+    {
+    case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+        return touchEvent(Touch::TOUCH_PRESS, x, y, 0);
+
+    case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
+        return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
+
+    case Mouse::MOUSE_MOVE:
+        return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
+
+    default:
         break;
     }
 
-    return _consumeTouchEvents;
-}
-
-void Control::keyEvent(Keyboard::KeyEvent evt, int key)
-{
+    return false;
 }
 
 void Control::notifyListeners(Listener::EventType eventType)
@@ -729,6 +791,8 @@ void Control::notifyListeners(Listener::EventType eventType)
             }
         }
     }
+
+    fireScriptEvent<void>("controlEvent", this, eventType);
 }
 
 void Control::update(const Control* container, const Vector2& offset)
@@ -907,17 +971,15 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
-        GL_ASSERT( glClearColor(0, 0, 0, 0) );
-        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height,
-            _clearBounds.width, _clearBounds.height) );
-        GL_ASSERT( glClear(GL_COLOR_BUFFER_BIT) );
+        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
+        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
     }
 
-    spriteBatch->begin();
+    spriteBatch->start();
     drawBorder(spriteBatch, clip);
     drawImages(spriteBatch, clip);
-    spriteBatch->end();
+    spriteBatch->finish();
 
     drawText(clip);
     _dirty = false;
@@ -928,7 +990,7 @@ bool Control::isDirty()
     return _dirty;
 }
 
-bool Control::isContainer()
+bool Control::isContainer() const
 {
     return false;
 }
@@ -970,6 +1032,11 @@ Theme::ThemeImage* Control::getImage(const char* id, State state)
         return NULL;
 
     return imageList->getImage(id);
+}
+
+const char* Control::getType() const
+{
+    return "control";
 }
 
 // Implementation of AnimationHandler
@@ -1059,7 +1126,6 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
         break;
     case ANIMATE_OPACITY:
         _dirty = true;
-    default:
         break;
     }
 }

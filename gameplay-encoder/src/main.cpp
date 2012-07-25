@@ -7,16 +7,28 @@
 
 using namespace gameplay;
 
-static std::string getFileName(const std::string& filepath)
+/**
+ * Prompts the user for a font size until a valid font size is entered.
+ * 
+ * @return A valid font size.
+ */
+static unsigned int promptUserFontSize()
 {
-    size_t index1 = filepath.find_last_of('\\');
-    size_t index2 = filepath.find_last_of('/');
-    size_t index = (index1 != -1 && index1 > index2 ? index1 : index2);
-    size_t length = filepath.length();
-    std::string filename = filepath.substr(index + 1, length);
-    length = filename.length();
-    std::string output = filename.substr(0, (length-4));
-    return output;
+    static const int lowerBound = 8;
+    static const int upperBound = 500;
+    unsigned int fontSize = 0;
+    char buffer[80];
+    do
+    {
+        printf("Enter font size (between %d and %d):\n", lowerBound, upperBound);
+        std::cin.getline(buffer, 80);
+        int i = atoi(buffer);
+        if (i >= lowerBound && i <= upperBound)
+        {
+            fontSize = (unsigned int)i;
+        }
+    } while (fontSize == 0);
+    return fontSize;
 }
 
 /**
@@ -74,9 +86,13 @@ int main(int argc, const char** argv)
         }
     case EncoderArguments::FILEFORMAT_TTF:
         {
-            std::string realpath(arguments.getFilePath());
-            std::string id = getFileName(realpath);
-            writeFont(realpath.c_str(), arguments.getFontSize(), id.c_str(), arguments.fontPreviewEnabled());
+            unsigned int fontSize = arguments.getFontSize();
+            if (fontSize == 0)
+            {
+                fontSize = promptUserFontSize();
+            }
+            std::string id = getBaseName(arguments.getFilePath());
+            writeFont(arguments.getFilePath().c_str(), arguments.getOutputFilePath().c_str(), fontSize, id.c_str(), arguments.fontPreviewEnabled());
             break;
         }
     case EncoderArguments::FILEFORMAT_GPB:

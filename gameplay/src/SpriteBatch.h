@@ -52,6 +52,7 @@ public:
      * @param initialCapacity An optional initial capacity of the batch (number of sprites).
      * 
      * @return A new SpriteBatch for drawing sprites using the given texture.
+     * @script{create}
      */
     static SpriteBatch* create(const char* texturePath, Effect* effect = NULL, unsigned int initialCapacity = 0);
 
@@ -78,6 +79,7 @@ public:
      * @param initialCapacity An optional initial capacity of the batch (number of sprites).
      * 
      * @return A new SpriteBatch for drawing sprites using the given texture.
+     * @script{create}
      */
     static SpriteBatch* create(Texture* texture, Effect* effect = NULL, unsigned int initialCapacity = 0);
 
@@ -87,12 +89,12 @@ public:
     virtual ~SpriteBatch();
 
     /**
-     * Begins drawing sprites.
+     * Starts drawing sprites.
      *
      * This method must be called before drawing any sprites and it must eventually be
-     * followed by a call to end().
+     * followed by a call to finish().
      */
-    void begin();
+    void start();
 
     /**
      * Draws a single sprite.
@@ -236,15 +238,24 @@ public:
     void draw(float x, float y, float z, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, bool positionIsCenter = false);
 
     /**
-     * Ends sprite drawing.
+     * Finishes sprite drawing.
      *
      * This method flushes the batch and commits rendering of all sprites that were
      * drawn since the last call to begin().
      */
-    void end();
+    void finish();
 
     /**
-     * Returns the StateBlock for the SpriteBatch.
+     * Gets the texture sampler. 
+     *
+     * This return texture sampler is used when sampling the texture in the
+     * effect. This can be modified for controlling sampler setting such as
+     * filtering modes.
+     */
+    Texture::Sampler* getSampler() const;
+
+    /**
+     * Gets the StateBlock for the SpriteBatch.
      *
      * The returned state block controls the renderer state used when drawing items
      * with this sprite batch. Modification can be made to the returned state block
@@ -272,6 +283,13 @@ public:
      * @param matrix The new projection matrix to be used with the default effect.
      */
     void setProjectionMatrix(const Matrix& matrix);
+
+    /**
+     * Gets the projection matrix for the SpriteBatch.
+     * 
+     * @return The projection matrix.
+     */
+    const Matrix& getProjectionMatrix() const;
 
 private:
 
@@ -303,8 +321,6 @@ private:
      */
     SpriteBatch(const SpriteBatch& copy);
 
-    const Matrix& getOrthoMatrix() const;
-
     /**
      * Adds a single sprite to a SpriteVertex array.
      * 
@@ -317,7 +333,7 @@ private:
      * @param u2 Texture coordinate.
      * @param v2 Texture coordinate.
      * @param color The color to tint the sprite. Use white for no tint.
-     * @param clip The clip rectangle.
+     * @param vertices The vertices to draw.
      */
     void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, SpriteBatch::SpriteVertex* vertices);
 
@@ -334,6 +350,7 @@ private:
      * @param v2 Texture coordinate.
      * @param color The color to tint the sprite. Use white for no tint.
      * @param clip The clip rectangle.
+     * @param vertices The vertices to draw.
      */
     void addSprite(float x, float y, float width, float height, float u1, float v1, float u2, float v2, const Vector4& color, const Rectangle& clip, SpriteBatch::SpriteVertex* vertices);
 
@@ -355,6 +372,7 @@ private:
     bool clipSprite(const Rectangle& clip, float& x, float& y, float& width, float& height, float& u1, float& v1, float& u2, float& v2);
 
     MeshBatch* _batch;
+    Texture::Sampler* _sampler;
     bool _customEffect;
     float _textureWidthRatio;
     float _textureHeightRatio;

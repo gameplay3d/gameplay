@@ -126,12 +126,12 @@ void Model::setMaterial(Material* material, int partIndex)
     {
         for (unsigned int i = 0, tCount = oldMaterial->getTechniqueCount(); i < tCount; ++i)
         {
-            Technique* t = oldMaterial->getTechnique(i);
+            Technique* t = oldMaterial->getTechniqueByIndex(i);
             GP_ASSERT(t);
             for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
             {
-                GP_ASSERT(t->getPass(j));
-                t->getPass(j)->setVertexAttributeBinding(NULL);
+                GP_ASSERT(t->getPassByIndex(j));
+                t->getPassByIndex(j)->setVertexAttributeBinding(NULL);
             }
         }
         SAFE_RELEASE(oldMaterial);
@@ -142,11 +142,11 @@ void Model::setMaterial(Material* material, int partIndex)
         // Hookup vertex attribute bindings for all passes in the new material.
         for (unsigned int i = 0, tCount = material->getTechniqueCount(); i < tCount; ++i)
         {
-            Technique* t = material->getTechnique(i);
+            Technique* t = material->getTechniqueByIndex(i);
             GP_ASSERT(t);
             for (unsigned int j = 0, pCount = t->getPassCount(); j < pCount; ++j)
             {
-                Pass* p = t->getPass(j);
+                Pass* p = t->getPassByIndex(j);
                 GP_ASSERT(p);
                 VertexAttributeBinding* b = VertexAttributeBinding::create(_mesh, p->getEffect());
                 p->setVertexAttributeBinding(b);
@@ -268,7 +268,7 @@ void Model::draw(bool wireframe)
             unsigned int passCount = technique->getPassCount();
             for (unsigned int i = 0; i < passCount; ++i)
             {
-                Pass* pass = technique->getPass(i);
+                Pass* pass = technique->getPassByIndex(i);
                 GP_ASSERT(pass);
                 pass->bind();
                 GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
@@ -304,7 +304,7 @@ void Model::draw(bool wireframe)
                 unsigned int passCount = technique->getPassCount();
                 for (unsigned int j = 0; j < passCount; ++j)
                 {
-                    Pass* pass = technique->getPass(j);
+                    Pass* pass = technique->getPassByIndex(j);
                     GP_ASSERT(pass);
                     pass->bind();
                     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
@@ -393,8 +393,21 @@ Model* Model::clone(NodeCloneContext &context)
             GP_ERROR("Failed to clone material for model.");
             return model;
         }
-        model->setMaterial(materialClone); // TODO: Don't forget material parts
+        model->setMaterial(materialClone);
         materialClone->release();
+    }
+    if (_partMaterials)
+    {
+        GP_ASSERT(_partCount == model->_partCount);
+        for (unsigned int i = 0; i < _partCount; ++i)
+        {
+            if (_partMaterials[i])
+            {
+                Material* materialClone = _partMaterials[i]->clone(context);
+                model->setMaterial(materialClone, i);
+                materialClone->release();
+            }
+        }
     }
     return model;
 }
@@ -410,7 +423,7 @@ void Model::setMaterialNodeBinding(Material *material)
         unsigned int techniqueCount = material->getTechniqueCount();
         for (unsigned int i = 0; i < techniqueCount; ++i)
         {
-            Technique* technique = material->getTechnique(i);
+            Technique* technique = material->getTechniqueByIndex(i);
             GP_ASSERT(technique);
             
             technique->setNodeBinding(_node);
@@ -418,7 +431,7 @@ void Model::setMaterialNodeBinding(Material *material)
             unsigned int passCount = technique->getPassCount();
             for (unsigned int j = 0; j < passCount; ++j)
             {
-                Pass* pass = technique->getPass(j);
+                Pass* pass = technique->getPassByIndex(j);
                 GP_ASSERT(pass);
 
                 pass->setNodeBinding(_node);

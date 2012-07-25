@@ -39,6 +39,11 @@ Theme::Style::~Style()
         SAFE_RELEASE(_overlays[i]);
     }
 }
+
+Theme* Theme::Style::getTheme() const
+{
+    return _theme;
+}
     
 const char* Theme::Style::getId() const
 {

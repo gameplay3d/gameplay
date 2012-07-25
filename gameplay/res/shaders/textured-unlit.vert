@@ -1,0 +1,48 @@
+// Inputs
+attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
+attribute vec2 a_texCoord;									// Vertex Texture Coordinate				(u, v)
+#if defined(SKINNING)
+attribute vec4 a_blendWeights;								// Vertex blend weight, up to 4				(0, 1, 2, 3) 
+attribute vec4 a_blendIndices;								// Vertex blend index int u_matrixPalette	(0, 1, 2, 3)
+#endif
+
+// Uniforms
+uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space
+#if defined(SKINNING)
+uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices
+#endif
+#if defined(TEXTURE_REPEAT)
+uniform vec2 u_textureRepeat;								// Texture repeat for tiling
+#endif
+#if defined(TEXTURE_OFFSET)
+uniform vec2 u_textureOffset;								// Texture offset
+#endif
+
+// Outputs
+varying vec2 v_texCoord;									// Texture Coordinate
+
+// Vertex attribute accessors
+#if defined(SKINNING)
+#include "lib/attributes-skinning.vert"
+#else
+#include "lib/attributes.vert" 
+#endif
+
+// Vertex Program
+void main()
+{
+    // Get the vertex position
+    vec4 position = getPosition();
+
+    // Transform position to clip space.
+    gl_Position = u_worldViewProjectionMatrix * position;
+
+    // Texture transformation.
+    v_texCoord = a_texCoord;
+    #if defined(TEXTURE_REPEAT)
+    v_texCoord *= u_textureRepeat;
+    #endif
+    #if defined(TEXTURE_OFFSET)
+    v_texCoord += u_textureOffset;
+    #endif
+}

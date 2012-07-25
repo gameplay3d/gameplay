@@ -6,6 +6,7 @@
 #include "Quaternion.h"
 #include "Matrix.h"
 #include "AnimationTarget.h"
+#include "ScriptTarget.h"
 
 namespace gameplay
 {
@@ -13,6 +14,7 @@ namespace gameplay
 class BoundingBox;
 class BoundingSphere;
 class NodeCloneContext;
+class ScriptListener;
 
 /**
  * Defines a 3-dimensional transformation.
@@ -27,7 +29,7 @@ class NodeCloneContext;
  * components using matrix.decompose(Vector3, Quaternion, Vector3) and then pass
  * those arguments to the appropriate constructor or set methods of Transform.
  */
-class Transform : public AnimationTarget
+class Transform : public AnimationTarget, public ScriptTarget
 {
 public:
 
@@ -736,17 +738,17 @@ public:
     void removeListener(Transform::Listener* listener);
     
     /**
-     * @see AnimationTarget#getAnimationPropertyComponentCount
+     * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
     /**
-     * @see AnimationTarget#getAnimationProperty
+     * @see AnimationTarget::getAnimationProperty
      */
     void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
     /**
-     * @see AnimationTarget#setAnimationProperty
+     * @see AnimationTarget::setAnimationProperty
      */
     void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 

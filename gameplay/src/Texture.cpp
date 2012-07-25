@@ -44,11 +44,7 @@ namespace gameplay
 
 static std::vector<Texture*> __textureCache;
 
-Texture::Texture() : _handle(0), _mipmapped(false), _cached(false), _compressed(false)
-{
-}
-
-Texture::Texture(const Texture& copy)
+Texture::Texture() : _handle(0), _format(RGBA), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false)
 {
 }
 
@@ -159,39 +155,32 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
 
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
 {
-    // Load our texture.
+    // Create and load the texture.
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
+    GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
 
-    if (format == DEPTH)
-    {
-        // <type> must be UNSIGNED_SHORT or UNSIGNED_INT for a format of DEPTH_COMPONENT.
-        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_INT, data) );
-    }
-    else
-    {
-        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
-    }
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMipmaps ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
+    texture->_format = format;
     texture->_width = width;
     texture->_height = height;
-
     if (generateMipmaps)
     {
         texture->generateMipmaps();
+        texture->_mipmapped = true;
     }
 
     return texture;
 }
 
 // Computes the size of a PVRTC data chunk for a mipmap level of the given size.
-unsigned int computePVRTCDataSize(int width, int height, int bpp)
+static unsigned int computePVRTCDataSize(int width, int height, int bpp)
 {
     int blockSize;
     int widthBlocks;
@@ -745,6 +734,11 @@ Texture* Texture::createCompressedDDS(const char* path)
     SAFE_DELETE_ARRAY(mipLevels);
 
     return texture;
+}
+
+Texture::Format Texture::getFormat() const
+{
+    return _format;
 }
 
 unsigned int Texture::getWidth() const
