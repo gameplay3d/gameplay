@@ -76,22 +76,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::PhysicsController Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;PhysicsController.h&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for gameplay::PhysicsController:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classgameplay_1_1_physics_controller.png" usemap="#gameplay::PhysicsController_map" alt=""/>
+  <map id="gameplay::PhysicsController_map" name="gameplay::PhysicsController_map">
+<area href="classgameplay_1_1_script_target.html" alt="gameplay::ScriptTarget" shape="rect" coords="0,0,172,24"/>
+</map>
+ </div></div>
 
 <p><a href="classgameplay_1_1_physics_controller-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>CollisionCallback</b></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>CollisionInfo</b></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>DebugDrawer</b></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html">HitFilter</a></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">HitResult</a></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller_1_1_listener.html">Listener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
@@ -109,87 +118,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d38b041f052706cb0ac8b39e5283d2f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a9d38b041f052706cb0ac8b39e5283d2f">getGravity</a> () const </td></tr>
 <tr class="memitem:ab085ecda3423f445960150208e5ba1c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ab085ecda3423f445960150208e5ba1c9">setGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity)</td></tr>
 <tr class="memitem:ae2089a6dababa097ef955d1105c4bd6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae2089a6dababa097ef955d1105c4bd6d">drawDebug</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;viewProjection)</td></tr>
-<tr class="memitem:aecbb567040146ce4003d3c3ab1ad6a0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#aecbb567040146ce4003d3c3ab1ad6a0c">rayTest</a> (const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;ray, float distance, <a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">PhysicsController::HitResult</a> *result=NULL)</td></tr>
-<tr class="memitem:ae0ef6e11ae93e4cbc871f7a9bd0eee10"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#ae0ef6e11ae93e4cbc871f7a9bd0eee10">sweepTest</a> (<a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;endPosition, <a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">PhysicsController::HitResult</a> *result=NULL)</td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a44243d5391f18bc002ed35a9dade2544"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544">addSingleResult</a> (btManifoldPoint &amp;cp, const btCollisionObject *a, int partIdA, int indexA, const btCollisionObject *b, int partIdB, int indexB)</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:aa2fab026580d6f14280c2ffb8063a314"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2fab026580d6f14280c2ffb8063a314"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Game</b></td></tr>
-<tr class="memitem:aa59c958a66870f0d251ec0dd477d2eff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa59c958a66870f0d251ec0dd477d2eff"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsConstraint</b></td></tr>
-<tr class="memitem:a3c7aa887ecde6200e42d2abcaba2597b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c7aa887ecde6200e42d2abcaba2597b"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b></td></tr>
-<tr class="memitem:af360cdaf6a9c69eb52b51ce74d51bb09"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af360cdaf6a9c69eb52b51ce74d51bb09"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCharacter</b></td></tr>
-<tr class="memitem:a6b9233d6d8c2457530ed7b0f106483ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b9233d6d8c2457530ed7b0f106483ba"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCollisionObject</b></td></tr>
-<tr class="memitem:aa93b40262c98c88169a23e7429e4a85c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa93b40262c98c88169a23e7429e4a85c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</b></td></tr>
+<tr class="memitem:a3e4973d8d738551e2750475ab6c62871"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a3e4973d8d738551e2750475ab6c62871">rayTest</a> (const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;ray, float distance, <a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">PhysicsController::HitResult</a> *result=NULL, <a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html">PhysicsController::HitFilter</a> *filter=NULL)</td></tr>
+<tr class="memitem:a14ce5509e2c802a606497424b2e7be41"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_controller.html#a14ce5509e2c802a606497424b2e7be41">sweepTest</a> (<a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *object, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;endPosition, <a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">PhysicsController::HitResult</a> *result=NULL, <a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html">PhysicsController::HitFilter</a> *filter=NULL)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for controlling game physics. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a44243d5391f18bc002ed35a9dade2544"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">btScalar <a class="el" href="classgameplay_1_1_physics_controller.html#a44243d5391f18bc002ed35a9dade2544">gameplay::PhysicsController::addSingleResult</a> </td>
-          <td>(</td>
-          <td class="paramtype">btManifoldPoint &amp;&#160;</td>
-          <td class="paramname"><em>cp</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const btCollisionObject *&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>partIdA</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>indexA</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const btCollisionObject *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>partIdB</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>indexB</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Internal function used for Bullet integration (do not use or override). </p>
-
-</div>
-</div>
 <a class="anchor" id="a9c9c7800807569809a677be38873170a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -642,12 +576,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
 
 </div>
 </div>
-<a class="anchor" id="aecbb567040146ce4003d3c3ab1ad6a0c"></a>
+<a class="anchor" id="a3e4973d8d738551e2750475ab6c62871"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_physics_controller.html#aecbb567040146ce4003d3c3ab1ad6a0c">gameplay::PhysicsController::rayTest</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_physics_controller.html#a3e4973d8d738551e2750475ab6c62871">gameplay::PhysicsController::rayTest</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_ray.html">Ray</a> &amp;&#160;</td>
           <td class="paramname"><em>ray</em>, </td>
@@ -662,7 +596,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">PhysicsController::HitResult</a> *&#160;</td>
-          <td class="paramname"><em>result</em> = <code>NULL</code>&#160;</td>
+          <td class="paramname"><em>result</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html">PhysicsController::HitFilter</a> *&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -677,7 +617,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
   <table class="params">
     <tr><td class="paramname">ray</td><td>The ray to test intersection with. </td></tr>
     <tr><td class="paramname">distance</td><td>How far along the given ray to test for intersections. </td></tr>
-    <tr><td class="paramname">result</td><td>Optional pointer to a HitTest structure to store hit test result information in. </td></tr>
+    <tr><td class="paramname">result</td><td>Optional pointer to a HitTest structure to store the hit test result information in. When using a default (or no) filter, this will always be the closest object hit. Otherwise, if using a custom filter, it will be the last object passed to the <a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html#ad021d4ffdd38a210b9ca9789b9f081fd">HitFilter::hit</a> method (which is not necessarily the closest or furthest). </td></tr>
+    <tr><td class="paramname">filter</td><td>Optional filter pointer used to control which objects are tested.</td></tr>
   </table>
   </dd>
 </dl>
@@ -733,12 +674,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
 
 </div>
 </div>
-<a class="anchor" id="ae0ef6e11ae93e4cbc871f7a9bd0eee10"></a>
+<a class="anchor" id="a14ce5509e2c802a606497424b2e7be41"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_physics_controller.html#ae0ef6e11ae93e4cbc871f7a9bd0eee10">gameplay::PhysicsController::sweepTest</a> </td>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_physics_controller.html#a14ce5509e2c802a606497424b2e7be41">gameplay::PhysicsController::sweepTest</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_collision_object.html">PhysicsCollisionObject</a> *&#160;</td>
           <td class="paramname"><em>object</em>, </td>
@@ -753,7 +694,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structgameplay_1_1_physics_controller_1_1_hit_result.html">PhysicsController::HitResult</a> *&#160;</td>
-          <td class="paramname"><em>result</em> = <code>NULL</code>&#160;</td>
+          <td class="paramname"><em>result</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html">PhysicsController::HitFilter</a> *&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -769,7 +716,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
   <table class="params">
     <tr><td class="paramname">object</td><td>The collision object to test. </td></tr>
     <tr><td class="paramname">endPosition</td><td>The end position of the sweep test, in world space. </td></tr>
-    <tr><td class="paramname">result</td><td>Optional pointer to a HitTest structure to store hit test result information in. </td></tr>
+    <tr><td class="paramname">result</td><td>Optional pointer to a HitTest structure to store the hit test result information in. When using a default (or no) filter, this will always be the closest object hit. Otherwise, if using a custom filter, it will be the last object passed to the <a class="el" href="classgameplay_1_1_physics_controller_1_1_hit_filter.html#ad021d4ffdd38a210b9ca9789b9f081fd">HitFilter::hit</a> method (which is not necessarily the closest or furthest). </td></tr>
+    <tr><td class="paramname">filter</td><td>Optional filter pointer used to control which objects are tested.</td></tr>
   </table>
   </dd>
 </dl>
@@ -781,7 +729,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGhostObject</
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 22:06:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
