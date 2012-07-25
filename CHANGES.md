@@ -22,6 +22,7 @@
 - Fixes RenderState::StateBlock::bindNoRestore() issue where blend function was not restored to the proper defaults.
 - Fixes some inconsistencies in Game event method names for menuEvent. (breaks compat. in Game)
 - Fixes some inconsistencies with AnimationClip::getID() to be same as Node::getId() and other classes. (breaks compat. in AnimationClip)
+- Fixes to gameplay-encoder and PhysicsRigidBody for heightmaps which adds height precision into generated heightmap png's.
 
 ## v1.3.0
 

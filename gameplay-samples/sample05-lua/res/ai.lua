@@ -28,9 +28,9 @@ _stateMachine:setState("spinning")
 -- Create animations
 _slidingClip = _modelNode:createAnimation("sliding", Transform.ANIMATE_TRANSLATE(), 6, { 0, 250, 750, 1250, 1750, 2000 }, { 0,0,0, 2,0,0, 2,0,-4, -2,0,-4, -2,0,0, 0,0,0 }, Curve.LINEAR):getClip()
 _slidingClip:setRepeatCount(AnimationClip.REPEAT_INDEFINITE())
-_bouncingClip = _modelNode:createAnimation("bouncing", Transform.ANIMATE_TRANSLATE_Y(), 3, { 0, 500, 1000 }, { 0, 0.75, 0 }, Curve.LINEAR):getClip()
+_bouncingClip = _modelNode:createAnimation("bouncing", Transform.ANIMATE_TRANSLATE_Y(), 3, { 0, 500, 1000 }, { 0, 0.75, 0 }, Curve.CUBIC_IN_OUT):getClip()
 _bouncingClip:setRepeatCount(AnimationClip.REPEAT_INDEFINITE())
-_scaleClip = _modelNode:createAnimation("scale", Transform.ANIMATE_SCALE(), 3, { 0, 750, 1500 }, { 1,1,1, 2,2,2, 1,1,1 }, Curve.LINEAR):getClip()
+_scaleClip = _modelNode:createAnimation("scale", Transform.ANIMATE_SCALE(), 3, { 0, 750, 1500 }, { 1,1,1, 2,2,2, 1,1,1 }, Curve.QUADRATIC_IN_OUT):getClip()
 _scaleClip:setRepeatCount(AnimationClip.REPEAT_INDEFINITE())
 
 -- Called by game.lua to toggle AI state
