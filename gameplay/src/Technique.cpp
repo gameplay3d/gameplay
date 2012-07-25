@@ -31,7 +31,7 @@ unsigned int Technique::getPassCount() const
     return _passes.size();
 }
 
-Pass* Technique::getPass(unsigned int index) const
+Pass* Technique::getPassByIndex(unsigned int index) const
 {
     GP_ASSERT(index < _passes.size());
     return _passes[index];
@@ -50,7 +50,6 @@ Pass* Technique::getPass(const char* id) const
             return pass;
         }
     }
-
     return NULL;
 }
 

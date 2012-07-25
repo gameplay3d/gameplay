@@ -27,6 +27,7 @@ public:
      * 
      * @param path The path to the image file.
      * @return The newly created image.
+     * @script{create}
      */
     static Image* create(const char* path);
 
@@ -34,6 +35,7 @@ public:
      * Gets the image's raw pixel data.
      * 
      * @return The image's pixel data.
+     * @script{ignore}
      */
     inline unsigned char* getData() const;
 
@@ -69,6 +71,11 @@ private:
      * Destructor.
      */
     ~Image();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Image& operator=(const Image&);
 
     unsigned char* _data;
     Format _format;

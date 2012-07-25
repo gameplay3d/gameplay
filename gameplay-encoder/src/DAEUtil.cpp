@@ -1,3 +1,4 @@
+#include <set>
 #include "Base.h"
 #include "DAEUtil.h"
 #include "StringUtil.h"
@@ -419,6 +420,135 @@ domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene)
         }
     }
     return NULL;
+}
+
+domNode* getParent(domNodeRef node)
+{
+    daeElement* parent = node->getParent();
+    if (parent && parent->getElementType() == COLLADA_TYPE::NODE)
+    {
+        domNodeRef parentNode = daeSafeCast<domNode>(parent);
+        return parentNode.cast();
+    }
+    return NULL;
+}
+
+domAnimation* getAnimation(domChannelRef channel)
+{
+    daeElement* parent = channel->getParent();
+    if (parent && parent->getElementType() == COLLADA_TYPE::ANIMATION)
+    {
+        domAnimationRef parentNode = daeSafeCast<domAnimation>(parent);
+        return parentNode.cast();
+    }
+    return NULL;
+}
+
+domNode* getCommonNodeAncestor(std::list<domNodeRef>& nodes)
+{
+    if (nodes.empty())
+        return NULL;
+    if (nodes.size() == 1)
+        return nodes.begin()->cast();
+
+    std::list<domNode*> ancestors;
+    size_t minAncestorCount = INT_MAX;
+    for (std::list<domNodeRef>::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        domNodeRef& node = *it;
+        getNodeAncestors(node, ancestors);
+        ancestors.push_back(node.cast());
+        minAncestorCount = std::min(minAncestorCount, ancestors.size());
+    }
+    ancestors.resize(minAncestorCount);
+
+    return ancestors.back();
+}
+
+void getNodeAncestors(domNodeRef& node, std::list<domNode*>& ancestors)
+{
+    ancestors.clear();
+    domNode* parent = getParent(node);
+    while (parent != NULL)
+    {
+        ancestors.push_front(parent);
+        parent = getParent(parent);
+    }
+}
+
+bool findGroupAnimationNodes(domCOLLADA* dom, std::vector<std::string>& nodesToGroup)
+{
+    bool groupPossible = false;
+    const domLibrary_controllers_Array& controllersArrays = dom->getLibrary_controllers_array();
+    size_t controllersArraysCount = controllersArrays.getCount();
+    for (size_t i = 0; i < controllersArraysCount; ++i)
+    {
+        const domLibrary_controllersRef& libraryController = controllersArrays.get(i);
+        const domController_Array& controllerArray = libraryController->getController_array();
+        size_t controllerCount = controllerArray.getCount();
+        for (size_t j = 0; j < controllerCount; ++j)
+        {
+            const domControllerRef& controllerRef = controllerArray.get(j);
+            const domSkinRef& skinRef = controllerRef->getSkin();
+            if (skinRef.cast() != NULL)
+            {
+                domSkin::domJointsRef joints = skinRef->getJoints();
+                domInputLocal_Array& jointInputs = joints->getInput_array();
+                for (unsigned int i = 0; i < jointInputs.getCount(); ++i)
+                {
+                    domInputLocalRef input = jointInputs.get(i);
+                    std::string inputSemantic = std::string(input->getSemantic());
+                    domURIFragmentType* sourceURI = &input->getSource();
+                    sourceURI->resolveElement();
+                    const domSourceRef source = (domSource*)(daeElement*)sourceURI->getElement();
+                    if (equals(inputSemantic, "JOINT"))
+                    {
+                        std::list<domChannelRef> channels;
+                        std::list<domNodeRef> nodes;
+                        findChannelsTargetingJoints(source, channels, nodes);
+                        // If the channels don't share the same animation then they can be grouped.
+                        if (!sameAnimation(channels))
+                        {
+                            groupPossible = true;
+                            domNode* parentMost = getCommonNodeAncestor(nodes);
+                            nodesToGroup.push_back(parentMost->getId());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return groupPossible;
+}
+
+bool sameAnimation(std::list<domChannelRef>& channels)
+{
+    std::list<domChannelRef>::iterator it = channels.begin();
+    domAnimation* temp = getAnimation(*it);
+    ++it;
+    for (; it != channels.end(); ++it)
+    {
+        if (getAnimation(*it) != temp)
+            return false;
+    }
+    return true;
+}
+
+void findChannelsTargetingJoints(const domSourceRef& source, std::list<domChannelRef>& channels, std::list<domNodeRef>& nodes)
+{
+    std::vector<std::string> jointNames;
+    getJointNames(source, jointNames);
+    for (std::vector<std::string>::iterator i = jointNames.begin(); i != jointNames.end(); i++)
+    {
+        daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
+        daeElement* element = resolver.getElement();
+        if (element && element->getElementType() == COLLADA_TYPE::NODE)
+        {
+            domNodeRef node = daeSafeCast<domNode>(element);
+            nodes.push_back(node);
+            getAnimationChannels(node, channels);
+        }
+    }
 }
 
 }

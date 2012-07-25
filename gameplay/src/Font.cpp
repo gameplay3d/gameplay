@@ -45,11 +45,6 @@ Font::Font() :
 {
 }
 
-Font::Font(const Font& copy)
-{
-    // hidden
-}
-
 Font::~Font()
 {
     // Remove this Font from the font cache.
@@ -145,6 +140,10 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     // Create batch for the font.
     SpriteBatch* batch = SpriteBatch::create(texture, __fontEffect, 128);
 
+    // Add linear filtering for better font quality.
+    Texture::Sampler* sampler = batch->getSampler();
+    sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+
     // Release __fontEffect since the SpriteBatch keeps a reference to it
     SAFE_RELEASE(__fontEffect);
 
@@ -177,10 +176,10 @@ unsigned int Font::getSize()
     return _size;
 }
 
-void Font::begin()
+void Font::start()
 {
     GP_ASSERT(_batch);
-    _batch->begin();
+    _batch->start();
 }
 
 Font::Text* Font::createText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify,
@@ -738,10 +737,10 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
     }
 }
 
-void Font::end()
+void Font::finish()
 {
     GP_ASSERT(_batch);
-    _batch->end();
+    _batch->finish();
 }
 
 void Font::measureText(const char* text, unsigned int size, unsigned int* width, unsigned int* height)
@@ -751,12 +750,19 @@ void Font::measureText(const char* text, unsigned int size, unsigned int* width,
     GP_ASSERT(width);
     GP_ASSERT(height);
 
-    float scale = (float)size / _size;
     const int length = strlen(text);
+    if (length == 0)
+    {
+        *width = 0;
+        *height = 0;
+        return;
+    }
+
+    float scale = (float)size / _size;
     const char* token = text;
 
     *width = 0;
-    *height = 0;
+    *height = size;
 
     // Measure a line at a time.
     while (token[0] != 0)
@@ -784,6 +790,12 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
     GP_ASSERT(text);
     GP_ASSERT(out);
 
+    if (strlen(text) == 0)
+    {
+        out->set(0, 0, 0, 0);
+        return;
+    }
+
     float scale = (float)size / _size;
     Justify vAlign = static_cast<Justify>(justify & 0xF0);
     if (vAlign == 0)
@@ -802,8 +814,8 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
     std::vector<Vector2> lines;
 
     unsigned int lineWidth = 0;
-    int yPos = clip.y;
-    const float viewportHeight = clip.height - size;
+    int yPos = clip.y + size;
+    const float viewportHeight = clip.height;
 
     if (wrap)
     {

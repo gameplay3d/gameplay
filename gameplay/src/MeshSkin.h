@@ -128,7 +128,7 @@ private:
     ~MeshSkin();
     
     /**
-     * Copy assignment operator.
+     * Hidden copy assignment operator.
      */
     MeshSkin& operator=(const MeshSkin&);
 

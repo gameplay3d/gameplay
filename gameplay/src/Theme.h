@@ -135,7 +135,6 @@ namespace gameplay
 class Theme: public Ref
 {
     friend class Control;
-    friend class Container;
     friend class Form;
     friend class Skin;
 
@@ -294,6 +293,36 @@ public:
         Vector4 _color;
     };
 
+    /**
+     * Creates a theme using the data from the Properties object defined at the specified URL, 
+     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
+     * 
+     * @param url The URL pointing to the Properties object defining the theme. 
+     * @script{create}
+     */
+    static Theme* create(const char* url);
+
+    /**
+     * Get a style by its ID.
+     *
+     * @param id The style ID.
+     *
+     * @return The style with the specified ID, or NULL if it does not exist.
+     */
+    Theme::Style* getStyle(const char* id) const;
+
+    /**
+     * Get the empty style.  Used when a control does not specify a style.
+     * This is especially useful for containers that are being used only for
+     * layout and positioning, and have no background or border themselves.
+     * The empty style has no border, background, margin, padding, images, etc..
+     * Any needed properties can be set on the control directly.
+     *
+     * @return The empty style.
+     */
+    Theme::Style* getEmptyStyle();
+
 private:
 
     /**
@@ -319,6 +348,11 @@ private:
         ImageList(const ImageList& copy);
 
         ~ImageList();
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        ImageList& operator=(const ImageList&);
 
         static ImageList* create(float tw, float th, Properties* properties);
 
@@ -379,6 +413,11 @@ private:
         
         ~Skin();
 
+        /**
+         * Hidden copy assignment operator.
+         */
+        Skin& operator=(const Skin&);
+
         static Skin* create(const char* id, float tw, float th, const Rectangle& region, const Theme::Border& border, const Vector4& color);
 
         void setRegion(const Rectangle& region, float tw, float th);
@@ -407,17 +446,9 @@ private:
     ~Theme();
 
     /**
-     * Creates an instance of a Theme using the data from the Properties object defined at the specified URL, 
-     * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
-     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
-     * 
-     * @param url The URL pointing to the Properties object defining the theme.
-     *
-     * @return A new Theme.
+     * Hidden copy assignment operator.
      */
-    static Theme* create(const char* url);
-
-    Theme::Style* getStyle(const char* id) const;
+    Theme& operator=(const Theme&);
 
     void setProjectionMatrix(const Matrix& matrix);
 

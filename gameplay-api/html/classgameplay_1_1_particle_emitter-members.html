@@ -88,7 +88,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#add002898fa33a0fe99e4e76d5a03faf7">create</a>(Properties *properties)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a3c2a530ca2dd1100be4cabd9e900c02e">create</a>(const char *texturePath, TextureBlending textureBlending, unsigned int particleCountMax)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#ae683f3d5eba31607f92997dd7692cbb4">draw</a>()</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#afa630f0ad9c29d089469d18b546eafcc">emit</a>(unsigned int particleCount)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a3b5cda21464c44613109c1174e251e68">emitOnce</a>(unsigned int particleCount)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a4d5bccda4ffcb508c117f37ca94ed046">getAcceleration</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#ab255eed8820e717e2f3b6296e76ae730">getAccelerationVariance</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a603fe93c2acb24137b13add4200f3ca4">getColorEnd</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
@@ -123,7 +123,6 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a2265cf2de9f9e8b9181d18a9c334a87d">isSpriteAnimated</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a1e0be548109998a02f62754beb3055b8">isSpriteLooped</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a37eccfc13be8b09815eaf5daeabf91c7">isStarted</a>() const </td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>Node</b> (defined in <a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a>)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td><code> [friend]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43">Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a4af6b566116534038e02bfffea72867f">Ref</a>(const Ref &amp;copy)</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
@@ -149,13 +148,13 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#ae2c361f40c23e62670341e5455fd3856">start</a>()</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#aafbbca12525c915b20753a2e7de7c878">stop</a>()</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a7145dddf0796cfeed62ea0ad94bda7d6">TextureBlending</a> enum name</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#a9569f892f7b845211b820980e420aee9">update</a>(long elapsedTime)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_particle_emitter.html#aae471f2b01772d47a2333220221daf91">update</a>(float elapsedTime)</td><td><a class="el" href="classgameplay_1_1_particle_emitter.html">gameplay::ParticleEmitter</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a4442b32c090160052130593d6523945c">~Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected, virtual]</code></td></tr>
 </table></div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

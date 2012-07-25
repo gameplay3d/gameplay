@@ -52,7 +52,7 @@ void ParticlesGame::initialize()
 
     // Load the form for editing ParticleEmitters.
     _form = Form::create("res/editor.form");
-    _form->setConsumeTouchEvents(false);
+    _form->setConsumeInputEvents(false);
 
     // Store pointers to UI controls we care about.
     _startRed = (Slider*)_form->getControl("startRed");
@@ -562,7 +562,7 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
         {
             // Emit a burst of particles.
             unsigned int burstSize = (unsigned int)_burstSize->getValue();
-            emitter->emit(burstSize);
+            emitter->emitOnce(burstSize);
         }
         break;
     case Listener::PRESS:
@@ -600,7 +600,7 @@ void ParticlesGame::finalize()
     }    
 }
 
-void ParticlesGame::update(long elapsedTime)
+void ParticlesGame::update(float elapsedTime)
 {
     // Update camera movement
     if (_wDown)
@@ -636,10 +636,10 @@ void ParticlesGame::update(long elapsedTime)
     _particleEmitterNode->getParticleEmitter()->update(elapsedTime);
     
     // Update UI.
-    _form->update();
+    _form->update(elapsedTime);
 }
 
-void ParticlesGame::render(long elapsedTime)
+void ParticlesGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, BACKGROUND_COLOR, 1.0f, 0);
@@ -786,7 +786,7 @@ void ParticlesGame::emitterChanged()
     if (_particleEmitterIndex == 2)
     {
         _started->setChecked(false);
-        emitter->emit(20);
+        emitter->emitOnce(20);
     }
     else
     {
@@ -981,9 +981,9 @@ void ParticlesGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
-    batch->begin();
+    batch->start();
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
 
@@ -991,7 +991,7 @@ void ParticlesGame::drawFrameRate(Font* font, const Vector4& color, unsigned int
 {
     char buffer[30];
     sprintf(buffer, "FPS: %u\nParticles: %u", fps, _particleEmitterNode->getParticleEmitter()->getParticlesCount());
-    font->begin();
+    font->start();
     font->drawText(buffer, x, y, color, font->getSize());
-    font->end();
+    font->finish();
 }

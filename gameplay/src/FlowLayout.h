@@ -26,13 +26,6 @@ public:
 protected:
 
     /**
-     * Create a FlowLayout.
-     *
-     * @return A FlowLayout object.
-     */
-    static FlowLayout* create();
-
-    /**
      * Update the controls contained by the specified container.
      *
      * @param container The container to update.
@@ -56,6 +49,13 @@ private:
      * Destructor.
      */
     virtual ~FlowLayout();
+
+    /**
+     * Create a FlowLayout.
+     *
+     * @return A FlowLayout object.
+     */
+    static FlowLayout* create();
 
 };
 

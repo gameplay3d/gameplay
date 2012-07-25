@@ -179,15 +179,12 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"COLLADA and FBX file options:\n");
     fprintf(stderr,"  -i <id>\t\tFilter by node ID.\n");
     fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
-    fprintf(stderr,"  -groupAnimations <node id> <animation id>\n" \
-        "\t\t\tGroup all animation channels targetting the nodes into a new animation.\n");
-    fprintf(stderr,"  -heightmaps \"<node ids>\"\n" \
+    fprintf(stderr,"  -g <node id> <animation id>\n" \
+        "\t\t\tGroup all animation channels targeting the nodes into a new animation.\n");
+    fprintf(stderr,"  -h \"<node ids>\"\n" \
         "\t\t\tList of nodes to generate heightmaps for.\n" \
         "\t\t\tNode id list should be in quotes with a space between each id.\n" \
         "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"COLLADA file options:\n");
-    fprintf(stderr,"  -dae <filepath>\tOutput optimized DAE.\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"TTF file options:\n");
     fprintf(stderr,"  -s <size of font>\tSize of the font.\n");
@@ -284,12 +281,12 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         break;
     case 'g':
-        if (str.compare("-groupAnimations") == 0)
+        if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
         {
             // read two strings, make sure not to go out of bounds
             if ((*index + 2) >= options.size())
             {
-                fprintf(stderr, "Error: -groupAnimations requires 2 arguments.\n");
+                fprintf(stderr, "Error: -g requires 2 arguments.\n");
                 _parseError = true;
                 return;
             }
@@ -316,7 +313,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         break;
     case 'h':
         {
-            if (str.compare("-heightmaps") == 0)
+            if (str.compare("-heightmaps") == 0 || str.compare("-h") == 0)
             {
                 (*index)++;
                 if (*index < options.size())
@@ -450,7 +447,7 @@ void unittestsEncoderArguments()
     exePath.append("/gameplay-encoder.exe");
     const char* exe = exePath.c_str();
     {
-        const char* argv[] = {exe, "-groupAnimations", "root", "movements", "C:\\Git\\gaming\\GamePlay\\gameplay-encoder\\res\\seymour.dae"};
+        const char* argv[] = {exe, "-g", "root", "movements", "C:\\Git\\gaming\\GamePlay\\gameplay-encoder\\res\\seymour.dae"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
         assert(equals(args.getAnimationId("root"), ("movements")));
         assert(equals(args.getGroupAnimationNodeId()[0], ("root")));

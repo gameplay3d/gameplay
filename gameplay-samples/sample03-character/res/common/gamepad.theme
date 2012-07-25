@@ -1,0 +1,82 @@
+theme gamepad
+{
+	texture = @gamepad
+	
+	imageList joystickImages
+	{
+        image outer
+		{
+			region = 0, 0, 256, 256
+		}
+		
+        image inner
+		{
+			region = 256, 0, 256, 256
+		}
+	}
+
+    skin base
+	{
+		border
+		{
+			left = 1
+			right = 1
+			top = 1
+			bottom = 1
+		}
+	}
+
+	skin buttonAActiveSkin : base
+	{
+		region = 0, 304, 160, 160
+	}
+	
+	skin buttonANormalSkin : base
+	{
+		region = 176, 304, 160, 160
+	}
+
+    skin buttonBActiveSkin : base
+	{
+		region = 383, 304, 160, 160
+	}
+	
+	skin buttonBNormalSkin : base
+	{
+		region = 561, 304, 160, 160
+	}
+
+	style joystickStyle
+	{
+		stateNormal
+		{
+			imageList = joystickImages
+		}
+	}
+	
+	style buttonAStyle
+	{
+	    stateNormal
+		{
+			skin = buttonANormalSkin
+		}
+		
+		stateActive
+		{
+			skin = buttonAActiveSkin
+		}
+	}
+
+    style buttonBStyle
+	{
+	    stateNormal
+		{
+			skin = buttonBNormalSkin
+		}
+		
+		stateActive
+		{
+			skin = buttonBActiveSkin
+		}
+	}
+}

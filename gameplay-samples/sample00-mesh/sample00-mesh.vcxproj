@@ -74,16 +74,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/lua/include;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/win32;../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -105,7 +105,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_WINDOWS;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/lua/include;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
@@ -114,8 +114,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/win32;../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -139,15 +139,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../external-deps/bullet/include;../../gameplay/src;../../external-deps/lua/include;../../external-deps/openal/include/AL;../../external-deps/oggvorbis/include;../../external-deps/libpng/include;../../external-deps/zlib/include;../../external-deps/glew/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/win32;../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -174,8 +174,6 @@
     <None Include="res\duck.gpb" />
     <None Include="res\duck.material" />
     <None Include="res\grid.material" />
-    <None Include="res\line.fsh" />
-    <None Include="res\line.vsh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshGame.cpp" />

@@ -76,10 +76,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Label Class Reference</div>  </div>
 </div><!--header-->
@@ -93,8 +93,9 @@ Inheritance diagram for gameplay::Label:</div>
   <img src="classgameplay_1_1_label.png" usemap="#gameplay::Label_map" alt=""/>
   <map id="gameplay::Label_map" name="gameplay::Label_map">
 <area href="classgameplay_1_1_control.html" alt="gameplay::Control" shape="rect" coords="259,56,422,80"/>
-<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="173,0,336,24"/>
-<area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="346,0,509,24"/>
+<area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="86,0,249,24"/>
+<area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="259,0,422,24"/>
+<area href="classgameplay_1_1_script_target.html" alt="gameplay::ScriptTarget" shape="rect" coords="432,0,595,24"/>
 <area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="86,168,249,192"/>
 <area href="classgameplay_1_1_slider.html" alt="gameplay::Slider" shape="rect" coords="259,168,422,192"/>
 <area href="classgameplay_1_1_text_box.html" alt="gameplay::TextBox" shape="rect" coords="432,168,595,192"/>
@@ -109,7 +110,11 @@ Inheritance diagram for gameplay::Label:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a29f916c4b4afab37d6bdaa467720d3c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a29f916c4b4afab37d6bdaa467720d3c7">setText</a> (const char *text)</td></tr>
 <tr class="memitem:a914dd10a6abc2231fd60a5e040205f41"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a914dd10a6abc2231fd60a5e040205f41">getText</a> ()</td></tr>
+<tr class="memitem:af11e3bc6954d534ee1ed9bf848904c16"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">getType</a> () const </td></tr>
 <tr class="memitem:a21d473e1749ab7d876c8ebabb96bb375"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a21d473e1749ab7d876c8ebabb96bb375">addListener</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> *listener, int eventFlags)</td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a38c9eb8cfc8afa3e76f13fd8683c6ce1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_label.html">Label</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a38c9eb8cfc8afa3e76f13fd8683c6ce1">create</a> (const char *id, <a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a1b85fc1bebe9cd82da2f5b8891fbd452"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a1b85fc1bebe9cd82da2f5b8891fbd452">Label</a> ()</td></tr>
@@ -126,10 +131,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ac4aab4460df13e322899329f764d4212"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_font.html">Font</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#ac4aab4460df13e322899329f764d4212">_font</a></td></tr>
 <tr class="memitem:a79d68d5c1565f3c075371c5fe232801f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a79d68d5c1565f3c075371c5fe232801f">_textColor</a></td></tr>
 <tr class="memitem:a4502dd7fc31d887bd03c36e622a26667"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_label.html#a4502dd7fc31d887bd03c36e622a26667">_textBounds</a></td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:aee29d97f7e87f0263024133085c28e3d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee29d97f7e87f0263024133085c28e3d"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A label is the most basic type of control, capable only of rendering text within its border.</p>
@@ -220,12 +221,50 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 </div>
 </div>
+<a class="anchor" id="a38c9eb8cfc8afa3e76f13fd8683c6ce1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_label.html">Label</a>* <a class="el" href="classgameplay_1_1_label.html#a38c9eb8cfc8afa3e76f13fd8683c6ce1">gameplay::Label::create</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td>
+          <td class="paramname"><em>style</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Create a new label control.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The control's ID. </td></tr>
+    <tr><td class="paramname">style</td><td>The control's style.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The new label.  </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a1845972d801788eacc8922a36c576d57">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a5232963cb6e1b0af4ca6ea437961f48b">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_button.html#a61ee6eca719e35574b69599f750f614d">gameplay::Button</a>, and <a class="el" href="classgameplay_1_1_slider.html#acf5f46209988f03a11bcf84274409d8c">gameplay::Slider</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aa4a8eeb08c7a64586da980c9b09999e8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classgameplay_1_1_label.html">Label</a>* <a class="el" href="classgameplay_1_1_label.html#aa4a8eeb08c7a64586da980c9b09999e8">gameplay::Label::create</a> </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_label.html">Label</a>* <a class="el" href="classgameplay_1_1_label.html#a38c9eb8cfc8afa3e76f13fd8683c6ce1">gameplay::Label::create</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td>
           <td class="paramname"><em>style</em>, </td>
@@ -299,6 +338,27 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 <div class="memdoc">
 <p>Get the text displayed by this label.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The text displayed by this label. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af11e3bc6954d534ee1ed9bf848904c16"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label::getType</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">Control::getType</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#adc74e6fa5d73449369faf239b1fe8bc3">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>.</p>
 
 </div>
 </div>
@@ -456,7 +516,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Container</b></td></
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

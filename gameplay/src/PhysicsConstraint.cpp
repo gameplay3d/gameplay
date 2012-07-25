@@ -2,7 +2,6 @@
 #include "PhysicsConstraint.h"
 #include "Game.h"
 #include "Node.h"
-#include "PhysicsMotionState.h"
 #include "PhysicsRigidBody.h"
 
 namespace gameplay
@@ -36,8 +35,8 @@ Vector3 PhysicsConstraint::centerOfMassMidpoint(const Node* a, const Node* b)
     a->getWorldMatrix().getTranslation(&tA);
     b->getWorldMatrix().getTranslation(&tB);
 
-    tA = getWorldCenterOfMass(a->getModel());
-    tB = getWorldCenterOfMass(b->getModel());
+    tA = getWorldCenterOfMass(a);
+    tB = getWorldCenterOfMass(b);
     
     Vector3 d(tA, tB);
     d.scale(0.5f);
@@ -131,43 +130,29 @@ btTransform PhysicsConstraint::getTransformOffset(const Node* node, const Vector
     return btTransform(BQ(r), BV(t));
 }
 
-Vector3 PhysicsConstraint::getWorldCenterOfMass(const Model* model)
+Vector3 PhysicsConstraint::getWorldCenterOfMass(const Node* node)
 {
-    GP_ASSERT(model && model->getMesh() && model->getNode());
+    GP_ASSERT(node);
+
+    const BoundingSphere& sphere = node->getBoundingSphere();
+    if (!(sphere.center.isZero() && sphere.radius == 0))
+    {
+        // The world-space center of mass is the sphere's center.
+        return sphere.center;
+    }
+
+    // Warn the user that the node has no bounding volume.
+    GP_WARN("Node %s' has no bounding volume - center of mass is defaulting to local coordinate origin.", node->getId());
 
     Vector3 center;
-    const BoundingBox& box = model->getMesh()->getBoundingBox();
-    if (!(box.min.isZero() && box.max.isZero()))
-    {
-        Vector3 bMin, bMax;
-        model->getNode()->getWorldMatrix().transformPoint(box.min, &bMin);
-        model->getNode()->getWorldMatrix().transformPoint(box.max, &bMax);
-        center.set(bMin, bMax);
-        center.scale(0.5f);
-        center.add(bMin);
-    }
-    else
-    {
-        const BoundingSphere& sphere = model->getMesh()->getBoundingSphere();
-        if (!(sphere.center.isZero() && sphere.radius == 0))
-        {
-            model->getNode()->getWorldMatrix().transformPoint(sphere.center, &center);
-        }
-        else
-        {
-            // Warn the user that the model has no bounding volume.
-            GP_WARN("Model '%s' has no bounding volume - center of mass is defaulting to local coordinate origin.", model->getNode()->getId());
-            model->getNode()->getWorldMatrix().transformPoint(&center);
-        }
-    }
-
+    node->getWorldMatrix().transformPoint(&center);
     return center;
 }
 
 Vector3 PhysicsConstraint::offsetByCenterOfMass(const Node* node, const Vector3& v)
 {
-    GP_ASSERT(node && node->getCollisionObject() && node->getCollisionObject()->getMotionState());
-    btVector3 centerOfMassOffset = (node->getCollisionObject()->getMotionState())->_centerOfMassOffset.getOrigin();
+    GP_ASSERT(node && node->getCollisionObject() && node->getCollisionObject()->_motionState);
+    btVector3 centerOfMassOffset = node->getCollisionObject()->_motionState->_centerOfMassOffset.getOrigin();
     return Vector3(v.x + centerOfMassOffset.x(), v.y + centerOfMassOffset.y(), v.z + centerOfMassOffset.z());
 }
 

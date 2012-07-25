@@ -56,7 +56,7 @@ public:
      * Loads a set of filesystem aliases from the given Properties object.
      *
      * The specified properties object contains a single namespace with a list
-     * of fielsystem aliases that will be used to establish soft links to files
+     * of filesystem aliases that will be used to establish soft links to files
      * when reading files through this class.
      *
      * This can be helpful for managing loading of resources that may change
@@ -89,16 +89,17 @@ public:
      * @param files The vector to append the files to.
      * 
      * @return True if successful, false if error.
+     * @script{ignore}
      */
     static bool listFiles(const char* dirPath, std::vector<std::string>& files);
 
     /**
      * Checks if the file at the given path exists.
      * 
-     * @param path The path to the file.
+     * @param filePath The path to the file.
      * @return <code>true</code> if the file exists; <code>false</code> otherwise.
      */
-    static bool fileExists(const char* path);
+    static bool fileExists(const char* filePath);
 
     /**
      * Opens the specified file.
@@ -106,12 +107,13 @@ public:
      * The file at the specified location is opened, relative to the currently set
      * resource path.
      *
-     * @param path The path to the file to be opened, relative to the currently set resource path.
+     * @param filePath The path to the file to be opened, relative to the currently set resource path.
      * @param mode The mode used to open the file, passed directly to fopen.
      * 
      * @see setResourcePath(const char*)
+     * @script{ignore}
      */
-    static FILE* openFile(const char* path, const char* mode);
+    static FILE* openFile(const char* filePath, const char* mode);
 
     /**
      * Reads the entire contents of the specified file and returns its contents.

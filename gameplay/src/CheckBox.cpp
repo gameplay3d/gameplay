@@ -9,14 +9,21 @@ CheckBox::CheckBox() : _checked(false), _image(NULL)
 {
 }
 
-CheckBox::CheckBox(const CheckBox& copy)
-{
-    // Hidden.
-}
-
 CheckBox::~CheckBox()
 {
 
+}
+
+CheckBox* CheckBox::create(const char* id, Theme::Style* style)
+{
+    GP_ASSERT(style);
+
+    CheckBox* checkBox = new CheckBox();
+    if (id)
+        checkBox->_id = id;
+    checkBox->setStyle(style);
+
+    return checkBox;
 }
 
 CheckBox* CheckBox::create(Theme::Style* style, Properties* properties)
@@ -157,6 +164,11 @@ void CheckBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     Vector2 pos(_viewportBounds.x, _viewportBounds.y + _viewportBounds.height * 0.5f - size.y * 0.5f);
 
     spriteBatch->draw(pos.x, pos.y, size.x, size.y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
+}
+
+const char* CheckBox::getType() const
+{
+    return "checkBox";
 }
 
 }

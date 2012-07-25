@@ -293,7 +293,7 @@ void RenderState::bind(Pass* pass)
     // Apply parameter bindings and renderer state for the entire hierarchy, top-down.
     rs = NULL;
     Effect* effect = pass->getEffect();
-    while (rs = getTopmost(rs))
+    while ((rs = getTopmost(rs)))
     {
         for (unsigned int i = 0, count = rs->_parameters.size(); i < count; ++i)
         {
@@ -360,8 +360,9 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 }
 
 RenderState::StateBlock::StateBlock()
-    : _blendEnabled(false), _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false),
-      _srcBlend(RenderState::BLEND_ONE), _dstBlend(RenderState::BLEND_ONE), _bits(0L)
+    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false),
+      _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
+      _bits(0L)
 {
 }
 
@@ -404,11 +405,11 @@ void RenderState::StateBlock::bindNoRestore()
             GL_ASSERT( glDisable(GL_BLEND) );
         _defaultState->_blendEnabled = _blendEnabled;
     }
-    if ((_bits & RS_BLEND_FUNC) && (_srcBlend != _defaultState->_srcBlend || _dstBlend != _defaultState->_dstBlend))
+    if ((_bits & RS_BLEND_FUNC) && (_blendSrc != _defaultState->_blendSrc || _blendDst != _defaultState->_blendDst))
     {
-        GL_ASSERT( glBlendFunc((GLenum)_srcBlend, (GLenum)_dstBlend) );
-        _defaultState->_srcBlend = _srcBlend;
-        _defaultState->_dstBlend = _dstBlend;
+        GL_ASSERT( glBlendFunc((GLenum)_blendSrc, (GLenum)_blendDst) );
+        _defaultState->_blendSrc = _blendSrc;
+        _defaultState->_blendDst = _blendDst;
     }
     if ((_bits & RS_CULL_FACE) && (_cullFaceEnabled != _defaultState->_cullFaceEnabled))
     {
@@ -454,10 +455,10 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
     }
     if (!(stateOverrideBits & RS_BLEND_FUNC) && (_defaultState->_bits & RS_BLEND_FUNC))
     {
-        GL_ASSERT( glBlendFunc(GL_ONE, GL_ONE) );
+        GL_ASSERT( glBlendFunc(GL_ONE, GL_ZERO) );
         _defaultState->_bits &= ~RS_BLEND_FUNC;
-        _defaultState->_srcBlend = RenderState::BLEND_ONE;
-        _defaultState->_dstBlend = RenderState::BLEND_ONE;
+        _defaultState->_blendSrc = RenderState::BLEND_ONE;
+        _defaultState->_blendDst = RenderState::BLEND_ZERO;
     }
     if (!(stateOverrideBits & RS_CULL_FACE) && (_defaultState->_bits & RS_CULL_FACE))
     {
@@ -494,7 +495,7 @@ void RenderState::StateBlock::enableDepthWrite()
     }
 }
 
-bool parseBoolean(const char* value)
+static bool parseBoolean(const char* value)
 {
     GP_ASSERT(value);
 
@@ -510,7 +511,7 @@ bool parseBoolean(const char* value)
     return false;
 }
 
-RenderState::Blend parseBlend(const char* value)
+static RenderState::Blend parseBlend(const char* value)
 {
     GP_ASSERT(value);
 
@@ -550,11 +551,11 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     {
         setBlend(parseBoolean(value));
     }
-    else if (strcmp(name, "srcBlend") == 0)
+    else if (strcmp(name, "blendSrc") == 0 || strcmp(name, "srcBlend") == 0 )   // Leaving srcBlend for backward compat.
     {
         setBlendSrc(parseBlend(value));
     }
-    else if (strcmp(name, "dstBlend") == 0)
+    else if (strcmp(name, "blendDst") == 0 || strcmp(name, "dstBlend") == 0)    // // Leaving dstBlend for backward compat.
     {
         setBlendDst(parseBlend(value));
     }
@@ -591,9 +592,10 @@ void RenderState::StateBlock::setBlend(bool enabled)
 
 void RenderState::StateBlock::setBlendSrc(Blend blend)
 {
-    _srcBlend = blend;
-    if (_srcBlend == BLEND_ONE && _dstBlend == BLEND_ONE)
+    _blendSrc = blend;
+    if (_blendSrc == BLEND_ONE && _blendDst == BLEND_ZERO)
     {
+        // Default blend func
         _bits &= ~RS_BLEND_FUNC;
     }
     else
@@ -604,9 +606,10 @@ void RenderState::StateBlock::setBlendSrc(Blend blend)
 
 void RenderState::StateBlock::setBlendDst(Blend blend)
 {
-    _dstBlend = blend;
-    if (_srcBlend == BLEND_ONE && _dstBlend == BLEND_ONE)
+    _blendDst = blend;
+    if (_blendSrc == BLEND_ONE && _blendDst == BLEND_ZERO)
     {
+        // Default blend func
         _bits &= ~RS_BLEND_FUNC;
     }
     else

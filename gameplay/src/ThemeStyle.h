@@ -25,6 +25,15 @@ class Theme::Style
     friend class Container;
     friend class Form;
 
+public:
+
+    /**
+     * Get the theme this style belongs to.
+     *
+     * @return The theme this style belongs to.
+     */
+    Theme* getTheme() const;
+
 private:
 
     /**
@@ -59,6 +68,11 @@ private:
         Overlay(const Overlay& copy);
             
         ~Overlay();
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        Overlay& operator=(const Overlay&);
 
         static Overlay* create();
 
@@ -123,17 +137,17 @@ private:
         const Theme::UVs& getCursorUVs() const;
 
         /**
-         * @see AnimationTarget#getAnimationPropertyComponentCount
+         * @see AnimationTarget::getAnimationPropertyComponentCount
          */
         unsigned int getAnimationPropertyComponentCount(int propertyId) const;
 
         /**
-         * @see AnimationTarget#getAnimationProperty
+         * @see AnimationTarget::getAnimationProperty
          */
         void getAnimationPropertyValue(int propertyId, AnimationValue* value);
 
         /**
-         * @see AnimationTarget#setAnimationProperty
+         * @see AnimationTarget::setAnimationProperty
          */
         void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
        
@@ -176,6 +190,11 @@ private:
      * Destructor.
      */
     ~Style();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Style& operator=(const Style&);
 
     /**
      * Returns the Id of this Style.

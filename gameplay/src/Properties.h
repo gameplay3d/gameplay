@@ -150,6 +150,7 @@ public:
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
      * 
      * @param url The URL to create the properties from.
+     * @script{create}
      */
     static Properties* create(const char* url);
 
@@ -164,6 +165,7 @@ public:
      * @param value Optional pointer to a const char* to store the value of the next property in.
      * 
      * @return The name of the next property, or NULL if there are no properties remaining.
+     * @script{ignore}
      */
     const char* getNextProperty(char** value = NULL);
 
@@ -219,7 +221,7 @@ public:
     /**
      * Returns the type of a property.
      *
-     * @param name The name of hte property to interpret, or NULL to return the current property's type.
+     * @param name The name of the property to interpret, or NULL to return the current property's type.
      *
      * @return The type of the property.
      */
@@ -239,10 +241,11 @@ public:
      * Interpret the value of the given property as a boolean.
      *
      * @param name The name of the property to interpret, or NULL to return the current property's value.
+     * @param defaultValue the default value to return if the specified property does not exist within the properties file.
      * 
      * @return true if the property exists and its value is "true", otherwise false.
      */
-    bool getBool(const char* name = NULL) const;
+    bool getBool(const char* name = NULL, bool defaultValue = false) const;
 
     /**
      * Interpret the value of the given property as an integer.

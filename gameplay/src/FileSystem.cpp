@@ -68,6 +68,7 @@ void makepath(std::string path, int mode)
 }
 #endif
 
+/** @script{ignore} */
 static std::string __resourcePath("./");
 static std::map<std::string, std::string> __aliases;
 
@@ -200,14 +201,14 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 #endif
 }
 
-bool FileSystem::fileExists(const char* path)
+bool FileSystem::fileExists(const char* filePath)
 {
-    GP_ASSERT(path);
+    GP_ASSERT(filePath);
 
     std::string fullPath(__resourcePath);
-    fullPath += resolvePath(path);
+    fullPath += resolvePath(filePath);
 
-    createFileFromAsset(path);
+    createFileFromAsset(filePath);
 
     gp_stat_struct s;
 // Win32 doesn't support an asset or bundle definitions.
@@ -216,7 +217,7 @@ bool FileSystem::fileExists(const char* path)
     {
         fullPath = __resourcePath;
         fullPath += "../../gameplay/";
-        fullPath += path;
+        fullPath += filePath;
         
         return stat(fullPath.c_str(), &s) == 0;
     }
@@ -229,6 +230,7 @@ bool FileSystem::fileExists(const char* path)
 FILE* FileSystem::openFile(const char* path, const char* mode)
 {
     GP_ASSERT(path);
+    GP_ASSERT(mode);
 
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(path);
@@ -254,6 +256,8 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
 
 char* FileSystem::readAll(const char* filePath, int* fileSize)
 {
+    GP_ASSERT(filePath);
+
     // Open file for reading.
     FILE* file = openFile(filePath, "rb");
     if (file == NULL)
