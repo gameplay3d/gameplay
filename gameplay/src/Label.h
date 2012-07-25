@@ -24,6 +24,7 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          text        = <string>
+         consumeEvents = <bool>  // Whether the label propogates input events to the Game's input event handler. Default is true.
     }
  @endverbatim
  */
@@ -32,6 +33,17 @@ class Label : public Control
     friend class Container;
 
 public:
+
+    /**
+     * Create a new label control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new label.
+     * @script{create}
+     */
+    static Label* create(const char*id, Theme::Style* style);
 
     /**
      * Set the text for this label to display.
@@ -46,6 +58,11 @@ public:
      * @return The text displayed by this label.
      */
     const char* getText();
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
     /**
      * Add a listener to be notified of specific events affecting

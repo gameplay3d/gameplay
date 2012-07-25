@@ -77,14 +77,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::PhysicsCollisionObject::CollisionListener Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;PhysicsCollisionObject.h&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for gameplay::PhysicsCollisionObject::CollisionListener:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classgameplay_1_1_physics_collision_object_1_1_collision_listener.png" usemap="#gameplay::PhysicsCollisionObject::CollisionListener_map" alt=""/>
+  <map id="gameplay::PhysicsCollisionObject::CollisionListener_map" name="gameplay::PhysicsCollisionObject::CollisionListener_map">
+<area href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html" alt="gameplay::PhysicsCollisionObject::ScriptListener" shape="rect" coords="0,56,300,80"/>
+</map>
+ </div></div>
 
 <p><a href="classgameplay_1_1_physics_collision_object_1_1_collision_listener-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -97,12 +105,6 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af8643bc731e96238df434f9e28bafd81"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#af8643bc731e96238df434f9e28bafd81">~CollisionListener</a> ()</td></tr>
 <tr class="memitem:a8a9c5c68b83a925eb0d160e99e683443"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#a8a9c5c68b83a925eb0d160e99e683443">collisionEvent</a> (<a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_listener.html#ab6781fd21400a84de64a0b87e2fda393">PhysicsCollisionObject::CollisionListener::EventType</a> type, const <a class="el" href="classgameplay_1_1_physics_collision_object_1_1_collision_pair.html">PhysicsCollisionObject::CollisionPair</a> &amp;collisionPair, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;contactPointA=<a class="el" href="classgameplay_1_1_vector3.html#abe4fe277a0b7db6709dd43ec54493a55">Vector3::zero</a>(), const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;contactPointB=<a class="el" href="classgameplay_1_1_vector3.html#abe4fe277a0b7db6709dd43ec54493a55">Vector3::zero</a>())=0</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a6b9233d6d8c2457530ed7b0f106483ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b9233d6d8c2457530ed7b0f106483ba"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCollisionObject</b></td></tr>
-<tr class="memitem:ad018280e085823e2e430f6afdd26000c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad018280e085823e2e430f6afdd26000c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Collision listener interface. </p>
@@ -187,6 +189,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
 </div>
 <div class="memdoc">
 <p>Called when a collision occurs between two objects in the physics world.</p>
+<p>NOTE: You are not permitted to disable physics objects from within this callback. Disabling physics on a collision object removes the object from the physics world. This is not permitted during the PhysicsController::update.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">type</td><td>The type of collision event. </td></tr>
@@ -197,13 +200,15 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b
   </dd>
 </dl>
 
+<p>Implemented in <a class="el" href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html#aa58b60c29a57a6473ff93df401b36f7b">gameplay::PhysicsCollisionObject::ScriptListener</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

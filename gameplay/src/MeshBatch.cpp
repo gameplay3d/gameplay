@@ -11,12 +11,6 @@ MeshBatch::MeshBatch(const VertexFormat& vertexFormat, Mesh::PrimitiveType primi
     resize(initialCapacity);
 }
 
-MeshBatch::MeshBatch(const MeshBatch& copy)
-    : _vertexFormat(copy._vertexFormat)
-{
-    // hidden
-}
-
 MeshBatch::~MeshBatch()
 {
     SAFE_RELEASE(_material);
@@ -55,11 +49,11 @@ void MeshBatch::updateVertexAttributeBinding()
     // Update our vertex attribute bindings.
     for (unsigned int i = 0, techniqueCount = _material->getTechniqueCount(); i < techniqueCount; ++i)
     {
-        Technique* t = _material->getTechnique(i);
+        Technique* t = _material->getTechniqueByIndex(i);
         GP_ASSERT(t);
         for (unsigned int j = 0, passCount = t->getPassCount(); j < passCount; ++j)
         {
-            Pass* p = t->getPass(j);
+            Pass* p = t->getPassByIndex(j);
             GP_ASSERT(p);
             VertexAttributeBinding* b = VertexAttributeBinding::create(_vertexFormat, _vertices, p->getEffect());
             p->setVertexAttributeBinding(b);
@@ -120,7 +114,7 @@ bool MeshBatch::resize(unsigned int capacity)
     // (we only know how many indices will be stored). Assume the worst case
     // for now, which is the same number of vertices as indices.
     unsigned int indexCapacity = vertexCapacity;
-    if (indexCapacity > USHRT_MAX)
+    if (_indexed && indexCapacity > USHRT_MAX)
     {
         GP_ERROR("Index capacity is greater than the maximum unsigned short value (%d > %d).", indexCapacity, USHRT_MAX);
         return false;
@@ -162,7 +156,7 @@ bool MeshBatch::resize(unsigned int capacity)
     return true;
 }
     
-void MeshBatch::begin()
+void MeshBatch::start()
 {
     _vertexCount = 0;
     _indexCount = 0;
@@ -170,7 +164,7 @@ void MeshBatch::begin()
     _indicesPtr = _indices;
 }
 
-void MeshBatch::end()
+void MeshBatch::finish()
 {
 }
 
@@ -193,7 +187,7 @@ void MeshBatch::draw()
     unsigned int passCount = technique->getPassCount();
     for (unsigned int i = 0; i < passCount; ++i)
     {
-        Pass* pass = technique->getPass(i);
+        Pass* pass = technique->getPassByIndex(i);
         GP_ASSERT(pass);
         pass->bind();
 

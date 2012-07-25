@@ -32,17 +32,12 @@ public:
      */
     enum Justify
     {
-        // Specify horizontal alignment, use default vertical alignment (ALIGN_TOP).
         ALIGN_LEFT = 0x01,
         ALIGN_HCENTER = 0x02,
         ALIGN_RIGHT = 0x04,
-    
-        // Specify vertical alignment, use default horizontal alignment (ALIGN_LEFT).
         ALIGN_TOP = 0x10,
         ALIGN_VCENTER = 0x20,
         ALIGN_BOTTOM = 0x40,
-
-        // Specify both vertical and horizontal alignment.
         ALIGN_TOP_LEFT = ALIGN_TOP | ALIGN_LEFT,
         ALIGN_VCENTER_LEFT = ALIGN_VCENTER | ALIGN_LEFT,
         ALIGN_BOTTOM_LEFT = ALIGN_BOTTOM | ALIGN_LEFT,
@@ -52,28 +47,6 @@ public:
         ALIGN_TOP_RIGHT = ALIGN_TOP | ALIGN_RIGHT,
         ALIGN_VCENTER_RIGHT = ALIGN_VCENTER | ALIGN_RIGHT,
         ALIGN_BOTTOM_RIGHT = ALIGN_BOTTOM | ALIGN_RIGHT
-    };
-
-    /**
-     * Defines a font glyph within the texture map for a font.
-     */
-    class Glyph
-    {
-    public:
-        /**
-         * Glyph character code (decimal value).
-         */
-        unsigned int code;
-
-        /**
-         * Glyph width (in pixels).
-         */
-        unsigned int width;
-
-        /**
-         * Glyph texture coordinates.
-         */
-        float uvs[4];
     };
 
     /**
@@ -95,6 +68,11 @@ public:
          * Destructor.
          */
         ~Text();
+
+        /**
+         * Hidden copy assignment operator.
+         */
+        Text& operator=(const Text&);
 
         /**
          * Get the string that will be drawn from this Text object.
@@ -124,25 +102,9 @@ public:
      * @param id An optional ID of the font resource within the bundle (NULL for the first/only resource).
      * 
      * @return The specified font.
+     * @script{create}
      */
     static Font* create(const char* path, const char* id = NULL);
-
-    /**
-     * Creates a font with the given characteristics from the specified glyph array and texture map.
-     *
-     * This method will create a new Font object regardless of whether another Font is already
-     * created with the same attributes.
-     *
-     * @param family The font family name.
-     * @param style The font style.
-     * @param size The font size.
-     * @param glyphs An array of font glyphs, defining each character in the font within the texture map.
-     * @param glyphCount The number of items in the glyph array.
-     * @param texture A texture map containing rendered glyphs.
-     * 
-     * @return The new Font.
-     */
-    static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 
     /**
      * Returns the font size (max height of glyphs) in pixels.
@@ -150,14 +112,9 @@ public:
     unsigned int getSize();
 
     /**
-     * Begins text drawing for this font.
+     * Starts text drawing for this font.
      */
-    void begin();
-
-    /**
-     * Ends text batching for this font and renders all drawn text.
-     */
-    void end();
+    void start();
 
     /**
      * Draws the specified text in a solid color, with a scaling factor.
@@ -215,6 +172,11 @@ public:
                      Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false, const Rectangle* clip = NULL);
 
     /**
+     * Finishes text batching for this font and renders all drawn text.
+     */
+    void finish();
+
+    /**
      * Measures a string's width and height without alignment, wrapping or clipping.
      *
      * @param text The text to measure.
@@ -268,8 +230,29 @@ public:
      */
     static Justify getJustify(const char* justify);
 
-
 private:
+
+    /**
+     * Defines a font glyph within the texture map for a font.
+     */
+    class Glyph
+    {
+    public:
+        /**
+         * Glyph character code (decimal value).
+         */
+        unsigned int code;
+
+        /**
+         * Glyph width (in pixels).
+         */
+        unsigned int width;
+
+        /**
+         * Glyph texture coordinates.
+         */
+        float uvs[4];
+    };
 
     /**
      * Constructor.
@@ -285,6 +268,28 @@ private:
      * Destructor.
      */
     ~Font();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Font& operator=(const Font&);
+
+    /**
+     * Creates a font with the given characteristics from the specified glyph array and texture map.
+     *
+     * This method will create a new Font object regardless of whether another Font is already
+     * created with the same attributes.
+     *
+     * @param family The font family name.
+     * @param style The font style.
+     * @param size The font size.
+     * @param glyphs An array of font glyphs, defining each character in the font within the texture map.
+     * @param glyphCount The number of items in the glyph array.
+     * @param texture A texture map containing rendered glyphs.
+     * 
+     * @return The new Font.
+     */
+    static Font* create(const char* family, Style style, unsigned int size, Glyph* glyphs, int glyphCount, Texture* texture);
 
     void getMeasurementInfo(const char* text, const Rectangle& area, unsigned int size, Justify justify, bool wrap, bool rightToLeft,
                             std::vector<int>* xPositions, int* yPosition, std::vector<unsigned int>* lineLengths);

@@ -120,6 +120,7 @@ public:
 
         /**
          * Creates a new StateBlock with default render state settings.
+         * @script{create}
          */
         static StateBlock* create();
 
@@ -213,13 +214,12 @@ public:
         static void enableDepthWrite();
 
         // States
-        bool _blendEnabled;
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
         bool _depthWriteEnabled;
-        Blend _srcBlend;
-        Blend _dstBlend;
-        // State bits
+        bool _blendEnabled;
+        Blend _blendSrc;
+        Blend _blendDst;
         long _bits;
 
         static StateBlock* _defaultState;
@@ -279,7 +279,7 @@ public:
      *
      * It is legal to pass the returned StateBlock to another RenderState object.
      * In this case, the StateBlock will be referenced by both RenderState objects
-     * and any changes to the StateBlock will be refelcted in all objects
+     * and any changes to the StateBlock will be reflected in all objects
      * that reference it.
      *
      * @return The StateBlock for this RenderState.

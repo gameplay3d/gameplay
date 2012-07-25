@@ -5,6 +5,7 @@
 #include "FileSystem.h"
 #include "Game.h"
 #include "Form.h"
+#include "ScriptController.h"
 #include <unistd.h>
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -37,14 +38,14 @@ extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 static AppDelegate *__appDelegate = NULL;
 static View* __view = NULL;
 
-static long __timeStart;
-static long __timeAbsolute;
+static double __timeStart;
+static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __pitch;
 static float __roll;
 
 
-long getMachTimeInMilliseconds();
+double getMachTimeInMilliseconds();
 
 int getKey(unichar keyCode);
 
@@ -580,17 +581,17 @@ int getKey(unichar keyCode);
 @end
 
 
-long getMachTimeInMilliseconds()
+double getMachTimeInMilliseconds()
 {
-    static const int64_t kOneMillion = 1000 * 1000;
+    static const double kOneMillion = 1000 * 1000;
     static mach_timebase_info_data_t s_timebase_info;
     
     if (s_timebase_info.denom == 0) 
         (void) mach_timebase_info(&s_timebase_info);
     
     // mach_absolute_time() returns billionth of seconds, so divide by one million to get milliseconds
-    GP_ASSERT(kOneMillion * s_timebase_info.denom);
-    return (long)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
+    GP_ASSERT(s_timebase_info.denom);
+    return ((double)mach_absolute_time() * (double)s_timebase_info.numer) / (kOneMillion * (double)s_timebase_info.denom);
 }
 
 int getKey(unichar keyCode) 
@@ -825,15 +826,11 @@ Platform::Platform(Game* game) : _game(game)
 {
 }
 
-Platform::Platform(const Platform& copy)
-{
-}
-
 Platform::~Platform()
 {
 }
 
-Platform* Platform::create(Game* game)
+Platform* Platform::create(Game* game, void* attachToWindow)
 {
     Platform* platform = new Platform(game);
     return platform;
@@ -868,13 +865,13 @@ unsigned int Platform::getDisplayHeight()
     return size.height;
 }
 
-long Platform::getAbsoluteTime()
+double Platform::getAbsoluteTime()
 {
     __timeAbsolute = getMachTimeInMilliseconds();
     return __timeAbsolute;
 }
 
-void Platform::setAbsoluteTime(long time)
+void Platform::setAbsoluteTime(double time)
 {
     __timeAbsolute = time;
 }
@@ -892,6 +889,34 @@ void Platform::setVsync(bool enable)
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
+}
+
+bool Platform::hasMouse()
+{
+    // not supported
+    return false;
+}
+
+void Platform::setMouseCaptured(bool captured)
+{
+    // not supported
+}
+
+bool Platform::isMouseCaptured()
+{
+    // not supported
+    return false;
+}
+
+void Platform::setCursorVisible(bool visible)
+{
+    // not supported
+}
+
+bool Platform::isCursorVisible()
+{
+    // not supported
+    return false;
 }
 
 void Platform::setMultiTouch(bool enabled) 
@@ -930,15 +955,34 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
     {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
+        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
+    }
+}
+    
+void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+{
+    if (!Form::keyEventInternal(evt, key))
+    {
+        Game::getInstance()->keyEvent(evt, key);
+        Game::getInstance()->getScriptController()->keyEvent(evt, key);
     }
 }
 
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
+bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    Game::getInstance()->keyEvent(evt, key);
-    Form::keyEventInternal(evt, key);
-}
-    
+    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
+    {
+        return true;
+    }
+    else
+    {
+        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
+    }
+}    
 
 void Platform::sleep(long ms)
 {

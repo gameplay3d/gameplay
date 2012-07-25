@@ -9,14 +9,14 @@ using namespace gameplay;
  * Longboard game class.
  *
  * This class extends gameplay::Game, which hosts the game's message pump,
- * frame loop, window and other neccessary code.
+ * frame loop, window and other necessary code.
  */
 class LongboardGame : public Game
 {
 public:
 
     /**
-     * Constructror.
+     * Constructor.
      */
     LongboardGame();
 
@@ -45,12 +45,12 @@ protected:
     /**
      * @see Game::update
      */
-    void update(long elapsedTime);
+    void update(float elapsedTime);
 
     /**
      * @see Game::render
      */
-    void render(long elapsedTime);
+    void render(float elapsedTime);
 
 private:
 

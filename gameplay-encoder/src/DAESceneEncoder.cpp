@@ -36,19 +36,52 @@ unsigned int getMaxOffset(domInputLocalOffset_Array& inputArray)
 
 void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLLADA* dom)
 {
-    DAEOptimizer optimizer(dom);
     const std::vector<std::string>& groupAnimatioNodeIds = arguments.getGroupAnimationNodeId();
     const std::vector<std::string>& groupAnimatioIds = arguments.getGroupAnimationAnimationId();
     assert(groupAnimatioNodeIds.size() == groupAnimatioIds.size());
-    size_t size = groupAnimatioNodeIds.size();
-    if (size > 0)
+    if (!groupAnimatioNodeIds.empty())
     {
-        begin();
-        for (size_t i = 0; i < size; ++i)
+        size_t size = groupAnimatioNodeIds.size();
+        if (size > 0)
         {
-            optimizer.combineAnimations(groupAnimatioNodeIds[i], groupAnimatioIds[i]);
+            DAEOptimizer optimizer(dom);
+            begin();
+            for (size_t i = 0; i < size; ++i)
+            {
+                optimizer.combineAnimations(groupAnimatioNodeIds[i], groupAnimatioIds[i]);
+            }
+            end("groupAnimation");
         }
-        end("groupAnimation");
+    }
+    else
+    {
+        // Determine if there are any mesh skins that are animated that have more than 1 animation targeting its joints.
+        // (candidates for grouping)
+        std::vector<std::string> nodeIds;
+        if (findGroupAnimationNodes(dom, nodeIds))
+        {
+            // Ask the user if they want to group animations automatically.
+            if (promptUserGroupAnimations())
+            {
+                printf("Grouping animations...\n");
+
+                DAEOptimizer optimizer(dom);
+                begin();
+                char buffer[20];
+                size_t size = nodeIds.size();
+                for (size_t i = 0; i < size; ++i)
+                {
+                    // In COLLADA, ids must be unique but they don't have to be unique in GPB.
+                    // Save the animation id as "animations___#" and then rename it once the GPB objects are created
+                    // but before the GPB is written to file.
+                    sprintf(buffer, "animations___%lu", i);
+                    std::string animationId(buffer);
+                    _tempGroupAnimationIds.push_back(animationId);
+                    optimizer.combineAnimations(nodeIds[i], animationId);
+                }
+                end("groupAnimation");
+            }
+        }
     }
     if (arguments.DAEOutputEnabled())
     {
@@ -306,6 +339,7 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     end("loadAnimations");
 
     _gamePlayFile.adjust();
+    _gamePlayFile.renameAnimations(_tempGroupAnimationIds, "animations");
 
     // Write the output file
     std::string outputFilePath = arguments.getOutputFilePath();
@@ -626,7 +660,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
             }
             else if (type == domMatrix::ID())
             {
-                // If the animation is targetting a matrix then convert it into
+                // If the animation is targeting a matrix then convert it into
                 // a scale, rotate, translate animation by decomposing the matrix.
                 targetProperty = Transform::ANIMATE_SCALE_ROTATE_TRANSLATE;
 
@@ -1333,7 +1367,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             std::vector<std::string> list;
             getJointNames(source, list);
 
-            // Go through the joint list and conver them from sid to id because the sid information is
+            // Go through the joint list and convert them from sid to id because the sid information is
             // lost when converting to the gameplay binary format.
             for (std::vector<std::string>::iterator i = list.begin(); i != list.end(); i++)
             {

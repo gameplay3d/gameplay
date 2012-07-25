@@ -15,10 +15,6 @@ Material::Material() :
 {
 }
 
-Material::Material(const Material& m)
-{
-}
-
 Material::~Material()
 {
     // Destroy all the techniques.
@@ -81,9 +77,12 @@ Material* Material::create(Properties* materialProperties)
     // Set the current technique to the first found technique.
     if (material->getTechniqueCount() > 0)
     {
-        material->setTechnique((unsigned int)0);
+        Technique* t = material->getTechniqueByIndex(0);
+        if (t)
+        {
+            material->_currentTechnique = t;
+        }
     }
-
     return material;
 }
 
@@ -152,7 +151,7 @@ unsigned int Material::getTechniqueCount() const
     return _techniques.size();
 }
 
-Technique* Material::getTechnique(unsigned int index) const
+Technique* Material::getTechniqueByIndex(unsigned int index) const
 {
     GP_ASSERT(index < _techniques.size());
     return _techniques[index];
@@ -182,15 +181,6 @@ Technique* Material::getTechnique() const
 void Material::setTechnique(const char* id)
 {
     Technique* t = getTechnique(id);
-    if (t)
-    {
-        _currentTechnique = t;
-    }
-}
-
-void Material::setTechnique(unsigned int index)
-{
-    Technique* t = getTechnique(index);
     if (t)
     {
         _currentTechnique = t;
@@ -242,21 +232,9 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     const char* fragmentShaderPath = passProperties->getString("fragmentShader");
     GP_ASSERT(fragmentShaderPath);
     const char* defines = passProperties->getString("defines");
-    std::string define;
-    if (defines != NULL)
-    {
-        define = defines;
-        define.insert(0, "#define ");
-        unsigned int pos;
-        while ((pos = define.find(';')) != std::string::npos)
-        {
-            define.replace(pos, 1, "\n#define ");
-        }
-        define += "\n";
-    }
 
     // Create the pass.
-    Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, define.c_str());
+    Pass* pass = Pass::create(passProperties->getId(), technique, vertexShaderPath, fragmentShaderPath, defines);
     if (!pass)
     {
         GP_ERROR("Failed to create pass for technique.");
@@ -272,7 +250,7 @@ bool Material::loadPass(Technique* technique, Properties* passProperties)
     return true;
 }
 
-bool isMaterialKeyword(const char* str)
+static bool isMaterialKeyword(const char* str)
 {
     GP_ASSERT(str);
 
@@ -293,7 +271,7 @@ bool isMaterialKeyword(const char* str)
     return false;
 }
 
-Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultValue)
+static Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultValue)
 {
     if (str == NULL || strlen(str) == 0)
     {
@@ -331,7 +309,7 @@ Texture::Filter parseTextureFilterMode(const char* str, Texture::Filter defaultV
     }
 }
 
-Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
+static Texture::Wrap parseTextureWrapMode(const char* str, Texture::Wrap defaultValue)
 {
     if (str == NULL || strlen(str) == 0)
     {
@@ -362,7 +340,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
     properties->rewind();
 
     const char* name;
-    while (name = properties->getNextProperty())
+    while ((name = properties->getNextProperty()))
     {
         if (isMaterialKeyword(name))
             continue; // keyword - skip
@@ -424,7 +402,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
 
     // Iterate through all child namespaces searching for samplers and render state blocks.
     Properties* ns;
-    while (ns = properties->getNextNamespace())
+    while ((ns = properties->getNextNamespace()))
     {
         if (strcmp(ns->getNamespace(), "sampler") == 0)
         {
@@ -462,7 +440,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
         }
         else if (strcmp(ns->getNamespace(), "renderState") == 0)
         {
-            while (name = ns->getNextProperty())
+            while ((name = ns->getNextProperty()))
             {
                 GP_ASSERT(renderState->getStateBlock());
                 renderState->getStateBlock()->setState(name, ns->getString());

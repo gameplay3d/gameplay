@@ -77,8 +77,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::PhysicsRigidBody Class Reference</div>  </div>
 </div><!--header-->
@@ -121,7 +120,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a153061a1c10fdeec004e2c1e82357f83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a153061a1c10fdeec004e2c1e82357f83">getGravity</a> () const </td></tr>
 <tr class="memitem:a9d8b00f62704fcf3202376985b08aca8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a9d8b00f62704fcf3202376985b08aca8">setGravity</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;gravity)</td></tr>
 <tr class="memitem:a2eabfc0bab5ab7b5ef2c98ff63370145"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a2eabfc0bab5ab7b5ef2c98ff63370145">setKinematic</a> (bool kinematic)</td></tr>
-<tr class="memitem:a11c19c2e9245487eb8de22164c3247ba"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a11c19c2e9245487eb8de22164c3247ba">getHeight</a> (float x, float y) const </td></tr>
+<tr class="memitem:a2197beb224bd4f7f008a01aad866e112"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a2197beb224bd4f7f008a01aad866e112">setEnabled</a> (bool enable)</td></tr>
+<tr class="memitem:a7ef233023fc7b0b587e10843fe743593"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a7ef233023fc7b0b587e10843fe743593">getHeight</a> (float x, float y, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *normal=NULL) const </td></tr>
 <tr class="memitem:a7ce7a6c03c7f515b1954ce7c4fdd7f39"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a7ce7a6c03c7f515b1954ce7c4fdd7f39">isStatic</a> () const </td></tr>
 <tr class="memitem:a0cfa434c0c1a9d5d9c9fa40c91b4a06b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a0cfa434c0c1a9d5d9c9fa40c91b4a06b">applyForce</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;force, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *relativePosition=NULL)</td></tr>
 <tr class="memitem:a4bf94de32676004d7aad713a53726da2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a4bf94de32676004d7aad713a53726da2">applyImpulse</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;impulse, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *relativePosition=NULL)</td></tr>
@@ -130,26 +130,6 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0542fd62b1949e5f0f49fe94c4917509"><td class="memItemLeft" align="right" valign="top">btCollisionObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a0542fd62b1949e5f0f49fe94c4917509">getCollisionObject</a> () const </td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a6db9d28bd448a131448276ee03de1e6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6db9d28bd448a131448276ee03de1e6d"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b></td></tr>
-<tr class="memitem:af360cdaf6a9c69eb52b51ce74d51bb09"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af360cdaf6a9c69eb52b51ce74d51bb09"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsCharacter</b></td></tr>
-<tr class="memitem:aa59c958a66870f0d251ec0dd477d2eff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa59c958a66870f0d251ec0dd477d2eff"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsConstraint</b></td></tr>
-<tr class="memitem:ad018280e085823e2e430f6afdd26000c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad018280e085823e2e430f6afdd26000c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b></td></tr>
-<tr class="memitem:a86e5cb88a3d077acce15f88f01b21b2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86e5cb88a3d077acce15f88f01b21b2a"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsFixedConstraint</b></td></tr>
-<tr class="memitem:a800b5d92b1ae6145ded5479a4501fabc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a800b5d92b1ae6145ded5479a4501fabc"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsGenericConstraint</b></td></tr>
-<tr class="memitem:a87fcee5e15b7c88590cd0086d0b0d2d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87fcee5e15b7c88590cd0086d0b0d2d3"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsHingeConstraint</b></td></tr>
-<tr class="memitem:a3ec502f468b6453c3543f49866d2270d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ec502f468b6453c3543f49866d2270d"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSocketConstraint</b></td></tr>
-<tr class="memitem:a540af8dbd903f6543ec151ba770b515c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a540af8dbd903f6543ec151ba770b515c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstraint</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a class for physics rigid bodies. </p>
@@ -377,17 +357,17 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
 </div>
 <div class="memdoc">
 <p>Gets the gravity that affects the rigid body (this can be different from the global gravity; </p>
-<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_physics_rigid_body.html#a9d8b00f62704fcf3202376985b08aca8">setGravity</a>).</dd></dl>
+<dl class="section see"><dt>See also:</dt><dd>setGravity(Vector3)).</dd></dl>
 <dl class="section return"><dt>Returns:</dt><dd>The gravity. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a11c19c2e9245487eb8de22164c3247ba"></a>
+<a class="anchor" id="a7ef233023fc7b0b587e10843fe743593"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a11c19c2e9245487eb8de22164c3247ba">gameplay::PhysicsRigidBody::getHeight</a> </td>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a7ef233023fc7b0b587e10843fe743593">gameplay::PhysicsRigidBody::getHeight</a> </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -396,7 +376,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>normal</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -406,11 +392,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the height at the given point (only for rigid bodies of type HEIGHTFIELD).</p>
+<p>Gets the height and normal at the given point (only for rigid bodies of type HEIGHTFIELD).</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x position. </td></tr>
     <tr><td class="paramname">y</td><td>The y position. </td></tr>
+    <tr><td class="paramname">normal</td><td>If non-null, the surface normal at the given point. </td></tr>
   </table>
   </dd>
 </dl>
@@ -610,6 +597,32 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
 
 </div>
 </div>
+<a class="anchor" id="a2197beb224bd4f7f008a01aad866e112"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a2197beb224bd4f7f008a01aad866e112">gameplay::PhysicsRigidBody::setEnabled</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets whether the rigid body is enabled or disabled in the physics world.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enable</td><td>true enables the collision object, false disables it. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_physics_collision_object.html#a8f4aeab962d1a1f1db4039de8a84b3bc">gameplay::PhysicsCollisionObject</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a1a0b718232a1c06da4d3fd6f6f944390"></a>
 <div class="memitem">
 <div class="memproto">
@@ -734,7 +747,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsSpringConstra
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:44:00 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

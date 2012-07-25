@@ -28,7 +28,7 @@ ParticleEmitter::ParticleEmitter(SpriteBatch* batch, unsigned int particleCountM
     _spriteBatch(batch), _spriteTextureBlending(BLEND_TRANSPARENT),  _spriteTextureWidth(0), _spriteTextureHeight(0), _spriteTextureWidthRatio(0), _spriteTextureHeightRatio(0), _spriteTextureCoords(NULL),
     _spriteAnimated(false),  _spriteLooped(false), _spriteFrameCount(1), _spriteFrameRandomOffset(0),_spriteFrameDuration(0L), _spriteFrameDurationSecs(0.0f), _spritePercentPerFrame(0.0f),
     _node(NULL), _orbitPosition(false), _orbitVelocity(false), _orbitAcceleration(false),
-    _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _timeLast(0L), _timeRunning(0L)
+    _timePerEmission(PARTICLE_EMISSION_RATE_TIME_INTERVAL), _timeRunning(0)
 {
     GP_ASSERT(particleCountMax);
     _particles = new Particle[particleCountMax];
@@ -228,7 +228,6 @@ void ParticleEmitter::setEmissionRate(unsigned int rate)
 void ParticleEmitter::start()
 {
     _started = true;
-    _timeLast = Game::getGameTime();
 }
 
 void ParticleEmitter::stop()
@@ -263,7 +262,7 @@ bool ParticleEmitter::isActive() const
     return active;
 }
 
-void ParticleEmitter::emit(unsigned int particleCount)
+void ParticleEmitter::emitOnce(unsigned int particleCount)
 {
     GP_ASSERT(_node);
     GP_ASSERT(_particles);
@@ -355,6 +354,11 @@ unsigned int ParticleEmitter::getParticlesCount() const
 void ParticleEmitter::setEllipsoid(bool ellipsoid)
 {
     _ellipsoid = ellipsoid;
+}
+
+bool ParticleEmitter::isEllipsoid() const
+{
+    return _ellipsoid;
 }
 
 void ParticleEmitter::setSize(float startMin, float startMax, float endMin, float endMax)
@@ -786,8 +790,7 @@ ParticleEmitter::TextureBlending ParticleEmitter::getTextureBlendingFromString(c
     }
 }
 
-
-void ParticleEmitter::update(long elapsedTime)
+void ParticleEmitter::update(float elapsedTime)
 {
     if (!isActive())
     {
@@ -795,7 +798,7 @@ void ParticleEmitter::update(long elapsedTime)
     }
 
     // Calculate the time passed since last update.
-    float elapsedSecs = (float)elapsedTime * 0.001f;
+    float elapsedSecs = elapsedTime * 0.001f;
 
     if (_started && _emissionRate)
     {
@@ -804,16 +807,15 @@ void ParticleEmitter::update(long elapsedTime)
 
         // How many particles should we emit this frame?
         GP_ASSERT(_timePerEmission);
-        unsigned int emitCount = _timeRunning / _timePerEmission;
-            
+        unsigned int emitCount = (unsigned int)(_timeRunning / _timePerEmission);
+
         if (emitCount)
         {
             if ((int)_timePerEmission > 0)
             {
-                _timeRunning %= (int)_timePerEmission;
+                _timeRunning = fmod(_timeRunning, (double)_timePerEmission);
             }
-
-            emit(emitCount);
+            emitOnce(emitCount);
         }
     }
 
@@ -932,7 +934,7 @@ void ParticleEmitter::draw()
         }
 
         // Begin sprite batch drawing
-        _spriteBatch->begin();
+        _spriteBatch->start();
 
         // 2D Rotation.
         static const Vector2 pivot(0.5f, 0.5f);
@@ -959,7 +961,7 @@ void ParticleEmitter::draw()
         }
 
         // Render.
-        _spriteBatch->end();
+        _spriteBatch->finish();
     }
 }
 

@@ -29,6 +29,7 @@ public:
      * release() method must be called. Note that calling release() does
      * NOT free any actual game objects created/returned from the Bundle
      * instance and those objects must be released separately.
+     * @script{create}
      */
     static Bundle* create(const char* path);
 
@@ -39,6 +40,7 @@ public:
      * @param id The ID of the scene to load (NULL to load the first scene).
      * 
      * @return The loaded scene, or NULL if the scene could not be loaded.
+     * @script{create}
      */
     Scene* loadScene(const char* id = NULL);
 
@@ -48,6 +50,7 @@ public:
      * @param id The ID of the node to load in the bundle.
      * 
      * @return The loaded node, or NULL if the node could not be loaded.
+     * @script{create}
      */
     Node* loadNode(const char* id);
 
@@ -57,6 +60,7 @@ public:
      * @param id The ID of the mesh to load.
      * 
      * @return The loaded mesh, or NULL if the mesh could not be loaded.
+     * @script{create}
      */
     Mesh* loadMesh(const char* id);
 
@@ -66,6 +70,7 @@ public:
      * @param id The ID of the font to load.
      * 
      * @return The loaded font, or NULL if the font could not be loaded.
+     * @script{create}
      */
     Font* loadFont(const char* id);
 
@@ -150,6 +155,11 @@ private:
      * Destructor.
      */
     ~Bundle();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    Bundle& operator=(const Bundle&);
 
     /**
      * Finds a reference by ID.
@@ -383,7 +393,7 @@ private:
      * Reads the animation channel data at the current file position into the given animation
      * (with the given animation target and target attribute).
      * 
-     * Note: this is used by #loadNode(const char*, Scene*) and #readAnimationChannel(Scene*, Animation*, const char*).
+     * Note: this is used by Bundle::loadNode(const char*, Scene*) and Bundle::readAnimationChannel(Scene*, Animation*, const char*).
      * 
      * @param animation The animation to the load channel into.
      * @param id The ID of the animation that this channel is loaded into.

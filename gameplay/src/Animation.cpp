@@ -450,6 +450,16 @@ Animation* Animation::clone(Channel* channel, AnimationTarget* target)
     // Release the animation because a newly created animation has a ref count of 1 and the channels hold the ref to animation.
     animation->release();
     GP_ASSERT(animation->getRefCount() == 1);
+
+    // Clone the clips
+    if (_clips)
+    {
+        for (std::vector<AnimationClip*>::iterator it = _clips->begin(); it != _clips->end(); ++it)
+        {
+            AnimationClip* newClip = (*it)->clone(animation);
+            animation->addClip(newClip);
+        }
+    }
     return animation;
 }
 

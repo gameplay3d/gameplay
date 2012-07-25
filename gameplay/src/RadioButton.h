@@ -30,6 +30,7 @@ namespace gameplay
          text        = <string>
          group       = <string>
          iconSize    = <width, height>   // The size to draw the radio button icon, if different from its size in the texture.
+         consumeEvents = <bool>          // Whether the radio button propogates input events to the Game's input event handler. Default is true.
     }
  @endverbatim
  */
@@ -38,6 +39,18 @@ class RadioButton : public Button
     friend class Container;
 
 public:
+
+    /**
+     * Create a new radio button control.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new radio button.
+     * @script{create}
+     */
+    static RadioButton* create(const char* id, Theme::Style* style);
+
     /**
      * Get whether this radio button is currently selected.
      *
@@ -59,6 +72,11 @@ public:
      * @return The size of the radio button icon.
      */
     const Vector2& getImageSize() const;
+
+    /**
+     * @see Control::getType
+     */
+    const char* getType() const;
 
     /**
      * Add a listener to be notified of specific events affecting

@@ -75,8 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Pass Class Reference</div>  </div>
 </div><!--header-->
@@ -102,16 +101,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abac7d0a5d8670b2e098c4277ab389e45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_effect.html">Effect</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#abac7d0a5d8670b2e098c4277ab389e45">getEffect</a> () const </td></tr>
 <tr class="memitem:a7ab510a8df6fb2588b89052a84839b0e"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a7ab510a8df6fb2588b89052a84839b0e">getAutoBindProperties</a> () const </td></tr>
 <tr class="memitem:a3f4db53739c8a28fb2573829e6fbab63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a3f4db53739c8a28fb2573829e6fbab63">setVertexAttributeBinding</a> (<a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> *binding)</td></tr>
+<tr class="memitem:a79534da42d2bc8dd0debe95c3e4c46cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a79534da42d2bc8dd0debe95c3e4c46cb">getVertexAttributeBinding</a> () const </td></tr>
 <tr class="memitem:a309772048014e32dc61ed01c7dfac34d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind</a> ()</td></tr>
 <tr class="memitem:a5ff979f261605f2a09c222812690e866"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_pass.html#a5ff979f261605f2a09c222812690e866">unbind</a> ()</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a807f0a09f6d88f6738f32cadeae4a3cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a807f0a09f6d88f6738f32cadeae4a3cd"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Technique</b></td></tr>
-<tr class="memitem:aa1212b6e372a0f45d2c01f3cd203af77"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1212b6e372a0f45d2c01f3cd203af77"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Material</b></td></tr>
-<tr class="memitem:aa11cf52cee463b783fb9c84651aa1565"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa11cf52cee463b783fb9c84651aa1565"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a pass for an object to be rendered.</p>
@@ -148,8 +140,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
       </table>
 </div>
 <div class="memdoc">
-<p>Get a list of properties to be auto-bound. </p>
-
+<p>Get a list of properties to be auto-bound.  
 </div>
 </div>
 <a class="anchor" id="abac7d0a5d8670b2e098c4277ab389e45"></a>
@@ -186,6 +177,24 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 
 </div>
 </div>
+<a class="anchor" id="a79534da42d2bc8dd0debe95c3e4c46cb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a>* <a class="el" href="classgameplay_1_1_pass.html#a79534da42d2bc8dd0debe95c3e4c46cb">gameplay::Pass::getVertexAttributeBinding</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets a vertex attribute binding for this pass.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The vertex attribute binding for this pass. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a3f4db53739c8a28fb2573829e6fbab63"></a>
 <div class="memitem">
 <div class="memproto">
@@ -200,7 +209,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
       </table>
 </div>
 <div class="memdoc">
-<p>Stores a vertex attribute binding for this pass.</p>
+<p>Sets a vertex attribute binding for this pass.</p>
 <p>When a mesh binding is set, the <a class="el" href="classgameplay_1_1_vertex_attribute_binding.html">VertexAttributeBinding</a> will be automatically bound when the <a class="el" href="classgameplay_1_1_pass.html#a309772048014e32dc61ed01c7dfac34d">bind()</a> method is called for the pass.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -233,7 +242,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderState</b></td>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

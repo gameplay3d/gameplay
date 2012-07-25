@@ -26,7 +26,7 @@ class PhysicsCharacter : public PhysicsGhostObject, public btActionInterface
 public:
 
     /**
-     * @see PhysicsCollisionObject#getType
+     * @see PhysicsCollisionObject::getType
      */
     PhysicsCollisionObject::Type getType() const;
 
@@ -40,7 +40,7 @@ public:
     bool isPhysicsEnabled() const;
 
     /**
-     * Enables or disables phyiscs simulation for the character.
+     * Enables or disables physics simulation for the character.
      *
      * When physics simulation is enabled (default), the physics character automatically
      * responds to collisions in the physics world. For example, the character will
@@ -167,11 +167,13 @@ public:
 
     /**
      * @see btActionInterface::updateAction
+     * @script{ignore}
      */
     void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 
     /**
      * @see btActionInterface::debugDraw
+     * @script{ignore}
      */
     void debugDraw(btIDebugDraw* debugDrawer);
 
@@ -190,7 +192,7 @@ private:
      * Use PhysicsController::createCharacter to create physics characters.
      *
      * @param node Scene node that represents the character.
-     * @param shape Physis collision shape definition.
+     * @param shape Physics collision shape definition.
      * @param mass The mass of the character.
      */
     PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass);

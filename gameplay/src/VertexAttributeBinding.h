@@ -16,14 +16,14 @@ class Effect;
  *
  * In a perfect world, this class would always be a binding directly between
  * a unique VertexFormat and an Effect, where the VertexFormat is simply the
- * definition of the layout of any annoymous vertex buffer. However, the OpenGL
+ * definition of the layout of any anonymous vertex buffer. However, the OpenGL
  * mechanism for setting up these bindings is Vertex Array Objects (VAOs).
  * OpenGL requires a separate VAO per vertex buffer object (VBO), rather than per
  * vertex layout definition. Therefore, although we would like to define this
  * binding between a VertexFormat and Effect, we are specifying the binding
  * between a Mesh and Effect to satisfy the OpenGL requirement of one VAO per VBO.
  *
- * Note that this class still does proivide a binding between a VertexFormat
+ * Note that this class still does provide a binding between a VertexFormat
  * and an Effect, however this binding is actually a client-side binding and 
  * should only be used when writing custom code that use client-side vertex
  * arrays, since it is slower than the server-side VAOs used by OpenGL
@@ -46,6 +46,7 @@ public:
      * @param effect The effect.
      * 
      * @return A VertexAttributeBinding for the requested parameters.
+     * @script{create}
      */
     static VertexAttributeBinding* create(Mesh* mesh, Effect* effect);
 
@@ -56,13 +57,14 @@ public:
      * set of parameters that need to be passed to the renderer to setup vertex attribute
      * bindings between a vertex buffer and a vertex shader. The specified vertexPointer is
      * a client-side block of memory that contains the vertices to be send to the renderer,
-     * formatted as indiicated in the specified vertexFormat parameter.
+     * formatted as indicated in the specified vertexFormat parameter.
      *
      * @param vertexFormat The vertex format.
      * @param vertexPointer Pointer to beginning of client-side vertex array.
      * @param effect The effect.
      * 
      * @return A VertexAttributeBinding for the requested parameters.
+     * @script{ignore}
      */
     static VertexAttributeBinding* create(const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect);
 
@@ -98,6 +100,11 @@ private:
      * Destructor.
      */
     ~VertexAttributeBinding();
+
+    /**
+     * Hidden copy assignment operator.
+     */
+    VertexAttributeBinding& operator=(const VertexAttributeBinding&);
 
     static VertexAttributeBinding* create(Mesh* mesh, const VertexFormat& vertexFormat, void* vertexPointer, Effect* effect);
 

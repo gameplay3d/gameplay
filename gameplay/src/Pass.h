@@ -37,11 +37,12 @@ public:
 
     /**
      * Get a list of properties to be auto-bound.
+     * @script{ignore}
      */
     const std::vector<std::string>* getAutoBindProperties() const;
 
     /**
-     * Stores a vertex attribute binding for this pass.
+     * Sets a vertex attribute binding for this pass.
      *
      * When a mesh binding is set, the VertexAttributeBinding will be automatically
      * bound when the bind() method is called for the pass.
@@ -49,6 +50,13 @@ public:
      * @param binding The VertexAttributeBinding to set (or NULL to remove an existing binding).
      */
     void setVertexAttributeBinding(VertexAttributeBinding* binding);
+
+    /**
+     * Sets a vertex attribute binding for this pass.
+     *
+     * @return The vertex attribute binding for this pass.
+     */
+    VertexAttributeBinding* getVertexAttributeBinding() const;
 
     /**
      * Binds the render state for this pass.

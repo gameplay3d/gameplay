@@ -77,8 +77,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Mesh Class Reference</div>  </div>
 </div><!--header-->
@@ -122,7 +121,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad3891cfdea5c84c0b329fbdcca183746"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#ad3891cfdea5c84c0b329fbdcca183746">isDynamic</a> () const </td></tr>
 <tr class="memitem:a23b265c465d554d50c7811f685b3bb6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a23b265c465d554d50c7811f685b3bb6f">getPrimitiveType</a> () const </td></tr>
 <tr class="memitem:a2115babdcc1cc60461beeb39f967d6bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a2115babdcc1cc60461beeb39f967d6bc">setPrimitiveType</a> (<a class="el" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">Mesh::PrimitiveType</a> type)</td></tr>
-<tr class="memitem:aba3016461ab9934887d5170ddd896280"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#aba3016461ab9934887d5170ddd896280">setVertexData</a> (void *vertexData, unsigned int vertexStart=0, unsigned int vertexCount=0)</td></tr>
+<tr class="memitem:a7c763cda6356fd4e7d94aea01e9977ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a7c763cda6356fd4e7d94aea01e9977ee">setVertexData</a> (float *vertexData, unsigned int vertexStart=0, unsigned int vertexCount=0)</td></tr>
 <tr class="memitem:a1eac134e6bbc66c01be9137fd321317d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh_part.html">MeshPart</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a1eac134e6bbc66c01be9137fd321317d">addPart</a> (<a class="el" href="classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4">PrimitiveType</a> primitiveType, <a class="el" href="classgameplay_1_1_mesh.html#a865d9e14d59471e8773694faa8656db1">Mesh::IndexFormat</a> indexFormat, unsigned int indexCount, bool dynamic=false)</td></tr>
 <tr class="memitem:a1265b40eb16a1315b339021358f25c15"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a1265b40eb16a1315b339021358f25c15">getPartCount</a> () const </td></tr>
 <tr class="memitem:a703bed334d6e765ff818a624d8432d8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_mesh_part.html">MeshPart</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a703bed334d6e765ff818a624d8432d8a">getPart</a> (unsigned int index)</td></tr>
@@ -139,12 +138,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a4dbf5442169c94b5808bbe39a86ad66e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#a4dbf5442169c94b5808bbe39a86ad66e">createQuadFullscreen</a> ()</td></tr>
 <tr class="memitem:ad67aec33949af9e286deefb03cc059ae"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#ad67aec33949af9e286deefb03cc059ae">createLines</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *points, unsigned int pointCount)</td></tr>
 <tr class="memitem:aa6fb3e513af5fa3bc51720e7437279e4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh.html#aa6fb3e513af5fa3bc51720e7437279e4">createBoundingBox</a> (const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;box)</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a2bf2a0e9b454c55aa5dcb5aa4698697b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2bf2a0e9b454c55aa5dcb5aa4698697b"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Model</b></td></tr>
-<tr class="memitem:a2b8dc7250e74bde2e1a403e1d88c8fac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b8dc7250e74bde2e1a403e1d88c8fac"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a mesh supporting various vertex formats and 1 or more MeshPart(s) to define how the vertices are connected. </p>
@@ -488,7 +481,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 <div class="memdoc">
 <p>Returns the bounding box for the points in this mesh.</p>
 <p>Only meshes loaded from bundle files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
-<p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not neccessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is neccessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
+<p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not necessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is necessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The bounding box for the mesh. </dd></dl>
 
 </div>
@@ -508,7 +501,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 <div class="memdoc">
 <p>Returns the bounding sphere for the points in the mesh.</p>
 <p>Only meshes loaded from bundle files are imported with valid bounding volumes. Programmatically created meshes will contain empty bounding volumes until the setBoundingBox and/or setBoundingSphere methods are called to specify the mesh's local bounds.</p>
-<p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not neccessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is neccessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
+<p>Meshes that are attached to a <a class="el" href="classgameplay_1_1_model.html">Model</a> with a <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a> will have a bounding volume that is not necessarily tight fighting on the <a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> vertices. Instead, the bounding volume will be an approximation that contains all possible vertex positions in all possible poses after skinning is applied. This is necessary since skinning vertices result in vertex positions that lie outside the original mesh bounds and could otherwise result in a bounding volume that does not fully contain an animated/skinned mesh.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The bounding sphere for the mesh. </dd></dl>
 
 </div>
@@ -757,14 +750,14 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aba3016461ab9934887d5170ddd896280"></a>
+<a class="anchor" id="a7c763cda6356fd4e7d94aea01e9977ee"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_mesh.html#aba3016461ab9934887d5170ddd896280">gameplay::Mesh::setVertexData</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_mesh.html#a7c763cda6356fd4e7d94aea01e9977ee">gameplay::Mesh::setVertexData</a> </td>
           <td>(</td>
-          <td class="paramtype">void *&#160;</td>
+          <td class="paramtype">float *&#160;</td>
           <td class="paramname"><em>vertexData</em>, </td>
         </tr>
         <tr>
@@ -803,7 +796,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Bundle</b></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 00:43:59 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

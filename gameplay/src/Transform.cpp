@@ -14,6 +14,7 @@ Transform::Transform()
 {
     _targetType = AnimationTarget::TRANSFORM;
     _scale.set(Vector3::one());
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
@@ -21,6 +22,7 @@ Transform::Transform(const Vector3& scale, const Quaternion& rotation, const Vec
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
@@ -28,6 +30,7 @@ Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(scale, rotation, translation);
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::Transform(const Transform& copy)
@@ -35,6 +38,7 @@ Transform::Transform(const Transform& copy)
 {
     _targetType = AnimationTarget::TRANSFORM;
     set(copy);
+    addScriptEvent("transformChanged", "<Transform>");
 }
 
 Transform::~Transform()
@@ -843,6 +847,7 @@ void Transform::transformChanged()
             l.listener->transformChanged(this, l.cookie);
         }
     }
+    fireScriptEvent<void>("transformChanged", this);
 }
 
 void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
@@ -853,6 +858,7 @@ void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
     transform->_scale.set(_scale);
     transform->_rotation.set(_rotation);
     transform->_translation.set(_translation);
+    transform->dirty(DIRTY_TRANSLATION | DIRTY_ROTATION | DIRTY_SCALE);
 }
 
 void Transform::applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight)

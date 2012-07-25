@@ -4,7 +4,7 @@
 MeshGame game;
 
 MeshGame::MeshGame()
-    : _font(NULL), _scene(NULL),_modelNode(NULL), _touched(false), _touchX(0)
+    : _font(NULL), _scene(NULL), _modelNode(NULL), _touched(false), _touchX(0)
 {
 }
 
@@ -14,6 +14,8 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
+    createGridModel();
+    
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
@@ -52,18 +54,18 @@ void MeshGame::finalize()
     SAFE_RELEASE(_scene);
 }
 
-void MeshGame::update(long elapsedTime)
+void MeshGame::update(float elapsedTime)
 {
     // Rotate model
     if (!_touched)
-        _modelNode->rotateY(MATH_DEG_TO_RAD(0.5f));
+        _modelNode->rotateY(elapsedTime * MATH_DEG_TO_RAD(0.05f));
 }
 
-void MeshGame::render(long elapsedTime)
+void MeshGame::render(float elapsedTime)
 {
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
-
+    
     // Visit all the nodes in the scene, drawing the models/mesh.
     _scene->visit(this, &MeshGame::drawScene);
 
@@ -124,18 +126,18 @@ void MeshGame::drawFrameRate(Font* font, const Vector4& color, unsigned int x, u
 {
     char buffer[10];
     sprintf(buffer, "%u", fps);
-    font->begin();
+    font->start();
     font->drawText(buffer, x, y, color, font->getSize());
-    font->end();
+    font->finish();
 }
 
 void MeshGame::drawSplash(void* param)
 {
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
     SpriteBatch* batch = SpriteBatch::create("res/logo_powered_white.png");
-    batch->begin();
+    batch->start();
     batch->draw(this->getWidth() * 0.5f, this->getHeight() * 0.5f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, 1.0f, 0.0f, Vector4::one(), true);
-    batch->end();
+    batch->finish();
     SAFE_DELETE(batch);
 }
 
@@ -144,7 +146,7 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
     // There needs to be an odd number of lines
     lineCount |= 1;
     const unsigned int pointCount = lineCount * 4;
-    const unsigned int verticesSize = pointCount * (3 + 3);
+    const unsigned int verticesSize = pointCount * (3 + 3);  // (3 (position(xyz) + 3 color(rgb))
 
     std::vector<float> vertices;
     vertices.resize(verticesSize);
@@ -219,5 +221,6 @@ Model* MeshGame::createGridModel(unsigned int lineCount)
 
     Model* model = Model::create(mesh);
     model->setMaterial("res/grid.material");
+    SAFE_RELEASE(mesh);
     return model;
 }

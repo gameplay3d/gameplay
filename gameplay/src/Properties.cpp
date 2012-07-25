@@ -7,7 +7,9 @@ namespace gameplay
 {
 
 // Utility functions (shared with SceneLoader).
+/** @script{ignore} */
 void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
+/** @script{ignore} */
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
 
 Properties::Properties()
@@ -572,7 +574,7 @@ Properties* Properties::getNamespace(const char* id, bool searchNames) const
         }
         
         // Search recursively.
-        ret = ret->getNamespace(id);
+        ret = ret->getNamespace(id, searchNames);
         if (ret != NULL)
         {
             return ret;
@@ -598,7 +600,7 @@ bool Properties::exists(const char* name) const
     return _properties.find(name) != _properties.end();
 }
 
-const bool isStringNumeric(const char* str)
+static const bool isStringNumeric(const char* str)
 {
     GP_ASSERT(str);
 
@@ -687,7 +689,7 @@ const char* Properties::getString(const char* name) const
     return NULL;
 }
 
-bool Properties::getBool(const char* name) const
+bool Properties::getBool(const char* name, bool defaultValue) const
 {
     const char* valueString = getString(name);
     if (valueString)
@@ -695,7 +697,7 @@ bool Properties::getBool(const char* name) const
         return (strcmp(valueString, "true") == 0);
     }
 
-    return false;
+    return defaultValue;
 }
 
 int Properties::getInt(const char* name) const

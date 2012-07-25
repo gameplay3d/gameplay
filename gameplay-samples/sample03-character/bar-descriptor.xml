@@ -40,8 +40,6 @@
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
 
-   <platformVersion>2.0.0.7971</platformVersion>
-
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>
         <autoOrients>false</autoOrients>
@@ -54,16 +52,13 @@
     
     <asset path="icon.png">icon.png</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders/colored.fsh">res/shaders/colored.fsh</asset>
-    <asset path="../../gameplay/res/shaders/colored.vsh">res/shaders/colored.vsh</asset>
-    <asset path="../../gameplay/res/shaders/colored-specular.fsh">res/shaders/colored-specular.fsh</asset>
-    <asset path="../../gameplay/res/shaders/colored-specular.vsh">res/shaders/colored-specular.vsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse.fsh">res/shaders/diffuse.fsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse.vsh">res/shaders/diffuse.vsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse-specular.fsh">res/shaders/diffuse-specular.fsh</asset>
-    <asset path="../../gameplay/res/shaders/diffuse-specular.vsh">res/shaders/diffuse-specular.vsh</asset>
-    <asset path="../../gameplay/res/shaders/textured.fsh">res/shaders/textured.fsh</asset>
-    <asset path="../../gameplay/res/shaders/textured.vsh">res/shaders/textured.vsh</asset>
+    <asset path="../../gameplay/res/shaders/colored.frag">res/shaders/colored.frag</asset>
+    <asset path="../../gameplay/res/shaders/colored.vert">res/shaders/colored.vert</asset>
+    <asset path="../../gameplay/res/shaders/textured.frag">res/shaders/textured.frag</asset>
+    <asset path="../../gameplay/res/shaders/textured.vert">res/shaders/textured.vert</asset>
+    <asset path="../../gameplay/res/shaders/textured-unlit.frag">res/shaders/textured-unlit.frag</asset>
+    <asset path="../../gameplay/res/shaders/textured-unlit.vert">res/shaders/textured-unlit.vert</asset>
+    <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
     <asset path="res/common">res/common</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
