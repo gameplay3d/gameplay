@@ -78,8 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::PhysicsCollisionShape Class Reference</div>  </div>
 </div><!--header-->
@@ -136,12 +135,6 @@ Static Public Member Functions</h2></td></tr>
 <a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">PhysicsCollisionShape::Definition</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_shape.html#aa55b67a049caafe1d68fc42a18462a5f">heightfield</a> (<a class="el" href="classgameplay_1_1_image.html">Image</a> *image)</td></tr>
 <tr class="memitem:aab5053b53f6a7b5a8abcaa23de98e2cf"><td class="memItemLeft" align="right" valign="top">static <br class="typebreak"/>
 <a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">PhysicsCollisionShape::Definition</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_shape.html#aab5053b53f6a7b5a8abcaa23de98e2cf">mesh</a> (<a class="el" href="classgameplay_1_1_mesh.html">Mesh</a> *<a class="el" href="classgameplay_1_1_physics_collision_shape.html#aab5053b53f6a7b5a8abcaa23de98e2cf">mesh</a>)</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ad018280e085823e2e430f6afdd26000c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad018280e085823e2e430f6afdd26000c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsController</b></td></tr>
-<tr class="memitem:a3c7aa887ecde6200e42d2abcaba2597b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c7aa887ecde6200e42d2abcaba2597b"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Base physics collision shape class that all supported shapes derive from. </p>
@@ -214,7 +207,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
   <table class="params">
     <tr><td class="paramname">extents</td><td>Extents of the box shape along the x, y and z axes. </td></tr>
     <tr><td class="paramname">center</td><td>Center point of the box. </td></tr>
-    <tr><td class="paramname">absolute</td><td>True to specifiy that the given center point is an absolute position. By default the center point is treated as relative to the location of the node that the shape is attached to.</td></tr>
+    <tr><td class="paramname">absolute</td><td>True to specify that the given center point is an absolute position. By default the center point is treated as relative to the location of the node that the shape is attached to.</td></tr>
   </table>
   </dd>
 </dl>
@@ -282,7 +275,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
     <tr><td class="paramname">radius</td><td>Radius of the capsule. </td></tr>
     <tr><td class="paramname">height</td><td>Height of the capsule. </td></tr>
     <tr><td class="paramname">center</td><td>Center point of the capsule. </td></tr>
-    <tr><td class="paramname">absolute</td><td>True to specifiy that the given center point is an absolute position. By default the center point is treated as relative to the location of the node that the shape is attached to.</td></tr>
+    <tr><td class="paramname">absolute</td><td>True to specify that the given center point is an absolute position. By default the center point is treated as relative to the location of the node that the shape is attached to.</td></tr>
   </table>
   </dd>
 </dl>
@@ -304,7 +297,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 </div>
 <div class="memdoc">
 <p>Returns the internal bullet physics shape object.</p>
-<dl class="section return"><dt>Returns:</dt><dd>The bullet shape object. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>The bullet shape object.  </dd></dl>
 
 </div>
 </div>
@@ -359,7 +352,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
       </table>
 </div>
 <div class="memdoc">
-<p>Defines a mesh shape using the specified mehs.</p>
+<p>Defines a mesh shape using the specified mesh.</p>
 <dl class="section return"><dt>Returns:</dt><dd><a class="el" href="structgameplay_1_1_physics_collision_shape_1_1_definition.html">Definition</a> of a mesh shape. </dd></dl>
 
 </div>
@@ -417,7 +410,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
   <table class="params">
     <tr><td class="paramname">radius</td><td>Radius of the sphere. </td></tr>
     <tr><td class="paramname">center</td><td>Center point of the sphere. </td></tr>
-    <tr><td class="paramname">absolute</td><td>True to specifiy that the given center point is an absolute position. By default the center point is treated as relative to the location of the node that the shape is attached to.</td></tr>
+    <tr><td class="paramname">absolute</td><td>True to specify that the given center point is an absolute position. By default the center point is treated as relative to the location of the node that the shape is attached to.</td></tr>
   </table>
   </dd>
 </dl>
@@ -425,11 +418,38 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsRigidBody</b>
 
 </div>
 </div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a04b204c2341457823385edf90cb79872"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HeightfieldData* <a class="el" href="classgameplay_1_1_physics_collision_shape.html#a04b204c2341457823385edf90cb79872">gameplay::PhysicsCollisionShape::heightfieldData</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+ 
+</div>
+</div>
+<a class="anchor" id="a572f7b3770c160965fa837dcec7571bc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MeshData* <a class="el" href="classgameplay_1_1_physics_collision_shape.html#a572f7b3770c160965fa837dcec7571bc">gameplay::PhysicsCollisionShape::meshData</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+ 
+</div>
+</div>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 22:06:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

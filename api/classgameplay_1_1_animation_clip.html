@@ -77,8 +77,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::AnimationClip Class Reference</div>  </div>
 </div><!--header-->
@@ -101,13 +100,14 @@ Inheritance diagram for gameplay::AnimationClip:</div>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">Listener</a></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ListenerEvent</b></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>ScriptListener</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a73cc315494e68a133565d839e27d9d13"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a73cc315494e68a133565d839e27d9d13">getID</a> () const </td></tr>
+<tr class="memitem:a964b19aa8de84b2fa40ac07df7ffddff"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a964b19aa8de84b2fa40ac07df7ffddff">getId</a> () const </td></tr>
 <tr class="memitem:a12c347102fdd8fdbe8e30804b1833742"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a12c347102fdd8fdbe8e30804b1833742">getAnimation</a> () const </td></tr>
 <tr class="memitem:a66b9cad3b41aba5a1695917489b6f92d"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">getStartTime</a> () const </td></tr>
 <tr class="memitem:ae0898f2d6b4d3d886d1f2bba8ef0dbd5"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ae0898f2d6b4d3d886d1f2bba8ef0dbd5">getEndTime</a> () const </td></tr>
-<tr class="memitem:a7e69fea3f954c14384937486db6bfe90"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a7e69fea3f954c14384937486db6bfe90">getElaspedTime</a> () const </td></tr>
+<tr class="memitem:a50deae8acd757bdde7c824b7297e95ed"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a50deae8acd757bdde7c824b7297e95ed">getElaspedTime</a> () const </td></tr>
 <tr class="memitem:ab29326cd02dd538d28900b127896ab01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ab29326cd02dd538d28900b127896ab01">setRepeatCount</a> (float repeatCount)</td></tr>
 <tr class="memitem:a006f61a1f72e9428b5d9717530de04c1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a006f61a1f72e9428b5d9717530de04c1">getRepeatCount</a> () const </td></tr>
 <tr class="memitem:ac177842ec1730ce35cd02c47b03f8155"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac177842ec1730ce35cd02c47b03f8155">setActiveDuration</a> (unsigned long duration)</td></tr>
@@ -125,15 +125,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abf7d596e7960b8dfa7c79ace78aeaf71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71">addBeginListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
 <tr class="memitem:af1e38797873c3fa5a8921e6b43e40719"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#af1e38797873c3fa5a8921e6b43e40719">addEndListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener)</td></tr>
 <tr class="memitem:ac1ffa1b5991a31c5810902f72c445e64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac1ffa1b5991a31c5810902f72c445e64">addListener</a> (<a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html">AnimationClip::Listener</a> *listener, unsigned long eventTime)</td></tr>
+<tr class="memitem:aca653dd7453eea98e31eea001f32e6c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#aca653dd7453eea98e31eea001f32e6c9">addBeginListener</a> (const char *function)</td></tr>
+<tr class="memitem:a247149e1d64d99afaf7483352e90a9b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a247149e1d64d99afaf7483352e90a9b8">addEndListener</a> (const char *function)</td></tr>
+<tr class="memitem:a99cba39780ba947ae9081d3eabae50d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a99cba39780ba947ae9081d3eabae50d9">addListener</a> (const char *function, unsigned long eventTime)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a32c79759c1e6a69d0d10db44579853b6"><td class="memItemLeft" align="right" valign="top">static const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a32c79759c1e6a69d0d10db44579853b6">REPEAT_INDEFINITE</a> = 0</td></tr>
-<tr><td colspan="2"><h2><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a7899599edce4988a894c8e7431e7bb85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7899599edce4988a894c8e7431e7bb85"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>AnimationController</b></td></tr>
-<tr class="memitem:af47625f50036c466946f960db7320bcf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af47625f50036c466946f960db7320bcf"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines the runtime session of an <a class="el" href="classgameplay_1_1_animation.html">Animation</a> to be played. </p>
@@ -162,6 +159,31 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 
 </div>
 </div>
+<a class="anchor" id="aca653dd7453eea98e31eea001f32e6c9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#abf7d596e7960b8dfa7c79ace78aeaf71">gameplay::AnimationClip::addBeginListener</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds an animation begin listener.</p>
+<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218">AnimationClip::Listener::animationEvent</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>The Lua script function to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> begins. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="af1e38797873c3fa5a8921e6b43e40719"></a>
 <div class="memitem">
 <div class="memproto">
@@ -180,6 +202,31 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> ends. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a247149e1d64d99afaf7483352e90a9b8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#af1e38797873c3fa5a8921e6b43e40719">gameplay::AnimationClip::addEndListener</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds an animation end listener.</p>
+<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218">AnimationClip::Listener::animationEvent</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>The Lua script function to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> ends. </td></tr>
   </table>
   </dd>
 </dl>
@@ -214,6 +261,42 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">listener</td><td>The listener to be called when the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> reaches the specified time in its playback. </td></tr>
+    <tr><td class="paramname">eventTime</td><td>The time the listener will be called during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. Must be between 0 and the duration of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a99cba39780ba947ae9081d3eabae50d9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#ac1ffa1b5991a31c5810902f72c445e64">gameplay::AnimationClip::addListener</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>eventTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds an animation listener to be called back at the specified eventTime during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>.</p>
+<p>Note: the given Lua function must have the same function signature as <a class="el" href="classgameplay_1_1_animation_clip_1_1_listener.html#ae46b7010e5e5c64f61dcd55755e9c218">AnimationClip::Listener::animationEvent</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>The Lua script function to be called when an <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> reaches the specified time in its playback. </td></tr>
     <tr><td class="paramname">eventTime</td><td>The time the listener will be called during the playback of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. Must be between 0 and the duration of the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
   </table>
   </dd>
@@ -324,16 +407,16 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 </div>
 <div class="memdoc">
 <p>Gets the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s duration.</p>
-<dl class="section return"><dt>Returns:</dt><dd>the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s duration. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s duration, in milliseconds. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7e69fea3f954c14384937486db6bfe90"></a>
+<a class="anchor" id="a50deae8acd757bdde7c824b7297e95ed"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned long <a class="el" href="classgameplay_1_1_animation_clip.html#a7e69fea3f954c14384937486db6bfe90">gameplay::AnimationClip::getElaspedTime</a> </td>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_animation_clip.html#a50deae8acd757bdde7c824b7297e95ed">gameplay::AnimationClip::getElaspedTime</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -364,12 +447,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 
 </div>
 </div>
-<a class="anchor" id="a73cc315494e68a133565d839e27d9d13"></a>
+<a class="anchor" id="a964b19aa8de84b2fa40ac07df7ffddff"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classgameplay_1_1_animation_clip.html#a73cc315494e68a133565d839e27d9d13">gameplay::AnimationClip::getID</a> </td>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_animation_clip.html#a964b19aa8de84b2fa40ac07df7ffddff">gameplay::AnimationClip::getId</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -506,7 +589,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 <p>Use REPEAT_INDEFINITE to play the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a> indefinitely.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">duration</td><td>The active duration that is set on the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>. </td></tr>
+    <tr><td class="paramname">duration</td><td>The active duration that is set on the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>, in milliseconds. </td></tr>
   </table>
   </dd>
 </dl>
@@ -622,7 +705,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Animation</b></td></
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 22:06:22 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
