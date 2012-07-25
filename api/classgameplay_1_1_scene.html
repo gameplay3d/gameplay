@@ -122,6 +122,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae234fd87e01b77182066b6f881cae3a6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *))</td></tr>
 <tr class="memitem:a27625217db95d54e5a5cc17a0bbbec46"><td class="memTemplParams" colspan="2">template&lt;class T , class C &gt; </td></tr>
 <tr class="memitem:a27625217db95d54e5a5cc17a0bbbec46"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a27625217db95d54e5a5cc17a0bbbec46">visit</a> (T *instance, bool(T::*visitMethod)(<a class="el" href="classgameplay_1_1_node.html">Node</a> *, C), C cookie)</td></tr>
+<tr class="memitem:a09271f311f4df134229c0bc2b9b7b127"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#a09271f311f4df134229c0bc2b9b7b127">visit</a> (const char *visitMethod)</td></tr>
 <tr class="memitem:aeae4174b22fc093cb18d0e56d4241643"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_scene.html#aeae4174b22fc093cb18d0e56d4241643">drawDebug</a> (unsigned int debugFlags)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -350,7 +351,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns:</dt><dd>The number of matches found. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>The number of matches found.  </dd></dl>
 
 </div>
 </div>
@@ -673,7 +674,7 @@ template&lt;class T , class C &gt; </div>
 <div class="memdoc">
 <p>Visits each node in the scene and calls the specified method pointer.</p>
 <p>Calling this method invokes the specified method pointer for each node in the scene hierarchy, passing the <a class="el" href="classgameplay_1_1_node.html">Node</a> and the specified cookie value.</p>
-<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a cookie of a user-specified type. The scene travesal continues while visitMethod return true. Returning false will cause the traversal to stop.</p>
+<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a cookie of a user-specified type. The scene traversal continues while visitMethod return true. Returning false will cause the traversal to stop.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>The pointer to an instance of the object that contains visitMethod. </td></tr>
@@ -685,11 +686,37 @@ template&lt;class T , class C &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a09271f311f4df134229c0bc2b9b7b127"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_scene.html#ae234fd87e01b77182066b6f881cae3a6">gameplay::Scene::visit</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>visitMethod</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Visits each node in the scene and calls the specified Lua function.</p>
+<p>Calling this method invokes the specified Lua function for each node in the scene hierarchy.</p>
+<p>The visitMethod parameter must be a string containing the name of a valid Lua function that has a boolean return type and accepts a single parameter of type Node*.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visitMethod</td><td>The name of the Lua function to call for each node in the scene. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 1 2012 22:06:23 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
