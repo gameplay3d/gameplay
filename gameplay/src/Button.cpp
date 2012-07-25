@@ -64,14 +64,12 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             setState(Control::FOCUS);
 
             notifyListeners(Listener::CLICK);
-
-            return _consumeInputEvents;
         }
         else
         {
             setState(Control::NORMAL);
         }
-        break;
+        return _consumeInputEvents;
 
     case Touch::TOUCH_MOVE:
         return _consumeInputEvents;
