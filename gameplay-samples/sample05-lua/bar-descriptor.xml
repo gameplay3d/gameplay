@@ -9,7 +9,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry Tablet OS applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>org.gameplay3d.sample05</id>
+    <id>org.gameplay3d_sample05</id>
 
     <!-- The name that is displayed in the BlackBerry Tablet OS application installer. 
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -52,14 +52,6 @@
 
     <asset path="icon.png">icon.png</asset>
     <asset path="game.config">game.config</asset>
-    <!-- These individual assets are covered by the umbrella 'res' asset element.
-	  -	<asset path="res/arial40.gpb">res/arial40.gpb</asset>
-	  -	<asset path="res/box-diffuse.png">res/box-diffuse.png</asset>
-	  -	<asset path="res/box.gpb">res/box.gpb</asset>
-	  -	<asset path="res/box.material">res/box.material</asset>
-	  -	<asset path="res/grid.material">res/grid.material</asset>
-	  -	<asset path="res/script.lua">res/script.lua</asset>
-      -->
     <asset path="res">res</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
     <asset path="../../gameplay/res/shaders/textured.vert">res/shaders/textured.vert</asset>
