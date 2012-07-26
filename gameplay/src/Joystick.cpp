@@ -156,7 +156,8 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
             else
             {
                 value.set(_displacement);
-                value.normalize();
+                GP_ASSERT(_radius);
+                value.scale(1.0f / _radius);
             }
 
             // Check if the value has changed. Won't this always be the case?
@@ -178,7 +179,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
             _displacement.set(dx, dy);
             
             Vector2 value;
-            if (fabs(_displacement.x) > _radius || fabs(_displacement.y) > _radius)
+            if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
             {
                 _displacement.normalize();
                 value.set(_displacement);
@@ -187,7 +188,8 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
             else
             {
                 value.set(_displacement);
-                value.normalize();
+                GP_ASSERT(_radius);
+                value.scale(1.0f / _radius);
             }
 
             if (_value != value)
