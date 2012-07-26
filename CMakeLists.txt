@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(GamePlay)
 
-set(GAMEPLAY_VERSION 1.4.0)
+set(GAMEPLAY_VERSION 1.5.0)
 
 # gameplay library
 add_subdirectory(gameplay)
