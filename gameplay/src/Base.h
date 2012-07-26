@@ -15,6 +15,7 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <list>
 #include <set>
@@ -152,7 +153,13 @@ extern void printError(const char* format, ...);
 #endif
 
 // Audio (OpenAL/Vorbis)
-#if defined (__QNX__) || defined(__ANDROID__)
+#ifdef __QNX__
+#include <AL/al.h>
+#include <AL/alc.h>
+#elif __ANDROID__
+#include <AL/al.h>
+#include <AL/alc.h>
+#elif __linux__
 #include <AL/al.h>
 #include <AL/alc.h>
 #elif WIN32
@@ -205,6 +212,10 @@ using std::va_list;
     #define GLEW_STATIC
     #include <GL/glew.h>
     #define USE_VAO
+#elif __linux__
+        #define GLEW_STATIC
+        #include <GL/glew.h>
+        #define USE_VAO
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
