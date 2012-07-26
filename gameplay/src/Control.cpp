@@ -707,7 +707,7 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         // Controls that don't have an ACTIVE state go to the FOCUS state when pressed.
         // (Other controls, such as buttons and sliders, become ACTIVE when pressed and go to the FOCUS state on release.)
         // Labels are never any state other than NORMAL.
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+        if (_contactIndex == INVALID_CONTACT_INDEX && x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
         {
             _contactIndex = (int) contactIndex;
@@ -720,26 +720,28 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         {
             // If this control was in focus, it's not any more.
             _state = NORMAL;
-            _contactIndex = INVALID_CONTACT_INDEX;
         }
         break;
             
     case Touch::TOUCH_RELEASE:
-
-        _contactIndex = INVALID_CONTACT_INDEX;
-
-        // Always trigger Listener::RELEASE
-        notifyListeners(Listener::RELEASE);
-
-        // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        if (_contactIndex == (int)contactIndex)
         {
-            // Leave this control in the FOCUS state.
-            notifyListeners(Listener::CLICK);
-        }
+			_contactIndex = INVALID_CONTACT_INDEX;
 
-        return _consumeInputEvents;
+			// Always trigger Listener::RELEASE
+			notifyListeners(Listener::RELEASE);
+
+			// Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
+			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+			{
+				// Leave this control in the FOCUS state.
+				notifyListeners(Listener::CLICK);
+			}
+
+			return _consumeInputEvents;
+        }
+        break;
     }
 
     return false;
