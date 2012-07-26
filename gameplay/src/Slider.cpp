@@ -101,10 +101,16 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
+        if (_contactIndex != INVALID_CONTACT_INDEX)
+            return false;
         _state = Control::ACTIVE;
+        
         // Fall through to calculate new value.
     case Touch::TOUCH_MOVE:
-    case Touch::TOUCH_RELEASE:
+    
+        if (evt != Touch::TOUCH_PRESS && _contactIndex != (int)contactIndex)
+            return false;
+
         if (_state == ACTIVE &&
             x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
@@ -145,12 +151,14 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
 
             _dirty = true;
         }
+        break;
+    case Touch::TOUCH_RELEASE:
 
-        if (evt == Touch::TOUCH_RELEASE)
-        {
-            _state = FOCUS;
-            _dirty = true;
-        }
+        if (_contactIndex != (int) contactIndex)// (evt == Touch::TOUCH_RELEASE)
+            return false;
+
+        _dirty = true;
+        _state = FOCUS;
         break;
     }
     
@@ -180,7 +188,7 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
         case Mouse::MOUSE_WHEEL:
         {
-            if (_state == FOCUS)
+            if (_state == FOCUS || _state == ACTIVE)
             {
                 float total = _max - _min;
                 float oldValue = _value;
