@@ -116,59 +116,39 @@ public:
     Node* getParent() const;
 
     /**
-     * Returns whether this node is visible (true by default).
+     * Determines if a custom tag with the specified name is set.
      *
-     * @return Whether the node is visible.
+     * @param name Name of the tag to query.
+     *
+     * @return true if the tag is set, false otherwise.
      */
-    bool isVisible() const;
+    bool hasTag(const char* name) const;
 
     /**
-     * Sets whether this node is visible.
+     * Returns the value of the custom tag with the given name.
      *
-     * @return Whether this node is visible.
+     * @param name Name of the tag to return.
+     *
+     * @return The value of the given tag, or NULL if the tag is not set.
      */
-    void setVisible(bool visible);
+    const char* getTag(const char* name) const;
 
     /**
-     * Returns whether this node is transparent (false by default).
+     * Sets a custom tag on this Node.
      *
-     * All nodes are opaque by default, unless otherwise set as
-     * transparent using the setTransparent method. These methods
-     * can be used to flag nodes as transparent and then query the
-     * property during game execution, for example to render all
-     * opaque objects first, followed by transparent objects with
-     * alpha blending enabled.
+     * Custom tags can be used for a variety of purposes within a game. For example,
+     * a tag called "transparent" can be added to nodes, to indicate which nodes in
+     * a scene are transparent. This tag can then be read during rendering to sort
+     * transparent and opaque objects for correct drawing order. Another example
+     * is using a "visible" tag to mark nodes as invisible to be skipped during
+     * rendering.
      *
-     * @return Whether the node is transparent.
+     * Setting a tag to NULL removes the tag from the Node.
+     *
+     * @param name Name of the tag to set.
+     * @param value Optional value of the tag (empty string by default).
      */
-    bool isTransparent() const;
-
-    /**
-     * Sets whether this node is transparent.
-     *
-     * @param transparent Whether the node is transparent.
-     */
-    void setTransparent(bool transparent);
-
-    /**
-     * Returns whether this node is dynamic.
-     *
-     * The dynamic propery can be used to flag nodes as being non-static.
-     * This can be useful for modifying behavior or rendering/material
-     * logic at runtime for static vs dynamic (moving) objects. An
-     * example would be determing whether to use static or  dyanmic
-     * lighting materials for node models during loading.
-     *
-     * @return Whether this node is dynamic (false by default).
-     */
-    bool isDynamic() const;
-
-    /**
-     * Sets whether this node is dynamic.
-     *
-     * @param dynamic Whether the node is dynamic.
-     */
-    void setDynamic(bool dynamic);
+    void setTag(const char* name, const char* value = "");
 
     /**
      * Returns the user pointer for this node.
@@ -730,9 +710,9 @@ protected:
     unsigned int _childCount;
 
     /**
-     * Node property flags. 
-     */ 
-    unsigned int _nodeFlags;
+     * List of custom tags for a node.
+     */
+    std::map<std::string, std::string>* _tags;
 
     /**
      * Pointer to the Camera attached to the Node.
