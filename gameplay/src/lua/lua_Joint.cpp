@@ -81,6 +81,7 @@ void luaRegister_Joint()
         {"getScaleY", lua_Joint_getScaleY},
         {"getScaleZ", lua_Joint_getScaleZ},
         {"getScene", lua_Joint_getScene},
+        {"getTag", lua_Joint_getTag},
         {"getTranslation", lua_Joint_getTranslation},
         {"getTranslationView", lua_Joint_getTranslationView},
         {"getTranslationWorld", lua_Joint_getTranslationWorld},
@@ -95,9 +96,7 @@ void luaRegister_Joint()
         {"getWorldMatrix", lua_Joint_getWorldMatrix},
         {"getWorldViewMatrix", lua_Joint_getWorldViewMatrix},
         {"getWorldViewProjectionMatrix", lua_Joint_getWorldViewProjectionMatrix},
-        {"isDynamic", lua_Joint_isDynamic},
-        {"isTransparent", lua_Joint_isTransparent},
-        {"isVisible", lua_Joint_isVisible},
+        {"hasTag", lua_Joint_hasTag},
         {"release", lua_Joint_release},
         {"removeAllChildren", lua_Joint_removeAllChildren},
         {"removeChild", lua_Joint_removeChild},
@@ -117,7 +116,6 @@ void luaRegister_Joint()
         {"setAudioSource", lua_Joint_setAudioSource},
         {"setCamera", lua_Joint_setCamera},
         {"setCollisionObject", lua_Joint_setCollisionObject},
-        {"setDynamic", lua_Joint_setDynamic},
         {"setForm", lua_Joint_setForm},
         {"setId", lua_Joint_setId},
         {"setIdentity", lua_Joint_setIdentity},
@@ -129,12 +127,11 @@ void luaRegister_Joint()
         {"setScaleX", lua_Joint_setScaleX},
         {"setScaleY", lua_Joint_setScaleY},
         {"setScaleZ", lua_Joint_setScaleZ},
+        {"setTag", lua_Joint_setTag},
         {"setTranslation", lua_Joint_setTranslation},
         {"setTranslationX", lua_Joint_setTranslationX},
         {"setTranslationY", lua_Joint_setTranslationY},
         {"setTranslationZ", lua_Joint_setTranslationZ},
-        {"setTransparent", lua_Joint_setTransparent},
-        {"setVisible", lua_Joint_setVisible},
         {"transformPoint", lua_Joint_transformPoint},
         {"transformVector", lua_Joint_transformVector},
         {"translate", lua_Joint_translate},
@@ -3064,6 +3061,47 @@ int lua_Joint_getScene(lua_State* state)
     return 0;
 }
 
+int lua_Joint_getTag(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                Joint* instance = getInstance(state);
+                const char* result = instance->getTag(param1);
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joint_getTag - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joint_getTranslation(lua_State* state)
 {
     // Get the number of parameters.
@@ -3712,7 +3750,7 @@ int lua_Joint_getWorldViewProjectionMatrix(lua_State* state)
     return 0;
 }
 
-int lua_Joint_isDynamic(lua_State* state)
+int lua_Joint_hasTag(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -3720,12 +3758,16 @@ int lua_Joint_isDynamic(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 1:
+        case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
                 Joint* instance = getInstance(state);
-                bool result = instance->isDynamic();
+                bool result = instance->hasTag(param1);
 
                 // Push the return value onto the stack.
                 lua_pushboolean(state, result);
@@ -3734,88 +3776,14 @@ int lua_Joint_isDynamic(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "lua_Joint_isDynamic - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Joint_hasTag - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_isTransparent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Joint* instance = getInstance(state);
-                bool result = instance->isTransparent();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Joint_isTransparent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_isVisible(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Joint* instance = getInstance(state);
-                bool result = instance->isVisible();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Joint_isVisible - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4892,44 +4860,6 @@ int lua_Joint_setCollisionObject(lua_State* state)
     return 0;
 }
 
-int lua_Joint_setDynamic(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
-
-                Joint* instance = getInstance(state);
-                instance->setDynamic(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Joint_setDynamic - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Joint_setForm(lua_State* state)
 {
     // Get the number of parameters.
@@ -5450,6 +5380,68 @@ int lua_Joint_setScaleZ(lua_State* state)
     return 0;
 }
 
+int lua_Joint_setTag(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                Joint* instance = getInstance(state);
+                instance->setTag(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joint_setTag - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = ScriptUtil::getString(3, false);
+
+                Joint* instance = getInstance(state);
+                instance->setTag(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joint_setTag - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joint_setTranslation(lua_State* state)
 {
     // Get the number of parameters.
@@ -5616,82 +5608,6 @@ int lua_Joint_setTranslationZ(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Joint_setTranslationZ - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_setTransparent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
-
-                Joint* instance = getInstance(state);
-                instance->setTransparent(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Joint_setTransparent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joint_setVisible(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
-
-                Joint* instance = getInstance(state);
-                instance->setVisible(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Joint_setVisible - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

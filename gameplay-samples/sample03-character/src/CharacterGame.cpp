@@ -80,7 +80,7 @@ bool CharacterGame::initializeScene(Node* node)
 void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* material)
 {
     // Bind light shader parameters to dynamic objects only
-    if (node->isDynamic())
+    if (node->hasTag("dynamic"))
     {
         Node* lightNode = scene->findNode("sun");
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
@@ -147,7 +147,7 @@ void CharacterGame::drawSplash(void* param)
 
 bool CharacterGame::drawScene(Node* node, bool transparent)
 {
-    if (node->getModel() && (transparent == node->isTransparent()))
+    if (node->getModel() && (transparent == node->hasTag("transparent")))
         node->getModel()->draw(_wireframe);
 
     return true;
@@ -549,12 +549,12 @@ void CharacterGame::adjustCamera(float elapsedTime)
     {
         float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
         float alpha = d < 10 ? (d * 0.1f) : 1.0f;
-        _characterMeshNode->setTransparent(alpha < 1.0f);
+        _characterMeshNode->setTag("transparent", alpha < 1.0f ? "true" : NULL);
         _materialParameterAlpha->setValue(alpha);
     }
     else
     {
-        _characterMeshNode->setTransparent(false);
+        _characterMeshNode->setTag("transparent", NULL);
         _materialParameterAlpha->setValue(1.0f);
     }
 }
