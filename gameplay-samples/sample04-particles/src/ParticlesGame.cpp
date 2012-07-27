@@ -25,6 +25,8 @@ void ParticlesGame::initialize()
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &ParticlesGame::drawSplash, NULL, 1000L);
 
+    setMultiTouch(true);
+
     // Set keyboard state.
     _wDown = _aDown = _sDown = _dDown = false;
     _touched = false;
