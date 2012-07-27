@@ -34,7 +34,6 @@ form gamepadForm
             button
             {
                 style = buttonAStyle
-                consumeEvents = false
                 size = 128, 128
                 alignment = ALIGN_BOTTOM_LEFT
             }
@@ -42,7 +41,6 @@ form gamepadForm
             button
             {
                 style = buttonBStyle
-                consumeEvents = false
                 size = 128, 128
                 alignment = ALIGN_TOP_RIGHT
             }

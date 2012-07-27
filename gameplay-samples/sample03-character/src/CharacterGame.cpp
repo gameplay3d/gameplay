@@ -547,7 +547,7 @@ void CharacterGame::adjustCamera(float elapsedTime)
     // If the character is closer than 10 world units to the camera, apply transparency to the character so he does not obstruct the view.
     if (occlusion)
     {
-        float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterMeshNode->getTranslationWorld());
+        float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterNode->getTranslationWorld());
         float alpha = d < 10 ? (d * 0.1f) : 1.0f;
         _characterMeshNode->setTag("transparent", alpha < 1.0f ? "true" : NULL);
         _materialParameterAlpha->setValue(alpha);
