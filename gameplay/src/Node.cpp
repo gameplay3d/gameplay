@@ -13,17 +13,12 @@
 #define NODE_DIRTY_BOUNDS 2
 #define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
 
-// Node property flags
-#define NODE_FLAG_VISIBLE 1
-#define NODE_FLAG_TRANSPARENT 2
-#define NODE_FLAG_DYNAMIC 4
-
 namespace gameplay
 {
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
-    _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
@@ -52,6 +47,7 @@ Node::~Node()
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
     SAFE_DELETE(_collisionObject);
+    SAFE_DELETE(_tags);
 
     setAgent(NULL);
 
@@ -213,43 +209,46 @@ Node* Node::getParent() const
     return _parent;
 }
 
-bool Node::isVisible() const
+bool Node::hasTag(const char* name) const
 {
-    return ((_nodeFlags & NODE_FLAG_VISIBLE) == NODE_FLAG_VISIBLE);
+    GP_ASSERT(name);
+
+    return (_tags ? _tags->find(name) != _tags->end() : false);
 }
 
-void Node::setVisible(bool visible)
+const char* Node::getTag(const char* name) const
 {
-    if (visible)
-        _nodeFlags |= NODE_FLAG_VISIBLE;
+    GP_ASSERT(name);
+
+    if (!_tags)
+        return NULL;
+
+    std::map<std::string, std::string>::const_iterator itr = _tags->find(name);
+    return (itr == _tags->end() ? NULL : itr->second.c_str());
+}
+
+void Node::setTag(const char* name, const char* value)
+{
+    GP_ASSERT(name);
+
+    if (value == NULL)
+    {
+        // Removing tag
+        if (_tags)
+        {
+            _tags->erase(name);
+            if (_tags->size() == 0)
+                SAFE_DELETE(_tags);
+        }
+    }
     else
-        _nodeFlags &= ~NODE_FLAG_VISIBLE;
-}
+    {
+        // Setting tag
+        if (_tags == NULL)
+            _tags = new std::map<std::string, std::string>();
 
-bool Node::isTransparent() const
-{
-    return ((_nodeFlags & NODE_FLAG_TRANSPARENT) == NODE_FLAG_TRANSPARENT);
-}
-
-void Node::setTransparent(bool transparent)
-{
-    if (transparent)
-        _nodeFlags |= NODE_FLAG_TRANSPARENT;
-    else
-        _nodeFlags &= ~NODE_FLAG_TRANSPARENT;
-}
-
-bool Node::isDynamic() const
-{
-    return ((_nodeFlags & NODE_FLAG_DYNAMIC) == NODE_FLAG_DYNAMIC);
-}
-
-void Node::setDynamic(bool dynamic)
-{
-    if (dynamic)
-        _nodeFlags |= NODE_FLAG_DYNAMIC;
-    else
-        _nodeFlags &= ~NODE_FLAG_DYNAMIC;
+        (*_tags)[name] = value;
+    }
 }
 
 void* Node::getUserPointer() const
