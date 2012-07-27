@@ -123,103 +123,115 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
     {
         case Touch::TOUCH_PRESS:
         {
-            float dx = 0.0f;
-            float dy = 0.0f;
-
-            _contactIndex = (int) contactIndex;
-            notifyListeners(Listener::PRESS);
-
-            // Get the displacement of the touch from the centre.
-            if (!_relative)
+            if (_contactIndex == INVALID_CONTACT_INDEX)
             {
-                dx = x - _screenRegion.width * 0.5f;
-                dy = _screenRegion.height * 0.5f - y;
-            }
-            else
-            {
-                _screenRegion.x = x + _bounds.x - _screenRegion.width * 0.5f;
-                _screenRegion.y = y + _bounds.y - _screenRegion.height * 0.5f;
-            }
+                float dx = 0.0f;
+                float dy = 0.0f;
 
-            _displacement.set(dx, dy);
+                _contactIndex = (int) contactIndex;
+                notifyListeners(Listener::PRESS);
 
-            // If the displacement is greater than the radius, then cap the displacement to the
-            // radius.
-            
-            Vector2 value;
-            if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
-            {
-                _displacement.normalize();
-                value.set(_displacement);
-                _displacement.scale(_radius);
-            }
-            else
-            {
-                value.set(_displacement);
-                GP_ASSERT(_radius);
-                value.scale(1.0f / _radius);
-            }
+                // Get the displacement of the touch from the centre.
+                if (!_relative)
+                {
+                    dx = x - _screenRegion.width * 0.5f;
+                    dy = _screenRegion.height * 0.5f - y;
+                }
+                else
+                {
+                    _screenRegion.x = x + _bounds.x - _screenRegion.width * 0.5f;
+                    _screenRegion.y = y + _bounds.y - _screenRegion.height * 0.5f;
+                }
 
-            // Check if the value has changed. Won't this always be the case?
-            if (_value != value)
-            {
-                _value.set(value);
-                _dirty = true;
-                notifyListeners(Listener::VALUE_CHANGED);
-            }
+                _displacement.set(dx, dy);
 
-            _state = ACTIVE;
-            return _consumeInputEvents;
+                // If the displacement is greater than the radius, then cap the displacement to the
+                // radius.
+                
+                Vector2 value;
+                if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
+                {
+                    _displacement.normalize();
+                    value.set(_displacement);
+                    _displacement.scale(_radius);
+                }
+                else
+                {
+                    value.set(_displacement);
+                    GP_ASSERT(_radius);
+                    value.scale(1.0f / _radius);
+                }
+
+                // Check if the value has changed. Won't this always be the case?
+                if (_value != value)
+                {
+                    _value.set(value);
+                    _dirty = true;
+                    notifyListeners(Listener::VALUE_CHANGED);
+                }
+
+                _state = ACTIVE;
+                return _consumeInputEvents;
+            }
+            break;
         }
         case Touch::TOUCH_MOVE:
         {
-            float dx = x - ((_relative) ? _screenRegion.x - _bounds.x : 0.0f) - _screenRegion.width * 0.5f;
-            float dy = -(y - ((_relative) ? _screenRegion.y - _bounds.y : 0.0f) - _screenRegion.height * 0.5f);
+            if (_contactIndex == (int) contactIndex)
+            {
+                float dx = x - ((_relative) ? _screenRegion.x - _bounds.x : 0.0f) - _screenRegion.width * 0.5f;
+                float dy = -(y - ((_relative) ? _screenRegion.y - _bounds.y : 0.0f) - _screenRegion.height * 0.5f);
             
-            _displacement.set(dx, dy);
+                _displacement.set(dx, dy);
             
-            Vector2 value;
-            if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
-            {
-                _displacement.normalize();
-                value.set(_displacement);
-                _displacement.scale(_radius);
-            }
-            else
-            {
-                value.set(_displacement);
-                GP_ASSERT(_radius);
-                value.scale(1.0f / _radius);
-            }
+                Vector2 value;
+                if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
+                {
+                    _displacement.normalize();
+                    value.set(_displacement);
+                    _displacement.scale(_radius);
+                }
+                else
+                {
+                    value.set(_displacement);
+                    GP_ASSERT(_radius);
+                    value.scale(1.0f / _radius);
+                }
 
-            if (_value != value)
-            {
-                _value.set(value);
-                _dirty = true;
-                notifyListeners(Listener::VALUE_CHANGED);
-            }
+                if (_value != value)
+                {
+                    _value.set(value);
+                    _dirty = true;
+                    notifyListeners(Listener::VALUE_CHANGED);
+                }
 
-            return _consumeInputEvents;
+                return _consumeInputEvents;
+            }
+            break;
         }
         case Touch::TOUCH_RELEASE:
         {
-            _contactIndex = INVALID_CONTACT_INDEX;
-
-            notifyListeners(Listener::RELEASE);
-
-            // Reset displacement and direction vectors.
-            _displacement.set(0.0f, 0.0f);
-            Vector2 value(_displacement);
-            if (_value != value)
+            if (_contactIndex == (int) contactIndex)
             {
-                _value.set(value);
-                _dirty = true;
-                notifyListeners(Listener::VALUE_CHANGED);
+                _contactIndex = INVALID_CONTACT_INDEX;
+
+                notifyListeners(Listener::RELEASE);
+
+                // Reset displacement and direction vectors.
+                _displacement.set(0.0f, 0.0f);
+                Vector2 value(_displacement);
+                if (_value != value)
+                {
+                    _value.set(value);
+                    _dirty = true;
+                    notifyListeners(Listener::VALUE_CHANGED);
+                }
+
+                _state = NORMAL;
+
+                return _consumeInputEvents;
             }
-
-            _state = NORMAL;
-
-            return _consumeInputEvents;
+            break;
         }
     }
 
