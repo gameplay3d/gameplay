@@ -38,43 +38,49 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        if (_contactIndex == INVALID_CONTACT_INDEX)
         {
-            _contactIndex = (int) contactIndex;
+			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+			{
+				_contactIndex = (int) contactIndex;
 
-            setState(Control::ACTIVE);
+				setState(Control::ACTIVE);
 
-            notifyListeners(Listener::PRESS);
+				notifyListeners(Listener::PRESS);
 
-            return _consumeInputEvents;
-        }
-        else
-        {
-            setState(Control::NORMAL);
+				return _consumeInputEvents;
+			}
+			else
+			{
+				setState(Control::NORMAL);
+			}
         }
         break;
 
     case Touch::TOUCH_RELEASE:
-        _contactIndex = INVALID_CONTACT_INDEX;
-        notifyListeners(Listener::RELEASE);
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        if (_contactIndex == (int) contactIndex)
         {
-            setState(Control::FOCUS);
+			_contactIndex = INVALID_CONTACT_INDEX;
+			notifyListeners(Listener::RELEASE);
+			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+			{
+				setState(Control::FOCUS);
 
-            notifyListeners(Listener::CLICK);
-
-            return _consumeInputEvents;
-        }
-        else
-        {
-            setState(Control::NORMAL);
+				notifyListeners(Listener::CLICK);
+			}
+			else
+			{
+				setState(Control::NORMAL);
+			}
+			return _consumeInputEvents;
         }
         break;
-
     case Touch::TOUCH_MOVE:
-        return _consumeInputEvents;
+        if (_contactIndex == (int) contactIndex)
+            return _consumeInputEvents;
+        break;
     }
 
     return false;
