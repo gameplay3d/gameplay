@@ -116,6 +116,7 @@ public:
     void renameAnimations(std::vector<std::string>& animationIds, const char* newId);
 
 private:
+
     /**
      * Computes the bounds of all meshes in the node hierarchy.
      */
