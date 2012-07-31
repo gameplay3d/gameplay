@@ -72,7 +72,7 @@ public:
      * @param indexCount The number of indices to be set.
      * @script{ignore}
      */
-    void setIndexData(void* indexData, unsigned int indexStart, unsigned int indexCount);
+    void setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount);
 
 private:
 
