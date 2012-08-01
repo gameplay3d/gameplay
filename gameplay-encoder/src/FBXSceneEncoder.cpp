@@ -165,6 +165,14 @@ bool isGroupAnimationPossible(FbxScene* fbxScene);
 bool isGroupAnimationPossible(FbxNode* fbxNode);
 bool isGroupAnimationPossible(FbxMesh* fbxMesh);
 
+FbxAnimCurve* getCurve(FbxPropertyT<FbxDouble3>& prop, FbxAnimLayer* animLayer, const char* pChannel)
+{
+#if FBXSDK_VERSION_MAJOR == 2013 && FBXSDK_VERSION_MINOR == 1
+    return prop.GetCurve<FbxAnimCurve>(animLayer, pChannel);
+#else
+    return prop.GetCurve(animLayer, pChannel);
+#endif
+}
 
 ////////////////////////////////////
 // Member Functions
@@ -311,55 +319,55 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
     float startTime = FLT_MAX, stopTime = -1.0f, frameRate = -FLT_MAX;
     bool tx = false, ty = false, tz = false, rx = false, ry = false, rz = false, sx = false, sy = false, sz = false;
     FbxAnimCurve* animCurve = NULL;
-    animCurve = fbxNode->LclTranslation.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_X);
+    animCurve = getCurve(fbxNode->LclTranslation, animLayer, FBXSDK_CURVENODE_COMPONENT_X);
     if (animCurve)
     {
         tx = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclTranslation.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_Y);
+    animCurve = getCurve(fbxNode->LclTranslation, animLayer, FBXSDK_CURVENODE_COMPONENT_Y);
     if (animCurve)
     {
         ty = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclTranslation.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_Z);
+    animCurve = getCurve(fbxNode->LclTranslation, animLayer, FBXSDK_CURVENODE_COMPONENT_Z);
     if (animCurve)
     {
         tz = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclRotation.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_X);
+    animCurve = getCurve(fbxNode->LclRotation, animLayer, FBXSDK_CURVENODE_COMPONENT_X);
     if (animCurve)
     {
         rx = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclRotation.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_Y);
+    animCurve = getCurve(fbxNode->LclRotation, animLayer, FBXSDK_CURVENODE_COMPONENT_Y);
     if (animCurve)
     {
         ry = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclRotation.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_Z);
+    animCurve = getCurve(fbxNode->LclRotation, animLayer, FBXSDK_CURVENODE_COMPONENT_Z);
     if (animCurve)
     {
         rz = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclScaling.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_X);
+    animCurve = getCurve(fbxNode->LclScaling, animLayer, FBXSDK_CURVENODE_COMPONENT_X);
     if (animCurve)
     {
         sx = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclScaling.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_Y);
+    animCurve = getCurve(fbxNode->LclScaling, animLayer, FBXSDK_CURVENODE_COMPONENT_Y);
     if (animCurve)
     {
         sy = true;
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
-    animCurve = fbxNode->LclScaling.GetCurve<FbxAnimCurve>(animLayer, FBXSDK_CURVENODE_COMPONENT_Z);
+    animCurve = getCurve(fbxNode->LclScaling, animLayer, FBXSDK_CURVENODE_COMPONENT_Z);
     if (animCurve)
     {
         sz = true;
@@ -583,14 +591,6 @@ void FBXSceneEncoder::transformNode(FbxNode* fbxNode, Node* node)
 
     float m[16];
     copyMatrix(matrix, m);
-    int i = 0;
-    for (int row = 0; row < 4; ++row)
-    {
-        for (int col = 0; col < 4; ++col)
-        {
-            m[i++] = (float)matrix.Get(row, col);
-        }
-    }
     node->setTransformMatrix(m);
 }
 
