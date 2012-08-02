@@ -949,6 +949,10 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     }
     node->_world = _world;
     node->_bounds = _bounds;
+    if (_tags)
+    {
+        node->_tags = new std::map<std::string, std::string>(_tags->begin(), _tags->end());
+    }
 }
 
 AudioSource* Node::getAudioSource() const
