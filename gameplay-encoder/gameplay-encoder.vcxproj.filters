@@ -127,6 +127,9 @@
     <ClCompile Include="src\Curve.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Heightmap.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexElement.h">
@@ -250,6 +253,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Curve.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Thread.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Heightmap.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

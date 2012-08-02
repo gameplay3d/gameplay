@@ -20,6 +20,12 @@ public:
         FILEFORMAT_GPB
     };
 
+    struct HeightmapOption
+    {
+        std::vector<std::string> nodeIds;
+        std::string filename;
+    };
+
     /**
      * Constructor.
      */
@@ -73,7 +79,7 @@ public:
     bool containsGroupNodeId(const std::string& nodeId) const;
     const std::string getAnimationId(const std::string& nodeId) const;
 
-    const std::vector<std::string>& getHeightmapNodeIds() const;
+    const std::vector<HeightmapOption>& getHeightmapOptions() const;
 
     /**
      * Returns true if an error occurred while parsing the command line arguments.
@@ -142,7 +148,7 @@ private:
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
-    std::vector<std::string> _heightmapNodeIds;
+    std::vector<HeightmapOption> _heightmaps;
 
 };
 

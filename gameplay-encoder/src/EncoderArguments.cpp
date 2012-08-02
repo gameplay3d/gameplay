@@ -145,9 +145,9 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
     return "";
 }
 
-const std::vector<std::string>& EncoderArguments::getHeightmapNodeIds() const
+const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeightmapOptions() const
 {
-    return _heightmapNodeIds;
+    return _heightmaps;
 }
 
 bool EncoderArguments::parseErrorOccured() const
@@ -177,18 +177,20 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"  .ttf\t(TrueType Font)\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"COLLADA and FBX file options:\n");
-    fprintf(stderr,"  -i <id>\t\tFilter by node ID.\n");
-    fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
+    fprintf(stderr,"  -i <id>\tFilter by node ID.\n");
+    fprintf(stderr,"  -t\t\tWrite text/xml.\n");
     fprintf(stderr,"  -g <node id> <animation id>\n" \
-        "\t\t\tGroup all animation channels targeting the nodes into a new animation.\n");
-    fprintf(stderr,"  -h \"<node ids>\"\n" \
-        "\t\t\tList of nodes to generate heightmaps for.\n" \
-        "\t\t\tNode id list should be in quotes with a space between each id.\n" \
-        "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n");
+        "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
+    fprintf(stderr,"  -h \"<node ids>\" <filename>\n" \
+        "\t\tGenerates a single heightmap image using meshes from the specified\n" \
+        "\t\tnodes. Node id list should be in quotes with a space between each id.\n" \
+        "\t\tFilename is the name of the image (PNG) to be saved.\n" \
+        "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"TTF file options:\n");
-    fprintf(stderr,"  -s <size of font>\tSize of the font.\n");
-    fprintf(stderr,"  -p\t\t\tOutput font preview.\n");
+    fprintf(stderr,"  -s <size>\tSize of the font.\n");
+    fprintf(stderr,"  -p\t\tOutput font preview.\n");
+    fprintf(stderr, "\n");
     exit(8);
 }
 
@@ -313,11 +315,14 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         break;
     case 'h':
         {
-            if (str.compare("-heightmaps") == 0 || str.compare("-h") == 0)
+            if (str.compare("-heightmap") == 0 || str.compare("-h") == 0)
             {
                 (*index)++;
-                if (*index < options.size())
+                if (*index < (options.size() + 1))
                 {
+                    _heightmaps.resize(_heightmaps.size() + 1);
+                    HeightmapOption& heightmap = _heightmaps.back();
+
                     // Split node id list into tokens
                     unsigned int length = options[*index].size() + 1;
                     char* nodeIds = new char[length];
@@ -326,14 +331,36 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                     char* id = strtok(nodeIds, " ");
                     while (id)
                     {
-                        _heightmapNodeIds.push_back(id);
+                        heightmap.nodeIds.push_back(id);
                         id = strtok(NULL, " ");
                     }
                     delete[] nodeIds;
+
+                    // Store output filename
+                    (*index)++;
+                    heightmap.filename = options[*index];
+                    if (heightmap.filename.empty())
+                    {
+                        fprintf(stderr, "Error: missing filename argument for -h|-heightmap.\n");
+                        _parseError = true;
+                        return;
+                    }
+                    
+                    // Ensure the output filename has a .png extention
+                    if (heightmap.filename.length() > 5)
+                    {
+                        const char* ext = heightmap.filename.c_str() + (heightmap.filename.length() - 4);
+                        if (ext[0] != '.' || tolower(ext[1]) != 'p' || tolower(ext[2]) != 'n' || tolower(ext[3]) != 'g')
+                            heightmap.filename += ".png";
+                    }
+                    else
+                        heightmap.filename += ".png";
                 }
                 else
                 {
-                    fprintf(stderr, "Error: missing argument for -heightmaps.\n");
+                    fprintf(stderr, "Error: missing argument for -h|-heightmap.\n");
+                    _parseError = true;
+                    return;
                 }
             }
         }

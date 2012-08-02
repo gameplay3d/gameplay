@@ -92,6 +92,15 @@ void BoundingVolume::transform(const Matrix& m)
 
 void BoundingVolume::merge(const BoundingVolume& v)
 {
+    // Merge the box portion
+    min.x = std::min(min.x, v.min.x);
+    min.y = std::min(min.y, v.min.y);
+    min.z = std::min(min.z, v.min.z);
+    max.x = std::max(max.x, v.max.x);
+    max.y = std::max(max.y, v.max.y);
+    max.z = std::max(max.z, v.max.z);
+
+    // Merge the sphere portion
     // Calculate the distance between the two centers.
     float vx = center.x - v.center.x;
     float vy = center.y - v.center.y;

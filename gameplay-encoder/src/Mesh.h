@@ -60,11 +60,6 @@ public:
 
     unsigned int getVertexIndex(const Vertex& vertex);
 
-    /**
-     * Generates a heightmap with the given filename for this mesh.
-     */
-    void generateHeightmap(const char* filename);
-
     void computeBounds();
 
     Model* model;

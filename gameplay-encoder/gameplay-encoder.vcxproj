@@ -30,6 +30,7 @@
     <ClCompile Include="src\Glyph.cpp" />
     <ClCompile Include="src\GPBDecoder.cpp" />
     <ClCompile Include="src\Animations.cpp" />
+    <ClCompile Include="src\Heightmap.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="src\Glyph.h" />
     <ClInclude Include="src\GPBDecoder.h" />
     <ClInclude Include="src\Animations.h" />
+    <ClInclude Include="src\Heightmap.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MaterialParameter.h" />
@@ -89,6 +91,7 @@
     <ClInclude Include="src\ReferenceTable.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\StringUtil.h" />
+    <ClInclude Include="src\Thread.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\TTFFontEncoder.h" />
     <ClInclude Include="src\Vector2.h" />

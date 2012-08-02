@@ -2,6 +2,8 @@
 #include "GPBFile.h"
 #include "Transform.h"
 #include "StringUtil.h"
+#include "EncoderArguments.h"
+#include "Heightmap.h"
 
 #define EPSILON 1.2e-7f;
 
@@ -323,6 +325,13 @@ void GPBFile::adjust()
     //   Search for animations that have the same target and key times and see if they can be merged.
     //   Blender will output a simple translation animation to 3 separate animations with the same key times but targeting X, Y and Z.
     //   This can be merged into one animation. Same for scale animations.
+
+    // Generate heightmaps
+    const std::vector<EncoderArguments::HeightmapOption>& heightmaps = EncoderArguments::getInstance()->getHeightmapOptions();
+    for (unsigned int i = 0, count = heightmaps.size(); i < count; ++i)
+    {
+        Heightmap::generate(heightmaps[i].nodeIds, heightmaps[i].filename.c_str());
+    }
 }
 
 void GPBFile::groupMeshSkinAnimations()
@@ -405,7 +414,6 @@ void GPBFile::optimizeTransformAnimations()
         }
     }
 }
-
 
 void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel)
 {
