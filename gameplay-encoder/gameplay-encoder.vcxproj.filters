@@ -255,10 +255,10 @@
     <ClInclude Include="src\Curve.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Heightmap.h">
+    <ClInclude Include="src\Thread.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Thread.h">
+    <ClInclude Include="src\Heightmap.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
