@@ -243,6 +243,10 @@ copy gameplay-template\res\* %projPath%\res\
 REM Copy icon
 copy gameplay-template\icon.png %projPath%\icon.png
 
+REM Copy config
+copy gameplay-template\game.config %projPath%\game.config
+call:replace %projPath%\game.config TEMPLATE_TITLE "%projName%"
+
 REM Open new project folder
 start %projPath%
 

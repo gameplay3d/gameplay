@@ -26,8 +26,7 @@ void TemplateGame::initialize()
     Node* boxNode = _scene->findNode("box");
     Model* boxModel = boxNode->getModel();
     Material* boxMaterial = boxModel->setMaterial("res/box.material");
-	boxMaterial->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
-	boxMaterial->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
+    boxMaterial->getParameter("u_ambientColor")->setValue(_scene->getAmbientColor());
     boxMaterial->getParameter("u_lightColor")->setValue(light->getColor());
     boxMaterial->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
 }
