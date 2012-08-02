@@ -31,11 +31,11 @@ XCode project "gameplay-encoder.xcodeproj" on MacOSX.
 - Edit the project properties of "gameplay-encoder" for Debug
 - Add Preprocessor Definition "USE_FBX" (C++/Preprocessor)
 - Add the FBX SDK include directory to Additional Include Directories (C++/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/include
+  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.2/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.1/lib/vs2010/x86
-- Add "fbxsdk-2013.1-mdd.lib"(Release) and "wininet.lib" to the Additional Dependencies (Linker/Input)
-  * Example: fbxsdk-2013.1-mdd.lib;wininet.lib
+  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.2/lib/vs2010/x86
+- Add "fbxsdk-2013.2-mdd.lib"(Release) to the Additional Dependencies (Linker/Input)
+  * Example: fbxsdk-2013.2-mdd.lib
 - Build gameplay-encoder
 
 ### Building with FBX Support on Mac OS X using XCode 4.3.2+
@@ -43,9 +43,9 @@ XCode project "gameplay-encoder.xcodeproj" on MacOSX.
 - Edit the project properties of target "gameplay-encoder".
 - Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
 - Add the FBX include directory to Header Search Paths: (Build Settings)
-  * Example: /Applications/Autodesk/FBXSDK20131/include
+  * Example: "/Applications/Autodesk/FBX SDK/2013.2/include" (Use quotes due to additional space in path)
 - Add the FBX library and dependency Library/Frameworks: (Build Phases -> Link Binary with Libraries)
-  * Example: /Applications/Autodesk/FBXSDK20131/lib/gcc4/ub/libfbxsdk-2013.1-static.a  (Add Other)
+  * Example: /Applications/Autodesk/FBX SDK/2013.2/lib/gcc4/ub/libfbxsdk-2013.2-static.a  (Add Other)
   * Example: libiconv.dylib, Cocoa.framework, SystemConfiguration.framework
 - Build gameplay-encoder
 

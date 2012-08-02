@@ -151,7 +151,7 @@ while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
 		back="../${back}"
 	fi
 done
-gpPath=${back}${gpPathAbs#$common_path/}
+gpPath=${back}/${gpPathAbs#$common_path/}
 if [[ ${gpPathAbs} == ${common_path} ]]; then
 	gpPath=${back}
 fi
