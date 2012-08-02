@@ -250,6 +250,11 @@ cp "gameplay-template/res/"* "$projPath/res/"
 # Copy icon
 cp "gameplay-template/icon.png" "$projPath/icon.png"
 
+# Copy config
+cp "gameplay-template/game.config" "$projPath/game.config"
+sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/game.config"
+
+
 # Open the new project folder
 open $projPath
 
