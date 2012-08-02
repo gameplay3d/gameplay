@@ -165,7 +165,8 @@
     <None Include="bar-descriptor.xml" >
         <SubType>Designer</SubType>
     </None>
-    <None Include="icon.png" />
+    <None Include="game.config" />
+	<None Include="icon.png" />
     <None Include="res\box.dae" />
     <None Include="res\box.gpb" />
     <None Include="res\box.material" />
