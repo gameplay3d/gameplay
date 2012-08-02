@@ -168,7 +168,7 @@ Form* Form::create(const char* url)
     }
     form->initialize(style, formProperties);
 
-    form->_consumeInputEvents = formProperties->getBool("consumeInputs");
+    form->_consumeInputEvents = formProperties->getBool("consumeEvents");
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)

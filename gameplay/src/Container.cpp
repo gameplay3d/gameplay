@@ -746,7 +746,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 				_scrollBarOpacityClip = NULL;
 			}
 			_scrollBarOpacity = 1.0f;
-
+            _dirty = true;
 			return _consumeInputEvents;
     	}
 		break;
@@ -808,7 +808,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
                 _scrollingStartTimeY = gameTime;
 
             _scrollingLastTime = gameTime;
-
+            _dirty = true;
             return _consumeInputEvents;
         }
         break;
@@ -825,6 +825,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 			{
 				_scrollingVelocity.set(0, 0);
 				_scrollingMouseVertically = _scrollingMouseHorizontally = false;
+                _dirty = true;
 				return _consumeInputEvents;
 			}
 
@@ -861,7 +862,7 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
 			}
 
 			_scrollingMouseVertically = _scrollingMouseHorizontally = false;
-
+            _dirty = true;
 			return _consumeInputEvents;
     	}
     	break;
@@ -940,6 +941,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                 _scrollBarOpacityClip = NULL;
             }
             _scrollBarOpacity = 1.0f;
+            _dirty = true;
             return _consumeInputEvents;
     }
 
@@ -986,12 +988,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
         Control::State currentState = control->getState();
         if ((control->isContainer() && currentState == Control::FOCUS) || 
-            (currentState != Control::NORMAL && control->_contactIndex == data) ||
+            (currentState != Control::NORMAL) ||// && control->_contactIndex == data) ||
             ((evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
-              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
-              evt == Mouse::MOUSE_WHEEL) &&
+              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON) &&
                 x >= xPos + boundsX &&
                 x <= xPos + boundsX + bounds.width &&
                 y >= yPos + boundsY &&
@@ -1045,7 +1046,6 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         if ((mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data)) ||
             (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
         {
-            _dirty = true;
             eventConsumed = true;
         }
     }
