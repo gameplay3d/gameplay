@@ -516,6 +516,16 @@ void ScriptController::setString(const char* name, const char* v)
     lua_setglobal(_lua, name);
 }
 
+void ScriptController::print(const char* str)
+{
+    printError("%s", str);
+}
+
+void ScriptController::print(const char* str1, const char* str2)
+{
+    printError("%s%s", str1, str2);
+}
+
 ScriptController::ScriptController() : _lua(NULL)
 {
     memset(_callbacks, 0, sizeof(std::string*) * CALLBACK_COUNT);
@@ -530,9 +540,8 @@ ScriptController::~ScriptController()
 }
 
 static const char* lua_print_function = 
-    "function print(str, ...)\n"
-    "    local arg = {...}\n"
-    "    printError(string.format(str, table.unpack(arg)))\n"
+    "function print(...)\n"
+    "    ScriptController.print(table.concat({...},\"\\t\"), \"\\n\")\n"
     "end\n";
 
 void ScriptController::initialize()
