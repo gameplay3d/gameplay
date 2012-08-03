@@ -24,6 +24,7 @@ public:
     {
         std::vector<std::string> nodeIds;
         std::string filename;
+        bool isHighPrecision;
     };
 
     /**

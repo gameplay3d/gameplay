@@ -30,11 +30,14 @@ static float getFieldOfView(FbxCamera* fbxCamera);
  * Loads the texture coordinates from given mesh's polygon part into the vertex.
  * 
  * @param fbxMesh The mesh to get the polygon from.
- * @param polyIndex The index of the polygon.
- * @param posInPoly The position in the polygon.
+ * @param uvs The UV list to load tex coords from.
+ * @param uvSetIndex The UV set index of the uvs.
+ * @param polyIndex The index of the polygon in the mesh.
+ * @param posInPoly The position of the vertex in the polygon.
+ * @param meshVertexIndex The index of the vertex in the mesh.
  * @param vertex The vertex to copy the texture coordinates to.
  */
-static void loadTextureCoords(FbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* vertex);
+static void loadTextureCoords(FbxMesh* fbxMesh, const FbxGeometryElementUV* uvs, int uvSetIndex, int polyIndex, int posInPoly, int meshVertexIndex, Vertex* vertex);
 
 /**
  * Loads the normal from the mesh and adds it to the given vertex.
@@ -851,6 +854,11 @@ Mesh* FBXSceneEncoder::loadMesh(FbxMesh* fbxMesh)
     std::vector<std::vector<Vector2> > weights;
     bool hasSkin = loadBlendWeights(fbxMesh, weights);
     
+    // Get list of uv sets for mesh
+    FbxStringList uvSetNameList;
+    fbxMesh->GetUVSetNames(uvSetNameList);
+    const int uvSetCount = uvSetNameList.GetCount();
+
     int vertexIndex = 0;
     FbxVector4* controlPoints = fbxMesh->GetControlPoints();
     const int polygonCount = fbxMesh->GetPolygonCount();
@@ -867,7 +875,15 @@ Mesh* FBXSceneEncoder::loadMesh(FbxMesh* fbxMesh)
             vertex.position.y = (float)position[1];
             vertex.position.z = (float)position[2];
 
-            loadTextureCoords(fbxMesh, polyIndex, posInPoly, &vertex);
+            // Load tex coords for all uv sets
+            for (int uvSetIndex = 0; uvSetIndex < uvSetCount; ++uvSetIndex)
+            {
+                const FbxGeometryElementUV* uvElement = fbxMesh->GetElementUV(uvSetNameList.GetStringAt(uvSetIndex));
+                if (uvElement)
+                    loadTextureCoords(fbxMesh, uvElement, uvSetIndex, polyIndex, posInPoly, vertexIndex, &vertex);
+            }
+
+            // Load other data
             loadNormal(fbxMesh, vertexIndex, controlPointIndex, &vertex);
             loadTangent(fbxMesh, vertexIndex, &vertex);
             loadBinormal(fbxMesh, vertexIndex, &vertex);
@@ -931,9 +947,12 @@ Mesh* FBXSceneEncoder::loadMesh(FbxMesh* fbxMesh)
         mesh->addVetexAttribute(BINORMAL, Vertex::BINORMAL_COUNT);
     }
     // Texture Coordinates
-    if (vertex.hasTexCoord)
+    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
     {
-        mesh->addVetexAttribute(TEXCOORD0, Vertex::TEXCOORD_COUNT);
+        if (vertex.hasTexCoord[i])
+        {
+            mesh->addVetexAttribute(TEXCOORD0 + i, Vertex::TEXCOORD_COUNT);
+        }
     }
     // Diffuse Color
     if (vertex.hasDiffuse)
@@ -1061,54 +1080,46 @@ float getFieldOfView(FbxCamera* fbxCamera)
     return (float)fieldOfViewY;
 }
 
-void loadTextureCoords(FbxMesh* fbxMesh, int polyIndex, int posInPoly, Vertex* vertex)
+void loadTextureCoords(FbxMesh* fbxMesh, const FbxGeometryElementUV* uvs, int uvSetIndex, int polyIndex, int posInPoly, int meshVertexIndex, Vertex* vertex)
 {
     assert(fbxMesh && polyIndex >=0 && posInPoly >= 0);
-    if (fbxMesh->GetElementUVCount() > 0)
+
+    const bool useIndex = uvs->GetReferenceMode() != FbxGeometryElement::eDirect;
+    const int indexCount = useIndex ? uvs->GetIndexArray().GetCount() : 0;
+    int uvIndex = -1;
+
+    switch (uvs->GetMappingMode())
     {
-        // Get only the first UV coordinates.
-        FbxGeometryElementUV* uv = fbxMesh->GetElementUV(0);
-        switch (uv->GetMappingMode())
+    case FbxGeometryElement::eByControlPoint:
         {
-        case FbxGeometryElement::eByControlPoint:
-            switch (uv->GetReferenceMode())
-            {
-            case FbxGeometryElement::eDirect:
-                vertex->hasTexCoord = true;
-                vertex->texCoord.x = (float)uv->GetDirectArray().GetAt(polyIndex)[0];
-                vertex->texCoord.y = (float)uv->GetDirectArray().GetAt(polyIndex)[1];
-                break;
-            case FbxGeometryElement::eIndexToDirect:
-                {
-                    int id = uv->GetIndexArray().GetAt(polyIndex);
-                    vertex->hasTexCoord = true;
-                    vertex->texCoord.x = (float)uv->GetDirectArray().GetAt(id)[0];
-                    vertex->texCoord.y = (float)uv->GetDirectArray().GetAt(id)[1];
-                }
-                break;
-            default:
-                break;
-            }
-            break;
-        case FbxGeometryElement::eByPolygonVertex:
-            {
-                int lTextureUVIndex = fbxMesh->GetTextureUVIndex(polyIndex, posInPoly);
-                switch (uv->GetReferenceMode())
-                {
-                case FbxGeometryElement::eDirect:
-                case FbxGeometryElement::eIndexToDirect:
-                    vertex->hasTexCoord = true;
-                    vertex->texCoord.x = (float)uv->GetDirectArray().GetAt(lTextureUVIndex)[0];
-                    vertex->texCoord.y = (float)uv->GetDirectArray().GetAt(lTextureUVIndex)[1];
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
-        default:
-            break;
+            // Get the index of the current vertex in control points array
+            int polyVertIndex = fbxMesh->GetPolygonVertex(polyIndex, posInPoly);
+
+            // The UV index depends on the reference mode
+            uvIndex = useIndex ? uvs->GetIndexArray().GetAt(polyVertIndex) : polyVertIndex;
         }
+        break;
+
+    case FbxGeometryElement::eByPolygonVertex:
+        if (meshVertexIndex < indexCount)
+        {
+            uvIndex = useIndex ? uvs->GetIndexArray().GetAt(meshVertexIndex) : meshVertexIndex;
+        }
+        break;
+
+    default:
+        // Only support eByPolygonVertex and eByControlPoint mappings
+        break;
+    }
+
+    vertex->hasTexCoord[uvSetIndex] = true;
+
+    // Store UV information in vertex
+    if (uvIndex != -1)
+    {
+        FbxVector2 uvValue = uvs->GetDirectArray().GetAt(uvIndex);
+        vertex->texCoord[uvSetIndex].x = (float)uvValue[0];
+        vertex->texCoord[uvSetIndex].y = (float)uvValue[1];
     }
 }
 
