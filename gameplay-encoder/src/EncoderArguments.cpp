@@ -18,7 +18,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
-    _daeOutput(false)
+    _daeOutput(false),
+    _isHeightmapHighP(false)
 {
     __instance = this;
 
@@ -150,6 +151,11 @@ const std::vector<std::string>& EncoderArguments::getHeightmapNodeIds() const
     return _heightmapNodeIds;
 }
 
+bool EncoderArguments::isHeightmapHighP() const
+{
+    return _isHeightmapHighP;
+}
+
 bool EncoderArguments::parseErrorOccured() const
 {
     return _parseError;
@@ -184,7 +190,8 @@ void EncoderArguments::printUsage() const
     fprintf(stderr,"  -h \"<node ids>\"\n" \
         "\t\t\tList of nodes to generate heightmaps for.\n" \
         "\t\t\tNode id list should be in quotes with a space between each id.\n" \
-        "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n");
+        "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n" \
+        "\t\t\tFor 24-bit packed height data use -hp instead of -h.\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"TTF file options:\n");
     fprintf(stderr,"  -s <size of font>\tSize of the font.\n");
@@ -313,8 +320,10 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         break;
     case 'h':
         {
-            if (str.compare("-heightmaps") == 0 || str.compare("-h") == 0)
+            bool isHighPrecision = str.compare("-hp") == 0;
+            if (str.compare("-heightmaps") == 0 || str.compare("-h") == 0 || isHighPrecision)
             {
+                _isHeightmapHighP = isHighPrecision;
                 (*index)++;
                 if (*index < options.size())
                 {
