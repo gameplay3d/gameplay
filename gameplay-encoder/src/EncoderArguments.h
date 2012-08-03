@@ -74,6 +74,11 @@ public:
     const std::string getAnimationId(const std::string& nodeId) const;
 
     const std::vector<std::string>& getHeightmapNodeIds() const;
+    
+    /**
+     * Returns true if the heightmap is to be high precision (24-bit packed).
+     */
+    bool isHeightmapHighP() const;
 
     /**
      * Returns true if an error occurred while parsing the command line arguments.
@@ -139,6 +144,7 @@ private:
     bool _fontPreview;
     bool _textOutput;
     bool _daeOutput;
+    bool _isHeightmapHighP;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
