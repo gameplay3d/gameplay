@@ -197,6 +197,19 @@ public:
     void clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil);
 
     /**
+     * Clears the specified resource buffers to the specified clear values. 
+     * 
+     * @param flags The flags indicating which buffers to be cleared.
+     * @param red The red channel.
+     * @param green The green channel.
+     * @param blue The blue channel.
+     * @param alpha The alpha channel.
+     * @param clearDepth The depth value to clear to when the flags includes the color buffer.
+     * @param clearStencil The stencil value to clear to when the flags includes the color buffer.
+     */
+    void clear(ClearFlags flags, float red, float green, float blue, float alpha, float clearDepth, int clearStencil);
+
+    /**
      * Gets the audio controller for managing control of audio
      * associated with the game.
      *

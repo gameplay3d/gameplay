@@ -55,6 +55,7 @@ public:
      * @param dynamic true if the mesh is dynamic; false otherwise.
      * 
      * @return The created mesh.
+     * @script{create}
      */
     static Mesh* createMesh(const VertexFormat& vertexFormat, unsigned int vertexCount, bool dynamic = false);
 
@@ -71,6 +72,7 @@ public:
      * @param p4 The fourth point.
      * 
      * @return The created mesh.
+     * @script{create}
      */
     static Mesh* createQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4);
 
@@ -83,6 +85,7 @@ public:
      * @param height The height of the quad.
      * 
      * @return The newly created mesh.
+     * @script{create}
      */
     static Mesh* createQuad(float x, float y, float width, float height);
 
@@ -96,6 +99,7 @@ public:
      * normalized device coordinates for vertex positions.
      * 
      * @return The newly created mesh.
+     * @script{create}
      */
     static Mesh* createQuadFullscreen();
 
@@ -109,6 +113,7 @@ public:
      * @param pointCount The number of points.
      * 
      * @return The newly created mesh.
+     * @script{create}
      */
     static Mesh* createLines(Vector3* points, unsigned int pointCount);
 
@@ -120,6 +125,7 @@ public:
      * @param box The BoundingBox that will be used to create the mesh.
      * 
      * @return The newly created bounding box mesh.
+     * @script{create}
      */
     static Mesh* createBoundingBox(const BoundingBox& box);
 

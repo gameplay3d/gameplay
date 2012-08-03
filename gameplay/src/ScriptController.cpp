@@ -342,7 +342,7 @@ void ScriptController::loadScript(const char* path, bool forceReload)
     {
         const char* scriptContents = FileSystem::readAll(path);
         if (luaL_dostring(_lua, scriptContents))
-            GP_ERROR("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+            GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
 
         SAFE_DELETE_ARRAY(scriptContents);
 
@@ -516,6 +516,16 @@ void ScriptController::setString(const char* name, const char* v)
     lua_setglobal(_lua, name);
 }
 
+void ScriptController::print(const char* str)
+{
+    printError("%s", str);
+}
+
+void ScriptController::print(const char* str1, const char* str2)
+{
+    printError("%s%s", str1, str2);
+}
+
 ScriptController::ScriptController() : _lua(NULL)
 {
     memset(_callbacks, 0, sizeof(std::string*) * CALLBACK_COUNT);
@@ -530,9 +540,8 @@ ScriptController::~ScriptController()
 }
 
 static const char* lua_print_function = 
-    "function print(str, ...)\n"
-    "    local arg = {...}\n"
-    "    printError(string.format(str, table.unpack(arg)))\n"
+    "function print(...)\n"
+    "    ScriptController.print(table.concat({...},\"\\t\"), \"\\n\")\n"
     "end\n";
 
 void ScriptController::initialize()
@@ -739,7 +748,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
 
     // Perform the function call.
     if (lua_pcall(_lua, argumentCount, resultCount, 0) != 0)
-        GP_ERROR("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
+        GP_WARN("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
 }
 
 void ScriptController::registerCallback(ScriptCallback callback, std::string function)

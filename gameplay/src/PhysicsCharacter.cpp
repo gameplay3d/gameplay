@@ -202,6 +202,11 @@ void PhysicsCharacter::setVelocity(const Vector3& velocity)
     _moveVelocity.setValue(velocity.x, velocity.y, velocity.z);
 }
 
+void PhysicsCharacter::setVelocity(float x, float y, float z)
+{
+    _moveVelocity.setValue(x, y, z);
+}
+
 void PhysicsCharacter::rotate(const Vector3& axis, float angle)
 {
     GP_ASSERT(_node);
