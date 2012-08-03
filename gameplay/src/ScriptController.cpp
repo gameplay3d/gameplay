@@ -1025,3 +1025,4 @@ template<> std::string ScriptController::executeFunction<std::string>(const char
     SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(std::string, luaL_checkstring);
 }
 
+}
