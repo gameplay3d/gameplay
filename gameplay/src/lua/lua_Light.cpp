@@ -576,9 +576,37 @@ int lua_Light_setColor(lua_State* state)
             }
             break;
         }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                Light* instance = getInstance(state);
+                instance->setColor(param1, param2, param3);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Light_setColor - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
             lua_error(state);
             break;
         }
@@ -720,7 +748,45 @@ int lua_Light_static_createDirectional(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Light");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Light_static_createDirectional - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 3:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                void* returnPtr = (void*)Light::createDirectional(param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
                     luaL_getmetatable(state, "Light");
                     lua_setmetatable(state, -2);
                 }
@@ -740,7 +806,7 @@ int lua_Light_static_createDirectional(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 3).");
             lua_error(state);
             break;
         }
@@ -772,7 +838,49 @@ int lua_Light_static_createPoint(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Light");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Light_static_createPoint - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 4:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                void* returnPtr = (void*)Light::createPoint(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
                     luaL_getmetatable(state, "Light");
                     lua_setmetatable(state, -2);
                 }
@@ -792,7 +900,7 @@ int lua_Light_static_createPoint(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
             lua_error(state);
             break;
         }
@@ -832,7 +940,57 @@ int lua_Light_static_createSpot(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Light");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Light_static_createSpot - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 6:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 6);
+
+                void* returnPtr = (void*)Light::createSpot(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
                     luaL_getmetatable(state, "Light");
                     lua_setmetatable(state, -2);
                 }
@@ -852,7 +1010,7 @@ int lua_Light_static_createSpot(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 4 or 6).");
             lua_error(state);
             break;
         }
