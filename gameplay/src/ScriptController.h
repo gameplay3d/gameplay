@@ -552,6 +552,23 @@ public:
      */
     template<typename T>void setObjectPointer(const char* type, const char* name, T* v);
 
+    /**
+     * Prints the string to the platform's output stream or log file.
+     * Used for overriding Lua's print function.
+     * 
+     * @param str The string to print.
+     */
+    static void print(const char* str);
+
+    /**
+     * Prints the strings to the platform's output stream or log file.
+     * Used for overriding Lua's print function.
+     * 
+     * @param str1 The first string to print.
+     * @param str2 The second string to print on the same line as str1.
+     */
+    static void print(const char* str1, const char* str2);
+
 private:
 
     /**
