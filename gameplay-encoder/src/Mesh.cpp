@@ -139,7 +139,7 @@ bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const std:
     return false;
 }
 
-void Mesh::generateHeightmap(const char* filename)
+void Mesh::generateHeightmap(const char* filename, bool highP)
 {
     // Shoot rays down from a point just above the max Y position of the mesh.
     // Compute ray-triangle intersection tests against the ray and this mesh to 
@@ -225,14 +225,24 @@ void Mesh::generateHeightmap(const char* filename)
             // Write height value normalized between 0-255 (between min and max height)
             float h = heights[y*width + x];
             float nh = (h - minHeight) / maxHeight;
-            int bits = (int)(nh * 16777215.0f); // 2^24-1
-
             int pos = x*3;
-            row[pos+2] = (png_byte)(bits & 0xff);
-            bits >>= 8;
-            row[pos+1] = (png_byte)(bits & 0xff);
-            bits >>= 8;
-            row[pos] = (png_byte)(bits & 0xff);
+            if (highP)
+            {
+                // high precision packed 24-bit (RGB)
+                int bits = (int)(nh * 16777215.0f); // 2^24-1
+
+                row[pos+2] = (png_byte)(bits & 0xff);
+                bits >>= 8;
+                row[pos+1] = (png_byte)(bits & 0xff);
+                bits >>= 8;
+                row[pos] = (png_byte)(bits & 0xff);
+            }
+            else
+            {
+                // standard precision 8-bit (grayscale)
+                png_byte b = (png_byte)(nh * 255.0f);
+                row[pos] = row[pos+1] = row[pos+2] = b;
+            }
         }
         png_write_row(png_ptr, row);
     }

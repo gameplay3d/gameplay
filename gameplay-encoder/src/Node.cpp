@@ -137,7 +137,7 @@ void Node::generateHeightmap()
             heightmapFilename += getId();
             heightmapFilename += ".png";
 
-            mesh->generateHeightmap(heightmapFilename.c_str());
+            mesh->generateHeightmap(heightmapFilename.c_str(), EncoderArguments::getInstance()->isHeightmapHighP());
         }
     }
 }
