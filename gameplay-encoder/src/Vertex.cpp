@@ -5,8 +5,10 @@ namespace gameplay
 {
 
 Vertex::Vertex(void)
-    : hasNormal(false), hasTangent(false), hasBinormal(false), hasTexCoord(false), hasDiffuse(false), hasWeights(false)
+    : hasNormal(false), hasTangent(false), hasBinormal(false), hasDiffuse(false), hasWeights(false)
 {
+    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
+        hasTexCoord[i] = false;
 }
 
 Vertex::~Vertex(void)
@@ -22,8 +24,11 @@ unsigned int Vertex::byteSize() const
         count += TANGENT_COUNT;
     if (hasBinormal)
         count += BINORMAL_COUNT;
-    if (hasTexCoord)
-        count += TEXCOORD_COUNT;
+    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
+    {
+        if (hasTexCoord[i])
+            count += TEXCOORD_COUNT;
+    }
     if (hasWeights)
         count += BLEND_WEIGHTS_COUNT + BLEND_INDICES_COUNT;
     if (hasDiffuse)
@@ -46,9 +51,12 @@ void Vertex::writeBinary(FILE* file) const
     {
         writeVectorBinary(binormal, file);
     }
-    if (hasTexCoord)
+    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
     {
-        writeVectorBinary(texCoord, file);
+        if (hasTexCoord[i])
+        {
+            writeVectorBinary(texCoord[i], file);
+        }
     }
     if (hasDiffuse)
     {
@@ -80,10 +88,13 @@ void Vertex::writeText(FILE* file) const
         write("// binormal\n", file);
         writeVectorText(binormal, file);
     }
-    if (hasTexCoord)
+    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
     {
-        write("// texCoord\n", file);
-        writeVectorText(texCoord, file);
+        if (hasTexCoord[i])
+        {
+            write("// texCoord\n", file);
+            writeVectorText(texCoord[i], file);
+        }
     }
     if (hasDiffuse)
     {
