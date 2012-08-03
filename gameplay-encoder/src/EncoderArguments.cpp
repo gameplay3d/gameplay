@@ -185,7 +185,8 @@ void EncoderArguments::printUsage() const
         "\t\tGenerates a single heightmap image using meshes from the specified\n" \
         "\t\tnodes. Node id list should be in quotes with a space between each id.\n" \
         "\t\tFilename is the name of the image (PNG) to be saved.\n" \
-        "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n");
+        "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n" \
+        "\t\tFor 24-bit packed height data use -hp instead of -h.\n");
     fprintf(stderr,"\n");
     fprintf(stderr,"TTF file options:\n");
     fprintf(stderr,"  -s <size>\tSize of the font.\n");
@@ -315,13 +316,16 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         break;
     case 'h':
         {
-            if (str.compare("-heightmap") == 0 || str.compare("-h") == 0)
+            bool isHighPrecision = str.compare("-hp") == 0;
+            if (str.compare("-heightmap") == 0 || str.compare("-h") == 0 || isHighPrecision)
             {
                 (*index)++;
                 if (*index < (options.size() + 1))
                 {
                     _heightmaps.resize(_heightmaps.size() + 1);
                     HeightmapOption& heightmap = _heightmaps.back();
+                    
+                    heightmap.isHighPrecision = isHighPrecision;
 
                     // Split node id list into tokens
                     unsigned int length = options[*index].size() + 1;
