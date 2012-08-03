@@ -1611,7 +1611,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     }
     mesh = new Mesh();
     mesh->setId(geometryId.c_str());
-    
+
     std::vector<DAEPolygonInput*> polygonInputs;
 
     // Quickly just go through each triangles array and make sure they have the same number of inputs
@@ -1819,7 +1819,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                                 break;
                             case 'b':
                             case 'B':
-                                vertex.diffuse.z = (float)source.get(index + i); // blue
+                                vertex.diffuse.z = (float)source.get(index+ i ); // blue
                                 break;
                             case 'a':
                             case 'A':
@@ -1849,32 +1849,41 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                 break;
 
             case TEXCOORD0:
-                vertex.hasTexCoord = true;
-                if (polygonInputs[k]->accessor)
-                {
-                    // TODO: This assumes (s, t) are first
-                    unsigned int stride = (unsigned int)polygonInputs[k]->accessor->getStride();
-                    if (polyIndexInt < 0)
-                    {
-                        unsigned int i = (unsigned int)((int)polygonInputs[k]->accessor->getCount()) + polyIndexInt;
-                        vertex.texCoord.x = (float)source.get(i * stride);
-                        vertex.texCoord.y = (float)source.get(i * stride + 1);
-                    }
-                    else
-                    {
-                        vertex.texCoord.x = (float)source.get(polyIndex * stride);
-                        vertex.texCoord.y = (float)source.get(polyIndex * stride + 1);
-                    }
-                }
-                else
-                {
-                    vertex.texCoord.x = (float)source.get(polyIndex * 2);
-                    vertex.texCoord.y = (float)source.get(polyIndex * 2 + 1);
-                }
-                break;
-
             case TEXCOORD1:
-                // TODO
+            case TEXCOORD2:
+            case TEXCOORD3:
+            case TEXCOORD4:
+            case TEXCOORD5:
+            case TEXCOORD6:
+            case TEXCOORD7:
+                {
+                    unsigned int index = polygonInputs[k]->type - TEXCOORD0;
+                    //for (unsigned int i = 0; i < uvSetCount; ++i)
+                    //{
+                        vertex.hasTexCoord[index] = true;
+                        if (polygonInputs[k]->accessor)
+                        {
+                            // TODO: This assumes (s, t) are first
+                            unsigned int stride = (unsigned int)polygonInputs[k]->accessor->getStride();
+                            if (polyIndexInt < 0)
+                            {
+                                unsigned int i = (unsigned int)((int)polygonInputs[k]->accessor->getCount()) + polyIndexInt;
+                                vertex.texCoord[index].x = (float)source.get(i * stride);
+                                vertex.texCoord[index].y = (float)source.get(i * stride + 1);
+                            }
+                            else
+                            {
+                                vertex.texCoord[index].x = (float)source.get(polyIndex * stride);
+                                vertex.texCoord[index].y = (float)source.get(polyIndex * stride + 1);
+                            }
+                        }
+                        else
+                        {
+                            vertex.texCoord[index].x = (float)source.get(polyIndex * 2);
+                            vertex.texCoord[index].y = (float)source.get(polyIndex * 2 + 1);
+                        }
+                    //}
+                }
                 break;
 
             default:
@@ -1909,13 +1918,6 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
         // Add our new subset for the mesh.
         mesh->addMeshPart(subset);
     }
-    
-    bool hasNormals = mesh->vertices[0].hasNormal;
-    bool hasDiffuses = mesh->vertices[0].hasDiffuse;
-    bool hasTangents = mesh->vertices[0].hasTangent;
-    bool hasBinormals = mesh->vertices[0].hasBinormal;
-    bool hasTexCoords = mesh->vertices[0].hasTexCoord;
-    bool hasWeights = mesh->vertices[0].hasWeights;
 
     // The order that the vertex elements are add to the list matters.
     // It should be the same order as how the Vertex data is written.
@@ -1924,32 +1926,35 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     mesh->addVetexAttribute(POSITION, Vertex::POSITION_COUNT);
     
     // Normals
-    if (hasNormals)
+    if (mesh->vertices[0].hasNormal)
     {
         mesh->addVetexAttribute(NORMAL, Vertex::NORMAL_COUNT);
     }
     // Tangents
-    if (hasTangents)
+    if (mesh->vertices[0].hasTangent)
     {
         mesh->addVetexAttribute(TANGENT, Vertex::TANGENT_COUNT);
     }
     // Binormals
-    if (hasBinormals)
+    if (mesh->vertices[0].hasBinormal)
     {
         mesh->addVetexAttribute(BINORMAL, Vertex::BINORMAL_COUNT);
     }
     // Texture Coordinates
-    if (hasTexCoords)
+    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
     {
-        mesh->addVetexAttribute(TEXCOORD0, Vertex::TEXCOORD_COUNT);
+        if (mesh->vertices[0].hasTexCoord[i])
+        {
+            mesh->addVetexAttribute(TEXCOORD0 + i, Vertex::TEXCOORD_COUNT);
+        }
     }
     // Diffuse Color
-    if (hasDiffuses)
+    if (mesh->vertices[0].hasDiffuse)
     {
         mesh->addVetexAttribute(COLOR, Vertex::DIFFUSE_COUNT);
     }
     // Skinning BlendWeights BlendIndices
-    if (hasWeights)
+    if (mesh->vertices[0].hasWeights)
     {
         mesh->addVetexAttribute(BLENDWEIGHTS, Vertex::BLEND_WEIGHTS_COUNT);
         mesh->addVetexAttribute(BLENDINDICES, Vertex::BLEND_INDICES_COUNT);
