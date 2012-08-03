@@ -36,7 +36,7 @@ bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const Vect
 int intersect_triangle(const float orig[3], const float dir[3], const float vert0[3], const float vert1[3], const float vert2[3], float *t, float *u, float *v);
 bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const std::vector<Vertex>& vertices, const std::vector<MeshPart*>& parts, Vector3* point);
 
-void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* filename)
+void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* filename, bool highP)
 {
     printf("Generating heightmap: %s...\n", filename);
 
@@ -203,14 +203,24 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
             // Write height value normalized between 0-255 (between min and max height)
             float h = heights[y*width + x];
             float nh = (h - minHeight) / maxHeight;
-            int bits = (int)(nh * 16777215.0f); // 2^24-1
-
             int pos = x*3;
-            row[pos+2] = (png_byte)(bits & 0xff);
-            bits >>= 8;
-            row[pos+1] = (png_byte)(bits & 0xff);
-            bits >>= 8;
-            row[pos] = (png_byte)(bits & 0xff);
+            if (highP)
+            {
+                // high precision packed 24-bit (RGB)
+                int bits = (int)(nh * 16777215.0f); // 2^24-1
+                
+                row[pos+2] = (png_byte)(bits & 0xff);
+                bits >>= 8;
+                row[pos+1] = (png_byte)(bits & 0xff);
+                bits >>= 8;
+                row[pos] = (png_byte)(bits & 0xff);
+            }
+            else
+            {
+                // standard precision 8-bit (grayscale)
+                png_byte b = (png_byte)(nh * 255.0f);
+                row[pos] = row[pos+1] = row[pos+2] = b;
+            }
         }
         png_write_row(png_ptr, row);
     }
