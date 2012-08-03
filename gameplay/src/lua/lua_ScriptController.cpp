@@ -16,7 +16,11 @@ void luaRegister_ScriptController()
         {"loadUrl", lua_ScriptController_loadUrl},
         {NULL, NULL}
     };
-    const luaL_Reg* lua_statics = NULL;
+    const luaL_Reg lua_statics[] = 
+    {
+        {"print", lua_ScriptController_static_print},
+        {NULL, NULL}
+    };
     std::vector<std::string> scopePath;
 
     ScriptUtil::registerClass("ScriptController", lua_members, NULL, NULL, lua_statics, scopePath);
@@ -125,6 +129,64 @@ int lua_ScriptController_loadUrl(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ScriptController_static_print(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(1, false);
+
+                ScriptController::print(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_ScriptController_static_print - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(1, false);
+
+                // Get parameter 2 off the stack.
+                const char* param2 = ScriptUtil::getString(2, false);
+
+                ScriptController::print(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_ScriptController_static_print - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
             lua_error(state);
             break;
         }
