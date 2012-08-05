@@ -80,7 +80,7 @@ float Rectangle::bottom() const
 
 bool Rectangle::contains(float x, float y) const
 {
-    return (x >= x && x <= (x + width) && y >= y && y <= (y + height));
+    return (x >= this->x && x <= (this->x + width) && y >= this->y && y <= (this->y + height));
 }
 
 bool Rectangle::contains(float x, float y, float width, float height) const
