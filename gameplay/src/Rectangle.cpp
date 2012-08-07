@@ -80,7 +80,7 @@ float Rectangle::bottom() const
 
 bool Rectangle::contains(float x, float y) const
 {
-    return (x >= x && x <= (x + width) && y >= y && y <= (y + height));
+    return (x >= this->x && x <= (this->x + width) && y >= this->y && y <= (this->y + height));
 }
 
 bool Rectangle::contains(float x, float y, float width, float height) const
@@ -95,12 +95,12 @@ bool Rectangle::contains(const Rectangle& r) const
 
 bool Rectangle::intersects(float x, float y, float width, float height) const
 {
-    const float left   = max(this->x, x);
-    const float top    = max(this->y, y);
-    const float right  = min(x + width, x + width);
-    const float bottom = min(y + height, y + height);
-
-    return (right > left && bottom > top);
+    float t;
+    if ((t = x - this->x) > this->width || -t > width)
+        return false;
+    if ((t = y - this->y) > this->height || -t > height)
+        return false;
+    return true;
 }
 
 bool Rectangle::intersects(const Rectangle& r) const
