@@ -169,6 +169,7 @@ public:
 
     /**
      * Determines whether a specified rectangle intersects with this rectangle.
+     * Rectangles intersect if there is a common point that is contained in both rectangles.
      *
      * @param x The x-coordinate of the rectangle.
      * @param y The y-coordinate of the rectangle.
