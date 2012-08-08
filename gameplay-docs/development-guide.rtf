@@ -20,7 +20,7 @@
 {\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}{\listoverride\listid5\listoverridecount0\ls5}{\listoverride\listid6\listoverridecount0\ls6}{\listoverride\listid7\listoverridecount0\ls7}{\listoverride\listid8\listoverridecount0\ls8}{\listoverride\listid9\listoverridecount0\ls9}{\listoverride\listid10\listoverridecount0\ls10}{\listoverride\listid11\listoverridecount0\ls11}}
 {\info
 {\author user}
-{\*\company Research In Motion Limited}}\margl1440\margr1440\vieww12540\viewh14520\viewkind1\viewscale80
+{\*\company Research In Motion Limited}}\margl1440\margr1440\vieww12840\viewh14520\viewkind1\viewscale80
 \deftab720
 \pard\pardeftab720\ri0
 
@@ -512,18 +512,18 @@ You should consider reading the latest versions of the API reference from the pr
 \fs24 \cf9 \ul \ulc9 Android NDK}}
 \fs24 \cf9 \ul \ulc9  
 \fs22 \cf0 \ulnone and {\field{\*\fldinst{HYPERLINK "http://developer.android.com/sdk/ndk/overview.html"}}{\fldrslt 
-\fs24 \cf9 \ul \ulc9 follow these instructions}}. \
+\fs24 \cf9 \ul follow these instructions}}. \
 \pard\pardeftab720\li1440\fi-360\ri0\qj
 \ls3\ilvl1
 \f1 \cf0 d.	Make sure <android-ndk-path> is added to PATH. \
 \pard\pardeftab720\li1440\fi-360\ri0\qj
 \ls3\ilvl1
 \f2 \cf0 e.	Install {\field{\*\fldinst{HYPERLINK "http://ant.apache.org/manual/install.html"}}{\fldrslt 
-\fs24 \cf9 \ul \ulc9 Apache Ant}}. \
+\fs24 \cf9 \ul Apache Ant}}. \
 f.	Make sure <ant-path>/bin is added the PATH.\
 g.	Install {\field{\*\fldinst{HYPERLINK "http://cygwin.com/install.html"}}{\fldrslt 
-\fs24 \cf9 \ul \ulc9 Cygwin}}
-\fs24 \cf9 \ul \ulc9  
+\fs24 \cf9 \ul Cygwin}}
+\fs24 \cf9 \ul  
 \fs22 \cf0 \ulnone and select and add the package 
 \b make: The GNU version of the 'make' utility
 \b0  during installation. \
@@ -733,9 +733,9 @@ To run the project on Mac, simply open the Xcode project and build and run.\
 \b\fs36 \cf0 Using fonts and 3-D scenes\
 \pard\pardeftab720\ri0
 
-\f2\b0\fs24 \cf0 For fonts and 3-D scenes, you will want to support industry-standard file formats, such as {\field{\*\fldinst{HYPERLINK "http://en.wikipedia.org/wiki/TrueType"}}{\fldrslt \cf9 \ul \ulc9 TrueType}}\cf9 \ul \ulc9  \cf0 \ulnone for fonts and popular modern 3-D scene formats such as {\field{\*\fldinst{HYPERLINK "https://collada.org/mediawiki/index.php/COLLADA_-_Digital_Asset_and_FX_Exchange_Schema"}}{\fldrslt \cf9 \ul \ulc9 COLLADA}}\cf9 \ul \ulc9  \cf0 \ulnone and the {\field{\*\fldinst{HYPERLINK "http://usa.autodesk.com/adsk/servlet/pc/index?id=6837478&amp;siteID=123112"}}{\fldrslt \cf9 \ul \ulc9 FBX}}\cf9 \ul \ulc9  \cf0 \ulnone formats. \
+\f2\b0\fs24 \cf0 For fonts and 3-D scenes, you will want to support industry-standard file formats, such as {\field{\*\fldinst{HYPERLINK "http://en.wikipedia.org/wiki/TrueType"}}{\fldrslt \cf9 \ul TrueType}}\cf9 \ul  \cf0 \ulnone for fonts and popular modern 3-D scene formats such as {\field{\*\fldinst{HYPERLINK "https://collada.org/mediawiki/index.php/COLLADA_-_Digital_Asset_and_FX_Exchange_Schema"}}{\fldrslt \cf9 \ul COLLADA}}\cf9 \ul  \cf0 \ulnone and the {\field{\*\fldinst{HYPERLINK "http://usa.autodesk.com/adsk/servlet/pc/index?id=6837478&amp;siteID=123112"}}{\fldrslt \cf9 \ul FBX}}\cf9 \ul  \cf0 \ulnone formats. \
 \
-Although these formats are popular and have the widest support in tooling options, they are not considered efficient runtime formats. The gameplay library requires that you convert these formats to its documented {\field{\*\fldinst{HYPERLINK "https://github.com/blackberry/GamePlay/blob/master/gameplay-encoder/gameplay-bundle.txt"}}{\fldrslt \cf9 \ul \ulc9 gameplay bundle format (.gpb)}}\cf9 \ul \ulc9  \cf0 \ulnone using the gameplay-encoder executable.\
+Although these formats are popular and have the widest support in tooling options, they are not considered efficient runtime formats. The gameplay library requires that you convert these formats to its documented {\field{\*\fldinst{HYPERLINK "https://github.com/blackberry/GamePlay/blob/master/gameplay-encoder/gameplay-bundle.txt"}}{\fldrslt \cf9 \ul gameplay bundle format (.gpb)}}\cf9 \ul  \cf0 \ulnone using the gameplay-encoder executable.\
 \pard\pardeftab720\ri0\sb480\sa120
 
 \f1\b\fs36 \cf0 Pre-built gameplay-encoder tool
@@ -763,7 +763,7 @@ Although these formats are popular and have the widest support in tooling option
 \f0 \
 \pard\pardeftab720\ri0
 
-\f2\b0\fs24 \cf0 Although the FBX format is supported by the gameplay-encoder tools, FBX is not allowed to be re-distributed as part of our framework. However, it is free for you to use. Simply download the {\field{\*\fldinst{HYPERLINK "http://usa.autodesk.com/adsk/servlet/pc/index?id=6837478&amp;siteID=123112"}}{\fldrslt \cf9 \ul \ulc9 FBX SDK}}\cf9 \ul \ulc9  \cf0 \ulnone and then re-build the code in the gameplay-encoder using the USE_FBX preprocessor directive and ensure that you include the header and library paths in the project to the FBX SDK paths.\
+\f2\b0\fs24 \cf0 Although the FBX format is supported by the gameplay-encoder tools, FBX is not allowed to be re-distributed as part of our framework. However, it is free for you to use. Simply download the {\field{\*\fldinst{HYPERLINK "http://usa.autodesk.com/adsk/servlet/pc/index?id=6837478&amp;siteID=123112"}}{\fldrslt \cf9 \ul FBX SDK}}\cf9 \ul  \cf0 \ulnone and then re-build the code in the gameplay-encoder using the USE_FBX preprocessor directive and ensure that you include the header and library paths in the project to the FBX SDK paths.\
 \pard\pardeftab720\ri0\sb480\sa120
 
 \f1\b\fs36 \cf0 Content pipeline\
@@ -997,7 +997,7 @@ Next, you
 \f1\b\fs36 \cf0 Drawing text and images\
 \pard\pardeftab720\ri0
 
-\b0\fs24 \cf0 The following code sample illustrates how to render and image and text together:\
+\b0\fs24 \cf0 The following code sample illustrates how to render an image and text together:\
 \
 \pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\ri0
 
@@ -1239,7 +1239,7 @@ The
 \f1\b\fs36 \cf0 Encoding an FBX file\
 \pard\pardeftab720\ri0
 
-\f2\b0\fs24 \cf0 To convert an FBX file to a gameplay binary file, you must install the FBX SDK and set the preprocessor directive USE_FBX. See the instructions in the \cf9 \ul \ulc9 gameplay-encoder README \cf0 \ulnone on GitHub.\
+\f2\b0\fs24 \cf0 To convert an FBX file to a gameplay binary file, you must install the FBX SDK and set the preprocessor directive USE_FBX. See the instructions in the \cf9 \ul gameplay-encoder README \cf0 \ulnone on GitHub.\
 \pard\pardeftab720\ri0\sb480\sa120
 
 \f1\b\fs36 \cf0 Loading a scene\
@@ -1698,12 +1698,10 @@ Here is an example of binding a value on a parameter:\
 \f0 .\
 
 \f1 If there is an error compiling the shaders the expanded shader without the definitions is output with an .err file extension in the same directory where the file was loaded from. \
-\pard\pardeftab720\ri0
 
-\f0 \cf0 \
-\pard\pardeftab720\ri0
+\f0 \
 
-\f1\b \cf0 Example:
+\f1\b Example:
 \f0 \
 \
 \pard\pardeftab720\ri0
@@ -2321,7 +2319,6 @@ character->getRigidBody()->addCollisionListener(mygame,\'a0wall);\
  \
 ...\
  \
-\pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\ri0
 \cf9 void\cf0 \'a0MyGame::collisionEvent(PhysicsRigidBody::Listener::EventType\'a0type,\'a0\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf9 const\cf0 \'a0PhysicsRigidBody::CollisionPair&\'a0pair,\'a0\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0      \cf9 const\cf0 \'a0Vector3&\'a0pointA,\'a0\cf9 const\cf0 \'a0Vector3&\'a0pointB)\
@@ -3171,9 +3168,9 @@ myButton->addListener(\cf9 this\cf0 ,\'a0Control::Listener::PRESS\'a0|\'a0Contro
 \f0 \
 \pard\pardeftab720\ri0
 
-\f1\b0\fs22 \cf0 To write Lua scripts, you can use any text editor or IDE. If Visual Studio is your editor of choice, it is recommended that you install the Lua Language Support extension, which adds syntax highlighting to the editor (available here: {\field{\*\fldinst{HYPERLINK "http://vslua.codeplex.com/"}}{\fldrslt \cf9 \ul \ulc9 http://vslua.codeplex.com/}}).\
+\f1\b0\fs22 \cf0 To write Lua scripts, you can use any text editor or IDE. If Visual Studio is your editor of choice, it is recommended that you install the Lua Language Support extension, which adds syntax highlighting to the editor (available here: {\field{\*\fldinst{HYPERLINK "http://vslua.codeplex.com/"}}{\fldrslt \cf9 \ul http://vslua.codeplex.com/}}).\
 \
-To generate your own bindings, you will need to download and install Doxygen (available here: {\field{\*\fldinst{HYPERLINK "http://www.doxygen.org"}}{\fldrslt \cf9 \ul \ulc9 http://www.doxygen.org}}).
+To generate your own bindings, you will need to download and install Doxygen (available here: {\field{\*\fldinst{HYPERLINK "http://www.doxygen.org"}}{\fldrslt \cf9 \ul http://www.doxygen.org}}).
 \f0 \
 \pard\pardeftab720\ri0\sb480\sa120
 
@@ -3181,7 +3178,7 @@ To generate your own bindings, you will need to download and install Doxygen (av
 \f0 \
 \pard\pardeftab720\ri0
 
-\f1\b0\fs22 \cf0 For an introductory look at scripting with Lua, including basic language features, visit {\field{\*\fldinst{HYPERLINK "http://www.lua.org/pil/"}}{\fldrslt \cf9 \ul \ulc9 http://www.lua.org/pil/}}. Note that the documentation available at this link is aimed at Lua 5.0 and will contain some outdated APIs. However, the basic usage of the language remains the same
+\f1\b0\fs22 \cf0 For an introductory look at scripting with Lua, including basic language features, visit {\field{\*\fldinst{HYPERLINK "http://www.lua.org/pil/"}}{\fldrslt \cf9 \ul http://www.lua.org/pil/}}. Note that the documentation available at this link is aimed at Lua 5.0 and will contain some outdated APIs. However, the basic usage of the language remains the same
 \f0 .\
 \
 
@@ -3243,9 +3240,8 @@ v\cf12 :\cf0 y(4.2)\
 \pard\pardeftab720\ri0
 
 \f0\fs22 \cf0 \
-\pard\pardeftab720\ri0
 
-\f1 \cf0 Then on the C++ side, as usual, you must derive a class from Game and create a static instance on the stack. However, in the case of a script-based game, the .h file can simply contain the class definition with all empty implementations while the .cpp file would contain the static instance. For example,\
+\f1 Then on the C++ side, as usual, you must derive a class from Game and create a static instance on the stack. However, in the case of a script-based game, the .h file can simply contain the class definition with all empty implementations while the .cpp file would contain the static instance. For example,\
 \
 MyScriptGame.h\
 \pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\ri0
@@ -3264,9 +3260,8 @@ class\cf0 \'a0MyScriptGame:\'a0\cf9 public\cf0 \'a0Game\
 
 \f0\fs22 \cf0 \
 \
-\pard\pardeftab720\ri0
 
-\f1 \cf0 MyScriptGame.cpp\
+\f1 MyScriptGame.cpp\
 \pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\ri0
 
 \f5\fs20 \cf9 \
@@ -3278,9 +3273,8 @@ MyScriptGame\'a0game;\
 \pard\pardeftab720\ri0
 
 \f0\fs22 \cf0 \
-\pard\pardeftab720\ri0
 
-\f1 \cf0 The sample does not require any other C++ implementation. For a complete sample game using the techniques described above, see sample05-lua as one-to-one mapping of sample00-mesh with a box instead of a duck. It also has some additional scripting code showcasing AIAgent and AIStates.
+\f1 The sample does not require any other C++ implementation. For a complete sample game using the techniques described above, see sample05-lua as one-to-one mapping of sample00-mesh with a box instead of a duck. It also has some additional scripting code showcasing AIAgent and AIStates.
 \f0 \
 \pard\pardeftab720\ri0\sb480\sa120
 
@@ -3416,9 +3410,8 @@ MyScriptGame\'a0game;\
 \cf0 \
 \pard\pardeftab720\ri0
 \cf0 \
-\pard\pardeftab720\ri0
 
-\f1 \cf0 This step is usually done either in the constructor of the class or in a class initialization function. Next, the class will want to fire the event so that the script callback functions are actually called. This code is placed wherever it makes sense (depending on what the actual event is) and looks like so:\
+\f1 This step is usually done either in the constructor of the class or in a class initialization function. Next, the class will want to fire the event so that the script callback functions are actually called. This code is placed wherever it makes sense (depending on what the actual event is) and looks like so:\
 \
 \pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\ri0
 
@@ -3426,9 +3419,8 @@ MyScriptGame\'a0game;\
 \pard\pardeftab720\ri0
 
 \f0\fs22 \cf0 \
-\pard\pardeftab720\ri0
 
-\f1 \cf0 The template argument corresponds to the return type of the callback function, the first parameter is the name of the event to fire, and the remaining arguments are the parameters to the actual callback function: in this case, the integer that is passed to the notify callback. To see a full example of a class that derives from 
+\f1 The template argument corresponds to the return type of the callback function, the first parameter is the name of the event to fire, and the remaining arguments are the parameters to the actual callback function: in this case, the integer that is passed to the notify callback. To see a full example of a class that derives from 
 \f4\fs24 gameplay::ScriptTarget 
 \f1\fs22 within gameplay, take a look at the 
 \f4\fs24 gameplay::Control 
@@ -3464,7 +3456,7 @@ MyScriptGame\'a0game;\
 \ls8\ilvl2
 \f7 \uc0\u9827 
 \f8 	
-\f1 There is no reasonable way to unload a Lua script; thus, the recommended usage pattern is to put each script's variables and functions inside a table (see Lua technical note 7 at {\field{\*\fldinst{HYPERLINK "http://www.lua.org/notes/ltn007.html"}}{\fldrslt \cf9 \ul \ulc9 http://www.lua.org/notes/ltn007.html}}). i.e.\
+\f1 There is no reasonable way to unload a Lua script; thus, the recommended usage pattern is to put each script's variables and functions inside a table (see Lua technical note 7 at {\field{\*\fldinst{HYPERLINK "http://www.lua.org/notes/ltn007.html"}}{\fldrslt \cf9 \ul http://www.lua.org/notes/ltn007.html}}). i.e.\
 \pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\li720\ri0
 
 \f5\fs20 \cf11 \
@@ -3574,7 +3566,7 @@ Android is a trademark of Google Inc. Apache is a trademark of The Apache Softwa
 \
 \pard\pardeftab720\ri0
 
-\f2 \cf0 This documentation including all documentation incorporated by reference herein such as documentation provided or made available at {\field{\*\fldinst{HYPERLINK "http://www.blackberry.com/go/docs"}}{\fldrslt \cf9 \ul \ulc9 www.blackberry.com/go/docs}}is provided or made accessible "AS IS" and "AS AVAILABLE" and without condition, endorsement, guarantee, representation, or warranty of any kind by Research In Motion Limited and its affiliated companies ("RIM") and RIM assumes no responsibility for any typographical, technical, or other inaccuracies, errors, or omissions in this documentation. In order to protect RIM proprietary and confidential information and/or trade secrets, this documentation may describe some aspects of RIM technology in generalized terms. RIM reserves the right to periodically change information that is contained in this documentation; however, RIM makes no commitment to provide any such changes, updates, enhancements, or other additions to this documentation to you in a timely manner or at all.\
+\f2 \cf0 This documentation including all documentation incorporated by reference herein such as documentation provided or made available at {\field{\*\fldinst{HYPERLINK "http://www.blackberry.com/go/docs"}}{\fldrslt \cf9 \ul www.blackberry.com/go/docs}}is provided or made accessible "AS IS" and "AS AVAILABLE" and without condition, endorsement, guarantee, representation, or warranty of any kind by Research In Motion Limited and its affiliated companies ("RIM") and RIM assumes no responsibility for any typographical, technical, or other inaccuracies, errors, or omissions in this documentation. In order to protect RIM proprietary and confidential information and/or trade secrets, this documentation may describe some aspects of RIM technology in generalized terms. RIM reserves the right to periodically change information that is contained in this documentation; however, RIM makes no commitment to provide any such changes, updates, enhancements, or other additions to this documentation to you in a timely manner or at all.\
 \pard\pardeftab720\ri0
 
 \f0 \cf0 \
