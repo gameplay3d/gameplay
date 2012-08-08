@@ -2991,7 +2991,7 @@ this run the following command with your gameplay-encoder executable:<o:p></o:p>
 <h3>Drawing text and images</h3>
 
 <p class=MsoNormal><span style='font-size:12.0pt;mso-bidi-font-family:"Times New Roman"'>The
-following code sample illustrates how to render and image and text together:<o:p></o:p></span></p>
+following code sample illustrates how to render an image and text together:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:12.0pt;mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
 
@@ -3022,15 +3022,15 @@ style='background:white'><span style='font-family:Consolas;color:black'> <o:p></
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;</span><span
 style='font-family:Consolas;color:green'>//&nbsp;Draw&nbsp;your&nbsp;sprites&nbsp;(we&nbsp;will&nbsp;only&nbsp;draw&nbsp;one&nbsp;now</span><span
 style='font-family:Consolas;color:black'><o:p></o:p></span></pre><pre
-style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_batch-&gt;begin();<o:p></o:p></span></pre><pre
+style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_batch-&gt;start();<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_batch-&gt;draw(Rectangle(0,&nbsp;0,&nbsp;WINDOW_WIDTH,&nbsp;WINDOW_HEIGHT),&nbsp;<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rectangle(0,&nbsp;0,&nbsp;WINDOW_WIDTH,&nbsp;WINDOW_HEIGHT),&nbsp;Vector4::one());<o:p></o:p></span></pre><pre
-style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_batch-&gt;end();<o:p></o:p></span></pre><pre
+style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_batch-&gt;finish();<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'> <o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;</span><span
 style='font-family:Consolas;color:green'>//&nbsp;Draw&nbsp;the&nbsp;text&nbsp;at&nbsp;position&nbsp;20,20&nbsp;using&nbsp;red&nbsp;color</span><span
 style='font-family:Consolas;color:black'><o:p></o:p></span></pre><pre
-style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_font-&gt;begin();<o:p></o:p></span></pre><pre
+style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_font-&gt;start();<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;</span><span
 style='font-family:Consolas;color:blue'>char</span><span style='font-family:
 Consolas;color:black'>&nbsp;text[1024];<o:p></o:p></span></pre><pre
@@ -3040,7 +3040,7 @@ style='font-family:Consolas;color:black'>,&nbsp;Game::getFrameRate());<o:p></o:p
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_font-&gt;drawText(</span><span
 style='font-family:Consolas;color:#A31515'>&quot;Game&nbsp;20,&nbsp;20,&nbsp;Vector4(1,&nbsp;0,&nbsp;0,&nbsp;1),&nbsp;_font-&gt;getSize());</span><span
 style='font-family:Consolas;color:black'><o:p></o:p></span></pre><pre
-style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_font-&gt;end();<o:p></o:p></span></pre><pre
+style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;_font-&gt;finish();<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>}<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'> <o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:blue'>void</span><span
@@ -3050,7 +3050,7 @@ style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&n
 style='font-family:Consolas;color:green'>//&nbsp;Use&nbsp;built-in&nbsp;macros&nbsp;to&nbsp;clean&nbsp;up&nbsp;our&nbsp;resources.</span><span
 style='font-family:Consolas;color:black'><o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;SAFE_DELETE(_batch);<o:p></o:p></span></pre><pre
-style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;SAFE_DELETE(_font);<o:p></o:p></span></pre><pre
+style='background:white'><span style='font-family:Consolas;color:black'>&nbsp;&nbsp;&nbsp;&nbsp;SAFE_RELEASE(_font);<o:p></o:p></span></pre><pre
 style='background:white'><span style='font-family:Consolas;color:black'>}<o:p></o:p></span></pre>
 
 <h3>Batch, batch, batch</h3>
@@ -3064,10 +3064,10 @@ style='font-size:12.0pt;mso-bidi-font-family:"Times New Roman"'> and </span><spa
 style='font-size:12.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>gameplay::Font</span><span
 style='font-size:12.0pt;mso-bidi-font-family:"Times New Roman"'> code sequences
 above both have a common flow to them. The developer performs a call to </span><span
-style='font-size:12.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>begin()</span><span
+style='font-size:12.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>start()</span><span
 style='font-size:12.0pt;mso-bidi-font-family:"Times New Roman"'> followed by
 drawing operations and finishing with a call to </span><span style='font-size:
-12.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>end()</span><span
+12.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>finish()</span><span
 style='font-size:12.0pt;mso-bidi-font-family:"Times New Roman"'>. This is to
 support batching or combining drawing operations into a single hardware
 rendering call.<a name=d9e3a1310></a><o:p></o:p></span></p>
