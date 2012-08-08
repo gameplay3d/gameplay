@@ -44,9 +44,6 @@
 namespace gameplay
 {
 
-// Lua bindings for global functions.
-int lua__printError(lua_State* state);
-
 // Global enum to string conversion function (used to pass enums to Lua from C++).
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value);
 

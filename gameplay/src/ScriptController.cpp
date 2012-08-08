@@ -518,12 +518,12 @@ void ScriptController::setString(const char* name, const char* v)
 
 void ScriptController::print(const char* str)
 {
-    printError("%s", str);
+    gameplay::print("%s", str);
 }
 
 void ScriptController::print(const char* str1, const char* str2)
 {
-    printError("%s%s", str1, str2);
+    gameplay::print("%s%s", str1, str2);
 }
 
 ScriptController::ScriptController() : _lua(NULL)
@@ -552,7 +552,7 @@ void ScriptController::initialize()
     luaL_openlibs(_lua);
     lua_RegisterAllBindings();
 
-    // Create our own print() function that uses gameplay::printError.
+    // Create our own print() function that uses gameplay::print.
     if (luaL_dostring(_lua, lua_print_function))
         GP_ERROR("Failed to load custom print() function with error: '%s'.", lua_tostring(_lua, -1));
 }

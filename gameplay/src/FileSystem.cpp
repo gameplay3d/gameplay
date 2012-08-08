@@ -305,6 +305,23 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     return buffer;
 }
 
+bool FileSystem::isAbsolutePath(const char* filePath)
+{
+    if (filePath == 0 || filePath[0] == '\0')
+        return false;
+#ifdef WIN32
+    if (strlen(filePath) >= 2)
+    {
+        char first = filePath[0];
+        if (filePath[1] == ':' && ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')))
+            return true;
+    }
+    return false;
+#else
+    return filePath[0] == '/';
+#endif
+}
+
 void createFileFromAsset(const char* path)
 {
 #ifdef __ANDROID__
