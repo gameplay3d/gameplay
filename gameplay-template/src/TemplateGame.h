@@ -13,7 +13,7 @@ class TemplateGame: public Game
 public:
 
     /**
-     * Constructror.
+     * Constructor.
      */
     TemplateGame();
 
