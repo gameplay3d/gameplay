@@ -618,7 +618,7 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 namespace gameplay
 {
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
