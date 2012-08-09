@@ -54,7 +54,7 @@ static double timespec2millis(struct timespec *a)
     return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
@@ -85,7 +85,7 @@ static EGLenum checkErrorEGL(const char* msg)
         "EGL power management event has occurred",
     };
     EGLenum error = eglGetError();
-    printError("%s: %s.", msg, errmsg[error - EGL_SUCCESS]);
+    print("%s: %s.", msg, errmsg[error - EGL_SUCCESS]);
     return error;
 }
 

@@ -21,7 +21,7 @@ CharacterGame game;
 
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
-      _ceiling(NULL), _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
+      _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
       _keyFlags(0), _drawDebug(0), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
 {
     _buttonPressed = new bool[2];
@@ -51,16 +51,15 @@ void CharacterGame::initialize()
     initializeGamepad();
 
     // Create a collision object for the ceiling.
-    _scene->addNode("ceiling");
-    _ceiling = Node::create("ceiling");
-    _ceiling->setTranslationY(14.5f);
+    Node* ceiling = _scene->addNode("ceiling");
+    ceiling->setTranslationY(14.5f);
     PhysicsRigidBody::Parameters rbParams;
     rbParams.mass = 0.0f;
     rbParams.friction = 0.5f;
     rbParams.restitution = 0.75f;
     rbParams.linearDamping = 0.025f;
     rbParams.angularDamping = 0.16f;
-    _ceiling->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, PhysicsCollisionShape::box(Vector3(49.5f, 1.0f, 49.5f)), &rbParams);
+    ceiling->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, PhysicsCollisionShape::box(Vector3(49.5f, 1.0f, 49.5f)), &rbParams);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initializeScene);

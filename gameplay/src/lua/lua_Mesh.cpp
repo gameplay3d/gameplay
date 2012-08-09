@@ -988,7 +988,7 @@ int lua_Mesh_static_createBoundingBox(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1040,7 +1040,7 @@ int lua_Mesh_static_createLines(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1092,7 +1092,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1130,7 +1130,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1190,7 +1190,7 @@ int lua_Mesh_static_createQuad(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1223,7 +1223,7 @@ int lua_Mesh_static_createQuad(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1266,7 +1266,7 @@ int lua_Mesh_static_createQuadFullscreen(lua_State* state)
             {
                 ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
-                object->owns = false;
+                object->owns = true;
                 luaL_getmetatable(state, "Mesh");
                 lua_setmetatable(state, -2);
             }

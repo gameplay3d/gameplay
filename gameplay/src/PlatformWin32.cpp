@@ -9,7 +9,7 @@
 #include <GL/wglew.h>
 #include <windowsx.h>
 
-using gameplay::printError;
+using gameplay::print;
 
 // Default to 720p
 static int __width = 1280;
@@ -444,7 +444,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 namespace gameplay
 {
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
