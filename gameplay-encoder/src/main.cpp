@@ -56,12 +56,12 @@ int main(int argc, const char** argv)
     // Check if the file exists.
     if (!arguments.fileExists())
     {
-        fprintf(stderr, "Error: File not found: %s\n", arguments.getFilePathPointer());
+        LOG(1, "Error: File not found: %s\n", arguments.getFilePathPointer());
         return -1;
     }
 
     // File exists
-    fprintf(stderr, "Encoding file: %s\n", arguments.getFilePathPointer());
+    LOG(1, "Encoding file: %s\n", arguments.getFilePathPointer());
 
     switch (arguments.getFileFormat())
     {
@@ -80,7 +80,7 @@ int main(int argc, const char** argv)
             fbxEncoder.write(realpath, arguments);
             break;
 #else
-            fprintf(stderr, "Error: FBX not enabled. Install the FBX SDK and use the preprocessor definition USE_FBX.\n");
+            LOG(1, "Error: FBX not enabled. Install the FBX SDK and use the preprocessor definition USE_FBX.\n");
             return -1;
 #endif
         }
@@ -104,7 +104,7 @@ int main(int argc, const char** argv)
         }
    default:
         {
-            fprintf(stderr, "Error: Unsupported file format: %s\n", arguments.getFilePathPointer());
+            LOG(1, "Error: Unsupported file format: %s\n", arguments.getFilePathPointer());
             return -1;
         }
     }
