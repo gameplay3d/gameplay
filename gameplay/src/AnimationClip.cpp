@@ -169,7 +169,7 @@ float AnimationClip::getBlendWeight() const
 
 bool AnimationClip::isPlaying() const
 {
-    return isClipStateBitSet(CLIP_IS_PLAYING_BIT);
+    return (isClipStateBitSet(CLIP_IS_PLAYING_BIT) && !isClipStateBitSet(CLIP_IS_PAUSED_BIT));
 }
 
 void AnimationClip::play()

@@ -121,14 +121,17 @@ static void copyMatrix(const FbxMatrix& fbxMatrix, Matrix& matrix);
 static void findMinMaxTime(FbxAnimCurve* animCurve, float* startTime, float* stopTime, float* frameRate);
 
 /**
- * Appends a key frame of the given node's transform at the given time.
+ * Appends key frame data to the given node for the specified animation target attribute.
  * 
  * @param fbxNode The node to get the matrix transform from.
- * @param time The key time to add and the time to get the transform from.
- * @param keyTimes The list of key times to append to.
- * @param keyValues The list of key values to append to.
+ * @param channel The aniamtion channel to write values into.
+ * @param time The time of the keyframe.
+ * @param scale The evaluated scale for the keyframe.
+ * @param rotation The evalulated rotation for the keyframe.
+ * @param translation The evalulated translation for the keyframe.
+
  */
-static void appendKeyFrame(FbxNode* fbxNode, float time, std::vector<float>* keyTimes, std::vector<float>* keyValues);
+static void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, const Vector3& scale, const Quaternion& rotation, const Vector3& translation);
 
 /**
  * Decomposes the given node's matrix transform at the given time and copies to scale, rotation and translation.
@@ -199,8 +202,8 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
     
     if (!importer->Initialize(filepath.c_str(), -1, sdkManager->GetIOSettings()))
     {
-        printf("Call to FbxImporter::Initialize() failed.\n");
-        printf("Error returned: %s\n\n", importer->GetLastErrorString());
+        LOG(1, "Call to FbxImporter::Initialize() failed.\n");
+        LOG(1, "Error returned: %s\n\n", importer->GetLastErrorString());
         exit(-1);
     }
     
@@ -241,19 +244,19 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
         {
             std::string path = outputFilePath.substr(0, pos);
             path.append(".xml");
-            fprintf(stderr, "Saving debug file: %s\n", path.c_str());
+            LOG(1, "Saving debug file: %s\n", path.c_str());
             if (!_gamePlayFile.saveText(path))
             {
-                fprintf(stderr,"Error writing text file: %s\n", path.c_str());
+                LOG(1, "Error writing text file: %s\n", path.c_str());
             }
         }
     }
     else
     {
-        fprintf(stderr, "Saving binary file: %s\n", outputFilePath.c_str());
+        LOG(1, "Saving binary file: %s\n", outputFilePath.c_str());
         if (!_gamePlayFile.saveBinary(outputFilePath))
         {
-            fprintf(stderr,"Error writing binary file: %s\n", outputFilePath.c_str());
+            LOG(1, "Error writing binary file: %s\n", outputFilePath.c_str());
         }
     }
 }
@@ -377,77 +380,141 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
         findMinMaxTime(animCurve, &startTime, &stopTime, &frameRate);
     }
 
-    bool translate = tx | ty | tz;
-    bool scale = sx | sy | sz;
-    bool rotate = rx | ry | rz;
+    if (!(sx || sy || sz || rx || ry || rz || tx || ty || tz))
+        return; // no animation channels
 
-    if (translate || rotate || scale)
+    assert(startTime != FLT_MAX);
+    assert(stopTime >= 0.0f);
+
+    // Determine which animation channels to create
+    std::vector<unsigned int> channelAttribs;
+    if (sx && sy && sz)
     {
-        assert(startTime != FLT_MAX);
-        assert(stopTime >= 0.0f);
+        if (rx || ry || rz)
+        {
+            if (tx && ty && tz)
+            {
+                channelAttribs.push_back(Transform::ANIMATE_SCALE_ROTATE_TRANSLATE);
+            }
+            else
+            {
+                channelAttribs.push_back(Transform::ANIMATE_SCALE_ROTATE);
+                if (tx)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_X);
+                if (ty)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Y);
+                if (tz)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Z);
+            }
+        }
+        else
+        {
+            if (tx && ty && tz)
+            {
+                channelAttribs.push_back(Transform::ANIMATE_SCALE_TRANSLATE);
+            }
+            else
+            {
+                channelAttribs.push_back(Transform::ANIMATE_SCALE);
+                if (tx)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_X);
+                if (ty)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Y);
+                if (tz)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Z);
+            }
+        }
+    }
+    else
+    {
+        if (rx || ry || rz)
+        {
+            if (tx && ty && tz)
+            {
+                channelAttribs.push_back(Transform::ANIMATE_ROTATE_TRANSLATE);
+            }
+            else
+            {
+                channelAttribs.push_back(Transform::ANIMATE_ROTATE);
+                if (tx)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_X);
+                if (ty)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Y);
+                if (tz)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Z);
+            }
+        }
+        else
+        {
+            if (tx && ty && tz)
+            {
+                channelAttribs.push_back(Transform::ANIMATE_TRANSLATE);
+            }
+            else
+            {
+                if (tx)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_X);
+                if (ty)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Y);
+                if (tz)
+                    channelAttribs.push_back(Transform::ANIMATE_TRANSLATE_Z);
+            }
+        }
+
+        if (sx)
+            channelAttribs.push_back(Transform::ANIMATE_SCALE_X);
+        if (sy)
+            channelAttribs.push_back(Transform::ANIMATE_SCALE_Y);
+        if (sz)
+            channelAttribs.push_back(Transform::ANIMATE_SCALE_Z);
+    }
+    unsigned int channelCount = channelAttribs.size();
+    assert(channelCount > 0);
+
+    // Allocate channel list
+    for (unsigned int i = 0; i < channelCount; ++i)
+    {
         AnimationChannel* channel = new AnimationChannel();
         channel->setTargetId(name);
-        channel->setTargetAttribute(Transform::ANIMATE_SCALE_ROTATE_TRANSLATE);
-        
-        float increment = 1000.0f / frameRate;
-        std::vector<float> keyTimes;
-        std::vector<float> keyValues;
-        for (float time = startTime; time < stopTime; time += increment)
-        {
-            appendKeyFrame(fbxNode, time, &keyTimes, &keyValues);
-        }
-        // Add the last key frame at exactly stopTime
-        appendKeyFrame(fbxNode, stopTime, &keyTimes, &keyValues);
-
-        channel->setKeyTimes(keyTimes);
-        /*
-        std::vector<float> newKeyValues;
-        for (size_t i = 0, size = keyValues.size(); i < size; i += 10)
-        {
-            if (translate)
-            {
-                newKeyValues.push_back(keyValues[i+0]);
-                newKeyValues.push_back(keyValues[i+1]);
-                newKeyValues.push_back(keyValues[i+2]);
-            }
-            if (rotate)
-            {
-                newKeyValues.push_back(keyValues[i+3]);
-                newKeyValues.push_back(keyValues[i+4]);
-                newKeyValues.push_back(keyValues[i+5]);
-                newKeyValues.push_back(keyValues[i+6]);
-            }
-            if (scale)
-            {
-                newKeyValues.push_back(keyValues[i+7]);
-                newKeyValues.push_back(keyValues[i+8]);
-                newKeyValues.push_back(keyValues[i+9]);
-            }
-        }
-        channel->setKeyValues(newKeyValues);
-        */
-        channel->setKeyValues(keyValues);
         channel->setInterpolation(AnimationChannel::LINEAR);
+        channel->setTargetAttribute(channelAttribs[i]);
         animation->add(channel);
-        /*
-        if (!translate)
+    }
+
+    // Evaulate animation curve in increments of frameRate and populate channel data.
+    FbxAMatrix fbxMatrix;
+    Matrix matrix;
+    float increment = 1000.0f / frameRate;
+    for (float time = startTime; time <= stopTime; time += increment)
+    {
+        // Clamp time to stopTime
+        time = std::min(time, stopTime);
+
+        // Evalulate the animation at this time
+        FbxTime kTime;
+        kTime.SetMilliSeconds((FbxLongLong)time);
+        fbxMatrix = fbxNode->EvaluateLocalTransform(kTime);
+        copyMatrix(fbxMatrix, matrix);
+
+        // Decompose the evalulated transformation matrix into separate
+        // scale, rotation and translation.
+        Vector3 scale;
+        Quaternion rotation;
+        Vector3 translation;
+        matrix.decompose(&scale, &rotation, &translation);
+        rotation.normalize();
+
+        // Append keyframe data to all channels
+        for (unsigned int i = 0; i < channelCount; ++i)
         {
-            addTranslateChannel(animation, fbxNode, startTime, stopTime);
+            appendKeyFrame(fbxNode, animation->getAnimationChannel(i), time, scale, rotation, translation);
         }
-        if (!rotate)
-        {
-            printf("rotate?\n"); // TODO
-        }
-        if (!scale)
-        {
-            addScaleChannel(animation, fbxNode, startTime, stopTime);
-        }
-        */
-        if (_groupAnimation != animation)
-        {
-            // TODO explains
-            _gamePlayFile.addAnimation(animation);
-        }
+    }
+
+    if (_groupAnimation != animation)
+    {
+        // TODO explain
+        _gamePlayFile.addAnimation(animation);
     }
 }
 
@@ -576,7 +643,7 @@ void FBXSceneEncoder::saveMesh(FbxUInt64 meshId, Mesh* mesh)
 
 void FBXSceneEncoder::print(const char* str)
 {
-    fprintf(stderr,"%s\n", str);
+    LOG(1, "%s\n", str);
 }
 
 void FBXSceneEncoder::transformNode(FbxNode* fbxNode, Node* node)
@@ -659,7 +726,7 @@ void FBXSceneEncoder::loadCamera(FbxNode* fbxNode, Node* node)
     }
     else
     {
-        warning("Unknown camera type in node");
+        LOG(2, "Warning: Unknown camera type in node.\n");
         return;
     }
     _gamePlayFile.addCamera(camera);
@@ -743,7 +810,7 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
     }
     default:
     {
-        warning("Unknown light type in node.");
+        LOG(2, "Warning: Unknown light type in node.\n");
         return;
     }
     }
@@ -993,16 +1060,6 @@ void FBXSceneEncoder::triangulateRecursive(FbxNode* fbxNode)
     {
         triangulateRecursive(fbxNode->GetChild(childIndex));
     }
-}
-
-void FBXSceneEncoder::warning(const std::string& message)
-{
-    printf("Warning: %s\n", message.c_str());
-}
-
-void FBXSceneEncoder::warning(const char* message)
-{
-    printf("Warning: %s\n", message);
 }
 
 ////////////////////////////////////
@@ -1387,32 +1444,132 @@ void findMinMaxTime(FbxAnimCurve* animCurve, float* startTime, float* stopTime, 
     *frameRate = std::max(*frameRate, (float)stop.GetFrameRate(FbxTime::eDefaultMode));
 }
 
-void appendKeyFrame(FbxNode* fbxNode, float time, std::vector<float>* keyTimes, std::vector<float>* keyValues)
+void appendKeyFrame(FbxNode* fbxNode, AnimationChannel* channel, float time, const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
 {
-    FbxAMatrix fbxMatrix;
-    Matrix matrix;
-    FbxTime kTime;
-    kTime.SetMilliSeconds((FbxLongLong)time);
-    fbxMatrix = fbxNode->EvaluateLocalTransform(kTime);
-    copyMatrix(fbxMatrix, matrix);
+    // Write key time
+    channel->getKeyTimes().push_back(time);
 
-    Vector3 scale;
-    Quaternion rotation;
-    Vector3 translation;
-    matrix.decompose(&scale, &rotation, &translation);
-    rotation.normalize();
+    // Write key values
+    std::vector<float>& keyValues = channel->getKeyValues();
+    switch (channel->getTargetAttribute())
+    {
+        case Transform::ANIMATE_SCALE:
+        {
+            keyValues.push_back(scale.x);
+            keyValues.push_back(scale.y);
+            keyValues.push_back(scale.z);
+        }
+        break;
 
-    keyTimes->push_back(time);
-    keyValues->push_back(scale.x);
-    keyValues->push_back(scale.y);
-    keyValues->push_back(scale.z);
-    keyValues->push_back(rotation.x);
-    keyValues->push_back(rotation.y);
-    keyValues->push_back(rotation.z);
-    keyValues->push_back(rotation.w);
-    keyValues->push_back(translation.x);
-    keyValues->push_back(translation.y);
-    keyValues->push_back(translation.z);
+        case Transform::ANIMATE_SCALE_X:
+        {
+            keyValues.push_back(scale.x);
+        }
+        break;
+
+        case Transform::ANIMATE_SCALE_Y:
+        {
+            keyValues.push_back(scale.y);
+        }
+        break;
+
+        case Transform::ANIMATE_SCALE_Z:
+        {
+            keyValues.push_back(scale.z);
+        }
+        break;
+
+        case Transform::ANIMATE_ROTATE:
+        {
+            keyValues.push_back(rotation.x);
+            keyValues.push_back(rotation.y);
+            keyValues.push_back(rotation.z);
+            keyValues.push_back(rotation.w);
+        }
+        break;
+
+        case Transform::ANIMATE_TRANSLATE:
+        {
+            keyValues.push_back(translation.x);
+            keyValues.push_back(translation.y);
+            keyValues.push_back(translation.z);
+        }
+        break;
+
+        case Transform::ANIMATE_TRANSLATE_X:
+        {
+            keyValues.push_back(translation.x);
+        }
+        break;
+
+        case Transform::ANIMATE_TRANSLATE_Y:
+        {
+            keyValues.push_back(translation.y);
+        }
+        break;
+
+        case Transform::ANIMATE_TRANSLATE_Z:
+        {
+            keyValues.push_back(translation.z);
+        }
+        break;
+
+        case Transform::ANIMATE_ROTATE_TRANSLATE:
+        {
+            keyValues.push_back(rotation.x);
+            keyValues.push_back(rotation.y);
+            keyValues.push_back(rotation.z);
+            keyValues.push_back(rotation.w);
+            keyValues.push_back(translation.x);
+            keyValues.push_back(translation.y);
+            keyValues.push_back(translation.z);
+        }
+        break;
+
+        case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
+        {
+            keyValues.push_back(scale.x);
+            keyValues.push_back(scale.y);
+            keyValues.push_back(scale.z);
+            keyValues.push_back(rotation.x);
+            keyValues.push_back(rotation.y);
+            keyValues.push_back(rotation.z);
+            keyValues.push_back(rotation.w);
+            keyValues.push_back(translation.x);
+            keyValues.push_back(translation.y);
+            keyValues.push_back(translation.z);
+        }
+        break;
+
+        case Transform::ANIMATE_SCALE_TRANSLATE:
+        {
+            keyValues.push_back(scale.x);
+            keyValues.push_back(scale.y);
+            keyValues.push_back(scale.z);
+            keyValues.push_back(translation.x);
+            keyValues.push_back(translation.y);
+            keyValues.push_back(translation.z);
+        }
+        break;
+
+        case Transform::ANIMATE_SCALE_ROTATE:
+        {
+            keyValues.push_back(scale.x);
+            keyValues.push_back(scale.y);
+            keyValues.push_back(scale.z);
+            keyValues.push_back(rotation.x);
+            keyValues.push_back(rotation.y);
+            keyValues.push_back(rotation.z);
+            keyValues.push_back(rotation.w);
+        }
+        break;
+
+        default:
+        {
+            LOG(1, "Warning: Invalid animatoin target (%d) attribute for node: %s.\n", channel->getTargetAttribute(), fbxNode->GetName());
+        }
+        return;
+    }
 }
 
 void decompose(FbxNode* fbxNode, float time, Vector3* scale, Quaternion* rotation, Vector3* translation)

@@ -163,7 +163,7 @@ void MeshSkin::computeBounds()
         return;
     }
 
-    DEBUGPRINT_VARG("\nComputing bounds for skin of mesh: %s\n", _mesh->getId().c_str());
+    LOG(2, "Computing bounds for skin of mesh: %s\n", _mesh->getId().c_str());
 
     Node* joint;
 
@@ -192,7 +192,7 @@ void MeshSkin::computeBounds()
     unsigned int jointCount = _joints.size();
     unsigned int vertexCount = _mesh->getVertexCount();
 
-    DEBUGPRINT_VARG("> %d joints found.\n", jointCount);
+    LOG(3, "  %d joints found.\n", jointCount);
 
     std::vector<AnimationChannel*> channels;
     std::vector<Node*> channelTargets;
@@ -201,8 +201,8 @@ void MeshSkin::computeBounds()
     _jointBounds.resize(jointCount);
 
     // Construct a list of all animation channels that target the joints affecting this mesh skin
-    DEBUGPRINT("> Collecting animations...\n");
-    DEBUGPRINT("> 0%%\r");
+    LOG(3, "  Collecting animations...\n");
+    LOG(3, "  0%%\r");
     for (unsigned int i = 0; i < jointCount; ++i)
     {
         joint = _joints[i];
@@ -272,16 +272,16 @@ void MeshSkin::computeBounds()
         }
         _jointBounds[i] = jointBounds;
 
-        DEBUGPRINT_VARG("> %d%%\r", (int)((float)(i+1) / (float)jointCount * 100.0f));
+        LOG(3, "  %d%%\r", (int)((float)(i+1) / (float)jointCount * 100.0f));
     }
-    DEBUGPRINT("\n");
+    LOG(3, "\n");
 
     unsigned int channelCount = channels.size();
 
     // Create a Curve for each animation channel
     float maxDuration = 0.0f;
-    DEBUGPRINT("> Building animation curves...\n");
-    DEBUGPRINT("> 0%%\r");
+    LOG(3, "  Building animation curves...\n");
+    LOG(3, "  0%%\r");
     for (unsigned int i = 0; i < channelCount; ++i)
     {
         AnimationChannel* channel = channels[i];
@@ -340,9 +340,9 @@ void MeshSkin::computeBounds()
         delete[] keyValues;
         keyValues = NULL;
 
-        DEBUGPRINT_VARG("> %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
+        LOG(3, "  %d%%\r", (int)((float)(i+1) / (float)channelCount * 100.0f));
     }
-    DEBUGPRINT("\n");
+    LOG(3, "\n");
 
     // Compute a total combined bounding volume for the MeshSkin that contains all possible
     // vertex positions for all animations targeting the skin. This rough approximation allows
@@ -366,8 +366,8 @@ void MeshSkin::computeBounds()
     _mesh->bounds.radius = 0;
     Vector3 skinnedPos;
     Vector3 tempPos;
-    DEBUGPRINT("> Evaluating joints...\n");
-    DEBUGPRINT("> 0%%\r");
+    LOG(3, "  Evaluating joints...\n");
+    LOG(3, "  0%%\r");
     BoundingVolume finalBounds;
     while (time <= maxDuration)
     {
@@ -416,9 +416,9 @@ void MeshSkin::computeBounds()
         else
             time += 33.0f;
 
-        DEBUGPRINT_VARG("> %d%%\r", (int)(time / maxDuration * 100.0f));
+        LOG(3, "  %d%%\r", (int)(time / maxDuration * 100.0f));
     }
-    DEBUGPRINT("\n");
+    LOG(3, "\n");
 
     // Update the bounding sphere for the mesh
     _mesh->bounds = finalBounds;
