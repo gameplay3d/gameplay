@@ -1,4 +1,4 @@
--- This lua script file represents an exact lua implementation translation of sample00-mesh with a box instead of a duck.
+-- This lua script file represents a lua implementation translation of sample00-mesh with a box instead of a duck.
 
 function initialize()
     -- Display splash screen for at least 1 second.
@@ -35,7 +35,7 @@ function initialize()
     _scene:addNode("grid"):setModel(model)
 
     -- Load the AI script
-    game:getScriptController():loadScript("res/ai.lua")
+    dofile("res/ai.lua")
 
     ScreenDisplayer.finish()
 end
@@ -75,7 +75,7 @@ end
 
 function drawSplash()
     local game = Game.getInstance()
-    game:clear(Game.CLEAR_COLOR_DEPTH, Vector4.new(0, 0, 0, 1), 1.0, 0)
+    game:clear(Game.CLEAR_COLOR_DEPTH, 0, 0, 0, 1, 1.0, 0)
     local batch = SpriteBatch.create("res/logo_powered_white.png")
     batch:start()
     batch:draw(game:getWidth() * 0.5, game:getHeight() * 0.5, 0.0, 512.0, 512.0, 0.0, 1.0, 1.0, 0.0, Vector4.one(), true)
@@ -117,79 +117,53 @@ function createGridModel()
 
     local vertices = {}
     local gridLength = math.floor(lineCount / 2)
-
     local value = -gridLength
-    local i = 1 -- NOTE: Lua arrays start at 1!
-    while i < verticesSize do
+
+    while #vertices + 1 < verticesSize do
         -- Default line color is dark grey
-        local color = Vector4.new(0.3, 0.3, 0.3, 1.0)
+        local red, green, blue = 0.3, 0.3, 0.3
 
         -- Every 10th line is brighter grey
         if math.floor(value + 0.5) % 10 == 0 then
-            color:set(0.45, 0.45, 0.45, 1.0)
+            red, green, blue = 0.45, 0.45, 0.45
         end
-
         -- The Z axis is blue
-        if value == 0.0 then
-            color:set(0.15, 0.15, 0.7, 1.0)
+        if value == 0 then
+            red, green, blue = 0.15, 0.15, 0.7
         end
 
         -- Build the lines
-        vertices[i] = value
-        i = i + 1
-        vertices[i] = 0.0
-        i = i + 1
-        vertices[i] = -gridLength
-        i = i + 1
-        vertices[i] = color:x()
-        i = i + 1
-        vertices[i] = color:y()
-        i = i + 1
-        vertices[i] = color:z()
-        i = i + 1
+        vertices[#vertices+1] = value
+        vertices[#vertices+1] = 0.0
+        vertices[#vertices+1] = -gridLength
+        vertices[#vertices+1] = red
+        vertices[#vertices+1] = green
+        vertices[#vertices+1] = blue
 
-        vertices[i] = value
-        i = i + 1
-        vertices[i] = 0.0
-        i = i + 1
-        vertices[i] = gridLength
-        i = i + 1
-        vertices[i] = color:x()
-        i = i + 1
-        vertices[i] = color:y()
-        i = i + 1
-        vertices[i] = color:z()
-        i = i + 1
+        vertices[#vertices+1] = value
+        vertices[#vertices+1] = 0.0
+        vertices[#vertices+1] = gridLength
+        vertices[#vertices+1] = red
+        vertices[#vertices+1] = green
+        vertices[#vertices+1] = blue
 
         -- The X axis is red
         if value == 0.0 then
-            color:set(0.7, 0.15, 0.15, 1.0)
+            red, green, blue = 0.7, 0.15, 0.15
         end
-        vertices[i] = -gridLength
-        i = i + 1
-        vertices[i] = 0.0
-        i = i + 1
-        vertices[i] = value
-        i = i + 1
-        vertices[i] = color:x()
-        i = i + 1
-        vertices[i] = color:y()
-        i = i + 1
-        vertices[i] = color:z()
-        i = i + 1
+        vertices[#vertices+1] = -gridLength
+        vertices[#vertices+1] = 0.0
+        vertices[#vertices+1] = value
+        vertices[#vertices+1] = red
+        vertices[#vertices+1] = green
+        vertices[#vertices+1] = blue
 
-        vertices[i] = gridLength
-        i = i + 1
-        vertices[i] = 0.0
-        i = i + 1
-        vertices[i] = value
-        i = i + 1
-        vertices[i] = color:x()
-        i = i + 1
-        vertices[i] = color:y()
-        i = i + 1
-        vertices[i] = color:z()
-        i = i + 1
+        vertices[#vertices+1] = gridLength
+        vertices[#vertices+1] = 0.0
+        vertices[#vertices+1] = value
+        vertices[#vertices+1] = red
+        vertices[#vertices+1] = green
+        vertices[#vertices+1] = blue
 
         value = value + 1.0
     end
@@ -200,13 +174,12 @@ function createGridModel()
     }
     local mesh = Mesh.createMesh(VertexFormat.new(elements, 2), pointCount, false)
     if mesh == nil then
-        return nil
+        return nil, "Error creating grid mesh."
     end
     mesh:setPrimitiveType(Mesh.LINES)
     mesh:setVertexData(vertices, 0, pointCount)
 
     local model = Model.create(mesh)
     model:setMaterial("res/grid.material")
-    mesh:release()
     return model
 end

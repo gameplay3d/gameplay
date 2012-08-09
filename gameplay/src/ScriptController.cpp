@@ -544,6 +544,30 @@ static const char* lua_print_function =
     "    ScriptController.print(table.concat({...},\"\\t\"), \"\\n\")\n"
     "end\n";
 
+#ifndef WIN32
+static const char* lua_loadfile_function = 
+    "do\n"
+    "    local oldLoadfile = loadfile\n"
+    "    loadfile = function(filename)\n"
+    "        if filename ~= nil and not FileSystem.isAbsolutePath(filename) then\n"
+    "            filename = FileSystem.getResourcePath() .. filename\n"
+    "        end\n"
+    "        return oldLoadfile(filename)\n"
+    "    end\n"
+    "end\n";
+
+static const char* lua_dofile_function = 
+    "do\n"
+    "    local oldDofile = dofile\n"
+    "    dofile = function(filename)\n"
+    "        if filename ~= nil and not FileSystem.isAbsolutePath(filename) then\n"
+    "            filename = FileSystem.getResourcePath() .. filename\n"
+    "        end\n"
+    "        return oldDofile(filename)\n"
+    "    end\n"
+    "end\n";
+#endif
+
 void ScriptController::initialize()
 {
     _lua = luaL_newstate();
@@ -555,6 +579,14 @@ void ScriptController::initialize()
     // Create our own print() function that uses gameplay::print.
     if (luaL_dostring(_lua, lua_print_function))
         GP_ERROR("Failed to load custom print() function with error: '%s'.", lua_tostring(_lua, -1));
+
+#ifndef WIN32
+    // Change the functions that read a file to use FileSystem.getResourcePath as their base path.
+    if (luaL_dostring(_lua, lua_loadfile_function))
+        GP_ERROR("Failed to load custom loadfile() function with error: '%s'.", lua_tostring(_lua, -1));
+    if (luaL_dostring(_lua, lua_dofile_function))
+        GP_ERROR("Failed to load custom dofile() function with error: '%s'.", lua_tostring(_lua, -1));
+#endif
 }
 
 void ScriptController::initializeGame()
