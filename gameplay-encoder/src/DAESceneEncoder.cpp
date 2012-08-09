@@ -63,7 +63,7 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
             // Ask the user if they want to group animations automatically.
             if (promptUserGroupAnimations())
             {
-                printf("Grouping animations...\n");
+                LOG(2, "Grouping animations...\n");
 
                 DAEOptimizer optimizer(dom);
                 begin();
@@ -87,7 +87,7 @@ void DAESceneEncoder::optimizeCOLLADA(const EncoderArguments& arguments, domCOLL
     {
         if (!_collada->writeTo(arguments.getFilePath(), arguments.getDAEOutputPath()))
         {
-            fprintf(stderr,"Error: COLLADA failed to write the dom for file: %s\n", arguments.getDAEOutputPath().c_str());
+            LOG(1, "Error: COLLADA failed to write the dom for file: %s\n", arguments.getDAEOutputPath().c_str());
         }
     }
 }
@@ -268,7 +268,7 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     end("Open file");
     if (!_dom)
     {
-        fprintf(stderr,"Error: COLLADA failed to open file: %s\n", filepath.c_str());
+        LOG(1, "Error: COLLADA failed to open file: %s\n", filepath.c_str());
         if (_collada)
         {
             delete _collada;
@@ -314,23 +314,23 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
                     }
                     else
                     {
-                        fprintf(stderr,"COLLADA File loaded to the dom, but failed to load node %s.\n", nodeId);
+                        LOG(1, "COLLADA File loaded to the dom, but failed to load node %s.\n", nodeId);
                     }
                 }
                 else
                 {
-                    fprintf(stderr,"COLLADA File loaded to the dom, but node was not found with node ID %s.\n", nodeId);
+                    LOG(1, "COLLADA File loaded to the dom, but node was not found with node ID %s.\n", nodeId);
                 }
             }
         }
         else
         {
-             fprintf(stderr,"COLLADA File loaded to the dom, but query for the dom assets failed.\n");
+             LOG(1, "COLLADA File loaded to the dom, but query for the dom assets failed.\n");
         }
     }
     else
     {
-        fprintf(stderr, "COLLADA File loaded to the dom, but missing <visual_scene>.\n");
+        LOG(1, "COLLADA File loaded to the dom, but missing <visual_scene>.\n");
     }
     
     // The animations should be loaded last
@@ -350,20 +350,20 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
         {
             std::string path = outputFilePath.substr(0, pos);
             path.append(".xml");
-            fprintf(stderr, "Saving debug file: %s\n", path.c_str());
+            LOG(1, "Saving debug file: %s\n", path.c_str());
             if (!_gamePlayFile.saveText(path))
             {
-                fprintf(stderr,"Error writing text file: %s\n", path.c_str());
+                LOG(1, "Error writing text file: %s\n", path.c_str());
             }
         }
     }
     else
     {
-        fprintf(stderr, "Saving binary file: %s\n", outputFilePath.c_str());
+        LOG(1, "Saving binary file: %s\n", outputFilePath.c_str());
         begin();
         if (!_gamePlayFile.saveBinary(outputFilePath))
         {
-            fprintf(stderr,"Error writing binary file: %s\n", outputFilePath.c_str());
+            LOG(1, "Error writing binary file: %s\n", outputFilePath.c_str());
         }
         end("save binary");
     }
@@ -569,7 +569,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
             daeInt type = attributeElement->typeID();
             if (type == domRotate::ID())
             {
-                printf(TRANSFORM_WARNING_FORMAT, targetId, "Rotate", TRANSFORM_MESSAGE);
+                LOG(1, TRANSFORM_WARNING_FORMAT, targetId, "Rotate", TRANSFORM_MESSAGE);
                 return false;
                 /*
                 // <rotate>
@@ -610,7 +610,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
             }
             else if (type == domScale::ID())
             {
-                printf(TRANSFORM_WARNING_FORMAT, targetId, "Scale", TRANSFORM_MESSAGE);
+                LOG(1, TRANSFORM_WARNING_FORMAT, targetId, "Scale", TRANSFORM_MESSAGE);
                 return false;
                 /*
                 // <scale>
@@ -635,7 +635,7 @@ bool DAESceneEncoder::loadTarget(const domChannelRef& channelRef, AnimationChann
             }
             else if (type == domTranslate::ID())
             {
-                printf(TRANSFORM_WARNING_FORMAT, targetId, "Translate", TRANSFORM_MESSAGE);
+                LOG(1, TRANSFORM_WARNING_FORMAT, targetId, "Translate", TRANSFORM_MESSAGE);
                 return false;
                 /*
                 // <translate>
@@ -719,7 +719,7 @@ void DAESceneEncoder::end(const char* str)
 {
     #ifdef ENCODER_PRINT_TIME
     clock_t time = clock() - _begin;
-    fprintf(stderr,"%5d %s\n", time, str);
+    LOG(1, "%5d %s\n", time, str);
     #endif
 }
 
@@ -936,10 +936,10 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
                 break;
             }
             case COLLADA_TYPE::SKEW:
-                warning("Skew transform found but not supported.");
+                LOG(1, "Warning: Skew transform found but not supported.\n");
                 break;
             case COLLADA_TYPE::LOOKAT:
-                warning("Lookat transform found but not supported.");
+                LOG(1, "Warning: Lookat transform found but not supported.\n");
                 break;
             default:
                 break;
@@ -1024,7 +1024,7 @@ void DAESceneEncoder::loadGeometryInstance(const domNode* n, Node* node)
         }
         else
         {
-            warning(std::string("Failed to resolve geometry url: ") + geometryURI.getURI());
+            LOG(1, "Failed to resolve geometry url: %s\n", geometryURI.getURI());
         }
     }
 }
@@ -1399,7 +1399,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
     // Make sure we have some joints
     if (jointCount == 0)
     {
-        warning("No joints found for skin: ");
+        LOG(1, "Warning: No joints found for skin: %s\n", skinElement->getID());
         return NULL;
     }
 
@@ -1572,7 +1572,7 @@ Model* DAESceneEncoder::loadGeometry(const domGeometry* geometry, const domBind_
     const domMesh* meshElement = geometry->getMesh();
     if (meshElement == NULL)
     {
-        warning(std::string("No mesh found for geometry: ") + geometry->getId());
+        LOG(1, "Warning: No mesh found for geometry: %s\n", geometry->getId());
         return NULL;
     }
 
@@ -1599,7 +1599,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
     // Ensure the data is exported as triangles.
     if (trianglesArrayCount == 0)
     {
-        warning(std::string("Geometry mesh has no triangles: ") + geometryId);
+        LOG(1, "Warning: Geometry mesh has no triangles: %s\n", geometryId.c_str());
         return NULL;
     }
 
@@ -1650,7 +1650,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                         int type = getVertexUsageType(semantic);
                         if (type == -1)
                         {
-                            warning(std::string("Vertex semantic (") + semantic + ") is invalid/unsupported for geometry mesh: " + geometryId);
+                            LOG(1, "Warning: Vertex semantic (%s) is invalid/unsupported for geometry mesh: %s\n", semantic.c_str(), geometryId.c_str());
                         }
 
                         DAEPolygonInput* polygonInput = new DAEPolygonInput();
@@ -1669,7 +1669,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                     int type = getVertexUsageType(semantic);
                     if (type == -1)
                     {
-                        warning(std::string("Semantic (") + semantic + ") is invalid/unsupported for geometry mesh: " + geometryId);
+                        LOG(1, "Warning: Semantic (%s) is invalid/unsupported for geometry mesh: %s\n", semantic.c_str(), geometryId.c_str());
                         break;
                     }
                     if (type == TEXCOORD0)
@@ -1709,7 +1709,7 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
                 {
                     delete polygonInputs[j];
                 }
-                warning(std::string("Triangles do not all have the same number of input sources for geometry mesh: ") + geometryId);
+                LOG(1, "Warning: Triangles do not all have the same number of input sources for geometry mesh: %s\n", geometryId.c_str());
                 return NULL;
             }
             else
@@ -1962,16 +1962,6 @@ Mesh* DAESceneEncoder::loadMesh(const domMesh* meshElement, const std::string& g
 
     _gamePlayFile.addMesh(mesh);
     return mesh;
-}
-
-void DAESceneEncoder::warning(const std::string& message)
-{
-    printf("Warning: %s\n", message.c_str());
-}
-
-void DAESceneEncoder::warning(const char* message)
-{
-    printf("Warning: %s\n", message);
 }
 
 int DAESceneEncoder::getVertexUsageType(const std::string& semantic)
