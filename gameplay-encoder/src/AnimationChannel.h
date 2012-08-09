@@ -54,19 +54,16 @@ public:
     void setInterpolations(const std::vector<unsigned int>& values);
 
     unsigned int getTargetAttribute() const;
-    const std::vector<float>& getKeyValues() const;
-    const std::vector<float>& getKeyTimes() const;
-    const std::vector<float>& getTangentsIn() const;
-    const std::vector<float>& getTangentsOut() const;
-    const std::vector<unsigned int>& getInterpolationTypes() const;
+    std::vector<float>& getKeyValues();
+    std::vector<float>& getKeyTimes();
+    std::vector<float>& getTangentsIn();
+    std::vector<float>& getTangentsOut();
+    std::vector<unsigned int>& getInterpolationTypes();
 
     /**
      * Removes duplicate key frames from the animation channel.
      */
     void removeDuplicates();
-
-    void convertToQuaternion();
-    void convertToTransform();
 
     /**
      * Returns the interpolation type value for the given string or zero if not valid.

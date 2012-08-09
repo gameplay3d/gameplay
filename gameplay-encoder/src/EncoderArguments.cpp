@@ -13,12 +13,15 @@ namespace gameplay
 
 static EncoderArguments* __instance;
 
+extern int __logVerbosity = 1;
+
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontSize(0),
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
-    _daeOutput(false)
+    _daeOutput(false),
+    _optimizeAnimations(false)
 {
     __instance = this;
 
@@ -170,28 +173,36 @@ bool EncoderArguments::fileExists() const
 
 void EncoderArguments::printUsage() const
 {
-    fprintf(stderr,"Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
-    fprintf(stderr,"Supported file extensions:\n");
-    fprintf(stderr,"  .dae\t(COLLADA)\n");
-    fprintf(stderr,"  .fbx\t(FBX)\n");
-    fprintf(stderr,"  .ttf\t(TrueType Font)\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"COLLADA and FBX file options:\n");
-    fprintf(stderr,"  -i <id>\tFilter by node ID.\n");
-    fprintf(stderr,"  -t\t\tWrite text/xml.\n");
-    fprintf(stderr,"  -g <node id> <animation id>\n" \
+    LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
+    LOG(1, "Supported file extensions:\n");
+    LOG(1, "  .dae\t(COLLADA)\n");
+    LOG(1, "  .fbx\t(FBX)\n");
+    LOG(1, "  .ttf\t(TrueType Font)\n");
+    LOG(1, "\n");
+    LOG(1, "General Options:\n");
+    LOG(1, "  -v <verbosity>\tVerbosity level (0-4).\n");
+    LOG(1, "\n");
+    LOG(1, "COLLADA and FBX file options:\n");
+    LOG(1, "  -i <id>\tFilter by node ID.\n");
+    LOG(1, "  -t\t\tWrite text/xml.\n");
+    LOG(1, "  -g <node id> <animation id>\n" \
         "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
-    fprintf(stderr,"  -h \"<node ids>\" <filename>\n" \
+    LOG(1, "  -oa\n" \
+        "\t\tOptimizes animations by analyzing animation channel data and\n" \
+        "\t\tremoving any channels that contain default/identity values\n" \
+        "\t\tand removing any duplicate contiguous keyframes, which are common\n" \
+        "\t\twhen exporting baked animation data.\n");
+    LOG(1, "  -h \"<node ids>\" <filename>\n" \
         "\t\tGenerates a single heightmap image using meshes from the specified\n" \
         "\t\tnodes. Node id list should be in quotes with a space between each id.\n" \
         "\t\tFilename is the name of the image (PNG) to be saved.\n" \
         "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n" \
         "\t\tFor 24-bit packed height data use -hp instead of -h.\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"TTF file options:\n");
-    fprintf(stderr,"  -s <size>\tSize of the font.\n");
-    fprintf(stderr,"  -p\t\tOutput font preview.\n");
-    fprintf(stderr, "\n");
+    LOG(1, "\n");
+    LOG(1, "TTF file options:\n");
+    LOG(1, "  -s <size>\tSize of the font.\n");
+    LOG(1, "  -p\t\tOutput font preview.\n");
+    LOG(1, "\n");
     exit(8);
 }
 
@@ -208,6 +219,11 @@ bool EncoderArguments::textOutputEnabled() const
 bool EncoderArguments::DAEOutputEnabled() const
 {
     return _daeOutput;
+}
+
+bool EncoderArguments::optimizeAnimationsEnabled() const
+{
+    return _optimizeAnimations;
 }
 
 const char* EncoderArguments::getNodeId() const
@@ -274,7 +290,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             // read one string, make sure not to go out of bounds
             if ((*index + 1) >= options.size())
             {
-                fprintf(stderr, "Error: -dae requires 1 argument.\n");
+                LOG(1, "Error: -dae requires 1 argument.\n");
                 _parseError = true;
                 return;
             }
@@ -289,7 +305,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             // read two strings, make sure not to go out of bounds
             if ((*index + 2) >= options.size())
             {
-                fprintf(stderr, "Error: -g requires 2 arguments.\n");
+                LOG(1, "Error: -g requires 2 arguments.\n");
                 _parseError = true;
                 return;
             }
@@ -300,7 +316,6 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         break;
     case 'i':
-    case 'o':
         // Node ID
         (*index)++;
         if (*index < options.size())
@@ -309,9 +324,17 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         else
         {
-            fprintf(stderr, "Error: missing arguemnt for -%c.\n", str[1]);
+            LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
             _parseError = true;
             return;
+        }
+        break;
+    case 'o':
+        // Optimization flag
+        if (str == "-oa")
+        {
+            // Optimize animations
+            _optimizeAnimations = true;
         }
         break;
     case 'h':
@@ -345,7 +368,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                     heightmap.filename = options[*index];
                     if (heightmap.filename.empty())
                     {
-                        fprintf(stderr, "Error: missing filename argument for -h|-heightmap.\n");
+                        LOG(1, "Error: missing filename argument for -h|-heightmap.\n");
                         _parseError = true;
                         return;
                     }
@@ -362,7 +385,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                 }
                 else
                 {
-                    fprintf(stderr, "Error: missing argument for -h|-heightmap.\n");
+                    LOG(1, "Error: missing argument for -h|-heightmap.\n");
                     _parseError = true;
                     return;
                 }
@@ -394,7 +417,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         else
         {
-            fprintf(stderr, "Error: missing arguemnt for -%c.\n", str[1]);
+            LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
             _parseError = true;
             return;
         }
@@ -402,6 +425,16 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     case 't':
         _textOutput = true;
         break;
+    case 'v':
+        (*index)++;
+        if (*index < options.size())
+        {
+            __logVerbosity = atoi(options[*index].c_str());
+            if (__logVerbosity < 0)
+                __logVerbosity = 0;
+            else if (__logVerbosity > 4)
+                __logVerbosity = 4;
+        }
     default:
         break;
     }

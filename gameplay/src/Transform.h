@@ -94,6 +94,16 @@ public:
     static const int ANIMATE_SCALE_ROTATE_TRANSLATE = 17;
 
     /**
+     * Scale + Translation animation property. Data=sx,sy,sz,tx,ty,tz
+     */
+    static const int ANIMATE_SCALE_TRANSLATE = 18;
+
+    /**
+     * Scale + Rotation animation property. Data=sx,sy,sz,qx,qy,qz,qw
+     */
+    static const int ANIMATE_SCALE_ROTATE = 19;
+
+    /**
      * Globally suspends all transform changed events.
      */
     static void suspendTransformChanged();
