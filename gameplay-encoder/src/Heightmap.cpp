@@ -38,7 +38,7 @@ bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const std:
 
 void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* filename, bool highP)
 {
-    printf("Generating heightmap: %s...\n", filename);
+    LOG(1, "Generating heightmap: %s...\n", filename);
 
     GPBFile* gpbFile = GPBFile::getInstance();
 
@@ -66,18 +66,18 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
             }
             else
             {
-                fprintf(stderr, "WARNING: Node passed to heightmap argument does not have a mesh: %s\n", nodeIds[j].c_str());
+                LOG(1, "WARNING: Node passed to heightmap argument does not have a mesh: %s\n", nodeIds[j].c_str());
             }
         }
         else
         {
-            fprintf(stderr, "WARNING: Failed to locate node for heightmap argument: %s\n", nodeIds[j].c_str());
+            LOG(1, "WARNING: Failed to locate node for heightmap argument: %s\n", nodeIds[j].c_str());
         }
     }
 
     if (meshes.size() == 0)
     {
-        fprintf(stderr, "WARNING: Skipping generation of heightmap '%s'. No nodes found.\n", filename);
+        LOG(1, "WARNING: Skipping generation of heightmap '%s'. No nodes found.\n", filename);
         return;
     }
 
@@ -123,7 +123,7 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
         // Start the processing thread
         if (!createThread(&threads[i], &generateHeightmapChunk, &data))
         {
-            fprintf(stderr, "ERROR: Failed to spawn worker thread for generation of heightmap: %s\n", filename);
+            LOG(1, "ERROR: Failed to spawn worker thread for generation of heightmap: %s\n", filename);
             return;
         }
     }
@@ -144,11 +144,11 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
             maxHeight = threadData[i].maxHeight;
     }
 
-    printf("\r\tDone.\n");
+    LOG(1, "\r\tDone.\n");
 
     if (__failedRayCasts)
     {
-        fprintf(stderr, "Warning: %d triangle intersections failed for heightmap: %s\n", __failedRayCasts, filename);
+        LOG(1, "Warning: %d triangle intersections failed for heightmap: %s\n", __failedRayCasts, filename);
 
         // Go through and clamp any height values that are set to -FLT_MAX to the min recorded height value
         // (otherwise the range of height values will be far too large).
@@ -169,21 +169,21 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
     FILE* fp = fopen(filename, "wb");
     if (fp == NULL)
     {
-        fprintf(stderr, "Error: Failed to open file for writing: %s\n", filename);
+        LOG(1, "Error: Failed to open file for writing: %s\n", filename);
         goto error;
     }
 
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (png_ptr == NULL)
     {
-        fprintf(stderr, "Error: Write struct creation failed: %s\n", filename);
+        LOG(1, "Error: Write struct creation failed: %s\n", filename);
         goto error;
     }
 
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
-        fprintf(stderr, "Error: Info struct creation failed: %s\n", filename);
+        LOG(1, "Error: Info struct creation failed: %s\n", filename);
         goto error;
     }
 
@@ -226,7 +226,7 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
     }
 
     png_write_end(png_ptr, NULL);
-    printf("Saved heightmap: %s\n", filename);
+    LOG(1, "Saved heightmap: %s\n", filename);
 
 error:
     if (heights)
@@ -261,7 +261,7 @@ int generateHeightmapChunk(void* threadData)
 
     for (int z = minZ; z <= maxZ; ++z)
     {
-        printf("\r\t%d%%", (int)(((float)__processedHeightmapScanLines / __totalHeightmapScanlines) * 100.0f));
+        LOG(1, "\r\t%d%%", (int)(((float)__processedHeightmapScanLines / __totalHeightmapScanlines) * 100.0f));
 
         rayOrigin.z = (float)z;
         for (int x = minX; x <= maxX; ++x)

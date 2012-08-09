@@ -18,6 +18,11 @@ static GPBFile* __instance = NULL;
 static bool isAlmostOne(float value);
 
 /**
+ * Returns true if the given value is close to zero.
+ */
+static bool isAlmostZero(float value);
+
+/**
  * Gets the common node ancestor for the given list of nodes.
  * This function assumes that the nodes share a common ancestor.
  * 
@@ -305,13 +310,17 @@ void GPBFile::adjust()
         }
     }
 
+    LOG(1, "Computing bounding volumes.\n");
     for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
     {
         computeBounds(*i);
     }
 
-    // try to convert joint transform animations into rotation animations
-    //optimizeTransformAnimations();
+    if (EncoderArguments::getInstance()->optimizeAnimationsEnabled())
+    {
+        LOG(1, "Optimizing animations.\n");
+        optimizeAnimations();
+    }
 
     // TODO:
     // remove ambient _lights
@@ -385,27 +394,31 @@ void GPBFile::computeBounds(Node* node)
     }
 }
 
-void GPBFile::optimizeTransformAnimations()
+void GPBFile::optimizeAnimations()
 {
     const unsigned int animationCount = _animations.getAnimationCount();
     for (unsigned int animationIndex = 0; animationIndex < animationCount; ++animationIndex)
     {
         Animation* animation = _animations.getAnimation(animationIndex);
         assert(animation);
+
         const int channelCount = animation->getAnimationChannelCount();
+
+        LOG(2, "Optimizing %d channel(s) in animation '%s'.\n", channelCount, animation->getId().c_str());
+
         // loop backwards because we will be adding and removing channels
         for (int channelIndex = channelCount -1; channelIndex >= 0 ; --channelIndex)
         {
             AnimationChannel* channel = animation->getAnimationChannel(channelIndex);
             assert(channel);
-            // get target node
+
+            // Optimize node animation channels
             const Object* obj = _refTable.get(channel->getTargetId());
             if (obj && obj->getTypeId() == Object::NODE_ID)
             {
-                const Node* node = static_cast<const Node*>(obj);
-                if (node->isJoint() && channel->getTargetAttribute() == Transform::ANIMATE_SCALE_ROTATE_TRANSLATE)
+                if (channel->getTargetAttribute() == Transform::ANIMATE_SCALE_ROTATE_TRANSLATE)
                 {
-                    decomposeTransformAnimationChannel(animation, channel);
+                    decomposeTransformAnimationChannel(animation, channel, channelIndex);
 
                     animation->remove(channel);
                     SAFE_DELETE(channel);
@@ -415,8 +428,10 @@ void GPBFile::optimizeTransformAnimations()
     }
 }
 
-void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel)
+void GPBFile::decomposeTransformAnimationChannel(Animation* animation, AnimationChannel* channel, int channelIndex)
 {
+    LOG(2, "  Optimizing animaton channel %s:%d.\n", animation->getId().c_str(), channelIndex+1);
+
     const std::vector<float>& keyTimes = channel->getKeyTimes();
     const std::vector<float>& keyValues = channel->getKeyValues();
     const size_t keyTimesSize = keyTimes.size();
@@ -425,7 +440,7 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const Ani
     std::vector<float> scaleKeyValues;
     std::vector<float> rotateKeyValues;
     std::vector<float> translateKeyValues;
-                    
+
     scaleKeyValues.reserve(keyTimesSize * 3);
     rotateKeyValues.reserve(keyTimesSize * 4);
     translateKeyValues.reserve(keyTimesSize * 3);
@@ -450,8 +465,13 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const Ani
 
     // Don't add the scale channel if all the key values are close to 1.0
     size_t oneCount = (size_t)std::count_if(scaleKeyValues.begin(), scaleKeyValues.end(), isAlmostOne);
-    if (scaleKeyValues.size() != oneCount)
+    if (scaleKeyValues.size() == oneCount)
     {
+        LOG(2, "    Discarding scale channel.\n");
+    }
+    else
+    {
+        LOG(3, "    Keeping scale channel.\n");
         AnimationChannel* scaleChannel = new AnimationChannel();
         scaleChannel->setTargetId(channel->getTargetId());
         scaleChannel->setKeyTimes(channel->getKeyTimes());
@@ -464,27 +484,64 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, const Ani
         animation->add(scaleChannel);
     }
 
-    AnimationChannel* rotateChannel = new AnimationChannel();
-    rotateChannel->setTargetId(channel->getTargetId());
-    rotateChannel->setKeyTimes(channel->getKeyTimes());
-    rotateChannel->setTangentsIn(channel->getTangentsIn());
-    rotateChannel->setTangentsOut(channel->getTangentsOut());
-    rotateChannel->setInterpolations(channel->getInterpolationTypes());
-    rotateChannel->setTargetAttribute(Transform::ANIMATE_ROTATE);
-    rotateChannel->setKeyValues(rotateKeyValues);
-    rotateChannel->removeDuplicates();
-    animation->add(rotateChannel);
+    // Don't add the rotation channel if all quaternions are close to identity
+    oneCount = 0;
+    for (unsigned int i = 0, count = rotateKeyValues.size(); i < count; i += 4)
+    {
+        float x = rotateKeyValues[i];
+        float y = rotateKeyValues[i+1];
+        float z = rotateKeyValues[i+2];
+        float w = rotateKeyValues[i+3];
+        if (ISZERO(x) && ISZERO(y) && ISZERO(z) && ISONE(w))
+            ++oneCount;
+        else
+        {
+            LOG(4, "Rotation not identity: %d\n", i);
+            Quaternion q(x, y, z, w);
+            Vector3 axis;
+            float angle = q.toAxisAngle(&axis);
+            angle = 0;
+        }
+    }
+    if ((rotateKeyValues.size()>>2) == oneCount)
+    {
+        LOG(2, "    Discarding rotation channel.\n");
+    }
+    else
+    {
+        LOG(3, "    Keeping rotation channel.\n");
+        AnimationChannel* rotateChannel = new AnimationChannel();
+        rotateChannel->setTargetId(channel->getTargetId());
+        rotateChannel->setKeyTimes(channel->getKeyTimes());
+        rotateChannel->setTangentsIn(channel->getTangentsIn());
+        rotateChannel->setTangentsOut(channel->getTangentsOut());
+        rotateChannel->setInterpolations(channel->getInterpolationTypes());
+        rotateChannel->setTargetAttribute(Transform::ANIMATE_ROTATE);
+        rotateChannel->setKeyValues(rotateKeyValues);
+        rotateChannel->removeDuplicates();
+        animation->add(rotateChannel);
+    }
 
-    AnimationChannel* translateChannel = new AnimationChannel();
-    translateChannel->setTargetId(channel->getTargetId());
-    translateChannel->setKeyTimes(channel->getKeyTimes());
-    translateChannel->setTangentsIn(channel->getTangentsIn());
-    translateChannel->setTangentsOut(channel->getTangentsOut());
-    translateChannel->setInterpolations(channel->getInterpolationTypes());
-    translateChannel->setTargetAttribute(Transform::ANIMATE_TRANSLATE);
-    translateChannel->setKeyValues(translateKeyValues);
-    translateChannel->removeDuplicates();
-    animation->add(translateChannel);
+    // Don't add the translation channel if all values are close to zero
+    oneCount = (size_t)std::count_if(translateKeyValues.begin(), translateKeyValues.end(), isAlmostZero);
+    if (translateKeyValues.size() == oneCount)
+    {
+        LOG(2, "    Discarding translation channel.\n");
+    }
+    else
+    {
+        LOG(3, "    Keeping translation channel.\n");
+        AnimationChannel* translateChannel = new AnimationChannel();
+        translateChannel->setTargetId(channel->getTargetId());
+        translateChannel->setKeyTimes(channel->getKeyTimes());
+        translateChannel->setTangentsIn(channel->getTangentsIn());
+        translateChannel->setTangentsOut(channel->getTangentsOut());
+        translateChannel->setInterpolations(channel->getInterpolationTypes());
+        translateChannel->setTargetAttribute(Transform::ANIMATE_TRANSLATE);
+        translateChannel->setKeyValues(translateKeyValues);
+        translateChannel->removeDuplicates();
+        animation->add(translateChannel);
+    }
 }
 
 void GPBFile::moveAnimationChannels(Node* node, Animation* dstAnimation)
@@ -517,7 +574,12 @@ void GPBFile::moveAnimationChannels(Node* node, Animation* dstAnimation)
 
 bool isAlmostOne(float value)
 {
-    return std::fabs(value - 1.0f) < EPSILON;
+    return (value - 1.0f) < EPSILON;
+}
+
+bool isAlmostZero(float value)
+{
+    return std::fabs(value) < EPSILON;
 }
 
 Node* getCommonNodeAncestor(const std::vector<Node*>& nodes)
