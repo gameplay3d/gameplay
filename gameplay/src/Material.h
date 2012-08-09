@@ -24,6 +24,7 @@ class Material : public RenderState
     friend class Pass;
     friend class RenderState;
     friend class Node;
+    friend class Model;
 
 public:
 
@@ -76,15 +77,6 @@ public:
      * @script{create}
      */
     static Material* create(const char* vshPath, const char* fshPath, const char* defines = NULL);
-
-    /**
-     * Clones this material.
-     * 
-     * @param context The clone context.
-     * 
-     * @return The newly created material.
-     */
-    Material* clone(NodeCloneContext &context) const;
 
     /**
      * Returns the number of techniques in the material.
@@ -141,6 +133,16 @@ private:
      * Destructor.
      */
     ~Material();
+
+    /**
+     * Clones this material.
+     * 
+     * @param context The clone context.
+     * 
+     * @return The newly created material.
+     * @script{create}
+     */
+    Material* clone(NodeCloneContext &context) const;
 
     /**
      * Loads a technique from the given properties object into the specified material.

@@ -129,6 +129,21 @@ public:
     void drawText(const char* text, int x, int y, const Vector4& color, unsigned int size = 0, bool rightToLeft = false);
 
     /**
+     * Draws the specified text in a solid color, with a scaling factor.
+     * 
+     * @param text The text to draw.
+     * @param x The viewport x position to draw text at.
+     * @param y The viewport y position to draw text at.
+     * @param red The red channel of the text color.
+     * @param green The green channel of the text color.
+     * @param blue The blue channel of the text color.
+     * @param alpha The alpha channel of the text color.
+     * @param size The size to draw text (0 for default size).
+     * @param rightToLeft Whether to draw text from right to left.
+     */
+    void drawText(const char* text, int x, int y, float red, float green, float blue, float alpha, unsigned int size = 0, bool rightToLeft = false);
+
+    /**
      * Draws the specified text within a rectangular area, with a specified alignment and scale.
      * Clips text outside the viewport. Optionally wraps text to fit within the width of the viewport.
      *

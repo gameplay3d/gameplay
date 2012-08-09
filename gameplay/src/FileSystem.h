@@ -129,6 +129,15 @@ public:
      */
     static char* readAll(const char* filePath, int* fileSize = NULL);
 
+    /**
+     * Determines if the file path is an absolute path for the current platform.
+     * 
+     * @param filePath The file path to test.
+     * 
+     * @return True if the path is an absolute path or false otherwise.
+     */
+    static bool isAbsolutePath(const char* filePath);
+
 private:
 
     /**

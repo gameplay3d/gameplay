@@ -41,6 +41,15 @@ public:
     void setPosition(const Vector3& position);
 
     /**
+     * Sets the position of the audio source.
+     * 
+     * @param x The x coordinate of the position.
+     * @param y The y coordinate of the position.
+     * @param z The z coordinate of the position.
+     */
+    void setPosition(float x, float y, float z);
+
+    /**
      * Returns the gain of the audio listener.
      *
      * @return The gain of the audio listener.
@@ -67,6 +76,15 @@ public:
      * @param velocity A vector representing the velocity.
      */
     void setVelocity(const Vector3& velocity);
+
+    /**
+     * Sets the velocity of the audio source
+     * 
+     * @param x The x coordinate of the velocity.
+     * @param y The y coordinate of the velocity.
+     * @param z The z coordinate of the velocity.
+     */
+    void setVelocity(float x, float y, float z);
 
     /**
      * Gets the float pointer to the orientation of the audio listener.
@@ -98,6 +116,18 @@ public:
      * @param up The up vector.
      */
     void setOrientation(const Vector3& forward, const Vector3& up);
+
+    /**
+     * Sets the orientation of the audio listener.
+     * 
+     * @param forwardX The x coordinate of the forward vector.
+     * @param forwardY The y coordinate of the forward vector.
+     * @param forwardZ The z coordinate of the forward vector.
+     * @param upX The x coordinate of the up vector.
+     * @param upY The y coordinate of the up vector.
+     * @param upZ The z coordinate of the up vector.
+     */
+    void setOrientation(float forwardX, float forwardY, float forwardZ, float upX, float upY, float upZ);
 
     /**
      * Gets the camera currently associated with the audio listener.

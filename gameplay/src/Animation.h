@@ -59,6 +59,7 @@ public:
      * @param end The time (in milliseconds) that the AnimationClip will end.
      * 
      * @return The newly created AnimationClip; NULL if an AnimationClip already exists with the same ID.
+     * @script{create}
      */
     AnimationClip* createClip(const char* id, unsigned long start, unsigned long end);
     

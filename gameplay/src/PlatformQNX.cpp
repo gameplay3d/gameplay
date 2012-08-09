@@ -400,7 +400,7 @@ static int getUnicode(int qnxKeyCode)
     return qnxKeyCode;
 }
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;

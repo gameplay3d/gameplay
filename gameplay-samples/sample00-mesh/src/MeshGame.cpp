@@ -14,8 +14,6 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
-    createGridModel();
-    
     // Display the gameplay splash screen for at least 1 second.
     displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
 
