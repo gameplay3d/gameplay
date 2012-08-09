@@ -49,9 +49,9 @@ void main()
     v_texCoord1 = a_texCoord1;
     #endif
     #if defined(TEXTURE_REPEAT)
-    v_texCoord *= u_textureRepeat;
+    v_texCoord0 *= u_textureRepeat;
     #endif
     #if defined(TEXTURE_OFFSET)
-    v_texCoord += u_textureOffset;
+    v_texCoord0 += u_textureOffset;
     #endif
 }

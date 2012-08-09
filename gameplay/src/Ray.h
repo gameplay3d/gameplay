@@ -40,6 +40,18 @@ public:
     Ray(const Vector3& origin, const Vector3& direction);
 
     /**
+     * Constructs a new ray initialized to the specified values.
+     * 
+     * @param originX The x coordinate of the origin.
+     * @param originY The y coordinate of the origin.
+     * @param originZ The z coordinate of the origin.
+     * @param dirX The x coordinate of the direction.
+     * @param dirY The y coordinate of the direction.
+     * @param dirZ The z coordinate of the direction.
+     */
+    Ray(float originX, float originY, float originZ, float dirX, float dirY, float dirZ);
+
+    /**
      * Constructs a new ray from the given ray.
      *
      * @param copy The ray to copy.
@@ -66,6 +78,15 @@ public:
     void setOrigin(const Vector3& origin);
 
     /**
+     * Sets the ray's origin.
+     * 
+     * @param x The x coordinate of the origin.
+     * @param y The y coordinate of the origin.
+     * @param z The z coordinate of the origin.
+     */
+    void setOrigin(float x, float y, float z);
+
+    /**
      * Gets the ray's direction.
      *
      * @return The ray's direction.
@@ -78,6 +99,15 @@ public:
      * @param direction The new direction vector.
      */
     void setDirection(const Vector3& direction);
+
+    /**
+     * Sets the ray's direction.
+     * 
+     * @param x The x coordinate of the direction.
+     * @param y The y coordinate of the direction.
+     * @param z The z coordinate of the direction.
+     */
+    void setDirection(float x, float y, float z);
 
     /**
      * Tests whether this ray intersects the specified bounding sphere.

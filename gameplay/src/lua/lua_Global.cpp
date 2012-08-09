@@ -6,7 +6,6 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
-    ScriptUtil::registerFunction("printError", lua__printError);
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
@@ -762,42 +761,6 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("TEXCOORD6", "TEXCOORD6", scopePath);
         ScriptUtil::registerConstantString("TEXCOORD7", "TEXCOORD7", scopePath);
     }
-}
-
-int lua__printError(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
-
-                printError(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua__printError - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
 }
 
 static const char* enumStringEmpty = "";

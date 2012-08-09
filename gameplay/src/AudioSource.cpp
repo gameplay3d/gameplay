@@ -233,6 +233,11 @@ void AudioSource::setVelocity(const Vector3& velocity)
     _velocity = velocity;
 }
 
+void AudioSource::setVelocity(float x, float y, float z)
+{
+    setVelocity(Vector3(x, y, z));
+}
+
 Node* AudioSource::getNode() const
 {
     return _node;

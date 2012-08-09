@@ -541,6 +541,11 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
     }
 }
 
+void Font::drawText(const char* text, int x, int y, float red, float green, float blue, float alpha, unsigned int size, bool rightToLeft)
+{
+    drawText(text, x, y, Vector4(red, green, blue, alpha), size, rightToLeft);
+}
+
 void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft, const Rectangle* clip)
 {
     GP_ASSERT(text);

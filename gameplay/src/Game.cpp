@@ -408,6 +408,11 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
     glClear(bits);
 }
 
+void Game::clear(ClearFlags flags, float red, float green, float blue, float alpha, float clearDepth, int clearStencil)
+{
+    clear(flags, Vector4(red, green, blue, alpha), clearDepth, clearStencil);
+}
+
 AudioListener* Game::getAudioListener()
 {
     if (_audioListener == NULL)

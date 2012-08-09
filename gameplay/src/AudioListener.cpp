@@ -41,6 +41,11 @@ void AudioListener::setPosition(const Vector3& position)
     _position = position;
 }
 
+void AudioListener::setPosition(float x, float y, float z)
+{
+    _position.set(x, y, z);
+}
+
 const Vector3& AudioListener::getVelocity() const 
 { 
     return _velocity; 
@@ -49,6 +54,11 @@ const Vector3& AudioListener::getVelocity() const
 void AudioListener::setVelocity(const Vector3& velocity)
 {
     _velocity = velocity;
+}
+
+void AudioListener::setVelocity(float x, float y, float z)
+{
+    _velocity.set(x, y, z);
 }
 
 const float* AudioListener::getOrientation() const
@@ -75,6 +85,12 @@ void AudioListener::setOrientation(const Vector3& forward, const Vector3& up)
     _orientation[1].x = up.x;
     _orientation[1].y = up.y;
     _orientation[1].z = up.z;
+}
+
+void AudioListener::setOrientation(float forwardX, float forwardY, float forwardZ, float upX, float upY, float upZ)
+{
+    _orientation[0].set(forwardX, forwardY, forwardZ);
+    _orientation[1].set(upX, upY, upZ);
 }
 
 Camera* AudioListener::getCamera() const
