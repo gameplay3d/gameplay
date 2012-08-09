@@ -1307,7 +1307,6 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
         return NULL;
     }
 
-    // TODO: Handle other target attributes later.
     if (targetAttribute > 0)
     {
         GP_ASSERT(target);

@@ -177,6 +177,8 @@ void Mesh::computeBounds()
         return;
     }
 
+    LOG(2, "Computing bounds for mesh: %s\n", getId().c_str());
+
     bounds.min.x = bounds.min.y = bounds.min.z = FLT_MAX;
     bounds.max.x = bounds.max.y = bounds.max.z = -FLT_MAX;
     bounds.center.x = bounds.center.y = bounds.center.z = 0.0f;

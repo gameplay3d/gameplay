@@ -146,7 +146,9 @@ void luaRegister_Node()
         {"ANIMATE_ROTATE", lua_Node_static_ANIMATE_ROTATE},
         {"ANIMATE_ROTATE_TRANSLATE", lua_Node_static_ANIMATE_ROTATE_TRANSLATE},
         {"ANIMATE_SCALE", lua_Node_static_ANIMATE_SCALE},
+        {"ANIMATE_SCALE_ROTATE", lua_Node_static_ANIMATE_SCALE_ROTATE},
         {"ANIMATE_SCALE_ROTATE_TRANSLATE", lua_Node_static_ANIMATE_SCALE_ROTATE_TRANSLATE},
+        {"ANIMATE_SCALE_TRANSLATE", lua_Node_static_ANIMATE_SCALE_TRANSLATE},
         {"ANIMATE_SCALE_UNIT", lua_Node_static_ANIMATE_SCALE_UNIT},
         {"ANIMATE_SCALE_X", lua_Node_static_ANIMATE_SCALE_X},
         {"ANIMATE_SCALE_Y", lua_Node_static_ANIMATE_SCALE_Y},
@@ -5626,6 +5628,23 @@ int lua_Node_static_ANIMATE_SCALE(lua_State* state)
     return 1;
 }
 
+int lua_Node_static_ANIMATE_SCALE_ROTATE(lua_State* state)
+{
+    // Validate the number of parameters.
+    if (lua_gettop(state) > 0)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0).");
+        lua_error(state);
+    }
+
+    int result = Node::ANIMATE_SCALE_ROTATE;
+
+    // Push the return value onto the stack.
+    lua_pushinteger(state, result);
+
+    return 1;
+}
+
 int lua_Node_static_ANIMATE_SCALE_ROTATE_TRANSLATE(lua_State* state)
 {
     // Validate the number of parameters.
@@ -5636,6 +5655,23 @@ int lua_Node_static_ANIMATE_SCALE_ROTATE_TRANSLATE(lua_State* state)
     }
 
     int result = Node::ANIMATE_SCALE_ROTATE_TRANSLATE;
+
+    // Push the return value onto the stack.
+    lua_pushinteger(state, result);
+
+    return 1;
+}
+
+int lua_Node_static_ANIMATE_SCALE_TRANSLATE(lua_State* state)
+{
+    // Validate the number of parameters.
+    if (lua_gettop(state) > 0)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0).");
+        lua_error(state);
+    }
+
+    int result = Node::ANIMATE_SCALE_TRANSLATE;
 
     // Push the return value onto the stack.
     lua_pushinteger(state, result);
