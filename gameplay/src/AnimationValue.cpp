@@ -56,18 +56,18 @@ void AnimationValue::setFloat(unsigned int index, float value)
     _value[index] = value;
 }
 
-void AnimationValue::getFloat(float* value, unsigned int offset, unsigned int length) const
+void AnimationValue::getFloats(unsigned int index, float* values, unsigned int count) const
 {
-    GP_ASSERT(_value && value && offset < _componentCount && (offset + length) <= _componentCount);
+    GP_ASSERT(_value && values && index < _componentCount && (index + count) <= _componentCount);
 
-    memcpy(value + offset, _value, length * sizeof(float));
+    memcpy(values, &_value[index], count * sizeof(float));
 }
 
-void AnimationValue::setFloat(float* value, unsigned int offset, unsigned int length)
+void AnimationValue::setFloats(unsigned int index, float* values, unsigned int count)
 {
-    GP_ASSERT(_value && value && offset < _componentCount && (offset + length) <= _componentCount);
+    GP_ASSERT(_value && values && index < _componentCount && (index + count) <= _componentCount);
 
-    memcpy(_value, value + offset, length * sizeof(float));
+    memcpy(&_value[index], values, count * sizeof(float));
 }
 
 }
