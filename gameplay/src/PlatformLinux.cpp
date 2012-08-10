@@ -503,10 +503,23 @@ double timespec2millis(struct timespec *a)
     return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
+void updateWindowSize()
+{
+    GP_ASSERT( __display );
+    GP_ASSERT( __window );
+    XWindowAttributes windowAttrs;
+    XGetWindowAttributes(__display, __window, &windowAttrs);  
+    __windowSize[0] = windowAttrs.width;
+    __windowSize[1] = windowAttrs.height;
+}
+
 int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
- 
+
+    //must do now since used during setup
+    updateWindowSize();
+    
     static const float ACCELEROMETER_X_FACTOR = 90.0f / __windowSize[0];
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / __windowSize[1];
     static int lx = 0;
@@ -540,10 +553,7 @@ int Platform::enterMessagePump()
 
         case Expose: 
             {
-                XWindowAttributes windowAttrs;
-                XGetWindowAttributes(__display, __window, &windowAttrs);  
-                __windowSize[0] = windowAttrs.width;
-                __windowSize[1] = windowAttrs.height;
+                updateWindowSize();
                 if (!suspended)
                 {
                     _game->frame();
