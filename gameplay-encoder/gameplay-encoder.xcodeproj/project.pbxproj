@@ -58,6 +58,11 @@
 		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
 		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
 		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
+		F122794215D521ED00ADB323 /* libfbxsdk-2013.2-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F122794115D521ED00ADB323 /* libfbxsdk-2013.2-static.a */; };
+		F122794415D5220000ADB323 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F122794315D5220000ADB323 /* libiconv.dylib */; };
+		F122794615D5221000ADB323 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F122794515D5221000ADB323 /* Cocoa.framework */; };
+		F122794815D5222000ADB323 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F122794715D5222000ADB323 /* SystemConfiguration.framework */; };
+		F18DCCDB15D551F800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCCD915D551F800DB35DB /* Heightmap.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -172,6 +177,13 @@
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
 		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		F122794115D521ED00ADB323 /* libfbxsdk-2013.2-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-2013.2-static.a"; path = "../../../../../Applications/Autodesk/FBX SDK/2013.2/lib/gcc4/ub/libfbxsdk-2013.2-static.a"; sourceTree = "<group>"; };
+		F122794315D5220000ADB323 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		F122794515D5221000ADB323 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		F122794715D5222000ADB323 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		F18DCCD915D551F800DB35DB /* Heightmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heightmap.cpp; path = src/Heightmap.cpp; sourceTree = SOURCE_ROOT; };
+		F18DCCDA15D551F800DB35DB /* Heightmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightmap.h; path = src/Heightmap.h; sourceTree = SOURCE_ROOT; };
+		F18DCCDD15D5523C00DB35DB /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = src/Thread.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +191,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F122794815D5222000ADB323 /* SystemConfiguration.framework in Frameworks */,
+				F122794615D5221000ADB323 /* Cocoa.framework in Frameworks */,
+				F122794415D5220000ADB323 /* libiconv.dylib in Frameworks */,
+				F122794215D521ED00ADB323 /* libfbxsdk-2013.2-static.a in Frameworks */,
 				42D277591472EFA700D867A4 /* libpcre.a in Frameworks */,
 				42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */,
 				42C8EE351472B60100E43619 /* libfreetype.a in Frameworks */,
@@ -196,6 +212,10 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
+				F122794715D5222000ADB323 /* SystemConfiguration.framework */,
+				F122794515D5221000ADB323 /* Cocoa.framework */,
+				F122794315D5220000ADB323 /* libiconv.dylib */,
+				F122794115D521ED00ADB323 /* libfbxsdk-2013.2-static.a */,
 				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
 				42475CE7147208A000610A6A /* Products */,
@@ -213,6 +233,9 @@
 		42475CE9147208A000610A6A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F18DCCDD15D5523C00DB35DB /* Thread.h */,
+				F18DCCD915D551F800DB35DB /* Heightmap.cpp */,
+				F18DCCDA15D551F800DB35DB /* Heightmap.h */,
 				42C8EDB714724CD700E43619 /* Animation.cpp */,
 				42C8EDB814724CD700E43619 /* Animation.h */,
 				42C8EDB914724CD700E43619 /* AnimationChannel.cpp */,
@@ -416,6 +439,7 @@
 				4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */,
 				42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */,
 				4251B12C152D044B002F6199 /* Curve.cpp in Sources */,
+				F18DCCDB15D551F800DB35DB /* Heightmap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +528,13 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DOM_INCLUDE_LIBXML,
+					NO_BOOST,
+					NO_ZAE,
+					"DEBUG=1",
+					USE_FBX,
+				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -513,6 +544,7 @@
 					"../external-deps/collada-dom/include",
 					"../external-deps/collada-dom/include/1.4",
 					"../external-deps/libpng/include",
+					"\"/Applications/Autodesk/FBX SDK/2013.2/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -521,6 +553,7 @@
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
 					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.2/lib/gcc4/ub\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -536,6 +569,12 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DOM_INCLUDE_LIBXML,
+					NO_BOOST,
+					NO_ZAE,
+					USE_FBX,
+				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -545,6 +584,7 @@
 					"../external-deps/collada-dom/include",
 					"../external-deps/collada-dom/include/1.4",
 					"../external-deps/libpng/include",
+					"\"/Applications/Autodesk/FBX SDK/2013.2/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -553,6 +593,7 @@
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
 					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.2/lib/gcc4/ub\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
