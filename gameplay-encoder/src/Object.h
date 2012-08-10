@@ -2,6 +2,7 @@
 #define OBJ_H_
 
 #include "FileIO.h"
+#include "Base.h"
 
 namespace gameplay
 {
