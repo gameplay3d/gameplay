@@ -17,6 +17,8 @@ Thumbs.db
 /Device-Coverage
 /Device-Profile
 /Device-Release
+# CMake build directory
+/build
 
 /gameplay/Debug
 /gameplay/DebugMem

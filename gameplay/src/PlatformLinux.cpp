@@ -353,7 +353,7 @@ static Keyboard::Key getKey(KeySym sym)
     }
 }
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
@@ -381,7 +381,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     int configAttribs[] = 
     { 
-        GLX_RENDER_TYPE,    GLX_RGBA_BIT,GLX_RGBA, 
+        GLX_RENDER_TYPE,    GLX_RGBA_BIT,
         GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
         GLX_X_RENDERABLE,   True,
         GLX_DEPTH_SIZE,     24, 
@@ -425,6 +425,12 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
+    
+    if( configCount == 0 || configs == 0 )
+    {
+        perror( "glXChooseFBConfig" );
+        return NULL;
+    }
     
     // Create the windows
     XVisualInfo* visualInfo;

@@ -4,6 +4,11 @@ project(GamePlay)
 
 set(GAMEPLAY_VERSION 1.5.0)
 
+message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
+if( ${CMAKE_BUILD_TYPE} STREQUAL "DEBUG" )
+    add_definitions(-D_DEBUG)
+endif()
+
 # gameplay library
 add_subdirectory(gameplay)
 
