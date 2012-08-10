@@ -91,6 +91,7 @@ void luaRegister_Joystick()
         {"setFocusIndex", lua_Joystick_setFocusIndex},
         {"setFont", lua_Joystick_setFont},
         {"setFontSize", lua_Joystick_setFontSize},
+        {"setHeight", lua_Joystick_setHeight},
         {"setImageColor", lua_Joystick_setImageColor},
         {"setImageRegion", lua_Joystick_setImageRegion},
         {"setInnerRegionSize", lua_Joystick_setInnerRegionSize},
@@ -108,6 +109,7 @@ void luaRegister_Joystick()
         {"setTextAlignment", lua_Joystick_setTextAlignment},
         {"setTextColor", lua_Joystick_setTextColor},
         {"setTextRightToLeft", lua_Joystick_setTextRightToLeft},
+        {"setWidth", lua_Joystick_setWidth},
         {"setZIndex", lua_Joystick_setZIndex},
         {NULL, NULL}
     };
@@ -3562,6 +3564,44 @@ int lua_Joystick_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_Joystick_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Joystick* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joystick_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joystick_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4441,6 +4481,44 @@ int lua_Joystick_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joystick_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Joystick* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Joystick_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
