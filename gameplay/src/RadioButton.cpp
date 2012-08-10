@@ -28,6 +28,8 @@ RadioButton* RadioButton::create(const char* id, Theme::Style* style)
         radioButton->_id = id;
     radioButton->setStyle(style);
 
+    __radioButtons.push_back(radioButton);
+
     return radioButton;
 }
 
@@ -60,6 +62,11 @@ RadioButton* RadioButton::create(Theme::Style* style, Properties* properties)
 bool RadioButton::isSelected() const
 {
     return _selected;
+}
+
+void RadioButton::setSelected(bool selected)
+{
+    _selected = selected;
 }
 
 void RadioButton::setImageSize(float width, float height)
@@ -196,6 +203,16 @@ void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 const char* RadioButton::getType() const
 {
     return "radioButton";
+}
+
+void RadioButton::setGroupId(const char* groupId)
+{
+    _groupId = groupId;
+}
+
+const char* RadioButton::getGroupId() const
+{
+    return _groupId.c_str();
 }
 
 }

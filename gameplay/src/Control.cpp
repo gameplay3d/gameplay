@@ -153,6 +153,24 @@ void Control::setSize(float width, float height)
     }
 }
 
+void Control::setWidth(float width)
+{
+    if (width != _bounds.width)
+    {
+        _bounds.width = width;
+        _dirty = true;
+    }
+}
+
+void Control::setHeight(float height)
+{
+    if (height != _bounds.height)
+    {
+        _bounds.height = height;
+        _dirty = true;
+    }
+}
+
 void Control::setBounds(const Rectangle& bounds)
 {
     if (bounds != _bounds)

@@ -12,6 +12,8 @@ int lua_Gamepad_getForm(lua_State* state);
 int lua_Gamepad_getId(lua_State* state);
 int lua_Gamepad_getJoystickCount(lua_State* state);
 int lua_Gamepad_getJoystickValue(lua_State* state);
+int lua_Gamepad_getJoystickXAxis(lua_State* state);
+int lua_Gamepad_getJoystickYAxis(lua_State* state);
 int lua_Gamepad_isJoystickActive(lua_State* state);
 int lua_Gamepad_isVirtual(lua_State* state);
 int lua_Gamepad_update(lua_State* state);

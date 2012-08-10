@@ -93,6 +93,7 @@ void luaRegister_CheckBox()
         {"setFocusIndex", lua_CheckBox_setFocusIndex},
         {"setFont", lua_CheckBox_setFont},
         {"setFontSize", lua_CheckBox_setFontSize},
+        {"setHeight", lua_CheckBox_setHeight},
         {"setImageColor", lua_CheckBox_setImageColor},
         {"setImageRegion", lua_CheckBox_setImageRegion},
         {"setImageSize", lua_CheckBox_setImageSize},
@@ -109,6 +110,7 @@ void luaRegister_CheckBox()
         {"setTextAlignment", lua_CheckBox_setTextAlignment},
         {"setTextColor", lua_CheckBox_setTextColor},
         {"setTextRightToLeft", lua_CheckBox_setTextRightToLeft},
+        {"setWidth", lua_CheckBox_setWidth},
         {"setZIndex", lua_CheckBox_setZIndex},
         {NULL, NULL}
     };
@@ -3546,6 +3548,44 @@ int lua_CheckBox_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_CheckBox_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                CheckBox* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_CheckBox_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_CheckBox_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4391,6 +4431,44 @@ int lua_CheckBox_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_CheckBox_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                CheckBox* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_CheckBox_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
