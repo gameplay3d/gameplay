@@ -88,6 +88,7 @@ void luaRegister_Label()
         {"setFocusIndex", lua_Label_setFocusIndex},
         {"setFont", lua_Label_setFont},
         {"setFontSize", lua_Label_setFontSize},
+        {"setHeight", lua_Label_setHeight},
         {"setImageColor", lua_Label_setImageColor},
         {"setImageRegion", lua_Label_setImageRegion},
         {"setMargin", lua_Label_setMargin},
@@ -103,6 +104,7 @@ void luaRegister_Label()
         {"setTextAlignment", lua_Label_setTextAlignment},
         {"setTextColor", lua_Label_setTextColor},
         {"setTextRightToLeft", lua_Label_setTextRightToLeft},
+        {"setWidth", lua_Label_setWidth},
         {"setZIndex", lua_Label_setZIndex},
         {NULL, NULL}
     };
@@ -3419,6 +3421,44 @@ int lua_Label_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_Label_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Label* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Label_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Label_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4222,6 +4262,44 @@ int lua_Label_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Label_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Label* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Label_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

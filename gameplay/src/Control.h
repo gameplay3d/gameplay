@@ -212,6 +212,18 @@ public:
      */
     virtual void setSize(float width, float height);
 
+    /** 
+     * Set the desired width of the control, including it's border and padding, before clipping.
+     * @param width The width;
+     */
+    virtual void setWidth(float width);
+
+    /** 
+     * Set the desired height of the control, including it's border and padding, before clipping.
+     * @param height The height;
+     */
+    virtual void setHeight(float height);
+
     /**
      * Set the bounds of this control, relative to its parent container and including its
      * border and padding, before clipping.

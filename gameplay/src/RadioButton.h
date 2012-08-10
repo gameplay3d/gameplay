@@ -59,6 +59,11 @@ public:
     bool isSelected() const;
 
     /**
+     * Sets whether this radio button is currently selected.
+     */
+    void setSelected(bool selected);
+
+    /**
      * Set the size to draw the radio button icon.
      *
      * @param width The width to draw the radio button icon.
@@ -89,6 +94,19 @@ public:
      * @param eventFlags The events to listen for.
      */
     virtual void addListener(Control::Listener* listener, int eventFlags);
+
+    /**
+     *
+     * @param groupId
+     */
+    void setGroupId(const char* groupId);
+
+    /**
+     * Gets the RadioButton's group ID.
+     *
+     * @return the RadioButton's group ID.
+     */
+    const char* getGroupId() const;
 
 protected:
 

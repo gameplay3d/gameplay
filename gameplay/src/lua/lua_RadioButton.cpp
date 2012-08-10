@@ -52,6 +52,7 @@ void luaRegister_RadioButton()
         {"getFocusIndex", lua_RadioButton_getFocusIndex},
         {"getFont", lua_RadioButton_getFont},
         {"getFontSize", lua_RadioButton_getFontSize},
+        {"getGroupId", lua_RadioButton_getGroupId},
         {"getHeight", lua_RadioButton_getHeight},
         {"getId", lua_RadioButton_getId},
         {"getImageColor", lua_RadioButton_getImageColor},
@@ -92,6 +93,8 @@ void luaRegister_RadioButton()
         {"setFocusIndex", lua_RadioButton_setFocusIndex},
         {"setFont", lua_RadioButton_setFont},
         {"setFontSize", lua_RadioButton_setFontSize},
+        {"setGroupId", lua_RadioButton_setGroupId},
+        {"setHeight", lua_RadioButton_setHeight},
         {"setImageColor", lua_RadioButton_setImageColor},
         {"setImageRegion", lua_RadioButton_setImageRegion},
         {"setImageSize", lua_RadioButton_setImageSize},
@@ -99,6 +102,7 @@ void luaRegister_RadioButton()
         {"setOpacity", lua_RadioButton_setOpacity},
         {"setPadding", lua_RadioButton_setPadding},
         {"setPosition", lua_RadioButton_setPosition},
+        {"setSelected", lua_RadioButton_setSelected},
         {"setSize", lua_RadioButton_setSize},
         {"setSkinColor", lua_RadioButton_setSkinColor},
         {"setSkinRegion", lua_RadioButton_setSkinRegion},
@@ -108,6 +112,7 @@ void luaRegister_RadioButton()
         {"setTextAlignment", lua_RadioButton_setTextAlignment},
         {"setTextColor", lua_RadioButton_setTextColor},
         {"setTextRightToLeft", lua_RadioButton_setTextRightToLeft},
+        {"setWidth", lua_RadioButton_setWidth},
         {"setZIndex", lua_RadioButton_setZIndex},
         {NULL, NULL}
     };
@@ -1591,6 +1596,43 @@ int lua_RadioButton_getFontSize(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_getGroupId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RadioButton* instance = getInstance(state);
+                const char* result = instance->getGroupId();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RadioButton_getGroupId - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -3507,6 +3549,82 @@ int lua_RadioButton_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_RadioButton_setGroupId(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(2, false);
+
+                RadioButton* instance = getInstance(state);
+                instance->setGroupId(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RadioButton_setGroupId - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                RadioButton* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RadioButton_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RadioButton_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -3886,6 +4004,44 @@ int lua_RadioButton_setPosition(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_setSelected(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                RadioButton* instance = getInstance(state);
+                instance->setSelected(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RadioButton_setSelected - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4352,6 +4508,44 @@ int lua_RadioButton_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                RadioButton* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RadioButton_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
