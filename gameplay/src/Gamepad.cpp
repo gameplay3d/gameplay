@@ -6,8 +6,8 @@ namespace gameplay
 {
 
 Gamepad::Gamepad(unsigned int handle, const char* formPath)
-    : _id(""), _gamepadForm(NULL), _uiJoysticks(NULL), _uiButtons(NULL), _handle(handle), _buttonCount(0), 
-    _joystickCount(0), _triggerCount(0)
+    : _id(""), _handle(handle), _buttonCount(0), _joystickCount(0), _triggerCount(0), _gamepadForm(NULL),
+      _uiJoysticks(NULL), _uiButtons(NULL)
 {
     GP_ASSERT(formPath);
 
@@ -19,10 +19,9 @@ Gamepad::Gamepad(unsigned int handle, const char* formPath)
     bindGamepadControls(_gamepadForm);
 }
 
-Gamepad::Gamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, 
-    unsigned int triggerCount)
-    : _id(id), _gamepadForm(NULL), _uiJoysticks(NULL), _uiButtons(NULL), _handle(handle), 
-      _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount)
+Gamepad::Gamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount)
+    : _id(id), _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
+      _gamepadForm(NULL), _uiJoysticks(NULL), _uiButtons(NULL)
 {
 }
 
