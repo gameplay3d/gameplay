@@ -112,6 +112,7 @@ void luaRegister_Form()
         {"setFocusIndex", lua_Form_setFocusIndex},
         {"setFont", lua_Form_setFont},
         {"setFontSize", lua_Form_setFontSize},
+        {"setHeight", lua_Form_setHeight},
         {"setImageColor", lua_Form_setImageColor},
         {"setImageRegion", lua_Form_setImageRegion},
         {"setMargin", lua_Form_setMargin},
@@ -129,6 +130,7 @@ void luaRegister_Form()
         {"setTextAlignment", lua_Form_setTextAlignment},
         {"setTextColor", lua_Form_setTextColor},
         {"setTextRightToLeft", lua_Form_setTextRightToLeft},
+        {"setWidth", lua_Form_setWidth},
         {"setZIndex", lua_Form_setZIndex},
         {"update", lua_Form_update},
         {NULL, NULL}
@@ -3827,6 +3829,44 @@ int lua_Form_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_Form_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Form_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4706,6 +4746,44 @@ int lua_Form_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Form_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
