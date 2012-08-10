@@ -107,7 +107,7 @@ int getKey(unichar keyCode);
         }
         else
         {
-            printError("Invalid OS Version: %s\n", (currSysVer == NULL?"NULL":[currSysVer cStringUsingEncoding:NSASCIIStringEncoding]));
+            print("Invalid OS Version: %s\n", (currSysVer == NULL?"NULL":[currSysVer cStringUsingEncoding:NSASCIIStringEncoding]));
             [self release];
             return nil;
         }
@@ -813,7 +813,7 @@ int getKey(unichar keyCode)
 namespace gameplay
 {
     
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;

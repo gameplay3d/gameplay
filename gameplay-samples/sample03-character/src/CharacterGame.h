@@ -90,7 +90,6 @@ private:
     Node* _characterMeshNode;
     Node* _characterShadowNode;
     Node* _basketballNode;
-    Node* _ceiling;
     float _floorLevel;
     Animation* _animation;
     AnimationClip* _currentClip;

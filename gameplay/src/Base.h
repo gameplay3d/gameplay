@@ -49,8 +49,11 @@ using std::modf;
 
 namespace gameplay
 {
-/** Print logging (implemented per platform). */
-extern void printError(const char* format, ...);
+/**
+ * Print logging (implemented per platform).
+ * @script{ignore}
+ */
+extern void print(const char* format, ...);
 }
 
 // Current function macro.
@@ -73,9 +76,9 @@ extern void printError(const char* format, ...);
 #else
 #define GP_ERROR(...) do \
     { \
-        printError("%s -- ", __current__func__); \
-        printError(__VA_ARGS__); \
-        printError("\n"); \
+        gameplay::print("%s -- ", __current__func__); \
+        gameplay::print(__VA_ARGS__); \
+        gameplay::print("\n"); \
         assert(0); \
         std::exit(-1); \
     } while (0)
@@ -84,9 +87,9 @@ extern void printError(const char* format, ...);
 // Warning macro.
 #define GP_WARN(...) do \
     { \
-        printError("%s -- ", __current__func__); \
-        printError(__VA_ARGS__); \
-        printError("\n"); \
+        gameplay::print("%s -- ", __current__func__); \
+        gameplay::print(__VA_ARGS__); \
+        gameplay::print("\n"); \
     } while (0)
 
 // Bullet Physics

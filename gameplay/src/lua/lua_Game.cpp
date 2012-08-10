@@ -162,9 +162,53 @@ int lua_Game_clear(lua_State* state)
             }
             break;
         }
+        case 8:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER &&
+                lua_type(state, 8) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                Game::ClearFlags param1 = (Game::ClearFlags)lua_enumFromString_GameClearFlags(luaL_checkstring(state, 2));
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 7);
+
+                // Get parameter 7 off the stack.
+                int param7 = (int)luaL_checkint(state, 8);
+
+                Game* instance = getInstance(state);
+                instance->clear(param1, param2, param3, param4, param5, param6, param7);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_clear - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 5).");
+            lua_pushstring(state, "Invalid number of parameters (expected 5 or 8).");
             lua_error(state);
             break;
         }

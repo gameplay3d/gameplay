@@ -578,6 +578,7 @@ public:
      * Clones the node and all of its child nodes.
      * 
      * @return A new node.
+     * @script{create}
      */
     Node* clone() const;
 

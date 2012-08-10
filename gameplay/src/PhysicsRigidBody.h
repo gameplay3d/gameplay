@@ -169,6 +169,15 @@ public:
     inline void setLinearVelocity(const Vector3& velocity);
 
     /**
+     * Sets the rigid body's linear velocity.
+     * 
+     * @param x The x coordinate of the linear velocity vector.
+     * @param y The y coordinate of the linear velocity vector.
+     * @param z The z coordinate of the linear velocity vector.
+     */
+    inline void setLinearVelocity(float x, float y, float z);
+
+    /**
      * Gets the rigid body's angular velocity.
      * 
      * @return The angular velocity.
@@ -181,6 +190,15 @@ public:
      * @param velocity The angular velocity.
      */
     inline void setAngularVelocity(const Vector3& velocity);
+
+    /**
+     * Sets the rigid body's angular velocity.
+     * 
+     * @param x The x coordinate of the angular velocity vector.
+     * @param y The y coordinate of the angular velocity vector.
+     * @param z The z coordinate of the angular velocity vector.
+     */
+    inline void setAngularVelocity(float x, float y, float z);
 
     /**
      * Gets the rigid body's anisotropic friction.
@@ -197,6 +215,15 @@ public:
     inline void setAnisotropicFriction(const Vector3& friction);
 
     /**
+     * Sets the rigid body's anisotropic friction.
+     * 
+     * @param x The x coordinate of the anisotropic friction.
+     * @param y The y coordinate of the anisotropic friction.
+     * @param z The z coordinate of the anisotropic friction.
+     */
+    inline void setAnisotropicFriction(float x, float y, float z);
+
+    /**
      * Gets the gravity that affects the rigid body (this can
      * be different from the global gravity; @see setGravity(Vector3)).
      * 
@@ -210,6 +237,15 @@ public:
      * @param gravity The gravity.
      */
     inline void setGravity(const Vector3& gravity);
+
+    /**
+     * Sets the rigid body's gravity (this overrides the global gravity for this rigid body).
+     * 
+     * @param x The x coordinate of the gravity vector.
+     * @param y The y coordinate of the gravity vector.
+     * @param z The z coordinate of the gravity vector.
+     */
+    inline void setGravity(float x, float y, float z);
 
     /**
      * Sets whether the rigid body is a kinematic rigid body or not.
