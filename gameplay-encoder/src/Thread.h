@@ -65,7 +65,7 @@ namespace gameplay
         delete data;
         data = NULL;
         int retVal = threadFunction(arg);
-        pthread_exit(retVal);
+        pthread_exit((void*)retVal);
     }
 
     static bool createThread(THREAD_HANDLE* handle, int(*threadFunction)(void*), void* arg)
