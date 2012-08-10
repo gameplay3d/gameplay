@@ -123,6 +123,17 @@ public:
     bool intersects(const Vector3& point) const;
 
     /**
+     * Tests whether this frustum instersects the specified point.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param z The z coordinate.
+     *
+     * @return true if the specified point intersects this frustum; false otherwise.
+     */
+    bool intersects(float x, float y, float z) const;
+
+    /**
      * Tests whether this frustum intersects the specified bounding sphere.
      *
      * @param sphere The bounding sphere to test intersection with.

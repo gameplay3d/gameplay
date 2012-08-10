@@ -18,6 +18,11 @@ Plane::Plane(const Vector3& normal, float distance)
     set(normal, distance);
 }
 
+Plane::Plane(float normalX, float normalY, float normalZ, float distance)
+{
+    set(Vector3(normalX, normalY, normalZ), distance);
+}
+
 Plane::Plane(const Plane& copy)
 {
     set(copy);
@@ -35,6 +40,12 @@ const Vector3& Plane::getNormal() const
 void Plane::setNormal(const Vector3& normal)
 {
     _normal = normal;
+    normalize();
+}
+
+void Plane::setNormal(float x, float y, float z)
+{
+    _normal.set(x, y, z);
     normalize();
 }
 
