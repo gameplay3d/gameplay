@@ -14,6 +14,7 @@ int lua_Game_gamepadEvent(lua_State* state);
 int lua_Game_getAIController(lua_State* state);
 int lua_Game_getAccelerometerValues(lua_State* state);
 int lua_Game_getAnimationController(lua_State* state);
+int lua_Game_getAttachedGamepads(lua_State* state);
 int lua_Game_getAudioController(lua_State* state);
 int lua_Game_getAudioListener(lua_State* state);
 int lua_Game_getConfig(lua_State* state);

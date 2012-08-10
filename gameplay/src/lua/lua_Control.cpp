@@ -86,6 +86,7 @@ void luaRegister_Control()
         {"setFocusIndex", lua_Control_setFocusIndex},
         {"setFont", lua_Control_setFont},
         {"setFontSize", lua_Control_setFontSize},
+        {"setHeight", lua_Control_setHeight},
         {"setImageColor", lua_Control_setImageColor},
         {"setImageRegion", lua_Control_setImageRegion},
         {"setMargin", lua_Control_setMargin},
@@ -100,6 +101,7 @@ void luaRegister_Control()
         {"setTextAlignment", lua_Control_setTextAlignment},
         {"setTextColor", lua_Control_setTextColor},
         {"setTextRightToLeft", lua_Control_setTextRightToLeft},
+        {"setWidth", lua_Control_setWidth},
         {"setZIndex", lua_Control_setZIndex},
         {NULL, NULL}
     };
@@ -3378,6 +3380,44 @@ int lua_Control_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_Control_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Control* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Control_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Control_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4143,6 +4183,44 @@ int lua_Control_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Control_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Control* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Control_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

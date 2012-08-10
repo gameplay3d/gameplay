@@ -66,8 +66,6 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
-
-
 inline bool Game::hasMouse()
 {
     return Platform::hasMouse();
@@ -111,6 +109,21 @@ inline void Game::getAccelerometerValues(float* pitch, float* roll)
 inline void Game::displayKeyboard(bool display)
 {
     Platform::displayKeyboard(display);
+}
+
+inline unsigned int Game::getAttachedGamepads()
+{
+    Platform::getGamepadCount();
+    unsigned int gamepadCount = 0;
+
+    for (std::vector<Gamepad*>::iterator itr = _gamepads->begin(); itr != _gamepads->end(); itr++)
+    {
+        Gamepad* gamepad = (*itr);
+        if (gamepad->isAttached())
+            gamepadCount++;
+    }
+    
+    return gamepadCount;
 }
 
 inline unsigned int Game::getGamepadCount() const
