@@ -56,7 +56,7 @@ varying float v_spotLightAttenuation;						// Attenuation of spot light
 varying vec3 v_spotLightDirection;							// Direction of spot light in tangent space
 #include "lib/lighting-spot.vert"
 #else
-uniform vec3 v_lightDirection;								// Direction of light
+varying vec3 v_lightDirection;								// Direction of light
 #include "lib/lighting-directional.vert"
 #endif
 
