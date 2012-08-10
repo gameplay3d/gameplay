@@ -621,8 +621,9 @@ Platform::~Platform()
         DestroyWindow(__hwnd);
         __hwnd = 0;
     }
-
+#ifdef USE_XINPUT
     SAFE_DELETE_ARRAY(_xInputGamepads);
+#endif
 }
 
 bool initializeGL()
@@ -1036,10 +1037,10 @@ unsigned int Platform::getGamepadCount()
 
 bool Platform::isGamepadAttached(unsigned int gamepadHandle)
 {
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
 #ifdef USE_XINPUT
+    GP_ASSERT(0 <= gamepadHandle);
+    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
     Game* game = Game::getInstance();
     GP_ASSERT(game);
 
@@ -1082,10 +1083,11 @@ bool Platform::isGamepadAttached(unsigned int gamepadHandle)
 
 const char* Platform::getGamepadId(unsigned int gamepadHandle) 
 {
+
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     return _xInputGamepads[gamepadHandle]._id.c_str();
 #endif
     return NULL;
@@ -1093,10 +1095,10 @@ const char* Platform::getGamepadId(unsigned int gamepadHandle)
 
 unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
 {
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
 #ifdef USE_XINPUT
+    GP_ASSERT(0 <= gamepadHandle);
+    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
     if (!_xInputGamepads[gamepadHandle]._isConnected)
         return 0;
 
@@ -1108,10 +1110,10 @@ unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
 
 bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
 {
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
 #ifdef USE_XINPUT
+    GP_ASSERT(0 <= gamepadHandle);
+    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
     return getXInputButtonState(gamepadHandle, buttonIndex);
 #endif
 
@@ -1120,10 +1122,11 @@ bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int bu
 
 unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
 {
+
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     if (!_xInputGamepads[gamepadHandle]._isConnected)
         return 0;
 
@@ -1135,10 +1138,11 @@ unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
 
 float Platform::getGamepadJoystickXAxis(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
+    
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     return getXInputJoystickXAxis(gamepadHandle, joystickIndex);
 #endif 
 
@@ -1147,10 +1151,11 @@ float Platform::getGamepadJoystickXAxis(unsigned int gamepadHandle, unsigned int
 
 float Platform::getGamepadJoystickYAxis(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
+
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     return getXInputJoystickYAxis(gamepadHandle, joystickIndex);
 #endif
 
@@ -1159,10 +1164,11 @@ float Platform::getGamepadJoystickYAxis(unsigned int gamepadHandle, unsigned int
 
 void Platform::getGamepadJoystickValue(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* value)
 {
+    
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     getXInputJoystickValue(gamepadHandle, joystickIndex, value);
 #endif
 
@@ -1170,10 +1176,11 @@ void Platform::getGamepadJoystickValue(unsigned int gamepadHandle, unsigned int 
 
 bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
+    
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     return (getXInputJoystickXAxis(gamepadHandle, joystickIndex) != 0.0f || getXInputJoystickYAxis(gamepadHandle, joystickIndex) != 0.0f);
 #endif 
 
@@ -1182,10 +1189,11 @@ bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int 
 
 unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
 {
+
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
     return XInputGamepad::TRIGGER_COUNT;
 #endif
 
@@ -1194,9 +1202,10 @@ unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
 
 float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
 {
+    
+#ifdef USE_XINPUT
     GP_ASSERT(0 <= gamepadHandle);
     GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-#ifdef USE_XINPUT
     //TODO:
 #endif
     return 0.0f;
