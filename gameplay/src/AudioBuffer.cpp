@@ -89,7 +89,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
     }
     else if (memcmp(header, "OggS", 4) == 0)
     {
-        if (!AudioBuffer::loadOgg(file, alBuffer))
+         if (!AudioBuffer::loadOgg(file, alBuffer))
         {
             GP_ERROR("Invalid ogg file: %s", path);
             goto cleanup;
@@ -101,7 +101,9 @@ AudioBuffer* AudioBuffer::create(const char* path)
         goto cleanup;
     }
     
-    fclose(file);
+    //may have been closed (such as by Ogg)
+    if( file )
+        fclose(file);
 
     buffer = new AudioBuffer(path, alBuffer);
 
@@ -303,16 +305,16 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     }
 }
     
-bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
+bool AudioBuffer::loadOgg(FILE*& file, ALuint buffer)
 {
     GP_ASSERT(file);
 
     OggVorbis_File ogg_file;
     vorbis_info* info;
     ALenum format;
-    int result;
+    long result;
     int section;
-    unsigned int size = 0;
+    unsigned long size = 0;
 
     rewind(file);
 
@@ -331,7 +333,7 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
         format = AL_FORMAT_STEREO16;
 
     // size = #samples * #channels * 2 (for 16 bit).
-    unsigned int data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
+    ogg_int64_t data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
     char* data = new char[data_size];
 
     while (size < data_size)
