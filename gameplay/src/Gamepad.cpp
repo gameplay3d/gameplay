@@ -101,7 +101,7 @@ void Gamepad::update(float elapsedTime)
     }
     else
     {
-        isAttached();
+        isConnected();
     }
 }
 
@@ -155,7 +155,7 @@ bool Gamepad::isJoystickActive(unsigned int joystickId) const
     }
 }
 
-void Gamepad::getJoystickValue(unsigned int joystickId, Vector2* outValue) const
+void Gamepad::getJoystickAxisValues(unsigned int joystickId, Vector2* outValue) const
 {
     GP_ASSERT(joystickId < _joystickCount);
 
@@ -173,18 +173,18 @@ void Gamepad::getJoystickValue(unsigned int joystickId, Vector2* outValue) const
     }
     else
     {
-        Platform::getGamepadJoystickValue(_handle, joystickId, outValue);
+        Platform::getGamepadJoystickAxisValues(_handle, joystickId, outValue);
     }
 }
 
-float Gamepad::getJoystickXAxis(unsigned int joystickId) const
+float Gamepad::getJoystickAxisX(unsigned int joystickId) const
 {
-    return Platform::getGamepadJoystickXAxis(_handle, joystickId);
+    return Platform::getGamepadJoystickAxisX(_handle, joystickId);
 }
 
-float Gamepad::getJoystickYAxis(unsigned int joystickId) const
+float Gamepad::getJoystickAxisY(unsigned int joystickId) const
 {
-    return Platform::getGamepadJoystickYAxis(_handle, joystickId);
+    return Platform::getGamepadJoystickAxisY(_handle, joystickId);
 }
 
 bool Gamepad::isVirtual() const
@@ -197,7 +197,7 @@ Form* Gamepad::getForm() const
     return _gamepadForm;
 }
 
-bool Gamepad::isAttached() const
+bool Gamepad::isConnected() const
 {
     if (_gamepadForm)
     {
@@ -205,7 +205,7 @@ bool Gamepad::isAttached() const
     }
     else
     {
-        return Platform::isGamepadAttached(_handle);
+        return Platform::isGamepadConnected(_handle);
     }
 }
 

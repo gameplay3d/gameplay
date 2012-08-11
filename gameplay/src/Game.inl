@@ -111,24 +111,14 @@ inline void Game::displayKeyboard(bool display)
     Platform::displayKeyboard(display);
 }
 
-inline unsigned int Game::getAttachedGamepads()
-{
-    Platform::getGamepadCount();
-    unsigned int gamepadCount = 0;
-
-    for (std::vector<Gamepad*>::iterator itr = _gamepads->begin(); itr != _gamepads->end(); itr++)
-    {
-        Gamepad* gamepad = (*itr);
-        if (gamepad->isAttached())
-            gamepadCount++;
-    }
-    
-    return gamepadCount;
-}
-
 inline unsigned int Game::getGamepadCount() const
 {
     return _gamepads->size();
+}
+
+inline unsigned int Game::getGamepadsConnected()
+{
+    return Platform::getGamepadsConnected();
 }
 
 inline Gamepad* Game::getGamepad(unsigned int index) const
