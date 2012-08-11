@@ -45,5 +45,4 @@ add_subdirectory(sample01-longboard)
 add_subdirectory(sample02-spaceship)
 #add_subdirectory(sample03-character)
 add_subdirectory(sample04-particles)
-#add_subdirectory(gameplay-samples/sample05-lua)
-
+#add_subdirectory(sample05-lua)
