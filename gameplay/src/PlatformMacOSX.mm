@@ -914,7 +914,7 @@ bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int 
     return false;
 }
 
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
+float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
     return 0.0f;
 }
