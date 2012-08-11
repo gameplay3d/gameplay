@@ -249,7 +249,7 @@ void CharacterGame::update(float elapsedTime)
 
     if (_gamepad->isJoystickActive(0))
     {
-        _currentDirection = _gamepad->getJoystickValue(0);
+        _gamepad->getJoystickAxisValues(0, &_currentDirection);
     }
     else
     {

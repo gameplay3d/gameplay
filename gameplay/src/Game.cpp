@@ -112,6 +112,9 @@ bool Game::startup()
     RenderState::initialize();
     FrameBuffer::initialize();
     
+    // Load any gamepads, ui or physical.
+    loadGamepads();
+
     _animationController = new AnimationController();
     _animationController->initialize();
 
@@ -124,8 +127,6 @@ bool Game::startup()
     _aiController = new AIController();
     _aiController->initialize();
 
-    loadGamepads();
-    
     _scriptController = new ScriptController();
     _scriptController->initialize();
 
@@ -265,6 +266,7 @@ void Game::frame()
         initialize();
         _scriptController->initializeGame();
         _initialized = true;
+        triggerGamepadEvents(); // Now that the game has been initialized, trigger any gamepad attached events.
     }
 
     if (_state == Game::RUNNING)
@@ -527,29 +529,44 @@ void Game::loadConfig()
 
 void Game::loadGamepads()
 {
+    // Load virtual gamepads.
     if (_properties)
     {
         // Check if there is a virtual keyboard included in the .config file.
         // If there is, try to create it and assign it to "player one".
         Properties* gamepadProperties = _properties->getNamespace("gamepads", true);
+        unsigned int gamepadCount = 0;
         if (gamepadProperties && gamepadProperties->exists("form"))
         {
             const char* gamepadFormPath = gamepadProperties->getString("form");
             GP_ASSERT(gamepadFormPath);
-            Gamepad* gamepad = createGamepad(gamepadProperties->getId(), gamepadFormPath);
+            Gamepad* gamepad = new Gamepad(gamepadCount, gamepadFormPath);
             GP_ASSERT(gamepad);
+
+            _gamepads->push_back(gamepad);
+            gamepadCount++;
         }
     }
+
+    // Checks for any physical gamepads
+    getGamepadCount();
 }
 
-Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
+unsigned int Game::createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount)
 {
-    GP_ASSERT(gamepadFormPath);
-    Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
+    Gamepad* gamepad = new Gamepad(id, handle, buttonCount, joystickCount, triggerCount);
     GP_ASSERT(gamepad);
     _gamepads->push_back(gamepad);
+    return _gamepads->size() - 1;
+}
 
-    return gamepad;
+void Game::triggerGamepadEvents()
+{
+    for (std::vector<Gamepad*>::iterator itr = _gamepads->begin(); itr != _gamepads->end(); itr++)
+    {
+        if ((*itr)->isConnected())
+            gamepadEvent(Gamepad::CONNECTED_EVENT, (*itr));
+    }
 }
 
 }

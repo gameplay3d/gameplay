@@ -107,6 +107,7 @@ void luaRegister_Container()
         {"setFocusIndex", lua_Container_setFocusIndex},
         {"setFont", lua_Container_setFont},
         {"setFontSize", lua_Container_setFontSize},
+        {"setHeight", lua_Container_setHeight},
         {"setImageColor", lua_Container_setImageColor},
         {"setImageRegion", lua_Container_setImageRegion},
         {"setMargin", lua_Container_setMargin},
@@ -123,6 +124,7 @@ void luaRegister_Container()
         {"setTextAlignment", lua_Container_setTextAlignment},
         {"setTextColor", lua_Container_setTextColor},
         {"setTextRightToLeft", lua_Container_setTextRightToLeft},
+        {"setWidth", lua_Container_setWidth},
         {"setZIndex", lua_Container_setZIndex},
         {NULL, NULL}
     };
@@ -3739,6 +3741,44 @@ int lua_Container_setFontSize(lua_State* state)
     return 0;
 }
 
+int lua_Container_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setHeight(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_setImageColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -4580,6 +4620,44 @@ int lua_Container_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setWidth(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

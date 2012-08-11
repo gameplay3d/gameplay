@@ -26,6 +26,9 @@ class ScriptController;
  */
 class Game
 {
+
+    friend class Platform;
+
 public:
     
     /**
@@ -349,19 +352,28 @@ public:
     inline bool isCursorVisible();
 
     /**
-     * Gamepad callback on gamepad events.
+     * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
+     * and Gamepad::DISCONNECTED_EVENT.
      *
      * @param evt The gamepad event that occurred.
      * @param gamepad the gamepad the event occurred on
      */
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
-
+    
     /**
-     * Gets the number of gamepad's connected to the game.
+     * Gets the number of gamepad's that can be used in the game. Includes gamepads not connected.
      * 
-     * @return The number of gamepad's connected to the game.
+     * @return The number of gamepad's that can be used in the game.
      */
     inline unsigned int getGamepadCount() const;
+
+    /**
+     * Gets the number of physical gamepad's attached/connected to the game.
+     * Can be called to detects if any gamepads have been attached or detached.
+     * 
+     * @return The number of gamepads attached to the Platform.
+     */
+    inline unsigned int getGamepadsConnected();
 
     /**
      * Gets the gamepad at the specified index.
@@ -553,6 +565,16 @@ private:
      * @param gamepadFormPath The path to the .form file.
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
+
+    /**
+     * Creates a Gamepad object for a physical gamepad.
+     */
+    unsigned int createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount);
+
+    /**
+     * Triggers any Gamepad::CONNECTED_EVENTS after initialization.
+     */
+    void triggerGamepadEvents();
 
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.

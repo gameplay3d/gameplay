@@ -13,6 +13,7 @@ namespace gameplay
  */
 class Gamepad
 {
+    friend class Platform;
     friend class Game;
     friend class Control;
 
@@ -23,8 +24,8 @@ public:
      */
     enum GamepadEvent
     {
-        ATTACHED_EVENT,
-        DETACHED_EVENT,
+        CONNECTED_EVENT,
+        DISCONNECTED_EVENT
     };
 
     /**
@@ -76,10 +77,26 @@ public:
     /**
      * Returns the specified joystick's value as a Vector2.
      *
-     * @param joystickId The unique integer ID of the joystick to set.
-     * @return A Vector2 of the joystick displacement for the specified joystick.
+     * @param joystickId The index of the joystick to get the value for.
+     * @param outValue The current x-axis and y-asix value displacement of the joystick.
      */
-    const Vector2& getJoystickValue(unsigned int joystickId) const;
+    void getJoystickAxisValues(unsigned int joystickId, Vector2* outValues) const;
+
+    /**
+     * Returns the specified joystick's x-axis value.
+     *
+     * @param joystickId The index of the joystick to get the x-axis value for.
+     * @return The current value of the joystick's x-axis value.
+     */
+    float getJoystickAxisX(unsigned int joystickId) const;
+    
+    /**
+     * Returns the specified joystick's y-axis value.
+     * 
+     * @param joystickId The index of the joystick to get the y-axis value for.
+     * @return The current value of the joystick's y-axis value.
+     */
+    float getJoystickAxisY(unsigned int joystickId) const;
 
     /**
      * Returns whether the gamepad is currently represented with a UI form or not.
@@ -111,19 +128,22 @@ public:
 private:
 
     /**
-     * Constructor.
-     * 
-     * @param id The gamepad's id.
-     */
-    Gamepad(const char* id);
-    
-    /**
      * Constructs a gamepad from the specified .form file.
      *
      * @param id The gamepad's id.
      * @param formPath The path the the .form file.
      */ 
-    Gamepad(const char* id, const char* formPath);
+    Gamepad(unsigned int handle, const char* formPath);
+
+    /**
+     * Constructs a physical gamepad.
+     *
+     * @param id The gamepad's id.
+     * @param buttonCount the number of buttons on the gamepad. 
+     * @param joystickCount the number of joysticks on the gamepad.
+     * @param triggerCount the number of triggers on the gamepad.
+     */
+    Gamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount);
 
     /**
      * Copy constructor.
@@ -134,16 +154,27 @@ private:
      * Destructor.
      */
     virtual ~Gamepad();
-
+    
     /** 
      * Binds the Joystick and Button Control object's from the specified container.
      */
     void bindGamepadControls(Container* container);
 
-    std::string _id;
-    std::vector<Joystick*> _joysticks;
-    std::vector<Button*> _buttons;
+    /**
+     * Gets whether the Gamepad is currently connected to the Platform.
+     */
+    bool isConnected() const;
+        
+    std::string _id;              // ID of the Gamepad
+    unsigned int _handle;         // The handle of the Gamepad.
+    unsigned int _buttonCount;    // Number of buttons.
+    unsigned int _joystickCount;  // Number of joysticks.
+    unsigned int _triggerCount;   // Number of triggers.
+    
+    // Data needed for virtual gamepads.
     Form* _gamepadForm;
+    std::vector<Joystick*>* _uiJoysticks;
+    std::vector<Button*>* _uiButtons;
 };
 
 }

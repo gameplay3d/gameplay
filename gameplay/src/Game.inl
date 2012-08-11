@@ -66,8 +66,6 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
-
-
 inline bool Game::hasMouse()
 {
     return Platform::hasMouse();
@@ -116,6 +114,11 @@ inline void Game::displayKeyboard(bool display)
 inline unsigned int Game::getGamepadCount() const
 {
     return _gamepads->size();
+}
+
+inline unsigned int Game::getGamepadsConnected()
+{
+    return Platform::getGamepadsConnected();
 }
 
 inline Gamepad* Game::getGamepad(unsigned int index) const
