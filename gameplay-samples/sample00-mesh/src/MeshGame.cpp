@@ -88,27 +88,27 @@ void MeshGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
 {
     switch (evt)
     {
-    case Touch::TOUCH_PRESS:
-        {
-            _touched = true;
-            _touchX = x;
-        }
-        break;
-    case Touch::TOUCH_RELEASE:
-        {
-            _touched = false;
-            _touchX = 0;
-        }
-        break;
-    case Touch::TOUCH_MOVE:
-        {
-            int deltaX = x - _touchX;
-            _touchX = x;
-            _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
-        }
-        break;
-    default:
-        break;
+        case Touch::TOUCH_PRESS:
+            {
+                _touched = true;
+                _touchX = x;
+            }
+            break;
+        case Touch::TOUCH_RELEASE:
+            {
+                _touched = false;
+                _touchX = 0;
+            }
+            break;
+        case Touch::TOUCH_MOVE:
+            {
+                int deltaX = x - _touchX;
+                _touchX = x;
+                _modelNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
+            }
+            break;
+        default:
+            break;
     };
 }
 

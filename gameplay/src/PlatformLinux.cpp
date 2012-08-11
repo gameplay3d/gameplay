@@ -525,7 +525,6 @@ int Platform::enterMessagePump()
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / __windowSize[1];
     static int lx = 0;
     static int ly = 0;
-    static bool suspended = false;
     static bool shiftDown = false;
     static bool capsOn = false;
     static XEvent evt;
@@ -541,26 +540,13 @@ int Platform::enterMessagePump()
     // setup select for message handling (to allow non-blocking)
     // based on http://stackoverflow.com/questions/8592292/how-to-quit-the-blocking-of-xlibs-xnextevent
     int x11_fd = ConnectionNumber(__display);
-//     timespec tv;
-//     tv.tv_nsec = 16000000; //low enough for 60FPS
-//     tv.tv_sec = 0;
-    //fd_set in_fds;
     pollfd xpolls[1];
     xpolls[0].fd = x11_fd;
     xpolls[0].events = POLLIN|POLLPRI;
     
-    // Message loop.
+    // Message loop. (TODO: if "exit" is called, like in tests, this doesn't quite properly, just a SEGFAULT)
     while (true)
     {
-//         FD_ZERO(&in_fds);
-//         FD_SET(x11_fd, &in_fds);
-// 
-//         //check if anything is pending (though XPending also checkes, this does a well-behaved timed wait)
-//         int ret = pselect(x11_fd+1, &in_fds, 0, 0, &tv, 0);
-//         //only care about x events
-//         if( ret && !FD_ISSET(x11_fd, &in_fds) )
-//             ret = 0;
-
         //poll seems more flexible (like select though there is always data every third request even when XPending returns nothing)
         int ret = poll( xpolls, 1, 16 );
 
@@ -581,11 +567,6 @@ int Platform::enterMessagePump()
             case Expose: 
                 {
                     updateWindowSize();
-                    if (!suspended)
-                    {
-                        _game->frame();
-                        glXSwapBuffers(__display, __window);
-                    }
                 }
                 break;
 
@@ -663,12 +644,11 @@ int Platform::enterMessagePump()
                 {
                     if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, evt.xmotion.x, evt.xmotion.y, 0))
                     {
-                        if (evt.xbutton.button == 1)
+                        if (evt.xmotion.state & Button1Mask )
                         {
                             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, evt.xmotion.x, evt.xmotion.y, 0);
-                            return 0;
                         }
-                        else if (evt.xbutton.button == 3)
+                        else if (evt.xmotion.state & Button3Mask )
                         {
                             // Update the pitch and roll by adding the scaled deltas.
                             __roll += (float)(evt.xbutton.x - lx) * ACCELEROMETER_X_FACTOR;
