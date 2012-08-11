@@ -1,0 +1,20 @@
+set(GAME_SRC
+	src/LongboardGame.cpp
+	src/LongboardGame.h
+)
+
+#TODO: EM: I didn't add any RES items since they don't appear to be handled now anyway (I manually copy all to res for testing)
+
+add_executable(sample01-longboard
+    ${GAME_SRC}
+)
+
+target_link_libraries(sample01-longboard ${GAMEPLAY_LIBRARIES})
+
+set_target_properties(sample01-longboard PROPERTIES
+    OUTPUT_NAME "sample01-longboard"
+    CLEAN_DIRECT_OUTPUT 1
+)
+
+source_group(res FILES ${GAME_RES} ${GAMEPLAY_RES} ${GAME_RES_SHADERS} ${GAME_RES_SHADERS_LIB})
+source_group(src FILES ${GAME_SRC})
