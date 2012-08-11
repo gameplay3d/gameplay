@@ -1,3 +1,5 @@
+set(GAME_NAME sample00-mesh)
+
 set(GAME_SRC
     src/MeshGame.cpp
     src/MeshGame.h
@@ -38,62 +40,24 @@ set(GAME_RES_SHADERS_LIB
     res/shaders/lib/lighting.frag
 )
 
-include_directories( 
-    ../../gameplay/src
-    ../../external-deps/lua/include
-    ../../external-deps/bullet/include
-    ../../external-deps/libpng/include
-    ../../external-deps/oggvorbis/include
-    ../../external-deps/zlib/include
-    ../../external-deps/openal/include
-    ../../external-deps/glew/include
-)
-
-add_definitions(-D__linux__)
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL)
-
-#TODO make this section variant per OS
-link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../external-deps/lua/lib/linux
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../external-deps/zlib/lib/linux
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../external-deps/libpng/lib/linux
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../external-deps/bullet/lib/linux
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../external-deps/oggvorbis/lib/linux
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../external-deps/glew/lib/linux
-)
-
-add_executable(sample00-mesh
+add_executable(${GAME_NAME}
     ${GAME_SRC}
 )
 
-#TODO make this section variant per OS
-target_link_libraries ( sample00-mesh
-    gameplay
-	m
-    lua
-    png
-    z
-    vorbis
-    ogg
-    BulletDynamics
-    BulletCollision
-    LinearMath
-    openal
-    GLEW
-    GL
-) 
+target_link_libraries(${GAME_NAME} ${GAMEPLAY_LIBRARIES})
 
-set_target_properties(sample00-mesh PROPERTIES
-    OUTPUT_NAME "sample00-mesh"
+set_target_properties(${GAME_NAME} PROPERTIES
+    OUTPUT_NAME "${GAME_NAME}"
     CLEAN_DIRECT_OUTPUT 1
 )
 
 source_group(res FILES ${GAME_RES} ${GAMEPLAY_RES} ${GAME_RES_SHADERS} ${GAME_RES_SHADERS_LIB})
 source_group(src FILES ${GAME_SRC})
 
-
-
-
-
-
-
+#EM: I'll leave the above untouched for now, the below is to setup the "res" folder for linux testing
+COPY_RES( ${GAME_NAME} )
+COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
+    res/logo_powered_white.png 
+    res/shaders/*
+    )
+    

@@ -12,6 +12,7 @@
 #include <X11/keysym.h>
 #include <sys/time.h>
 #include <GL/glxew.h>
+#include <poll.h>
 
 #define TOUCH_COUNT_MAX     4
 
@@ -353,7 +354,7 @@ static Keyboard::Key getKey(KeySym sym)
     }
 }
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
@@ -381,7 +382,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     int configAttribs[] = 
     { 
-        GLX_RENDER_TYPE,    GLX_RGBA_BIT,GLX_RGBA, 
+        GLX_RENDER_TYPE,    GLX_RGBA_BIT,
         GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
         GLX_X_RENDERABLE,   True,
         GLX_DEPTH_SIZE,     24, 
@@ -426,6 +427,12 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
     
+    if( configCount == 0 || configs == 0 )
+    {
+        perror( "glXChooseFBConfig" );
+        return NULL;
+    }
+    
     // Create the windows
     XVisualInfo* visualInfo;
     visualInfo = glXGetVisualFromFBConfig(__display, configs[0]);
@@ -447,7 +454,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __window = XCreateWindow(__display, DefaultRootWindow(__display), 0, 0, 1280, 720, 0, 
                             visualInfo->depth, InputOutput, visualInfo->visual, winMask,
                             &winAttribs); 
-   
+    
     XMapWindow(__display, __window);
     XStoreName(__display, __window, "");
 
@@ -497,15 +504,27 @@ double timespec2millis(struct timespec *a)
     return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
+void updateWindowSize()
+{
+    GP_ASSERT( __display );
+    GP_ASSERT( __window );
+    XWindowAttributes windowAttrs;
+    XGetWindowAttributes(__display, __window, &windowAttrs);  
+    __windowSize[0] = windowAttrs.width;
+    __windowSize[1] = windowAttrs.height;
+}
+
 int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
- 
+
+    //must do now since used during setup
+    updateWindowSize();
+    
     static const float ACCELEROMETER_X_FACTOR = 90.0f / __windowSize[0];
     static const float ACCELEROMETER_Y_FACTOR = 90.0f / __windowSize[1];
     static int lx = 0;
     static int ly = 0;
-    static bool suspended = false;
     static bool shiftDown = false;
     static bool capsOn = false;
     static XEvent evt;
@@ -518,136 +537,144 @@ int Platform::enterMessagePump()
     // Run the game.
     _game->run();
   
-    // Message loop.
+    // setup select for message handling (to allow non-blocking)
+    // based on http://stackoverflow.com/questions/8592292/how-to-quit-the-blocking-of-xlibs-xnextevent
+    int x11_fd = ConnectionNumber(__display);
+    pollfd xpolls[1];
+    xpolls[0].fd = x11_fd;
+    xpolls[0].events = POLLIN|POLLPRI;
+    
+    // Message loop. (TODO: if "exit" is called, like in tests, this doesn't quite properly, just a SEGFAULT)
     while (true)
     {
-       XNextEvent(__display, &evt);
-    
-        switch (evt.type) 
+        //poll seems more flexible (like select though there is always data every third request even when XPending returns nothing)
+        int ret = poll( xpolls, 1, 16 );
+
+        //handle all pending events in one block (TODO: perhaps there should be a limit to force rendering?)
+        while( ret && XPending(__display) )
         {
-        case DestroyNotify :
+            XNextEvent(__display, &evt);
+            
+            switch (evt.type) 
             {
-                cleanupX11();
-                exit(0);
-            }
-            break;
-
-        case Expose: 
-            {
-                XWindowAttributes windowAttrs;
-                XGetWindowAttributes(__display, __window, &windowAttrs);  
-                __windowSize[0] = windowAttrs.width;
-                __windowSize[1] = windowAttrs.height;
-                if (!suspended)
+            case DestroyNotify :
                 {
-                    _game->frame();
-                    glXSwapBuffers(__display, __window);
+                    cleanupX11();
+                    exit(0);
                 }
-            }
-            break;
+                break;
 
-        case KeyPress:
-            {
-                KeySym sym = XLookupKeysym(&evt.xkey, 0);
-                Keyboard::Key key = getKey(sym);
-                gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
-            }
-            break;
+            case Expose: 
+                {
+                    updateWindowSize();
+                }
+                break;
 
-        case KeyRelease:
-            {
-                KeySym sym = XLookupKeysym(&evt.xkey, 0);
-                Keyboard::Key key = getKey(sym);
-                gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
-            }
-            break;
+            case KeyPress:
+                {
+                    KeySym sym = XLookupKeysym(&evt.xkey, 0);
+                    Keyboard::Key key = getKey(sym);
+                    gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
+                }
+                break;
 
-        case ButtonPress:
-            {
-                gameplay::Mouse::MouseEvent mouseEvt;
-                switch(evt.xbutton.button)
+            case KeyRelease:
                 {
-                    case 1:
-                        mouseEvt = gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON;
-                        break;
-                    case 2:
-                        mouseEvt = gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON;
-                        break;
-                    case 3:
-                        mouseEvt = gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON;
-                        break;
-                    case 4:
-                    case 5:
-                        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, 
-                                                               evt.xbutton.x, evt.xbutton.y, 
-                                                               evt.xbutton.button == Button4 ? 1 : -1);
-                        break;
-                    default:
-                        break;
+                    KeySym sym = XLookupKeysym(&evt.xkey, 0);
+                    Keyboard::Key key = getKey(sym);
+                    gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
                 }
-                if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
-                {
-                    gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, evt.xbutton.x, evt.xbutton.y, 0);
-                }
-            }
-            break;
+                break;
 
-        case ButtonRelease:
-            {
-                gameplay::Mouse::MouseEvent mouseEvt;
-                switch(evt.xbutton.button)
+            case ButtonPress:
                 {
-                    case 1:
-                        mouseEvt = gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON;
-                        break;
-                    case 2:
-                        mouseEvt = gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON;
-                        break;
-                    case 3:
-                        mouseEvt = gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON;
-                        break;
-                    default:
-                        break;
-                }
-                if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
-                {
-                    gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, evt.xbutton.x, evt.xbutton.y, 0);
-                }
-            }
-            break;
-    
-        case MotionNotify:
-            {
-                if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, evt.xmotion.x, evt.xmotion.y, 0))
-                {
-                    if (evt.xbutton.button == 1)
+                    gameplay::Mouse::MouseEvent mouseEvt;
+                    switch(evt.xbutton.button)
                     {
-                        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, evt.xmotion.x, evt.xmotion.y, 0);
-                        return 0;
+                        case 1:
+                            mouseEvt = gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON;
+                            break;
+                        case 2:
+                            mouseEvt = gameplay::Mouse::MOUSE_PRESS_MIDDLE_BUTTON;
+                            break;
+                        case 3:
+                            mouseEvt = gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON;
+                            break;
+                        case 4:
+                        case 5:
+                            gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, 
+                                                                evt.xbutton.x, evt.xbutton.y, 
+                                                                evt.xbutton.button == Button4 ? 1 : -1);
+                            break;
+                        default:
+                            break;
                     }
-                    else if (evt.xbutton.button == 3)
+                    if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
                     {
-                        // Update the pitch and roll by adding the scaled deltas.
-                        __roll += (float)(evt.xbutton.x - lx) * ACCELEROMETER_X_FACTOR;
-                        __pitch += -(float)(evt.xbutton.y - ly) * ACCELEROMETER_Y_FACTOR;
-
-                        // Clamp the values to the valid range.
-                        __roll = max(min(__roll, 90.0f), -90.0f);
-                        __pitch = max(min(__pitch, 90.0f), -90.0f);
-
-                        // Update the last X/Y values.
-                        lx = evt.xbutton.x;
-                        ly = evt.xbutton.y;
+                        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, evt.xbutton.x, evt.xbutton.y, 0);
                     }
                 }
-            }
-            break;
+                break;
+
+            case ButtonRelease:
+                {
+                    gameplay::Mouse::MouseEvent mouseEvt;
+                    switch(evt.xbutton.button)
+                    {
+                        case 1:
+                            mouseEvt = gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON;
+                            break;
+                        case 2:
+                            mouseEvt = gameplay::Mouse::MOUSE_RELEASE_MIDDLE_BUTTON;
+                            break;
+                        case 3:
+                            mouseEvt = gameplay::Mouse::MOUSE_RELEASE_RIGHT_BUTTON;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!gameplay::Platform::mouseEventInternal(mouseEvt, evt.xbutton.x, evt.xbutton.y, 0))
+                    {
+                        gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, evt.xbutton.x, evt.xbutton.y, 0);
+                    }
+                }
+                break;
         
-        default:
-            break;
-        }
+            case MotionNotify:
+                {
+                    if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, evt.xmotion.x, evt.xmotion.y, 0))
+                    {
+                        if (evt.xmotion.state & Button1Mask )
+                        {
+                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, evt.xmotion.x, evt.xmotion.y, 0);
+                        }
+                        else if (evt.xmotion.state & Button3Mask )
+                        {
+                            // Update the pitch and roll by adding the scaled deltas.
+                            __roll += (float)(evt.xbutton.x - lx) * ACCELEROMETER_X_FACTOR;
+                            __pitch += -(float)(evt.xbutton.y - ly) * ACCELEROMETER_Y_FACTOR;
 
-        sleep(1);
+                            // Clamp the values to the valid range.
+                            __roll = max(min(__roll, 90.0f), -90.0f);
+                            __pitch = max(min(__pitch, 90.0f), -90.0f);
+
+                            // Update the last X/Y values.
+                            lx = evt.xbutton.x;
+                            ly = evt.xbutton.y;
+                        }
+                    }
+                }
+                break;
+            
+            default:
+                break;
+            }
+        }
+        
+        //render each iteration (this ensures that with mouse activity we still get rendering
+        //(if you only render when select is 0 a stream of activity blocks all rendering)
+        _game->frame();
+        glXSwapBuffers(__display, __window);
     }
 
     cleanupX11();
