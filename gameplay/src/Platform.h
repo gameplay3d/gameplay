@@ -185,14 +185,14 @@ public:
      *
      * @return the number of gamepads connected to the Platform.
      */
-    static unsigned int getGamepadCount();
+    static unsigned int getGamepadsConnected();
 
     /**
-     * Gets whether the specified gamepad is attached to the Platform.
+     * Gets whether the specified gamepad is connected to the Platform.
      *
      * @param gamepadHandle the handle to the gamepad.
      */
-    static bool isGamepadAttached(unsigned int gamepadHandle);
+    static bool isGamepadConnected(unsigned int gamepadHandle);
 
     /**
      * Gets the specified gamepad's ID.
@@ -242,7 +242,7 @@ public:
      * @param joystickIndex The index of the joystick.
      * @return the value of the joystick's x-axis.
      */
-    static float getGamepadJoystickXAxis(unsigned int gamepadHandle, unsigned int joystickIndex);
+    static float getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex);
 
     /**
      * Gets the value of the joystick's x-axis on the specified joystick.
@@ -251,7 +251,7 @@ public:
      * @param joystickIndex The index of the joystick.
      * @return the value of the joystick's x-axis.
      */
-    static float getGamepadJoystickYAxis(unsigned int gamepadHandle, unsigned int joystickIndex);
+    static float getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex);
 
     /**
      * Gets the values for the specified gamepad and joystick index.
@@ -260,7 +260,7 @@ public:
      * @param joystickIndex the index to the joystick to retrieve the value for.
      * @param outValue will be populated with the current value of the specified joystick.
      */
-    static void getGamepadJoystickValue(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* value);
+    static void getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue);
 
     /**
      * Gets the number of triggers on the specified gamepad.

@@ -564,8 +564,8 @@ void Game::triggerGamepadEvents()
 {
     for (std::vector<Gamepad*>::iterator itr = _gamepads->begin(); itr != _gamepads->end(); itr++)
     {
-        if ((*itr)->isAttached())
-            gamepadEvent(Gamepad::ATTACHED_EVENT, (*itr));
+        if ((*itr)->isConnected())
+            gamepadEvent(Gamepad::CONNECTED_EVENT, (*itr));
     }
 }
 
