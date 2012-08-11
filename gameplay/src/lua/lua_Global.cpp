@@ -352,8 +352,8 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Gamepad");
-        ScriptUtil::registerConstantString("ATTACHED_EVENT", "ATTACHED_EVENT", scopePath);
-        ScriptUtil::registerConstantString("DETACHED_EVENT", "DETACHED_EVENT", scopePath);
+        ScriptUtil::registerConstantString("CONNECTED_EVENT", "CONNECTED_EVENT", scopePath);
+        ScriptUtil::registerConstantString("DISCONNECTED_EVENT", "DISCONNECTED_EVENT", scopePath);
     }
 
     // Register enumeration Image::Format.

@@ -989,12 +989,12 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
-unsigned int Platform::getGamepadCount()
+unsigned int Platform::getGamepadsConnected()
 {
     return 0;
 }
 
-bool Platform::isGamepadAttached(unsigned int gamepadHandle)
+bool Platform::isGamepadConnected(unsigned int gamepadHandle)
 {
     return false;
 }
@@ -1024,19 +1024,18 @@ bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int 
     return false;
 }
 
-float Platform::getGamepadJoystickXAxis(unsigned int gamepadHandle, unsigned int joystickIndex)
+float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
     return 0.0f;
 }
 
-float Platform::getGamepadJoystickYAxis(unsigned int gamepadHandle, unsigned int joystickIndex)
+float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
     return 0.0f;
 }
 
-void Platform::getGamepadJoystickValue(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* value)
+void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
 {
-
 }
 
 unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
