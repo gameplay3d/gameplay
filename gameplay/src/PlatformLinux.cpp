@@ -380,20 +380,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     FileSystem::setResourcePath("./");
     Platform* platform = new Platform(game);
 
-    int configAttribs[] = 
-    { 
-        GLX_RENDER_TYPE,    GLX_RGBA_BIT,
-        GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
-        GLX_X_RENDERABLE,   True,
-        GLX_DEPTH_SIZE,     24, 
-        GLX_STENCIL_SIZE,   8,
-        GLX_RED_SIZE,       8,
-        GLX_BLUE_SIZE,      8,
-        GLX_GREEN_SIZE,     8,
-        GLX_DOUBLEBUFFER,   True,
-        0 
-    };
-
     // Get the display and initialize.
     __display = XOpenDisplay(NULL);
     if (__display == NULL)
@@ -423,6 +409,19 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int *value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
 
     // Get the configs
+    int configAttribs[] = 
+    { 
+        GLX_RENDER_TYPE,    GLX_RGBA_BIT,
+        GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
+        GLX_X_RENDERABLE,   True,
+        GLX_DEPTH_SIZE,     24, 
+        GLX_STENCIL_SIZE,   8,
+        GLX_RED_SIZE,       8,
+        GLX_GREEN_SIZE,     8,
+        GLX_BLUE_SIZE,      8,
+        GLX_DOUBLEBUFFER,   True,
+        0 
+    };
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
@@ -460,7 +459,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __context = glXCreateContext(__display, visualInfo, NULL, True);
     glXMakeCurrent(__display, __window, __context);
 
-    // Use OpenGL 2.x with GLEW  (TODO: Currently crashing here...)
+    // Use OpenGL 2.x with GLEW
     glewExperimental = GL_TRUE;
     GLenum glewStatus = glewInit();
     if(glewStatus != GLEW_OK)
