@@ -30,7 +30,7 @@ public:
      * @return The newly created empty scene.
      * @script{create}
      */
-    static Scene* createScene();
+    static Scene* create();
 
     /**
      * Loads a scene from the given '.scene' file.
