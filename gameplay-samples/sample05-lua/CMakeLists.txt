@@ -1,8 +1,8 @@
-set( GAME_NAME sample00-mesh )
+set(GAME_NAME sample05-lua)
 
 set(GAME_SRC
-	src/MeshGame.cpp
-	src/MeshGame.h
+	src/LuaGame.cpp
+	src/LuaGame.h
 )
 
 add_executable(${GAME_NAME}
@@ -19,8 +19,3 @@ set_target_properties(${GAME_NAME} PROPERTIES
 source_group(res FILES ${GAME_RES} ${GAMEPLAY_RES} ${GAME_RES_SHADERS} ${GAME_RES_SHADERS_LIB})
 source_group(src FILES ${GAME_SRC})
 
-COPY_RES( ${GAME_NAME} )
-COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
-    res/logo_powered_white.png 
-    res/shaders/*
-    )
