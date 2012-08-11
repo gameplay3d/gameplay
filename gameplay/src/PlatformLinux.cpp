@@ -452,11 +452,16 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __window = XCreateWindow(__display, DefaultRootWindow(__display), 0, 0, 1280, 720, 0, 
                             visualInfo->depth, InputOutput, visualInfo->visual, winMask,
                             &winAttribs); 
-   
+    
     XMapWindow(__display, __window);
     XStoreName(__display, __window, "");
 
     __context = glXCreateContext(__display, visualInfo, NULL, True);
+    if(!__context)
+    {
+        perror("glXCreateContext");
+        return NULL;
+    }
     glXMakeCurrent(__display, __window, __context);
 
     // Use OpenGL 2.x with GLEW

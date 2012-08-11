@@ -26,7 +26,12 @@ macro(COPY_RES GAME_NAME)
     # it won't be done -- good for testing)
     add_custom_target( ${GAME_NAME}_ASSETS ALL )
     
-    COPY_RES_FILES( ${GAME_NAME} ${GAME_NAME}_CORE_RES ${CMAKE_CURRENT_SOURCE_DIR} "res/*" )
+    # copy entire "res" directory and "game.config" if there is one
+    set(CRG_PATTERN "res/*" "game.config")
+    COPY_RES_FILES( ${GAME_NAME} ${GAME_NAME}_CORE_RES 
+        ${CMAKE_CURRENT_SOURCE_DIR} 
+        "${CRG_PATTERN}"
+        )
     add_dependencies( ${GAME_NAME}_ASSETS ${GAME_NAME}_CORE_RES )
 endmacro()
 
