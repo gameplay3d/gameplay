@@ -332,7 +332,7 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
         format = AL_FORMAT_STEREO16;
 
     // size = #samples * #channels * 2 (for 16 bit).
-    ogg_int64_t data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
+    long data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
     char* data = new char[data_size];
 
     while (size < data_size)
