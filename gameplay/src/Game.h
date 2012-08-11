@@ -352,8 +352,8 @@ public:
     inline bool isCursorVisible();
 
     /**
-     * Gamepad callback on gamepad events. Override to receive Gamepad::ATTACHED_EVENT 
-     * and Gamepad::DETACHED_EVENT.
+     * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
+     * and Gamepad::DISCONNECTED_EVENT.
      *
      * @param evt The gamepad event that occurred.
      * @param gamepad the gamepad the event occurred on
@@ -368,12 +368,12 @@ public:
     inline unsigned int getGamepadCount() const;
 
     /**
-     * Gets the number of gamepad's connected to the game.
+     * Gets the number of physical gamepad's attached/connected to the game.
      * Can be called to detects if any gamepads have been attached or detached.
      * 
      * @return The number of gamepads attached to the Platform.
      */
-    inline unsigned int getAttachedGamepads();
+    inline unsigned int getGamepadsConnected();
 
     /**
      * Gets the gamepad at the specified index.
@@ -572,7 +572,7 @@ private:
     unsigned int createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount);
 
     /**
-     * Triggers any Gamepad::ATTACHED_EVENTS after initialization.
+     * Triggers any Gamepad::CONNECTED_EVENTS after initialization.
      */
     void triggerGamepadEvents();
 
