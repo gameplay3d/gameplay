@@ -1,3 +1,5 @@
+include(BuildHelpers.CMakeLists.txt)
+
 include_directories( 
     ${CMAKE_SOURCE_DIR}/gameplay/src
     ${CMAKE_SOURCE_DIR}/external-deps/lua/include
@@ -39,6 +41,7 @@ set(GAMEPLAY_LIBRARIES
 ) 
 #TODO: The above should be enough, no?
 add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL)
+
 
 add_subdirectory(sample00-mesh)
 add_subdirectory(sample01-longboard)

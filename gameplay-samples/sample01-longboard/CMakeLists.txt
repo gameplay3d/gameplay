@@ -1,3 +1,5 @@
+set( GAME_NAME sample01-longboard )
+
 set(GAME_SRC
 	src/LongboardGame.cpp
 	src/LongboardGame.h
@@ -5,16 +7,22 @@ set(GAME_SRC
 
 #TODO: EM: I didn't add any RES items since they don't appear to be handled now anyway (I manually copy all to res for testing)
 
-add_executable(sample01-longboard
+add_executable(${GAME_NAME}
     ${GAME_SRC}
 )
 
-target_link_libraries(sample01-longboard ${GAMEPLAY_LIBRARIES})
+target_link_libraries(${GAME_NAME} ${GAMEPLAY_LIBRARIES})
 
-set_target_properties(sample01-longboard PROPERTIES
-    OUTPUT_NAME "sample01-longboard"
+set_target_properties(${GAME_NAME} PROPERTIES
+    OUTPUT_NAME "${GAME_NAME}"
     CLEAN_DIRECT_OUTPUT 1
 )
 
 source_group(res FILES ${GAME_RES} ${GAMEPLAY_RES} ${GAME_RES_SHADERS} ${GAME_RES_SHADERS_LIB})
 source_group(src FILES ${GAME_SRC})
+
+COPY_RES( ${GAME_NAME} )
+COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
+    res/logo_powered_white.png 
+    res/shaders/*
+    )
