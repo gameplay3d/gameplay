@@ -644,7 +644,6 @@ int Platform::enterMessagePump()
                         if (evt.xmotion.state & Button1Mask)
                         {
                             gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, evt.xmotion.x, evt.xmotion.y, 0);
-                            return 0;
                         }
                         else if (evt.xmotion.state & Button3Mask)
                         {
