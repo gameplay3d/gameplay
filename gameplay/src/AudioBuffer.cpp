@@ -101,6 +101,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
         goto cleanup;
     }
 
+	//NOTE: loadOgg actually sets this null, so it is expected
     if (file)    
         fclose(file);
 
@@ -304,7 +305,7 @@ bool AudioBuffer::loadWav(FILE* file, ALuint buffer)
     }
 }
     
-bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
+bool AudioBuffer::loadOgg(FILE*& file, ALuint buffer)
 {
     GP_ASSERT(file);
 
