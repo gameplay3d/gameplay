@@ -39,7 +39,7 @@ void luaRegister_Scene()
     };
     const luaL_Reg lua_statics[] = 
     {
-        {"createScene", lua_Scene_static_createScene},
+        {"create", lua_Scene_static_create},
         {"load", lua_Scene_static_load},
         {NULL, NULL}
     };
@@ -897,7 +897,7 @@ int lua_Scene_setId(lua_State* state)
     return 0;
 }
 
-int lua_Scene_static_createScene(lua_State* state)
+int lua_Scene_static_create(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -907,7 +907,7 @@ int lua_Scene_static_createScene(lua_State* state)
     {
         case 0:
         {
-            void* returnPtr = (void*)Scene::createScene();
+            void* returnPtr = (void*)Scene::create();
             if (returnPtr)
             {
                 ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));

@@ -33,6 +33,7 @@ static HGLRC __hrc = 0;
 static bool __mouseCaptured = false;
 static POINT __mouseCapturePoint = { 0, 0 };
 static bool __cursorVisible = true;
+static unsigned int __gamepadsConnected = 0;
 
 #ifdef USE_XINPUT
 struct XInputGamepad
@@ -46,7 +47,6 @@ struct XInputGamepad
     XINPUT_STATE state;
 };
 
-static unsigned int __xinputGamepadsConnected = 0;
 static XInputGamepad* __xinputGamepads = NULL;
 
 static DWORD getXInputGamepadButtonMask(unsigned int buttonHandle)
@@ -1022,16 +1022,16 @@ void Platform::displayKeyboard(bool display)
 unsigned int Platform::getGamepadsConnected()
 {
     // Check to see what xbox360 gamepads are connected.
-    __xinputGamepadsConnected = 0;
+    __gamepadsConnected = 0;
 
 #ifdef USE_XINPUT
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; i++)
     {
         if (isGamepadConnected(i))
-            __xinputGamepadsConnected++;
+            __gamepadsConnected++;
     }    
 #endif
-    return __xinputGamepadsConnected;
+    return __gamepadsConnected;
 }
 
 bool Platform::isGamepadConnected(unsigned int gamepadHandle)

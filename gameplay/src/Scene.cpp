@@ -31,7 +31,7 @@ Scene::~Scene()
     SAFE_DELETE(_debugBatch);
 }
 
-Scene* Scene::createScene()
+Scene* Scene::create()
 {
     return new Scene();
 }
