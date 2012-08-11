@@ -97,9 +97,11 @@ void SpaceshipGame::initialize()
     initializeEnvironment();
 
     // Create a background audio track
+#if 0
     _backgroundSound = AudioSource::create("res/background.ogg");
     if (_backgroundSound)
         _backgroundSound->setLooped(true);
+#endif
     
     // Create font
     _font = Font::create("res/airstrip28.gpb");
@@ -149,11 +151,13 @@ void SpaceshipGame::initializeSpaceship()
     initializeMaterial(material, false, false);
 
     // Setup the sound
+#if 0    
     _spaceshipSound = AudioSource::create("res/spaceship.wav");
     if (_spaceshipSound)
     {
         _spaceshipSound->setLooped(true);
     }
+#endif
 }
 
 void SpaceshipGame::initializeEnvironment()
@@ -240,15 +244,19 @@ void SpaceshipGame::update(float elapsedTime)
     {
         _time += t;
 
+    #if 0
         // Play the background track
         if (_backgroundSound->getState() != AudioSource::PLAYING)
             _backgroundSound->play();
+    #endif
     }
     else
     {
+    #if 0
         // Stop the background track
         if (_backgroundSound->getState() != AudioSource::STOPPED)
             _backgroundSound->stop();
+    #endif
 
         _throttle = 0.0f;
     }
@@ -340,17 +348,21 @@ void SpaceshipGame::update(float elapsedTime)
         // Apply ship spin
         _shipNode->rotateY(MATH_DEG_TO_RAD(SHIP_ROTATE_SPEED_MAX * t * _throttle));
 
+    #if 0
         // Play sound effect
         if (_spaceshipSound->getState() != AudioSource::PLAYING)
             _spaceshipSound->play();
         
         // Set the pitch based on the throttle
         _spaceshipSound->setPitch(_throttle * SOUND_PITCH_SCALE);
+    #endif
     }
     else
     {
+    #if 0
         // Stop sound effect
         _spaceshipSound->stop();
+    #endif
     }
 
     // Modify ship glow effect based on the throttle
