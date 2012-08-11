@@ -14,7 +14,7 @@ MeshGame::~MeshGame()
 
 void MeshGame::initialize()
 {
-    // Display the gameplay splash screen for at least 1 second.
+    // Display the gameplay splash screen for at least 1 second. (em: reduced to 100ms to speed up testing)
     displayScreen(this, &MeshGame::drawSplash, NULL, 100L);
 
     // Load font

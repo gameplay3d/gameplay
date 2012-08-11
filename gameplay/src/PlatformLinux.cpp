@@ -537,10 +537,28 @@ int Platform::enterMessagePump()
     // Run the game.
     _game->run();
   
+    // setup select for message handling (to allow non-blocking)
+    // based on http://stackoverflow.com/questions/8592292/how-to-quit-the-blocking-of-xlibs-xnextevent
+    int x11_fd = ConnectionNumber(__display);
+    struct timeval tv;
+    fd_set in_fds;
+    tv.tv_usec = 16000; //enough for 60FPS (TODO: though select may also wait longer, likely 0 is best here to not wait and have our own delay code)
+    tv.tv_sec = 0;
+    
     // Message loop.
     while (true)
     {
-       XNextEvent(__display, &evt);
+        FD_ZERO(&in_fds);
+        FD_SET(x11_fd, &in_fds);
+        
+        if( !select(x11_fd+1, &in_fds, 0, 0, &tv) )
+        {
+            _game->frame();
+            glXSwapBuffers(__display, __window);
+            continue;
+        }
+        
+        XNextEvent(__display, &evt);
     
         switch (evt.type) 
         {
@@ -662,8 +680,9 @@ int Platform::enterMessagePump()
         default:
             break;
         }
-
-        sleep(1);
+        
+        //em: um, what was this for?!
+        //sleep(1);
     }
 
     cleanupX11();
