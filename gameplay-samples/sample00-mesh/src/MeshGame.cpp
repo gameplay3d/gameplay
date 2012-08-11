@@ -15,7 +15,7 @@ MeshGame::~MeshGame()
 void MeshGame::initialize()
 {
     // Display the gameplay splash screen for at least 1 second.
-    displayScreen(this, &MeshGame::drawSplash, NULL, 1000L);
+    displayScreen(this, &MeshGame::drawSplash, NULL, 100L);
 
     // Load font
     _font = Font::create("res/arial40.gpb");

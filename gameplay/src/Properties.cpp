@@ -976,7 +976,7 @@ void calculateNamespacePath(const std::string& urlString, std::string& fileStrin
 {
     // If the url references a specific namespace within the file,
     // calculate the full namespace path to the final namespace.
-    unsigned int loc = urlString.rfind("#");
+    size_t loc = urlString.rfind("#");
     if (loc != urlString.npos)
     {
         fileString = urlString.substr(0, loc);

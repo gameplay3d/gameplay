@@ -108,7 +108,7 @@ static void replaceDefines(const char* defines, std::string& out)
     if (defines && strlen(defines) != 0)
     {
         out = defines;
-        unsigned int pos;
+        size_t pos;
         out.insert(0, "#define ");
         while ((pos = out.find(';')) != std::string::npos)
         {
