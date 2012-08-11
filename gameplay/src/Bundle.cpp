@@ -394,7 +394,7 @@ Scene* Bundle::loadScene(const char* id)
         }
     }
     
-    Scene* scene = Scene::createScene();
+    Scene* scene = Scene::create();
     scene->setId(getIdFromOffset());
 
     // Read the number of children.
