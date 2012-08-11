@@ -453,7 +453,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __window = XCreateWindow(__display, DefaultRootWindow(__display), 0, 0, 1280, 720, 0, 
                             visualInfo->depth, InputOutput, visualInfo->visual, winMask,
                             &winAttribs); 
-   
+    
     XMapWindow(__display, __window);
     XStoreName(__display, __window, "");
 
@@ -540,10 +540,10 @@ int Platform::enterMessagePump()
     // setup select for message handling (to allow non-blocking)
     // based on http://stackoverflow.com/questions/8592292/how-to-quit-the-blocking-of-xlibs-xnextevent
     int x11_fd = ConnectionNumber(__display);
-    struct timeval tv;
-    fd_set in_fds;
-    tv.tv_usec = 16000; //enough for 60FPS (TODO: though select may also wait longer, likely 0 is best here to not wait and have our own delay code)
+    timespec tv;
+    tv.tv_nsec = 10000000;
     tv.tv_sec = 0;
+    fd_set in_fds;
     
     // Message loop.
     while (true)
@@ -551,7 +551,8 @@ int Platform::enterMessagePump()
         FD_ZERO(&in_fds);
         FD_SET(x11_fd, &in_fds);
         
-        if( !select(x11_fd+1, &in_fds, 0, 0, &tv) )
+        int ret = pselect(x11_fd+1, &in_fds, 0, 0, &tv, 0);
+        if( !ret || !XPending(__display) )
         {
             _game->frame();
             glXSwapBuffers(__display, __window);
