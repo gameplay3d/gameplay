@@ -100,8 +100,9 @@ AudioBuffer* AudioBuffer::create(const char* path)
         GP_ERROR("Unsupported audio file: %s", path);
         goto cleanup;
     }
-    
-    fclose(file);
+
+    if (file)    
+        fclose(file);
 
     buffer = new AudioBuffer(path, alBuffer);
 
@@ -310,9 +311,9 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
     OggVorbis_File ogg_file;
     vorbis_info* info;
     ALenum format;
-    int result;
+    long result;
     int section;
-    unsigned int size = 0;
+    long size = 0;
 
     rewind(file);
 
@@ -331,7 +332,7 @@ bool AudioBuffer::loadOgg(FILE* file, ALuint buffer)
         format = AL_FORMAT_STEREO16;
 
     // size = #samples * #channels * 2 (for 16 bit).
-    unsigned int data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
+    ogg_int64_t data_size = ov_pcm_total(&ogg_file, -1) * info->channels * 2;
     char* data = new char[data_size];
 
     while (size < data_size)
