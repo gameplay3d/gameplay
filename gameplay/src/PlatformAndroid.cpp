@@ -1040,7 +1040,7 @@ float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int
     return 0.0f;
 }
 
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
+float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
     return 0.0f;
 }

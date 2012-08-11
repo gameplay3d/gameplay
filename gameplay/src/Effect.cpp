@@ -102,13 +102,12 @@ Effect* Effect::createFromSource(const char* vshSource, const char* fshSource, c
     return createFromSource(NULL, vshSource, NULL, fshSource, defines);
 }
 
-
 static void replaceDefines(const char* defines, std::string& out)
 {
     if (defines && strlen(defines) != 0)
     {
         out = defines;
-        unsigned int pos;
+        size_t pos;
         out.insert(0, "#define ");
         while ((pos = out.find(';')) != std::string::npos)
         {

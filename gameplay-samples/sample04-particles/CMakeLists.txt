@@ -1,8 +1,8 @@
-set( GAME_NAME sample00-mesh )
+set(GAME_NAME sample04-particles)
 
 set(GAME_SRC
-	src/MeshGame.cpp
-	src/MeshGame.h
+	src/ParticlesGame.cpp
+	src/ParticlesGame.h
 )
 
 add_executable(${GAME_NAME}
@@ -22,5 +22,4 @@ source_group(src FILES ${GAME_SRC})
 COPY_RES( ${GAME_NAME} )
 COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
     res/logo_powered_white.png 
-    res/shaders/*
     )
