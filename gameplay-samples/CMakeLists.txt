@@ -43,7 +43,7 @@ add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletC
 add_subdirectory(sample00-mesh)
 add_subdirectory(sample01-longboard)
 add_subdirectory(sample02-spaceship)
-#add_subdirectory(gameplay-samples/sample03-character)
-#add_subdirectory(gameplay-samples/sample04-particles)
+#add_subdirectory(sample03-character)
+add_subdirectory(sample04-particles)
 #add_subdirectory(gameplay-samples/sample05-lua)
 
