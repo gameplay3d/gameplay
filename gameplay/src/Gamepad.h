@@ -24,8 +24,8 @@ public:
      */
     enum GamepadEvent
     {
-        ATTACHED_EVENT,
-        DETACHED_EVENT
+        CONNECTED_EVENT,
+        DISCONNECTED_EVENT
     };
 
     /**
@@ -78,9 +78,9 @@ public:
      * Returns the specified joystick's value as a Vector2.
      *
      * @param joystickId The index of the joystick to get the value for.
-     * @param outValue The current displacement of the joystick.
+     * @param outValue The current x-axis and y-asix value displacement of the joystick.
      */
-    void getJoystickValue(unsigned int joystickId, Vector2* outValue) const;
+    void getJoystickAxisValues(unsigned int joystickId, Vector2* outValues) const;
 
     /**
      * Returns the specified joystick's x-axis value.
@@ -88,7 +88,7 @@ public:
      * @param joystickId The index of the joystick to get the x-axis value for.
      * @return The current value of the joystick's x-axis value.
      */
-    float getJoystickXAxis(unsigned int joystickId) const;
+    float getJoystickAxisX(unsigned int joystickId) const;
     
     /**
      * Returns the specified joystick's y-axis value.
@@ -96,7 +96,7 @@ public:
      * @param joystickId The index of the joystick to get the y-axis value for.
      * @return The current value of the joystick's y-axis value.
      */
-    float getJoystickYAxis(unsigned int joystickId) const;
+    float getJoystickAxisY(unsigned int joystickId) const;
 
     /**
      * Returns whether the gamepad is currently represented with a UI form or not.
@@ -163,7 +163,7 @@ private:
     /**
      * Gets whether the Gamepad is currently connected to the Platform.
      */
-    bool isAttached() const;
+    bool isConnected() const;
         
     std::string _id;              // ID of the Gamepad
     unsigned int _handle;         // The handle of the Gamepad.
