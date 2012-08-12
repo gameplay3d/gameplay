@@ -7,6 +7,7 @@ Effect * _flat;
 VertexAttribute _vPosition;
 Uniform* _uColor;
 VertexAttributeBinding * _bindPosition;
+Font * _font;
 
 /**
     A simple way to construct vertex arrays.
@@ -76,6 +77,7 @@ char const * shaderFragment = ""
     
 void CubesGame::initialize()
 {
+    _font = Font::create("res/arial40.gpb");
     _flat = Effect::createFromSource( shaderVertex, shaderFragment );
     
     _vPosition = _flat->getVertexAttribute( "vPosition" );
@@ -96,6 +98,7 @@ void CubesGame::initialize()
 void CubesGame::finalize()
 {
     SAFE_RELEASE(_flat);
+    SAFE_RELEASE(_font);
 }
 
 void CubesGame::update(float elapsedTime)
@@ -117,6 +120,14 @@ void CubesGame::render(float elapsedTime)
     _flat->setValue( _uColor, Vector4(0,1.0,0.5,1.0) );
     
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4 );
+    
+    //-limited to ASCII
+    //-drawText is in device coordinates
+    char buffer[64];
+    sprintf( buffer,"%f",elapsedTime );
+    _font->start();
+    _font->drawText(buffer, 5, 5, Vector4(1.0,1.0,1.0,1.0), _font->getSize() );
+    _font->finish();
 }
 
 void CubesGame::keyEvent(Keyboard::KeyEvent evt, int key)
