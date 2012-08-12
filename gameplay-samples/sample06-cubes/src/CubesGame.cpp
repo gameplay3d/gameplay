@@ -141,7 +141,7 @@ void CubesGame::initialize()
 
     _eyeInclination = M_PI/6;
     _eyeAzimuth = M_PI/8;
-    _eyeDist = 3;
+    _eyeDist = 2;
     updateEye();
 }
 
@@ -195,7 +195,11 @@ void CubesGame::render(float elapsedTime)
     //TODO: This should be done only on size change, what is the interface for this?
     Matrix proj;
     float ratio = float(getWidth())/getHeight();
-    Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,_eyeDist-1.5,_eyeDist-1.5+3,&proj);
+    
+    float zNear = std::max(0.1, _eyeDist-1.5);
+    float zFar = zNear+3;
+    Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,zNear,zFar,&proj);
+    //Matrix::createFrustum(-ratio/2,ratio/2,-0.5,0.5, zNear, zFar, &proj);
     
     Matrix look;
     Matrix::createLookAt( _eye, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &look );
