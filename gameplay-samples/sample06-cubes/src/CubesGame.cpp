@@ -11,6 +11,23 @@ VertexAttributeBinding * _bindPosition;
 Font * _font;
 float _angle;
 bool _freeze;
+Vector3 _eye;
+float _eyeAzimuth, _eyeInclination;
+float _eyeDist;
+
+void updateEye()
+{
+    _eye = Vector3(
+        _eyeDist * sin( _eyeInclination ) * cos( _eyeAzimuth ),
+        _eyeDist * sin( _eyeInclination ) * sin( _eyeAzimuth ),
+        _eyeDist * cos( _eyeInclination )
+        );
+}
+
+//I'm keeping this high enough to slow the framerate on my system, looking for optimizations
+int _grid = 9;
+float _scale = 0.25;
+float _disperse = 1.5;
 
 /**
     A simple way to construct vertex arrays.
@@ -78,7 +95,10 @@ char const * shaderFragment = ""
     "varying vec4 vColor;"
     "void main()"
     "{"
-    "   gl_FragColor = vColor;"
+    // fake light to show distance a bit
+    "   float d = 1.0 - gl_FragCoord.z;"
+    //"   float d = 1.0;"
+    "   gl_FragColor = vec4(vColor.x*d,vColor.y*d,vColor.z*d,1.0);"
     "}"
     ;
     
@@ -118,6 +138,11 @@ void CubesGame::initialize()
     
     _angle = 0;
     _freeze = false;
+
+    _eyeInclination = M_PI/6;
+    _eyeAzimuth = M_PI/8;
+    _eyeDist = 3;
+    updateEye();
 }
 
 void CubesGame::finalize()
@@ -144,8 +169,10 @@ void CubesGame::render(float elapsedTime)
     
     //TODO: where in the framework does this?
     glEnable( GL_DEPTH_TEST );
+    //glEnable( GL_CULL_FACE ); //TODO: some of our faces wind incorrectly
     glDepthFunc( GL_LEQUAL );
     glDepthMask( true );
+    
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4(0.30,0.30,0.25,1.0), 1.0f, 0);
 
@@ -160,28 +187,44 @@ void CubesGame::render(float elapsedTime)
     
     //_flat->setValue( _uColor, Vector4(0,1.0,0.5,1.0) );
 
-    Matrix trans = Matrix::identity();
-    trans.rotate(Vector3(1,1,0), _angle);
-    trans.scale(0.25);
+    float cell = _disperse / _grid;
+    Matrix rot = Matrix::identity();
+    rot.rotate(Vector3(1,1,0), _angle);
+    rot.scale(cell*_scale);
 
+    //TODO: This should be done only on size change, what is the interface for this?
     Matrix proj;
     float ratio = float(getWidth())/getHeight();
-    Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,1,3,&proj);
+    Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,_eyeDist-1.5,_eyeDist-1.5+3,&proj);
     
     Matrix look;
-    Matrix::createLookAt( Vector3(0,0,-2)/*eye*/, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &look );
+    Matrix::createLookAt( _eye, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &look );
     
-    trans = (proj * look) * trans;
+    Matrix view = proj * look;
 
-    _flat->setValue( _uTransform, trans );
+    Matrix trans;
+    for( int x=0; x < _grid; ++x )
+    {
+        float tx = (-0.5*_disperse) + (x+0.5) * cell;
+        for( int y=0; y < _grid; ++y )
+        {
+            float ty = (-0.5*_disperse) + (y+0.5) * cell;
+            for( int z=0; z < _grid; ++z )
+            {
+                float tz = (-0.5*_disperse) + (z+0.5)*cell;
+                trans.setIdentity();
+                trans.translate(tx,ty,tz);
+                _flat->setValue( _uTransform, view * (trans * rot) );
+                for( int i=0; i < 6; ++i )
+                    glDrawArrays(GL_TRIANGLE_STRIP, i*4, 4 );
+            }
+        }
+    }
 
-    for( int i=0; i < 6; ++i )
-        glDrawArrays(GL_TRIANGLE_STRIP, i*4, 4 );
-    
     //-limited to ASCII
     //-drawText is in device coordinates
-    char buffer[64];
-    sprintf( buffer,"%d FPS", int(1.0/elapsedTime) );
+    char buffer[128];
+    sprintf( buffer,"%d FPS\n%d Cubes", getFrameRate(), _grid*_grid*_grid );
     _font->start();
     _font->drawText(buffer, 5, 5, Vector4(1.0,1.0,1.0,1.0), _font->getSize() );
     _font->finish();
@@ -189,16 +232,28 @@ void CubesGame::render(float elapsedTime)
 
 void CubesGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
+    //TODO: This is causing double-strokes, CHAR and RELEASE don't work (Linux platform)
     if (evt == Keyboard::KEY_PRESS)
     {
         switch (key)
         {
-        case Keyboard::KEY_ESCAPE:
-            exit();
-            break;
+            case Keyboard::KEY_ESCAPE:
+                exit();
+                break;
+                
+            case Keyboard::KEY_KP_PLUS:
+                _grid++;
+                break;
+                
+            case Keyboard::KEY_KP_MINUS:
+                if( _grid > 1 )
+                    _grid--;
+                break;
         }
     }
 }
+
+int _lastX, _lastY;
 
 void CubesGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
@@ -211,6 +266,31 @@ void CubesGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
             _freeze = false;
             break;
         case Touch::TOUCH_MOVE:
+        {
+            int deltaX = x - _lastX;
+            int deltaY = y - _lastY;
+            if( _freeze )
+            {
+                //this isn't really what we want, it moves the camera within a sphere (we want relative movement)
+                _eyeInclination += deltaY / 50.0;
+                _eyeAzimuth -= deltaX / 50.0;
+                updateEye();
+            }
             break;
+        }
     };
+    
+    _lastX = x;
+    _lastY = y;
+}
+
+bool CubesGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    switch(evt)
+    {
+        case Mouse::MOUSE_WHEEL:
+            _scale *= pow( 0.5, -wheelDelta );
+            return true;
+    }
+    return false;
 }
