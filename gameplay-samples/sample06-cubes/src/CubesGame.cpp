@@ -5,9 +5,11 @@ CubesGame game;
 
 Effect * _flat;
 VertexAttribute _vPosition;
-Uniform* _uColor;
+Uniform * _uColor;
+Uniform * _uTransform;
 VertexAttributeBinding * _bindPosition;
 Font * _font;
+float _angle;
 
 /**
     A simple way to construct vertex arrays.
@@ -63,8 +65,9 @@ CubesGame::CubesGame()
 
 char const * shaderVertex = ""
     "attribute vec4 vPosition;"
+    "uniform mat4 uTransform;"
     "void main() {"
-    "  gl_Position = vPosition;"
+    "  gl_Position = uTransform * vPosition;"
     "}"
     ;
 char const * shaderFragment = ""
@@ -84,15 +87,19 @@ void CubesGame::initialize()
     GP_ASSERT(_vPosition != -1 );
     _uColor = _flat->getUniform( "uColor" );
     GP_ASSERT(_uColor);
+    _uTransform = _flat->getUniform( "uTransform" );
+    GP_ASSERT(_uTransform);
     
     _square( -0.5, -0.5, 0 )
         ( -0.5, 0.5, 0 )
         ( 0.5, 0.5, 0 )
         ( 0.5, -0.5, 0 );
 
-    VertexFormat::Element e( VertexFormat::POSITION, 3 );
-    VertexFormat vf( &e, 1 );
-    _bindPosition = VertexAttributeBinding::create(vf,&_square.data[0],_flat);
+//     VertexFormat::Element e( VertexFormat::POSITION, 3 );
+//     VertexFormat vf( &e, 1 );
+//     _bindPosition = VertexAttributeBinding::create(vf,&_square.data[0],_flat);
+    
+    _angle = 0;
 }
 
 void CubesGame::finalize()
@@ -103,6 +110,10 @@ void CubesGame::finalize()
 
 void CubesGame::update(float elapsedTime)
 {
+    //convert to seconds
+    elapsedTime /= 1000;
+    
+    _angle += elapsedTime;
 }
 
 void CubesGame::render(float elapsedTime)
@@ -118,7 +129,11 @@ void CubesGame::render(float elapsedTime)
     glVertexAttribPointer(_vPosition, 3, GL_FLOAT, false, 0, &_square.data[0] );
     
     _flat->setValue( _uColor, Vector4(0,1.0,0.5,1.0) );
-    
+
+    Matrix trans = Matrix::identity();
+    trans.rotate(Vector3(1,1,0), _angle);
+    _flat->setValue( _uTransform, trans );
+
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4 );
     
     //-limited to ASCII
