@@ -44,9 +44,6 @@ void MeshGame::initialize()
     Model* model = createGridModel();
     _scene->addNode("grid")->setModel(model);
     model->release();
-    
-    _hideModel = false;
-    _gDown = false;
 }
 
 void MeshGame::finalize()
@@ -67,53 +64,21 @@ void MeshGame::render(float elapsedTime)
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
     
-    if( !_hideModel )
-    {
-        // Visit all the nodes in the scene, drawing the models/mesh.
-        _scene->visit(this, &MeshGame::drawScene);
-    }
+    // Visit all the nodes in the scene, drawing the models/mesh.
+    _scene->visit(this, &MeshGame::drawScene);
 
     // Draw the fps
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
-/**
-    The _hideModel was introduced so that keyboard response could
-    be tested correctly.
-    Refer: https://github.com/blackberry/GamePlay/issues/347
-*/
 void MeshGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
     {
-        print( "PRESS: %d %c\n",key,key );
         switch (key)
         {
         case Keyboard::KEY_ESCAPE:
             exit();
-            break;
-            
-        case 'h':
-            _hideModel = !_hideModel;
-            break;
-        case 'j':
-            _hideModel = true;
-            break;
-        case 'g':
-            GP_ASSERT( !_gDown );
-            _gDown = true;
-            break;
-        }
-    }
-    else if (evt == Keyboard::KEY_RELEASE)
-    {
-        print( "RELEASE: %d %c\n",key,key );
-        switch (key)
-        {
-        case 'g':
-            GP_ASSERT( _gDown );
-            _gDown = false;
-            _hideModel = false;
             break;
         }
     }
