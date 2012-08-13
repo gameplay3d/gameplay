@@ -4,33 +4,39 @@
 /**
     A simple way to construct vertex arrays.
 */
-struct float_buffer
+template<typename T>
+struct data_buffer
 {
-    std::vector<float> data;
+    std::vector<T> data;
     
     void clear()
     {
         data.clear();
     }
     
+    size_t byte_size()
+    {
+        return data.size() * sizeof(T);
+    }
     
+  
     /** 
         The () operators allow easy construction of vertices.
     */
-    float_buffer& operator()( float a )
+    data_buffer& operator()( T a )
     { 
         data.push_back( a );
         return *this;
     }
     
-    float_buffer& operator()( float a, float b )
+    data_buffer& operator()( T a, T b )
     { 
         data.push_back( a );
         data.push_back( b );
         return *this;
     }
     
-    float_buffer& operator()( float a, float b, float c )
+    data_buffer& operator()( T a, T b, T c )
     { 
         data.push_back( a );
         data.push_back( b );
@@ -38,7 +44,7 @@ struct float_buffer
         return *this;
     }
     
-    float_buffer& operator()( float a, float b, float c, float d )
+    data_buffer& operator()( T a, T b, T c, T d )
     { 
         data.push_back( a );
         data.push_back( b );

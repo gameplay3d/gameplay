@@ -47,7 +47,10 @@ protected:
 
 private:
     //data buffers
-    float_buffer _square, _color;
+    data_buffer<GLfloat> _square;
+    data_buffer<GLfloat> _color;
+    
+    GLuint _bufSquare, _bufColor;
     
     //dimensions of the grid
     int _grid;
@@ -69,11 +72,13 @@ private:
     float _eyeDist;
     Form * _form;
     bool _showForm;
-
+    bool _useBuffers;
+    
     Slider * _sliderNumCubes;
     Slider * _sliderScale;
     Slider * _sliderDisperse;
     CheckBox * _checkOrthoView;
+    CheckBox * _checkUseBuffers;
     
     Matrix matProj, matLook, matView;
     void setProjMatrix( bool ortho );
