@@ -2,6 +2,7 @@
 #define TEMPLATEGAME_H_
 
 #include "gameplay.h"
+#include "float_buffer.h"
 
 using namespace gameplay;
 
@@ -45,6 +46,9 @@ protected:
     void render(float elapsedTime);
 
 private:
+    //data buffers
+    float_buffer _square, _color;
+    
     //dimensions of the grid
     int _grid;
     //scale of the cubes relative to their cell size
@@ -52,8 +56,28 @@ private:
     //spacing of the cells
     float _disperse;
     
-    Matrix matProj;
+    Effect * _flat;
+    VertexAttribute _aPosition;
+    VertexAttribute _aColor;
+    Uniform * _uTransform;
+    VertexAttributeBinding * _bindPosition;
+    Font * _font;
+    float _angle;
+    bool _freeze;
+    Vector3 _eye;
+    float _eyeAzimuth, _eyeInclination;
+    float _eyeDist;
+    Form * _form;
+    bool _showForm;
+
+    Slider * _sliderNumCubes;
+    Slider * _sliderScale;
+    Slider * _sliderDisperse;
+    CheckBox * _checkOrthoView;
+    
+    Matrix matProj, matLook, matView;
     void setProjMatrix( bool ortho );
+    void updateEye();
     
     void readForm();
 };

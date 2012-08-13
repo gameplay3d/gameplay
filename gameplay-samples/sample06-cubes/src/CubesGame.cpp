@@ -3,34 +3,6 @@
 // Declare our game instance
 CubesGame game;
 
-Effect * _flat;
-VertexAttribute _aPosition;
-VertexAttribute _aColor;
-Uniform * _uTransform;
-VertexAttributeBinding * _bindPosition;
-Font * _font;
-float _angle;
-bool _freeze;
-Vector3 _eye;
-float _eyeAzimuth, _eyeInclination;
-float _eyeDist;
-Form * _form;
-bool _showForm;
-
-Slider * _sliderNumCubes;
-Slider * _sliderScale;
-Slider * _sliderDisperse;
-CheckBox * _checkOrthoView;
-
-void updateEye()
-{
-    _eye = Vector3(
-        _eyeDist * sin( _eyeInclination ) * cos( _eyeAzimuth ),
-        _eyeDist * sin( _eyeInclination ) * sin( _eyeAzimuth ),
-        _eyeDist * cos( _eyeInclination )
-        );
-}
-
 void CubesGame::setProjMatrix( bool ortho )
 {
     float ratio = float(getWidth())/getHeight();
@@ -44,56 +16,17 @@ void CubesGame::setProjMatrix( bool ortho )
         Matrix::createFrustum(-ratio/2,ratio/2,-0.5,0.5, zNear, zFar, &matProj);
 }
 
-/**
-    A simple way to construct vertex arrays.
-*/
-struct float_buffer
-{
-    std::vector<float> data;
-    
-    void clear()
-    {
-        data.clear();
-    }
-    
-    
-    /** 
-        The () operators allow easy construction of vertices.
-    */
-    float_buffer& operator()( float a )
-    { 
-        data.push_back( a );
-        return *this;
-    }
-    
-    float_buffer& operator()( float a, float b )
-    { 
-        data.push_back( a );
-        data.push_back( b );
-        return *this;
-    }
-    
-    float_buffer& operator()( float a, float b, float c )
-    { 
-        data.push_back( a );
-        data.push_back( b );
-        data.push_back( c );
-        return *this;
-    }
-    
-    float_buffer& operator()( float a, float b, float c, float d )
-    { 
-        data.push_back( a );
-        data.push_back( b );
-        data.push_back( c );
-        data.push_back( d );
-        return *this;
-    }
-};
-float_buffer _square, _color;
-
 CubesGame::CubesGame()
 {
+    _flat = 0;
+    _uTransform = 0;
+    _bindPosition = 0;
+    _font = 0;
+    _form = 0;
+    _sliderNumCubes = 0;
+    _sliderScale = 0;
+    _sliderDisperse =0;
+    _checkOrthoView = 0;
 }
 
 char const * shaderVertex = ""
@@ -189,6 +122,13 @@ void CubesGame::finalize()
 {
     SAFE_RELEASE(_flat);
     SAFE_RELEASE(_font);
+    SAFE_RELEASE(_bindPosition);
+    SAFE_RELEASE(_form);
+    
+    SAFE_RELEASE(_sliderNumCubes);
+    SAFE_RELEASE(_sliderScale);
+    SAFE_RELEASE(_sliderDisperse);
+    SAFE_RELEASE(_checkOrthoView);
 }
 
 void CubesGame::update(float elapsedTime)
@@ -228,17 +168,10 @@ void CubesGame::render(float elapsedTime)
     glEnableVertexAttribArray(_aColor);
     glVertexAttribPointer(_aColor, 3, GL_FLOAT, false, 0, &_color.data[0] );
     
-    //_flat->setValue( _uColor, Vector4(0,1.0,0.5,1.0) );
-
     float cell = _disperse / _grid;
     Matrix rot = Matrix::identity();
     rot.rotate(Vector3(1,1,0), _angle);
     rot.scale(cell*_scale);
-
-    Matrix look;
-    Matrix::createLookAt( _eye, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &look );
-    
-    Matrix view = matProj * look;
 
     Matrix trans;
     for( int x=0; x < _grid; ++x )
@@ -252,7 +185,7 @@ void CubesGame::render(float elapsedTime)
                 float tz = (-0.5*_disperse) + (z+0.5)*cell;
                 trans.setIdentity();
                 trans.translate(tx,ty,tz);
-                _flat->setValue( _uTransform, view * (trans * rot) );
+                _flat->setValue( _uTransform, matView * (trans * rot) );
                 for( int i=0; i < 6; ++i )
                     glDrawArrays(GL_TRIANGLE_STRIP, i*4, 4 );
             }
@@ -336,9 +269,6 @@ bool CubesGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     switch(evt)
     {
-        case Mouse::MOUSE_WHEEL:
-            _scale *= pow( 0.5, -wheelDelta );
-            return true;
     }
     return false;
 }
@@ -351,4 +281,17 @@ void CubesGame::controlEvent(Control* control, EventType evt)
             readForm();
             break;
     }
+}
+
+void CubesGame::updateEye()
+{
+    _eye = Vector3(
+        _eyeDist * sin( _eyeInclination ) * cos( _eyeAzimuth ),
+        _eyeDist * sin( _eyeInclination ) * sin( _eyeAzimuth ),
+        _eyeDist * cos( _eyeInclination )
+        );
+        
+    Matrix::createLookAt( _eye, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &matLook );
+    
+    matView = matProj * matLook;
 }
