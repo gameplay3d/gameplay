@@ -581,9 +581,23 @@ int Platform::enterMessagePump()
 
             case KeyRelease:
                 {
+                    //detect and drop repeating keystrokes (no other way to do this using the event interface)
+                    XEvent next;
+                    if( XPending(__display) )
+                    {
+                        XPeekEvent(__display,&next);
+                        if( next.type == KeyPress 
+                            && next.xkey.time == evt.xkey.time
+                            && next.xkey.keycode == evt.xkey.keycode )
+                        {
+                            XNextEvent(__display,&next);
+                            continue;
+                        }
+                    }
+                    
                     KeySym sym = XLookupKeysym(&evt.xkey, 0);
                     Keyboard::Key key = getKey(sym);
-                    gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
+                    gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, key);
                 }
                 break;
 
