@@ -134,6 +134,36 @@ void Matrix::createPerspective(float fieldOfView, float aspectRatio,
     dst->m[14] = -2.0f * zFarPlane * zNearPlane * f_n;
 }
 
+void Matrix::createFrustum(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane, Matrix* dst)
+{
+    GP_ASSERT(dst);
+    GP_ASSERT(left != right);
+    GP_ASSERT(top != bottom);
+    GP_ASSERT(zNearPlane > 0);
+    GP_ASSERT(zFarPlane > zNearPlane );
+    
+    //formula from the OpenGL reference
+    dst->m[0] = 2 * zNearPlane / ( right - left );
+    dst->m[1] = 0;
+    dst->m[2] = (right + left) / (right - left);
+    dst->m[3] = 0;
+    
+    dst->m[4] = 0;
+    dst->m[5] = 2 * zNearPlane / (top - bottom);
+    dst->m[6] = (top+bottom) / (top-bottom);
+    dst->m[7] = 0;
+    
+    dst->m[8] = 0;
+    dst->m[9] = 0;
+    dst->m[10] = -(zFarPlane+zNearPlane)/(zFarPlane -zNearPlane);
+    dst->m[11] = -(2*zFarPlane*zNearPlane)/(zFarPlane - zNearPlane);
+    
+    dst->m[12] = 0;
+    dst->m[13] = 0;
+    dst->m[14] = -1;
+    dst->m[15] = 0;
+}
+
 void Matrix::createOrthographic(float width, float height, float zNearPlane, float zFarPlane, Matrix* dst)
 {
     float halfWidth = width / 2.0f;

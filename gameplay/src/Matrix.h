@@ -169,6 +169,18 @@ public:
     static void createPerspective(float fieldOfView, float aspectRatio, float zNearPlane, float zFarPlane, Matrix* dst);
 
     /**
+     * Builds a frustum projection matrix (equivalent to the matrix used by glFrustrum)
+     *
+     * @param left Left vertical clipping plane
+     * @param right Right vertical clipping plane
+     * @param bottom Bottom horizontal clipping plane
+     * @param top Top horizontal clipping plane
+     * @param zNearPlane The distance to the near view plane.
+     * @param zFarPlane The distance to the far view plane.
+    */
+    static void createFrustum(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane, Matrix* dst);
+    
+    /**
      * Creates an orthographic projection matrix.
      *
      * @param width The width of the view.
