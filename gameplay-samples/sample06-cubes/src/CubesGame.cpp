@@ -3,19 +3,6 @@
 // Declare our game instance
 CubesGame game;
 
-void CubesGame::setProjMatrix( bool ortho )
-{
-    float ratio = float(getWidth())/getHeight();
-    
-    float zNear = std::max(0.1, _eyeDist-1.5);
-    float zFar = zNear+3;
-    
-    if( ortho )
-        Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,zNear,zFar,&matProj);
-    else
-        Matrix::createFrustum(-ratio/2,ratio/2,-0.5,0.5, zNear, zFar, &matProj);
-}
-
 CubesGame::CubesGame()
 {
     _flat = 0;
@@ -90,8 +77,7 @@ void CubesGame::initialize()
     _eyeInclination = M_PI/6;
     _eyeAzimuth = M_PI/8;
     _eyeDist = 2;
-    updateEye();
-    
+
     _form = Form::create("res/editor.form");
     _form->setConsumeInputEvents(false);
     
@@ -108,6 +94,8 @@ void CubesGame::initialize()
     _showForm = true;
     //use whatever the form has set as defaults
     readForm();
+    
+    updateEye();
 }
 
 void CubesGame::readForm()
@@ -279,6 +267,7 @@ void CubesGame::controlEvent(Control* control, EventType evt)
     {
         case Listener::VALUE_CHANGED:
             readForm();
+            updateEye();
             break;
     }
 }
@@ -290,8 +279,21 @@ void CubesGame::updateEye()
         _eyeDist * sin( _eyeInclination ) * sin( _eyeAzimuth ),
         _eyeDist * cos( _eyeInclination )
         );
-        
+
     Matrix::createLookAt( _eye, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &matLook );
     
     matView = matProj * matLook;
+}
+
+void CubesGame::setProjMatrix( bool ortho )
+{
+    float ratio = float(getWidth())/getHeight();
+
+    float zNear = std::max(0.1, _eyeDist-1.5);
+    float zFar = zNear+3;
+    
+    if( ortho )
+        Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,zNear,zFar,&matProj);
+    else
+        Matrix::createFrustum(-ratio/2,ratio/2,-0.5,0.5, zNear, zFar, &matProj);
 }
