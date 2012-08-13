@@ -5,9 +5,9 @@ CubesGame game;
 
 CubesGame::CubesGame()
 {
+    _texture = 0;
     _flat = 0;
     _uTransform = 0;
-    _bindPosition = 0;
     _font = 0;
     _form = 0;
     _sliderNumCubes = 0;
@@ -22,20 +22,30 @@ char const * shaderVertex = ""
     "attribute vec4 aPosition;"
     "attribute vec4 aColor;"
     "uniform mat4 uTransform;"
+    
     "varying vec4 vColor;"
+    
+    "attribute vec2 aTex;"
+    "varying vec2 vTex;"
+    
     "void main() {"
     "  gl_Position = uTransform * aPosition;"
     "  vColor = aColor;"
+    "  vTex = aTex;"
     "}"
     ;
 char const * shaderFragment = ""
     "varying vec4 vColor;"
+
+    "uniform sampler2D uTex;"
+    "varying vec2 vTex;"
+    
     "void main()"
     "{"
     // fake light to show distance a bit
     "   float d = 1.0 - gl_FragCoord.z;"
-    //"   float d = 1.0;"
-    "   gl_FragColor = vec4(vColor.x*d,vColor.y*d,vColor.z*d,1.0);"
+    "   vec4 tex = texture2D(uTex,vTex);"
+    "   gl_FragColor = vec4(vColor.x*d,vColor.y*d,vColor.z*d,1.0) * tex;"
     "}"
     ;
     
@@ -44,12 +54,21 @@ void CubesGame::initialize()
     _font = Font::create("res/arial40.gpb");
     _flat = Effect::createFromSource( shaderVertex, shaderFragment );
     
+    _texture = Texture::Sampler::create( "res/face.png" );
+    GP_ASSERT(_texture);
+    _texture->setWrapMode( Texture::CLAMP, Texture::CLAMP );
+    _texture->setFilterMode( Texture::NEAREST, Texture::NEAREST );
+    
     _aPosition = _flat->getVertexAttribute( "aPosition" );
     GP_ASSERT(_aPosition != -1 );
     _aColor = _flat->getVertexAttribute( "aColor" );
     GP_ASSERT(_aColor != -1 );
     _uTransform = _flat->getUniform( "uTransform" );
     GP_ASSERT(_uTransform);
+    _aTex = _flat->getVertexAttribute( "aTex" );
+    GP_ASSERT( _aTex != -1 );
+    _uTex = _flat->getUniform( "uTex" );
+    //GP_ASSERT(_uTex);
     
     //perhaps optimize this later
     _square
@@ -68,6 +87,14 @@ void CubesGame::initialize()
         (1,0,1)(1,0.25,1)(1,0.5,1)(1,0.75,1)
         (1,1,0)(1,1,0.25)(1,1,0.5)(1,1,0.75)
         (1,1,1)(1,1,1)(1,1,1)(1,1,1);
+        
+    _tex
+        (0,0)(0,1)(1,0)(1,1)
+        (0,0)(0,1)(1,0)(1,1)
+        (0,0)(0,1)(1,0)(1,1)
+        (0,0)(0,1)(1,0)(1,1)
+        (0,0)(0,1)(1,0)(1,1)
+        (0,0)(0,1)(1,0)(1,1);
 
     //the versions which are a single mesh of triangles
     _squareComplete
@@ -88,12 +115,14 @@ void CubesGame::initialize()
         
         
      //create vertex buffers in GL
-     GLuint buffers[4];
-     glGenBuffers(4,buffers);
+     GLuint buffers[6];
+     glGenBuffers(6,buffers);
      _bufSquare = buffers[0];
      _bufColor = buffers[1];
      _bufSquareComplete = buffers[2];
      _bufColorComplete = buffers[3];
+     _bufTex = buffers[4];
+     _bufTexComplete = buffers[5];
      
      glBindBuffer(GL_ARRAY_BUFFER,_bufSquare);
      glBufferData(GL_ARRAY_BUFFER,_square.byte_size(),&_square.data[0],GL_STATIC_DRAW);
@@ -106,7 +135,10 @@ void CubesGame::initialize()
      
      glBindBuffer(GL_ARRAY_BUFFER,_bufColorComplete);
      glBufferData(GL_ARRAY_BUFFER,_colorComplete.byte_size(),&_colorComplete.data[0],GL_STATIC_DRAW);
-     
+
+     glBindBuffer(GL_ARRAY_BUFFER,_bufTex);
+     glBufferData(GL_ARRAY_BUFFER,_tex.byte_size(),&_tex.data[0],GL_STATIC_DRAW);
+
     _angle = 0;
     _freeze = false;
 
@@ -152,8 +184,8 @@ void CubesGame::finalize()
 {
     SAFE_RELEASE(_flat);
     SAFE_RELEASE(_font);
-    SAFE_RELEASE(_bindPosition);
     SAFE_RELEASE(_form);
+    SAFE_RELEASE(_texture);
     
     SAFE_RELEASE(_sliderNumCubes);
     SAFE_RELEASE(_sliderScale);
@@ -180,7 +212,7 @@ void CubesGame::render(float elapsedTime)
     //convert to seconds
     elapsedTime /= 1000;
     
-    //TODO: where in the framework does this?
+    //TODO: could RenderState be used here somehow, just the raw restore, or bindNoRestore would be good
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LEQUAL );
     glDepthMask( true );
@@ -192,6 +224,7 @@ void CubesGame::render(float elapsedTime)
 
     glEnableVertexAttribArray(_aPosition);
     glEnableVertexAttribArray(_aColor);
+    glEnableVertexAttribArray(_aTex);
     
     if( _useBuffers )
     {
@@ -200,6 +233,9 @@ void CubesGame::render(float elapsedTime)
     
         glBindBuffer(GL_ARRAY_BUFFER, _singleMesh ? _bufColorComplete : _bufColor );
         glVertexAttribPointer(_aColor, 3, GL_FLOAT, false, 0, 0 );
+        
+        glBindBuffer(GL_ARRAY_BUFFER, _singleMesh ? _bufTexComplete : _bufTex );
+        glVertexAttribPointer(_aTex, 2, GL_FLOAT, false, 0, 0 );
     }
     else
     {
@@ -207,7 +243,14 @@ void CubesGame::render(float elapsedTime)
             _singleMesh ? &_squareComplete.data[0] : &_square.data[0] );
         glVertexAttribPointer(_aColor, 3, GL_FLOAT, false, 0, 
             _singleMesh ? &_colorComplete.data[0] : & _color.data[0] );
+        glVertexAttribPointer(_aTex, 2, GL_FLOAT, false, 0, 
+            _singleMesh ? &_texComplete.data[0] : & _tex.data[0] );
     }
+    
+    //TODO: this generates a lot of redundant gl Calls (reconfigures texture each time)
+    //TODO: it takes the uniform index as the texture index, does that make sense in the general case?
+    if(_uTex)
+        _flat->setValue(_uTex, _texture);
     
     float cell = _disperse / _grid;
     Matrix rot = Matrix::identity();

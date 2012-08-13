@@ -49,8 +49,11 @@ private:
     //data buffers
     data_buffer<GLfloat> _square, _squareComplete;
     data_buffer<GLfloat> _color, _colorComplete;
+    data_buffer<GLfloat> _tex, _texComplete;
     
-    GLuint _bufSquare, _bufSquareComplete, _bufColor, _bufColorComplete;
+    GLuint _bufSquare, _bufSquareComplete, 
+        _bufColor, _bufColorComplete,
+        _bufTex, _bufTexComplete;
     
     //dimensions of the grid
     int _grid;
@@ -60,10 +63,11 @@ private:
     float _disperse;
     
     Effect * _flat;
-    VertexAttribute _aPosition;
-    VertexAttribute _aColor;
+    VertexAttribute _aPosition, _aColor, _aTex;
     Uniform * _uTransform;
-    VertexAttributeBinding * _bindPosition;
+    Uniform * _uTex;    
+
+    Texture::Sampler * _texture;
     Font * _font;
     float _angle;
     bool _freeze;
