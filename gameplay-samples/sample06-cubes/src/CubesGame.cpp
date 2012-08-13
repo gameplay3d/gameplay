@@ -107,10 +107,6 @@ void CubesGame::initialize()
      glBindBuffer(GL_ARRAY_BUFFER,_bufColorComplete);
      glBufferData(GL_ARRAY_BUFFER,_colorComplete.byte_size(),&_colorComplete.data[0],GL_STATIC_DRAW);
      
-//     VertexFormat::Element e( VertexFormat::POSITION, 3 );
-//     VertexFormat vf( &e, 1 );
-//     _bindPosition = VertexAttributeBinding::create(vf,&_square.data[0],_flat);
-    
     _angle = 0;
     _freeze = false;
 
@@ -186,17 +182,14 @@ void CubesGame::render(float elapsedTime)
     
     //TODO: where in the framework does this?
     glEnable( GL_DEPTH_TEST );
-    //glEnable( GL_CULL_FACE ); //TODO: some of our faces wind incorrectly
     glDepthFunc( GL_LEQUAL );
     glDepthMask( true );
+    //glEnable( GL_CULL_FACE ); //some of our faces wind incorrectly, so we can't enable this
     
-    // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4(0.30,0.30,0.25,1.0), 1.0f, 0);
 
     _flat->bind();
 
-    //_bindPosition->setVertexAttribPointer(_vPosition, 3, GL_FLOAT, false, 0,  &_square.data[0] );
-    //_bindPosition->bind();
     glEnableVertexAttribArray(_aPosition);
     glEnableVertexAttribArray(_aColor);
     
