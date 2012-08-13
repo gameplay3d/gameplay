@@ -61,14 +61,5 @@ form cubesEditor
             text = Use Buffers
             checked = true
         }
-        
-        checkBox singleMesh
-        {
-            style = iconNoBorder
-            size = 140,40
-            imageSize = 35,35
-            text = Single Mesh
-            checked = true
-        }
     }
 }

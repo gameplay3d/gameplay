@@ -47,13 +47,8 @@ protected:
 
 private:
     //data buffers
-    data_buffer<GLfloat> _square, _squareComplete;
-    data_buffer<GLfloat> _color, _colorComplete;
-    data_buffer<GLfloat> _tex, _texComplete;
-    
-    GLuint _bufSquare, _bufSquareComplete, 
-        _bufColor, _bufColorComplete,
-        _bufTex, _bufTexComplete;
+    data_buffer<GLfloat> _square, _color, _tex;
+    GLuint _bufSquare, _bufColor, _bufTex;
     
     //dimensions of the grid
     int _grid;
