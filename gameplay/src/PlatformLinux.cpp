@@ -152,6 +152,7 @@ static Keyboard::Key getKey(KeySym sym)
     case XK_F12:
         return Keyboard::KEY_F12;
     case XK_KP_Space:
+    case XK_space:
         return Keyboard::KEY_SPACE;
     case XK_parenright:
         return Keyboard::KEY_RIGHT_PARENTHESIS;
