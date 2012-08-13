@@ -20,7 +20,7 @@ form cubesEditor
             size = 150,50
             orientation = HORIZONTAL
             min = 1
-            max = 30 
+            max = 40 
             value = 3
             step = 1
             text = Cubes ^ 3
@@ -59,6 +59,15 @@ form cubesEditor
             size = 140,40
             imageSize = 35,35
             text = Use Buffers
+            checked = true
+        }
+        
+        checkBox singleMesh
+        {
+            style = iconNoBorder
+            size = 140,40
+            imageSize = 35,35
+            text = Single Mesh
             checked = true
         }
     }

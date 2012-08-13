@@ -47,10 +47,10 @@ protected:
 
 private:
     //data buffers
-    data_buffer<GLfloat> _square;
-    data_buffer<GLfloat> _color;
+    data_buffer<GLfloat> _square, _squareComplete;
+    data_buffer<GLfloat> _color, _colorComplete;
     
-    GLuint _bufSquare, _bufColor;
+    GLuint _bufSquare, _bufSquareComplete, _bufColor, _bufColorComplete;
     
     //dimensions of the grid
     int _grid;
@@ -73,12 +73,14 @@ private:
     Form * _form;
     bool _showForm;
     bool _useBuffers;
+    bool _singleMesh;
     
     Slider * _sliderNumCubes;
     Slider * _sliderScale;
     Slider * _sliderDisperse;
     CheckBox * _checkOrthoView;
     CheckBox * _checkUseBuffers;
+    CheckBox * _checkSingleMesh;
     
     Matrix matProj, matLook, matView;
     void setProjMatrix( bool ortho );

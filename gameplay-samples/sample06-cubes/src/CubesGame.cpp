@@ -14,6 +14,8 @@ CubesGame::CubesGame()
     _sliderScale = 0;
     _sliderDisperse =0;
     _checkOrthoView = 0;
+    _checkUseBuffers = 0;
+    _checkSingleMesh = 0;
 }
 
 char const * shaderVertex = ""
@@ -66,12 +68,32 @@ void CubesGame::initialize()
         (1,0,1)(1,0.25,1)(1,0.5,1)(1,0.75,1)
         (1,1,0)(1,1,0.25)(1,1,0.5)(1,1,0.75)
         (1,1,1)(1,1,1)(1,1,1)(1,1,1);
-     
+
+    //the versions which are a single mesh of triangles
+    _squareComplete
+        (-1,-1,1)(1,-1,1)(-1,1,1) (1,-1,1)(-1,1,1)(1,1,1) //front
+        (1,-1,1)(1,-1,-1)(1,1,1) (1,-1,-1)(1,1,1)(1,1,-1) //right
+        (-1,-1,-1)(1,-1,-1)(-1,1,-1) (1,-1,-1)(-1,1,-1)(1,1,-1) //back
+        (-1,1,-1)(-1,1,1)(-1,-1,-1) (-1,1,1)(-1,-1,-1)(-1,-1,1) //left
+        (-1,-1,-1)(1,-1,-1)(-1,-1,1) (1,-1,-1)(-1,-1,1)(1,-1,1) //bottom
+        (-1,1,1)(1,1,1)(-1,1,-1) (1,1,1)(-1,1,-1)(1,1,-1);  //top
+        
+    _colorComplete
+        (1,0,0)(1,0.25,0.25)(1,0.5,0.5) (1,0.25,0.25)(1,0.5,0.5)(1,0.75,0.75)
+        (0,1,0)(0.25,1,0.25)(0.5,1,0.5) (0.25,1,0.25)(0.5,1,0.5)(0.75,1,0.75)
+        (0,0,1)(0.25,0.25,1)(0.5,0.5,1) (0.25,0.25,1)(0.5,0.5,1)(0.75,0.75,1)
+        (1,0,1)(1,0.25,1)(1,0.5,1) (1,0.25,1)(1,0.5,1)(1,0.75,1)
+        (1,1,0)(1,1,0.25)(1,1,0.5) (1,1,0.25)(1,1,0.5)(1,1,0.75)
+        (1,1,1)(1,1,1)(1,1,1) (1,1,1)(1,1,1)(1,1,1);
+        
+        
      //create vertex buffers in GL
-     GLuint buffers[2];
-     glGenBuffers(2,buffers);
+     GLuint buffers[4];
+     glGenBuffers(4,buffers);
      _bufSquare = buffers[0];
      _bufColor = buffers[1];
+     _bufSquareComplete = buffers[2];
+     _bufColorComplete = buffers[3];
      
      glBindBuffer(GL_ARRAY_BUFFER,_bufSquare);
      glBufferData(GL_ARRAY_BUFFER,_square.byte_size(),&_square.data[0],GL_STATIC_DRAW);
@@ -79,6 +101,12 @@ void CubesGame::initialize()
      glBindBuffer(GL_ARRAY_BUFFER,_bufColor);
      glBufferData(GL_ARRAY_BUFFER,_color.byte_size(),&_color.data[0],GL_STATIC_DRAW);
 
+     glBindBuffer(GL_ARRAY_BUFFER,_bufSquareComplete);
+     glBufferData(GL_ARRAY_BUFFER,_squareComplete.byte_size(),&_squareComplete.data[0],GL_STATIC_DRAW);
+     
+     glBindBuffer(GL_ARRAY_BUFFER,_bufColorComplete);
+     glBufferData(GL_ARRAY_BUFFER,_colorComplete.byte_size(),&_colorComplete.data[0],GL_STATIC_DRAW);
+     
 //     VertexFormat::Element e( VertexFormat::POSITION, 3 );
 //     VertexFormat vf( &e, 1 );
 //     _bindPosition = VertexAttributeBinding::create(vf,&_square.data[0],_flat);
@@ -98,12 +126,14 @@ void CubesGame::initialize()
     _sliderDisperse = (Slider*)_form->getControl("disperse");
     _checkOrthoView = (CheckBox*)_form->getControl("orthoView");
     _checkUseBuffers = (CheckBox*)_form->getControl("useBuffers");
+    _checkSingleMesh = (CheckBox*)_form->getControl("singleMesh");
     
     _sliderNumCubes->addListener(this, Listener::VALUE_CHANGED);
     _sliderScale->addListener(this, Listener::VALUE_CHANGED);
     _checkOrthoView->addListener(this, Listener::VALUE_CHANGED);
     _sliderDisperse->addListener(this, Listener::VALUE_CHANGED);
     _checkUseBuffers->addListener(this, Listener::VALUE_CHANGED);
+    _checkSingleMesh->addListener(this, Listener::VALUE_CHANGED);
 
     _showForm = true;
     //use whatever the form has set as defaults
@@ -119,6 +149,7 @@ void CubesGame::readForm()
     _scale = _sliderScale->getValue();
     _grid = (int)_sliderNumCubes->getValue();
     _useBuffers = _checkUseBuffers->isChecked();
+    _singleMesh = _checkSingleMesh->isChecked();
 }
 
 void CubesGame::finalize()
@@ -171,16 +202,18 @@ void CubesGame::render(float elapsedTime)
     
     if( _useBuffers )
     {
-        glBindBuffer(GL_ARRAY_BUFFER,_bufSquare);
+        glBindBuffer(GL_ARRAY_BUFFER, _singleMesh ? _bufSquareComplete : _bufSquare );
         glVertexAttribPointer(_aPosition, 3, GL_FLOAT, false, 0, 0 );
     
-        glBindBuffer(GL_ARRAY_BUFFER,_bufColor);
+        glBindBuffer(GL_ARRAY_BUFFER, _singleMesh ? _bufColorComplete : _bufColor );
         glVertexAttribPointer(_aColor, 3, GL_FLOAT, false, 0, 0 );
     }
     else
     {
-        glVertexAttribPointer(_aPosition, 3, GL_FLOAT, false, 0, &_square.data[0] );
-        glVertexAttribPointer(_aColor, 3, GL_FLOAT, false, 0, &_color.data[0] );
+        glVertexAttribPointer(_aPosition, 3, GL_FLOAT, false, 0, 
+            _singleMesh ? &_squareComplete.data[0] : &_square.data[0] );
+        glVertexAttribPointer(_aColor, 3, GL_FLOAT, false, 0, 
+            _singleMesh ? &_colorComplete.data[0] : & _color.data[0] );
     }
     
     float cell = _disperse / _grid;
@@ -188,6 +221,8 @@ void CubesGame::render(float elapsedTime)
     rot.rotate(Vector3(1,1,0), _angle);
     rot.scale(cell*_scale);
 
+    //the calculation time in this loop becomes significant at 27K cubes
+    //accounting for a significant fraction of the FPS drop
     Matrix trans;
     for( int x=0; x < _grid; ++x )
     {
@@ -200,12 +235,19 @@ void CubesGame::render(float elapsedTime)
                 float tz = (-0.5*_disperse) + (z+0.5)*cell;
                 trans.setIdentity();
                 trans.translate(tx,ty,tz);
-                _flat->setValue( _uTransform, matView * (trans * rot) );
-                for( int i=0; i < 6; ++i )
-                    glDrawArrays(GL_TRIANGLE_STRIP, i*4, 4 );
-            }
-        }
-    }
+                trans = matView  * (trans * rot);
+                
+                _flat->setValue( _uTransform, trans );
+                if( _singleMesh )
+                    glDrawArrays(GL_TRIANGLES,0,6*6);
+                else
+                {
+                    for( int i=0; i < 6; ++i )
+                        glDrawArrays(GL_TRIANGLE_STRIP, i*4, 4 );
+                }
+            } //z
+        } //y
+    } //x
 
     //draw on top
     glDepthFunc( GL_ALWAYS );
