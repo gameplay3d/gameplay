@@ -69,6 +69,9 @@ private:
     Node* _modelNode;
     bool _touched;
     int _touchX;
+    bool _hideModel;
+    
+    int _gDown;
 };
 
 #endif
