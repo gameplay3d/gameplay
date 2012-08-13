@@ -12,6 +12,7 @@ macro(COPY_RES_FILES GAME_NAME GAME_RES_TARGET REL_DIR SRC_FILES)
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${REL_DIR}/${SRC_FILE}"
                 "${CMAKE_CURRENT_BINARY_DIR}/${SRC_FILE}"
+            DEPENDS "${REL_DIR}/${SRC_FILE}"
             COMMENT "Copy ${SRC_FILE}"
             )
         list(APPEND ALL_FILES "${CMAKE_CURRENT_BINARY_DIR}/${SRC_FILE}" )

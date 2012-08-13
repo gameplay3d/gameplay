@@ -1,0 +1,56 @@
+form cubesEditor
+{
+    theme = res/editor.theme
+    autoWidth = true
+    autoHeight = true
+    
+    container settings
+    {
+        style = basic
+        alignment = ALIGN_TOP_RIGHT
+        width = 200
+        layout = LAYOUT_VERTICAL
+        scroll = SCROLL_VERTICAL
+        autoHeight = true
+        scrollBarsAutoHide = false
+        
+        slider numCubes
+        {
+            style = noBorder
+            size = 150,50
+            orientation = HORIZONTAL
+            min = 1
+            max = 30 
+            value = 3
+            step = 1
+            text = Cubes ^ 3
+        }
+        
+        slider scale : numCubes
+        {
+            min = 0.05
+            max = 2.0 
+            value = 0.25
+            step = 0.05
+            text = Cube Size
+        }
+        
+        slider disperse : numCubes
+        {
+            min = 0.5
+            max = 5.0
+            value = 1.0
+            step = 0.25
+            text = Dispersion
+        }
+        
+        checkBox orthoView
+        {
+            style = iconNoBorder
+            size = 140,40
+            imageSize = 35,35
+            text = Orthographic Projection
+            checked = false
+        }
+    }
+}

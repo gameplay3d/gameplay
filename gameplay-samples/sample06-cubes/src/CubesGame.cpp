@@ -14,6 +14,13 @@ bool _freeze;
 Vector3 _eye;
 float _eyeAzimuth, _eyeInclination;
 float _eyeDist;
+Form * _form;
+bool _showForm;
+
+Slider * _sliderNumCubes;
+Slider * _sliderScale;
+Slider * _sliderDisperse;
+CheckBox * _checkOrthoView;
 
 void updateEye()
 {
@@ -24,10 +31,18 @@ void updateEye()
         );
 }
 
-//I'm keeping this high enough to slow the framerate on my system, looking for optimizations
-int _grid = 9;
-float _scale = 0.25;
-float _disperse = 1.5;
+void CubesGame::setProjMatrix( bool ortho )
+{
+    float ratio = float(getWidth())/getHeight();
+    
+    float zNear = std::max(0.1, _eyeDist-1.5);
+    float zFar = zNear+3;
+    
+    if( ortho )
+        Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,zNear,zFar,&matProj);
+    else
+        Matrix::createFrustum(-ratio/2,ratio/2,-0.5,0.5, zNear, zFar, &matProj);
+}
 
 /**
     A simple way to construct vertex arrays.
@@ -143,6 +158,31 @@ void CubesGame::initialize()
     _eyeAzimuth = M_PI/8;
     _eyeDist = 2;
     updateEye();
+    
+    _form = Form::create("res/editor.form");
+    _form->setConsumeInputEvents(false);
+    
+    _sliderNumCubes = (Slider*)_form->getControl("numCubes");
+    _sliderScale = (Slider*)_form->getControl("scale");
+    _sliderDisperse = (Slider*)_form->getControl("disperse");
+    _checkOrthoView = (CheckBox*)_form->getControl("orthoView");
+    
+    _sliderNumCubes->addListener(this, Listener::VALUE_CHANGED);
+    _sliderScale->addListener(this, Listener::VALUE_CHANGED);
+    _checkOrthoView->addListener(this, Listener::VALUE_CHANGED);
+    _sliderDisperse->addListener(this, Listener::VALUE_CHANGED);
+
+    _showForm = true;
+    //use whatever the form has set as defaults
+    readForm();
+}
+
+void CubesGame::readForm()
+{
+    setProjMatrix( _checkOrthoView->isChecked() );
+    _disperse = _sliderDisperse->getValue();
+    _scale = _sliderScale->getValue();
+    _grid = (int)_sliderNumCubes->getValue();
 }
 
 void CubesGame::finalize()
@@ -153,6 +193,9 @@ void CubesGame::finalize()
 
 void CubesGame::update(float elapsedTime)
 {
+    if( _showForm )
+        _form->update(elapsedTime);
+    
     //convert to seconds
     elapsedTime /= 1000;
     
@@ -192,19 +235,10 @@ void CubesGame::render(float elapsedTime)
     rot.rotate(Vector3(1,1,0), _angle);
     rot.scale(cell*_scale);
 
-    //TODO: This should be done only on size change, what is the interface for this?
-    Matrix proj;
-    float ratio = float(getWidth())/getHeight();
-    
-    float zNear = std::max(0.1, _eyeDist-1.5);
-    float zFar = zNear+3;
-    Matrix::createOrthographicOffCenter(-ratio,ratio,-1,1,zNear,zFar,&proj);
-    //Matrix::createFrustum(-ratio/2,ratio/2,-0.5,0.5, zNear, zFar, &proj);
-    
     Matrix look;
     Matrix::createLookAt( _eye, Vector3(0,0,0)/*center*/, Vector3(0,1,0)/*up*/, &look );
     
-    Matrix view = proj * look;
+    Matrix view = matProj * look;
 
     Matrix trans;
     for( int x=0; x < _grid; ++x )
@@ -225,6 +259,10 @@ void CubesGame::render(float elapsedTime)
         }
     }
 
+    //draw on top
+    glDepthFunc( GL_ALWAYS );
+    glDepthMask( false );
+    
     //-limited to ASCII
     //-drawText is in device coordinates
     char buffer[128];
@@ -232,6 +270,9 @@ void CubesGame::render(float elapsedTime)
     _font->start();
     _font->drawText(buffer, 5, 5, Vector4(1.0,1.0,1.0,1.0), _font->getSize() );
     _font->finish();
+    
+    if( _showForm )
+        _form->draw();
 }
 
 void CubesGame::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -244,14 +285,17 @@ void CubesGame::keyEvent(Keyboard::KeyEvent evt, int key)
             case Keyboard::KEY_ESCAPE:
                 exit();
                 break;
-                
-            case Keyboard::KEY_KP_PLUS:
-                _grid++;
+            //TODO: key is 0 for space! (Linux)
+            case ' ':
+                print( "TOGGLE: %d\n", _showForm);
+                _showForm = !_showForm;
                 break;
-                
-            case Keyboard::KEY_KP_MINUS:
-                if( _grid > 1 )
-                    _grid--;
+            //just because toggling can't work due to defect
+            case 'z':
+                _showForm = false;
+                break;
+            case 'x':
+                _showForm = true;
                 break;
         }
     }
@@ -297,4 +341,14 @@ bool CubesGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
             return true;
     }
     return false;
+}
+
+void CubesGame::controlEvent(Control* control, EventType evt)
+{
+    switch( evt )
+    {
+        case Listener::VALUE_CHANGED:
+            readForm();
+            break;
+    }
 }
