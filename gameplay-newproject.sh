@@ -9,7 +9,7 @@
 # as input parameters.
 #
 # IMPORTANT: This script must be run from the root of the gameplay
-# source tree.
+# source tree (on Linux can run from anywhere)
 #
 # ********************************************************************
 
@@ -31,7 +31,7 @@ if [[ "${OSTYPE}" == linux* ]]; then
 else
     GAME_PLAY_PATH=`pwd`
     
-    # the orignal version (which platform needs this?)
+    # the orignal version (MacOSX probably)
     function replace()
     {
         sed -i "" 's*$1*$2*g' $3
@@ -284,7 +284,7 @@ cp "${TEMPLATE_PATH}/game.config" "$projPath/game.config"
 replace TEMPLATE_TITLE "$title" "$projPath/game.config"
 
 
-if [[ "${OSTYPE}" == cygwin* ]]; then
+if [[ "${OSTYPE}" == darwin* ]]; then
     # Open the new project folder
     open $projPath
 fi
