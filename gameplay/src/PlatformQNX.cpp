@@ -512,7 +512,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 #endif
     int screenSwapInterval = WINDOW_VSYNC ? 1 : 0;
     int screenTransparency = SCREEN_TRANSPARENCY_NONE;
-    int angle = atoi(getenv("ORIENTATION"));
+
+	char *width_str = getenv("WIDTH");
+	char *height_str = getenv("HEIGHT");
 
     // Hard-coded to (0,0).
     int windowPosition[] =
@@ -579,68 +581,79 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         goto error;
     }
 
-    screen_display_t screen_display;
-    rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
-    if (rc)
-    {
-        perror("screen_get_window_property_pv(SCREEN_PROPERTY_DISPLAY)");
-        goto error;
-    }
+	if (width_str && height_str)
+	{
+		__screenWindowSize[0] = atoi(width_str);
+		__screenWindowSize[1] = atoi(height_str);
+	}
+	else
+	{
+		int angle = atoi(getenv("ORIENTATION"));
 
-    screen_display_mode_t screen_mode;
-    rc = screen_get_display_property_pv(screen_display, SCREEN_PROPERTY_MODE, (void**)&screen_mode);
-    if (rc)
-    {
-        perror("screen_get_display_property_pv(SCREEN_PROPERTY_MODE)");
-        goto error;
-    }
+		screen_display_t screen_display;
+		rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
+		if (rc)
+		{
+			perror("screen_get_window_property_pv(SCREEN_PROPERTY_DISPLAY)");
+			goto error;
+		}
 
-    int size[2];
-    rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, size);
-    if (rc)
-    {
-        perror("screen_get_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
-        goto error;
-    }
+		screen_display_mode_t screen_mode;
+		rc = screen_get_display_property_pv(screen_display, SCREEN_PROPERTY_MODE, (void**)&screen_mode);
+		if (rc)
+		{
+			perror("screen_get_display_property_pv(SCREEN_PROPERTY_MODE)");
+			goto error;
+		}
 
-    __screenWindowSize[0] = size[0];
-    __screenWindowSize[1] = size[1];
+		int size[2];
+		rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, size);
+		if (rc)
+		{
+			perror("screen_get_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
+			goto error;
+		}
 
-    if ((angle == 0) || (angle == 180))
-    {
-        if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
-            ((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
-        {
-            __screenWindowSize[1] = size[0];
-            __screenWindowSize[0] = size[1];
-        }
-    }
-    else if ((angle == 90) || (angle == 270))
-    {
-        if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
-            ((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
-        {
-            __screenWindowSize[1] = size[0];
-            __screenWindowSize[0] = size[1];
-        }
-    }
-    else
-    {
-        perror("Navigator returned an unexpected orientation angle.");
-        goto error;
-    }
+		__screenWindowSize[0] = size[0];
+		__screenWindowSize[1] = size[1];
+
+		if ((angle == 0) || (angle == 180))
+		{
+			if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
+				((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
+			{
+				__screenWindowSize[1] = size[0];
+				__screenWindowSize[0] = size[1];
+			}
+		}
+		else if ((angle == 90) || (angle == 270))
+		{
+			if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
+				((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
+			{
+				__screenWindowSize[1] = size[0];
+				__screenWindowSize[0] = size[1];
+			}
+		}
+		else
+		{
+			perror("Navigator returned an unexpected orientation angle.");
+			goto error;
+		}
+
+
+	    rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
+	    if (rc)
+	    {
+	        perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
+	        goto error;
+	    }
+	}
 
     rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, __screenWindowSize);
     if (rc)
     {
         perror("screen_set_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
-        goto error;
-    }
-
-    rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
-    if (rc)
-    {
-        perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
         goto error;
     }
 
