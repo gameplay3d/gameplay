@@ -9,9 +9,38 @@
 # as input parameters.
 #
 # IMPORTANT: This script must be run from the root of the gameplay
-# source tree.
+# source tree (on Linux can run from anywhere)
 #
 # ********************************************************************
+
+function die()
+{
+    echo "$1"
+    exit 1
+}
+
+if [[ "${OSTYPE}" == linux* ]]; then
+    GAME_PLAY_PATH=$(readlink -e $(dirname $0))
+    
+    # the common sed syntax
+    function replace()
+    {
+        sed -i "s*$1*$2*g" $3
+    }
+    
+else
+    GAME_PLAY_PATH=`pwd`
+    
+    # the orignal version (MacOSX probably)
+    function replace()
+    {
+        sed -i "" 's*$1*$2*g' $3
+    }
+fi
+
+# ensure run from correct directory
+TEMPLATE_PATH=${GAME_PLAY_PATH}/gameplay-template
+[ -d "$TEMPLATE_PATH" ] || die "Missing gameplay-template"
 
 echo
 echo "1. Enter a name for the new project."
@@ -140,7 +169,8 @@ if [[ ${projPath:0:1} != "/" ]]; then
 fi
 
 # Generate relative path from project folder to gameplay folder
-gpPathAbs=`pwd`
+gpPathAbs=$GAME_PLAY_PATH
+gpPath=$GAME_PLAY_PATH
 common_path=$projPath
 back=
 while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
@@ -156,57 +186,56 @@ if [[ ${gpPathAbs} == ${common_path} ]]; then
 	gpPath=${back}
 fi
 
-
 #############################################
 # Copy Microsoft Visual Studio project files
 #############################################
-cp "gameplay-template/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
-sed -i "" "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj"
+cp "${TEMPLATE_PATH}/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
+replace TEMPLATE_PROJECT "$projectName" "$projPath/$projName.vcxproj"
+replace TemplateGame "$className" "$projPath/$projName.vcxproj"
+replace GAMEPLAY_PATH "$gpPath" "$projPath/$projName.vcxproj"
 
-cp "gameplay-template/gameplay-template.vcxproj.filters" "$projPath/$projName.vcxproj.filters"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj.filters"
+cp "${TEMPLATE_PATH}/gameplay-template.vcxproj.filters" "$projPath/$projName.vcxproj.filters"
+replace TemplateGame "$className" "$projPath/$projName.vcxproj.filters"
 
-cp "gameplay-template/gameplay-template.vcxproj.user" "$projPath/$projName.vcxproj.user"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
+cp "${TEMPLATE_PATH}/gameplay-template.vcxproj.user" "$projPath/$projName.vcxproj.user"
+replace GAMEPLAY_PATH "$gpPath" "$projPath/$projName.vcxproj.user"
 
 
 #############################################
 # Copy Apple Xcode project files
 #############################################
 mkdir -p "$projPath/$projName.xcodeproj"
-cp "gameplay-template/gameplay-template.xcodeproj/project.pbxproj" "$projPath/$projName.xcodeproj/project.pbxproj"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/project.pbxproj"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.xcodeproj/project.pbxproj"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.xcodeproj/project.pbxproj"
+cp "${TEMPLATE_PATH}/gameplay-template.xcodeproj/project.pbxproj" "$projPath/$projName.xcodeproj/project.pbxproj"
+replace TEMPLATE_PROJECT "$projName" "$projPath/$projName.xcodeproj/project.pbxproj"
+replace TemplateGame "$className" "$projPath/$projName.xcodeproj/project.pbxproj"
+replace GAMEPLAY_PATH "$gpPath" "$projPath/$projName.xcodeproj/project.pbxproj"
 
-cp "gameplay-template/TEMPLATE_PROJECT-macosx.plist" "$projPath/$projName-macosx.plist"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
+cp "${TEMPLATE_PATH}/TEMPLATE_PROJECT-macosx.plist" "$projPath/$projName-macosx.plist"
+replace TEMPLATE_UUID "$uuid" "$projPath/$projName-macosx.plist"
+replace TEMPLATE_AUTHOR "$author" "$projPath/$projName-macosx.plist"
 
-cp "gameplay-template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
+cp "${TEMPLATE_PATH}/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
+replace TEMPLATE_TITLE "$title" "$projPath/$projName-ios.plist"
+replace TEMPLATE_UUID "$uuid" "$projPath/$projName-ios.plist"
+replace TEMPLATE_AUTHOR "$author" "$projPath/$projName-ios.plist"
 
 #############################################
 # Copy BlackBerry NDK project files
 #############################################
-cp "gameplay-template/template.cproject" "$projPath/.cproject"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.cproject"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/.cproject"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/.cproject"
+cp "${TEMPLATE_PATH}/template.cproject" "$projPath/.cproject"
+replace TEMPLATE_PROJECT "$projName" "$projPath/.cproject"
+replace TEMPLATE_UUID "$uuid" "$projPath/.cproject"
+replace GAMEPLAY_PATH "$gpPath" "$projPath/.cproject"
 
-cp "gameplay-template/template.project" "$projPath/.project"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.project"
+cp "${TEMPLATE_PATH}/template.project" "$projPath/.project"
+replace TEMPLATE_PROJECT "$projName" "$projPath/.project"
 
-cp "gameplay-template/template.bar-descriptor.xml" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_DESCRIPTION*$desc*g" "$projPath/bar-descriptor.xml"
+cp "${TEMPLATE_PATH}/template.bar-descriptor.xml" "$projPath/bar-descriptor.xml"
+replace TEMPLATE_PROJECT "$projName" "$projPath/bar-descriptor.xml"
+replace TEMPLATE_TITLE "$title" "$projPath/bar-descriptor.xml"
+replace TEMPLATE_UUID "$uuid" "$projPath/bar-descriptor.xml"
+replace TEMPLATE_AUTHOR "$author" "$projPath/bar-descriptor.xml"
+replace TEMPLATE_DESCRIPTION "$desc" "$projPath/bar-descriptor.xml"
 
 #############################################
 # Copy Android NDK project files
@@ -216,46 +245,48 @@ mkdir -p "$projPath/android/jni"
 mkdir -p "$projPath/android/res/values"
 mkdir -p "$projPath/android/res/drawable"
 
-cp "gameplay-template/android/template.AndroidManifest.xml" "$projPath/android/AndroidManifest.xml"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/AndroidManifest.xml"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/AndroidManifest.xml"
+cp "${TEMPLATE_PATH}/android/template.AndroidManifest.xml" "$projPath/android/AndroidManifest.xml"
+replace TEMPLATE_PROJECT "$projName" "$projPath/android/AndroidManifest.xml"
+replace TEMPLATE_UUID "$uuid" "$projPath/android/AndroidManifest.xml"
 
-cp "gameplay-template/android/template.build.xml" "$projPath/android/build.xml"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
+cp "${TEMPLATE_PATH}/android/template.build.xml" "$projPath/android/build.xml"
+replace TEMPLATE_PROJECT "$projName" "$projPath/android/build.xml"
 
-cp "gameplay-template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
+cp "${TEMPLATE_PATH}/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
 
-cp "gameplay-template/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
+cp "${TEMPLATE_PATH}/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"
+replace TEMPLATE_PROJECT "$projName" "$projPath/android/jni/Android.mk"
+replace TemplateGame "$className" "$projPath/android/jni/Android.mk"
+replace GAMEPLAY_PATH "$gpPath" "$projPath/android/jni/Android.mk"
 
 
-cp "gameplay-template/icon.png" "$projPath/android/res/drawable/icon.png"
-cp "gameplay-template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
+cp "${TEMPLATE_PATH}/icon.png" "$projPath/android/res/drawable/icon.png"
+cp "${TEMPLATE_PATH}/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
+replace TEMPLATE_TITLE "$title" "$projPath/android/res/values/strings.xml"
 
 
 #############################################
 # Copy source files
 #############################################
-cp "gameplay-template/src/TemplateGame.h" "$projPath/src/$className.h"
-cp "gameplay-template/src/TemplateGame.cpp" "$projPath/src/$className.cpp"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/src/$className.h"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/src/$className.cpp"
+cp "${TEMPLATE_PATH}/src/TemplateGame.h" "$projPath/src/$className.h"
+cp "${TEMPLATE_PATH}/src/TemplateGame.cpp" "$projPath/src/$className.cpp"
+replace TemplateGame "$className" "$projPath/src/$className.h"
+replace TemplateGame "$className" "$projPath/src/$className.cpp"
 
 # Copy resource files
-cp "gameplay-template/res/"* "$projPath/res/"
+cp "${TEMPLATE_PATH}/res/"* "$projPath/res/"
 
 # Copy icon
-cp "gameplay-template/icon.png" "$projPath/icon.png"
+cp "${TEMPLATE_PATH}/icon.png" "$projPath/icon.png"
 
 # Copy config
-cp "gameplay-template/game.config" "$projPath/game.config"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/game.config"
+cp "${TEMPLATE_PATH}/game.config" "$projPath/game.config"
+replace TEMPLATE_TITLE "$title" "$projPath/game.config"
 
 
-# Open the new project folder
-open $projPath
+if [[ "${OSTYPE}" == darwin* ]]; then
+    # Open the new project folder
+    open $projPath
+fi
 
 exit 0
