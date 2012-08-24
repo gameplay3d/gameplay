@@ -38,9 +38,10 @@ set(GAMEPLAY_LIBRARIES
     openal
     GLEW
     GL
+    rt
 ) 
 #TODO: The above should be enough, no?
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL)
+add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL lrt)
 
 
 add_subdirectory(sample00-mesh)
