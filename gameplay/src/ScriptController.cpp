@@ -9,18 +9,18 @@
     if (!lua_istable(sc->_lua, index)) \
     { \
         if (lua_islightuserdata(sc->_lua, index)) \
-            return (type*)lua_touserdata(sc->_lua, index); \
+            return LuaArray<type>((type*)lua_touserdata(sc->_lua, index)); \
         lua_pushfstring(sc->_lua, "Expected a " #type " pointer (an array represented as a Lua table), got '%s' instead.", \
             luaL_typename(sc->_lua, index)); \
         lua_error(sc->_lua); \
-        return NULL; \
+        return LuaArray<type>((type*)NULL); \
     } \
     \
     /* Get the size of the array. */ \
     lua_len(sc->_lua, index); \
     int size = luaL_checkint(sc->_lua, -1); \
     if (size <= 0) \
-        return NULL; \
+        return LuaArray<type>((type*)NULL); \
     \
     /* Declare a LuaArray to store the values. */ \
 	LuaArray<type> arr(size); \
@@ -771,6 +771,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
             }
             default:
                 GP_ERROR("Invalid argument type '%d'.", *(sig - 1));
+                break;
             }
 
             argumentCount++;

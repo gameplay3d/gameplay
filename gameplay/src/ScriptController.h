@@ -91,7 +91,7 @@ private:
 	struct Data
 	{
         Data() : value(NULL), refCount(0) { }
-		typename T* value;
+		T* value;
 		int refCount;
 	};
 
