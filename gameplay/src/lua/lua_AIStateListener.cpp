@@ -127,10 +127,10 @@ int lua_AIStateListener_stateEnter(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIAgent* param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
 
                 // Get parameter 2 off the stack.
-                AIState* param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
+                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
 
                 AIState::Listener* instance = getInstance(state);
                 instance->stateEnter(param1, param2);
@@ -169,10 +169,10 @@ int lua_AIStateListener_stateExit(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIAgent* param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
 
                 // Get parameter 2 off the stack.
-                AIState* param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
+                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
 
                 AIState::Listener* instance = getInstance(state);
                 instance->stateExit(param1, param2);
@@ -212,10 +212,10 @@ int lua_AIStateListener_stateUpdate(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                AIAgent* param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
 
                 // Get parameter 2 off the stack.
-                AIState* param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
+                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
