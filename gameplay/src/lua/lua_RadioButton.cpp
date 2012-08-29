@@ -190,7 +190,7 @@ int lua_RadioButton_addListener(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Control::Listener* param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false);
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -308,10 +308,10 @@ int lua_RadioButton_createAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createAnimation(param1, param2);
@@ -335,10 +335,10 @@ int lua_RadioButton_createAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Properties* param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
+                ScriptUtil::LuaArray<Properties> param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createAnimation(param1, param2);
@@ -375,7 +375,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -384,10 +384,10 @@ int lua_RadioButton_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                unsigned long* param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptUtil::getFloatPointer(6);
+                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
 
                 // Get parameter 6 off the stack.
                 Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
@@ -429,7 +429,7 @@ int lua_RadioButton_createAnimation(lua_State* state)
                 (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -438,16 +438,16 @@ int lua_RadioButton_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                unsigned long* param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptUtil::getFloatPointer(6);
+                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
 
                 // Get parameter 6 off the stack.
-                float* param6 = ScriptUtil::getFloatPointer(7);
+                ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
 
                 // Get parameter 7 off the stack.
-                float* param7 = ScriptUtil::getFloatPointer(8);
+                ScriptUtil::LuaArray<float> param7 = ScriptUtil::getFloatPointer(8);
 
                 // Get parameter 8 off the stack.
                 Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
@@ -505,16 +505,16 @@ int lua_RadioButton_createAnimationFromBy(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptUtil::getFloatPointer(4);
+                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptUtil::getFloatPointer(5);
+                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
                 Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
@@ -575,16 +575,16 @@ int lua_RadioButton_createAnimationFromTo(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptUtil::getFloatPointer(4);
+                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptUtil::getFloatPointer(5);
+                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
                 Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
@@ -656,7 +656,7 @@ int lua_RadioButton_destroyAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 RadioButton* instance = getInstance(state);
                 instance->destroyAnimation(param1);
@@ -827,7 +827,7 @@ int lua_RadioButton_getAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 RadioButton* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation(param1);
@@ -922,7 +922,7 @@ int lua_RadioButton_getAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 RadioButton* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
@@ -1687,7 +1687,7 @@ int lua_RadioButton_getImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1741,7 +1741,7 @@ int lua_RadioButton_getImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1841,7 +1841,7 @@ int lua_RadioButton_getImageUVs(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -2971,7 +2971,7 @@ int lua_RadioButton_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 RadioButton* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
@@ -2996,7 +2996,7 @@ int lua_RadioButton_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -3199,7 +3199,7 @@ int lua_RadioButton_setBounds(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 RadioButton* instance = getInstance(state);
                 instance->setBounds(*param1);
@@ -3276,7 +3276,7 @@ int lua_RadioButton_setCursorColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3318,7 +3318,7 @@ int lua_RadioButton_setCursorRegion(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3397,7 +3397,7 @@ int lua_RadioButton_setFont(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Font* param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
+                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
 
                 RadioButton* instance = getInstance(state);
                 instance->setFont(param1);
@@ -3418,7 +3418,7 @@ int lua_RadioButton_setFont(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Font* param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
+                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -3522,10 +3522,10 @@ int lua_RadioButton_setImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
 
                 RadioButton* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
@@ -3547,10 +3547,10 @@ int lua_RadioButton_setImageColor(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
@@ -3592,10 +3592,10 @@ int lua_RadioButton_setImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 RadioButton* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
@@ -3617,10 +3617,10 @@ int lua_RadioButton_setImageRegion(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
@@ -3949,7 +3949,7 @@ int lua_RadioButton_setSkinColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 RadioButton* instance = getInstance(state);
                 instance->setSkinColor(*param1);
@@ -3970,7 +3970,7 @@ int lua_RadioButton_setSkinColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4011,7 +4011,7 @@ int lua_RadioButton_setSkinRegion(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 RadioButton* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
@@ -4032,7 +4032,7 @@ int lua_RadioButton_setSkinRegion(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4111,7 +4111,7 @@ int lua_RadioButton_setStyle(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Theme::Style* param1 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+                ScriptUtil::LuaArray<Theme::Style> param1 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
 
                 RadioButton* instance = getInstance(state);
                 instance->setStyle(param1);
@@ -4149,7 +4149,7 @@ int lua_RadioButton_setText(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 RadioButton* instance = getInstance(state);
                 instance->setText(param1);
@@ -4249,7 +4249,7 @@ int lua_RadioButton_setTextColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 RadioButton* instance = getInstance(state);
                 instance->setTextColor(*param1);
@@ -4270,7 +4270,7 @@ int lua_RadioButton_setTextColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
@@ -4530,10 +4530,10 @@ int lua_RadioButton_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                Theme::Style* param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+                ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
 
                 void* returnPtr = (void*)RadioButton::create(param1, param2);
                 if (returnPtr)

@@ -137,7 +137,7 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Animation* param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false);
+                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false);
 
                 NodeCloneContext* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findClonedAnimation(param1);
@@ -187,7 +187,7 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 NodeCloneContext* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findClonedNode(param1);
@@ -238,10 +238,10 @@ int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Animation* param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false);
+                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false);
 
                 // Get parameter 2 off the stack.
-                Animation* param2 = ScriptUtil::getObjectPointer<Animation>(3, "Animation", false);
+                ScriptUtil::LuaArray<Animation> param2 = ScriptUtil::getObjectPointer<Animation>(3, "Animation", false);
 
                 NodeCloneContext* instance = getInstance(state);
                 instance->registerClonedAnimation(param1, param2);
@@ -280,10 +280,10 @@ int lua_NodeCloneContext_registerClonedNode(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Node* param2 = ScriptUtil::getObjectPointer<Node>(3, "Node", false);
+                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(3, "Node", false);
 
                 NodeCloneContext* instance = getInstance(state);
                 instance->registerClonedNode(param1, param2);

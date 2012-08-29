@@ -240,7 +240,7 @@ int lua_Effect_getUniform(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Effect* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getUniform(param1);
@@ -350,7 +350,7 @@ int lua_Effect_getVertexAttribute(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Effect* instance = getInstance(state);
                 void* returnPtr = (void*)new GLint(instance->getVertexAttribute(param1));
@@ -435,7 +435,7 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -450,10 +450,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptUtil::getFloatPointer(3);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -465,7 +465,7 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -480,10 +480,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                int* param2 = ScriptUtil::getIntPointer(3);
+                ScriptUtil::LuaArray<int> param2 = ScriptUtil::getIntPointer(3);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -495,10 +495,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", true);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, *param2);
@@ -510,10 +510,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
+                ScriptUtil::LuaArray<Matrix> param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -525,10 +525,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", true);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, *param2);
@@ -540,10 +540,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -555,10 +555,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, *param2);
@@ -570,10 +570,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -585,10 +585,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, *param2);
@@ -600,10 +600,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -615,10 +615,10 @@ int lua_Effect_setValue(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Texture::Sampler* param2 = ScriptUtil::getObjectPointer<Texture::Sampler>(3, "TextureSampler", false);
+                ScriptUtil::LuaArray<Texture::Sampler> param2 = ScriptUtil::getObjectPointer<Texture::Sampler>(3, "TextureSampler", false);
 
                 Effect* instance = getInstance(state);
                 instance->setValue(param1, param2);
@@ -640,10 +640,10 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptUtil::getFloatPointer(3);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -659,10 +659,10 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                int* param2 = ScriptUtil::getIntPointer(3);
+                ScriptUtil::LuaArray<int> param2 = ScriptUtil::getIntPointer(3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -678,10 +678,10 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
+                ScriptUtil::LuaArray<Matrix> param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", false);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -697,10 +697,10 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -716,10 +716,10 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -735,10 +735,10 @@ int lua_Effect_setValue(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Uniform* param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
+                ScriptUtil::LuaArray<Uniform> param1 = ScriptUtil::getObjectPointer<Uniform>(2, "Uniform", false);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -779,10 +779,10 @@ int lua_Effect_static_createFromFile(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Effect::createFromFile(param1, param2);
                 if (returnPtr)
@@ -814,13 +814,13 @@ int lua_Effect_static_createFromFile(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
 
                 void* returnPtr = (void*)Effect::createFromFile(param1, param2, param3);
                 if (returnPtr)
@@ -869,10 +869,10 @@ int lua_Effect_static_createFromSource(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Effect::createFromSource(param1, param2);
                 if (returnPtr)
@@ -904,13 +904,13 @@ int lua_Effect_static_createFromSource(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
 
                 void* returnPtr = (void*)Effect::createFromSource(param1, param2, param3);
                 if (returnPtr)

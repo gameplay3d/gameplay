@@ -138,13 +138,13 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3);
@@ -179,13 +179,13 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -224,13 +224,13 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -273,13 +273,13 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -326,13 +326,13 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -383,13 +383,13 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -404,7 +404,7 @@ int lua_Font_createText(lua_State* state)
                 bool param7 = ScriptUtil::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
-                Rectangle* param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false);
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3, param4, param5, param6, param7, param8);
@@ -454,7 +454,7 @@ int lua_Font_drawText(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Font::Text* param1 = ScriptUtil::getObjectPointer<Font::Text>(2, "FontText", false);
+                ScriptUtil::LuaArray<Font::Text> param1 = ScriptUtil::getObjectPointer<Font::Text>(2, "FontText", false);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1);
@@ -476,13 +476,13 @@ int lua_Font_drawText(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1, *param2, *param3);
@@ -505,7 +505,7 @@ int lua_Font_drawText(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -514,7 +514,7 @@ int lua_Font_drawText(lua_State* state)
                 int param3 = (int)luaL_checkint(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector4* param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1, param2, param3, *param4);
@@ -528,13 +528,13 @@ int lua_Font_drawText(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -561,7 +561,7 @@ int lua_Font_drawText(lua_State* state)
                 lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -570,7 +570,7 @@ int lua_Font_drawText(lua_State* state)
                 int param3 = (int)luaL_checkint(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector4* param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -588,13 +588,13 @@ int lua_Font_drawText(lua_State* state)
                 (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -625,7 +625,7 @@ int lua_Font_drawText(lua_State* state)
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -634,7 +634,7 @@ int lua_Font_drawText(lua_State* state)
                 int param3 = (int)luaL_checkint(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector4* param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -656,13 +656,13 @@ int lua_Font_drawText(lua_State* state)
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -697,13 +697,13 @@ int lua_Font_drawText(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -742,13 +742,13 @@ int lua_Font_drawText(lua_State* state)
                 (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -763,7 +763,7 @@ int lua_Font_drawText(lua_State* state)
                 bool param7 = ScriptUtil::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
-                Rectangle* param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false);
 
                 Font* instance = getInstance(state);
                 instance->drawText(param1, *param2, *param3, param4, param5, param6, param7, param8);
@@ -839,19 +839,19 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
 
                 // Get parameter 5 off the stack.
-                Vector2* param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
 
                 Font* instance = getInstance(state);
                 int result = instance->getIndexAtLocation(param1, *param2, param3, *param4, param5);
@@ -879,19 +879,19 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
 
                 // Get parameter 5 off the stack.
-                Vector2* param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
 
                 // Get parameter 6 off the stack.
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
@@ -923,19 +923,19 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
 
                 // Get parameter 5 off the stack.
-                Vector2* param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
 
                 // Get parameter 6 off the stack.
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
@@ -971,19 +971,19 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
 
                 // Get parameter 5 off the stack.
-                Vector2* param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
 
                 // Get parameter 6 off the stack.
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
@@ -1037,16 +1037,16 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1074,16 +1074,16 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1115,16 +1115,16 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1160,16 +1160,16 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector2* param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1342,16 +1342,16 @@ int lua_Font_measureText(lua_State* state)
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 // Get parameter 3 off the stack.
-                unsigned int* param3 = ScriptUtil::getUnsignedIntPointer(4);
+                ScriptUtil::LuaArray<unsigned int> param3 = ScriptUtil::getUnsignedIntPointer(4);
 
                 // Get parameter 4 off the stack.
-                unsigned int* param4 = ScriptUtil::getUnsignedIntPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 Font* instance = getInstance(state);
                 instance->measureText(param1, param2, param3, param4);
@@ -1365,16 +1365,16 @@ int lua_Font_measureText(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Rectangle* param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
 
                 Font* instance = getInstance(state);
                 instance->measureText(param1, *param2, param3, param4);
@@ -1398,16 +1398,16 @@ int lua_Font_measureText(lua_State* state)
                 (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Rectangle* param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
 
                 // Get parameter 5 off the stack.
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
@@ -1435,16 +1435,16 @@ int lua_Font_measureText(lua_State* state)
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Rectangle* param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
 
                 // Get parameter 5 off the stack.
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
@@ -1476,16 +1476,16 @@ int lua_Font_measureText(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                Rectangle* param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
 
                 // Get parameter 5 off the stack.
                 Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
@@ -1599,7 +1599,7 @@ int lua_Font_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Font::create(param1);
                 if (returnPtr)
@@ -1630,10 +1630,10 @@ int lua_Font_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Font::create(param1, param2);
                 if (returnPtr)
@@ -1681,7 +1681,7 @@ int lua_Font_static_getJustify(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 Font::Justify result = Font::getJustify(param1);
 

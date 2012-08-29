@@ -142,7 +142,7 @@ int lua_Game_clear(lua_State* state)
                 Game::ClearFlags param1 = (Game::ClearFlags)lua_enumFromString_GameClearFlags(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -296,7 +296,7 @@ int lua_Game_gamepadEvent(lua_State* state)
                 Gamepad::GamepadEvent param1 = (Gamepad::GamepadEvent)lua_enumFromString_GamepadGamepadEvent(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                Gamepad* param2 = ScriptUtil::getObjectPointer<Gamepad>(3, "Gamepad", false);
+                ScriptUtil::LuaArray<Gamepad> param2 = ScriptUtil::getObjectPointer<Gamepad>(3, "Gamepad", false);
 
                 Game* instance = getInstance(state);
                 instance->gamepadEvent(param1, param2);
@@ -381,10 +381,10 @@ int lua_Game_getAccelerometerValues(lua_State* state)
                 (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptUtil::getFloatPointer(2);
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptUtil::getFloatPointer(3);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
 
                 Game* instance = getInstance(state);
                 instance->getAccelerometerValues(param1, param2);
@@ -1402,7 +1402,7 @@ int lua_Game_schedule(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 Game* instance = getInstance(state);
                 instance->schedule(param1, param2);
@@ -1554,7 +1554,7 @@ int lua_Game_setViewport(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Game* instance = getInstance(state);
                 instance->setViewport(*param1);
