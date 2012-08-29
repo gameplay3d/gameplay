@@ -30,6 +30,75 @@ struct LuaObject
 };
 
 /**
+ * Stores a Lua parameter of an array/pointer type that is passed from Lua to C.
+ * Handles automatic cleanup of any temporary memory associated with the array.
+ * @script{ignore}
+ */
+template <typename T>
+class LuaArray
+{
+public:
+
+	/**
+	 * Creates a LuaArray to store a single pointer value.
+	 */
+	LuaArray(T* param);
+
+	/**
+	 * Allocates a LuaArray to store an array of values.
+	 *
+	 * Individual items in the array can be set using the 
+	 * set(unsigned int, const T&) method.
+	 * 
+	 * @param object Parameter object.
+	 * @param count Number of elements to store in the parameter.
+	 */
+	LuaArray(int count);
+
+	/**
+	 * Copy construcotr.
+	 */
+	LuaArray(const LuaArray<T>& copy);
+
+	/**
+	 * Destructor.
+	 */
+	~LuaArray();
+
+	/**
+	 * Assignment operator.
+	 */
+	LuaArray<T>& operator = (const LuaArray<T>& p);
+
+	/**
+	 * Copies the value of the object pointed to by itemPtr into the specified
+     * index of this LuaArray's array.
+	 */
+	void set(unsigned int index, const T* itemPtr);
+
+	/**
+	 * Conversion operator from LuaArray to T*.
+	 */
+	operator T* () const;
+
+    /**
+     * Overloades [] operator to get/set item value at index.
+     */
+    T& operator[] (int index);
+
+private:
+
+	struct Data
+	{
+        Data() : value(NULL), refCount(0) { }
+		T* value;
+		int refCount;
+	};
+
+	Data* _data;
+};
+
+/**
  * Registers the given library with Lua.
  * 
  * @param name The name of the library from within Lua.
@@ -115,7 +184,7 @@ void addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringF
  * @return The pointer.
  * @script{ignore}
  */
-bool* getBoolPointer(int index);
+LuaArray<bool> getBoolPointer(int index);
 
 /**
  * Gets a pointer to a short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -124,7 +193,7 @@ bool* getBoolPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-short* getShortPointer(int index);
+LuaArray<short> getShortPointer(int index);
 
 /**
  * Gets a pointer to an int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -133,7 +202,7 @@ short* getShortPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-int* getIntPointer(int index);
+LuaArray<int> getIntPointer(int index);
 
 /**
  * Gets a pointer to a long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -142,7 +211,7 @@ int* getIntPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-long* getLongPointer(int index);
+LuaArray<long> getLongPointer(int index);
 
 /**
  * Gets a pointer to an unsigned char (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -151,7 +220,7 @@ long* getLongPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-unsigned char* getUnsignedCharPointer(int index);
+LuaArray<unsigned char> getUnsignedCharPointer(int index);
 
 /**
  * Gets a pointer to an unsigned short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -160,7 +229,7 @@ unsigned char* getUnsignedCharPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-unsigned short* getUnsignedShortPointer(int index);
+LuaArray<unsigned short> getUnsignedShortPointer(int index);
 
 /**
  * Gets a pointer to an unsigned int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -169,7 +238,7 @@ unsigned short* getUnsignedShortPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-unsigned int* getUnsignedIntPointer(int index);
+LuaArray<unsigned int> getUnsignedIntPointer(int index);
 
 /**
  * Gets a pointer to an unsigned long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -178,7 +247,7 @@ unsigned int* getUnsignedIntPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-unsigned long* getUnsignedLongPointer(int index);
+LuaArray<unsigned long> getUnsignedLongPointer(int index);
 
 /**
  * Gets a pointer to a float (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -187,7 +256,7 @@ unsigned long* getUnsignedLongPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-float* getFloatPointer(int index);
+LuaArray<float> getFloatPointer(int index);
 
 /**
  * Gets a pointer to a double (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
@@ -196,7 +265,7 @@ float* getFloatPointer(int index);
  * @return The pointer.
  * @script{ignore}
  */
-double* getDoublePointer(int index);
+LuaArray<double> getDoublePointer(int index);
 
 /**
  * Gets an object pointer of the given type for the given stack index.
@@ -209,7 +278,8 @@ double* getDoublePointer(int index);
  *      is not an object or if the object is not derived from the given type.
  * @script{ignore}
  */
-template<typename T> T* getObjectPointer(int index, const char* type, bool nonNull);
+template <typename T>
+LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull);
 
 /**
  * Gets a string for the given stack index.
@@ -733,17 +803,17 @@ private:
     friend void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction);
     friend void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived);
     friend void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
-    friend bool* ScriptUtil::getBoolPointer(int index);
-    friend short* ScriptUtil::getShortPointer(int index);
-    friend int* ScriptUtil::getIntPointer(int index);
-    friend long* ScriptUtil::getLongPointer(int index);
-    friend unsigned char* ScriptUtil::getUnsignedCharPointer(int index);
-    friend unsigned short* ScriptUtil::getUnsignedShortPointer(int index);
-    friend unsigned int* ScriptUtil::getUnsignedIntPointer(int index);
-    friend unsigned long* ScriptUtil::getUnsignedLongPointer(int index);
-    friend float* ScriptUtil::getFloatPointer(int index);
-    friend double* ScriptUtil::getDoublePointer(int index);
-    template<typename T> friend T* ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull);
+    friend ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index);
+    friend ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index);
+    friend ScriptUtil::LuaArray<int> ScriptUtil::getIntPointer(int index);
+    friend ScriptUtil::LuaArray<long> ScriptUtil::getLongPointer(int index);
+    friend ScriptUtil::LuaArray<unsigned char> ScriptUtil::getUnsignedCharPointer(int index);
+    friend ScriptUtil::LuaArray<unsigned short> ScriptUtil::getUnsignedShortPointer(int index);
+    friend ScriptUtil::LuaArray<unsigned int> ScriptUtil::getUnsignedIntPointer(int index);
+    friend ScriptUtil::LuaArray<unsigned long> ScriptUtil::getUnsignedLongPointer(int index);
+    friend ScriptUtil::LuaArray<float> ScriptUtil::getFloatPointer(int index);
+    friend ScriptUtil::LuaArray<double> ScriptUtil::getDoublePointer(int index);
+    template<typename T> friend ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull);
     friend const char* ScriptUtil::getString(int index, bool isStdString);
 
     lua_State* _lua;

@@ -87,7 +87,7 @@ int lua_AIAgentListener_messageReceived(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIMessage* param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
+                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
 
                 AIAgent::Listener* instance = getInstance(state);
                 bool result = instance->messageReceived(param1);

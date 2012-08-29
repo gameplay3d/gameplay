@@ -493,7 +493,7 @@ int lua_AIAgent_setListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIAgent::Listener* param1 = ScriptUtil::getObjectPointer<AIAgent::Listener>(2, "AIAgentListener", false);
+                ScriptUtil::LuaArray<AIAgent::Listener> param1 = ScriptUtil::getObjectPointer<AIAgent::Listener>(2, "AIAgentListener", false);
 
                 AIAgent* instance = getInstance(state);
                 instance->setListener(param1);
