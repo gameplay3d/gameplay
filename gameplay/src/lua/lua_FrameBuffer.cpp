@@ -474,7 +474,7 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                DepthStencilTarget* param1 = ScriptUtil::getObjectPointer<DepthStencilTarget>(2, "DepthStencilTarget", false);
+                ScriptUtil::LuaArray<DepthStencilTarget> param1 = ScriptUtil::getObjectPointer<DepthStencilTarget>(2, "DepthStencilTarget", false);
 
                 FrameBuffer* instance = getInstance(state);
                 instance->setDepthStencilTarget(param1);
@@ -512,7 +512,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                RenderTarget* param1 = ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false);
+                ScriptUtil::LuaArray<RenderTarget> param1 = ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false);
 
                 FrameBuffer* instance = getInstance(state);
                 instance->setRenderTarget(param1);
@@ -533,7 +533,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                RenderTarget* param1 = ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false);
+                ScriptUtil::LuaArray<RenderTarget> param1 = ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -600,7 +600,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -654,7 +654,7 @@ int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)FrameBuffer::getFrameBuffer(param1);
                 if (returnPtr)

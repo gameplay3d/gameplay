@@ -208,10 +208,10 @@ int lua_Platform_static_getAccelerometerValues(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptUtil::getFloatPointer(1);
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptUtil::getFloatPointer(2);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(2);
 
                 Platform::getAccelerometerValues(param1, param2);
                 

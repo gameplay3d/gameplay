@@ -3,7 +3,94 @@
 namespace gameplay
 {
 
-template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull)
+template <typename T>
+ScriptUtil::LuaArray<T>::LuaArray(T* param)
+{
+	_data = new ScriptUtil::LuaArray<T>::Data();
+	_data->value = param;
+
+	// Initial ref count of zero means no memory management
+	_data->refCount = 0;
+}
+
+template <typename T>
+ScriptUtil::LuaArray<T>::LuaArray(int count)
+{
+	_data = new ScriptUtil::LuaArray<T>::Data();
+
+	// Allocate a chunk of memory to store 'count' number of T.
+	// Use new instead of malloc since we track memory allocations
+	// int DebugMem configurations.
+	_data->value = (T*)new unsigned char[sizeof(T) * count];
+
+	// Positive ref count means we automatically cleanup memory
+	_data->refCount = 1;
+}
+
+template <typename T>
+ScriptUtil::LuaArray<T>::LuaArray(const ScriptUtil::LuaArray<T>& copy)
+{
+	_data = copy._data;
+	++_data->refCount;
+}
+
+template <typename T>
+ScriptUtil::LuaArray<T>::~LuaArray()
+{
+	if ((--_data->refCount) <= 0)
+	{
+        // Non managed arrays/pointers start with ref count zero, so only delete data if
+        // the decremented ref count == 0 (otherwise it will be -1).
+        if (_data->refCount == 0)
+        {
+            unsigned char* value = (unsigned char*)_data->value;
+		    SAFE_DELETE_ARRAY(value);
+        }
+
+        SAFE_DELETE(_data);
+	}
+}
+
+template <typename T>
+ScriptUtil::LuaArray<T>& ScriptUtil::LuaArray<T>::operator = (const ScriptUtil::LuaArray<T>& p)
+{
+    _data = p._data;
+	++_data->refCount;
+}
+
+template <typename T>
+void ScriptUtil::LuaArray<T>::set(unsigned int index, const T* itemPtr)
+{
+	// WARNING: The following code will only work properly for arrays of pointers
+	// to objects (i.e. T**) or for simple structs that are being passed
+	// in as read-only. Since the memory is directly copied, any member data that
+	// is modified with the object that is copied, will not modify the original object.
+	// What is even scarier is that if an array of objects that contain virtual functions
+	// is copied here, then the vtables are copied directly, meaning the new object
+	// contains a copy of a vtable that points to functions in the old object. Calling
+	// virtual fucntions on the new object would then call the functions on the old object.
+	// If the old object is deleted, the vtable on the new object would point to addressess
+	// for functions that no longer exist.
+    if (itemPtr)
+        memcpy((void*)&_data->value[index], (void*)itemPtr, sizeof(T));
+    else
+        memset((void*)&_data->value[index], 0, sizeof(T));
+}
+
+template <typename T>
+ScriptUtil::LuaArray<T>::operator T* () const
+{
+	return _data->value;
+}
+
+template <typename T>
+T& ScriptUtil::LuaArray<T>::operator[] (int index)
+{
+    return _data->value[index];
+}
+
+template<typename T>
+ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
     if (lua_type(sc->_lua, index) == LUA_TNIL)
@@ -13,7 +100,7 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
             GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
         }
 
-        return NULL;
+        return LuaArray<T>((T*)NULL);
     }
     else if (lua_type(sc->_lua, index) == LUA_TTABLE)
     {
@@ -22,11 +109,10 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
         int size = luaL_checkint(sc->_lua, -1);
 
         if (size <= 0)
-            return NULL;
+            return LuaArray<T>((T*)NULL);
 
-        // Create an array to store the values.
-        T* values = (T*)malloc(sizeof(T)*size);
-        
+		LuaArray<T> arr(size);
+
         // Push the first key.
         lua_pushnil(sc->_lua);
         int i = 0;
@@ -42,12 +128,7 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                     if (lua_rawequal(sc->_lua, -1, -2))
                     {
                         lua_pop(sc->_lua, 2);
-                        T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
-                        if (ptr)
-                            memcpy((void*)&values[i], (void*)ptr, sizeof(T));
-                        else
-                            memset((void*)&values[i], 0, sizeof(T));
-
+						arr.set(i, (T*)((ScriptUtil::LuaObject*)p)->instance);
                         lua_pop(sc->_lua, 1);
                         continue;
                     }
@@ -61,12 +142,7 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                         if (lua_rawequal(sc->_lua, -1, -2))
                         {
                             lua_pop(sc->_lua, 2);
-                            T* ptr = (T*)((ScriptUtil::LuaObject*)p)->instance;
-                            if (ptr)
-                                memcpy((void*)&values[i], (void*)ptr, sizeof(T));
-                            else
-                                memset((void*)&values[i], 0, sizeof(T));
-
+							arr.set(i, (T*)((ScriptUtil::LuaObject*)p)->instance);
                             lua_pop(sc->_lua, 1);
                             continue;
                         }
@@ -77,7 +153,7 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
             }
         }
         
-        return values;
+        return arr;
     }
     else
     {
@@ -96,7 +172,7 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                     {
                         GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
                     }
-                    return ptr;
+                    return LuaArray<T>(ptr);
                 }
                 lua_pop(sc->_lua, 1);
 
@@ -113,7 +189,7 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
                         {
                             GP_ERROR("Attempting to pass NULL for required non-NULL parameter at index %d (likely a reference or by-value parameter).", index);
                         }
-                        return ptr;
+                        return LuaArray<T>(ptr);
                     }
                     lua_pop(sc->_lua, 1);
                 }
@@ -126,7 +202,8 @@ template<typename T>T* ScriptUtil::getObjectPointer(int index, const char* type,
         {
             GP_ERROR("Failed to retrieve a valid object pointer of type '%s' for parameter %d.", type, index);
         }
-        return NULL;
+
+        return LuaArray<T>((T*)NULL);
     }
 }
     

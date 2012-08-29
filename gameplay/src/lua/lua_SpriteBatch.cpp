@@ -94,10 +94,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(*param1, *param2);
@@ -119,13 +119,13 @@ int lua_SpriteBatch_draw(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(*param1, *param2, *param3);
@@ -138,13 +138,13 @@ int lua_SpriteBatch_draw(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param3 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(*param1, *param2, *param3);
@@ -167,16 +167,16 @@ int lua_SpriteBatch_draw(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param3 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", true);
 
                 // Get parameter 4 off the stack.
-                Vector4* param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(*param1, *param2, *param3, *param4);
@@ -201,19 +201,19 @@ int lua_SpriteBatch_draw(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param3 = ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", true);
 
                 // Get parameter 4 off the stack.
-                Vector4* param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
 
                 // Get parameter 5 off the stack.
-                Vector2* param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", true);
 
                 // Get parameter 6 off the stack.
                 float param6 = (float)luaL_checknumber(state, 7);
@@ -268,7 +268,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param8 = (float)luaL_checknumber(state, 9);
 
                 // Get parameter 9 off the stack.
-                Vector4* param9 = ScriptUtil::getObjectPointer<Vector4>(10, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param9 = ScriptUtil::getObjectPointer<Vector4>(10, "Vector4", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(param1, param2, param3, param4, param5, param6, param7, param8, *param9);
@@ -297,7 +297,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 lua_type(state, 11) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -318,10 +318,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param7 = (float)luaL_checknumber(state, 8);
 
                 // Get parameter 8 off the stack.
-                Vector4* param8 = ScriptUtil::getObjectPointer<Vector4>(9, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param8 = ScriptUtil::getObjectPointer<Vector4>(9, "Vector4", true);
 
                 // Get parameter 9 off the stack.
-                Vector2* param9 = ScriptUtil::getObjectPointer<Vector2>(10, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param9 = ScriptUtil::getObjectPointer<Vector2>(10, "Vector2", true);
 
                 // Get parameter 10 off the stack.
                 float param10 = (float)luaL_checknumber(state, 11);
@@ -368,10 +368,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param8 = (float)luaL_checknumber(state, 9);
 
                 // Get parameter 9 off the stack.
-                Vector4* param9 = ScriptUtil::getObjectPointer<Vector4>(10, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param9 = ScriptUtil::getObjectPointer<Vector4>(10, "Vector4", true);
 
                 // Get parameter 10 off the stack.
-                Rectangle* param10 = ScriptUtil::getObjectPointer<Rectangle>(11, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param10 = ScriptUtil::getObjectPointer<Rectangle>(11, "Rectangle", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(param1, param2, param3, param4, param5, param6, param7, param8, *param9, *param10);
@@ -418,7 +418,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 10);
 
                 // Get parameter 10 off the stack.
-                Vector4* param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->draw(param1, param2, param3, param4, param5, param6, param7, param8, param9, *param10);
@@ -448,7 +448,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 lua_type(state, 12) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -469,10 +469,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param7 = (float)luaL_checknumber(state, 8);
 
                 // Get parameter 8 off the stack.
-                Vector4* param8 = ScriptUtil::getObjectPointer<Vector4>(9, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param8 = ScriptUtil::getObjectPointer<Vector4>(9, "Vector4", true);
 
                 // Get parameter 9 off the stack.
-                Vector2* param9 = ScriptUtil::getObjectPointer<Vector2>(10, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param9 = ScriptUtil::getObjectPointer<Vector2>(10, "Vector2", true);
 
                 // Get parameter 10 off the stack.
                 float param10 = (float)luaL_checknumber(state, 11);
@@ -526,7 +526,7 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 10);
 
                 // Get parameter 10 off the stack.
-                Vector4* param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
 
                 // Get parameter 11 off the stack.
                 bool param11 = ScriptUtil::luaCheckBool(state, 12);
@@ -587,10 +587,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 10);
 
                 // Get parameter 10 off the stack.
-                Vector4* param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
 
                 // Get parameter 11 off the stack.
-                Vector2* param11 = ScriptUtil::getObjectPointer<Vector2>(12, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param11 = ScriptUtil::getObjectPointer<Vector2>(12, "Vector2", true);
 
                 // Get parameter 12 off the stack.
                 float param12 = (float)luaL_checknumber(state, 13);
@@ -615,13 +615,13 @@ int lua_SpriteBatch_draw(lua_State* state)
                 lua_type(state, 13) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
                 float param4 = (float)luaL_checknumber(state, 5);
@@ -642,10 +642,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 10);
 
                 // Get parameter 10 off the stack.
-                Vector4* param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
 
                 // Get parameter 11 off the stack.
-                Vector2* param11 = ScriptUtil::getObjectPointer<Vector2>(12, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param11 = ScriptUtil::getObjectPointer<Vector2>(12, "Vector2", true);
 
                 // Get parameter 12 off the stack.
                 float param12 = (float)luaL_checknumber(state, 13);
@@ -707,10 +707,10 @@ int lua_SpriteBatch_draw(lua_State* state)
                 float param9 = (float)luaL_checknumber(state, 10);
 
                 // Get parameter 10 off the stack.
-                Vector4* param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param10 = ScriptUtil::getObjectPointer<Vector4>(11, "Vector4", true);
 
                 // Get parameter 11 off the stack.
-                Vector2* param11 = ScriptUtil::getObjectPointer<Vector2>(12, "Vector2", true);
+                ScriptUtil::LuaArray<Vector2> param11 = ScriptUtil::getObjectPointer<Vector2>(12, "Vector2", true);
 
                 // Get parameter 12 off the stack.
                 float param12 = (float)luaL_checknumber(state, 13);
@@ -972,7 +972,7 @@ int lua_SpriteBatch_setProjectionMatrix(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 SpriteBatch* instance = getInstance(state);
                 instance->setProjectionMatrix(*param1);
@@ -1043,7 +1043,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)SpriteBatch::create(param1);
                 if (returnPtr)
@@ -1064,7 +1064,7 @@ int lua_SpriteBatch_static_create(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Texture* param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
+                ScriptUtil::LuaArray<Texture> param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
 
                 void* returnPtr = (void*)SpriteBatch::create(param1);
                 if (returnPtr)
@@ -1095,10 +1095,10 @@ int lua_SpriteBatch_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                Effect* param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
+                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
 
                 void* returnPtr = (void*)SpriteBatch::create(param1, param2);
                 if (returnPtr)
@@ -1120,10 +1120,10 @@ int lua_SpriteBatch_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Texture* param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
+                ScriptUtil::LuaArray<Texture> param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
 
                 // Get parameter 2 off the stack.
-                Effect* param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
+                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
 
                 void* returnPtr = (void*)SpriteBatch::create(param1, param2);
                 if (returnPtr)
@@ -1155,10 +1155,10 @@ int lua_SpriteBatch_static_create(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                Effect* param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
+                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -1184,10 +1184,10 @@ int lua_SpriteBatch_static_create(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Texture* param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
+                ScriptUtil::LuaArray<Texture> param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
 
                 // Get parameter 2 off the stack.
-                Effect* param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
+                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
