@@ -1629,10 +1629,10 @@ int lua_ParticleEmitter_setAcceleration(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setAcceleration(*param1, *param2);
@@ -1673,16 +1673,16 @@ int lua_ParticleEmitter_setColor(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector4* param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
 
                 // Get parameter 2 off the stack.
-                Vector4* param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
 
                 // Get parameter 3 off the stack.
-                Vector4* param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
 
                 // Get parameter 4 off the stack.
-                Vector4* param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setColor(*param1, *param2, *param3, *param4);
@@ -1885,10 +1885,10 @@ int lua_ParticleEmitter_setPosition(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setPosition(*param1, *param2);
@@ -1935,10 +1935,10 @@ int lua_ParticleEmitter_setRotation(lua_State* state)
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setRotation(param1, param2, *param3, *param4);
@@ -2110,7 +2110,7 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", false);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteFrameCoords(param1, param2);
@@ -2294,7 +2294,7 @@ int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptUtil::getFloatPointer(3);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteTexCoords(param1, param2);
@@ -2371,10 +2371,10 @@ int lua_ParticleEmitter_setVelocity(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setVelocity(*param1, *param2);
@@ -2445,7 +2445,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)ParticleEmitter::create(param1);
                 if (returnPtr)
@@ -2466,7 +2466,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Properties* param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false);
+                ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false);
 
                 void* returnPtr = (void*)ParticleEmitter::create(param1);
                 if (returnPtr)
@@ -2498,7 +2498,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 2));
@@ -2552,7 +2552,7 @@ int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 ParticleEmitter::TextureBlending result = ParticleEmitter::getTextureBlendingFromString(param1);
 

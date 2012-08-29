@@ -47,7 +47,7 @@ int lua_ScriptController_loadScript(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 ScriptController* instance = getInstance(state);
                 instance->loadScript(param1);
@@ -68,7 +68,7 @@ int lua_ScriptController_loadScript(lua_State* state)
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 3);
@@ -109,7 +109,7 @@ int lua_ScriptController_loadUrl(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 ScriptController* instance = getInstance(state);
                 std::string result = instance->loadUrl(param1);
@@ -149,7 +149,7 @@ int lua_ScriptController_static_print(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 ScriptController::print(param1);
                 
@@ -168,10 +168,10 @@ int lua_ScriptController_static_print(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 ScriptController::print(param1, param2);
                 

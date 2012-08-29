@@ -556,7 +556,7 @@ int lua_Texture_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Texture::create(param1);
                 if (returnPtr)
@@ -577,7 +577,7 @@ int lua_Texture_static_create(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Image* param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
+                ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
 
                 void* returnPtr = (void*)Texture::create(param1);
                 if (returnPtr)
@@ -608,7 +608,7 @@ int lua_Texture_static_create(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 2);
@@ -633,7 +633,7 @@ int lua_Texture_static_create(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                Image* param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
+                ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 2);
@@ -678,7 +678,7 @@ int lua_Texture_static_create(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 // Get parameter 4 off the stack.
-                unsigned char* param4 = ScriptUtil::getUnsignedCharPointer(4);
+                ScriptUtil::LuaArray<unsigned char> param4 = ScriptUtil::getUnsignedCharPointer(4);
 
                 void* returnPtr = (void*)Texture::create(param1, param2, param3, param4);
                 if (returnPtr)
@@ -721,7 +721,7 @@ int lua_Texture_static_create(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 // Get parameter 4 off the stack.
-                unsigned char* param4 = ScriptUtil::getUnsignedCharPointer(4);
+                ScriptUtil::LuaArray<unsigned char> param4 = ScriptUtil::getUnsignedCharPointer(4);
 
                 // Get parameter 5 off the stack.
                 bool param5 = ScriptUtil::luaCheckBool(state, 5);
