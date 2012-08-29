@@ -158,7 +158,7 @@ int lua_PhysicsControllerHitResult_normal(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->normal = *param2;
         return 0;
@@ -196,7 +196,7 @@ int lua_PhysicsControllerHitResult_object(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        PhysicsCollisionObject* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+        ScriptUtil::LuaArray<PhysicsCollisionObject> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
         instance->object = param2;
         return 0;
@@ -234,7 +234,7 @@ int lua_PhysicsControllerHitResult_point(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->point = *param2;
         return 0;

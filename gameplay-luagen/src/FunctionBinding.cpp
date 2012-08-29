@@ -11,7 +11,7 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
 static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex = false);
 static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel);
 static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int indentLevel);
-
+static inline std::string getTypeName(const FunctionBinding::Param& param);
 
 FunctionBinding::Param::Param(FunctionBinding::Param::Type type, Kind kind, const string& info) : 
     type(type), kind(kind), info(info), hasDefaultValue(false)
@@ -450,66 +450,55 @@ bool FunctionBinding::signaturesMatch(const FunctionBinding& b1, const FunctionB
     return false;
 }
 
-ostream& operator<<(ostream& o, const FunctionBinding::Param& param)
+static inline std::string getTypeName(const FunctionBinding::Param& param)
 {
     switch (param.type)
     {
     case FunctionBinding::Param::TYPE_VOID:
-        o << "void";
-        break;
+        return "void";
     case FunctionBinding::Param::TYPE_BOOL:
-        o << "bool";
-        break;
+        return "bool";
     case FunctionBinding::Param::TYPE_CHAR:
-        o << "char";
-        break;
+        return "char";
     case FunctionBinding::Param::TYPE_SHORT:
-        o << "short";
-        break;
+        return "short";
     case FunctionBinding::Param::TYPE_INT:
-        o << "int";
-        break;
+        return "int";
     case FunctionBinding::Param::TYPE_LONG:
-        o << "long";
-        break;
+        return "long";
     case FunctionBinding::Param::TYPE_UCHAR:
-        o << "unsigned char";
-        break;
+        return "unsigned char";
     case FunctionBinding::Param::TYPE_USHORT:
-        o << "unsigned short";
-        break;
+        return "unsigned short";
     case FunctionBinding::Param::TYPE_UINT:
-        o << "unsigned int";
-        break;
+        return "unsigned int";
     case FunctionBinding::Param::TYPE_ULONG:
-        o << "unsigned long";
-        break;
+        return "unsigned long";
     case FunctionBinding::Param::TYPE_FLOAT:
-        o << "float";
-        break;
+        return "float";
     case FunctionBinding::Param::TYPE_DOUBLE:
-        o << "double";
-        break;
+        return "double";
     case FunctionBinding::Param::TYPE_ENUM:
-        o << Generator::getInstance()->getIdentifier(param.info);
-        break;
+        return Generator::getInstance()->getIdentifier(param.info).c_str();
     case FunctionBinding::Param::TYPE_STRING:
         if (param.info == "string")
-            o << "std::string";
+            return "std::string";
         else
-            o << "const char";
-        break;
+            return "const char";
     case FunctionBinding::Param::TYPE_OBJECT:
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
-        o << Generator::getInstance()->getIdentifier(param.info);
-        break;
+        return Generator::getInstance()->getIdentifier(param.info).c_str();
     case FunctionBinding::Param::TYPE_UNRECOGNIZED:
-        o << param.info;
-        break;
+        return param.info.c_str();
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
     default:
-        break;
+        return "";
     }
+}
+
+ostream& operator<<(ostream& o, const FunctionBinding::Param& param)
+{
+    o << getTypeName(param);
 
     if (param.kind == FunctionBinding::Param::KIND_POINTER)
         o << "*";
@@ -735,7 +724,11 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
     case FunctionBinding::Param::TYPE_STRING:
     case FunctionBinding::Param::TYPE_ENUM:
         indent(o, indentLevel);
-        o << p << " param" << i + 1 << " = ";
+        if (p.kind == FunctionBinding::Param::KIND_POINTER)
+            o << "ScriptUtil::LuaArray<" << getTypeName(p) << ">";
+        else
+            o << p;
+        o << " param" << i + 1 << " = ";
         break;
     default:
         // Ignore these cases.
@@ -820,9 +813,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
         indent(o, indentLevel);
-        o << p;
-        if (p.kind != FunctionBinding::Param::KIND_POINTER)
-            o << "*";
+        o << "ScriptUtil::LuaArray<" << getTypeName(p) << ">";
         o << " param" << i + 1 << " = ";
         o << "ScriptUtil::getObjectPointer<";
         o << Generator::getInstance()->getIdentifier(p.info) << ">(" << paramIndex;

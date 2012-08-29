@@ -122,7 +122,7 @@ int lua_Quaternion__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptUtil::getFloatPointer(1);
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
 
                 void* returnPtr = (void*)new Quaternion(param1);
                 if (returnPtr)
@@ -143,7 +143,7 @@ int lua_Quaternion__init(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 void* returnPtr = (void*)new Quaternion(*param1);
                 if (returnPtr)
@@ -164,7 +164,7 @@ int lua_Quaternion__init(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 void* returnPtr = (void*)new Quaternion(*param1);
                 if (returnPtr)
@@ -195,7 +195,7 @@ int lua_Quaternion__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -305,7 +305,7 @@ int lua_Quaternion_conjugate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion* instance = getInstance(state);
                 instance->conjugate(param1);
@@ -362,7 +362,7 @@ int lua_Quaternion_inverse(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion* instance = getInstance(state);
                 bool result = instance->inverse(param1);
@@ -477,7 +477,7 @@ int lua_Quaternion_multiply(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Quaternion* instance = getInstance(state);
                 instance->multiply(*param1);
@@ -531,7 +531,7 @@ int lua_Quaternion_normalize(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion* instance = getInstance(state);
                 instance->normalize(param1);
@@ -569,7 +569,7 @@ int lua_Quaternion_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptUtil::getFloatPointer(2);
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
 
                 Quaternion* instance = getInstance(state);
                 instance->set(param1);
@@ -580,7 +580,7 @@ int lua_Quaternion_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Quaternion* instance = getInstance(state);
                 instance->set(*param1);
@@ -591,7 +591,7 @@ int lua_Quaternion_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Quaternion* instance = getInstance(state);
                 instance->set(*param1);
@@ -612,7 +612,7 @@ int lua_Quaternion_set(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -720,13 +720,13 @@ int lua_Quaternion_static_createFromAxisAngle(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Quaternion* param3 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param3 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", false);
 
                 Quaternion::createFromAxisAngle(*param1, param2, param3);
                 
@@ -763,10 +763,10 @@ int lua_Quaternion_static_createFromRotationMatrix(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Quaternion::createFromRotationMatrix(*param1, param2);
                 
@@ -842,16 +842,16 @@ int lua_Quaternion_static_lerp(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                Quaternion* param4 = ScriptUtil::getObjectPointer<Quaternion>(4, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param4 = ScriptUtil::getObjectPointer<Quaternion>(4, "Quaternion", false);
 
                 Quaternion::lerp(*param1, *param2, param3, param4);
                 
@@ -889,13 +889,13 @@ int lua_Quaternion_static_multiply(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Quaternion* param3 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param3 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", false);
 
                 Quaternion::multiply(*param1, *param2, param3);
                 
@@ -934,16 +934,16 @@ int lua_Quaternion_static_slerp(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 4 off the stack.
-                Quaternion* param4 = ScriptUtil::getObjectPointer<Quaternion>(4, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param4 = ScriptUtil::getObjectPointer<Quaternion>(4, "Quaternion", false);
 
                 Quaternion::slerp(*param1, *param2, param3, param4);
                 
@@ -984,22 +984,22 @@ int lua_Quaternion_static_squad(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(1, "Quaternion", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Quaternion* param3 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param3 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 4 off the stack.
-                Quaternion* param4 = ScriptUtil::getObjectPointer<Quaternion>(4, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param4 = ScriptUtil::getObjectPointer<Quaternion>(4, "Quaternion", true);
 
                 // Get parameter 5 off the stack.
                 float param5 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 6 off the stack.
-                Quaternion* param6 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param6 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", false);
 
                 Quaternion::squad(*param1, *param2, *param3, *param4, param5, param6);
                 
@@ -1073,7 +1073,7 @@ int lua_Quaternion_toAxisAngle(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Quaternion* instance = getInstance(state);
                 float result = instance->toAxisAngle(param1);
