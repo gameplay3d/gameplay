@@ -117,7 +117,7 @@ int lua_Rectangle__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(1, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(1, "Rectangle", true);
 
                 void* returnPtr = (void*)new Rectangle(*param1);
                 if (returnPtr)
@@ -279,7 +279,7 @@ int lua_Rectangle_contains(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Rectangle* instance = getInstance(state);
                 bool result = instance->contains(*param1);
@@ -453,7 +453,7 @@ int lua_Rectangle_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Rectangle* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -640,7 +640,7 @@ int lua_Rectangle_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 Rectangle* instance = getInstance(state);
                 instance->set(*param1);
@@ -753,13 +753,13 @@ int lua_Rectangle_static_combine(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(1, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(1, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
-                Rectangle* param2 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 3 off the stack.
-                Rectangle* param3 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", false);
+                ScriptUtil::LuaArray<Rectangle> param3 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", false);
 
                 Rectangle::combine(*param1, *param2, param3);
                 

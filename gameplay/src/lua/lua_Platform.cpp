@@ -220,10 +220,10 @@ int lua_Platform_static_getAccelerometerValues(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptUtil::getFloatPointer(1);
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
 
                 // Get parameter 2 off the stack.
-                float* param2 = ScriptUtil::getFloatPointer(2);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(2);
 
                 Platform::getAccelerometerValues(param1, param2);
                 
@@ -444,7 +444,7 @@ int lua_Platform_static_getGamepadJoystickAxisValues(lua_State* state)
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 3 off the stack.
-                Vector2* param3 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param3 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Platform::getGamepadJoystickAxisValues(param1, param2, param3);
                 

@@ -128,7 +128,7 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionObject* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->filter(param1);
@@ -169,7 +169,7 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsController::HitResult* param1 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true);
+                ScriptUtil::LuaArray<PhysicsController::HitResult> param1 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true);
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->hit(*param1);

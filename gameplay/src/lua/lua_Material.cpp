@@ -140,7 +140,7 @@ int lua_Material_getParameter(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Material* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getParameter(param1);
@@ -301,7 +301,7 @@ int lua_Material_getTechnique(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Material* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getTechnique(param1);
@@ -473,7 +473,7 @@ int lua_Material_setParameterAutoBinding(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
@@ -488,10 +488,10 @@ int lua_Material_setParameterAutoBinding(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 Material* instance = getInstance(state);
                 instance->setParameterAutoBinding(param1, param2);
@@ -529,7 +529,7 @@ int lua_Material_setStateBlock(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                RenderState::StateBlock* param1 = ScriptUtil::getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false);
+                ScriptUtil::LuaArray<RenderState::StateBlock> param1 = ScriptUtil::getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false);
 
                 Material* instance = getInstance(state);
                 instance->setStateBlock(param1);
@@ -567,7 +567,7 @@ int lua_Material_setTechnique(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Material* instance = getInstance(state);
                 instance->setTechnique(param1);
@@ -604,7 +604,7 @@ int lua_Material_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Material::create(param1);
                 if (returnPtr)
@@ -625,7 +625,7 @@ int lua_Material_static_create(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Properties* param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false);
+                ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false);
 
                 void* returnPtr = (void*)Material::create(param1);
                 if (returnPtr)
@@ -646,7 +646,7 @@ int lua_Material_static_create(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Effect* param1 = ScriptUtil::getObjectPointer<Effect>(1, "Effect", false);
+                ScriptUtil::LuaArray<Effect> param1 = ScriptUtil::getObjectPointer<Effect>(1, "Effect", false);
 
                 void* returnPtr = (void*)Material::create(param1);
                 if (returnPtr)
@@ -677,10 +677,10 @@ int lua_Material_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Material::create(param1, param2);
                 if (returnPtr)
@@ -712,13 +712,13 @@ int lua_Material_static_create(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
 
                 void* returnPtr = (void*)Material::create(param1, param2, param3);
                 if (returnPtr)

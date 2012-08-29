@@ -129,7 +129,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 MeshSkin* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getJoint(param1);
@@ -216,7 +216,7 @@ int lua_MeshSkin_getJointIndex(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Joint* param1 = ScriptUtil::getObjectPointer<Joint>(2, "Joint", false);
+                ScriptUtil::LuaArray<Joint> param1 = ScriptUtil::getObjectPointer<Joint>(2, "Joint", false);
 
                 MeshSkin* instance = getInstance(state);
                 int result = instance->getJointIndex(param1);
@@ -432,7 +432,7 @@ int lua_MeshSkin_setBindShape(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                float* param1 = ScriptUtil::getFloatPointer(2);
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
 
                 MeshSkin* instance = getInstance(state);
                 instance->setBindShape(param1);
@@ -470,7 +470,7 @@ int lua_MeshSkin_setRootJoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Joint* param1 = ScriptUtil::getObjectPointer<Joint>(2, "Joint", false);
+                ScriptUtil::LuaArray<Joint> param1 = ScriptUtil::getObjectPointer<Joint>(2, "Joint", false);
 
                 MeshSkin* instance = getInstance(state);
                 instance->setRootJoint(param1);
@@ -509,7 +509,7 @@ int lua_MeshSkin_transformChanged(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Transform* param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false);
+                ScriptUtil::LuaArray<Transform> param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);

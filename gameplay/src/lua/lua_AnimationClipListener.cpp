@@ -90,7 +90,7 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AnimationClip* param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false);
+                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false);
 
                 // Get parameter 2 off the stack.
                 AnimationClip::Listener::EventType param2 = (AnimationClip::Listener::EventType)lua_enumFromString_AnimationClipListenerEventType(luaL_checkstring(state, 3));
