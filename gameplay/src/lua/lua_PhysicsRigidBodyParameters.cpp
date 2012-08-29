@@ -385,7 +385,7 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
                 bool param6 = ScriptUtil::luaCheckBool(state, 6);
 
                 // Get parameter 7 off the stack.
-                Vector3* param7 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param7 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6, *param7);
                 if (returnPtr)
@@ -462,7 +462,7 @@ int lua_PhysicsRigidBodyParameters_anisotropicFriction(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
         instance->anisotropicFriction = *param2;
         return 0;

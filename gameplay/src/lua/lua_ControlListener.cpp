@@ -95,7 +95,7 @@ int lua_ControlListener_controlEvent(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Control* param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false);
+                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false);
 
                 // Get parameter 2 off the stack.
                 Control::Listener::EventType param2 = (Control::Listener::EventType)lua_enumFromString_ControlListenerEventType(luaL_checkstring(state, 3));

@@ -118,7 +118,7 @@ int lua_Plane__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true);
 
                 void* returnPtr = (void*)new Plane(*param1);
                 if (returnPtr)
@@ -149,7 +149,7 @@ int lua_Plane__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -243,7 +243,7 @@ int lua_Plane_distance(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->distance(*param1);
@@ -367,7 +367,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -381,7 +381,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -395,7 +395,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Frustum* param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
+                ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -409,7 +409,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -423,7 +423,7 @@ int lua_Plane_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
+                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 Plane* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -464,7 +464,7 @@ int lua_Plane_isParallel(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Plane* instance = getInstance(state);
                 bool result = instance->isParallel(*param1);
@@ -505,7 +505,7 @@ int lua_Plane_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Plane* instance = getInstance(state);
                 instance->set(*param1);
@@ -526,7 +526,7 @@ int lua_Plane_set(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -605,7 +605,7 @@ int lua_Plane_setNormal(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Plane* instance = getInstance(state);
                 instance->setNormal(*param1);
@@ -724,16 +724,16 @@ int lua_Plane_static_intersection(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true);
 
                 // Get parameter 2 off the stack.
-                Plane* param2 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param2 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 // Get parameter 3 off the stack.
-                Plane* param3 = ScriptUtil::getObjectPointer<Plane>(3, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param3 = ScriptUtil::getObjectPointer<Plane>(3, "Plane", true);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", false);
 
                 Plane::intersection(*param1, *param2, *param3, param4);
                 
@@ -770,7 +770,7 @@ int lua_Plane_transform(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Plane* instance = getInstance(state);
                 instance->transform(*param1);
