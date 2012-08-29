@@ -43,7 +43,7 @@ int lua_AIController_findAgent(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 AIController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findAgent(param1);
@@ -93,7 +93,7 @@ int lua_AIController_sendMessage(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIMessage* param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
+                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
 
                 AIController* instance = getInstance(state);
                 instance->sendMessage(param1);
@@ -114,7 +114,7 @@ int lua_AIController_sendMessage(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                AIMessage* param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
+                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);

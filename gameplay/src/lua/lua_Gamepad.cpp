@@ -253,7 +253,7 @@ int lua_Gamepad_getJoystickAxisValues(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                Vector2* param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
+                ScriptUtil::LuaArray<Vector2> param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
 
                 Gamepad* instance = getInstance(state);
                 instance->getJoystickAxisValues(param1, param2);

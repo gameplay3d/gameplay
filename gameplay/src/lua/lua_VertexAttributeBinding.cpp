@@ -232,10 +232,10 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Mesh* param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
+                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
 
                 // Get parameter 2 off the stack.
-                Effect* param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
+                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
 
                 void* returnPtr = (void*)VertexAttributeBinding::create(param1, param2);
                 if (returnPtr)
