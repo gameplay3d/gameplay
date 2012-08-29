@@ -555,7 +555,7 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Material* param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false);
+                ScriptUtil::LuaArray<Material> param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false);
 
                 Model* instance = getInstance(state);
                 instance->setMaterial(param1);
@@ -566,7 +566,7 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Model* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setMaterial(param1);
@@ -599,7 +599,7 @@ int lua_Model_setMaterial(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Material* param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false);
+                ScriptUtil::LuaArray<Material> param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -614,10 +614,10 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 Model* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setMaterial(param1, param2);
@@ -641,7 +641,7 @@ int lua_Model_setMaterial(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -678,13 +678,13 @@ int lua_Model_setMaterial(lua_State* state)
                 (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptUtil::getString(4, false);
+                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(4, false);
 
                 Model* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setMaterial(param1, param2, param3);
@@ -719,13 +719,13 @@ int lua_Model_setMaterial(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptUtil::getString(4, false);
+                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(4, false);
 
                 // Get parameter 4 off the stack.
                 int param4 = (int)luaL_checkint(state, 5);
@@ -777,7 +777,7 @@ int lua_Model_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Mesh* param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
+                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
 
                 void* returnPtr = (void*)Model::create(param1);
                 if (returnPtr)
