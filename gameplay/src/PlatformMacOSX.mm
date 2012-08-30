@@ -758,6 +758,17 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
+void Platform::swapBuffers()
+{
+    if (__view)
+        CGLFlushDrawable((CGLContextObj)[[__view openGLContext] CGLContextObj]);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
 }
@@ -829,12 +840,6 @@ bool Platform::isCursorVisible()
     return __cursorVisible;
 }
 
-void Platform::swapBuffers()
-{
-    if (__view)
-        CGLFlushDrawable((CGLContextObj)[[__view openGLContext] CGLContextObj]);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     // Do nothing.
@@ -874,9 +879,9 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::sleep(long ms)
+void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
+    // Do nothing
 }
 
 unsigned int Platform::getGamepadsConnected()

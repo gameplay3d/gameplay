@@ -241,6 +241,7 @@
     <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
+    <ClCompile Include="src\PlatformLinux.cpp" />
     <ClCompile Include="src\PlatformQNX.cpp" />
     <ClCompile Include="src\PlatformWin32.cpp" />
     <ClCompile Include="src\Properties.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\gameplay.h" />
+    <ClInclude Include="src\Gesture.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Joystick.h" />
