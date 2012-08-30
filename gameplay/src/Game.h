@@ -401,7 +401,7 @@ public:
      *
      * @param x The centroid x-coordinate of the rotate.
      * @param y The centroid y-coordinate of the rotate.
-     * @param scale The scale of the pinch.
+     * @param angle The angle of the rotation.
      */
     virtual void gestureRotateEvent(int x, int y, float angle);
 
