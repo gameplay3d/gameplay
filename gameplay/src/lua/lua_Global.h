@@ -17,6 +17,7 @@
 #include "lua_GameState.h"
 #include "lua_GamepadButtonState.h"
 #include "lua_GamepadGamepadEvent.h"
+#include "lua_GestureGestureEvent.h"
 #include "lua_ImageFormat.h"
 #include "lua_KeyboardKey.h"
 #include "lua_KeyboardKeyEvent.h"

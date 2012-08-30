@@ -53,6 +53,7 @@ LOCAL_SRC_FILES := \
     Game.cpp \
     Gamepad.cpp \
     gameplay-main-android.cpp \
+	Gesture.cpp \
     Image.cpp \
     Joint.cpp \
     Joystick.cpp \
@@ -167,6 +168,8 @@ LOCAL_SRC_FILES := \
     lua/lua_GamepadButtonState.cpp \
     lua/lua_GamepadGamepadEvent.cpp \
     lua/lua_GameState.cpp \
+	lua/lua_Gesture.cpp \
+	lua/lua_GestureGestureEvent.cpp \
     lua/lua_Global.cpp \
     lua/lua_Image.cpp \
     lua/lua_ImageFormat.cpp \
