@@ -86,7 +86,7 @@ int lua_FontText__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)new Font::Text(param1);
                 if (returnPtr)

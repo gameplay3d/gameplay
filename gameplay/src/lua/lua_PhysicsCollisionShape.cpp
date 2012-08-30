@@ -257,7 +257,7 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1));
                 if (returnPtr)
@@ -288,10 +288,10 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2));
                 if (returnPtr)
@@ -323,10 +323,10 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
                 bool param3 = ScriptUtil::luaCheckBool(state, 3);
@@ -438,7 +438,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3));
                 if (returnPtr)
@@ -477,7 +477,7 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
                 float param2 = (float)luaL_checknumber(state, 2);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 4 off the stack.
                 bool param4 = ScriptUtil::luaCheckBool(state, 4);
@@ -528,7 +528,7 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Image* param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
+                ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::heightfield(param1));
                 if (returnPtr)
@@ -576,7 +576,7 @@ int lua_PhysicsCollisionShape_static_mesh(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Mesh* param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
+                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::mesh(param1));
                 if (returnPtr)
@@ -677,7 +677,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2));
                 if (returnPtr)
@@ -712,7 +712,7 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
                 float param1 = (float)luaL_checknumber(state, 1);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 3 off the stack.
                 bool param3 = ScriptUtil::luaCheckBool(state, 3);

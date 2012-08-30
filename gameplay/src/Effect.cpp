@@ -244,6 +244,10 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     if (success != GL_TRUE)
     {
         GL_ASSERT( glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &length) );
+        if (length == 0)
+        {
+            length = 4096;
+        }
         if (length > 0)
         {
             infoLog = new char[length];
@@ -255,7 +259,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         if (vshPath)
             writeShaderToErrorFile(vshPath, shaderSource[2]);
 
-        GP_ERROR("Compile failed for vertex shader '%s' with error '%s'.", vshPath == NULL ? "NULL" : vshPath, infoLog == NULL ? "" : infoLog);
+        GP_ERROR("Compile failed for vertex shader '%s' with error '%s'.", vshPath == NULL ? vshSource : vshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -283,6 +287,10 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     if (success != GL_TRUE)
     {
         GL_ASSERT( glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &length) );
+        if (length == 0)
+        {
+            length = 4096;
+        }
         if (length > 0)
         {
             infoLog = new char[length];
@@ -294,7 +302,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
         if (fshPath)
             writeShaderToErrorFile(fshPath, shaderSource[2]);
 
-        GP_ERROR("Compile failed for fragment shader (%s): %s", fshPath == NULL ? "NULL" : fshPath, infoLog == NULL ? "" : infoLog);
+        GP_ERROR("Compile failed for fragment shader (%s): %s", fshPath == NULL ? fshSource : fshPath, infoLog == NULL ? "" : infoLog);
         SAFE_DELETE_ARRAY(infoLog);
 
         // Clean up.
@@ -319,6 +327,10 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     if (success != GL_TRUE)
     {
         GL_ASSERT( glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length) );
+        if (length == 0)
+        {
+            length = 4096;
+        }
         if (length > 0)
         {
             infoLog = new char[length];

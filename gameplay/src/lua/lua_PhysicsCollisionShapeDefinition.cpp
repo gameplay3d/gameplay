@@ -104,7 +104,7 @@ int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                PhysicsCollisionShape::Definition* param1 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(1, "PhysicsCollisionShapeDefinition", true);
+                ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(1, "PhysicsCollisionShapeDefinition", true);
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(*param1);
                 if (returnPtr)

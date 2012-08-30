@@ -229,7 +229,7 @@ int lua_Node_addChild(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 Node* instance = getInstance(state);
                 instance->addChild(param1);
@@ -267,7 +267,7 @@ int lua_Node_addListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+                ScriptUtil::LuaArray<Transform::Listener> param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
 
                 Node* instance = getInstance(state);
                 instance->addListener(param1);
@@ -288,7 +288,7 @@ int lua_Node_addListener(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+                ScriptUtil::LuaArray<Transform::Listener> param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
 
                 // Get parameter 2 off the stack.
                 long param2 = (long)luaL_checklong(state, 3);
@@ -452,10 +452,10 @@ int lua_Node_createAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createAnimation(param1, param2);
@@ -479,10 +479,10 @@ int lua_Node_createAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                Properties* param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
+                ScriptUtil::LuaArray<Properties> param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createAnimation(param1, param2);
@@ -519,7 +519,7 @@ int lua_Node_createAnimation(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -528,10 +528,10 @@ int lua_Node_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                unsigned long* param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptUtil::getFloatPointer(6);
+                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
 
                 // Get parameter 6 off the stack.
                 Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
@@ -573,7 +573,7 @@ int lua_Node_createAnimation(lua_State* state)
                 (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -582,16 +582,16 @@ int lua_Node_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                unsigned long* param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptUtil::getFloatPointer(6);
+                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
 
                 // Get parameter 6 off the stack.
-                float* param6 = ScriptUtil::getFloatPointer(7);
+                ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
 
                 // Get parameter 7 off the stack.
-                float* param7 = ScriptUtil::getFloatPointer(8);
+                ScriptUtil::LuaArray<float> param7 = ScriptUtil::getFloatPointer(8);
 
                 // Get parameter 8 off the stack.
                 Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
@@ -649,16 +649,16 @@ int lua_Node_createAnimationFromBy(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptUtil::getFloatPointer(4);
+                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptUtil::getFloatPointer(5);
+                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
                 Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
@@ -719,16 +719,16 @@ int lua_Node_createAnimationFromTo(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptUtil::getFloatPointer(4);
+                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptUtil::getFloatPointer(5);
+                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
                 Curve::InterpolationType param5 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 6));
@@ -800,7 +800,7 @@ int lua_Node_destroyAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 instance->destroyAnimation(param1);
@@ -838,7 +838,7 @@ int lua_Node_findNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1);
@@ -871,7 +871,7 @@ int lua_Node_findNode(lua_State* state)
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 3);
@@ -908,7 +908,7 @@ int lua_Node_findNode(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 3);
@@ -1130,7 +1130,7 @@ int lua_Node_getAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation(param1);
@@ -1225,7 +1225,7 @@ int lua_Node_getAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Node* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
@@ -1337,7 +1337,7 @@ int lua_Node_getBackVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getBackVector(param1);
@@ -1578,7 +1578,7 @@ int lua_Node_getDownVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getDownVector(param1);
@@ -1736,7 +1736,7 @@ int lua_Node_getForwardVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getForwardVector(param1);
@@ -2115,7 +2115,7 @@ int lua_Node_getLeftVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getLeftVector(param1);
@@ -2586,7 +2586,7 @@ int lua_Node_getRightVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getRightVector(param1);
@@ -2744,7 +2744,7 @@ int lua_Node_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", false);
 
                 Node* instance = getInstance(state);
                 instance->getRotation(param1);
@@ -2755,7 +2755,7 @@ int lua_Node_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Node* instance = getInstance(state);
                 instance->getRotation(param1);
@@ -2766,7 +2766,7 @@ int lua_Node_getRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 float result = instance->getRotation(param1);
@@ -2835,7 +2835,7 @@ int lua_Node_getScale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getScale(param1);
@@ -3030,7 +3030,7 @@ int lua_Node_getTag(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 const char* result = instance->getTag(param1);
@@ -3099,7 +3099,7 @@ int lua_Node_getTranslation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getTranslation(param1);
@@ -3405,7 +3405,7 @@ int lua_Node_getUpVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->getUpVector(param1);
@@ -3719,7 +3719,7 @@ int lua_Node_hasTag(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 bool result = instance->hasTag(param1);
@@ -3828,7 +3828,7 @@ int lua_Node_removeChild(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 Node* instance = getInstance(state);
                 instance->removeChild(param1);
@@ -3866,7 +3866,7 @@ int lua_Node_removeListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Transform::Listener* param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
+                ScriptUtil::LuaArray<Transform::Listener> param1 = ScriptUtil::getObjectPointer<Transform::Listener>(2, "TransformListener", false);
 
                 Node* instance = getInstance(state);
                 instance->removeListener(param1);
@@ -3946,7 +3946,7 @@ int lua_Node_rotate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Node* instance = getInstance(state);
                 instance->rotate(*param1);
@@ -3957,7 +3957,7 @@ int lua_Node_rotate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Node* instance = getInstance(state);
                 instance->rotate(*param1);
@@ -3978,7 +3978,7 @@ int lua_Node_rotate(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -4176,7 +4176,7 @@ int lua_Node_scale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->scale(*param1);
@@ -4356,7 +4356,7 @@ int lua_Node_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Transform* param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", true);
+                ScriptUtil::LuaArray<Transform> param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", true);
 
                 Node* instance = getInstance(state);
                 instance->set(*param1);
@@ -4378,13 +4378,13 @@ int lua_Node_set(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Quaternion* param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
@@ -4397,13 +4397,13 @@ int lua_Node_set(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Matrix* param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param2 = ScriptUtil::getObjectPointer<Matrix>(3, "Matrix", true);
 
                 // Get parameter 3 off the stack.
-                Vector3* param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
@@ -4426,16 +4426,16 @@ int lua_Node_set(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                Vector3* param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->set(*param1, *param2, param3, *param4);
@@ -4473,7 +4473,7 @@ int lua_Node_setAgent(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIAgent* param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
 
                 Node* instance = getInstance(state);
                 instance->setAgent(param1);
@@ -4515,7 +4515,7 @@ int lua_Node_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 Node* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
@@ -4540,7 +4540,7 @@ int lua_Node_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                AnimationValue* param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -4581,7 +4581,7 @@ int lua_Node_setAudioSource(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AudioSource* param1 = ScriptUtil::getObjectPointer<AudioSource>(2, "AudioSource", false);
+                ScriptUtil::LuaArray<AudioSource> param1 = ScriptUtil::getObjectPointer<AudioSource>(2, "AudioSource", false);
 
                 Node* instance = getInstance(state);
                 instance->setAudioSource(param1);
@@ -4619,7 +4619,7 @@ int lua_Node_setCamera(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Camera* param1 = ScriptUtil::getObjectPointer<Camera>(2, "Camera", false);
+                ScriptUtil::LuaArray<Camera> param1 = ScriptUtil::getObjectPointer<Camera>(2, "Camera", false);
 
                 Node* instance = getInstance(state);
                 instance->setCamera(param1);
@@ -4680,7 +4680,7 @@ int lua_Node_setCollisionObject(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1);
@@ -4703,7 +4703,7 @@ int lua_Node_setCollisionObject(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Properties* param1 = ScriptUtil::getObjectPointer<Properties>(2, "Properties", false);
+                ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(2, "Properties", false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1);
@@ -4739,7 +4739,7 @@ int lua_Node_setCollisionObject(lua_State* state)
                 PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionShape::Definition* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
+                ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1, *param2);
@@ -4776,10 +4776,10 @@ int lua_Node_setCollisionObject(lua_State* state)
                 PhysicsCollisionObject::Type param1 = (PhysicsCollisionObject::Type)lua_enumFromString_PhysicsCollisionObjectType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                PhysicsCollisionShape::Definition* param2 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
+                ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(3, "PhysicsCollisionShapeDefinition", true);
 
                 // Get parameter 3 off the stack.
-                PhysicsRigidBody::Parameters* param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody::Parameters>(4, "PhysicsRigidBodyParameters", false);
+                ScriptUtil::LuaArray<PhysicsRigidBody::Parameters> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody::Parameters>(4, "PhysicsRigidBodyParameters", false);
 
                 Node* instance = getInstance(state);
                 void* returnPtr = (void*)instance->setCollisionObject(param1, *param2, param3);
@@ -4829,7 +4829,7 @@ int lua_Node_setForm(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Form* param1 = ScriptUtil::getObjectPointer<Form>(2, "Form", false);
+                ScriptUtil::LuaArray<Form> param1 = ScriptUtil::getObjectPointer<Form>(2, "Form", false);
 
                 Node* instance = getInstance(state);
                 instance->setForm(param1);
@@ -4867,7 +4867,7 @@ int lua_Node_setId(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 instance->setId(param1);
@@ -4939,7 +4939,7 @@ int lua_Node_setLight(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Light* param1 = ScriptUtil::getObjectPointer<Light>(2, "Light", false);
+                ScriptUtil::LuaArray<Light> param1 = ScriptUtil::getObjectPointer<Light>(2, "Light", false);
 
                 Node* instance = getInstance(state);
                 instance->setLight(param1);
@@ -4977,7 +4977,7 @@ int lua_Node_setModel(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Model* param1 = ScriptUtil::getObjectPointer<Model>(2, "Model", false);
+                ScriptUtil::LuaArray<Model> param1 = ScriptUtil::getObjectPointer<Model>(2, "Model", false);
 
                 Node* instance = getInstance(state);
                 instance->setModel(param1);
@@ -5015,7 +5015,7 @@ int lua_Node_setParticleEmitter(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ParticleEmitter* param1 = ScriptUtil::getObjectPointer<ParticleEmitter>(2, "ParticleEmitter", false);
+                ScriptUtil::LuaArray<ParticleEmitter> param1 = ScriptUtil::getObjectPointer<ParticleEmitter>(2, "ParticleEmitter", false);
 
                 Node* instance = getInstance(state);
                 instance->setParticleEmitter(param1);
@@ -5053,7 +5053,7 @@ int lua_Node_setRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Quaternion* param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
 
                 Node* instance = getInstance(state);
                 instance->setRotation(*param1);
@@ -5064,7 +5064,7 @@ int lua_Node_setRotation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Node* instance = getInstance(state);
                 instance->setRotation(*param1);
@@ -5085,7 +5085,7 @@ int lua_Node_setRotation(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -5169,7 +5169,7 @@ int lua_Node_setScale(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->setScale(*param1);
@@ -5349,7 +5349,7 @@ int lua_Node_setTag(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 Node* instance = getInstance(state);
                 instance->setTag(param1);
@@ -5370,10 +5370,10 @@ int lua_Node_setTag(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
                 Node* instance = getInstance(state);
                 instance->setTag(param1, param2);
@@ -5411,7 +5411,7 @@ int lua_Node_setTranslation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->setTranslation(*param1);
@@ -5847,7 +5847,7 @@ int lua_Node_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Node::create(param1);
                 if (returnPtr)
@@ -5974,7 +5974,7 @@ int lua_Node_transformPoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->transformPoint(param1);
@@ -5995,10 +5995,10 @@ int lua_Node_transformPoint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
@@ -6036,7 +6036,7 @@ int lua_Node_transformVector(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->transformVector(param1);
@@ -6057,10 +6057,10 @@ int lua_Node_transformVector(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
@@ -6096,7 +6096,7 @@ int lua_Node_transformVector(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 5 off the stack.
-                Vector3* param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false);
 
                 Node* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
@@ -6134,7 +6134,7 @@ int lua_Node_translate(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Node* instance = getInstance(state);
                 instance->translate(*param1);

@@ -204,10 +204,10 @@ int lua_PhysicsSocketConstraint_static_centerOfMassMidpoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Node* param2 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
 
                 void* returnPtr = (void*)new Vector3(PhysicsSocketConstraint::centerOfMassMidpoint(param1, param2));
                 if (returnPtr)
@@ -256,10 +256,10 @@ int lua_PhysicsSocketConstraint_static_getRotationOffset(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new Quaternion(PhysicsSocketConstraint::getRotationOffset(param1, *param2));
                 if (returnPtr)
@@ -308,10 +308,10 @@ int lua_PhysicsSocketConstraint_static_getTranslationOffset(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Node* param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 void* returnPtr = (void*)new Vector3(PhysicsSocketConstraint::getTranslationOffset(param1, *param2));
                 if (returnPtr)

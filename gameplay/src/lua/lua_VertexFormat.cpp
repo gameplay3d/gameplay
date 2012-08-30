@@ -88,7 +88,7 @@ int lua_VertexFormat__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                VertexFormat::Element* param1 = ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false);
+                ScriptUtil::LuaArray<VertexFormat::Element> param1 = ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
