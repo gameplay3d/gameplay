@@ -367,7 +367,7 @@ int lua_TextureSampler_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Texture* param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
+                ScriptUtil::LuaArray<Texture> param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false);
 
                 void* returnPtr = (void*)Texture::Sampler::create(param1);
                 if (returnPtr)
@@ -388,7 +388,7 @@ int lua_TextureSampler_static_create(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Texture::Sampler::create(param1);
                 if (returnPtr)
@@ -419,7 +419,7 @@ int lua_TextureSampler_static_create(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 2);

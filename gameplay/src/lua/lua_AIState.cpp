@@ -322,7 +322,7 @@ int lua_AIState_setListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                AIState::Listener* param1 = ScriptUtil::getObjectPointer<AIState::Listener>(2, "AIStateListener", false);
+                ScriptUtil::LuaArray<AIState::Listener> param1 = ScriptUtil::getObjectPointer<AIState::Listener>(2, "AIStateListener", false);
 
                 AIState* instance = getInstance(state);
                 instance->setListener(param1);
@@ -359,7 +359,7 @@ int lua_AIState_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)AIState::create(param1);
                 if (returnPtr)

@@ -110,7 +110,7 @@ int lua_Frustum__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
 
                 void* returnPtr = (void*)new Frustum(*param1);
                 if (returnPtr)
@@ -131,7 +131,7 @@ int lua_Frustum__init(lua_State* state)
             else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Frustum* param1 = ScriptUtil::getObjectPointer<Frustum>(1, "Frustum", true);
+                ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(1, "Frustum", true);
 
                 void* returnPtr = (void*)new Frustum(*param1);
                 if (returnPtr)
@@ -226,7 +226,7 @@ int lua_Frustum_getCorners(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 Frustum* instance = getInstance(state);
                 instance->getCorners(param1);
@@ -356,7 +356,7 @@ int lua_Frustum_getMatrix(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
 
                 Frustum* instance = getInstance(state);
                 instance->getMatrix(param1);
@@ -532,7 +532,7 @@ int lua_Frustum_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Vector3* param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 Frustum* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -546,7 +546,7 @@ int lua_Frustum_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingSphere* param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
 
                 Frustum* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -560,7 +560,7 @@ int lua_Frustum_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                BoundingBox* param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
 
                 Frustum* instance = getInstance(state);
                 bool result = instance->intersects(*param1);
@@ -574,7 +574,7 @@ int lua_Frustum_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Plane* param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
 
                 Frustum* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -588,7 +588,7 @@ int lua_Frustum_intersects(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Ray* param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
+                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
 
                 Frustum* instance = getInstance(state);
                 float result = instance->intersects(*param1);
@@ -660,7 +660,7 @@ int lua_Frustum_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Frustum* param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
+                ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
 
                 Frustum* instance = getInstance(state);
                 instance->set(*param1);
@@ -671,7 +671,7 @@ int lua_Frustum_set(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Matrix* param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
 
                 Frustum* instance = getInstance(state);
                 instance->set(*param1);

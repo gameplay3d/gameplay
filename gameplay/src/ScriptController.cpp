@@ -9,34 +9,34 @@
     if (!lua_istable(sc->_lua, index)) \
     { \
         if (lua_islightuserdata(sc->_lua, index)) \
-            return (type*)lua_touserdata(sc->_lua, index); \
+            return LuaArray<type>((type*)lua_touserdata(sc->_lua, index)); \
         lua_pushfstring(sc->_lua, "Expected a " #type " pointer (an array represented as a Lua table), got '%s' instead.", \
             luaL_typename(sc->_lua, index)); \
         lua_error(sc->_lua); \
-        return NULL; \
+        return LuaArray<type>((type*)NULL); \
     } \
     \
     /* Get the size of the array. */ \
     lua_len(sc->_lua, index); \
     int size = luaL_checkint(sc->_lua, -1); \
     if (size <= 0) \
-        return NULL; \
+        return LuaArray<type>((type*)NULL); \
     \
-    /* Create an array to store the values. */ \
-    type* values = (type*)malloc(sizeof(type)*size); \
+    /* Declare a LuaArray to store the values. */ \
+	LuaArray<type> arr(size); \
     \
     /* Push the first key. */ \
     lua_pushnil(sc->_lua); \
     int i = 0; \
     for (; lua_next(sc->_lua, index) != 0 && i < size; i++) \
     { \
-        values[i] = (checkFunc(sc->_lua, -1)); \
+        arr[i] = (checkFunc(sc->_lua, -1)); \
         \
         /* Remove the value we just retrieved, but leave the key for the next iteration. */ \
         lua_pop(sc->_lua, 1); \
     } \
     \
-    return values
+    return arr
 
 namespace gameplay
 {
@@ -260,52 +260,52 @@ void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunc
     Game::getInstance()->getScriptController()->_stringFromEnum.push_back(stringFromEnum);
 }
 
-bool* ScriptUtil::getBoolPointer(int index)
+ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(bool, luaCheckBool);
 }
 
-short* ScriptUtil::getShortPointer(int index)
+ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(short, (short)luaL_checkint);
 }
 
-int* ScriptUtil::getIntPointer(int index)
+ScriptUtil::LuaArray<int> ScriptUtil::getIntPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(int, (int)luaL_checkint);
 }
 
-long* ScriptUtil::getLongPointer(int index)
+ScriptUtil::LuaArray<long> ScriptUtil::getLongPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(long, (long)luaL_checkint);
 }
 
-unsigned char* ScriptUtil::getUnsignedCharPointer(int index)
+ScriptUtil::LuaArray<unsigned char> ScriptUtil::getUnsignedCharPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(unsigned char, (unsigned char)luaL_checkunsigned);
 }
 
-unsigned short* ScriptUtil::getUnsignedShortPointer(int index)
+ScriptUtil::LuaArray<unsigned short> ScriptUtil::getUnsignedShortPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(unsigned short, (unsigned short)luaL_checkunsigned);
 }
 
-unsigned int* ScriptUtil::getUnsignedIntPointer(int index)
+ScriptUtil::LuaArray<unsigned int> ScriptUtil::getUnsignedIntPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(unsigned int, (unsigned int)luaL_checkunsigned);
 }
 
-unsigned long* ScriptUtil::getUnsignedLongPointer(int index)
+ScriptUtil::LuaArray<unsigned long> ScriptUtil::getUnsignedLongPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(unsigned long, (unsigned long)luaL_checkunsigned);
 }
 
-float* ScriptUtil::getFloatPointer(int index)
+ScriptUtil::LuaArray<float> ScriptUtil::getFloatPointer(int index)
 {
     GENERATE_LUA_GET_POINTER(float, (float)luaL_checknumber);
 }
 
-double* ScriptUtil::getDoublePointer(int index)
+ScriptUtil::LuaArray<double> ScriptUtil::getDoublePointer(int index)
 {
     GENERATE_LUA_GET_POINTER(double, (double)luaL_checknumber);
 }
@@ -771,6 +771,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
             }
             default:
                 GP_ERROR("Invalid argument type '%d'.", *(sig - 1));
+                break;
             }
 
             argumentCount++;

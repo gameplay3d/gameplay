@@ -777,7 +777,7 @@ int lua_Camera_pickRay(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -786,7 +786,7 @@ int lua_Camera_pickRay(lua_State* state)
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 // Get parameter 4 off the stack.
-                Ray* param4 = ScriptUtil::getObjectPointer<Ray>(5, "Ray", false);
+                ScriptUtil::LuaArray<Ray> param4 = ScriptUtil::getObjectPointer<Ray>(5, "Ray", false);
 
                 Camera* instance = getInstance(state);
                 instance->pickRay(*param1, param2, param3, param4);
@@ -827,16 +827,16 @@ int lua_Camera_project(lua_State* state)
                 (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptUtil::getFloatPointer(4);
+                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptUtil::getFloatPointer(5);
+                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
 
                 Camera* instance = getInstance(state);
                 instance->project(*param1, *param2, param3, param4);
@@ -860,19 +860,19 @@ int lua_Camera_project(lua_State* state)
                 (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
-                Vector3* param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
 
                 // Get parameter 3 off the stack.
-                float* param3 = ScriptUtil::getFloatPointer(4);
+                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                float* param4 = ScriptUtil::getFloatPointer(5);
+                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                float* param5 = ScriptUtil::getFloatPointer(6);
+                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
 
                 Camera* instance = getInstance(state);
                 instance->project(*param1, *param2, param3, param4, param5);
@@ -1300,7 +1300,7 @@ int lua_Camera_unproject(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                Rectangle* param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -1312,7 +1312,7 @@ int lua_Camera_unproject(lua_State* state)
                 float param4 = (float)luaL_checknumber(state, 5);
 
                 // Get parameter 5 off the stack.
-                Vector3* param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false);
+                ScriptUtil::LuaArray<Vector3> param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false);
 
                 Camera* instance = getInstance(state);
                 instance->unproject(*param1, param2, param3, param4, param5);
