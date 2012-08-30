@@ -10,6 +10,12 @@
 #include <sys/keycodes.h>
 #include <screen/screen.h>
 #include <input/screen_helpers.h>
+#include <gestures/set.h>
+#include <gestures/swipe.h>
+#include <gestures/pinch.h>
+#include <gestures/rotate.h>
+#include <gestures/tap.h>
+#include <gestures/double_tap.h>
 #include <bps/bps.h>
 #include <bps/event.h>
 #include <bps/screen.h>
@@ -39,6 +45,7 @@ static bool __multiTouch = false;
 static float __pitch;
 static float __roll;
 static const char* __glExtensions;
+static struct gestures_set * __gesturesSet;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
@@ -435,6 +442,47 @@ EGLenum checkErrorEGL(const char* msg)
     return error;
 }
 
+void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* param, int async)
+{
+    switch (gesture->type)
+    {
+    case GESTURE_SWIPE:
+        {
+            gesture_swipe_t* swipe = (gesture_swipe_t*)gesture;
+            Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+            break;
+        }
+
+    case GESTURE_PINCH:
+        {
+            gesture_pinch_t* pinch = (gesture_pinch_t*)gesture;
+            float scale = 1.0f; // todo: try to map this the same across ios and android.
+            Game::getInstance()->gesturePinchEvent(pinch->centroid.x, pinch->centroid.y, scale);
+            break;
+        }
+
+    case GESTURE_ROTATE:
+        {
+            gesture_rotate_t* rotate = (gesture_rotate_t*)gesture;
+            Game::getInstance()->gestureRotateEvent(rotate->centroid.x, rotate->centroid.y, rotate->angle);
+            break;
+        }
+    case GESTURE_TAP:
+        {
+            gesture_tap_t* tap = (gesture_tap_t*)gesture;
+            Game::getInstance()->gestureTapEvent(tap->touch_coords.x, tap->touch_coords.y);
+            break;
+        }
+
+    case GESTURE_DOUBLE_TAP:
+        {
+            gesture_tap_t* double_tap = (gesture_tap_t*)gesture;
+            Game::getInstance()->gestureTapDoubleEvent(double_tap->touch_coords.x,double_tap->touch_coords.y);
+            break;
+        }
+    }
+}
+
 Platform::Platform(Game* game)
     : _game(game)
 {
@@ -491,15 +539,13 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     bps_initialize();
 
+    // Initialize navigator and orientation
     static const int SENSOR_RATE = 25000;
     sensor_set_rate(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, SENSOR_RATE);
     sensor_set_skip_duplicates(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, true);
     sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
-
     navigator_request_events(0);
     navigator_rotation_lock(true);
-
-    // Determine initial orientation angle.
     orientation_direction_t direction;
     orientation_get(&direction, &__orientationAngle);
 
@@ -1077,6 +1123,17 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
+void Platform::swapBuffers()
+{
+    if (__eglDisplay && __eglSurface)
+        eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1156,12 +1213,6 @@ bool Platform::isCursorVisible()
     return false;
 }
 
-void Platform::swapBuffers()
-{
-    if (__eglDisplay && __eglSurface)
-        eglSwapBuffers(__eglDisplay, __eglSurface);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     if (display)
@@ -1204,9 +1255,55 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::sleep(long ms)
+void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
+    if (evt != Gesture::NONE && __gesturesSet == NULL)
+    {
+       __gesturesSet = gestures_set_alloc();
+    }
+
+    switch(evt)
+    {
+    case Gesture::NONE:
+        {
+            if (__gesturesSet)
+            {
+                gestures_set_free(__gesturesSet);
+                __gesturesSet =  NULL;
+            }
+            break;
+        }
+
+    case Gesture::SWIPE:
+        {
+            swipe_gesture_alloc(NULL, gesture_callback, __gesturesSet);
+            break;
+        }
+
+    case Gesture::PINCH:
+        {
+            pinch_gesture_alloc(NULL, gesture_callback, __gesturesSet);
+            break;
+        }
+
+    case Gesture::ROTATE:
+        {
+            rotate_gesture_alloc(NULL, gesture_callback, __gesturesSet);
+            break;
+        }
+
+    case Gesture::TAP:
+        {
+            tap_gesture_alloc(NULL, gesture_callback, __gesturesSet);
+            break;
+        }
+
+    case Gesture::TAP_DOUBLE:
+        {
+            double_tap_gesture_alloc(NULL, gesture_callback, __gesturesSet);
+            break;
+        }
+    }
 }
 
 unsigned int Platform::getGamepadsConnected()

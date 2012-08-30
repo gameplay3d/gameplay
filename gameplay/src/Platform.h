@@ -1,10 +1,11 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
-#include "Touch.h"
+#include "Vector2.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "Vector2.h"
+#include "Touch.h"
+#include "Gesture.h"
 #include "Gamepad.h"
 
 namespace gameplay
@@ -98,6 +99,18 @@ public:
     static void setVsync(bool enable);
 
     /**
+     * Swaps the frame buffer on the device.
+     */
+    static void swapBuffers();
+
+    /**
+     * Sleeps synchronously for the given amount of time (in milliseconds).
+     *
+     * @param ms How long to sleep (in milliseconds).
+     */
+    static void sleep(long ms);
+
+    /**
      * Set if multi-touch is enabled on the platform.
      *
      * Note that this method does nothing on platforms that do not
@@ -165,11 +178,6 @@ public:
      * @param roll The accelerometer roll.
      */
     static void getAccelerometerValues(float* pitch, float* roll);
-
-    /**
-     * Swaps the frame buffer on the device.
-     */
-    static void swapBuffers();
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -177,6 +185,13 @@ public:
      * @param display true when virtual keyboard needs to be displayed and false otherwise.
      */
     static void displayKeyboard(bool display);
+
+    /**
+     * Registers the platform for gesture recognition for the specified gesture event.
+     *
+     * @param evt The gesture event to recognize or Gesture::NONE to disable gesture recognition events.
+     */
+    static void recognizeGesture(Gesture::GestureEvent evt);
 
     /** 
      * Gets the number of gamepad devices connected to the Platform.
@@ -317,13 +332,6 @@ public:
      * @see Mouse::MouseEvent
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-
-    /**
-     * Sleeps synchronously for the given amount of time (in milliseconds).
-     *
-     * @param ms How long to sleep (in milliseconds).
-     */
-    static void sleep(long ms);
     
 private:
 

@@ -783,6 +783,9 @@
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\PlatformLinux.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1555,6 +1558,9 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_ScriptTarget.h">
       <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gesture.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

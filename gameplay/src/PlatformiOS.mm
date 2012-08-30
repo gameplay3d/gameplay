@@ -886,6 +886,16 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
+void Platform::swapBuffers()
+{
+    if (__view)
+        [__view swapBuffers];
+}
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
@@ -927,12 +937,6 @@ void Platform::setMultiTouch(bool enabled)
 bool Platform::isMultiTouch() 
 {
     return __view.multipleTouchEnabled;
-}
-
-void Platform::swapBuffers()
-{
-    if (__view)
-        [__view swapBuffers];
 }
 
 void Platform::displayKeyboard(bool display) 
@@ -984,9 +988,8 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }    
 
-void Platform::sleep(long ms)
+void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
 }
 
 unsigned int Platform::getGamepadsConnected()

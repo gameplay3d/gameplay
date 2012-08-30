@@ -878,6 +878,18 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
+
+void Platform::swapBuffers()
+{
+    if (__eglDisplay && __eglSurface)
+        eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -947,12 +959,6 @@ bool Platform::isCursorVisible()
     return false;
 }
 
-void Platform::swapBuffers()
-{
-    if (__eglDisplay && __eglSurface)
-        eglSwapBuffers(__eglDisplay, __eglSurface);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     if (display)
@@ -995,9 +1001,8 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::sleep(long ms)
+void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
 }
 
 unsigned int Platform::getGamepadsConnected()
