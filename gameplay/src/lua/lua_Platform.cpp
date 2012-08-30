@@ -2,7 +2,7 @@
 #include "ScriptController.h"
 #include "lua_Platform.h"
 #include "Platform.h"
-#include "lua_.h"
+#include "lua_GestureGestureEvent.h"
 #include "lua_KeyboardKeyEvent.h"
 #include "lua_MouseMouseEvent.h"
 #include "lua_TouchTouchEvent.h"
@@ -1030,7 +1030,7 @@ int lua_Platform_static_recognizeGesture(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                 param1 = ()lua_enumFromString_(luaL_checkstring(state, 1));
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 1));
 
                 Platform::recognizeGesture(param1);
                 

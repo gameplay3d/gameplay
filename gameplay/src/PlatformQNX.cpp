@@ -1257,14 +1257,14 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
-    if (evt != Gesture::NONE && __gesturesSet == NULL)
+    if (evt != Gesture::GESTURE_NONE && __gesturesSet == NULL)
     {
        __gesturesSet = gestures_set_alloc();
     }
 
     switch(evt)
     {
-    case Gesture::NONE:
+    case Gesture::GESTURE_NONE:
         {
             if (__gesturesSet)
             {
@@ -1274,31 +1274,31 @@ void Platform::recognizeGesture(Gesture::GestureEvent evt)
             break;
         }
 
-    case Gesture::SWIPE:
+    case Gesture::GESTURE_SWIPE:
         {
             swipe_gesture_alloc(NULL, gesture_callback, __gesturesSet);
             break;
         }
 
-    case Gesture::PINCH:
+    case Gesture::GESTURE_PINCH:
         {
             pinch_gesture_alloc(NULL, gesture_callback, __gesturesSet);
             break;
         }
 
-    case Gesture::ROTATE:
+    case Gesture::GESTURE_ROTATE:
         {
             rotate_gesture_alloc(NULL, gesture_callback, __gesturesSet);
             break;
         }
 
-    case Gesture::TAP:
+    case Gesture::GESTURE_TAP:
         {
             tap_gesture_alloc(NULL, gesture_callback, __gesturesSet);
             break;
         }
 
-    case Gesture::TAP_DOUBLE:
+    case Gesture::GESTURE_TAP_DOUBLE:
         {
             double_tap_gesture_alloc(NULL, gesture_callback, __gesturesSet);
             break;

@@ -50,7 +50,6 @@ public:
 	 * Individual items in the array can be set using the 
 	 * set(unsigned int, const T&) method.
 	 * 
-	 * @param object Parameter object.
 	 * @param count Number of elements to store in the parameter.
 	 */
 	LuaArray(int count);

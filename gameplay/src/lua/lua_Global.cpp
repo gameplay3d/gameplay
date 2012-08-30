@@ -360,12 +360,12 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Gesture");
-        ScriptUtil::registerConstantString("SWIPE", "SWIPE", scopePath);
-        ScriptUtil::registerConstantString("PINCH", "PINCH", scopePath);
-        ScriptUtil::registerConstantString("ROTATE", "ROTATE", scopePath);
-        ScriptUtil::registerConstantString("TAP", "TAP", scopePath);
-        ScriptUtil::registerConstantString("TAP_DOUBLE", "TAP_DOUBLE", scopePath);
-        ScriptUtil::registerConstantString("NONE", "NONE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_ROTATE", "GESTURE_ROTATE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_TAP_DOUBLE", "GESTURE_TAP_DOUBLE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_NONE", "GESTURE_NONE", scopePath);
     }
 
     // Register enumeration Image::Format.
