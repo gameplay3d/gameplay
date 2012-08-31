@@ -123,12 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7e18a29bc11c23c4a072c3fe3d33b5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ab7e18a29bc11c23c4a072c3fe3d33b5b">getNextSibling</a> () const </td></tr>
 <tr class="memitem:a4ace33975d00751cd783819382293650"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a4ace33975d00751cd783819382293650">getPreviousSibling</a> () const </td></tr>
 <tr class="memitem:adc7c8761ae81d45f6a94edf471e0a0b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#adc7c8761ae81d45f6a94edf471e0a0b0">getParent</a> () const </td></tr>
-<tr class="memitem:afeaa8f9b2d317d919d369ae995745170"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#afeaa8f9b2d317d919d369ae995745170">isVisible</a> () const </td></tr>
-<tr class="memitem:ae6a581bdc753500fa1c43a652e14db18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae6a581bdc753500fa1c43a652e14db18">setVisible</a> (bool visible)</td></tr>
-<tr class="memitem:a869dc5430e0eb78e57146b492545282c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a869dc5430e0eb78e57146b492545282c">isTransparent</a> () const </td></tr>
-<tr class="memitem:af31d3143019eb6eb2b2b208bcd450162"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#af31d3143019eb6eb2b2b208bcd450162">setTransparent</a> (bool transparent)</td></tr>
-<tr class="memitem:a76135618254c8bb8ba2c6a33d3c039d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a76135618254c8bb8ba2c6a33d3c039d9">isDynamic</a> () const </td></tr>
-<tr class="memitem:a1cd9f500588d1cc3acc9db30019c70ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1cd9f500588d1cc3acc9db30019c70ee">setDynamic</a> (bool dynamic)</td></tr>
+<tr class="memitem:a2bd733be82848d3d244d976e283aace2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2bd733be82848d3d244d976e283aace2">hasTag</a> (const char *name) const </td></tr>
+<tr class="memitem:aaee6264b6105b962031927e282b168c8"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aaee6264b6105b962031927e282b168c8">getTag</a> (const char *name) const </td></tr>
+<tr class="memitem:ad26da2c7c0c3f5313c9a4d7dd04fe2fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ad26da2c7c0c3f5313c9a4d7dd04fe2fd">setTag</a> (const char *name, const char *value=&quot;&quot;)</td></tr>
 <tr class="memitem:a2fbad0d2977cbce3544d8a8c1046abbc"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2fbad0d2977cbce3544d8a8c1046abbc">getUserPointer</a> () const </td></tr>
 <tr class="memitem:ae2e5a28dd90e7506b6fd9fa9b03fa58f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ae2e5a28dd90e7506b6fd9fa9b03fa58f">setUserPointer</a> (void *pointer, void(*cleanupCallback)(void *)=NULL)</td></tr>
 <tr class="memitem:a626c00f77bee1120374694edf4d5f6ab"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a626c00f77bee1120374694edf4d5f6ab">getChildCount</a> () const </td></tr>
@@ -198,7 +195,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a184343e28a4da222bd16ba805fc8fdc5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a184343e28a4da222bd16ba805fc8fdc5">_prevSibling</a></td></tr>
 <tr class="memitem:a069c03f7125b60c187ad0c443d459fe6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a069c03f7125b60c187ad0c443d459fe6">_parent</a></td></tr>
 <tr class="memitem:a838bd72a5257af82d4a84bbd64bb9181"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a838bd72a5257af82d4a84bbd64bb9181">_childCount</a></td></tr>
-<tr class="memitem:aa1963f68768120a825e75161c0fa23b5"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aa1963f68768120a825e75161c0fa23b5">_nodeFlags</a></td></tr>
+<tr class="memitem:a3dd518dd2a718c9fa29d97570cba0ce0"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <br class="typebreak"/>
+std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a3dd518dd2a718c9fa29d97570cba0ce0">_tags</a></td></tr>
 <tr class="memitem:a91121ca0be89e614ccfadef9fbced1b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a91121ca0be89e614ccfadef9fbced1b3">_camera</a></td></tr>
 <tr class="memitem:aca8208dfbc190ec33dee5b7e1857bd52"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#aca8208dfbc190ec33dee5b7e1857bd52">_light</a></td></tr>
 <tr class="memitem:a05686a4de65e5a86f32bf40a82113c53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a05686a4de65e5a86f32bf40a82113c53">_model</a></td></tr>
@@ -305,7 +303,7 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Clones the node and all of its child nodes.</p>
-<dl class="section return"><dt>Returns:</dt><dd>A new node. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>A new node.  </dd></dl>
 
 </div>
 </div>
@@ -1034,6 +1032,31 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aaee6264b6105b962031927e282b168c8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classgameplay_1_1_node.html#aaee6264b6105b962031927e282b168c8">gameplay::Node::getTag</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the value of the custom tag with the given name.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the tag to return.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The value of the given tag, or NULL if the tag is not set. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="abf99ba95086ef4c3b3e24cfda3b922c8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1216,6 +1239,31 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2bd733be82848d3d244d976e283aace2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a2bd733be82848d3d244d976e283aace2">gameplay::Node::hasTag</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if a custom tag with the specified name is set.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the tag to query.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>true if the tag is set, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ad101852cbf54700c3d10c78f69004fe9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1230,62 +1278,6 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Called when this <a class="el" href="classgameplay_1_1_node.html">Node</a>'s hierarchy changes. </p>
-
-</div>
-</div>
-<a class="anchor" id="a76135618254c8bb8ba2c6a33d3c039d9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a76135618254c8bb8ba2c6a33d3c039d9">gameplay::Node::isDynamic</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns whether this node is dynamic.</p>
-<p>The dynamic propery can be used to flag nodes as being non-static. This can be useful for modifying behavior or rendering/material logic at runtime for static vs dynamic (moving) objects. An example would be determing whether to use static or dyanmic lighting materials for node models during loading.</p>
-<dl class="section return"><dt>Returns:</dt><dd>Whether this node is dynamic (false by default). </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a869dc5430e0eb78e57146b492545282c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a869dc5430e0eb78e57146b492545282c">gameplay::Node::isTransparent</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns whether this node is transparent (false by default).</p>
-<p>All nodes are opaque by default, unless otherwise set as transparent using the setTransparent method. These methods can be used to flag nodes as transparent and then query the property during game execution, for example to render all opaque objects first, followed by transparent objects with alpha blending enabled.</p>
-<dl class="section return"><dt>Returns:</dt><dd>Whether the node is transparent. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="afeaa8f9b2d317d919d369ae995745170"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#afeaa8f9b2d317d919d369ae995745170">gameplay::Node::isVisible</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns whether this node is visible (true by default).</p>
-<dl class="section return"><dt>Returns:</dt><dd>Whether the node is visible. </dd></dl>
 
 </div>
 </div>
@@ -1532,30 +1524,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1cd9f500588d1cc3acc9db30019c70ee"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#a1cd9f500588d1cc3acc9db30019c70ee">gameplay::Node::setDynamic</a> </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>dynamic</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Sets whether this node is dynamic.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">dynamic</td><td>Whether the node is dynamic. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a44bc8c91f74faa7c6ffb02e3b380feae"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1679,24 +1647,37 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af31d3143019eb6eb2b2b208bcd450162"></a>
+<a class="anchor" id="ad26da2c7c0c3f5313c9a4d7dd04fe2fd"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#af31d3143019eb6eb2b2b208bcd450162">gameplay::Node::setTransparent</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ad26da2c7c0c3f5313c9a4d7dd04fe2fd">gameplay::Node::setTag</a> </td>
           <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>transparent</em></td><td>)</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>value</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Sets whether this node is transparent.</p>
+<p>Sets a custom tag on this <a class="el" href="classgameplay_1_1_node.html">Node</a>.</p>
+<p>Custom tags can be used for a variety of purposes within a game. For example, a tag called "transparent" can be added to nodes, to indicate which nodes in a scene are transparent. This tag can then be read during rendering to sort transparent and opaque objects for correct drawing order. Another example is using a "visible" tag to mark nodes as invisible to be skipped during rendering.</p>
+<p>Setting a tag to NULL removes the tag from the <a class="el" href="classgameplay_1_1_node.html">Node</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">transparent</td><td>Whether the node is transparent. </td></tr>
+    <tr><td class="paramname">name</td><td>Name of the tag to set. </td></tr>
+    <tr><td class="paramname">value</td><td>Optional value of the tag (empty string by default). </td></tr>
   </table>
   </dd>
 </dl>
@@ -1737,25 +1718,6 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="ae6a581bdc753500fa1c43a652e14db18"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_node.html#ae6a581bdc753500fa1c43a652e14db18">gameplay::Node::setVisible</a> </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>visible</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Sets whether this node is visible.</p>
-<dl class="section return"><dt>Returns:</dt><dd>Whether this node is visible. </dd></dl>
 
 </div>
 </div>
@@ -1963,20 +1925,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa1963f68768120a825e75161c0fa23b5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_node.html#aa1963f68768120a825e75161c0fa23b5">gameplay::Node::_nodeFlags</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_node.html">Node</a> property flags. </p>
-
-</div>
-</div>
 <a class="anchor" id="a7436cc6cc8a9ea6e3388b425dee1b202"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2047,6 +1995,20 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3dd518dd2a718c9fa29d97570cba0ce0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, std::string&gt;* <a class="el" href="classgameplay_1_1_node.html#a3dd518dd2a718c9fa29d97570cba0ce0">gameplay::Node::_tags</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>List of custom tags for a node. </p>
+
+</div>
+</div>
 <a class="anchor" id="a823c329894dfe4364922ef34b55238a7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2079,7 +2041,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 30 2012 19:06:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

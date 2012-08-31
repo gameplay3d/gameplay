@@ -78,7 +78,7 @@ public:
      * Returns the specified joystick's value as a Vector2.
      *
      * @param joystickId The index of the joystick to get the value for.
-     * @param outValue The current x-axis and y-asix value displacement of the joystick.
+     * @param outValues The current x-axis and y-asix value displacement of the joystick.
      */
     void getJoystickAxisValues(unsigned int joystickId, Vector2* outValues) const;
 
@@ -130,7 +130,7 @@ private:
     /**
      * Constructs a gamepad from the specified .form file.
      *
-     * @param id The gamepad's id.
+     * @param handle The gamepad handle
      * @param formPath The path the the .form file.
      */ 
     Gamepad(unsigned int handle, const char* formPath);
@@ -139,6 +139,7 @@ private:
      * Constructs a physical gamepad.
      *
      * @param id The gamepad's id.
+     * @param handle The gamepad handle
      * @param buttonCount the number of buttons on the gamepad. 
      * @param joystickCount the number of joysticks on the gamepad.
      * @param triggerCount the number of triggers on the gamepad.
