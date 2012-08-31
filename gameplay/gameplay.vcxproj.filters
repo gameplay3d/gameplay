@@ -783,6 +783,15 @@
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\PlatformLinux.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_Gesture.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1554,6 +1563,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_ScriptTarget.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gesture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Gesture.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_GestureGestureEvent.h">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>

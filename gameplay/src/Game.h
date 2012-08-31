@@ -4,8 +4,10 @@
 #include <queue>
 
 #include "Keyboard.h"
-#include "Touch.h"
 #include "Mouse.h"
+#include "Touch.h"
+#include "Gesture.h"
+#include "Gamepad.h"
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
@@ -14,7 +16,7 @@
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
-#include "Gamepad.h"
+
 
 namespace gameplay
 {
@@ -260,7 +262,7 @@ public:
     AudioListener* getAudioListener();
 
     /**
-     * Menu callback on menu events for platforms with special menu keys or gestures.
+     * Menu callback on menu events for platforms with special menu keys or special platform gestures.
      */
     virtual void menuEvent();
     
@@ -352,6 +354,74 @@ public:
     inline bool isCursorVisible();
 
     /**
+     * Requests the game to recognize the specified gesture events.
+     *
+     * This can be called multiple times to recognize more that one gesture.
+     * Call with Gesture::NONE to unrecognize all gestures. Once a gesture
+     * is recognized the specific gesture event methods will
+     * begin to be called.
+     *
+     * Registering for:
+     *
+     * Gesture::SWIPE calls gestureSwipeEvent(..)
+     * Gesture::PINCH calls gesturePinchEvent(..)
+     * Gesture::ROTATE calls gestureRotateEvent(..)
+     * Gesture::TAP calls gestureTapEvent(..)
+     * Gesture::TAP_DOUBLE calls gestureTapDoubleEvent(..)
+     *
+     * @param evt The gesture event to start recognizing for
+     */
+    void recognizeGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Gesture callback on Gesture::SWIPE events.
+     *
+     * @param x The x-coordinate of the start of the swipe.
+     * @param y The y-coordinate of the start of the swipe.
+     * @param direction The direction of the swipe
+     *
+     * @see Gesture::SWIPE_DIRECTION_UP
+     * @see Gesture::SWIPE_DIRECTION_DOWN
+     * @see Gesture::SWIPE_DIRECTION_LEFT
+     * @see Gesture::SWIPE_DIRECTION_RIGHT
+     */
+    virtual void gestureSwipeEvent(int x, int y, int direction);
+
+    /**
+     * Gesture callback on Gesture::PINCH events.
+     *
+     * @param x The centroid x-coordinate of the pinch.
+     * @param y The centroid y-coordinate of the pinch.
+     * @param scale The scale of the pinch.
+     */
+    virtual void gesturePinchEvent(int x, int y, float scale);
+
+    /**
+     * Gesture callback on Gesture::ROTATE events.
+     *
+     * @param x The centroid x-coordinate of the rotate.
+     * @param y The centroid y-coordinate of the rotate.
+     * @param angle The angle of the rotation.
+     */
+    virtual void gestureRotateEvent(int x, int y, float angle);
+
+    /**
+     * Gesture callback on Gesture::TAP events.
+     *
+     * @param x The x-coordinate of the tap.
+     * @param y The y-coordinate of the tap.
+     */
+    virtual void gestureTapEvent(int x, int y);
+
+    /**
+     * Gesture callback on Gesture::TAP_DOUBLE events.
+     *
+     * @param x The x-coordinate of the double tap.
+     * @param y The y-coordinate of the double tap.
+     */
+    virtual void gestureTapDoubleEvent(int x, int y);
+
+    /**
      * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
      * and Gamepad::DISCONNECTED_EVENT.
      *
@@ -359,7 +429,7 @@ public:
      * @param gamepad the gamepad the event occurred on
      */
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
-    
+
     /**
      * Gets the number of gamepad's that can be used in the game. Includes gamepads not connected.
      * 
