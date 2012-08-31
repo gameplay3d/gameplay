@@ -10,6 +10,12 @@
 #include <sys/keycodes.h>
 #include <screen/screen.h>
 #include <input/screen_helpers.h>
+#include <gestures/set.h>
+#include <gestures/swipe.h>
+#include <gestures/pinch.h>
+#include <gestures/rotate.h>
+#include <gestures/tap.h>
+#include <gestures/double_tap.h>
 #include <bps/bps.h>
 #include <bps/event.h>
 #include <bps/screen.h>
@@ -39,6 +45,9 @@ static bool __multiTouch = false;
 static float __pitch;
 static float __roll;
 static const char* __glExtensions;
+static struct gestures_set * __gestureSet;
+static bool __gestureEventsProcessed;
+static bool __gestureEvents[5];
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
@@ -435,6 +444,65 @@ EGLenum checkErrorEGL(const char* msg)
     return error;
 }
 
+void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* param, int async)
+{
+    switch (gesture->type)
+    {
+    case GESTURE_SWIPE:
+        {
+            if (__gestureEvents[(unsigned int) Gesture::GESTURE_SWIPE])
+            {
+                gesture_swipe_t* swipe = (gesture_swipe_t*)gesture;
+                Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+            }
+        }
+        break;
+
+    case GESTURE_PINCH:
+        {
+            if (__gestureEvents[(unsigned int) Gesture::GESTURE_PINCH])
+            {
+                gesture_pinch_t* pinch = (gesture_pinch_t*)gesture;
+                float dist_x = (float)pinch->last_distance.x - (float)pinch->distance.x;
+                float dist_y = (float)pinch->last_distance.y - (float)pinch->distance.y;
+                float scale = sqrt( (dist_x * dist_x) + (dist_y * dist_y) );
+                Game::getInstance()->gesturePinchEvent(pinch->centroid.x, pinch->centroid.y, scale);
+            }
+        }
+        break;
+
+    case GESTURE_ROTATE:
+        {
+            if (__gestureEvents[(unsigned int) Gesture::GESTURE_ROTATE])
+            {
+                gesture_rotate_t* rotate = (gesture_rotate_t*)gesture;
+                Game::getInstance()->gestureRotateEvent(rotate->centroid.x, rotate->centroid.y, rotate->angle);
+            }
+        }
+        break;
+
+    case GESTURE_TAP:
+        {
+            if (__gestureEvents[(unsigned int) Gesture::GESTURE_TAP])
+            {
+                gesture_tap_t* tap = (gesture_tap_t*)gesture;
+                Game::getInstance()->gestureTapEvent(tap->touch_coords.x, tap->touch_coords.y);
+            }
+        }
+        break;
+
+    case GESTURE_DOUBLE_TAP:
+        {
+            if (__gestureEvents[(unsigned int) Gesture::GESTURE_TAP_DOUBLE])
+            {
+                gesture_tap_t* double_tap = (gesture_tap_t*)gesture;
+                Game::getInstance()->gestureTapDoubleEvent(double_tap->touch_coords.x, double_tap->touch_coords.y);
+            }
+        }
+        break;
+    }
+}
+
 Platform::Platform(Game* game)
     : _game(game)
 {
@@ -489,17 +557,22 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
 
+    __gestureSet = gestures_set_alloc();
+    swipe_gesture_alloc(NULL, gesture_callback, __gestureSet);
+    pinch_gesture_alloc(NULL, gesture_callback, __gestureSet);
+    rotate_gesture_alloc(NULL, gesture_callback, __gestureSet);
+    tap_gesture_alloc(NULL, gesture_callback, __gestureSet);
+    double_tap_gesture_alloc(NULL, gesture_callback, __gestureSet);
+
     bps_initialize();
 
+    // Initialize navigator and orientation
     static const int SENSOR_RATE = 25000;
     sensor_set_rate(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, SENSOR_RATE);
     sensor_set_skip_duplicates(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, true);
     sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
-
     navigator_request_events(0);
     navigator_rotation_lock(true);
-
-    // Determine initial orientation angle.
     orientation_direction_t direction;
     orientation_get(&direction, &__orientationAngle);
 
@@ -827,7 +900,10 @@ int Platform::enterMessagePump()
                     case SCREEN_EVENT_MTOUCH_TOUCH:
                     {
                         screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                        if (__multiTouch || touchEvent.contact_id == 0)
+                        if (__gestureEventsProcessed)
+                            rc = gestures_set_process_event(__gestureSet, &touchEvent, NULL);
+
+                        if ( !rc && (__multiTouch || touchEvent.contact_id == 0))
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
@@ -837,7 +913,10 @@ int Platform::enterMessagePump()
                     case SCREEN_EVENT_MTOUCH_RELEASE:
                     {
                         screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                        if (__multiTouch || touchEvent.contact_id == 0)
+                        if (__gestureEventsProcessed)
+                            rc = gestures_set_process_event(__gestureSet, &touchEvent, NULL);
+
+                        if (!rc && (__multiTouch || touchEvent.contact_id == 0))
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
@@ -847,7 +926,10 @@ int Platform::enterMessagePump()
                     case SCREEN_EVENT_MTOUCH_MOVE:
                     {
                         screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                        if (__multiTouch ||touchEvent.contact_id == 0)
+                        if (__gestureEventsProcessed)
+                            rc = gestures_set_process_event(__gestureSet, &touchEvent, NULL);
+
+                        if (!rc && (__multiTouch || touchEvent.contact_id == 0))
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
@@ -1077,6 +1159,17 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
+void Platform::swapBuffers()
+{
+    if (__eglDisplay && __eglSurface)
+        eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1156,12 +1249,6 @@ bool Platform::isCursorVisible()
     return false;
 }
 
-void Platform::swapBuffers()
-{
-    if (__eglDisplay && __eglSurface)
-        eglSwapBuffers(__eglDisplay, __eglSurface);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     if (display)
@@ -1204,9 +1291,40 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::sleep(long ms)
+void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
+    switch(evt)
+    {
+    case Gesture::GESTURE_NONE:
+        __gestureEventsProcessed = false;
+        memset( __gestureEvents, 0, sizeof(__gestureEvents));
+        break;
+
+    case Gesture::GESTURE_SWIPE:
+        __gestureEventsProcessed = true;
+        __gestureEvents[(unsigned int) Gesture::GESTURE_SWIPE] = true;
+        break;
+
+    case Gesture::GESTURE_PINCH:
+        __gestureEventsProcessed = true;
+        __gestureEvents[(unsigned int) Gesture::GESTURE_PINCH] = true;
+            break;
+
+    case Gesture::GESTURE_ROTATE:
+        __gestureEventsProcessed = true;
+        __gestureEvents[(unsigned int) Gesture::GESTURE_ROTATE] = true;
+        break;
+
+    case Gesture::GESTURE_TAP:
+        __gestureEventsProcessed = true;
+        __gestureEvents[(unsigned int) Gesture::GESTURE_TAP] = true;
+        break;
+
+    case Gesture::GESTURE_TAP_DOUBLE:
+        __gestureEventsProcessed = true;
+        __gestureEvents[(unsigned int) Gesture::GESTURE_TAP_DOUBLE] = true;
+        break;
+    }
 }
 
 unsigned int Platform::getGamepadsConnected()

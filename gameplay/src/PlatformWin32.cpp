@@ -941,6 +941,17 @@ void Platform::setVsync(bool enable)
     __vsync = enable;
 }
 
+void Platform::swapBuffers()
+{
+    if (__hdc)
+        SwapBuffers(__hdc);
+}
+
+void Platform::sleep(long ms)
+{
+    Sleep(ms);
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     // not supported
@@ -1008,15 +1019,14 @@ bool Platform::isCursorVisible()
     return __cursorVisible;
 }
 
-void Platform::swapBuffers()
-{
-    if (__hdc)
-        SwapBuffers(__hdc);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     // Do nothing.
+}
+
+void Platform::recognizeGesture(Gesture::GestureEvent evt)
+{
+    // Do nothing
 }
 
 unsigned int Platform::getGamepadsConnected()
@@ -1242,11 +1252,6 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     {
         return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
     }
-}
-
-void Platform::sleep(long ms)
-{
-    Sleep(ms);
 }
 
 }

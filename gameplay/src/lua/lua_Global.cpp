@@ -356,6 +356,18 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("DISCONNECTED_EVENT", "DISCONNECTED_EVENT", scopePath);
     }
 
+    // Register enumeration Gesture::GestureEvent.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Gesture");
+        ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_ROTATE", "GESTURE_ROTATE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_TAP_DOUBLE", "GESTURE_TAP_DOUBLE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_NONE", "GESTURE_NONE", scopePath);
+    }
+
     // Register enumeration Image::Format.
     {
         std::vector<std::string> scopePath;
@@ -799,6 +811,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_GamepadButtonState((Gamepad::ButtonState)value);
     if (enumname == "Gamepad::GamepadEvent")
         return lua_stringFromEnum_GamepadGamepadEvent((Gamepad::GamepadEvent)value);
+    if (enumname == "Gesture::GestureEvent")
+        return lua_stringFromEnum_GestureGestureEvent((Gesture::GestureEvent)value);
     if (enumname == "Image::Format")
         return lua_stringFromEnum_ImageFormat((Image::Format)value);
     if (enumname == "Keyboard::Key")
