@@ -53,7 +53,6 @@ LOCAL_SRC_FILES := \
     Game.cpp \
     Gamepad.cpp \
     gameplay-main-android.cpp \
-	Gesture.cpp \
     Image.cpp \
     Joint.cpp \
     Joystick.cpp \
