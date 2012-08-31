@@ -93,7 +93,7 @@ static EGLenum checkErrorEGL(const char* msg)
 static bool initEGL()
 {
     // Hard-coded to 32-bit/OpenGL ES 2.0.
-    const EGLint eglConfigAttrs[] =
+    EGLint eglConfigAttrs[] =
     {
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
@@ -135,10 +135,21 @@ static bool initEGL()
             goto error;
         }
     
-        if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
+        if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE)
         {
             checkErrorEGL("eglChooseConfig");
             goto error;
+        }
+        
+        if (eglConfigCount == 0)
+        {
+            // try 16 bit depth buffer instead
+            eglConfigAttrs[9] = 16;
+            if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
+            {
+                checkErrorEGL("eglChooseConfig");
+                goto error;
+            }
         }
     
         __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
