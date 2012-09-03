@@ -990,6 +990,7 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 void Platform::recognizeGesture(Gesture::GestureEvent evt)
 {
+    fds;
 }
 
 unsigned int Platform::getGamepadsConnected()
