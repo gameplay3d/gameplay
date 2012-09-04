@@ -174,6 +174,13 @@ public:
      * @return The game window height.
      */
     inline unsigned int getHeight() const;
+    
+    /**
+     * Gets the aspect ratio of the window. (width / height)
+     * 
+     * @return The aspect ratio of the window.
+     */
+    inline float getAspectRatio() const;
 
     /**
      * Gets the game current viewport.
@@ -183,7 +190,7 @@ public:
     inline const Rectangle& getViewport() const;
 
     /**
-     * Set the game current viewport.
+     * Sets the game current viewport.
      *
      * The x, y, width and height of the viewport must all be positive.
      *
