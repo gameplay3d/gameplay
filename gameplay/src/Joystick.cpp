@@ -95,7 +95,6 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         if (inner)
         {
             const Rectangle& rect = inner->getRegion();
-            float radiusx2 = _radius * 2;;
             _screenRegion.width = rect.width;
             _screenRegion.height = rect.height;
         }

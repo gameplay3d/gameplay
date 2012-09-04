@@ -866,7 +866,6 @@ int Platform::enterMessagePump()
     int position[2];
     int domain;
     mtouch_event_t touchEvent;
-    int touchId = 0;
     bool suspended = false;
 
     // Get the initial time.

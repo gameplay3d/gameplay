@@ -261,10 +261,10 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         animation = createAnimation(id, propertyId, keyCount, keyTimes, keyValues, (Curve::InterpolationType) curve);
     }
 
-    SAFE_DELETE(keyOut);
-    SAFE_DELETE(keyIn);
-    SAFE_DELETE(keyValues);
-    SAFE_DELETE(keyTimes);
+    SAFE_DELETE_ARRAY(keyOut);
+    SAFE_DELETE_ARRAY(keyIn);
+    SAFE_DELETE_ARRAY(keyValues);
+    SAFE_DELETE_ARRAY(keyTimes);
 
     Properties* pClip = animationProperties->getNextNamespace();
     if (pClip && std::strcmp(pClip->getNamespace(), "clip") == 0)
