@@ -219,7 +219,14 @@ bool FileSystem::fileExists(const char* filePath)
         fullPath += "../../gameplay/";
         fullPath += filePath;
         
-        return stat(fullPath.c_str(), &s) == 0;
+        int result = stat(fullPath.c_str(), &s);
+        if (result != 0)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += filePath;
+            return stat(fullPath.c_str(), &s) == 0;
+        }
     }
     return true;
 #else
@@ -248,6 +255,13 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
         fullPath += path;
         
         fp = fopen(fullPath.c_str(), mode);
+        if (!fp)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += path;
+            fp = fopen(fullPath.c_str(), mode);
+        }
     }
 #endif
 
