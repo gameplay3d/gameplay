@@ -466,7 +466,7 @@ void Properties::mergeWith(Properties* overrides)
         this->_properties[name] = value;
         name = overrides->getNextProperty(&value);
     }
-    SAFE_DELETE(value);
+    SAFE_DELETE_ARRAY(value);
     this->_propertiesItr = this->_properties.end();
 
     // Merge all common nested namespaces, add new ones.
@@ -998,11 +998,9 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
 {
     // If the url references a specific namespace within the file,
     // return the specified namespace or notify the user if it cannot be found.
-    Properties* originalProperties = properties;
     if (namespacePath.size() > 0)
     {
         unsigned int size = namespacePath.size();
-        const char* tmp = namespacePath[0].c_str();
         properties->rewind();
         Properties* iter = properties->getNextNamespace();
         for (unsigned int i = 0; i < size;)

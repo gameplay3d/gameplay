@@ -401,6 +401,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     read = fread(data, 1, dataSize, file);
     if (read != dataSize)
     {
+		SAFE_DELETE_ARRAY(data);
         GP_ERROR("Failed to read texture data from PVR file '%s'.", path);
         return NULL;
     }

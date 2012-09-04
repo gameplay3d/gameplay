@@ -849,7 +849,6 @@ error:
 int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
-    int rc = 0;
 
     // Get the initial time.
     LARGE_INTEGER tps;

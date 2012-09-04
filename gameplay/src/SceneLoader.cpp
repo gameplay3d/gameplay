@@ -88,7 +88,6 @@ Scene* SceneLoader::loadInternal(const char* url)
 
     // Find the physics properties object.
     Properties* physics = NULL;
-    Properties* ns = NULL;
     sceneProperties->rewind();
     while (true)
     {
@@ -201,10 +200,6 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             break;
         }
         case SceneNodeProperty::MATERIAL:
-            {
-                const char* id = node->getId();
-                id = NULL;
-            }
             if (!node->getModel())
             {
                 GP_ERROR("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
@@ -288,7 +283,6 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     {
         // Handle scale, rotate and translate.
         Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
-        const char* name = NULL;
 
         switch (snp._type)
         {
