@@ -68,6 +68,13 @@ const char* MaterialParameter::getName() const
     return _name.c_str();
 }
 
+Texture::Sampler* MaterialParameter::getSampler() const
+{
+    if (_type == MaterialParameter::SAMPLER)
+        return const_cast<Texture::Sampler*>(_value.samplerValue);
+    return NULL;
+}
+
 void MaterialParameter::setValue(float value)
 {
     clearValue();
