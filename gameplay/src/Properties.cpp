@@ -17,15 +17,11 @@ Properties::Properties()
 }
 
 Properties::Properties(const Properties& copy)
+    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties)
 {
-    _namespace = copy._namespace;
-    _id = copy._id;
-    _parentID = copy._parentID;
-    _properties = copy._properties;
-    
     _namespaces = std::vector<Properties*>();
     std::vector<Properties*>::const_iterator it;
-    for (it = copy._namespaces.begin(); it < copy._namespaces.end(); it++)
+    for (it = copy._namespaces.begin(); it < copy._namespaces.end(); ++it)
     {
         GP_ASSERT(*it);
         _namespaces.push_back(new Properties(**it));
@@ -327,7 +323,7 @@ void Properties::readProperties(FILE* file)
 Properties::~Properties()
 {
     unsigned int count = _namespaces.size();
-    for (unsigned int i = 0; i < count; i++)
+    for (unsigned int i = 0; i < count; ++i)
     {
         SAFE_DELETE(_namespaces[i]);
     }
@@ -423,7 +419,7 @@ void Properties::resolveInheritance(const char* id)
                 derived->_properties = parent->_properties;
                 derived->_namespaces = std::vector<Properties*>();
                 std::vector<Properties*>::const_iterator itt;
-                for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); itt++)
+                for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); ++itt)
                 {
                     GP_ASSERT(*itt);
                     derived->_namespaces.push_back(new Properties(**itt));
@@ -512,7 +508,7 @@ const char* Properties::getNextProperty(char** value)
     else
     {
         // Move to the next property
-        _propertiesItr++;
+        ++_propertiesItr;
     }
 
     if (_propertiesItr != _properties.end())
@@ -540,7 +536,7 @@ Properties* Properties::getNextNamespace()
     }
     else
     {
-        _namespacesItr++;
+        ++_namespacesItr;
     }
 
     if (_namespacesItr != _namespaces.end())
@@ -565,7 +561,7 @@ Properties* Properties::getNamespace(const char* id, bool searchNames) const
     Properties* ret = NULL;
     std::vector<Properties*>::const_iterator it;
     
-    for (it = _namespaces.begin(); it < _namespaces.end(); it++)
+    for (it = _namespaces.begin(); it < _namespaces.end(); ++it)
     {
         ret = *it;
         if (strcmp(searchNames ? ret->_namespace.c_str() : ret->_id.c_str(), id) == 0)

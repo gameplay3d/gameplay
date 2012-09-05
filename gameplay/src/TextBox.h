@@ -152,7 +152,7 @@ protected:
     /**
      * The index into the TextBox's string that the caret is.
      */
-    unsigned int textIndex;
+    unsigned int _textIndex;
     
     /**
      * The last character that was entered into the TextBox.

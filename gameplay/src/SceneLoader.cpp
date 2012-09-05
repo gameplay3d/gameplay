@@ -105,7 +105,7 @@ Scene* SceneLoader::loadInternal(const char* url)
 
     // Clean up all loaded properties objects.
     std::map<std::string, Properties*>::iterator iter = _propertiesFromFile.begin();
-    for (; iter != _propertiesFromFile.end(); iter++)
+    for (; iter != _propertiesFromFile.end(); ++iter)
     {
         SAFE_DELETE(iter->second);
     }
@@ -910,7 +910,7 @@ void SceneLoader::loadReferencedFiles()
 {
     // Load all referenced properties files.
     std::map<std::string, Properties*>::iterator iter = _properties.begin();
-    for (; iter != _properties.end(); iter++)
+    for (; iter != _properties.end(); ++iter)
     {
         if (iter->second == NULL)
         {
@@ -1090,7 +1090,7 @@ SceneLoader::SceneNode::SceneNode()
 {
 }
 
-SceneLoader::SceneNodeProperty::SceneNodeProperty(Type type, std::string url, int index)
+SceneLoader::SceneNodeProperty::SceneNodeProperty(Type type, const std::string& url, int index)
     : _type(type), _url(url), _index(index)
 {
 }
