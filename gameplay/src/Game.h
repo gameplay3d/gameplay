@@ -354,24 +354,40 @@ public:
     inline bool isCursorVisible();
 
     /**
-     * Requests the game to recognize the specified gesture events.
+     * Determines whether a specific gesture event is supported.
      *
-     * This can be called multiple times to recognize more that one gesture.
-     * Call with Gesture::NONE to unrecognize all gestures. Once a gesture
-     * is recognized the specific gesture event methods will
+     * Use Gesture::GESTURE_ANY_SUPPORTED to test if one or more gesture events are supported.
+     *
+     * @param evt The gesture event to test and see if it is supported.
+     * @return true if the gesture tested is supported; false if not supported.
+     */
+    bool isGestureSupported(Gesture::GestureEvent evt);
+
+    /**
+     * Requests the game to register and start recognizing the specified gesture event.
+     *
+     * Call with Gesture::GESTURE_ANY_SUPPORTED to recognize all supported gestures.
+     * Once a gesture is recognized the specific gesture event methods will
      * begin to be called.
      *
      * Registering for:
      *
-     * Gesture::SWIPE calls gestureSwipeEvent(..)
-     * Gesture::PINCH calls gesturePinchEvent(..)
-     * Gesture::ROTATE calls gestureRotateEvent(..)
-     * Gesture::TAP calls gestureTapEvent(..)
-     * Gesture::TAP_DOUBLE calls gestureTapDoubleEvent(..)
+     * Gesture::GESTURE_SWIPE calls gestureSwipeEvent(..)
+     * Gesture::GESTURE_PINCH calls gesturePinchEvent(..)
+     * Gesture::GESTURE_TAP calls gestureTapEvent(..)
      *
      * @param evt The gesture event to start recognizing for
      */
-    void recognizeGesture(Gesture::GestureEvent evt);
+    void registerGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Requests the game to unregister for and stop recognizing the specified gesture event.
+     *
+     * Call with Gesture::GESTURE_ANY_SUPPORTED to unregister events from all supported gestures.
+     *
+     * @param evt The gesture event to start recognizing for
+     */
+    void unregisterGesture(Gesture::GestureEvent evt);
 
     /**
      * Gesture callback on Gesture::SWIPE events.
@@ -397,29 +413,12 @@ public:
     virtual void gesturePinchEvent(int x, int y, float scale);
 
     /**
-     * Gesture callback on Gesture::ROTATE events.
-     *
-     * @param x The centroid x-coordinate of the rotate.
-     * @param y The centroid y-coordinate of the rotate.
-     * @param angle The angle of the rotation.
-     */
-    virtual void gestureRotateEvent(int x, int y, float angle);
-
-    /**
      * Gesture callback on Gesture::TAP events.
      *
      * @param x The x-coordinate of the tap.
      * @param y The y-coordinate of the tap.
      */
     virtual void gestureTapEvent(int x, int y);
-
-    /**
-     * Gesture callback on Gesture::TAP_DOUBLE events.
-     *
-     * @param x The x-coordinate of the double tap.
-     * @param y The y-coordinate of the double tap.
-     */
-    virtual void gestureTapDoubleEvent(int x, int y);
 
     /**
      * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
