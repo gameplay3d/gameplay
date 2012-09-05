@@ -201,7 +201,7 @@ using std::va_list;
         #define USE_NEON
     #endif
 #elif __ANDROID__
-	#include <EGL/egl.h>
+    #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;

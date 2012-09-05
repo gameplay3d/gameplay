@@ -730,26 +730,26 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
     switch(evt)
     {
     case Touch::TOUCH_PRESS:
-    	if (_contactIndex == INVALID_CONTACT_INDEX)
-    	{
-    		_contactIndex = (int) contactIndex;
-    		_contactIndices++;
-			_scrollingLastX = _scrollingFirstX = x;
-			_scrollingLastY = _scrollingFirstY = y;
-			_scrollingVelocity.set(0, 0);
-			_scrolling = true;
-			_scrollingStartTimeX = _scrollingStartTimeY = 0;
+        if (_contactIndex == INVALID_CONTACT_INDEX)
+        {
+            _contactIndex = (int) contactIndex;
+            _contactIndices++;
+            _scrollingLastX = _scrollingFirstX = x;
+            _scrollingLastY = _scrollingFirstY = y;
+            _scrollingVelocity.set(0, 0);
+            _scrolling = true;
+            _scrollingStartTimeX = _scrollingStartTimeY = 0;
 
-			if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
-			{
-				_scrollBarOpacityClip->stop();
-				_scrollBarOpacityClip = NULL;
-			}
-			_scrollBarOpacity = 1.0f;
+            if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+            {
+                _scrollBarOpacityClip->stop();
+                _scrollBarOpacityClip = NULL;
+            }
+            _scrollBarOpacity = 1.0f;
             _dirty = true;
-			return _consumeInputEvents;
-    	}
-		break;
+            return _consumeInputEvents;
+        }
+        break;
     case Touch::TOUCH_MOVE:
         if (_scrolling && _contactIndex == (int) contactIndex)
         {
@@ -814,58 +814,58 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         break;
 
     case Touch::TOUCH_RELEASE:
-    	if (_contactIndex == (int) contactIndex)
-    	{
-    		_contactIndex = INVALID_CONTACT_INDEX;
-    		_contactIndices--;
-			_scrolling = false;
-			double gameTime = Game::getAbsoluteTime();
-			float timeSinceLastMove = (float)(gameTime - _scrollingLastTime);
-			if (timeSinceLastMove > SCROLL_INERTIA_DELAY)
-			{
-				_scrollingVelocity.set(0, 0);
-				_scrollingMouseVertically = _scrollingMouseHorizontally = false;
+        if (_contactIndex == (int) contactIndex)
+        {
+            _contactIndex = INVALID_CONTACT_INDEX;
+            _contactIndices--;
+            _scrolling = false;
+            double gameTime = Game::getAbsoluteTime();
+            float timeSinceLastMove = (float)(gameTime - _scrollingLastTime);
+            if (timeSinceLastMove > SCROLL_INERTIA_DELAY)
+            {
+                _scrollingVelocity.set(0, 0);
+                _scrollingMouseVertically = _scrollingMouseHorizontally = false;
                 _dirty = true;
-				return _consumeInputEvents;
-			}
+                return _consumeInputEvents;
+            }
 
-			int dx = _scrollingLastX - _scrollingFirstX;
-			int dy = _scrollingLastY - _scrollingFirstY;
+            int dx = _scrollingLastX - _scrollingFirstX;
+            int dy = _scrollingLastY - _scrollingFirstY;
 
-			float timeTakenX = (float)(gameTime - _scrollingStartTimeX);
-			float elapsedSecsX = timeTakenX * 0.001f;
-			float timeTakenY = (float)(gameTime - _scrollingStartTimeY);
-			float elapsedSecsY = timeTakenY * 0.001f;
+            float timeTakenX = (float)(gameTime - _scrollingStartTimeX);
+            float elapsedSecsX = timeTakenX * 0.001f;
+            float timeTakenY = (float)(gameTime - _scrollingStartTimeY);
+            float elapsedSecsY = timeTakenY * 0.001f;
 
-			float vx = dx;
-			float vy = dy;
-			if (elapsedSecsX > 0)
-				vx = (float)dx / elapsedSecsX;
-			if (elapsedSecsY > 0)
-				vy = (float)dy / elapsedSecsY;
+            float vx = dx;
+            float vy = dy;
+            if (elapsedSecsX > 0)
+                vx = (float)dx / elapsedSecsX;
+            if (elapsedSecsY > 0)
+                vy = (float)dy / elapsedSecsY;
 
-			if (_scrollingMouseVertically)
-			{
-				float yRatio = _totalHeight / _absoluteBounds.height;
-				vy *= yRatio;
-				_scrollingVelocity.set(0, -vy);
-			}
-			else if (_scrollingMouseHorizontally)
-			{
-				float xRatio = _totalWidth / _absoluteBounds.width;
-				vx *= xRatio;
-				_scrollingVelocity.set(-vx, 0);
-			}
-			else
-			{
-				_scrollingVelocity.set(vx, vy);
-			}
+            if (_scrollingMouseVertically)
+            {
+                float yRatio = _totalHeight / _absoluteBounds.height;
+                vy *= yRatio;
+                _scrollingVelocity.set(0, -vy);
+            }
+            else if (_scrollingMouseHorizontally)
+            {
+                float xRatio = _totalWidth / _absoluteBounds.width;
+                vx *= xRatio;
+                _scrollingVelocity.set(-vx, 0);
+            }
+            else
+            {
+                _scrollingVelocity.set(vx, vy);
+            }
 
-			_scrollingMouseVertically = _scrollingMouseHorizontally = false;
+            _scrollingMouseVertically = _scrollingMouseHorizontally = false;
             _dirty = true;
-			return _consumeInputEvents;
-    	}
-    	break;
+            return _consumeInputEvents;
+        }
+        break;
     }
 
     return false;

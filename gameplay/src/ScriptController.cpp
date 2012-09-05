@@ -23,7 +23,7 @@
         return LuaArray<type>((type*)NULL); \
     \
     /* Declare a LuaArray to store the values. */ \
-	LuaArray<type> arr(size); \
+    LuaArray<type> arr(size); \
     \
     /* Push the first key. */ \
     lua_pushnil(sc->_lua); \
@@ -59,13 +59,13 @@ void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
     lua_setglobal(sc->_lua, name);
 }
 
-void ScriptUtil::registerConstantBool(std::string name, bool value, std::vector<std::string> scopePath)
+void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -92,13 +92,13 @@ void ScriptUtil::registerConstantBool(std::string name, bool value, std::vector<
     }
 }
 
-void ScriptUtil::registerConstantNumber(std::string name, double value, std::vector<std::string> scopePath)
+void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -125,13 +125,13 @@ void ScriptUtil::registerConstantNumber(std::string name, double value, std::vec
     }
 }
 
-void ScriptUtil::registerConstantString(std::string name, std::string value, std::vector<std::string> scopePath)
+void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -159,13 +159,13 @@ void ScriptUtil::registerConstantString(std::string name, std::string value, std
 }
 
 void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, 
-    lua_CFunction deleteFunction, const luaL_Reg* statics,  std::vector<std::string> scopePath)
+    lua_CFunction deleteFunction, const luaL_Reg* statics,  const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the type is an inner type, get the correct parent 
     // table on the stack before creating the table for the class.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         std::string tablename = name;
 
@@ -229,7 +229,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
     }
 
     // Set the table we just created within the correct parent table.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_settable(sc->_lua, -3);
 
@@ -250,7 +250,7 @@ void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunc
     lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
 }
 
-void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived)
+void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived)
 {
     Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
 }
@@ -784,7 +784,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
         GP_WARN("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
 }
 
-void ScriptController::registerCallback(ScriptCallback callback, std::string function)
+void ScriptController::registerCallback(ScriptCallback callback, const std::string& function)
 {
     SAFE_DELETE(_callbacks[callback]);
     _callbacks[callback] = new std::string(function);

@@ -101,7 +101,7 @@ AudioBuffer* AudioBuffer::create(const char* path)
         goto cleanup;
     }
 
-	//NOTE: loadOgg actually sets this null, so it is expected
+    //NOTE: loadOgg actually sets this null, so it is expected
     if (file)    
         fclose(file);
 

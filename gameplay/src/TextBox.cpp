@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-TextBox::TextBox() : _lastKeypress(0)
+TextBox::TextBox() : _textIndex(0), _lastKeypress(0), _fontSize(0), _caretImage(NULL)
 {
 }
 
@@ -250,11 +250,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                 {
                     case Keyboard::KEY_BACKSPACE:
                     {
-                        if (textIndex > 0)
+                        if (_textIndex > 0)
                         {
-                            --textIndex;
-                            _text.erase(textIndex, 1);
-                            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                            --_textIndex;
+                            _text.erase(_textIndex, 1);
+                            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, _textIndex,
                                 textAlignment, true, rightToLeft);
 
                             _dirty = true;
@@ -272,11 +272,11 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     default:
                     {
                         // Insert character into string.
-                        _text.insert(textIndex, 1, (char)key);
+                        _text.insert(_textIndex, 1, (char)key);
                         consume = true;
 
                         // Get new location of caret.
-                        font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex + 1,
+                        font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, _textIndex + 1,
                             textAlignment, true, rightToLeft);
 
                         if (key == ' ')
@@ -286,8 +286,8 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                                 _caretLocation.y >= _textBounds.y + _textBounds.height)
                             {
                                 // If not, undo the character insertion.
-                                _text.erase(textIndex, 1);
-                                font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                                _text.erase(_textIndex, 1);
+                                font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, _textIndex,
                                     textAlignment, true, rightToLeft);
 
                                 // No need to check again.
@@ -302,8 +302,8 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                             textBounds.width >= _textBounds.width || textBounds.height >= _textBounds.height)
                         {
                             // If not, undo the character insertion.
-                            _text.erase(textIndex, 1);
-                            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
+                            _text.erase(_textIndex, 1);
+                            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, _textIndex,
                                 textAlignment, true, rightToLeft);
 
                             // TextBox is not dirty.

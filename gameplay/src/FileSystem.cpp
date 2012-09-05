@@ -219,7 +219,14 @@ bool FileSystem::fileExists(const char* filePath)
         fullPath += "../../gameplay/";
         fullPath += filePath;
         
-        return stat(fullPath.c_str(), &s) == 0;
+        int result = stat(fullPath.c_str(), &s);
+        if (result != 0)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += filePath;
+            return stat(fullPath.c_str(), &s) == 0;
+        }
     }
     return true;
 #else
@@ -248,6 +255,13 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
         fullPath += path;
         
         fp = fopen(fullPath.c_str(), mode);
+        if (!fp)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += path;
+            fp = fopen(fullPath.c_str(), mode);
+        }
     }
 #endif
 
@@ -335,7 +349,7 @@ void createFileFromAsset(const char* path)
     std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
     struct stat s;
     if (stat(directoryPath.c_str(), &s) != 0)
-        makepath(directoryPath.c_str(), 0777);
+        makepath(directoryPath, 0777);
 
     // To ensure that the files on the file system corresponding to the assets in the APK bundle
     // are always up to date (and in sync), we copy them from the APK to the file system once
