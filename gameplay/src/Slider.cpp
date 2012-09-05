@@ -6,7 +6,7 @@ namespace gameplay
 // Fraction of slider to scroll when mouse scrollwheel is used.
 static const float SCROLL_FRACTION = 0.1f;
 
-Slider::Slider() : _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
+Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
 {
 }
 
@@ -240,9 +240,6 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     // The slider is drawn in the center of the control (perpendicular to orientation).
     // The track is stretched according to orientation.
     // Caps and marker are not stretched.
-    const Theme::Border& border = getBorder(_state);
-    const Theme::Padding& padding = getPadding();
-
     const Rectangle& minCapRegion = _minImage->getRegion();
     const Rectangle& maxCapRegion = _maxImage->getRegion();
     const Rectangle& markerRegion = _markerImage->getRegion();

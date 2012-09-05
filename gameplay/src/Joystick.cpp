@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-Joystick::Joystick() : _relative(true), _innerSize(NULL), _outerSize(NULL)
+Joystick::Joystick() : _radius(1.0f), _relative(true), _innerSize(NULL), _outerSize(NULL)
 {
 }
 
@@ -47,6 +47,7 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         return;
     }
     _radius = properties->getFloat("radius");
+    GP_ASSERT(_radius != 0.0f);
 
     if (properties->exists("relative"))
     {
