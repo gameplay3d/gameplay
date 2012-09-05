@@ -1610,7 +1610,6 @@
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
 		5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7631512516B00D176CD /* libz.dylib */; };
-		5B74915B15F7CC9F00CFD43C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B74915A15F7CC9F00CFD43C /* libz.dylib */; };
 		5BAF2027152F2AF0003E2AC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */; };
 		5BAF2028152F2AF0003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */; };
 		5BAF2029152F2AF0003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2022152F2AF0003E2AC3 /* Foundation.framework */; };
@@ -2535,7 +2534,6 @@
 		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbis.a"; sourceTree = "<group>"; };
 		5B5DB93314C25BA5007755DB /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisenc.a"; sourceTree = "<group>"; };
 		5B5DB93414C25BA5007755DB /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisfile.a"; sourceTree = "<group>"; };
-		5B74915A15F7CC9F00CFD43C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5BAF201E152F2A6D003E2AC3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
@@ -2611,7 +2609,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B74915B15F7CC9F00CFD43C /* libz.dylib in Frameworks */,
 				5BAF2027152F2AF0003E2AC3 /* CoreGraphics.framework in Frameworks */,
 				5BAF2028152F2AF0003E2AC3 /* CoreMotion.framework in Frameworks */,
 				5BAF2029152F2AF0003E2AC3 /* Foundation.framework in Frameworks */,
@@ -2635,7 +2632,6 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
-				5B74915A15F7CC9F00CFD43C /* libz.dylib */,
 				42B7FE7115B080EE002BB8C3 /* lua */,
 				5BC4E7D4150F8C3C00CBE1C0 /* res */,
 				4234D9A314686C52003031B3 /* src */,
