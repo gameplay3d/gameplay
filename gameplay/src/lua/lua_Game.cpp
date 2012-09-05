@@ -34,6 +34,7 @@ void luaRegister_Game()
         {"getAIController", lua_Game_getAIController},
         {"getAccelerometerValues", lua_Game_getAccelerometerValues},
         {"getAnimationController", lua_Game_getAnimationController},
+        {"getAspectRatio", lua_Game_getAspectRatio},
         {"getAudioController", lua_Game_getAudioController},
         {"getAudioListener", lua_Game_getAudioListener},
         {"getConfig", lua_Game_getConfig},
@@ -627,6 +628,43 @@ int lua_Game_getAnimationController(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Game_getAnimationController - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_getAspectRatio(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                float result = instance->getAspectRatio();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_getAspectRatio - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

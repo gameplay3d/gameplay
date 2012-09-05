@@ -47,7 +47,7 @@ RenderTarget* RenderTarget::getRenderTarget(const char* id)
 
     // Search the vector for a matching ID.
     std::vector<RenderTarget*>::const_iterator it;
-    for (it = __renderTargets.begin(); it < __renderTargets.end(); it++)
+    for (it = __renderTargets.begin(); it < __renderTargets.end(); ++it)
     {
         RenderTarget* dst = *it;
         GP_ASSERT(dst);

@@ -829,7 +829,7 @@ void Transform::removeListener(Transform::Listener* listener)
 
     if (_listeners)
     {
-        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
         {
             if ((*itr).listener == listener)
             {
@@ -844,7 +844,7 @@ void Transform::transformChanged()
 {
     if (_listeners)
     {
-        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
         {
             TransformListener& l = *itr;
             GP_ASSERT(l.listener);
