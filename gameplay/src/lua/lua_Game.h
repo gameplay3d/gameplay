@@ -33,6 +33,7 @@ int lua_Game_getViewport(lua_State* state);
 int lua_Game_getWidth(lua_State* state);
 int lua_Game_hasMouse(lua_State* state);
 int lua_Game_isCursorVisible(lua_State* state);
+int lua_Game_isGestureRegistered(lua_State* state);
 int lua_Game_isGestureSupported(lua_State* state);
 int lua_Game_isInitialized(lua_State* state);
 int lua_Game_isMouseCaptured(lua_State* state);

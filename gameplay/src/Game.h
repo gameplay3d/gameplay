@@ -361,7 +361,7 @@ public:
     inline bool isCursorVisible();
 
     /**
-     * Determines whether a specific gesture event is supported.
+     * Determines whether a specified gesture event is supported.
      *
      * Use Gesture::GESTURE_ANY_SUPPORTED to test if one or more gesture events are supported.
      *
@@ -395,6 +395,13 @@ public:
      * @param evt The gesture event to start recognizing for
      */
     void unregisterGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Determines whether a specified gesture event is registered to receive event callbacks.
+     *
+     * @return true if the specified gesture event is registered; false of not registered.
+     */
+    bool isGestureRegistered(Gesture::GestureEvent evt);
 
     /**
      * Gesture callback on Gesture::SWIPE events.
