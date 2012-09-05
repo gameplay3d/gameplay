@@ -102,16 +102,16 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
         {
             if (_contactIndex == (int) _contactIndex && _state == Control::ACTIVE)
             {
-				if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-					y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-				{
-					if (!_selected)
-					{
-						RadioButton::clearSelected(_groupId);
-						_selected = true;
-						notifyListeners(Listener::VALUE_CHANGED);
-					}
-				}
+                if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                    y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+                {
+                    if (!_selected)
+                    {
+                        RadioButton::clearSelected(_groupId);
+                        _selected = true;
+                        notifyListeners(Listener::VALUE_CHANGED);
+                    }
+                }
             }
         }
         break;

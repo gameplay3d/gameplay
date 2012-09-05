@@ -139,7 +139,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     // Create batch for the font.
     SpriteBatch* batch = SpriteBatch::create(texture, __fontEffect, 128);
-	
+    
     // Release __fontEffect since the SpriteBatch keeps a reference to it
     SAFE_RELEASE(__fontEffect);
 

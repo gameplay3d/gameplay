@@ -638,7 +638,7 @@ Platform::~Platform()
 
 Platform* Platform::create(Game* game, void* attachToWindow)
 {
-	__attachToWindow = attachToWindow;
+    __attachToWindow = attachToWindow;
     Platform* platform = new Platform(game);
     
     return platform;
