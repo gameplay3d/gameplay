@@ -41,6 +41,12 @@ protected:
      */
     void render(float elapsedTime);
 
+    
+    void gestureSwipeEvent(int x, int y, int direction);
+    void gesturePinchEvent(int x, int y, float scale);
+    void gestureRotateEvent(int x, int y, float angle);
+    void gestureTapEvent(int x, int y);
+    void gestureTapDoubleEvent(int x, int y);
 };
 
 

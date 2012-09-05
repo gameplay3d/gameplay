@@ -32,14 +32,6 @@
 		4239DDEF157545A1005EA3F6 /* Joystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDEA157545A1005EA3F6 /* Joystick.h */; };
 		4239DDF4157545C1005EA3F6 /* MathUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDF1157545C1005EA3F6 /* MathUtil.h */; };
 		4239DDF5157545C1005EA3F6 /* MathUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 4239DDF1157545C1005EA3F6 /* MathUtil.h */; };
-		424CD6EF15F6F349009CA1B8 /* lua_Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CD6EB15F6F349009CA1B8 /* lua_Gesture.cpp */; };
-		424CD6F015F6F349009CA1B8 /* lua_Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CD6EB15F6F349009CA1B8 /* lua_Gesture.cpp */; };
-		424CD6F115F6F349009CA1B8 /* lua_Gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CD6EC15F6F349009CA1B8 /* lua_Gesture.h */; };
-		424CD6F215F6F349009CA1B8 /* lua_Gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CD6EC15F6F349009CA1B8 /* lua_Gesture.h */; };
-		424CD6F315F6F349009CA1B8 /* lua_GestureGestureEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CD6ED15F6F349009CA1B8 /* lua_GestureGestureEvent.cpp */; };
-		424CD6F415F6F349009CA1B8 /* lua_GestureGestureEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 424CD6ED15F6F349009CA1B8 /* lua_GestureGestureEvent.cpp */; };
-		424CD6F515F6F349009CA1B8 /* lua_GestureGestureEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CD6EE15F6F349009CA1B8 /* lua_GestureGestureEvent.h */; };
-		424CD6F615F6F349009CA1B8 /* lua_GestureGestureEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 424CD6EE15F6F349009CA1B8 /* lua_GestureGestureEvent.h */; };
 		4251B131152D049B002F6199 /* ScreenDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4251B12E152D049B002F6199 /* ScreenDisplayer.h */; };
 		4251B132152D049B002F6199 /* ScreenDisplayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4251B12E152D049B002F6199 /* ScreenDisplayer.h */; };
 		4251B133152D049B002F6199 /* ThemeStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B12F152D049B002F6199 /* ThemeStyle.cpp */; };
@@ -1618,7 +1610,7 @@
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
 		5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7631512516B00D176CD /* libz.dylib */; };
-		5BAF201F152F2A6D003E2AC3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF201E152F2A6D003E2AC3 /* libz.dylib */; };
+		5B74915B15F7CC9F00CFD43C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B74915A15F7CC9F00CFD43C /* libz.dylib */; };
 		5BAF2027152F2AF0003E2AC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */; };
 		5BAF2028152F2AF0003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */; };
 		5BAF2029152F2AF0003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2022152F2AF0003E2AC3 /* Foundation.framework */; };
@@ -1628,6 +1620,14 @@
 		5BAF202D152F2AF0003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2026152F2AF0003E2AC3 /* UIKit.framework */; };
 		5BB0823D14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
 		5BB0823E14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
+		5BBAD0F315F5251E004C9639 /* lua_Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */; };
+		5BBAD0F415F5251E004C9639 /* lua_Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */; };
+		5BBAD0F515F5251E004C9639 /* lua_Gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBAD0F015F5251D004C9639 /* lua_Gesture.h */; };
+		5BBAD0F615F5251E004C9639 /* lua_Gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBAD0F015F5251D004C9639 /* lua_Gesture.h */; };
+		5BBAD0F715F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAD0F115F5251D004C9639 /* lua_GestureGestureEvent.cpp */; };
+		5BBAD0F815F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAD0F115F5251D004C9639 /* lua_GestureGestureEvent.cpp */; };
+		5BBAD0F915F5251E004C9639 /* lua_GestureGestureEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBAD0F215F5251D004C9639 /* lua_GestureGestureEvent.h */; };
+		5BBAD0FA15F5251E004C9639 /* lua_GestureGestureEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBAD0F215F5251D004C9639 /* lua_GestureGestureEvent.h */; };
 		5BBE143E1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */; };
 		5BBE143F1513E400003FB362 /* PhysicsGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */; };
 		5BBE14401513E400003FB362 /* PhysicsGhostObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */; };
@@ -1716,10 +1716,6 @@
 		4239DDF1157545C1005EA3F6 /* MathUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MathUtil.h; path = src/MathUtil.h; sourceTree = SOURCE_ROOT; };
 		4239DDF2157545C1005EA3F6 /* MathUtil.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MathUtil.inl; path = src/MathUtil.inl; sourceTree = SOURCE_ROOT; };
 		4239DDF3157545C1005EA3F6 /* MathUtilNeon.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MathUtilNeon.inl; path = src/MathUtilNeon.inl; sourceTree = SOURCE_ROOT; };
-		424CD6EB15F6F349009CA1B8 /* lua_Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Gesture.cpp; sourceTree = "<group>"; };
-		424CD6EC15F6F349009CA1B8 /* lua_Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Gesture.h; sourceTree = "<group>"; };
-		424CD6ED15F6F349009CA1B8 /* lua_GestureGestureEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_GestureGestureEvent.cpp; sourceTree = "<group>"; };
-		424CD6EE15F6F349009CA1B8 /* lua_GestureGestureEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_GestureGestureEvent.h; sourceTree = "<group>"; };
 		4251B12E152D049B002F6199 /* ScreenDisplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScreenDisplayer.h; path = src/ScreenDisplayer.h; sourceTree = SOURCE_ROOT; };
 		4251B12F152D049B002F6199 /* ThemeStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThemeStyle.cpp; path = src/ThemeStyle.cpp; sourceTree = SOURCE_ROOT; };
 		4251B130152D049B002F6199 /* ThemeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeStyle.h; path = src/ThemeStyle.h; sourceTree = SOURCE_ROOT; };
@@ -2539,6 +2535,7 @@
 		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbis.a"; sourceTree = "<group>"; };
 		5B5DB93314C25BA5007755DB /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisenc.a"; sourceTree = "<group>"; };
 		5B5DB93414C25BA5007755DB /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisfile.a"; sourceTree = "<group>"; };
+		5B74915A15F7CC9F00CFD43C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5BAF201E152F2A6D003E2AC3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
@@ -2550,6 +2547,10 @@
 		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
 		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
+		5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Gesture.cpp; sourceTree = "<group>"; };
+		5BBAD0F015F5251D004C9639 /* lua_Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Gesture.h; sourceTree = "<group>"; };
+		5BBAD0F115F5251D004C9639 /* lua_GestureGestureEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_GestureGestureEvent.cpp; sourceTree = "<group>"; };
+		5BBAD0F215F5251D004C9639 /* lua_GestureGestureEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_GestureGestureEvent.h; sourceTree = "<group>"; };
 		5BBE143C1513E400003FB362 /* PhysicsGhostObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsGhostObject.cpp; path = src/PhysicsGhostObject.cpp; sourceTree = SOURCE_ROOT; };
 		5BBE143D1513E400003FB362 /* PhysicsGhostObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsGhostObject.h; path = src/PhysicsGhostObject.h; sourceTree = SOURCE_ROOT; };
 		5BC4E7D4150F8C3C00CBE1C0 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
@@ -2610,6 +2611,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B74915B15F7CC9F00CFD43C /* libz.dylib in Frameworks */,
 				5BAF2027152F2AF0003E2AC3 /* CoreGraphics.framework in Frameworks */,
 				5BAF2028152F2AF0003E2AC3 /* CoreMotion.framework in Frameworks */,
 				5BAF2029152F2AF0003E2AC3 /* Foundation.framework in Frameworks */,
@@ -2617,7 +2619,6 @@
 				5BAF202B152F2AF0003E2AC3 /* OpenGLES.framework in Frameworks */,
 				5BAF202C152F2AF0003E2AC3 /* QuartzCore.framework in Frameworks */,
 				5BAF202D152F2AF0003E2AC3 /* UIKit.framework in Frameworks */,
-				5BAF201F152F2A6D003E2AC3 /* libz.dylib in Frameworks */,
 				5B04C57514BFCFE100EB0071 /* libbullet.a in Frameworks */,
 				5B04C57614BFCFE100EB0071 /* libogg.a in Frameworks */,
 				5B04C57714BFCFE100EB0071 /* libvorbis.a in Frameworks */,
@@ -2634,6 +2635,7 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
+				5B74915A15F7CC9F00CFD43C /* libz.dylib */,
 				42B7FE7115B080EE002BB8C3 /* lua */,
 				5BC4E7D4150F8C3C00CBE1C0 /* res */,
 				4234D9A314686C52003031B3 /* src */,
@@ -3334,10 +3336,10 @@
 				42BCD38C15EFD0F300C0E076 /* lua_GamepadGamepadEvent.h */,
 				42BCD38D15EFD0F300C0E076 /* lua_GameState.cpp */,
 				42BCD38E15EFD0F300C0E076 /* lua_GameState.h */,
-				424CD6EB15F6F349009CA1B8 /* lua_Gesture.cpp */,
-				424CD6EC15F6F349009CA1B8 /* lua_Gesture.h */,
-				424CD6ED15F6F349009CA1B8 /* lua_GestureGestureEvent.cpp */,
-				424CD6EE15F6F349009CA1B8 /* lua_GestureGestureEvent.h */,
+				5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */,
+				5BBAD0F015F5251D004C9639 /* lua_Gesture.h */,
+				5BBAD0F115F5251D004C9639 /* lua_GestureGestureEvent.cpp */,
+				5BBAD0F215F5251D004C9639 /* lua_GestureGestureEvent.h */,
 				42BCD38F15EFD0F300C0E076 /* lua_Global.cpp */,
 				42BCD39015EFD0F300C0E076 /* lua_Global.h */,
 				42BCD39115EFD0F300C0E076 /* lua_Image.cpp */,
@@ -4032,8 +4034,8 @@
 				42BCD6C615EFD0F300C0E076 /* lua_VertexFormatElement.h in Headers */,
 				42BCD6CA15EFD0F300C0E076 /* lua_VertexFormatUsage.h in Headers */,
 				42BCD6CE15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */,
-				424CD6F115F6F349009CA1B8 /* lua_Gesture.h in Headers */,
-				424CD6F515F6F349009CA1B8 /* lua_GestureGestureEvent.h in Headers */,
+				5BBAD0F515F5251E004C9639 /* lua_Gesture.h in Headers */,
+				5BBAD0F915F5251E004C9639 /* lua_GestureGestureEvent.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4455,8 +4457,8 @@
 				42BCD6C715EFD0F300C0E076 /* lua_VertexFormatElement.h in Headers */,
 				42BCD6CB15EFD0F300C0E076 /* lua_VertexFormatUsage.h in Headers */,
 				42BCD6CF15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */,
-				424CD6F215F6F349009CA1B8 /* lua_Gesture.h in Headers */,
-				424CD6F615F6F349009CA1B8 /* lua_GestureGestureEvent.h in Headers */,
+				5BBAD0F615F5251E004C9639 /* lua_Gesture.h in Headers */,
+				5BBAD0FA15F5251E004C9639 /* lua_GestureGestureEvent.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4938,8 +4940,8 @@
 				42BCD6CC15EFD0F300C0E076 /* lua_VerticalLayout.cpp in Sources */,
 				42BCD6D015EFD0F300C0E076 /* PlatformLinux.cpp in Sources */,
 				42BCD6D415EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */,
-				424CD6EF15F6F349009CA1B8 /* lua_Gesture.cpp in Sources */,
-				424CD6F315F6F349009CA1B8 /* lua_GestureGestureEvent.cpp in Sources */,
+				5BBAD0F315F5251E004C9639 /* lua_Gesture.cpp in Sources */,
+				5BBAD0F715F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5357,8 +5359,8 @@
 				42BCD6CD15EFD0F300C0E076 /* lua_VerticalLayout.cpp in Sources */,
 				42BCD6D115EFD0F300C0E076 /* PlatformLinux.cpp in Sources */,
 				42BCD6D515EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */,
-				424CD6F015F6F349009CA1B8 /* lua_Gesture.cpp in Sources */,
-				424CD6F415F6F349009CA1B8 /* lua_GestureGestureEvent.cpp in Sources */,
+				5BBAD0F415F5251E004C9639 /* lua_Gesture.cpp in Sources */,
+				5BBAD0F815F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
