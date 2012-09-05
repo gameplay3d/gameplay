@@ -654,9 +654,9 @@ void Matrix::multiply(const Matrix& m)
 
 void Matrix::multiply(const Matrix& m1, const Matrix& m2, Matrix* dst)
 {
-	GP_ASSERT(dst);
+    GP_ASSERT(dst);
 
-	MathUtil::multiplyMatrix(m1.m, m2.m, dst->m);
+    MathUtil::multiplyMatrix(m1.m, m2.m, dst->m);
 }
 
 void Matrix::negate()

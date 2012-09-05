@@ -39,46 +39,46 @@ class LuaArray
 {
 public:
 
-	/**
-	 * Creates a LuaArray to store a single pointer value.
-	 */
-	LuaArray(T* param);
+    /**
+     * Creates a LuaArray to store a single pointer value.
+     */
+    LuaArray(T* param);
 
-	/**
-	 * Allocates a LuaArray to store an array of values.
-	 *
-	 * Individual items in the array can be set using the 
-	 * set(unsigned int, const T&) method.
-	 * 
-	 * @param count Number of elements to store in the parameter.
-	 */
-	LuaArray(int count);
+    /**
+     * Allocates a LuaArray to store an array of values.
+     *
+     * Individual items in the array can be set using the 
+     * set(unsigned int, const T&) method.
+     * 
+     * @param count Number of elements to store in the parameter.
+     */
+    LuaArray(int count);
 
-	/**
-	 * Copy construcotr.
-	 */
-	LuaArray(const LuaArray<T>& copy);
+    /**
+     * Copy construcotr.
+     */
+    LuaArray(const LuaArray<T>& copy);
 
-	/**
-	 * Destructor.
-	 */
-	~LuaArray();
+    /**
+     * Destructor.
+     */
+    ~LuaArray();
 
-	/**
-	 * Assignment operator.
-	 */
-	LuaArray<T>& operator = (const LuaArray<T>& p);
+    /**
+     * Assignment operator.
+     */
+    LuaArray<T>& operator = (const LuaArray<T>& p);
 
-	/**
-	 * Copies the value of the object pointed to by itemPtr into the specified
+    /**
+     * Copies the value of the object pointed to by itemPtr into the specified
      * index of this LuaArray's array.
-	 */
-	void set(unsigned int index, const T* itemPtr);
+     */
+    void set(unsigned int index, const T* itemPtr);
 
-	/**
-	 * Conversion operator from LuaArray to T*.
-	 */
-	operator T* () const;
+    /**
+     * Conversion operator from LuaArray to T*.
+     */
+    operator T* () const;
 
     /**
      * Overloades [] operator to get/set item value at index.
@@ -87,14 +87,14 @@ public:
 
 private:
 
-	struct Data
-	{
+    struct Data
+    {
         Data() : value(NULL), refCount(0) { }
-		T* value;
-		int refCount;
-	};
+        T* value;
+        int refCount;
+    };
 
-	Data* _data;
+    Data* _data;
 };
 
 /**

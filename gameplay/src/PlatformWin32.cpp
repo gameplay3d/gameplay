@@ -763,9 +763,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             DEVMODE dm;
             memset(&dm, 0, sizeof(dm));
             dm.dmSize= sizeof(dm);
-            dm.dmPelsWidth	= __width;
-            dm.dmPelsHeight	= __height;
-            dm.dmBitsPerPel	= 32;
+            dm.dmPelsWidth    = __width;
+            dm.dmPelsHeight    = __height;
+            dm.dmBitsPerPel    = 32;
             dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
             // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.

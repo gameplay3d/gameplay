@@ -23,7 +23,7 @@
         return LuaArray<type>((type*)NULL); \
     \
     /* Declare a LuaArray to store the values. */ \
-	LuaArray<type> arr(size); \
+    LuaArray<type> arr(size); \
     \
     /* Push the first key. */ \
     lua_pushnil(sc->_lua); \

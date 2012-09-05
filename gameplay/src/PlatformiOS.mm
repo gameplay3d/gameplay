@@ -51,7 +51,7 @@ int getKey(unichar keyCode);
 
 @interface View : UIView <UIKeyInput>
 {
-    EAGLContext* context;	
+    EAGLContext* context;
     CADisplayLink* displayLink;
     GLuint defaultFramebuffer;
     GLuint colorRenderbuffer;
@@ -237,7 +237,7 @@ int getKey(unichar keyCode);
 {
     if (interval >= 1)
     {
-        swapInterval = interval;		
+        swapInterval = interval;        
         if (updating)
         {
             [self stopUpdating];
@@ -555,7 +555,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application 
-{	
+{    
     [viewController startUpdating];
 }
 
@@ -565,7 +565,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application 
-{	
+{    
     [viewController stopUpdating];
 }
 
