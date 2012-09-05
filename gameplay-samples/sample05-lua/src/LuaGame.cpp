@@ -9,6 +9,7 @@ LuaGame::LuaGame()
 
 void LuaGame::initialize()
 {
+    this->registerGesture(Gesture::GESTURE_ANY_SUPPORTED);
 }
 
 void LuaGame::finalize()
@@ -34,17 +35,9 @@ void LuaGame::gesturePinchEvent(int x, int y, float scale)
     printf("Regonized Pinch Event: %d, %d, %f\n", x, y, scale);
 }
 
-void LuaGame::gestureRotateEvent(int x, int y, float angle)
-{
-    printf("Regonized Rotate Event: %d, %d, %f\n", x, y, angle);
-}
 
 void LuaGame::gestureTapEvent(int x, int y)
 {
     printf("Regonized Rotate Event: %d, %d\n", x, y);
 }
 
-void LuaGame::gestureTapDoubleEvent(int x, int y)
-{
-    printf("Regonized Double Tap Event: %d, %d\n", x, y);
-}
