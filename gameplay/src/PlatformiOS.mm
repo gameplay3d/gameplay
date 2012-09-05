@@ -988,7 +988,16 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }    
 
-void Platform::recognizeGesture(Gesture::GestureEvent evt)
+bool Platform::isGestureSupported(Gesture::GestureEvent evt)
+{
+    return false;
+}
+
+void Platform::registerGesture(Gesture::GestureEvent evt)
+{
+}
+
+void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
 }
 

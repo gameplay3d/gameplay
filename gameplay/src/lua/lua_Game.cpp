@@ -29,9 +29,7 @@ void luaRegister_Game()
         {"frame", lua_Game_frame},
         {"gamepadEvent", lua_Game_gamepadEvent},
         {"gesturePinchEvent", lua_Game_gesturePinchEvent},
-        {"gestureRotateEvent", lua_Game_gestureRotateEvent},
         {"gestureSwipeEvent", lua_Game_gestureSwipeEvent},
-        {"gestureTapDoubleEvent", lua_Game_gestureTapDoubleEvent},
         {"gestureTapEvent", lua_Game_gestureTapEvent},
         {"getAIController", lua_Game_getAIController},
         {"getAccelerometerValues", lua_Game_getAccelerometerValues},
@@ -51,6 +49,7 @@ void luaRegister_Game()
         {"getWidth", lua_Game_getWidth},
         {"hasMouse", lua_Game_hasMouse},
         {"isCursorVisible", lua_Game_isCursorVisible},
+        {"isGestureSupported", lua_Game_isGestureSupported},
         {"isInitialized", lua_Game_isInitialized},
         {"isMouseCaptured", lua_Game_isMouseCaptured},
         {"isMultiTouch", lua_Game_isMultiTouch},
@@ -58,7 +57,7 @@ void luaRegister_Game()
         {"menuEvent", lua_Game_menuEvent},
         {"mouseEvent", lua_Game_mouseEvent},
         {"pause", lua_Game_pause},
-        {"recognizeGesture", lua_Game_recognizeGesture},
+        {"registerGesture", lua_Game_registerGesture},
         {"resume", lua_Game_resume},
         {"run", lua_Game_run},
         {"schedule", lua_Game_schedule},
@@ -67,6 +66,7 @@ void luaRegister_Game()
         {"setMultiTouch", lua_Game_setMultiTouch},
         {"setViewport", lua_Game_setViewport},
         {"touchEvent", lua_Game_touchEvent},
+        {"unregisterGesture", lua_Game_unregisterGesture},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -418,52 +418,6 @@ int lua_Game_gesturePinchEvent(lua_State* state)
     return 0;
 }
 
-int lua_Game_gestureRotateEvent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 4:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                int param1 = (int)luaL_checkint(state, 2);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 4);
-
-                Game* instance = getInstance(state);
-                instance->gestureRotateEvent(param1, param2, param3);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Game_gestureRotateEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 4).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Game_gestureSwipeEvent(lua_State* state)
 {
     // Get the number of parameters.
@@ -503,48 +457,6 @@ int lua_Game_gestureSwipeEvent(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 4).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Game_gestureTapDoubleEvent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                int param1 = (int)luaL_checkint(state, 2);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                Game* instance = getInstance(state);
-                instance->gestureTapDoubleEvent(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Game_gestureTapDoubleEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -1350,6 +1262,47 @@ int lua_Game_isCursorVisible(lua_State* state)
     return 0;
 }
 
+int lua_Game_isGestureSupported(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
+
+                Game* instance = getInstance(state);
+                bool result = instance->isGestureSupported(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_isGestureSupported - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Game_isInitialized(lua_State* state)
 {
     // Get the number of parameters.
@@ -1624,7 +1577,7 @@ int lua_Game_pause(lua_State* state)
     return 0;
 }
 
-int lua_Game_recognizeGesture(lua_State* state)
+int lua_Game_registerGesture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1641,13 +1594,13 @@ int lua_Game_recognizeGesture(lua_State* state)
                 Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
 
                 Game* instance = getInstance(state);
-                instance->recognizeGesture(param1);
+                instance->registerGesture(param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_Game_recognizeGesture - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Game_registerGesture - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -2127,6 +2080,44 @@ int lua_Game_touchEvent(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_unregisterGesture(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 2));
+
+                Game* instance = getInstance(state);
+                instance->unregisterGesture(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_unregisterGesture - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
