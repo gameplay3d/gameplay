@@ -456,6 +456,11 @@ void Game::unregisterGesture(Gesture::GestureEvent evt)
     Platform::unregisterGesture(evt);
 }
 
+bool Game::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return Platform::isGestureRegistered(evt);
+}
+
 void Game::gestureSwipeEvent(int x, int y, int direction)
 {
 }
