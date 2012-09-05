@@ -1311,6 +1311,11 @@ void Platform::unregisterGesture(Gesture::GestureEvent evt)
         break;
     }
 }
+    
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return __gestureEventsProcessed.test(evt);
+}
 
 unsigned int Platform::getGamepadsConnected()
 {

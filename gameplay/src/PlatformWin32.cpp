@@ -1035,6 +1035,11 @@ void Platform::registerGesture(Gesture::GestureEvent evt)
 void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
 }
+    
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return false;
+}
 
 unsigned int Platform::getGamepadsConnected()
 {
