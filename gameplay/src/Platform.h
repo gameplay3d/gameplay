@@ -207,6 +207,13 @@ public:
      */
     static void unregisterGesture(Gesture::GestureEvent evt);
 
+    /**
+     * Tests if the specified gesture is registered for gesture recognition for the specified gesture event
+     *
+     * @param evt The gesture event to register to start recognizing events for.
+     */
+    static bool isGestureRegistered(Gesture::GestureEvent evt);
+    
     /** 
      * Gets the number of gamepad devices connected to the Platform.
      *

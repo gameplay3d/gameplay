@@ -603,13 +603,20 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 
 
 // Gesture support for Mac OS X Trackpads
-- (void)recognizeGesture:(Gesture::GestureEvent)evt {
-    if(evt == Gesture::GESTURE_NONE) _gestureEvents = 0;
-    else _gestureEvents = (_gestureEvents | evt);
+- (bool)isGestureRegistered: (Gesture::GestureEvent) evt {
+    return ((_gestureEvents & evt) == evt);
 }
+- (void)registerGesture: (Gesture::GestureEvent) evt {
+    _gestureEvents |= evt;
+}
+- (void)unregisterGesture: (Gesture::GestureEvent) evt {
+    _gestureEvents &= (~evt);
+}
+
+
 - (void)magnifyWithEvent:(NSEvent *)event
 {
-    if((_gestureEvents & Gesture::GESTURE_PINCH) == 0) return;
+    if([self isGestureRegistered:Gesture::GESTURE_PINCH] == false) return;
     
     NSSet *touches = [event touchesMatchingPhase:NSTouchPhaseAny  inView:nil];
     // Approximate the center by adding and averageing for now
@@ -627,7 +634,7 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 }
 - (void)swipeWithEvent:(NSEvent *)event
 {
-    if((_gestureEvents & Gesture::GESTURE_SWIPE) == 0) return;
+    if([self isGestureRegistered:Gesture::GESTURE_SWIPE] == false) return;
     /**
      * Gesture callback on Gesture::SWIPE events.
      *
@@ -641,23 +648,6 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
      * @see Gesture::SWIPE_DIRECTION_RIGHT
      */
     //virtual void gestureSwipeEvent(int x, int y, int direction);
-}
-
-- (void)rotateWithEvent:(NSEvent *)event
-{
-    if((_gestureEvents & Gesture::GESTURE_ROTATE) == 0) return;
-    NSSet *touches = [event touchesMatchingPhase:NSTouchPhaseAny  inView:nil];
-    // Approximate the center by adding and averageing for now
-    // Note this is centroid on the physical device be used for touching, not the display
-    float xavg = 0.0f;
-    float yavg = 0.0f;
-    for(NSTouch *t in touches) {
-        xavg += [t normalizedPosition].x;
-        yavg += [t normalizedPosition].y;
-    }
-    xavg /= [touches count];
-    yavg /= [touches count];
-    _game->gestureRotateEvent((int)xavg, (int)yavg, [event rotation]);
 }
 
 @end
@@ -941,17 +931,33 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
+    // TODO: Support Swipe and Tap
+    switch(evt)
+    {
+        case Gesture::GESTURE_PINCH:
+            return true;
+        default:
+            break;
+    }
     return false;
 }
 
 void Platform::registerGesture(Gesture::GestureEvent evt)
 {
+    [__view registerGesture:evt];
 }
 
 void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
-    [__view recognizeGesture:evt];
+    [__view unregisterGesture:evt];
 }
+  
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+     return [__view isGestureRegistered:evt];
+}
+
+    
 
 
 unsigned int Platform::getGamepadsConnected()
