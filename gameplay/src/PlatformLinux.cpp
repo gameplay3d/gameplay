@@ -426,10 +426,10 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
-    if( configCount == 0 || configs == 0 )	
-    {	
+    if( configCount == 0 || configs == 0 )    
+    {    
         perror( "glXChooseFBConfig" );
-        return NULL;	
+        return NULL;    
     }
 
     // Create the windows
@@ -494,11 +494,11 @@ void cleanupX11()
         glXMakeCurrent(__display, None, NULL);
 
         if (__context)
-     	    glXDestroyContext(__display, __context);
+             glXDestroyContext(__display, __context);
         if (__window)
-     	    XDestroyWindow(__display, __window);
+             XDestroyWindow(__display, __window);
 
-     	XCloseDisplay(__display);
+         XCloseDisplay(__display);
     }
 }
 
@@ -508,14 +508,14 @@ double timespec2millis(struct timespec *a)
     return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
-void updateWindowSize()	
-{	
-    GP_ASSERT(__display);	
+void updateWindowSize()    
+{    
+    GP_ASSERT(__display);    
     GP_ASSERT(__window);
-    XWindowAttributes windowAttrs;	
-    XGetWindowAttributes(__display, __window, &windowAttrs);  	
-    __windowSize[0] = windowAttrs.width;	
-    __windowSize[1] = windowAttrs.height;	
+    XWindowAttributes windowAttrs;    
+    XGetWindowAttributes(__display, __window, &windowAttrs);      
+    __windowSize[0] = windowAttrs.width;    
+    __windowSize[1] = windowAttrs.height;    
 }
 
 int Platform::enterMessagePump()
@@ -540,9 +540,9 @@ int Platform::enterMessagePump()
     // Run the game.
     _game->run();
 
-    // Setup select for message handling (to allow non-blocking)	
+    // Setup select for message handling (to allow non-blocking)    
     int x11_fd = ConnectionNumber(__display);
-	
+    
     pollfd xpolls[1];
     xpolls[0].fd = x11_fd;
     xpolls[0].events = POLLIN|POLLPRI;

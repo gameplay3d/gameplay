@@ -5,7 +5,7 @@ namespace gameplay
 {
 static std::vector<RadioButton*> __radioButtons;
 
-RadioButton::RadioButton() : _selected(false)
+RadioButton::RadioButton() : _selected(false), _image(NULL)
 {
 }
 
@@ -102,16 +102,16 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
         {
             if (_contactIndex == (int) _contactIndex && _state == Control::ACTIVE)
             {
-				if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-					y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-				{
-					if (!_selected)
-					{
-						RadioButton::clearSelected(_groupId);
-						_selected = true;
-						notifyListeners(Listener::VALUE_CHANGED);
-					}
-				}
+                if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                    y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+                {
+                    if (!_selected)
+                    {
+                        RadioButton::clearSelected(_groupId);
+                        _selected = true;
+                        notifyListeners(Listener::VALUE_CHANGED);
+                    }
+                }
             }
         }
         break;
@@ -123,7 +123,7 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
 void RadioButton::clearSelected(const std::string& groupId)
 {
     std::vector<RadioButton*>::const_iterator it;
-    for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
+    for (it = __radioButtons.begin(); it < __radioButtons.end(); ++it)
     {
         RadioButton* radioButton = *it;
         GP_ASSERT(radioButton);

@@ -56,7 +56,7 @@ private:
             URL = 128
         };
 
-        SceneNodeProperty(Type type, std::string url, int index);
+        SceneNodeProperty(Type type, const std::string& url, int index);
 
         Type _type;
         std::string _url;

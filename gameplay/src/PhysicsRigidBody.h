@@ -280,6 +280,8 @@ public:
 
     /**
      * Applies the given force to the rigid body (optionally, from the given relative position).
+     * Note that the total force applied depends on the duration of the next frame.
+     * If you want to apply an "impulse" irrespective of the frame duration, consider using applyImpulse.
      * 
      * @param force The force to be applied.
      * @param relativePosition The relative position from which to apply the force.

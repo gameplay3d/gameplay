@@ -744,20 +744,20 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
     case Touch::TOUCH_RELEASE:
         if (_contactIndex == (int)contactIndex)
         {
-			_contactIndex = INVALID_CONTACT_INDEX;
+            _contactIndex = INVALID_CONTACT_INDEX;
 
-			// Always trigger Listener::RELEASE
-			notifyListeners(Listener::RELEASE);
+            // Always trigger Listener::RELEASE
+            notifyListeners(Listener::RELEASE);
 
-			// Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-			{
-				// Leave this control in the FOCUS state.
-				notifyListeners(Listener::CLICK);
-			}
+            // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
+            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+            {
+                // Leave this control in the FOCUS state.
+                notifyListeners(Listener::CLICK);
+            }
 
-			return _consumeInputEvents;
+            return _consumeInputEvents;
         }
         break;
     }
