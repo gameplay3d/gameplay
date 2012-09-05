@@ -1023,9 +1023,17 @@ void Platform::displayKeyboard(bool display)
     // Do nothing.
 }
 
-void Platform::recognizeGesture(Gesture::GestureEvent evt)
+bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    // Do nothing
+    return false;
+}
+
+void Platform::registerGesture(Gesture::GestureEvent evt)
+{
+}
+
+void Platform::unregisterGesture(Gesture::GestureEvent evt)
+{
 }
 
 unsigned int Platform::getGamepadsConnected()

@@ -187,11 +187,25 @@ public:
     static void displayKeyboard(bool display);
 
     /**
+     * Tests if the specified gesture is supported on the platform.
+     *
+     * @return true if it is supported; false if not supported.
+     */
+    static bool isGestureSupported(Gesture::GestureEvent evt);
+
+    /**
      * Registers the platform for gesture recognition for the specified gesture event.
      *
-     * @param evt The gesture event to recognize or Gesture::NONE to disable gesture recognition events.
+     * @param evt The gesture event to register to start recognizing events for.
      */
-    static void recognizeGesture(Gesture::GestureEvent evt);
+    static void registerGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Registers the platform for gesture recognition for the specified gesture event.
+     *
+     * @param evt The gesture event to register to start recognizing events for.
+     */
+    static void unregisterGesture(Gesture::GestureEvent evt);
 
     /** 
      * Gets the number of gamepad devices connected to the Platform.
