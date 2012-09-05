@@ -38,12 +38,13 @@ void luaRegister_Platform()
         {"isCursorVisible", lua_Platform_static_isCursorVisible},
         {"isGamepadConnected", lua_Platform_static_isGamepadConnected},
         {"isGamepadJoystickActive", lua_Platform_static_isGamepadJoystickActive},
+        {"isGestureSupported", lua_Platform_static_isGestureSupported},
         {"isMouseCaptured", lua_Platform_static_isMouseCaptured},
         {"isMultiTouch", lua_Platform_static_isMultiTouch},
         {"isVsync", lua_Platform_static_isVsync},
         {"keyEventInternal", lua_Platform_static_keyEventInternal},
         {"mouseEventInternal", lua_Platform_static_mouseEventInternal},
-        {"recognizeGesture", lua_Platform_static_recognizeGesture},
+        {"registerGesture", lua_Platform_static_registerGesture},
         {"setAbsoluteTime", lua_Platform_static_setAbsoluteTime},
         {"setCursorVisible", lua_Platform_static_setCursorVisible},
         {"setMouseCaptured", lua_Platform_static_setMouseCaptured},
@@ -53,6 +54,7 @@ void luaRegister_Platform()
         {"sleep", lua_Platform_static_sleep},
         {"swapBuffers", lua_Platform_static_swapBuffers},
         {"touchEventInternal", lua_Platform_static_touchEventInternal},
+        {"unregisterGesture", lua_Platform_static_unregisterGesture},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -842,6 +844,45 @@ int lua_Platform_static_isGamepadJoystickActive(lua_State* state)
     return 0;
 }
 
+int lua_Platform_static_isGestureSupported(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 1));
+
+                bool result = Platform::isGestureSupported(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Platform_static_isGestureSupported - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Platform_static_isMouseCaptured(lua_State* state)
 {
     // Get the number of parameters.
@@ -1017,7 +1058,7 @@ int lua_Platform_static_mouseEventInternal(lua_State* state)
     return 0;
 }
 
-int lua_Platform_static_recognizeGesture(lua_State* state)
+int lua_Platform_static_registerGesture(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1032,13 +1073,13 @@ int lua_Platform_static_recognizeGesture(lua_State* state)
                 // Get parameter 1 off the stack.
                 Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 1));
 
-                Platform::recognizeGesture(param1);
+                Platform::registerGesture(param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_Platform_static_recognizeGesture - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Platform_static_registerGesture - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1360,6 +1401,42 @@ int lua_Platform_static_touchEventInternal(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_unregisterGesture(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Gesture::GestureEvent param1 = (Gesture::GestureEvent)lua_enumFromString_GestureGestureEvent(luaL_checkstring(state, 1));
+
+                Platform::unregisterGesture(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Platform_static_unregisterGesture - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

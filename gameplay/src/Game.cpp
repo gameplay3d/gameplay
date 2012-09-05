@@ -441,9 +441,19 @@ bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
-void Game::recognizeGesture(Gesture::GestureEvent evt)
+bool Game::isGestureSupported(Gesture::GestureEvent evt)
 {
-    Platform::recognizeGesture(evt);
+    return Platform::isGestureSupported(evt);
+}
+
+void Game::registerGesture(Gesture::GestureEvent evt)
+{
+    Platform::registerGesture(evt);
+}
+
+void Game::unregisterGesture(Gesture::GestureEvent evt)
+{
+    Platform::unregisterGesture(evt);
 }
 
 void Game::gestureSwipeEvent(int x, int y, int direction)
@@ -454,15 +464,7 @@ void Game::gesturePinchEvent(int x, int y, float scale)
 {
 }
 
-void Game::gestureRotateEvent(int x, int y, float angle)
-{
-}
-
 void Game::gestureTapEvent(int x, int y)
-{
-}
-
-void Game::gestureTapDoubleEvent(int x, int y)
 {
 }
 
