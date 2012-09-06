@@ -496,7 +496,7 @@ void GPBFile::decomposeTransformAnimationChannel(Animation* animation, Animation
             ++oneCount;
         else
         {
-            LOG(4, "Rotation not identity: %d\n", i);
+            LOG(4, "Rotation not identity: %u\n", i);
             Quaternion q(x, y, z, w);
             Vector3 axis;
             float angle = q.toAxisAngle(&axis);

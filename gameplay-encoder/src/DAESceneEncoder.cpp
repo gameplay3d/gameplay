@@ -287,10 +287,9 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
 
     // Find the <visual_scene> element within the <scene>
     const domCOLLADA::domSceneRef& domScene = _dom->getScene();
-    daeElement* scene = NULL;
     if (domScene && domScene->getInstance_visual_scene())
     {
-        scene = getVisualScene(domScene);
+        daeElement* scene = getVisualScene(domScene);
         if (scene)
         {
             if (nodeId == NULL)
@@ -1317,7 +1316,7 @@ void DAESceneEncoder::loadSkeleton(domNode* rootNode, MeshSkin* skin)
     // Resolve and set joints array for skin
     std::vector<Node*> _joints;
     const std::vector<std::string>& jointNames = skin->getJointNames();
-    for (std::vector<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); i++)
+    for (std::vector<std::string>::const_iterator i = jointNames.begin(); i != jointNames.end(); ++i)
     {
         Object* obj = _gamePlayFile.getFromRefTable(*i);
         if (obj && obj->getTypeId() == Object::NODE_ID)
@@ -1369,7 +1368,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
 
             // Go through the joint list and convert them from sid to id because the sid information is
             // lost when converting to the gameplay binary format.
-            for (std::vector<std::string>::iterator i = list.begin(); i != list.end(); i++)
+            for (std::vector<std::string>::iterator i = list.begin(); i != list.end(); ++i)
             {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
@@ -1388,7 +1387,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             jointCount = list.size();
             _jointInverseBindPoseMatrices.reserve(jointCount);
             unsigned int j = 0;
-            for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); i++)
+            for (std::vector<std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
             {
                 _jointLookupTable[*i] = j++;
             }

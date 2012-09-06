@@ -538,7 +538,7 @@ void findChannelsTargetingJoints(const domSourceRef& source, std::list<domChanne
 {
     std::vector<std::string> jointNames;
     getJointNames(source, jointNames);
-    for (std::vector<std::string>::iterator i = jointNames.begin(); i != jointNames.end(); i++)
+    for (std::vector<std::string>::iterator i = jointNames.begin(); i != jointNames.end(); ++i)
     {
         daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
         daeElement* element = resolver.getElement();
