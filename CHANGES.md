@@ -1,3 +1,7 @@
+## v1.5.0
+-- Adds gameplay-tests project as a test app for various engine features. More tests will be added in the future.
+-- Fixes the texture coordinates of Mesh::createQuad(float x, float y, float width, float height).
+
 ## v1.4.0
 
 - Lua script bindings for all gameplay interfaces.

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="res">
+    </Filter>
+    <Filter Include="src">
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game.config" />
+    <None Include="icon.png" />
+    <None Include="bar-descriptor.xml" />
+    <None Include="res\box.dae">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\colored.frag">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\colored.vert">
+      <Filter>res</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\TestsGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DrawTriangleTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshPrimitiveTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CreateSceneTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TriangleBatchTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio3DTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Grid.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FirstPersonCamera.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadSceneTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteBatchTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsConstraintTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\TestsGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DrawTriangleTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshPrimitiveTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CreateSceneTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TriangleBatchTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Audio3DTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Grid.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FirstPersonCamera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoadSceneTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteBatchTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsConstraintTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
