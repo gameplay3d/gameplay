@@ -222,10 +222,10 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             penY = row * rowSize;
             if (penY + rowSize > (int)imageHeight)
             {
-                LOG(1, "Image size exceeded!");
-               return -1;
+                free(imageBuffer);
+				LOG(1, "Image size exceeded!");
+				return -1;
             }
-
         }
         
         // penY should include the glyph offsets.
@@ -306,7 +306,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         std::string pgmFilePath = getFilenameNoExt(outFilePath);
         pgmFilePath.append(".pgm");
         FILE *imageFp = fopen(pgmFilePath.c_str(), "wb");
-        fprintf(imageFp, "P5 %d %d 255\n", imageWidth, imageHeight);
+        fprintf(imageFp, "P5 %u %u 255\n", imageWidth, imageHeight);
         fwrite((const char *)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, imageFp);
         fclose(imageFp);
     }

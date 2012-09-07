@@ -28,7 +28,7 @@ void Mesh::writeBinary(FILE* file)
     Object::writeBinary(file);
     // vertex formats
     write(_vertexFormat.size(), file);
-    for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); i++)
+    for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); ++i)
     {
         i->writeBinary(file);
     }
@@ -74,7 +74,7 @@ void Mesh::writeText(FILE* file)
     // for each VertexFormat
     if (vertices.size() > 0 )
     {
-        for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); i++)
+        for (std::vector<VertexElement>::iterator i = _vertexFormat.begin(); i != _vertexFormat.end(); ++i)
         {
             i->writeText(file);
         }
