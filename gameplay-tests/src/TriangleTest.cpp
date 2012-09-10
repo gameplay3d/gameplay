@@ -1,8 +1,8 @@
-#include "DrawTriangleTest.h"
+#include "TriangleTest.h"
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Draw Triangle", DrawTriangleTest, 1);
+    ADD_TEST("Graphics", "Draw Triangle", TriangleTest, 1);
 #endif
 
 /**
@@ -41,13 +41,13 @@ static Mesh* createTriangleMesh()
     return mesh;
 }
 
-DrawTriangleTest::DrawTriangleTest()
+TriangleTest::TriangleTest()
     : _font(NULL), _model(NULL), _spinDirection(-1.0f)
 {
     
 }
 
-void DrawTriangleTest::initialize()
+void TriangleTest::initialize()
 {
     // Create the font for drawing the framerate.
     _font = Font::create("res/common/arial18.gpb");
@@ -68,20 +68,20 @@ void DrawTriangleTest::initialize()
     _model->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
 }
 
-void DrawTriangleTest::finalize()
+void TriangleTest::finalize()
 {
     // Model and font are reference counted and should be released before closing this test.
     SAFE_RELEASE(_model);
     SAFE_RELEASE(_font);
 }
 
-void DrawTriangleTest::update(float elapsedTime)
+void TriangleTest::update(float elapsedTime)
 {
     // Update the rotation of the triangle. The speed is 180 degrees per second.
     _worldViewProjectionMatrix.rotateZ( _spinDirection * MATH_PI * elapsedTime * 0.001f);
 }
 
-void DrawTriangleTest::render(float elapsedTime)
+void TriangleTest::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
@@ -93,7 +93,7 @@ void DrawTriangleTest::render(float elapsedTime)
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
-void DrawTriangleTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void TriangleTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     switch (evt)
     {

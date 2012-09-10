@@ -167,47 +167,42 @@
     </None>
     <None Include="game.config" />
     <None Include="icon.png" />
-    <None Include="res\box.dae" />
-    <None Include="res\box.gpb" />
-    <None Include="res\box.material" />
-    <None Include="res\colored.frag" />
-    <None Include="res\colored.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio3DTest.cpp" />
     <ClCompile Include="src\CreateSceneTest.cpp" />
-    <ClCompile Include="src\DrawTriangleTest.cpp" />
+    <ClCompile Include="src\TriangleTest.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\InputTest.cpp" />
     <ClCompile Include="src\LoadSceneTest.cpp" />
     <ClCompile Include="src\MeshPrimitiveTest.cpp" />
     <ClCompile Include="src\PhysicsConstraintTest.cpp" />
-    <ClCompile Include="src\PhysicsTest.cpp" />
+    <ClCompile Include="src\PhysicsSceneTest.cpp" />
     <ClCompile Include="src\SpriteBatchTest.cpp" />
     <ClCompile Include="src\Test.cpp" />
     <ClCompile Include="src\TestsGame.cpp" />
     <ClCompile Include="src\TextTest.cpp" />
     <ClCompile Include="src\TextureTest.cpp" />
-    <ClCompile Include="src\TriangleBatchTest.cpp" />
+    <ClCompile Include="src\MeshBatchTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio3DTest.h" />
     <ClInclude Include="src\CreateSceneTest.h" />
-    <ClInclude Include="src\DrawTriangleTest.h" />
+    <ClInclude Include="src\TriangleTest.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\InputTest.h" />
     <ClInclude Include="src\LoadSceneTest.h" />
     <ClInclude Include="src\MeshPrimitiveTest.h" />
     <ClInclude Include="src\PhysicsConstraintTest.h" />
-    <ClInclude Include="src\PhysicsTest.h" />
+    <ClInclude Include="src\PhysicsSceneTest.h" />
     <ClInclude Include="src\SpriteBatchTest.h" />
     <ClInclude Include="src\Test.h" />
     <ClInclude Include="src\TestsGame.h" />
     <ClInclude Include="src\TextTest.h" />
     <ClInclude Include="src\TextureTest.h" />
-    <ClInclude Include="src\TriangleBatchTest.h" />
+    <ClInclude Include="src\MeshBatchTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,11 +1,11 @@
-#include "PhysicsTest.h"
+#include "PhysicsSceneTest.h"
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Physics", "Physics Test", PhysicsTest, 1);
+    ADD_TEST("Physics", "Physics Scene", PhysicsSceneTest, 1);
 #endif
 
-PhysicsTest::PhysicsTest()
+PhysicsSceneTest::PhysicsSceneTest()
     : _font(NULL), _scene(NULL), _lightNode(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false)
 {
     const char* paths[] = {"res/common/physics.physics#ball","res/common/physics.physics#box", "res/common/physics.physics#capsule"};
@@ -16,7 +16,7 @@ PhysicsTest::PhysicsTest()
     _colors.assign(colors, colors + 3);
 }
 
-void PhysicsTest::initialize()
+void PhysicsSceneTest::initialize()
 {
     // Create the font for drawing the framerate.
     _font = Font::create("res/common/arial18.gpb");
@@ -25,26 +25,26 @@ void PhysicsTest::initialize()
     // Use the aspect ratio of the display instead of the aspect ratio defined in the scene file.
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
     _lightNode = _scene->findNode("directionalLight");
-    _scene->visit(this, &PhysicsTest::bindLights);
+    _scene->visit(this, &PhysicsSceneTest::bindLights);
 }
 
-void PhysicsTest::finalize()
+void PhysicsSceneTest::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
 }
 
-void PhysicsTest::update(float elapsedTime)
+void PhysicsSceneTest::update(float elapsedTime)
 {
 }
 
-void PhysicsTest::render(float elapsedTime)
+void PhysicsSceneTest::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0);
 
     // Visit all the nodes in the scene, drawing the models/mesh.
-    _scene->visit(this, &PhysicsTest::drawScene);
+    _scene->visit(this, &PhysicsSceneTest::drawScene);
 
     if (_drawDebug == 1)
     {
@@ -62,7 +62,7 @@ void PhysicsTest::render(float elapsedTime)
     _font->finish();
 }
 
-void PhysicsTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     static const int optionWidth = 100;
     switch (evt)
@@ -112,7 +112,7 @@ void PhysicsTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
     };
 }
 
-void PhysicsTest::keyEvent(Keyboard::KeyEvent evt, int key)
+void PhysicsSceneTest::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
     {
@@ -130,7 +130,7 @@ void PhysicsTest::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 }
 
-bool PhysicsTest::drawScene(Node* node)
+bool PhysicsSceneTest::drawScene(Node* node)
 {
     Model* model = node->getModel();
     if (model)
@@ -138,7 +138,7 @@ bool PhysicsTest::drawScene(Node* node)
     return true;
 }
 
-bool PhysicsTest::bindLights(Node* node)
+bool PhysicsSceneTest::bindLights(Node* node)
 {
     Model* model = node->getModel();
     if (model)
@@ -169,7 +169,7 @@ bool PhysicsTest::bindLights(Node* node)
     return true;
 }
 
-void PhysicsTest::fireProjectile(const Ray& ray)
+void PhysicsSceneTest::fireProjectile(const Ray& ray)
 {
     Node* clone = _scene->findNode(_nodeIds[_objectType])->clone();
     clone->setRotation(Quaternion::identity());
@@ -204,7 +204,7 @@ void PhysicsTest::fireProjectile(const Ray& ray)
     clone->release();
 }
 
-void PhysicsTest::incrementDebugDraw()
+void PhysicsSceneTest::incrementDebugDraw()
 {
     _drawDebug = (_drawDebug + 1) % 2;
 }

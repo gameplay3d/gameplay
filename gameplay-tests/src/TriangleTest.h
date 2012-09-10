@@ -1,15 +1,15 @@
-#ifndef DrawTriangleTest_H_
-#define DrawTriangleTest_H_
+#ifndef TriangleTest_H_
+#define TriangleTest_H_
 
 #include "gameplay.h"
 #include "Test.h"
 
 using namespace gameplay;
 
-class DrawTriangleTest : public Test
+class TriangleTest : public Test
 {
 public:
-    DrawTriangleTest();
+    TriangleTest();
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
