@@ -1,15 +1,15 @@
-#ifndef TriangleBatchTest_H_
-#define TriangleBatchTest_H_
+#ifndef MeshBatchTest_H_
+#define MeshBatchTest_H_
 
 #include "gameplay.h"
 #include "Test.h"
 
 using namespace gameplay;
 
-class TriangleBatchTest : public Test
+class MeshBatchTest : public Test
 {
 public:
-    TriangleBatchTest();
+    MeshBatchTest();
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 protected:
@@ -33,7 +33,7 @@ private:
     };
 
     Font* _font;
-    MeshBatch* _triangleBatch;
+    MeshBatch* _meshBatch;
     Matrix _worldViewProjectionMatrix;
     std::vector<Vertex> _vertices;
 };

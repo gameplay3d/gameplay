@@ -5,62 +5,29 @@
     </Filter>
     <Filter Include="src">
     </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{c35d9ec0-a966-49e8-af48-14cbcb2d6818}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\box.dae">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\box.gpb">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\box.material">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\colored.frag">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\colored.vert">
-      <Filter>res</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\TestsGame.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Test.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DrawTriangleTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\MeshPrimitiveTest.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\CreateSceneTest.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\TriangleBatchTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Audio3DTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Grid.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FirstPersonCamera.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\InputTest.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\LoadSceneTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsTest.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TextTest.h">
@@ -75,42 +42,42 @@
     <ClInclude Include="src\PhysicsConstraintTest.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Grid.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FirstPersonCamera.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestsGame.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshBatchTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSceneTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TriangleTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\TestsGame.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Test.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DrawTriangleTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\MeshPrimitiveTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\CreateSceneTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\TriangleBatchTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Audio3DTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Grid.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FirstPersonCamera.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\InputTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\LoadSceneTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PhysicsTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TextTest.cpp">
@@ -123,6 +90,27 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PhysicsConstraintTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Grid.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FirstPersonCamera.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestsGame.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshBatchTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSceneTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TriangleTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,15 +1,15 @@
-#ifndef PhysicsTest_H_
-#define PhysicsTest_H_
+#ifndef PhysicsSceneTest_H_
+#define PhysicsSceneTest_H_
 
 #include "gameplay.h"
 #include "Test.h"
 
 using namespace gameplay;
 
-class PhysicsTest : public Test
+class PhysicsSceneTest : public Test
 {
 public:
-    PhysicsTest();
+    PhysicsSceneTest();
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
