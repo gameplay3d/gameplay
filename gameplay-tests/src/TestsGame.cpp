@@ -209,12 +209,12 @@ void TestsGame::drawTextMenu()
 
     static const int INDENT = 40;
     int fontHeight = _font->getSize();
-    int x = 0;
-    int y = 0;
+    int x = 10;
+    int y = 10;
     _font->start();
     for (size_t i = 0; i < _categories->size(); ++i)
     {
-        _font->drawText((*_categories)[i].c_str(), x, y, Vector4::one(), fontHeight);
+        _font->drawText((*_categories)[i].c_str(), x, y, Vector4(0, 0.5f, 1, 1), fontHeight);
         y += fontHeight;
         for (TestRecordList::iterator it = (*_tests)[i].begin(); it != (*_tests)[i].end(); ++it)
         {
