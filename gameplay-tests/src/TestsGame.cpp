@@ -79,7 +79,7 @@ void TestsGame::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (_activeTest)
     {
-        if (key == Keyboard::KEY_MENU || (evt == Keyboard::KEY_CHAR && (key == Keyboard::KEY_ESCAPE)))
+        if (key == Keyboard::KEY_MENU || (evt == Keyboard::KEY_PRESS && (key == Keyboard::KEY_ESCAPE)))
         {
             // Pressing escape exits the active test
             exitActiveTest();

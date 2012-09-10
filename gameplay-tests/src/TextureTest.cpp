@@ -14,7 +14,8 @@ Node* addQuadModelAndNode(Scene* scene, Mesh* mesh)
     return node;
 }
 
-Node* addQuadModelAndNode(Scene* scene, float x, float y, float width, float height, float s1 = 0.0f, float t1 = 0.0f, float s2 = 1.0f, float t2 = 1.0f)
+Node* addQuadModelAndNode(Scene* scene, float x, float y, float width, float height, 
+                          float s1 = 0.0f, float t1 = 0.0f, float s2 = 1.0f, float t2 = 1.0f)
 {
     Mesh* mesh = Mesh::createQuad(x, y, width, height, s1, t1, s2, t2);
     Node* node = addQuadModelAndNode(scene, mesh);

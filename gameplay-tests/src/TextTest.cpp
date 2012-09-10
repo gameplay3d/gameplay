@@ -130,7 +130,7 @@ void TextTest::render(float elapsedTime)
         // Test viewport versions.
         gameplay::Rectangle area;
         _font->measureText(_testString.c_str(), _viewport, size, &area, _alignment, _wrap, _ignoreClip);
-        _font->drawText(_testString.c_str(), _useViewport? _viewport : area, Vector4::fromColor(0xff0000ff), size, _alignment, _wrap, _rightToLeft);
+        _font->drawText(_testString.c_str(), _useViewport? _viewport : area, Vector4::fromColor(0xffffffff), size, _alignment, _wrap, _rightToLeft);
     
         _font->drawText("'", _viewport.x, _viewport.y, Vector4::fromColor(0x00ff00ff), size);
         _font->drawText(".", _viewport.x, _viewport.y + _viewport.height, Vector4::fromColor(0x00ff00ff), size);

@@ -5,6 +5,9 @@
       location = "group:gameplay/gameplay.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:gameplay-tests/gameplay-tests.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:gameplay-samples/sample00-mesh/sample00-mesh.xcodeproj">
    </FileRef>
    <FileRef
