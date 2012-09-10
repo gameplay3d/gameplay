@@ -28,15 +28,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample00-mesh", "gameplay-s
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample05-lua", "gameplay-samples\sample05-lua\sample05-lua.vcxproj", "{C220DB61-B43A-9628-54DF-7285E1F597C8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample05-lua", "gameplay-samples\sample05-lua\sample05-lua.vcxproj", "{C6121A62-AA46-BA6D-A1CE-8000544456AA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-tests", "gameplay-tests\gameplay-tests.vcxproj", "{F66B0042-1F98-C080-F6FA-D41B855D4FC6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-tests", "gameplay-tests\gameplay-tests.vcxproj", "{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,18 +83,24 @@ Global
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.DebugMem|Win32.Build.0 = DebugMem|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.ActiveCfg = Release|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.Build.0 = Release|Win32
-		{C220DB61-B43A-9628-54DF-7285E1F597C8}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C220DB61-B43A-9628-54DF-7285E1F597C8}.Debug|Win32.Build.0 = Debug|Win32
-		{C220DB61-B43A-9628-54DF-7285E1F597C8}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{C220DB61-B43A-9628-54DF-7285E1F597C8}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{C220DB61-B43A-9628-54DF-7285E1F597C8}.Release|Win32.ActiveCfg = Release|Win32
-		{C220DB61-B43A-9628-54DF-7285E1F597C8}.Release|Win32.Build.0 = Release|Win32
-		{F66B0042-1F98-C080-F6FA-D41B855D4FC6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F66B0042-1F98-C080-F6FA-D41B855D4FC6}.Debug|Win32.Build.0 = Debug|Win32
-		{F66B0042-1F98-C080-F6FA-D41B855D4FC6}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{F66B0042-1F98-C080-F6FA-D41B855D4FC6}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{F66B0042-1F98-C080-F6FA-D41B855D4FC6}.Release|Win32.ActiveCfg = Release|Win32
-		{F66B0042-1F98-C080-F6FA-D41B855D4FC6}.Release|Win32.Build.0 = Release|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Debug|Win32.Build.0 = Debug|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.DebugMem|Win32.Build.0 = DebugMem|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Release|Win32.ActiveCfg = Release|Win32
+		{C6121A62-AA46-BA6D-A1CE-8000544456AA}.Release|Win32.Build.0 = Release|Win32
+		{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}.Debug|Win32.Build.0 = Debug|Win32
+		{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}.DebugMem|Win32.Build.0 = DebugMem|Win32
+		{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}.Release|Win32.ActiveCfg = Release|Win32
+		{D70B295E-A2FF-2CBB-737E-3876E8AF77F6}.Release|Win32.Build.0 = Release|Win32
+		{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}.Debug|Win32.Build.0 = Debug|Win32
+		{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}.DebugMem|Win32.ActiveCfg = Debug|Win32
+		{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}.DebugMem|Win32.Build.0 = Debug|Win32
+		{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}.Release|Win32.ActiveCfg = Release|Win32
+		{D00232CF-A4A1-45A5-9E74-6CB86B8F2A87}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
