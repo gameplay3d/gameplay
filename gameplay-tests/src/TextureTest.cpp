@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Texture Modes", TextureTest, 6);
+    ADD_TEST("Graphics", "Textures", TextureTest, 6);
 #endif
 
 Node* addQuadModelAndNode(Scene* scene, Mesh* mesh)

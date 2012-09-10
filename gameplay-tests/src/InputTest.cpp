@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Input", "Input test", InputTest, 1);
+    ADD_TEST("Input", "Basic Input", InputTest, 1);
 #endif
 
 /**

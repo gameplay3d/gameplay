@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Physics", "Physics Constraint Test", PhysicsConstraintTest, 1);
+    ADD_TEST("Physics", "Physics Constraints", PhysicsConstraintTest, 2);
 #endif
 
 PhysicsConstraintTest::PhysicsConstraintTest()
