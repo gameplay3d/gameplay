@@ -49,8 +49,8 @@ void InputTest::render(float elapsedTime)
     unsigned int width, height;
     char buffer[50];
     _font->start();
-    const size_t size = _touchPoints.size();
-    for (size_t i = 0; i < size; ++i)
+    const unsigned int size = _touchPoints.size();
+    for (unsigned int i = 0; i < size; ++i)
     {
         sprintf(buffer, "%u", i);
         _font->measureText(buffer, _font->getSize(), &width, &height);
