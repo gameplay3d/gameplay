@@ -1,0 +1,64 @@
+material colored
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/colored.vert
+            fragmentShader = res/shaders/colored.frag
+
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material floor : colored
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.5, 0.5, 0.5, 1
+        }
+    }
+}
+
+material green : colored
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0.1, 0.6, 0.1, 1
+        }
+    }
+}
+
+material blue : colored
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 0, 0, 1, 1
+        }
+    }
+}
+
+material red : colored
+{
+    technique
+    {
+        pass
+        {
+            u_diffuseColor = 1, 0, 0, 1
+        }
+    }
+}

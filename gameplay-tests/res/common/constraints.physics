@@ -1,0 +1,54 @@
+collisionObject ball
+{
+    type = RIGID_BODY
+    shape = SPHERE
+    mass = 1.0
+    friction = 0.5
+    restitution = 0.5
+    linearDamping = 0.1
+    angularDamping = 0.5
+}
+
+collisionObject box
+{
+    type = RIGID_BODY
+    shape = BOX
+    mass = 5.0
+    friction = 1.0
+    restitution = 0.0
+    linearDamping = 0.5
+    angularDamping = 0.5
+}
+
+collisionObject capsule
+{
+    type = RIGID_BODY
+    shape = CAPSULE
+    mass = 5.0
+    friction = 1.0
+    restitution = 0.0
+    linearDamping = 0.5
+    angularDamping = 0.5
+}
+
+collisionObject mesh
+{
+    type = RIGID_BODY
+    shape = MESH
+    mass = 1.0
+    friction = 1.0
+    restitution = 0.0
+    linearDamping = 0.5
+    angularDamping = 0.5
+}
+
+collisionObject staticBox
+{
+    type = RIGID_BODY
+    shape = BOX
+    mass = 0.0
+    friction = 0.5
+    restitution = 0.75
+    linearDamping = 0.025
+    angularDamping = 0.16
+}

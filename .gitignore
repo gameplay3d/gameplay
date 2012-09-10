@@ -199,3 +199,14 @@ Thumbs.db
 
 /gameplay-internal
 /gameplay\android/proguard-project.txt
+/gameplay-tests/DebugMem
+/gameplay-tests/Device-Debug
+/gameplay-tests\android/bin
+/gameplay-tests\android/gen
+/gameplay-tests\android/libs
+/gameplay-tests\android/obj
+/gameplay-tests\android/src
+/gameplay-tests\android/local.properties
+/gameplay-tests\android/proguard-project.txt
+/gameplay-tests\android/project.properties
+/gameplay-tests\android/assets

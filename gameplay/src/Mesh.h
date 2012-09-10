@@ -83,11 +83,15 @@ public:
      * @param y The y coordinate.
      * @param width The width of the quad.
      * @param height The height of the quad.
+     * @param s1 The S texture coordinate of the bottom left point.
+     * @param t1 The T texture coordinate of the bottom left point.
+     * @param s2 The S texture coordinate of the top right point.
+     * @param t2 The T texture coordinate of the top right point.
      * 
      * @return The newly created mesh.
      * @script{create}
      */
-    static Mesh* createQuad(float x, float y, float width, float height);
+    static Mesh* createQuad(float x, float y, float width, float height, float s1 = 0.0f, float t1 = 0.0f, float s2 = 1.0f, float t2 = 1.0f);
 
     /**
      * Creates a new full-screen 2D quad.
