@@ -308,8 +308,6 @@ void FBXSceneEncoder::loadScene(FbxScene* fbxScene)
 
 void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fbxNode, Animation* animation)
 {
-    const std::string* targetId = NULL;
-
     const char* name = fbxNode->GetName();
     Node* node = _gamePlayFile.getNode(name);
     if (node)
