@@ -65,182 +65,182 @@ public:
      *
      * @return true if this is a front wheel, false otherwise.
      */
-    /*TODO: inline*/ bool isFront() const;
+    bool isFront() const;
 
     /**
      * Sets whether this is a front wheel.
      *
      * @param front true if this is a front wheel, false otherwise.
      */
-    /*TODO: inline*/ void setFront(bool front);
+    void setFront(bool front);
 
     /**
      * Gets direction of strut extension, in chassis space.
      *
      * @param wheelDirection address of where to store the result.
      */
-    /*TODO: inline*/ void getWheelDirection(Vector3* wheelDirection) const;
+    void getWheelDirection(Vector3* wheelDirection) const;
 
     /**
      * Sets direction of strut extension, in chassis space.
      *
      * @param wheelDirection direction of strut extension.
      */
-    /*TODO: inline*/ void setWheelDirection(const Vector3& wheelDirection);
+    void setWheelDirection(const Vector3& wheelDirection);
 
     /**
      * Gets direction of axle (the spin axis), in chassis space.
      *
      * @param wheelAxle address of where to store the result.
      */
-    /*TODO: inline*/ void getWheelAxle(Vector3* wheelAxle) const;
+    void getWheelAxle(Vector3* wheelAxle) const;
 
     /**
      * Sets direction of axle (the spin axis), in chassis space.
      *
      * @param wheelAxle direction of axle (the spin axis).
      */
-    /*TODO: inline*/ void setWheelAxle(const Vector3& wheelAxle);
+    void setWheelAxle(const Vector3& wheelAxle);
 
     /**
      * Gets strut connection point, in chassis space.
      *
      * @param strutConnectionPoint address of where to store the result.
      */
-    /*TODO: inline*/ void getStrutConnectionPoint(Vector3* strutConnectionPoint) const;
+    void getStrutConnectionPoint(Vector3* strutConnectionPoint) const;
 
     /**
      * Sets strut connection point, in chassis space.
      *
      * @param strutConnectionPoint strut connection point.
      */
-    /*TODO: inline*/ void setStrutConnectionPoint(const Vector3& strutConnectionPoint);
+    void setStrutConnectionPoint(const Vector3& strutConnectionPoint);
 
     /**
      * Gets the strut rest length.
      *
      * @return the strut rest length.
      */
-    /*TODO: inline*/ float getStrutRestLength() const;
+    float getStrutRestLength() const;
 
     /**
      * Sets the strut rest length.
      *
      * @param strutRestLength the strut rest length.
      */
-    /*TODO: inline*/ void setStrutRestLength(float strutRestLength);
+    void setStrutRestLength(float strutRestLength);
 
     /**
      * Gets the maximum strut travel.
      *
      * @return the maximum strut travel.
      */
-    /*TODO: inline*/ float getStrutTravelMax() const;
+    float getStrutTravelMax() const;
 
     /**
      * Sets the maximum strut travel.
      *
      * @param strutTravelMax the maximum strut travel.
      */
-    /*TODO: inline*/ void setStrutTravelMax(float strutTravelMax);
+    void setStrutTravelMax(float strutTravelMax);
 
     /**
      * Gets the strut stiffness, normalized to chassis mass.
      *
      * @return the strut stiffness, normalized to chassis mass.
      */
-    /*TODO: inline*/ float getStrutStiffness() const;
+    float getStrutStiffness() const;
 
     /**
      * Sets the strut stiffness, normalized to chassis mass.
      *
      * @param strutStiffness the strut stiffness, normalized to chassis mass.
      */
-    /*TODO: inline*/ void setStrutStiffness(float strutStiffness);
+    void setStrutStiffness(float strutStiffness);
 
     /**
      * Gets strut damping under compression, normalized to chassis mass.
      *
      * @return strut damping under compression, normalized to chassis mass.
      */
-    /*TODO: inline*/ float getStrutDampingCompression() const;
+    float getStrutDampingCompression() const;
 
     /**
      * Sets strut damping under compression, normalized to chassis mass.
      *
      * @param strutDampingCompression strut damping under compression, normalized to chassis mass.
      */
-    /*TODO: inline*/ void setStrutDampingCompression(float strutDampingCompression);
+    void setStrutDampingCompression(float strutDampingCompression);
 
     /**
      * Gets strut damping under relaxation, normalized to chassis mass.
      *
      * @return strut damping under relaxation, normalized to chassis mass.
      */
-    /*TODO: inline*/ float getStrutDampingRelaxation() const;
+    float getStrutDampingRelaxation() const;
 
     /**
      * Sets strut damping under relaxation, normalized to chassis mass.
      *
      * @param strutDampingRelaxation strut damping under relaxation, normalized to chassis mass.
      */
-    /*TODO: inline*/ void setStrutDampingRelaxation(float strutDampingRelaxation);
+    void setStrutDampingRelaxation(float strutDampingRelaxation);
 
     /**
      * Gets the maximum strut force.
      *
      * @return the maximum strut force.
      */
-    /*TODO: inline*/ float getStrutForceMax() const;
+    float getStrutForceMax() const;
 
     /**
      * Sets the maximum strut force.
      *
      * @param strutForceMax the maximum strut force.
      */
-    /*TODO: inline*/ void setStrutForceMax(float strutForceMax);
+    void setStrutForceMax(float strutForceMax);
 
     /**
      * Gets the breakout friction.
      *
      * @return the breakout friction.
      */
-    /*TODO: inline*/ float getFrictionBreakout() const;
+    float getFrictionBreakout() const;
 
     /**
      * Sets the breakout friction.
      *
      * @param frictionBreakout the breakout friction.
      */
-    /*TODO: inline*/ void setFrictionBreakout(float frictionBreakout);
+    void setFrictionBreakout(float frictionBreakout);
 
     /**
      * Gets the wheel radius.
      *
      * @return the wheel radius.
      */
-    /*TODO: inline*/ float getWheelRadius() const;
+    float getWheelRadius() const;
 
     /**
      * Sets the wheel radius.
      *
      * @param wheelRadius the wheel radius.
      */
-    /*TODO: inline*/ void setWheelRadius(float wheelRadius);
+    void setWheelRadius(float wheelRadius);
 
     /**
      * Gets roll influence which determines how side friction affects chassis roll.
      *
      * @return roll influence, normalized factor.
      */
-    /*TODO: inline*/ float getRollInfluence() const;
+    float getRollInfluence() const;
 
     /**
      * Sets roll influence which determines how side friction affects chassis roll.
      *
      * @param rollInfluence roll influence, normalized factor.
      */
-    /*TODO: inline*/ void setRollInfluence(float rollInfluence);
+    void setRollInfluence(float rollInfluence);
 
 protected:
 
@@ -317,7 +317,7 @@ private:
      * @param host the host vehicle.
      * @param indexInHost the index of this wheel within the host vehicle.
      */
-    /*TODO: inline*/ void setHost(PhysicsVehicle* host, unsigned int indexInHost);
+    void setHost(PhysicsVehicle* host, unsigned int indexInHost);
 
     /**
      * Adds this wheel to the specified Bullet vehicle.
@@ -333,4 +333,4 @@ private:
 
 }
 
-#endif /* PHYSICSVEHICLEWHEEL_H_ */
+#endif
