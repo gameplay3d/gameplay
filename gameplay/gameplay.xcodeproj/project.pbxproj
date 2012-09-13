@@ -21,6 +21,22 @@
 		421A233515B600E8004F97C3 /* ScriptTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421A233215B600E8004F97C3 /* ScriptTarget.cpp */; };
 		421A233615B600E8004F97C3 /* ScriptTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 421A233315B600E8004F97C3 /* ScriptTarget.h */; };
 		421A233715B600E8004F97C3 /* ScriptTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 421A233315B600E8004F97C3 /* ScriptTarget.h */; };
+		421FBD4F1602818800A61BC0 /* PhysicsVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD4B1602818800A61BC0 /* PhysicsVehicle.cpp */; };
+		421FBD501602818800A61BC0 /* PhysicsVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD4B1602818800A61BC0 /* PhysicsVehicle.cpp */; };
+		421FBD511602818800A61BC0 /* PhysicsVehicle.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD4C1602818800A61BC0 /* PhysicsVehicle.h */; };
+		421FBD521602818800A61BC0 /* PhysicsVehicle.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD4C1602818800A61BC0 /* PhysicsVehicle.h */; };
+		421FBD531602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD4D1602818800A61BC0 /* PhysicsVehicleWheel.cpp */; };
+		421FBD541602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD4D1602818800A61BC0 /* PhysicsVehicleWheel.cpp */; };
+		421FBD551602818800A61BC0 /* PhysicsVehicleWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD4E1602818800A61BC0 /* PhysicsVehicleWheel.h */; };
+		421FBD561602818800A61BC0 /* PhysicsVehicleWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD4E1602818800A61BC0 /* PhysicsVehicleWheel.h */; };
+		421FBD5C1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD581602827C00A61BC0 /* lua_PhysicsVehicle.cpp */; };
+		421FBD5D1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD581602827C00A61BC0 /* lua_PhysicsVehicle.cpp */; };
+		421FBD5E1602827C00A61BC0 /* lua_PhysicsVehicle.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD591602827C00A61BC0 /* lua_PhysicsVehicle.h */; };
+		421FBD5F1602827C00A61BC0 /* lua_PhysicsVehicle.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD591602827C00A61BC0 /* lua_PhysicsVehicle.h */; };
+		421FBD601602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD5A1602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp */; };
+		421FBD611602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421FBD5A1602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp */; };
+		421FBD621602827C00A61BC0 /* lua_PhysicsVehicleWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD5B1602827C00A61BC0 /* lua_PhysicsVehicleWheel.h */; };
+		421FBD631602827C00A61BC0 /* lua_PhysicsVehicleWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = 421FBD5B1602827C00A61BC0 /* lua_PhysicsVehicleWheel.h */; };
 		422260D61537790F0011E3AB /* Bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422260D41537790F0011E3AB /* Bundle.cpp */; };
 		422260D71537790F0011E3AB /* Bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422260D41537790F0011E3AB /* Bundle.cpp */; };
 		422260D81537790F0011E3AB /* Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 422260D51537790F0011E3AB /* Bundle.h */; };
@@ -1705,6 +1721,14 @@
 		421230D415B6121C00F0EC76 /* lua_ScriptTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua_ScriptTarget.h; path = src/lua/lua_ScriptTarget.h; sourceTree = SOURCE_ROOT; };
 		421A233215B600E8004F97C3 /* ScriptTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScriptTarget.cpp; path = src/ScriptTarget.cpp; sourceTree = SOURCE_ROOT; };
 		421A233315B600E8004F97C3 /* ScriptTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScriptTarget.h; path = src/ScriptTarget.h; sourceTree = SOURCE_ROOT; };
+		421FBD4B1602818800A61BC0 /* PhysicsVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsVehicle.cpp; path = src/PhysicsVehicle.cpp; sourceTree = SOURCE_ROOT; };
+		421FBD4C1602818800A61BC0 /* PhysicsVehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsVehicle.h; path = src/PhysicsVehicle.h; sourceTree = SOURCE_ROOT; };
+		421FBD4D1602818800A61BC0 /* PhysicsVehicleWheel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsVehicleWheel.cpp; path = src/PhysicsVehicleWheel.cpp; sourceTree = SOURCE_ROOT; };
+		421FBD4E1602818800A61BC0 /* PhysicsVehicleWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsVehicleWheel.h; path = src/PhysicsVehicleWheel.h; sourceTree = SOURCE_ROOT; };
+		421FBD581602827C00A61BC0 /* lua_PhysicsVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_PhysicsVehicle.cpp; sourceTree = "<group>"; };
+		421FBD591602827C00A61BC0 /* lua_PhysicsVehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_PhysicsVehicle.h; sourceTree = "<group>"; };
+		421FBD5A1602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_PhysicsVehicleWheel.cpp; sourceTree = "<group>"; };
+		421FBD5B1602827C00A61BC0 /* lua_PhysicsVehicleWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_PhysicsVehicleWheel.h; sourceTree = "<group>"; };
 		422260D41537790F0011E3AB /* Bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bundle.cpp; path = src/Bundle.cpp; sourceTree = SOURCE_ROOT; };
 		422260D51537790F0011E3AB /* Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bundle.h; path = src/Bundle.h; sourceTree = SOURCE_ROOT; };
 		4234D99A14686C52003031B3 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2812,6 +2836,10 @@
 				42CD0E13147D8FF50000361E /* PhysicsSpringConstraint.cpp */,
 				42CD0E14147D8FF50000361E /* PhysicsSpringConstraint.h */,
 				42CD0E15147D8FF50000361E /* PhysicsSpringConstraint.inl */,
+				421FBD4B1602818800A61BC0 /* PhysicsVehicle.cpp */,
+				421FBD4C1602818800A61BC0 /* PhysicsVehicle.h */,
+				421FBD4D1602818800A61BC0 /* PhysicsVehicleWheel.cpp */,
+				421FBD4E1602818800A61BC0 /* PhysicsVehicleWheel.h */,
 				42CD0E19147D8FF50000361E /* Platform.h */,
 				5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */,
 				42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */,
@@ -3446,6 +3474,10 @@
 				42BCD3FA15EFD0F300C0E076 /* lua_PhysicsSocketConstraint.h */,
 				42BCD3FB15EFD0F300C0E076 /* lua_PhysicsSpringConstraint.cpp */,
 				42BCD3FC15EFD0F300C0E076 /* lua_PhysicsSpringConstraint.h */,
+				421FBD581602827C00A61BC0 /* lua_PhysicsVehicle.cpp */,
+				421FBD591602827C00A61BC0 /* lua_PhysicsVehicle.h */,
+				421FBD5A1602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp */,
+				421FBD5B1602827C00A61BC0 /* lua_PhysicsVehicleWheel.h */,
 				42BCD3FD15EFD0F300C0E076 /* lua_Plane.cpp */,
 				42BCD3FE15EFD0F300C0E076 /* lua_Plane.h */,
 				42BCD3FF15EFD0F300C0E076 /* lua_Platform.cpp */,
@@ -4032,6 +4064,10 @@
 				42BCD6CE15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */,
 				5BBAD0F515F5251E004C9639 /* lua_Gesture.h in Headers */,
 				5BBAD0F915F5251E004C9639 /* lua_GestureGestureEvent.h in Headers */,
+				421FBD511602818800A61BC0 /* PhysicsVehicle.h in Headers */,
+				421FBD551602818800A61BC0 /* PhysicsVehicleWheel.h in Headers */,
+				421FBD5E1602827C00A61BC0 /* lua_PhysicsVehicle.h in Headers */,
+				421FBD621602827C00A61BC0 /* lua_PhysicsVehicleWheel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4455,6 +4491,10 @@
 				42BCD6CF15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */,
 				5BBAD0F615F5251E004C9639 /* lua_Gesture.h in Headers */,
 				5BBAD0FA15F5251E004C9639 /* lua_GestureGestureEvent.h in Headers */,
+				421FBD521602818800A61BC0 /* PhysicsVehicle.h in Headers */,
+				421FBD561602818800A61BC0 /* PhysicsVehicleWheel.h in Headers */,
+				421FBD5F1602827C00A61BC0 /* lua_PhysicsVehicle.h in Headers */,
+				421FBD631602827C00A61BC0 /* lua_PhysicsVehicleWheel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4938,6 +4978,10 @@
 				42BCD6D415EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */,
 				5BBAD0F315F5251E004C9639 /* lua_Gesture.cpp in Sources */,
 				5BBAD0F715F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */,
+				421FBD4F1602818800A61BC0 /* PhysicsVehicle.cpp in Sources */,
+				421FBD531602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */,
+				421FBD5C1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
+				421FBD601602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5357,6 +5401,10 @@
 				42BCD6D515EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */,
 				5BBAD0F415F5251E004C9639 /* lua_Gesture.cpp in Sources */,
 				5BBAD0F815F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */,
+				421FBD501602818800A61BC0 /* PhysicsVehicle.cpp in Sources */,
+				421FBD541602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */,
+				421FBD5D1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
+				421FBD611602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
