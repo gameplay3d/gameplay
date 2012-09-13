@@ -20,6 +20,8 @@ class PhysicsRigidBody : public PhysicsCollisionObject, public Transform::Listen
 {
     friend class Node;
     friend class PhysicsCharacter;
+    friend class PhysicsVehicle;
+    friend class PhysicsVehicleWheel;
     friend class PhysicsConstraint;
     friend class PhysicsController;
     friend class PhysicsFixedConstraint;
@@ -344,10 +346,11 @@ private:
      * 
      * @param node The node to create a rigid body for; note that the node must have
      *      a model attached to it prior to creating a rigid body for it.
-     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidBody').
+     * @param properties The properties object defining the rigid body.
+     * @param namespace The namespace expected (default is "RIGID_BODY").
      * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
      */
-    static PhysicsRigidBody* create(Node* node, Properties* properties);
+    static PhysicsRigidBody* create(Node* node, Properties* properties, const char* nspace = "RIGID_BODY");
 
     // Adds a constraint to this rigid body.
     void addConstraint(PhysicsConstraint* constraint);

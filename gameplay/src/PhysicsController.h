@@ -25,6 +25,7 @@ class PhysicsController : public ScriptTarget
     friend class PhysicsConstraint;
     friend class PhysicsRigidBody;
     friend class PhysicsCharacter;
+    friend class PhysicsVehicle;
     friend class PhysicsCollisionObject;
     friend class PhysicsGhostObject;
 

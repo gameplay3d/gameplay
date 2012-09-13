@@ -241,6 +241,8 @@
     <ClCompile Include="src\PhysicsRigidBody.cpp" />
     <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
+    <ClCompile Include="src\PhysicsVehicle.cpp" />
+    <ClCompile Include="src\PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
     <ClCompile Include="src\PlatformLinux.cpp" />
@@ -504,6 +506,8 @@
     <ClInclude Include="src\PhysicsRigidBody.h" />
     <ClInclude Include="src\PhysicsSocketConstraint.h" />
     <ClInclude Include="src\PhysicsSpringConstraint.h" />
+    <ClInclude Include="src\PhysicsVehicle.h" />
+    <ClInclude Include="src\PhysicsVehicleWheel.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\Properties.h" />
