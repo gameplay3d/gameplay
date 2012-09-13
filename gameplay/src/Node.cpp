@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Joint.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
 #include "Game.h"
@@ -1034,6 +1036,27 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
         }
         break;
 
+    case PhysicsCollisionObject::VEHICLE:
+        {
+            _collisionObject = new PhysicsVehicle(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
+
+    case PhysicsCollisionObject::VEHICLE_WHEEL:
+        {
+            //
+            // PhysicsVehicleWheel is special because this call will traverse up the scene graph for the
+            // first ancestor node that is shared with another node of collision type VEHICLE, and then
+            // proceed to add itself as a wheel onto that vehicle. This is by design, and allows the
+            // visual scene hierarchy to be the sole representation of the relationship between physics
+            // objects rather than forcing that upon the otherwise-flat ".physics" (properties) file.
+            //
+            // IMPORTANT: The VEHICLE must come before the VEHICLE_WHEEL in the ".scene" (properties) file!
+            //
+            _collisionObject = new PhysicsVehicleWheel(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
+
     case PhysicsCollisionObject::NONE:
         break;  // Already deleted, Just don't add a new collision object back.
     }
@@ -1082,6 +1105,23 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         {
             _collisionObject = PhysicsRigidBody::create(this, properties);
         }
+        else if (strcmp(type, "VEHICLE") == 0)
+        {
+            _collisionObject = PhysicsVehicle::create(this, properties);
+        }
+        else if (strcmp(type, "VEHICLE_WHEEL") == 0)
+        {
+            //
+            // PhysicsVehicleWheel is special because this call will traverse up the scene graph for the
+            // first ancestor node that is shared with another node of collision type VEHICLE, and then
+            // proceed to add itself as a wheel onto that vehicle. This is by design, and allows the
+            // visual scene hierarchy to be the sole representation of the relationship between physics
+            // objects rather than forcing that upon the otherwise-flat ".physics" (properties) file.
+            //
+            // IMPORTANT: The VEHICLE must come before the VEHICLE_WHEEL in the ".scene" (properties) file!
+            //
+            _collisionObject = PhysicsVehicleWheel::create(this, properties);
+        }
         else
         {
             GP_ERROR("Unsupported collision object type '%s'.", type);
@@ -1095,6 +1135,21 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     }
 
     return _collisionObject;
+}
+
+unsigned int Node::getNumAdvertisedDescendants() const
+{
+    return _advertisedDescendants.size();
+}
+
+Node* Node::getAdvertisedDescendant(unsigned int i) const
+{
+    return _advertisedDescendants.at(i);
+}
+
+void Node::addAdvertisedDescendant(Node* node)
+{
+    _advertisedDescendants.push_back(node);
 }
 
 AIAgent* Node::getAgent() const
