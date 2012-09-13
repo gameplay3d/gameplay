@@ -344,10 +344,9 @@ private:
     /**
      * Creates a rigid body from the specified properties object.
      * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
+     * @param node The node to create a rigid body for; note that the node must have a model attached to it prior to creating a rigid body for it.
      * @param properties The properties object defining the rigid body.
-     * @param namespace The namespace expected (default is "RIGID_BODY").
+     * @param nspace The namespace expected (default is "RIGID_BODY").
      * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
      */
     static PhysicsRigidBody* create(Node* node, Properties* properties, const char* nspace = "RIGID_BODY");

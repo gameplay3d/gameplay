@@ -81,6 +81,8 @@
 #include "lua_PhysicsRigidBodyParameters.h"
 #include "lua_PhysicsSocketConstraint.h"
 #include "lua_PhysicsSpringConstraint.h"
+#include "lua_PhysicsVehicle.h"
+#include "lua_PhysicsVehicleWheel.h"
 #include "lua_Plane.h"
 #include "lua_Platform.h"
 #include "lua_Properties.h"

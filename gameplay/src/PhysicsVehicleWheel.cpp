@@ -2,7 +2,6 @@
 #include "Node.h"
 #include "PhysicsVehicle.h"
 #include "PhysicsVehicleWheel.h"
-//TODO: move inline implementations into a separate INL file
 
 namespace gameplay
 {
@@ -10,10 +9,8 @@ namespace gameplay
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape::Definition& shape, const PhysicsRigidBody::Parameters& parameters)
     : PhysicsCollisionObject(node)
 {
-    //
     // Note that the constructor for PhysicsRigidBody calls addCollisionObject and so
     // that is where the rigid body gets added to the dynamics world.
-    //
     _rigidBody = new PhysicsRigidBody(node, shape, parameters);
 
     findAncestorAndBind();
@@ -29,12 +26,9 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody
 
 PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* properties)
 {
-    //
     // Note that the constructor for PhysicsRigidBody calls addCollisionObject and so
     // that is where the rigid body gets added to the dynamics world.
-    //
     PhysicsRigidBody* rigidBody = PhysicsRigidBody::create(node, properties, "VEHICLE_WHEEL");
-
     PhysicsVehicleWheel* wheel = new PhysicsVehicleWheel(node, rigidBody);
 
     // Load the defined wheel parameters.
@@ -125,16 +119,14 @@ void PhysicsVehicleWheel::findAncestorAndBind()
 {
     GP_ASSERT(getNode());
 
-    //
     // This is not an efficient algorithm if the number of advertised
     // descendants gets large. In fact, this search is O(n*m) in the
     // worst case with n nodes and m advertised descendants per node.
     // But (1) we are only visiting ancestor nodes, and (2) the number
     // of advertised descendants is expected to be small since this
-    // mechanism is currently only used for binding wheels onto a
-    // vehicle.
-    //TODO: revisit if the advertised descendants mechanism becomes popular.
+    // mechanism is currently only used for binding wheels onto a vehicle.
     //
+    // TODO: revisit if the advertised descendants mechanism becomes popular.
     PhysicsVehicle* host = NULL;
     PhysicsCollisionObject* collisionObject;
     Node* m;
@@ -224,10 +216,7 @@ void PhysicsVehicleWheel::setWheelDirection(const Vector3& wheelDirection)
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
 
-    _host->_vehicle->getWheelInfo(_indexInHost).m_wheelDirectionCS.setValue(
-        wheelDirection.x,
-        wheelDirection.y,
-        wheelDirection.z);
+    _host->_vehicle->getWheelInfo(_indexInHost).m_wheelDirectionCS.setValue(wheelDirection.x, wheelDirection.y, wheelDirection.z);
 }
 
 void PhysicsVehicleWheel::getWheelAxle(Vector3* wheelAxle) const
@@ -244,10 +233,7 @@ void PhysicsVehicleWheel::setWheelAxle(const Vector3& wheelAxle)
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
 
-    _host->_vehicle->getWheelInfo(_indexInHost).m_wheelAxleCS.setValue(
-        wheelAxle.x,
-        wheelAxle.y,
-        wheelAxle.z);
+    _host->_vehicle->getWheelInfo(_indexInHost).m_wheelAxleCS.setValue( wheelAxle.x, wheelAxle.y, wheelAxle.z);
 }
 
 void PhysicsVehicleWheel::getStrutConnectionPoint(Vector3* strutConnectionPoint) const
@@ -263,11 +249,9 @@ void PhysicsVehicleWheel::setStrutConnectionPoint(const Vector3& strutConnection
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
-
-    _host->_vehicle->getWheelInfo(_indexInHost).m_chassisConnectionPointCS.setValue(
-        strutConnectionPoint.x,
-        strutConnectionPoint.y,
-        strutConnectionPoint.z);
+    _host->_vehicle->getWheelInfo(_indexInHost).m_chassisConnectionPointCS.setValue(strutConnectionPoint.x,
+                                                                                    strutConnectionPoint.y,
+                                                                                    strutConnectionPoint.z);
 }
 
 float PhysicsVehicleWheel::getStrutRestLength() const
