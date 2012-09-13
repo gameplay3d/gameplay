@@ -45,6 +45,7 @@ static float __roll;
 static const char* __glExtensions;
 static struct gestures_set * __gestureSet;
 static bitset<3> __gestureEventsProcessed;
+static bool __gestureSwipeRecognized = false;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
@@ -450,7 +451,12 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
             if ( __gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) )
             {
                 gesture_swipe_t* swipe = (gesture_swipe_t*)gesture;
-                Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+                if (!__gestureSwipeRecognized)
+                {
+                    Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+                    __gestureSwipeRecognized = true;
+                }
+
             }
             break;
         }
@@ -896,6 +902,10 @@ int Platform::enterMessagePump()
                         if ( !rc && (__multiTouch || touchEvent.contact_id == 0) )
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                        }
+                        if (__gestureSwipeRecognized)
+                        {
+                            __gestureSwipeRecognized = false;
                         }
                         break;
                     }
