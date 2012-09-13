@@ -86,6 +86,8 @@ void lua_RegisterAllBindings()
     luaRegister_PhysicsRigidBodyParameters();
     luaRegister_PhysicsSocketConstraint();
     luaRegister_PhysicsSpringConstraint();
+    luaRegister_PhysicsVehicle();
+    luaRegister_PhysicsVehicleWheel();
     luaRegister_Plane();
     luaRegister_Platform();
     luaRegister_Properties();

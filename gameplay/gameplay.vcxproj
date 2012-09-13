@@ -171,6 +171,8 @@
     <ClCompile Include="src\lua\lua_PhysicsRigidBodyParameters.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsSpringConstraint.cpp" />
+    <ClCompile Include="src\lua\lua_PhysicsVehicle.cpp" />
+    <ClCompile Include="src\lua\lua_PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\lua\lua_Plane.cpp" />
     <ClCompile Include="src\lua\lua_Platform.cpp" />
     <ClCompile Include="src\lua\lua_Properties.cpp" />
@@ -434,6 +436,8 @@
     <ClInclude Include="src\lua\lua_PhysicsRigidBodyParameters.h" />
     <ClInclude Include="src\lua\lua_PhysicsSocketConstraint.h" />
     <ClInclude Include="src\lua\lua_PhysicsSpringConstraint.h" />
+    <ClInclude Include="src\lua\lua_PhysicsVehicle.h" />
+    <ClInclude Include="src\lua\lua_PhysicsVehicleWheel.h" />
     <ClInclude Include="src\lua\lua_Plane.h" />
     <ClInclude Include="src\lua\lua_Platform.h" />
     <ClInclude Include="src\lua\lua_Properties.h" />

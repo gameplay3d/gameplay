@@ -44,6 +44,8 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsCharacter");
     ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsGhostObject");
     ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsRigidBody");
+    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsVehicle");
+    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsVehicleWheel");
     ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsFixedConstraint");
     ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsGenericConstraint");
     ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsHingeConstraint");
@@ -360,9 +362,9 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Gesture");
+        ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
         ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
         ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
-        ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
         ScriptUtil::registerConstantString("GESTURE_ANY_SUPPORTED", "GESTURE_ANY_SUPPORTED", scopePath);
     }
 
@@ -632,6 +634,8 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("RIGID_BODY", "RIGID_BODY", scopePath);
         ScriptUtil::registerConstantString("CHARACTER", "CHARACTER", scopePath);
         ScriptUtil::registerConstantString("GHOST_OBJECT", "GHOST_OBJECT", scopePath);
+        ScriptUtil::registerConstantString("VEHICLE", "VEHICLE", scopePath);
+        ScriptUtil::registerConstantString("VEHICLE_WHEEL", "VEHICLE_WHEEL", scopePath);
         ScriptUtil::registerConstantString("NONE", "NONE", scopePath);
     }
 
