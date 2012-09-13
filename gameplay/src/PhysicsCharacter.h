@@ -19,7 +19,7 @@ namespace gameplay
  * character than would be possible if trying to move a character by applying
  * physical simulation with forces.
  */
-class PhysicsCharacter : public PhysicsGhostObject, public btActionInterface
+class PhysicsCharacter : public PhysicsGhostObject
 {
     friend class Node;
 
@@ -179,18 +179,6 @@ public:
      */
     void jump(float height);
 
-    /**
-     * @see btActionInterface::updateAction
-     * @script{ignore}
-     */
-    void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
-
-    /**
-     * @see btActionInterface::debugDraw
-     * @script{ignore}
-     */
-    void debugDraw(btIDebugDraw* debugDrawer);
-
 protected:
 
     /**
@@ -240,6 +228,25 @@ private:
 
     bool fixCollision(btCollisionWorld* world);
 
+    /**
+     * Hides the callback interfaces within the PhysicsCharacter.
+     * @script{ignore}
+     */
+    class ActionInterface : public btActionInterface
+    {
+    public:
+
+        ActionInterface(PhysicsCharacter* character);
+
+        void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
+
+        void debugDraw(btIDebugDraw* debugDrawer);
+        
+        PhysicsCharacter* character;
+    };
+
+    void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
+
     btVector3 _moveVelocity;
     float _forwardVelocity;
     float _rightVelocity;
@@ -255,6 +262,7 @@ private:
     float _cosSlopeAngle;
     bool _physicsEnabled;
     float _mass;
+    ActionInterface* _actionInterface;
 };
 
 }

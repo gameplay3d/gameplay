@@ -51,14 +51,14 @@ public:
     /**
      * Returns the rigid body associated with this vehicle.
      */
-    /*TODO: inline*/ PhysicsRigidBody* getRigidBody() const;
+    PhysicsRigidBody* getRigidBody() const;
 
     /**
      * Returns the number of wheels on this vehicle.
      *
      * @return the number of wheels on this vehicle.
      */
-    /*TODO: inline*/ unsigned int getNumWheels() const;
+    unsigned int getNumWheels() const;
 
     /**
      * Gets the wheel at the specified index.
@@ -66,7 +66,7 @@ public:
      * @param i index of wheel.
      * @return the wheel at the specified index.
      */
-    /*TODO: inline*/ PhysicsVehicleWheel* getWheel(unsigned int i);
+    PhysicsVehicleWheel* getWheel(unsigned int i);
 
     /**
      * Permanently adds a wheel to this vehicle.
@@ -78,7 +78,7 @@ public:
     /**
      * Returns an indication of vehicle speed in kilometers per hour.
      */
-    /*TODO: inline*/ float getSpeedKph() const;
+    float getSpeedKph() const;
 
     /**
      * Updates the vehicle state using the specified normalized command
@@ -95,42 +95,42 @@ public:
      *
      * @return steering gain at full deflection.
      */
-    /*TODO: inline*/ float getSteeringGain() const;
+    float getSteeringGain() const;
 
     /**
      * Sets steering gain at full deflection.
      *
      * @param steeringGain steering gain at full deflection.
      */
-    /*TODO: inline*/ void setSteeringGain(float steeringGain);
+    void setSteeringGain(float steeringGain);
 
     /**
      * Gets braking force at full braking.
      *
      * @return braking force at full braking.
      */
-    /*TODO: inline*/ float getBrakingForce() const;
+    float getBrakingForce() const;
 
     /**
      * Sets braking force at full braking.
      *
      * @param brakingForce braking force at full braking.
      */
-    /*TODO: inline*/ void setBrakingForce(float brakingForce);
+    void setBrakingForce(float brakingForce);
 
     /**
      * Gets driving force at full throttle.
      *
      * @return driving force at full throttle.
      */
-    /*TODO: inline*/ float getDrivingForce() const;
+    float getDrivingForce() const;
 
     /**
      * Sets driving force at full throttle.
      *
      * @param drivingForce driving force at full throttle.
      */
-    /*TODO: inline*/ void setDrivingForce(float drivingForce);
+    void setDrivingForce(float drivingForce);
 
 protected:
 
@@ -202,4 +202,4 @@ private:
 
 }
 
-#endif /* PHYSICSVEHICLE_H_ */
+#endif
