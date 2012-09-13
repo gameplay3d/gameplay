@@ -792,6 +792,12 @@
     <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\PhysicsVehicle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsVehicleWheel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1573,6 +1579,12 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_GestureGestureEvent.h">
       <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsVehicleWheel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsVehicle.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
