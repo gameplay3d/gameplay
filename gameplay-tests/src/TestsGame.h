@@ -40,6 +40,8 @@ public:
 
     void menuEvent();
 
+    void gestureSwipeEvent(int x, int y, int direction);
+
     /**
      * Adds a test.
      * 
