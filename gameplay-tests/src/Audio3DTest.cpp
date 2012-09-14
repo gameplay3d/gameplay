@@ -314,8 +314,6 @@ void Audio3DTest::drawVector3(const char* str, const Vector3 vector, int x, int 
     _font->drawText(buffer, x, y, Vector4::one(), _font->getSize());
 }
 
-// Functions
-
 void loadGrid(Scene* scene)
 {
     assert(scene);

@@ -83,14 +83,14 @@ LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
     Grid.cpp \
     InputTest.cpp \
     LoadSceneTest.cpp \
+	MeshBatchTest.cpp \
     MeshPrimitiveTest.cpp \
-    PhysicsConstraintTest.cpp \
-	PhysicsTest.cpp \
+	PhysicsSceneTest.cpp \
+	SpriteBatchTest.cpp \
     Test.cpp \
     TestsGame.cpp \
     TextTest.cpp \
-    TextureTest.cpp \
-    TriangleBatchTest.cpp
+    TextureTest.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../GamePlay/external-deps/lua/include" -I"../../../GamePlay/external-deps/bullet/include" -I"../../../GamePlay/external-deps/libpng/include" -I"../../../GamePlay/external-deps/oggvorbis/include" -I"../../../GamePlay/external-deps/openal/include" -I"../../../GamePlay/gameplay/src"
