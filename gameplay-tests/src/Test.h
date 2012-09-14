@@ -1,22 +1,25 @@
-#ifndef Test_H_
-#define Test_H_
+#ifndef TEST_H_
+#define TEST_H_
 
 #include "gameplay.h"
 
 using namespace gameplay;
 
 /**
- * Base class for all of the tests. The goal is to provide an interface that matches the Game class.
+ * Base class for all of the tests. 
+ *
+ * The goal is to provide an interface that matches the Game class.
+ * This way you can easily copy the code from your test into a game.
  */
 class Test
 {
     friend class TestsGame;
+
 public:
 
     static const Game::State& UNINITIALIZED;
     static const Game::State& RUNNING;
     static const Game::State& PAUSED;
-
     static const Game::ClearFlags& CLEAR_COLOR;
     static const Game::ClearFlags& CLEAR_DEPTH;
     static const Game::ClearFlags& CLEAR_STENCIL;
@@ -57,23 +60,17 @@ public:
 protected:
 
     Test();
-
     virtual ~Test();
-
     virtual void initialize() = 0;
     virtual void finalize() = 0;
     virtual void update(float elapsedTime) = 0;
     virtual void render(float elapsedTime) = 0;
-
     static void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
 private:
 
-    Test(const Test&);            // Hidden copy constructor.
-    Test& operator=(const Test&); // Hidden copy assignment operator.
-
-private:
-    
+    Test(const Test&); 
+    Test& operator=(const Test&);
 };
 
 #endif

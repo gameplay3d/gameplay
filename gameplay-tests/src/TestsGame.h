@@ -1,5 +1,5 @@
-#ifndef TestsGame_H_
-#define TestsGame_H_
+#ifndef TESTSGAME_H_
+#define TESTSGAME_H_
 
 #include "gameplay.h"
 #include "Test.h"
@@ -30,16 +30,34 @@ class TestsGame : public Game
 {
 public:
 
+    /**
+     * Constructor.
+     */
     TestsGame();
 
+    /**
+     * @see Game::keyEvent
+     */
 	void keyEvent(Keyboard::KeyEvent evt, int key);
-	
+
+    /**
+     * @see Game::touchEvent
+     */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * @see Game::mouseEvent
+     */
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * @see Game::menuEvent
+     */
     void menuEvent();
 
+    /**
+     * @see Game::gestureSwipeEvent
+     */
     void gestureSwipeEvent(int x, int y, int direction);
 
     /**
@@ -54,12 +72,24 @@ public:
 
 protected:
 
+    /**
+     * @see Game::initialize
+     */
     void initialize();
 
+    /**
+     * @see Game::finalize
+     */
     void finalize();
 
+    /**
+     * @see Game::update
+     */
     void update(float elapsedTime);
 
+    /**
+     * @see Game::render
+     */
     void render(float elapsedTime);
 
 private:
@@ -102,8 +132,9 @@ private:
         void* funcPtr;
         unsigned int order;
 
-        TestRecord() : funcPtr(NULL), order(0) {}
-        TestRecord(std::string title, void* funcPtr, unsigned int order) : title(title), funcPtr(funcPtr), order(order) {}
+        TestRecord() : funcPtr(NULL), order(0) { }
+        TestRecord(std::string title, void* funcPtr, unsigned int order) : title(title), funcPtr(funcPtr), order(order) { }
+
         TestRecord& operator = (const TestRecord& copy)
         {
             title = copy.title;
@@ -111,6 +142,7 @@ private:
             order = copy.order;
             return *this;
         }
+
         bool operator<(const TestRecord& v) const
         {
             return order < v.order;

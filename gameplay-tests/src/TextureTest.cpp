@@ -27,6 +27,7 @@ Material* setTextureUnlitMaterial(Model* model, const char* texturePath, bool mi
 {
     Material* material = model->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
+
     // Load the texture from file.
     Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue(texturePath, mipmap);
     if (mipmap)
@@ -42,8 +43,7 @@ Material* setTextureUnlitMaterial(Model* model, const char* texturePath, bool mi
 
 TextureTest::TextureTest()
     : _font(NULL), _scene(NULL), _zOffset(0.0f)
-{
-    
+{   
 }
 
 void TextureTest::initialize()
