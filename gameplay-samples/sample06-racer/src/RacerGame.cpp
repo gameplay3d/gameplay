@@ -354,15 +354,21 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_LEFT_ARROW:
             _keyFlags |= STEER_LEFT;
             break;
         case Keyboard::KEY_D:
         case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_RIGHT_ARROW:
             _keyFlags |= STEER_RIGHT;
             break;
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_CAPITAL_W:
         case Keyboard::KEY_UP_ARROW:
             _keyFlags |= ACCELERATOR;
             break;
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_CAPITAL_S:
         case Keyboard::KEY_DOWN_ARROW:
             _keyFlags |= BRAKE;
             break;
@@ -391,15 +397,21 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_LEFT_ARROW:
             _keyFlags &= ~STEER_LEFT;
             break;
         case Keyboard::KEY_D:
         case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_RIGHT_ARROW:
             _keyFlags &= ~STEER_RIGHT;
             break;
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_CAPITAL_W:
         case Keyboard::KEY_UP_ARROW:
             _keyFlags &= ~ACCELERATOR;
             break;
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_CAPITAL_S:
         case Keyboard::KEY_DOWN_ARROW:
             _keyFlags &= ~BRAKE;
             break;
