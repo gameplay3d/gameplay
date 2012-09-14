@@ -5,16 +5,15 @@
     ADD_TEST("Graphics", "Text", TextTest, 100);
 #endif
 
-const char* _legend =   "Keyboard input:\n\n" \
-                        "1-9:  Alignments\n" \
-                        "+/-: Scaling\n" \
-                        "F: Change font\n" \
+const char* _legend =  "F: Change font\n" \
                         "W: Wrapping\n" \
                         "C: Ignore clip-rect\n" \
                         "R: Reverse\n" \
                         "V: Switch between viewport\n" \
                         "   and clip region.\n" \
-                        "S: Simple / Advanced";
+                        "S: Simple / Advanced\n" \
+                        "1-9: Alignments\n" \
+                        "+/-: Scaling\n";
 
 std::string _fontNames[] =
 {
@@ -71,9 +70,10 @@ void TextTest::initialize()
     _legendText = _fonts[0]->createText(_legend, Rectangle(5, 100, 1000, 500), Vector4(0, 1, 0, 1), _fonts[0]->getSize());
     
     _testString = std::string(
-        "Some text for you to try wrapping.\n" \
-        "Text text text!\n\n" \
-        "Hello?\tGoodbye!");
+        "Lorem ipsum dolor sit amet, \n" \
+        "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" \
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n" \
+        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 }
 
 void TextTest::update(float elapsedTime)
@@ -94,15 +94,16 @@ void TextTest::render(float elapsedTime)
     char scale[9];
     sprintf(scale, "%f", _scale);
 
-    std::string fontInfo = _fontNames[_fontIndex];
+    std::string fontInfo = "Font: ";
+    fontInfo += _fontNames[_fontIndex];
     fontInfo += "\tSize: ";
     fontInfo += fontSize;
     fontInfo += "\tScale: ";
     fontInfo += scale;
 
     _fonts[1]->start();
-    _fonts[1]->drawText(fps, 5, 5, Vector4(1, 0, 0, 1), _fonts[1]->getSize());
-    _fonts[1]->drawText(fontInfo.c_str(), 250, 5, Vector4(0, 1, 0, 1), _fonts[1]->getSize());
+    _fonts[1]->drawText(fps, 5, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
+    _fonts[1]->drawText(fontInfo.c_str(), 250, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
     //_fonts[1]->end();
 
     _fonts[0]->start();

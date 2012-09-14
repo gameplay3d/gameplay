@@ -77,36 +77,62 @@ void SpriteBatchTest::render(float elapsedTime)
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
-    Rectangle dst(0, 0, 40, 40);
+    Rectangle dst(0, 0, 64, 64);
     Rectangle src(0, 0, 256, 256);
 
     _spriteBatch->start();
-    // Just a sprite
+
+    // Just a sprite dst from src no color tint
     _spriteBatch->draw(dst, src);
-    dst.x += dst.width;
+
     // Color tint
-    _spriteBatch->draw(dst, src, Vector4(1, 1, 0, 1));
-    dst.x += dst.width;
-    // Larger destination
-    _spriteBatch->draw(Rectangle(dst.x, dst.y, dst.width * 2.0f, dst.height * 2.0f), src);
-    dst.x += dst.width * 2.0f;
-    // Smaller destination
-    _spriteBatch->draw(Rectangle(dst.x, dst.y, dst.width / 2.0f, dst.height / 2.0f), src);
-    dst.x += dst.width / 2.0f;
-    // Just the height is smaller
-    _spriteBatch->draw(Rectangle(dst.x, dst.y, dst.width, dst.height * 2.0f), src);
-    dst.x += dst.width;
-    // Negative height
-    _spriteBatch->draw(Rectangle(dst.x, dst.y + dst.height * 2.0, dst.width, dst.height * -2.0f), src);
-    dst.x += dst.width;
+    _spriteBatch->draw(Rectangle( 64, 0, 64, 64), src, Vector4::fromColor(0xF68B28FF));
+    _spriteBatch->draw(Rectangle(128, 0, 64, 64), src, Vector4::fromColor(0xDA2128FF));
+    _spriteBatch->draw(Rectangle(192, 0, 64, 64), src, Vector4::fromColor(0xE21B52FF));
+    _spriteBatch->draw(Rectangle(256, 0, 64, 64), src, Vector4::fromColor(0xE12991FF));
+    _spriteBatch->draw(Rectangle(320, 0, 64, 64), src, Vector4::fromColor(0x9A258FFF));
+    _spriteBatch->draw(Rectangle(384, 0, 64, 64), src, Vector4::fromColor(0x4D3F99FF));
+    _spriteBatch->draw(Rectangle(448, 0, 64, 64), src, Vector4::fromColor(0x0073BCFF));
+    _spriteBatch->draw(Rectangle(512, 0, 64, 64), src, Vector4::fromColor(0x00A8DFFF));
+    _spriteBatch->draw(Rectangle(576, 0, 64, 64), src, Vector4::fromColor(0x00AFADFF));
+    _spriteBatch->draw(Rectangle(640, 0, 64, 64), src, Vector4::fromColor(0x00A95CFF));
+    _spriteBatch->draw(Rectangle(704, 0, 64, 64), src, Vector4::fromColor(0x8CC747FF));
+    _spriteBatch->draw(Rectangle(768, 0, 64, 64), src, Vector4::fromColor(0xFFE710FF));
+
+    // Negative height draw over top of the first one
+    _spriteBatch->draw(Rectangle(0, 0 , 64 * 2.0f, 64 * -2.0f), src);
+
+
     // Scale
-    _spriteBatch->draw(Vector3(dst.x, dst.y, 0), src, Vector2(dst.width * 2.0f, dst.height * 2.0f));
-    dst.x += dst.width * 2.0f;
+    _spriteBatch->draw(Vector3(0, 64, 0), src, Vector2(dst.width * 2.0f, dst.height * 2.0f));
+    // rotate 90
+    _spriteBatch->draw(Vector3(128, 64, 0), src, Vector2(128, 128), Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f), MATH_DEG_TO_RAD(90));
+    _spriteBatch->draw(Vector3(256, 64, 0), src, Vector2(128, 128), Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f), MATH_DEG_TO_RAD(180));
+    _spriteBatch->draw(Vector3(384, 64, 0), src, Vector2(128, 128), Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f), MATH_DEG_TO_RAD(270));
+    _spriteBatch->draw(Vector3(512, 64, 0), src, Vector2(128, 128), Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f), MATH_DEG_TO_RAD(360));
+    _spriteBatch->draw(Vector3(640, 64, 0), src, Vector2(128, 128), Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f), MATH_DEG_TO_RAD(0));
+    
+    // Lots of them now small
+    float alpha = 1.0;
+    unsigned int pointCount = 16;
+    unsigned int x = 0;
+    unsigned int y = 192;
+    for (unsigned int i = 0; i < pointCount; i++)
+    {
+        for (unsigned int j = 0; j < pointCount; j++)
+        {
+            _spriteBatch->draw(Rectangle(x, y, 32, 32), src); 
+            x += 32;    
+        }
+        x = 0;
+        y += 32;
+    }
+    _spriteBatch->finish();
 
-    // rotate
-    dst.x += dst.height / 4.0f;
-    _spriteBatch->draw(Vector3(dst.x, dst.y, 0), src, Vector2(dst.width, dst.height), Vector4(0, 1, 0, 1), Vector2(0.5f, 0.5f), MATH_PIOVER4);
-
+    // Draw a second batch to ensure no problems
+    _spriteBatch->start();
+    // 50% transparent
+    _spriteBatch->draw(Rectangle(x + 512, y - 512, 512, 512), src, Vector4(1, 1, 1, 0.5f)); 
     _spriteBatch->finish();
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());

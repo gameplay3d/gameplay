@@ -23,8 +23,6 @@
 		420D546515FE430D00AD0B91 /* MeshBatchTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544615FE430D00AD0B91 /* MeshBatchTest.cpp */; };
 		420D546615FE430D00AD0B91 /* MeshPrimitiveTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544815FE430D00AD0B91 /* MeshPrimitiveTest.cpp */; };
 		420D546715FE430D00AD0B91 /* MeshPrimitiveTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544815FE430D00AD0B91 /* MeshPrimitiveTest.cpp */; };
-		420D546815FE430D00AD0B91 /* PhysicsConstraintTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544A15FE430D00AD0B91 /* PhysicsConstraintTest.cpp */; };
-		420D546915FE430D00AD0B91 /* PhysicsConstraintTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544A15FE430D00AD0B91 /* PhysicsConstraintTest.cpp */; };
 		420D546A15FE430D00AD0B91 /* PhysicsSceneTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544C15FE430D00AD0B91 /* PhysicsSceneTest.cpp */; };
 		420D546B15FE430D00AD0B91 /* PhysicsSceneTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544C15FE430D00AD0B91 /* PhysicsSceneTest.cpp */; };
 		420D546C15FE430D00AD0B91 /* SpriteBatchTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D544E15FE430D00AD0B91 /* SpriteBatchTest.cpp */; };
@@ -89,8 +87,6 @@
 		420D544715FE430D00AD0B91 /* MeshBatchTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshBatchTest.h; sourceTree = "<group>"; };
 		420D544815FE430D00AD0B91 /* MeshPrimitiveTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshPrimitiveTest.cpp; sourceTree = "<group>"; };
 		420D544915FE430D00AD0B91 /* MeshPrimitiveTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshPrimitiveTest.h; sourceTree = "<group>"; };
-		420D544A15FE430D00AD0B91 /* PhysicsConstraintTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsConstraintTest.cpp; sourceTree = "<group>"; };
-		420D544B15FE430D00AD0B91 /* PhysicsConstraintTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicsConstraintTest.h; sourceTree = "<group>"; };
 		420D544C15FE430D00AD0B91 /* PhysicsSceneTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsSceneTest.cpp; sourceTree = "<group>"; };
 		420D544D15FE430D00AD0B91 /* PhysicsSceneTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicsSceneTest.h; sourceTree = "<group>"; };
 		420D544E15FE430D00AD0B91 /* SpriteBatchTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatchTest.cpp; sourceTree = "<group>"; };
