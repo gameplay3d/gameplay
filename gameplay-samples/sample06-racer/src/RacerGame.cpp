@@ -16,10 +16,14 @@ bool __drawDebug = false;
 RacerGame game;
 
 // Input bit-flags (powers of 2)
-#define ACCELERATOR (1)
-#define BRAKE (2)
-#define REVERSE (4)
-#define UPRIGHT (8)
+#define ACCELERATOR (1 << 0)
+#define BRAKE (1 << 1)
+#define REVERSE (1 << 2)
+#define UPRIGHT (1 << 3)
+#define STEER_LEFT (1 << 4)
+#define STEER_RIGHT (1 << 5)
+
+#define STEERING_RESPONSE (7.0f)
 
 #define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
 #define BUTTON_B (_gamepad->isVirtual() ? 1 : 11)
@@ -27,7 +31,7 @@ RacerGame game;
 #define BUTTON_Y (13)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _carSound(NULL)
+    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _carSound(NULL)
 {
 }
 
@@ -134,7 +138,6 @@ void RacerGame::update(float elapsedTime)
     if (_scene->getActiveCamera() && (cameraNode = _scene->getActiveCamera()->getNode()))
     {
         float dt = elapsedTime / 1000.0f;
-        float steering = 0;
         float braking = 0;
         float driving = 0;
 
@@ -145,8 +148,22 @@ void RacerGame::update(float elapsedTime)
             if (_gamepad->isJoystickActive(0))
             {
                 _gamepad->getJoystickAxisValues(0, &direction);
-                steering = -direction.x;
             }
+
+            // Allow keys to control steering
+            if (_keyFlags & STEER_LEFT)
+            {
+                _steering += STEERING_RESPONSE * dt;
+            }
+            else if (_keyFlags & STEER_RIGHT)
+            {
+                _steering -= STEERING_RESPONSE * dt;
+            }
+            else
+            {
+                _steering = -direction.x;
+            }
+            _steering = max(-1.0f, min(_steering, 1.0f));
 
             if (_keyFlags & ACCELERATOR || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
             {
@@ -228,10 +245,11 @@ void RacerGame::update(float elapsedTime)
         if (_carVehicle)
         {
             float blowdown = max(0.1f, 1 - 0.009f*fabs(_carVehicle->getSpeedKph()));
-            _carVehicle->update(blowdown*steering, braking, driving);
+            _carVehicle->update(blowdown*_steering, braking, driving);
 
             if (_keyFlags & UPRIGHT
-                    || !_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED)
+                    || !_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED
+                    || _carVehicle->getNode()->getTranslationY() < -1000.0f)
             {
                 resetVehicle();
             }
@@ -329,10 +347,16 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
+            _keyFlags |= STEER_LEFT;
+            break;
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_CAPITAL_D:
+            _keyFlags |= STEER_RIGHT;
+            break;
+        case Keyboard::KEY_UP_ARROW:
             _keyFlags |= ACCELERATOR;
             break;
-        case Keyboard::KEY_B:
-        case Keyboard::KEY_CAPITAL_B:
+        case Keyboard::KEY_DOWN_ARROW:
             _keyFlags |= BRAKE;
             break;
         case Keyboard::KEY_X:
@@ -349,7 +373,7 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_F:
             __flythruCamera = !__flythruCamera;
             break;
-        case Keyboard::KEY_D:
+        case Keyboard::KEY_B:
             __drawDebug = !__drawDebug;
             break;
         }
@@ -360,10 +384,16 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
+            _keyFlags &= ~STEER_LEFT;
+            break;
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_CAPITAL_D:
+            _keyFlags &= ~STEER_RIGHT;
+            break;
+        case Keyboard::KEY_UP_ARROW:
             _keyFlags &= ~ACCELERATOR;
             break;
-        case Keyboard::KEY_B:
-        case Keyboard::KEY_CAPITAL_B:
+        case Keyboard::KEY_DOWN_ARROW:
             _keyFlags &= ~BRAKE;
             break;
         case Keyboard::KEY_X:
@@ -389,6 +419,29 @@ void RacerGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
     case Touch::TOUCH_MOVE:
         break;
     };
+}
+
+bool RacerGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    bool consumed = false;
+
+    switch (evt)
+    {
+    case Mouse::MOUSE_PRESS_LEFT_BUTTON:
+        _keyFlags |= ACCELERATOR;
+        break;
+    case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
+        _keyFlags |= BRAKE;
+        break;
+    case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
+        _keyFlags &= ~ACCELERATOR;
+        break;
+    case Mouse::MOUSE_RELEASE_RIGHT_BUTTON:
+        _keyFlags &= ~BRAKE;
+        break;
+    }
+
+    return consumed;
 }
 
 void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
