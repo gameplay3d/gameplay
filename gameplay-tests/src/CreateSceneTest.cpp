@@ -60,9 +60,8 @@ static Mesh* createCubeMesh(float size = 1.0f)
 }
 
 CreateSceneTest::CreateSceneTest()
-    : _font(NULL), _scene(NULL)
+    : _font(NULL), _scene(NULL), _cubeNode(NULL)
 {
-    
 }
 
 void CreateSceneTest::initialize()
@@ -76,11 +75,14 @@ void CreateSceneTest::initialize()
     // Create the camera.
     Camera* camera = Camera::createPerspective(45.0f, getAspectRatio(), 1.0f, 10.0f);
     Node* cameraNode = _scene->addNode("camera");
+
     // Attach the camera to a node. This determines the position of the camera.
     cameraNode->setCamera(camera);
+
     // Make this the active camera of the scene.
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
+
     // Move the camera to look at the origin.
     cameraNode->translate(0, 1, 5);
     cameraNode->rotateX(MATH_DEG_TO_RAD(-11.25f));
@@ -98,27 +100,32 @@ void CreateSceneTest::initialize()
     Model* cubeModel = Model::create(cubeMesh);
     // Release the mesh because the model now holds a reference to it.
     SAFE_RELEASE(cubeMesh);
+
     // Create the material for the cube model and assign it to the first mesh part.
     Material* material = cubeModel->setMaterial("res/shaders/textured.vert", "res/shaders/textured.frag", 0);
+
     // These parameters are normally set in a .material file but this example sets them programmatically.
     // Bind the uniform "u_worldViewProjectionMatrix" to use the WORLD_VIEW_PROJECTION_MATRIX from the scene's active camera and the node that the model belongs to.
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
     material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
+
     // Bind the light's direction to the material.
     material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
     // Bind the light's color to the material.
     material->getParameter("u_lightColor")->setValue(lightNode->getLight()->getColor());
     // Set the ambient color of the material.
-    material->getParameter("u_ambientColor")->setValue(Vector3(0.25f, 0.25f, 0.25f));
+    material->getParameter("u_ambientColor")->setValue(Vector3(1, 1, 1));
+
     // Load the texture from file.
     Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/common/box-diffuse.png", true);
     sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     material->getStateBlock()->setCullFace(true);
     material->getStateBlock()->setDepthTest(true);
     material->getStateBlock()->setDepthWrite(true);
-    Node* cubeNode = _scene->addNode("cube");
-    cubeNode->setModel(cubeModel);
-    cubeNode->rotateY(MATH_PIOVER4);
+
+    _cubeNode = _scene->addNode("cube");
+    _cubeNode->setModel(cubeModel);
+    _cubeNode->rotateY(MATH_PIOVER4);
     SAFE_RELEASE(cubeModel);
 }
 
@@ -131,7 +138,7 @@ void CreateSceneTest::finalize()
 void CreateSceneTest::update(float elapsedTime)
 {
     // Rotate the directional light.
-    _scene->findNode("light")->rotateY(elapsedTime * 0.002 * MATH_PI);
+    _cubeNode->rotateY(elapsedTime * 0.002 * MATH_PI);
 }
 
 void CreateSceneTest::render(float elapsedTime)

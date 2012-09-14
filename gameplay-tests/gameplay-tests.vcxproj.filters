@@ -39,9 +39,6 @@
     <ClInclude Include="src\SpriteBatchTest.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsConstraintTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Grid.h">
       <Filter>src\common</Filter>
     </ClInclude>
@@ -87,9 +84,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\SpriteBatchTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PhysicsConstraintTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Grid.cpp">
