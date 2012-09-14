@@ -27,6 +27,11 @@ public:
      */
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    /**
+     * @see Game::mouseEvent
+     */
+    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
     /** 
      * @see Game::gamepadEvent
      */
@@ -90,6 +95,8 @@ private:
     Font* _font;
     std::vector<Node*> _renderQueues[2];
     unsigned int _keyFlags;
+    unsigned int _mouseFlags;
+    float _steering;
     Gamepad* _gamepad;
     Gamepad* _virtualGamepad;
     AnimationClip* _virtualGamepadClip;
