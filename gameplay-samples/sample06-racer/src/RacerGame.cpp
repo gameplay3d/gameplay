@@ -27,7 +27,7 @@ RacerGame game;
 #define BUTTON_Y (13)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _gamepad(NULL), _carVehicle(NULL)
+    : _scene(NULL), _keyFlags(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _carSound(NULL)
 {
 }
 
@@ -87,13 +87,13 @@ void RacerGame::initialize()
         _carSound->play();
         _carSound->setGain(0.5f);
     }
-//    _backgroundSound = AudioSource::create("res/common/background_track.ogg");
-//    if (_backgroundSound)
-//    {
-//        _backgroundSound->setLooped(true);
-//        _backgroundSound->play();
-//        _backgroundSound->setGain(0.05f);
-//    }
+    _backgroundSound = AudioSource::create("res/common/background_track.ogg");
+    if (_backgroundSound)
+    {
+        _backgroundSound->setLooped(true);
+        _backgroundSound->play();
+        _backgroundSound->setGain(0.05f);
+    }
 }
 
 bool RacerGame::initializeScene(Node* node)
@@ -117,7 +117,7 @@ bool RacerGame::initializeScene(Node* node)
 
 void RacerGame::finalize()
 {
-//    SAFE_RELEASE(_backgroundSound);
+    SAFE_RELEASE(_backgroundSound);
     SAFE_RELEASE(_carSound);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
@@ -140,9 +140,7 @@ void RacerGame::update(float elapsedTime)
 
         if (!__flythruCamera && _carVehicle)
         {
-            //
             // Vehicle Control (Normal Mode)
-            //
             Vector2 direction;
             if (_gamepad->isJoystickActive(0))
             {
@@ -176,9 +174,7 @@ void RacerGame::update(float elapsedTime)
                 braking = 1;
             }
 
-            //
             // Make the camera follow the car
-            //
             Node* carNode = _carVehicle->getNode();
             Vector3 carPosition(carNode->getTranslation());
             Vector3 fixedArm(Vector3::unitY()*4.0f - carNode->getBackVector()*10.0f);
@@ -198,9 +194,7 @@ void RacerGame::update(float elapsedTime)
         }
         else
         {
-            //
             // Flythru Control (Dev Mode)
-            //
             float speed = 0;
             if (_keyFlags & ACCELERATOR || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
             {
