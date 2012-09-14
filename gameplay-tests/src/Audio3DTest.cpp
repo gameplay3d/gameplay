@@ -14,10 +14,8 @@ static const unsigned int MOVE_UP = 16;
 static const unsigned int MOVE_DOWN = 32;
 
 static const float MOVE_SPEED = 15.0f;
-static const float UP_DOWN_SPEED = 10.0f;
 
-// Functions
-static void loadGrid(Scene* scene);
+static const float UP_DOWN_SPEED = 10.0f;
 
 /**
  * Returns true if the string ends with the given suffix.
@@ -91,7 +89,7 @@ void Audio3DTest::finalize()
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_cubeNode);
-    for (NodeMap::iterator it = _audioNodes.begin(); it != _audioNodes.end(); ++it)
+    for (std::map<std::string, Node*>::iterator it = _audioNodes.begin(); it != _audioNodes.end(); ++it)
     {
         it->second->release();
     }
@@ -269,7 +267,7 @@ void Audio3DTest::addSound(const std::string& file)
     path.append(file);
 
     Node* node = NULL;
-    NodeMap::iterator it = _audioNodes.find(path);
+    std::map<std::string, Node*>::iterator it = _audioNodes.find(path);
     if (it != _audioNodes.end())
     {
         node = it->second->clone();
@@ -314,7 +312,7 @@ void Audio3DTest::drawVector3(const char* str, const Vector3 vector, int x, int 
     _font->drawText(buffer, x, y, Vector4::one(), _font->getSize());
 }
 
-void loadGrid(Scene* scene)
+void Audio3DTest::loadGrid(Scene* scene)
 {
     assert(scene);
     Model* gridModel = createGridModel();

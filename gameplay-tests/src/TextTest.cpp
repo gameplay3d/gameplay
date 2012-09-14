@@ -9,8 +9,7 @@ const char* _legend =  "F: Change font\n" \
                         "W: Wrapping\n" \
                         "C: Ignore clip-rect\n" \
                         "R: Reverse\n" \
-                        "V: Switch between viewport\n" \
-                        "   and clip region.\n" \
+                        "V: Switch clip regions.\n" \
                         "S: Simple / Advanced\n" \
                         "1-9: Alignments\n" \
                         "+/-: Scaling\n";
@@ -21,18 +20,14 @@ std::string _fontNames[] =
     "arial18",
     "dynamic",
     "pirulen",
-    "SFSquareHead",
-    "BaroqueScript",
-    "FOO",
+    "squarehead",
+    "baroque",
+    "custom",
 };
 
 TextTest::TextTest()
     : _font(NULL), _fontIndex(0), _stateBlock(NULL), _legendText(NULL), _viewport(250, 100, 512, 200), _alignment(Font::ALIGN_LEFT),  
     _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _simple(false), _rightToLeft(false), _fontsCount(7)
-{
-}
-
-TextTest::~TextTest()
 {
 }
 
@@ -69,11 +64,11 @@ void TextTest::initialize()
 
     _legendText = _fonts[0]->createText(_legend, Rectangle(5, 100, 1000, 500), Vector4(0, 1, 0, 1), _fonts[0]->getSize());
     
-    _testString = std::string(
-        "Lorem ipsum dolor sit amet, \n" \
-        "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" \
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n" \
-        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+    _testString = std::string( "Lorem ipsum dolor sit amet, \n" \
+                                "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" \
+                                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n" \
+                                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.  \n" \
+                                "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 }
 
 void TextTest::update(float elapsedTime)
@@ -104,11 +99,9 @@ void TextTest::render(float elapsedTime)
     _fonts[1]->start();
     _fonts[1]->drawText(fps, 5, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
     _fonts[1]->drawText(fontInfo.c_str(), 250, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
-    //_fonts[1]->end();
 
     _fonts[0]->start();
     _fonts[0]->drawText(_legendText);
-    //_fonts[0]->end();
 
     unsigned int size = (float)_font->getSize() * _scale;
     if (_font != _fonts[0] && _font != _fonts[1])
@@ -145,8 +138,9 @@ void TextTest::render(float elapsedTime)
     }
 
     if (_font != _fonts[0] && _font != _fonts[1])
+    {
         _font->finish();
-
+    }
     _fonts[0]->finish();
     _fonts[1]->finish();
 }

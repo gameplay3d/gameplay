@@ -55,10 +55,10 @@ void PhysicsSceneTest::render(float elapsedTime)
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
     int y = getHeight() - _font->getSize() * 4;
     _font->start();
-    _font->drawText(_wireFrame ? "Wireframe" : "Solid", 0, y, Vector4::one(), _font->getSize());
-    _font->drawText(_drawDebug == 0 ? "Normal" : "Debug", 0, y += _font->getSize(), Vector4::one(), _font->getSize());
-    _font->drawText(_throw ? "Throw" : "Drop", 0, y += _font->getSize(), Vector4::one(), _font->getSize());
-    _font->drawText(_nodeIds[_objectType], 0, getHeight() - _font->getSize(), _colors[_objectType], _font->getSize());
+    _font->drawText(_wireFrame ? "Wireframe" : "Solid", 10, y, Vector4::one(), _font->getSize());
+    _font->drawText(_drawDebug == 0 ? "Normal" : "Debug", 10, y += _font->getSize(), Vector4::one(), _font->getSize());
+    _font->drawText(_throw ? "Throw" : "Drop", 10, y += _font->getSize(), Vector4::one(), _font->getSize());
+    _font->drawText(_nodeIds[_objectType], 10, getHeight() - _font->getSize(), _colors[_objectType], _font->getSize());
     _font->finish();
 }
 

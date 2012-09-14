@@ -11,18 +11,17 @@
 static Mesh* createTriangleMesh()
 {
     // Calculate the vertices of the equilateral triangle.
-    float a = 0.5f; // length of the side
+    float a = 0.5f;     // length of the side
     Vector2 p1(0.0f,       a / sqrtf(3.0f));
     Vector2 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
     Vector2 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
 
-    // Create 3 vertices.
-    // Each vertex has position (x, y, z) and color (red, green, blue)
+    // Create 3 vertices. Each vertex has position (x, y, z) and color (red, green, blue)
     float vertices[] =
     {
-        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f, // red
-        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f, // green
-        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f, // blue
+        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f,
+        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f,
+        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f,
     };
     unsigned int vertexCount = 3;
     VertexFormat::Element elements[] =
@@ -59,9 +58,11 @@ void TriangleTest::initialize()
 
     // Create the triangle mesh.
     Mesh* mesh = createTriangleMesh();
+
     // Create a model for the triangle mesh. A model is an instance of a Mesh that can be drawn with a specified material.
     _model = Model::create(mesh);
     SAFE_RELEASE(mesh);
+
     // Create a material from the built-in "colored-unlit" vertex and fragment shaders.
     // This sample doesn't use lighting so the unlit shader is used.
     // This sample uses vertex color so VERTEX_COLOR is defined. Look at the shader source files to see the supported defines.

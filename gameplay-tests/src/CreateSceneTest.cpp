@@ -87,8 +87,8 @@ void CreateSceneTest::initialize()
     cameraNode->translate(0, 1, 5);
     cameraNode->rotateX(MATH_DEG_TO_RAD(-11.25f));
 
-    // Create a light.
-    Light* light = Light::createDirectional(0.0f, 0.7f, 1.0f);
+    // Create a white light.
+    Light* light = Light::createDirectional(1.0f, 1.0f, 1.0f);
     Node* lightNode = _scene->addNode("light");
     lightNode->setLight(light);
     // Release the light because the node now holds a reference to it.

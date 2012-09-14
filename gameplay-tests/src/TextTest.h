@@ -1,16 +1,19 @@
-#ifndef TextTest_H_
-#define TextTest_H_
+#ifndef TEXTTEST_H_
+#define TEXTTEST_H_
 
 #include "gameplay.h"
 #include "Test.h"
 
 using namespace gameplay;
 
+/**
+ * Test the text and font class with various text functionality.
+ */
 class TextTest : public Test
 {
 public:
+
     TextTest();
-    virtual ~TextTest();
 
 protected:
     void initialize();

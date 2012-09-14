@@ -45,7 +45,6 @@ void InputTest::render(float elapsedTime)
 
     // Draw text
     Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
-
     unsigned int width, height;
     char buffer[50];
     _font->start();
@@ -58,19 +57,16 @@ void InputTest::render(float elapsedTime)
         int y = _touchPoints[i].y - (int)(height>>1);
         _font->drawText(buffer, x, y, fontColor, _font->getSize());
     }
-
     // Pressed keys
     if (_keyboardString.length() > 0)
     {
         _font->drawText(_keyboardString.c_str(), 0, 0, fontColor, _font->getSize());
     }
-
     // Printable symbols typed
     if (_symbolsString.length() > 0)
     {
         _font->drawText(_symbolsString.c_str(), 0, _font->getSize(), fontColor, _font->getSize());
     }
-
     // Mouse
     _font->drawText("M", _mousePoint.x, _mousePoint.y, fontColor, _font->getSize());
     if (_mouseString.length() > 0)
@@ -90,7 +86,7 @@ void InputTest::render(float elapsedTime)
     if (!_downKeys.empty())
     {
         std::string displayKeys;
-        for (KeySet::const_iterator i = _downKeys.begin(); i != _downKeys.end(); ++i)
+        for (std::set<int>::const_iterator i = _downKeys.begin(); i != _downKeys.end(); ++i)
         {
             const char* str = keyString(*i);
             displayKeys.append(str);
@@ -99,7 +95,7 @@ void InputTest::render(float elapsedTime)
         {
             _font->measureText(displayKeys.c_str(), _font->getSize(), &width, &height);
             int x = Game::getInstance()->getWidth() - width;
-            int y = 0; // Game::getInstance()->getHeight() - height - 50;
+            int y = 0;
             _font->drawText(displayKeys.c_str(), x, y, fontColor, _font->getSize());
         }
     }
@@ -218,7 +214,7 @@ void InputTest::keyEvent(Keyboard::KeyEvent evt, int key)
         }
         else
         {
-            _symbolsString.append(1, (char)(0xFF & key)); // TODO handle unicode later
+            _symbolsString.append(1, (char)(0xFF & key));
         }
         break;
     };
