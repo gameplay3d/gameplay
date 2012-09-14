@@ -84,19 +84,19 @@ void RacerGame::initialize()
     }
 
     // Create audio tracks
+    _backgroundSound = AudioSource::create("res/common/background_track.ogg");
+    if (_backgroundSound)
+    {
+        _backgroundSound->setLooped(true);
+        _backgroundSound->play();
+        _backgroundSound->setGain(0.1f);
+    }
     _carSound = AudioSource::create("res/common/engine_loop.ogg");
     if (_carSound)
     {
         _carSound->setLooped(true);
         _carSound->play();
         _carSound->setGain(0.5f);
-    }
-    _backgroundSound = AudioSource::create("res/common/background_track.ogg");
-    if (_backgroundSound)
-    {
-        _backgroundSound->setLooped(true);
-        _backgroundSound->play();
-        _backgroundSound->setGain(0.05f);
     }
 }
 
@@ -172,7 +172,7 @@ void RacerGame::update(float elapsedTime)
             }
             else
             {
-                _carSound->setGain(0.5f);
+                _carSound->setGain(0.8f);
             }
             float s = (int)_carVehicle->getSpeedKph() / 100.0f;
             _carSound->setPitch(max(0.2f, min(s, 2.0f)));
