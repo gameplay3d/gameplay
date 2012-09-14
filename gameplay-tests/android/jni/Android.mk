@@ -78,7 +78,6 @@ LOCAL_MODULE    := gameplay-tests
 LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
     Audio3DTest.cpp \
     CreateSceneTest.cpp \
-    DrawTriangleTest.cpp \
     FirstPersonCamera.cpp \
     Grid.cpp \
     InputTest.cpp \
@@ -90,7 +89,8 @@ LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
     Test.cpp \
     TestsGame.cpp \
     TextTest.cpp \
-    TextureTest.cpp
+    TextureTest.cpp \
+	TriangleTest.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
 LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../GamePlay/external-deps/lua/include" -I"../../../GamePlay/external-deps/bullet/include" -I"../../../GamePlay/external-deps/libpng/include" -I"../../../GamePlay/external-deps/oggvorbis/include" -I"../../../GamePlay/external-deps/openal/include" -I"../../../GamePlay/gameplay/src"

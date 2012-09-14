@@ -22,6 +22,7 @@ void TestsGame::initialize()
     {
         std::sort((*_tests)[i].begin(), (*_tests)[i].end());
     }
+    registerGesture(Gesture::GESTURE_SWIPE);
 }
 
 void TestsGame::finalize()
@@ -113,6 +114,12 @@ bool TestsGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 void TestsGame::menuEvent()
 {
     exitActiveTest();
+}
+
+void TestsGame::gestureSwipeEvent(int x, int y, int direction)
+{
+    if (direction == Gesture::SWIPE_DIRECTION_LEFT)
+        exitActiveTest();
 }
 
 void TestsGame::runTest(void* func)
