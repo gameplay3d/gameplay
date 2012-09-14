@@ -97,7 +97,7 @@ private:
     Vector3 _carPositionPrevious;
 
     // Sounds
-//    AudioSource* _backgroundSound;
+    AudioSource* _backgroundSound;
     AudioSource* _carSound;
 };
 
