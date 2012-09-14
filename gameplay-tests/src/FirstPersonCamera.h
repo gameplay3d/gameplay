@@ -13,10 +13,13 @@ class FirstPersonCamera
 public:
 
     /**
-     * Constructor. Be sure to call initialize() before trying to use FirstPersonCamera.
+     * Constructor.
      */
     FirstPersonCamera();
 
+    /**
+     * Destructor.
+     */
     ~FirstPersonCamera();
 
     /**
@@ -66,6 +69,7 @@ public:
     void moveRight(float amount);
 
     void moveUp(float amount);
+
     void moveDown(float amount);
 
     /**
@@ -77,6 +81,7 @@ public:
     void rotate(float yaw, float pitch);
 
 private:
+
     Node* _pitchNode;
     Node* _rootNode;
 };

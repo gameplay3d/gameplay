@@ -57,7 +57,6 @@ void MeshBatchTest::finalize()
 
 void MeshBatchTest::update(float elapsedTime)
 {
-    
 }
 
 void MeshBatchTest::render(float elapsedTime)
@@ -74,7 +73,7 @@ void MeshBatchTest::render(float elapsedTime)
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
     _font->start();
-    _font->drawText("Touch to add a triangle", 0, getHeight() - _font->getSize(), Vector4::one(), _font->getSize());
+    _font->drawText("Touch to add triangles", 0, getHeight() - _font->getSize(), Vector4::one(), _font->getSize());
     _font->finish();
 }
 
@@ -103,7 +102,7 @@ void MeshBatchTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 void MeshBatchTest::addTriangle(int x, int y)
 {
     // Calculate the vertices of the equilateral triangle.
-    float a = MATH_RANDOM_0_1() * 80.0 + 40.0f; // length of the side (between 40 and 120)
+    float a = MATH_RANDOM_0_1() * 80.0 + 40.0f;    // length of the side (between 40 and 120)
     Vector3 p1(0.0f,       a / sqrtf(3.0f), 0);
     Vector3 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)), 0);
     Vector3 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)), 0);

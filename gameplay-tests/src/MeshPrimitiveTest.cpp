@@ -11,18 +11,17 @@
 static Mesh* createTriangleMesh()
 {
     // Calculate the vertices of the equilateral triangle.
-    float a = 0.25f; // length of the side
+    float a = 0.25f;        // Length of side
     Vector2 p1(0.0f,       a / sqrtf(3.0f));
     Vector2 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
     Vector2 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
 
-    // Create 3 vertices.
-    // Each vertex has position (x, y, z) and color (red, green, blue)
+    // Create 3 vertices. Each vertex has position (x, y, z) and color (red, green, blue)
     float vertices[] =
     {
-        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f, // red
-        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f, // green
-        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f, // blue
+        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f,
+        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f,
+        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f,
     };
     unsigned int vertexCount = 3;
     VertexFormat::Element elements[] =
@@ -43,7 +42,7 @@ static Mesh* createTriangleMesh()
 
 static Mesh* createTriangleStripMesh()
 {
-    float scale = 0.02f; //scale
+    float scale = 0.02f;
     unsigned int vertexCount = 20;
 
     std::vector<float> vertices;
@@ -56,12 +55,13 @@ static Mesh* createTriangleStripMesh()
 
     for (unsigned int i = 0; i < vertexCount; ++i)
     {
-        vertices.push_back(x); // x
-        vertices.push_back(y + MATH_RANDOM_MINUS1_1() * scale); // y
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale * 2); // z
-        vertices.push_back(MATH_RANDOM_0_1()); // red
-        vertices.push_back(MATH_RANDOM_0_1()); // green
-        vertices.push_back(MATH_RANDOM_0_1()); // blue
+        // x, y, z, r, g, b
+        vertices.push_back(x);
+        vertices.push_back(y + MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale * 2); 
+        vertices.push_back(MATH_RANDOM_0_1()); 
+        vertices.push_back(MATH_RANDOM_0_1()); 
+        vertices.push_back(MATH_RANDOM_0_1()); 
         x += step;
         y *= -1.0f;
     }
@@ -114,19 +114,20 @@ static Mesh* createLineStripMesh()
 
 static Mesh* createLinesMesh()
 {
-    float scale = 0.2f; //scale
+    float scale = 0.2f; 
     unsigned int vertexCount = 40;
 
     std::vector<float> vertices;
     vertices.reserve(vertexCount * 6);
     for (unsigned int i = 0; i < vertexCount; ++i)
     {
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale); // x
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale); // y
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale); // z
-        vertices.push_back(MATH_RANDOM_0_1()); // red
-        vertices.push_back(MATH_RANDOM_0_1()); // green
-        vertices.push_back(MATH_RANDOM_0_1()); // blue
+        // x, y, z, r, g, b
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_0_1());
+        vertices.push_back(MATH_RANDOM_0_1());
+        vertices.push_back(MATH_RANDOM_0_1());
     }
     
     VertexFormat::Element elements[] =
@@ -149,19 +150,20 @@ static Mesh* createLinesMesh()
 
 static Mesh* createPointsMesh()
 {
-    float scale = 0.2f; //scale
+    float scale = 0.2f;
     unsigned int vertexCount = 100;
 
     std::vector<float> vertices;
     vertices.reserve(vertexCount * 6);
     for (unsigned int i = 0; i < vertexCount; ++i)
     {
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale); // x
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale); // y
-        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale); // z
-        vertices.push_back(MATH_RANDOM_0_1()); // red
-        vertices.push_back(MATH_RANDOM_0_1()); // green
-        vertices.push_back(MATH_RANDOM_0_1()); // blue
+        // x, y, z, r, g, b
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_MINUS1_1() * scale);
+        vertices.push_back(MATH_RANDOM_0_1());
+        vertices.push_back(MATH_RANDOM_0_1());
+        vertices.push_back(MATH_RANDOM_0_1()); 
     }
     
     VertexFormat::Element elements[] =
@@ -176,7 +178,6 @@ static Mesh* createPointsMesh()
         return NULL;
     }
     mesh->setPrimitiveType(Mesh::POINTS);
-    // 
     mesh->setVertexData(&vertices[0], 0, vertexCount);
     return mesh;
 }
@@ -184,7 +185,6 @@ static Mesh* createPointsMesh()
 MeshPrimitiveTest::MeshPrimitiveTest()
     : _font(NULL), _triangles(NULL), _triangleStrip(NULL), _lineStrip(NULL), _lines(NULL), _points(NULL)
 {
-    
 }
 
 void MeshPrimitiveTest::initialize()
@@ -201,6 +201,7 @@ void MeshPrimitiveTest::initialize()
     Mesh* triangleMesh = createTriangleMesh();
     _triangles = Model::create(triangleMesh);
     SAFE_RELEASE(triangleMesh);
+
     // Create a material from the built-in "colored-unlit" vertex and fragment shaders.
     // This sample doesn't use lighting so the unlit shader is used.
     // This sample uses vertex color so VERTEX_COLOR is defined. Look at the shader source files to see the supported defines.
@@ -222,11 +223,6 @@ void MeshPrimitiveTest::initialize()
     _lines = Model::create(lineMesh);
     SAFE_RELEASE(lineMesh);
     _lines->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
-
-    //Mesh* pointsMesh = createPointsMesh();
-    //_points = Model::create(pointsMesh);
-    //SAFE_RELEASE(pointsMesh);
-    //_points->setMaterial("res/shaders/colored-unlit.vert", "res/shaders/colored-unlit.frag", "VERTEX_COLOR");
 }
 
 void MeshPrimitiveTest::finalize()
@@ -279,12 +275,6 @@ void MeshPrimitiveTest::render(float elapsedTime)
     Matrix::multiply(m, wvp, &m);
     _triangleStrip->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(m);
     _triangleStrip->draw();
-
-    //m.setIdentity();
-    //m.translate(offset, offset, 0);
-    //Matrix::multiply(m, wvp, &m);
-    //_points->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(m);
-    //_points->draw();
 
     m.setIdentity();
     m.translate(-offset, -offset, 0);

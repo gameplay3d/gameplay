@@ -130,6 +130,7 @@ void TestsGame::runTest(void* func)
 
     _activeTest = reinterpret_cast<Test*>(p());
     _activeTest->initialize();
+    resume();
 }
 
 void TestsGame::exitActiveTest()

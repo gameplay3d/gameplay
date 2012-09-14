@@ -11,7 +11,7 @@
 static Mesh* createTriangleMesh()
 {
     // Calculate the vertices of the equilateral triangle.
-    float a = 0.5f; // length of the side
+    float a = 0.5f;        // length of the side
     Vector2 p1(0.0f,       a / sqrtf(3.0f));
     Vector2 p2(-a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
     Vector2 p3( a / 2.0f, -a / (2.0f * sqrtf(3.0f)));
@@ -20,9 +20,9 @@ static Mesh* createTriangleMesh()
     // Each vertex has position (x, y, z) and color (red, green, blue)
     float vertices[] =
     {
-        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f, // red
-        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f, // green
-        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f, // blue
+        p1.x, p1.y, 0.0f,     1.0f, 0.0f, 0.0f,
+        p2.x, p2.y, 0.0f,     0.0f, 1.0f, 0.0f, 
+        p3.x, p3.y, 0.0f,     0.0f, 0.0f, 1.0f,
     };
     unsigned int vertexCount = 3;
     VertexFormat::Element elements[] =
@@ -44,7 +44,6 @@ static Mesh* createTriangleMesh()
 SpriteBatchTest::SpriteBatchTest()
     : _font(NULL), _spriteBatch(NULL)
 {
-    
 }
 
 void SpriteBatchTest::initialize()
@@ -56,9 +55,7 @@ void SpriteBatchTest::initialize()
     float width = getWidth() / (float)getHeight();
     float height = 1.0f;
     Matrix::createOrthographic(width, height, -1.0f, 1.0f, &_worldViewProjectionMatrix);
-
     _spriteBatch = SpriteBatch::create("res/common/box-diffuse.png");
-
 }
 
 void SpriteBatchTest::finalize()
@@ -69,7 +66,6 @@ void SpriteBatchTest::finalize()
 
 void SpriteBatchTest::update(float elapsedTime)
 {
-    
 }
 
 void SpriteBatchTest::render(float elapsedTime)
@@ -102,7 +98,6 @@ void SpriteBatchTest::render(float elapsedTime)
     // Negative height draw over top of the first one
     _spriteBatch->draw(Rectangle(0, 0 , 64 * 2.0f, 64 * -2.0f), src);
 
-
     // Scale
     _spriteBatch->draw(Vector3(0, 64, 0), src, Vector2(dst.width * 2.0f, dst.height * 2.0f));
     // rotate 90
@@ -131,6 +126,7 @@ void SpriteBatchTest::render(float elapsedTime)
 
     // Draw a second batch to ensure no problems
     _spriteBatch->start();
+
     // 50% transparent
     _spriteBatch->draw(Rectangle(x + 512, y - 512, 512, 512), src, Vector4(1, 1, 1, 0.5f)); 
     _spriteBatch->finish();
