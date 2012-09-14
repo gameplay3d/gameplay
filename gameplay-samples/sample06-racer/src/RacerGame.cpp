@@ -165,7 +165,7 @@ void RacerGame::update(float elapsedTime)
             }
             _steering = max(-1.0f, min(_steering, 1.0f));
 
-            if (_keyFlags & ACCELERATOR || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
+            if ( (_keyFlags & ACCELERATOR) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED) )
             {
                 driving = 1;
                 _engineSound->setGain(1.0f);
@@ -178,15 +178,15 @@ void RacerGame::update(float elapsedTime)
             _engineSound->setPitch(max(0.2f, min(s, 2.0f)));
 
             // Reverse only below a reasonable speed
-            bool isReverseCommanded = _keyFlags & REVERSE
-                    || !_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED
-                    || direction.y < -0.9;
+            bool isReverseCommanded = (_keyFlags & REVERSE) ||
+                                      (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED) ||
+                                      (direction.y < -0.9);
             if (isReverseCommanded && _carVehicle->getSpeedKph() < 30.0f)
             {
                 driving = -0.6f;
             }
 
-            if (_keyFlags & BRAKE || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
+            if ( (_keyFlags & BRAKE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
             {
                 braking = 1;
                 if (_brakingSound && _brakingSound->getState() != AudioSource::PLAYING && _carVehicle->getSpeedKph() > 30.0f)
@@ -220,11 +220,11 @@ void RacerGame::update(float elapsedTime)
         {
             // Flythru Control (Dev Mode)
             float speed = 0;
-            if (_keyFlags & ACCELERATOR || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
+            if ( (_keyFlags & ACCELERATOR) || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
             {
                 speed = 60.0f;
             }
-            else if (_keyFlags & BRAKE || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
+            else if ( (_keyFlags & BRAKE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
             {
                 speed = -60.0f;
             }
@@ -254,9 +254,9 @@ void RacerGame::update(float elapsedTime)
             float blowdown = max(0.1f, 1 - 0.009f*fabs(_carVehicle->getSpeedKph()));
             _carVehicle->update(blowdown*_steering, braking, driving);
 
-            if (_keyFlags & UPRIGHT
-                    || !_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED
-                    || _carVehicle->getNode()->getTranslationY() < -1000.0f)
+            if ( (_keyFlags & UPRIGHT) ||
+                 (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
+                 (_carVehicle->getNode()->getTranslationY() < -1000.0f) )
             {
                 resetVehicle();
             }
