@@ -31,7 +31,7 @@ RacerGame game;
 #define BUTTON_Y (13)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _carSound(NULL)
+    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
 }
 
@@ -62,12 +62,6 @@ void RacerGame::initialize()
     getScriptController()->loadScript("res/common/game.lua");
     getScriptController()->executeFunction<void>("setScene", "<Scene>", _scene);
 
-    /*Animation* animation = _scene->findNode("camera1")->getAnimation();
-    if (animation)
-    {
-        animation->getClip()->setSpeed(10);
-        animation->play();
-    }*/
     _virtualGamepad = getGamepad(0);
     Form* gamepadForm = _virtualGamepad->getForm();
 
@@ -91,13 +85,18 @@ void RacerGame::initialize()
         _backgroundSound->play();
         _backgroundSound->setGain(0.1f);
     }
-    _carSound = AudioSource::create("res/common/engine_loop.ogg");
-    if (_carSound)
+
+    _engineSound = AudioSource::create("res/common/engine_loop.ogg");
+    if (_engineSound)
     {
-        _carSound->setLooped(true);
-        _carSound->play();
-        _carSound->setGain(0.5f);
+        _engineSound->setLooped(true);
+        _engineSound->play();
+        _engineSound->setGain(0.5f);
     }
+
+    _brakingSound = AudioSource::create("res/common/braking.ogg");
+    _brakingSound->setLooped(false);
+    _brakingSound->setGain(10.0f);
 }
 
 bool RacerGame::initializeScene(Node* node)
@@ -122,7 +121,8 @@ bool RacerGame::initializeScene(Node* node)
 void RacerGame::finalize()
 {
     SAFE_RELEASE(_backgroundSound);
-    SAFE_RELEASE(_carSound);
+    SAFE_RELEASE(_engineSound);
+    SAFE_RELEASE(_brakingSound);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
 }
@@ -168,14 +168,14 @@ void RacerGame::update(float elapsedTime)
             if (_keyFlags & ACCELERATOR || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
             {
                 driving = 1;
-                _carSound->setGain(1.0f);
+                _engineSound->setGain(1.0f);
             }
             else
             {
-                _carSound->setGain(0.8f);
+                _engineSound->setGain(0.8f);
             }
             float s = (int)_carVehicle->getSpeedKph() / 100.0f;
-            _carSound->setPitch(max(0.2f, min(s, 2.0f)));
+            _engineSound->setPitch(max(0.2f, min(s, 2.0f)));
 
             // Reverse only below a reasonable speed
             bool isReverseCommanded = _keyFlags & REVERSE
@@ -189,7 +189,14 @@ void RacerGame::update(float elapsedTime)
             if (_keyFlags & BRAKE || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
             {
                 braking = 1;
+                if (_brakingSound && _brakingSound->getState() != AudioSource::PLAYING && _carVehicle->getSpeedKph() > 30.0f)
+                    _brakingSound->play();
             }
+            else
+            {
+                _brakingSound->stop();
+            }
+
 
             // Make the camera follow the car
             Node* carNode = _carVehicle->getNode();

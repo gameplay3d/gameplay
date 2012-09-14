@@ -105,7 +105,8 @@ private:
 
     // Sounds
     AudioSource* _backgroundSound;
-    AudioSource* _carSound;
+    AudioSource* _engineSound;
+    AudioSource* _brakingSound;
 };
 
 #endif
