@@ -198,6 +198,34 @@ Thumbs.db
 /gameplay-samples/sample05-lua/android/proguard.cfg
 /gameplay-samples/sample05-lua/android/project.properties
 
+/gameplay-samples/sample06-racer/Debug
+/gameplay-samples/sample06-racer/DebugMem
+/gameplay-samples/sample06-racer/Release
+/gameplay-samples/sample06-racer/Simulator
+/gameplay-samples/sample06-racer/Simulator-Coverage
+/gameplay-samples/sample06-racer/Simulator-Profile
+/gameplay-samples/sample06-racer/Device-Debug
+/gameplay-samples/sample06-racer/Device-Coverage
+/gameplay-samples/sample06-racer/Device-Profile
+/gameplay-samples/sample06-racer/Device-Release
+/gameplay-samples/sample06-racer/game.config
+/gameplay-samples/sample06-racer/res/shaders
+/gameplay-samples/sample06-racer/res/logo_powered_white.png
+/gameplay-samples/sample06-racer/sample06-racer.xcodeproj/xcuserdata
+/gameplay-samples/sample06-racer/android/project.properties
+/gameplay-samples/sample06-racer/android/proguard.cfg
+/gameplay-samples/sample06-racer/android/local.properties
+/gameplay-samples/sample06-racer/android/src
+/gameplay-samples/sample06-racer/android/assets
+/gameplay-samples/sample06-racer/android/bin
+/gameplay-samples/sample06-racer/android/gen
+/gameplay-samples/sample06-racer/android/libs
+/gameplay-samples/sample06-racer/android/obj
+/gameplay-samples/sample06-racer/android/NUL
+/gameplay-samples/sample06-racer/android/local.properties
+/gameplay-samples/sample06-racer/android/proguard.cfg
+/gameplay-samples/sample06-racer/android/project.properties
+
 /gameplay-internal
 /gameplay/android/proguard-project.txt
 

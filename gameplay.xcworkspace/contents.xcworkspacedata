@@ -25,4 +25,7 @@
    <FileRef
       location = "group:gameplay-samples/sample05-lua/sample05-lua.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:gameplay-samples/sample06-racer/sample06-racer.xcodeproj">
+   </FileRef>
 </Workspace>
