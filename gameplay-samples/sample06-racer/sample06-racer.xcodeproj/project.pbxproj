@@ -22,6 +22,8 @@
 		42C933291491A6E50098216A /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933251491A6E50098216A /* libvorbisfile.a */; };
 		42C9332C1491A7680098216A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332A1491A7390098216A /* libpng.a */; };
 		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
+		42D604DF16058F89003F3C48 /* game.dxt.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604DE16058F89003F3C48 /* game.dxt.config */; };
+		42D604E216058F97003F3C48 /* game.pvr.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604E116058F97003F3C48 /* game.pvr.config */; };
 		5B61611614CCC24C0073B857 /* RacerGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* RacerGame.cpp */; };
 		5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
 		5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933201491A6C70098216A /* libbullet.a */; };
@@ -60,6 +62,8 @@
 		42C933251491A6E50098216A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
 		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		42D604DE16058F89003F3C48 /* game.dxt.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.dxt.config; sourceTree = "<group>"; };
+		42D604E116058F97003F3C48 /* game.pvr.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.pvr.config; sourceTree = "<group>"; };
 		5B61611214CCC2200073B857 /* sample06-racer-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample06-racer-macosx.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* sample06-racer-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample06-racer-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample06-racer-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample06-racer-ios.plist"; sourceTree = "<group>"; };
@@ -121,10 +125,12 @@
 		42C932B11491A0DB0098216A = {
 			isa = PBXGroup;
 			children = (
-				F188C94A15C1971F0025FC73 /* game.config */,
 				5B61611214CCC2200073B857 /* sample06-racer-macosx.plist */,
 				5B61612E14CCC24D0073B857 /* sample06-racer-ios.plist */,
 				42C932ED1491A4CB0098216A /* icon.png */,
+				F188C94A15C1971F0025FC73 /* game.config */,
+				42D604DE16058F89003F3C48 /* game.dxt.config */,
+				42D604E116058F97003F3C48 /* game.pvr.config */,
 				42C932F21491A53E0098216A /* res */,
 				42C932C61491A0DB0098216A /* src */,
 				42C932DD1491A1050098216A /* Libraries */,
@@ -220,7 +226,6 @@
 				42C932B91491A0DB0098216A /* Frameworks */,
 				42C933301491A7B50098216A /* ShellScript */,
 				42C932BA1491A0DB0098216A /* Resources */,
-				5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */,
 			);
 			buildRules = (
 			);
@@ -239,7 +244,6 @@
 				5B61611714CCC24C0073B857 /* Frameworks */,
 				5B61612414CCC24C0073B857 /* ShellScript */,
 				5B61612514CCC24C0073B857 /* Resources */,
-				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */,
 			);
 			buildRules = (
 			);
@@ -284,6 +288,7 @@
 				42C932EE1491A4CB0098216A /* icon.png in Resources */,
 				42C932F31491A53E0098216A /* res in Resources */,
 				F188C94B15C1971F0025FC73 /* game.config in Resources */,
+				42D604DF16058F89003F3C48 /* game.dxt.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +298,7 @@
 			files = (
 				5B61612614CCC24C0073B857 /* icon.png in Resources */,
 				5B61612714CCC24C0073B857 /* res in Resources */,
+				42D604E216058F97003F3C48 /* game.pvr.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,7 +316,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/game.dxt.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
 		};
 		5B61612414CCC24C0073B857 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -323,35 +329,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch -cm ${SRCROOT}/res";
-		};
-		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Gameplay Reousrces Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp -rn ../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
-		};
-		5BAF20D7152F30C3003E2AC3 /* Copy Gameplay Resources - Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Gameplay Resources - Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp -rn ../../gameplay/res/shaders ${SRCROOT}/res\ncp -rn ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/game.pvr.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 
