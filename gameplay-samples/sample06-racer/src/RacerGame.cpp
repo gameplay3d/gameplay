@@ -293,7 +293,7 @@ void RacerGame::render(float elapsedTime)
     _font->drawText(fps, 5, 5, Vector4(0,0.5f,1,1), 20);
     char kph[32];
     sprintf(kph, "%d [km/h]", carSpeed);
-    _font->drawText(kph, 300, 350, Vector4(1,1,1,1), 40);
+    _font->drawText(kph, getWidth() / 2 - 50, getHeight() - 60, Vector4(1,1,1,1), 40);
     _font->finish();
 }
 
