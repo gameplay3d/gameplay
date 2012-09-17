@@ -15,9 +15,12 @@
 
 using gameplay::print;
 
-// Default to 720p
-static int __width = 1280;
-static int __height = 720;
+// Window defaults
+#define DEFAULT_RESOLUTION_X 1024
+#define DEFAULT_RESOLUTION_Y 768
+#define DEFAULT_COLOR_BUFFER_SIZE 32
+#define DEFAULT_DEPTH_BUFFER_SIZE 24
+#define DEFAULT_STENCIL_BUFFER_SIZE 8
 
 static double __timeTicksPerMillis;
 static double __timeStart;
@@ -426,12 +429,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
-    // Scale factors for the mouse movement used to simulate the accelerometer.
-    GP_ASSERT(__width);
-    GP_ASSERT(__height);
-    static const float ACCELEROMETER_X_FACTOR = 90.0f / __width;
-    static const float ACCELEROMETER_Y_FACTOR = 90.0f / __height;
-
     static int lx, ly;
 
     static bool shiftDown = false;
@@ -524,9 +521,15 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
             {
+                // Scale factors for the mouse movement used to simulate the accelerometer.
+                RECT clientRect;
+                GetClientRect(__hwnd, &clientRect);
+                const float xFactor = 90.0f / clientRect.right;
+                const float yFactor = 90.0f / clientRect.bottom;
+
                 // Update the pitch and roll by adding the scaled deltas.
-                __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
-                __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
+                __roll += (float)(x - lx) * xFactor;
+                __pitch += -(float)(y - ly) * yFactor;
 
                 // Clamp the values to the valid range.
                 __roll = max(min(__roll, 90.0f), -90.0f);
@@ -593,6 +596,14 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 namespace gameplay
 {
 
+struct WindowCreationParams
+{
+    RECT rect;
+    std::wstring windowName;
+    bool fullscreen;
+    int samples;
+};
+
 extern void print(const char* format, ...)
 {
     va_list argptr;
@@ -626,41 +637,171 @@ Platform::~Platform()
 #endif
 }
 
-bool initializeGL()
+bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
 {
-    // Choose pixel format. 32-bit. RGBA.
+    bool fullscreen = false;
+    RECT rect = { CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT };
+    std::wstring windowName;
+    if (params)
+    {
+        windowName = params->windowName;
+        memcpy(&rect, &params->rect, sizeof(RECT));
+        fullscreen = params->fullscreen;
+    }
+
+    // Set the window style.
+    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+
+    // Adjust the window rectangle so the client size is the requested size.
+    AdjustWindowRectEx(&rect, style, FALSE, styleEx);
+
+    // Create the native Windows window.
+    *hwnd = CreateWindowEx(styleEx, L"gameplay", windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
+    if (*hwnd == NULL)
+    {
+        GP_ERROR("Failed to create window.");
+        return false;
+    }
+
+    // Get the drawing context.
+    *hdc = GetDC(*hwnd);
+    if (*hdc == NULL)
+    {
+        GP_ERROR("Failed to get device context.");
+        return false;
+    }
+
+    // Center the window
+    GetWindowRect(*hwnd, &rect);
+    const int screenX = (GetSystemMetrics(SM_CXSCREEN) - rect.right) / 2;
+    const int screenY = (GetSystemMetrics(SM_CYSCREEN) - rect.bottom) / 2;
+    SetWindowPos(*hwnd, *hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+    return true;
+}
+
+bool initializeGL(WindowCreationParams* params)
+{
+    // Create a temporary window and context to we can initialize GLEW and get access
+    // to additional OpenGL extension functions. This is a neccessary evil since the
+    // function for querying GL extensions is a GL extension itself.
+    HWND hwnd = NULL;
+    HDC hdc = NULL;
+    if (!createWindow(NULL, &hwnd, &hdc))
+        return false;
+
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
     pfd.nSize  = sizeof(PIXELFORMATDESCRIPTOR);
     pfd.nVersion   = 1;
     pfd.dwFlags    = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
     pfd.iPixelType = PFD_TYPE_RGBA;
-    pfd.cColorBits = 32;
-    pfd.cDepthBits = 32;
+    pfd.cColorBits = DEFAULT_COLOR_BUFFER_SIZE;
+    pfd.cDepthBits = DEFAULT_DEPTH_BUFFER_SIZE;
+    pfd.cStencilBits = DEFAULT_STENCIL_BUFFER_SIZE;
     pfd.iLayerType = PFD_MAIN_PLANE;
 
-    int pixelFormat = ChoosePixelFormat(__hdc, &pfd);
-
+    int pixelFormat = ChoosePixelFormat(hdc, &pfd);
     if (pixelFormat == 0)
     {
+        DestroyWindow(hwnd);
         GP_ERROR("Failed to choose a pixel format.");
         return false;
     }
-    if (!SetPixelFormat (__hdc, pixelFormat, &pfd))
+
+    if (!SetPixelFormat(hdc, pixelFormat, &pfd))
     {
+        DestroyWindow(hwnd);
         GP_ERROR("Failed to set the pixel format.");
         return false;
     }
 
-    HGLRC tempContext = wglCreateContext(__hdc);
-    wglMakeCurrent(__hdc, tempContext);
+    HGLRC tempContext = wglCreateContext(hdc);
+    if (!tempContext)
+    {
+        DestroyWindow(hwnd);
+        GP_ERROR("Failed to create temporary context for initialization.");
+        return false;
+    }
+    wglMakeCurrent(hdc, tempContext);
 
+    // Initialize GLEW
     if (GLEW_OK != glewInit())
     {
+        wglDeleteContext(tempContext);
+        DestroyWindow(hwnd);
         GP_ERROR("Failed to initialize GLEW.");
         return false;
     }
 
+    // Choose pixel format using wglChoosePixelFormatARB, which allows us to specify
+    // additional attributes such as multisampling.
+    int attribList[] = {
+        WGL_SAMPLES_ARB, params->samples,
+        WGL_SAMPLE_BUFFERS_ARB, params->samples > 0 ? 1 : 0,
+        WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+        WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+        WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+        WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+        WGL_COLOR_BITS_ARB, DEFAULT_COLOR_BUFFER_SIZE,
+        WGL_DEPTH_BITS_ARB, DEFAULT_DEPTH_BUFFER_SIZE,
+        WGL_STENCIL_BITS_ARB, DEFAULT_STENCIL_BUFFER_SIZE,
+        0
+    };
+    UINT numFormats;
+    if (!wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
+    {
+        bool valid = false;
+        if (params->samples > 0)
+        {
+            GP_WARN("Failed to choose pixel format with WGL_SAMPLES_ARB == %d. Attempting to fallback to lower samples setting.", params->samples);
+            while (params->samples > 0)
+            {
+                params->samples /= 2;
+                attribList[1] = params->samples;
+                attribList[3] = params->samples > 0 ? 1 : 0;
+                if (wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) && numFormats > 0)
+                {
+                    valid = true;
+                    GP_WARN("Found pixel format with WGL_SAMPLES_ARB == %d.", params->samples);
+                    break;
+                }
+            }
+        }
+
+        if (!valid)
+        {
+            wglDeleteContext(tempContext);
+            DestroyWindow(hwnd);
+            GP_ERROR("Failed to choose a pixel format.");
+            return false;
+        }
+    }
+
+    // Destroy old window
+    DestroyWindow(hwnd);
+    hwnd = NULL;
+    hdc = NULL;
+
+    // Create new/final window if needed
+    if (params)
+    {
+        if (!createWindow(params, &__hwnd, &__hdc))
+        {
+            wglDeleteContext(tempContext);
+            return false;
+        }
+    }
+
+    // Set final pixel format for window
+    if (!SetPixelFormat(__hdc, pixelFormat, &pfd))
+    {
+        GP_ERROR("Failed to set the pixel format: %d.", (int)GetLastError());
+        return false;
+    }
+
+    // Create our new GL context
     int attribs[] =
     {
         WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
@@ -674,8 +815,11 @@ bool initializeGL()
         GP_ERROR("Failed to create OpenGL context.");
         return false;
     }
+
+    // Delete the old/temporary context and window
     wglDeleteContext(tempContext);
 
+    // Make the new context current
     if (!wglMakeCurrent(__hdc, __hrc) || !__hrc)
     {
         GP_ERROR("Failed to make the window current.");
@@ -699,44 +843,96 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __hinstance = ::GetModuleHandle(NULL);
 
     __attachToWindow = (HWND)attachToWindow;
-    if (!__attachToWindow)
+
+    // Read window settings from config.
+    WindowCreationParams params;
+    params.fullscreen = false;
+    params.rect.left = 0;
+    params.rect.top = 0;
+    params.rect.right = 0;
+    params.rect.bottom = 0;
+    params.samples = 0;
+    if (game->getConfig())
     {
-        LPCTSTR windowClass = L"gameplay";
-        std::wstring windowName;
-        bool fullscreen = false;
-    
-        // Read window settings from config.
-        if (game->getConfig())
+        Properties* config = game->getConfig()->getNamespace("window", true);
+        if (config)
         {
-            Properties* config = game->getConfig()->getNamespace("window", true);
-            if (config)
+            // Read window title.
+            const char* title = config->getString("title");
+            if (title)
             {
-                // Read window title.
-                const char* title = config->getString("title");
-                if (title)
-                {
-                    int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
-                    wchar_t* wtitle = new wchar_t[len];
-                    MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
-                    windowName = wtitle;
-                    SAFE_DELETE_ARRAY(wtitle);
-                }
+                int len = MultiByteToWideChar(CP_ACP, 0, title, -1, NULL, 0);
+                wchar_t* wtitle = new wchar_t[len];
+                MultiByteToWideChar(CP_ACP, 0, title, -1, wtitle, len);
+                params.windowName = wtitle;
+                SAFE_DELETE_ARRAY(wtitle);
+            }
 
-                // Read window size.
-                int width = config->getInt("width");
-                if (width != 0)
-                    __width = width;
-                int height = config->getInt("height");
-                if (height != 0)
-                    __height = height;
+            // Read window rect.
+            int x = config->getInt("x");
+            if (x != 0)
+                params.rect.left = x;
+            int y = config->getInt("y");
+            if (y != 0)
+                params.rect.top = y;
+            int width = config->getInt("width");
+            if (width != 0)
+                params.rect.right = params.rect.left + width;
+            int height = config->getInt("height");
+            if (height != 0)
+                params.rect.bottom = params.rect.top + height;
 
-                // Read fullscreen state.
-                fullscreen = config->getBool("fullscreen");
+            // Read fullscreen state.
+            params.fullscreen = config->getBool("fullscreen");
+
+            // Read multisampling state.
+            params.samples = config->getInt("samples");
+            if (params.samples == 0)
+                params.samples = 1;
+        }
+    }
+
+    // If window size was not specified, set it to a default value
+    if (params.rect.right == 0)
+        params.rect.right = params.rect.left + DEFAULT_RESOLUTION_X;
+    if (params.rect.bottom == 0)
+        params.rect.bottom = params.rect.top + DEFAULT_RESOLUTION_Y;
+    int width = params.rect.right - params.rect.left;
+    int height = params.rect.bottom - params.rect.top;
+
+    if (params.fullscreen)
+    {
+        // Enumerate all supposed display settings
+        bool modeSupported = false;
+        DWORD modeNum = 0;
+        DEVMODE devMode;
+        memset(&devMode, 0, sizeof(DEVMODE));
+        devMode.dmSize = sizeof(DEVMODE);
+        devMode.dmDriverExtra = 0;
+        while (EnumDisplaySettings(NULL, modeNum++, &devMode) != 0)
+        {
+            // Is mode supported?
+            if (devMode.dmPelsWidth == width &&
+                devMode.dmPelsHeight == height &&
+                devMode.dmBitsPerPel == DEFAULT_COLOR_BUFFER_SIZE)
+            {
+                modeSupported = true;
+                break;
             }
         }
 
-        RECT rect = { 0, 0, __width, __height };
+        // If the requested mode is not supported, fall back to a safe default
+        if (!modeSupported)
+        {
+            width = DEFAULT_RESOLUTION_X;
+            height = DEFAULT_RESOLUTION_Y;
+            params.rect.right = params.rect.left + width;
+            params.rect.bottom = params.rect.top + height;
+        }
+    }
 
+    if (!__attachToWindow)
+    {
         // Register our window class.
         WNDCLASSEX wc;
         wc.cbSize = sizeof(WNDCLASSEX);
@@ -750,7 +946,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground  = NULL;  // No brush - we are going to paint our own background
         wc.lpszMenuName   = NULL;  // No default menu
-        wc.lpszClassName  = windowClass;
+        wc.lpszClassName  = L"gameplay";
 
         if (!::RegisterClassEx(&wc))
         {
@@ -758,44 +954,26 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             goto error;
         }
 
-        if (fullscreen)
+        if (params.fullscreen)
         {
             DEVMODE dm;
             memset(&dm, 0, sizeof(dm));
             dm.dmSize= sizeof(dm);
-            dm.dmPelsWidth    = __width;
-            dm.dmPelsHeight    = __height;
-            dm.dmBitsPerPel    = 32;
+            dm.dmPelsWidth	= width;
+            dm.dmPelsHeight	= height;
+            dm.dmBitsPerPel	= DEFAULT_COLOR_BUFFER_SIZE;
             dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
             // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
             if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
             {
-                fullscreen = false;
-                GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", __width, __height);
+                params.fullscreen = false;
+                GP_ERROR("Failed to start game in full-screen mode with resolution %dx%d.", width, height);
                 goto error;
             }
         }
 
-        // Set the window style.
-        DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-        DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
-
-        // Adjust the window rectangle so the client size is the requested size.
-        AdjustWindowRectEx(&rect, style, FALSE, styleEx);
-
-        // Create the native Windows window.
-        __hwnd = CreateWindowEx(styleEx, windowClass, windowName.c_str(), style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, __hinstance, NULL);
-
-        // Get the drawing context.
-        __hdc = GetDC(__hwnd);
-
-        // Center the window
-        const int screenX = (GetSystemMetrics(SM_CXSCREEN) - __width) / 2;
-        const int screenY = (GetSystemMetrics(SM_CYSCREEN) - __height) / 2;
-        ::SetWindowPos(__hwnd, __hwnd, screenX, screenY, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-
-        if (!initializeGL())
+        if (!initializeGL(&params))
             goto error;
 
         // Show the window.
@@ -808,8 +986,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         __hdc = GetDC(__hwnd);
 
         SetWindowLongPtr(__hwnd, GWL_WNDPROC, (LONG)(WNDPROC)__WndProc);
-        
-        if (!initializeGL())
+
+        if (!initializeGL(NULL))
             goto error;
     }
 
@@ -906,12 +1084,16 @@ void Platform::signalShutdown()
 
 unsigned int Platform::getDisplayWidth()
 {
-    return __width;
+    static RECT rect;
+    GetClientRect(__hwnd, &rect);
+    return rect.right;
 }
 
 unsigned int Platform::getDisplayHeight()
 {
-    return __height;
+    static RECT rect;
+    GetClientRect(__hwnd, &rect);
+    return rect.bottom;
 }
 
 double Platform::getAbsoluteTime()

@@ -40,6 +40,11 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
 {
     LOG(1, "Generating heightmap: %s...\n", filename);
 
+    // Initialize state variables
+    __processedHeightmapScanLines = 0;
+    __totalHeightmapScanlines = 0;
+    __failedRayCasts = 0;
+
     GPBFile* gpbFile = GPBFile::getInstance();
 
     // Lookup nodes in GPB file and compute a single bounding volume that encapsulates all meshes
