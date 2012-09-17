@@ -20,6 +20,8 @@ class PhysicsRigidBody : public PhysicsCollisionObject, public Transform::Listen
 {
     friend class Node;
     friend class PhysicsCharacter;
+    friend class PhysicsVehicle;
+    friend class PhysicsVehicleWheel;
     friend class PhysicsConstraint;
     friend class PhysicsController;
     friend class PhysicsFixedConstraint;
@@ -280,6 +282,8 @@ public:
 
     /**
      * Applies the given force to the rigid body (optionally, from the given relative position).
+     * Note that the total force applied depends on the duration of the next frame.
+     * If you want to apply an "impulse" irrespective of the frame duration, consider using applyImpulse.
      * 
      * @param force The force to be applied.
      * @param relativePosition The relative position from which to apply the force.
@@ -340,12 +344,12 @@ private:
     /**
      * Creates a rigid body from the specified properties object.
      * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
-     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidBody').
+     * @param node The node to create a rigid body for; note that the node must have a model attached to it prior to creating a rigid body for it.
+     * @param properties The properties object defining the rigid body.
+     * @param nspace The namespace expected (default is "RIGID_BODY").
      * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
      */
-    static PhysicsRigidBody* create(Node* node, Properties* properties);
+    static PhysicsRigidBody* create(Node* node, Properties* properties, const char* nspace = "RIGID_BODY");
 
     // Adds a constraint to this rigid body.
     void addConstraint(PhysicsConstraint* constraint);

@@ -52,7 +52,7 @@ bool Quaternion::isIdentity() const
 
 bool Quaternion::isZero() const
 {
-    return x == 0.0f && y == 0.0f && z == 0.0f && z == 0.0f;
+    return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
 void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternion* dst)

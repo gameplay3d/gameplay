@@ -1,3 +1,21 @@
+## v1.5.0
+
+- Linux support.
+- CMake support for Linux makefile generation.
+- Gamepad controllers support for desktops.
+- Touch gesture support for tap, swipe and pinch.
+- Vehicle phyics support via new PhysicsVehicle adn PhysicsVehicleWheels classes.
+- Adds gameplay-tests project as a test app for various engine features with initial basic tests.
+- Adds support for Scene files for wildcard identifiers.
+- Web community forums at http://www.gameplay3d.org/forums
+- Fixes the texture coordinates of Mesh::createQuad(float x, float y, float width, float height).
+- Fixes line-wise distortion when loading RGB png's into texture that are non-power of two.
+- Fixes inconsitencies in createXXXX methods.  (breaks compat. in Scene)
+- Fixes Rectanngle::contains.
+- Fixes Lua print logging.
+- Fixes Lua errors to be treated as runtime warnings.
+- Fixes setVertexData to pointers instead of constant data.
+
 ## v1.4.0
 
 - Lua script bindings for all gameplay interfaces.

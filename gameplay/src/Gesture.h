@@ -16,9 +16,9 @@ public:
      */
     enum GestureEvent
     {
-        GESTURE_SWIPE = 0,
+        GESTURE_TAP = 0,
+        GESTURE_SWIPE,
         GESTURE_PINCH,
-        GESTURE_TAP,
         GESTURE_ANY_SUPPORTED = -1,
     };
 

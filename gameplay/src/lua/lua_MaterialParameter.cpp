@@ -28,6 +28,7 @@ void luaRegister_MaterialParameter()
         {"getAnimationPropertyValue", lua_MaterialParameter_getAnimationPropertyValue},
         {"getName", lua_MaterialParameter_getName},
         {"getRefCount", lua_MaterialParameter_getRefCount},
+        {"getSampler", lua_MaterialParameter_getSampler},
         {"release", lua_MaterialParameter_release},
         {"setAnimationPropertyValue", lua_MaterialParameter_setAnimationPropertyValue},
         {"setValue", lua_MaterialParameter_setValue},
@@ -774,6 +775,52 @@ int lua_MaterialParameter_getRefCount(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_MaterialParameter_getRefCount - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MaterialParameter_getSampler(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                MaterialParameter* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getSampler();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "TextureSampler");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_MaterialParameter_getSampler - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

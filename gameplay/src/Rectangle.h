@@ -214,7 +214,7 @@ public:
     /**
      * operator =
      */
-    const Rectangle& operator = (const Rectangle& r);
+    Rectangle& operator = (const Rectangle& r);
 
     /**
      * operator ==

@@ -40,7 +40,7 @@ static std::vector<Form*> __forms;
 
 Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL), _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
 {
-	_consumeInputEvents = false;
+    _consumeInputEvents = false;
 }
 
 Form::~Form()

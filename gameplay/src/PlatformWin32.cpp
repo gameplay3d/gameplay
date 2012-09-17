@@ -1027,7 +1027,6 @@ error:
 int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
-    int rc = 0;
 
     // Get the initial time.
     LARGE_INTEGER tps;
@@ -1217,6 +1216,11 @@ void Platform::registerGesture(Gesture::GestureEvent evt)
 
 void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
+}
+    
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return false;
 }
 
 unsigned int Platform::getGamepadsConnected()

@@ -130,7 +130,7 @@ void AnimationChannel::setInterpolations(const std::vector<unsigned int>& values
 
 void AnimationChannel::removeDuplicates()
 {
-    LOG(3, "      Removing duplicates for channel with target attribute: %d.\n", _targetAttrib);
+    LOG(3, "      Removing duplicates for channel with target attribute: %u.\n", _targetAttrib);
 
     int startCount = _keytimes.size();
 
