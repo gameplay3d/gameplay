@@ -30,6 +30,13 @@ RacerGame game;
 #define BUTTON_X (12)
 #define BUTTON_Y (13)
 
+// Aerodynamic downforce effect
+#define AIR_DENSITY (1.2f)
+#define KPH_TO_MPS (1.0f / 3.6f)
+#define REF_AREA (7.5f)
+#define LIFT_COEFF (0.2f)
+#define DOWNFORCE_LUMPED (0.5f * AIR_DENSITY * KPH_TO_MPS * KPH_TO_MPS * REF_AREA * LIFT_COEFF)
+
 RacerGame::RacerGame()
     : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
@@ -251,12 +258,15 @@ void RacerGame::update(float elapsedTime)
 
         if (_carVehicle)
         {
-            float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(_carVehicle->getSpeedKph()));
+            float v = _carVehicle->getSpeedKph();
+            _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * v * v, 0));
+
+            float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(v));
             _carVehicle->update(blowdown*_steering, braking, driving);
 
             if ( (_keyFlags & UPRIGHT) ||
                  (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
-                 (_carVehicle->getNode()->getTranslationY() < -1000.0f) )
+                 (_carVehicle->getNode()->getTranslationY() < -300.0f) )
             {
                 resetVehicle();
             }
