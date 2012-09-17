@@ -30,6 +30,13 @@ RacerGame game;
 #define BUTTON_X (12)
 #define BUTTON_Y (13)
 
+// Aerodynamic downforce effect
+#define AIR_DENSITY (1.2f)
+#define KPH_TO_MPS (1.0f / 3.6f)
+#define REF_AREA (7.5f)
+#define LIFT_COEFF (0.2f)
+#define DOWNFORCE_LUMPED (0.5f * AIR_DENSITY * KPH_TO_MPS * KPH_TO_MPS * REF_AREA * LIFT_COEFF)
+
 RacerGame::RacerGame()
     : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
@@ -180,7 +187,7 @@ void RacerGame::update(float elapsedTime)
             // Reverse only below a reasonable speed
             bool isReverseCommanded = (_keyFlags & REVERSE) ||
                                       (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED) ||
-                                      (direction.y < -0.9);
+                                      (direction.y < -0.1 && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
             if (isReverseCommanded && _carVehicle->getSpeedKph() < 30.0f)
             {
                 driving = -0.6f;
@@ -207,7 +214,7 @@ void RacerGame::update(float elapsedTime)
             swingArm += fixedArm*0.0001f;
             swingArm.normalize();
             Vector3 commandedPosition(carPosition + fixedArm + swingArm*5.0f);
-            cameraNode->translate((commandedPosition - cameraNode->getTranslation()) * (dt / (dt + 0.2)));
+            cameraNode->translate((commandedPosition - cameraNode->getTranslation()) * (5.0f * dt));
             Matrix m;
             Matrix::createLookAt(cameraNode->getTranslation(), carPosition, Vector3::unitY(), &m);
             m.transpose();
@@ -251,12 +258,15 @@ void RacerGame::update(float elapsedTime)
 
         if (_carVehicle)
         {
-            float blowdown = max(0.1f, 1 - 0.009f*fabs(_carVehicle->getSpeedKph()));
+            float v = _carVehicle->getSpeedKph();
+            _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * v * v, 0));
+
+            float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(v));
             _carVehicle->update(blowdown*_steering, braking, driving);
 
             if ( (_keyFlags & UPRIGHT) ||
                  (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
-                 (_carVehicle->getNode()->getTranslationY() < -1000.0f) )
+                 (_carVehicle->getNode()->getTranslationY() < -300.0f) )
             {
                 resetVehicle();
             }
@@ -293,7 +303,7 @@ void RacerGame::render(float elapsedTime)
     _font->drawText(fps, 5, 5, Vector4(0,0.5f,1,1), 20);
     char kph[32];
     sprintf(kph, "%d [km/h]", carSpeed);
-    _font->drawText(kph, 300, 350, Vector4(1,1,1,1), 40);
+    _font->drawText(kph, getWidth() / 2 - 50, getHeight() - 60, Vector4(1,1,1,1), 40);
     _font->finish();
 }
 
