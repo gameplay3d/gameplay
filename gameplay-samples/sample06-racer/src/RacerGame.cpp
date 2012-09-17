@@ -180,7 +180,7 @@ void RacerGame::update(float elapsedTime)
             // Reverse only below a reasonable speed
             bool isReverseCommanded = (_keyFlags & REVERSE) ||
                                       (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED) ||
-                                      (direction.y < -0.9);
+                                      (direction.y < -0.1 && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
             if (isReverseCommanded && _carVehicle->getSpeedKph() < 30.0f)
             {
                 driving = -0.6f;
@@ -207,7 +207,7 @@ void RacerGame::update(float elapsedTime)
             swingArm += fixedArm*0.0001f;
             swingArm.normalize();
             Vector3 commandedPosition(carPosition + fixedArm + swingArm*5.0f);
-            cameraNode->translate((commandedPosition - cameraNode->getTranslation()) * (dt / (dt + 0.2)));
+            cameraNode->translate((commandedPosition - cameraNode->getTranslation()) * (5.0f * dt));
             Matrix m;
             Matrix::createLookAt(cameraNode->getTranslation(), carPosition, Vector3::unitY(), &m);
             m.transpose();
