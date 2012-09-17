@@ -21,10 +21,7 @@ Material::~Material()
     for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
     {
         Technique* technique = _techniques[i];
-        if (technique)
-        {
-            SAFE_RELEASE(technique);
-        }
+        SAFE_RELEASE(technique);
     }
 }
 

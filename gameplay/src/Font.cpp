@@ -139,11 +139,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     // Create batch for the font.
     SpriteBatch* batch = SpriteBatch::create(texture, __fontEffect, 128);
-
-    // Add linear filtering for better font quality.
-    Texture::Sampler* sampler = batch->getSampler();
-    sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
-
+    
     // Release __fontEffect since the SpriteBatch keeps a reference to it
     SAFE_RELEASE(__fontEffect);
 
@@ -152,6 +148,10 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
         GP_ERROR("Failed to create batch for font.");
         return NULL;
     }
+
+    // Add linear filtering for better font quality.
+    Texture::Sampler* sampler = batch->getSampler();
+    sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
 
     // Increase the ref count of the texture to retain it.
     texture->addRef();
@@ -193,7 +193,6 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         size = _size;
     GP_ASSERT(_size);
     float scale = (float)size / _size;
-    const int length = strlen(text);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -554,7 +553,6 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         size = _size;
     GP_ASSERT(_size);
     float scale = (float)size / _size;
-    const int length = strlen(text);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -1327,7 +1325,6 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
 
     // Essentially need to measure text until we reach inLocation.
     float scale = (float)size / _size;
-    const int length = strlen(text);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;

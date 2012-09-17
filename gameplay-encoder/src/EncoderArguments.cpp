@@ -137,7 +137,6 @@ bool EncoderArguments::containsGroupNodeId(const std::string& nodeId) const
 
 const std::string EncoderArguments::getAnimationId(const std::string& nodeId) const
 {
-    std::vector<std::string>::const_iterator it = find(_groupAnimationNodeId.begin(), _groupAnimationNodeId.end(), nodeId);
     for (size_t i = 0, size = _groupAnimationNodeId.size(); i < size; ++i)
     {
         if (_groupAnimationNodeId[i].compare(nodeId) == 0)

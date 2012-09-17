@@ -40,7 +40,6 @@ protected:
      * @see Game::render
      */
     void render(float elapsedTime);
-
 };
 
 

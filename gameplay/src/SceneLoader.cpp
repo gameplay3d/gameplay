@@ -88,7 +88,6 @@ Scene* SceneLoader::loadInternal(const char* url)
 
     // Find the physics properties object.
     Properties* physics = NULL;
-    Properties* ns = NULL;
     sceneProperties->rewind();
     while (true)
     {
@@ -106,7 +105,7 @@ Scene* SceneLoader::loadInternal(const char* url)
 
     // Clean up all loaded properties objects.
     std::map<std::string, Properties*>::iterator iter = _propertiesFromFile.begin();
-    for (; iter != _propertiesFromFile.end(); iter++)
+    for (; iter != _propertiesFromFile.end(); ++iter)
     {
         SAFE_DELETE(iter->second);
     }
@@ -201,10 +200,6 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             break;
         }
         case SceneNodeProperty::MATERIAL:
-            {
-                const char* id = node->getId();
-                id = NULL;
-            }
             if (!node->getModel())
             {
                 GP_ERROR("Attempting to set a material on node '%s', which has no model.", sceneNode._nodeID);
@@ -288,7 +283,6 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     {
         // Handle scale, rotate and translate.
         Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
-        const char* name = NULL;
 
         switch (snp._type)
         {
@@ -916,7 +910,7 @@ void SceneLoader::loadReferencedFiles()
 {
     // Load all referenced properties files.
     std::map<std::string, Properties*>::iterator iter = _properties.begin();
-    for (; iter != _properties.end(); iter++)
+    for (; iter != _properties.end(); ++iter)
     {
         if (iter->second == NULL)
         {
@@ -1096,7 +1090,7 @@ SceneLoader::SceneNode::SceneNode()
 {
 }
 
-SceneLoader::SceneNodeProperty::SceneNodeProperty(Type type, std::string url, int index)
+SceneLoader::SceneNodeProperty::SceneNodeProperty(Type type, const std::string& url, int index)
     : _type(type), _url(url), _index(index)
 {
 }

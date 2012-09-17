@@ -26,6 +26,7 @@ int lua_Platform_static_hasMouse(lua_State* state);
 int lua_Platform_static_isCursorVisible(lua_State* state);
 int lua_Platform_static_isGamepadConnected(lua_State* state);
 int lua_Platform_static_isGamepadJoystickActive(lua_State* state);
+int lua_Platform_static_isGestureRegistered(lua_State* state);
 int lua_Platform_static_isGestureSupported(lua_State* state);
 int lua_Platform_static_isMouseCaptured(lua_State* state);
 int lua_Platform_static_isMultiTouch(lua_State* state);

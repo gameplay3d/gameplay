@@ -173,8 +173,8 @@ bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsControlle
         {
         }
 
-		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
-		{
+        virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+        {
             if (!btCollisionWorld::ClosestRayResultCallback::needsCollision(proxy0))
                 return false;
 
@@ -248,8 +248,8 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
         {
         }
 
-		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
-		{
+        virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+        {
             if (!btCollisionWorld::ClosestConvexResultCallback::needsCollision(proxy0))
                 return false;
 

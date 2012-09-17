@@ -74,6 +74,8 @@
 #include "PhysicsRigidBody.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 
 // AI
 #include "AIController.h"

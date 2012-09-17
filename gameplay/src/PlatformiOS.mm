@@ -51,7 +51,7 @@ int getKey(unichar keyCode);
 
 @interface View : UIView <UIKeyInput>
 {
-    EAGLContext* context;	
+    EAGLContext* context;
     CADisplayLink* displayLink;
     GLuint defaultFramebuffer;
     GLuint colorRenderbuffer;
@@ -61,6 +61,10 @@ int getKey(unichar keyCode);
     NSInteger swapInterval;
     BOOL updating;
     Game* _game;
+    
+    UITapGestureRecognizer *_tapRecognizer;
+    UIPinchGestureRecognizer *_pinchRecognizer;
+    UISwipeGestureRecognizer *_swipeRecognizer;
 }
 
 @property (readonly, nonatomic, getter=isUpdating) BOOL updating;
@@ -237,7 +241,7 @@ int getKey(unichar keyCode);
 {
     if (interval >= 1)
     {
-        swapInterval = interval;		
+        swapInterval = interval;        
         if (updating)
         {
             [self stopUpdating];
@@ -382,6 +386,98 @@ int getKey(unichar keyCode);
             touchID = [touch hash];
         Platform::touchEventInternal(Touch::TOUCH_MOVE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
     }
+}
+
+// Gesture support for Mac OS X Trackpads
+- (bool)isGestureRegistered: (Gesture::GestureEvent) evt
+{
+    switch(evt) {
+        case Gesture::GESTURE_SWIPE:
+            return (_swipeRecognizer != NULL);
+        case Gesture::GESTURE_PINCH:
+            return (_pinchRecognizer != NULL);
+        case Gesture::GESTURE_TAP:
+            return (_tapRecognizer != NULL);
+        default:
+            break;
+    }
+    return false;
+}
+
+- (void)registerGesture: (Gesture::GestureEvent) evt
+{
+    if((evt & Gesture::GESTURE_SWIPE) == Gesture::GESTURE_SWIPE && _swipeRecognizer == NULL)
+    {
+        _swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+        [self addGestureRecognizer:_swipeRecognizer];
+    }
+    if((evt & Gesture::GESTURE_PINCH) == Gesture::GESTURE_PINCH && _pinchRecognizer == NULL)
+    {
+        _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
+        [self addGestureRecognizer:_pinchRecognizer];
+    }
+    if((evt & Gesture::GESTURE_TAP) == Gesture::GESTURE_TAP && _tapRecognizer == NULL)
+    {
+        _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [self addGestureRecognizer:_swipeRecognizer];
+    }
+}
+
+- (void)unregisterGesture: (Gesture::GestureEvent) evt
+{
+    if((evt & Gesture::GESTURE_SWIPE) == Gesture::GESTURE_SWIPE && _swipeRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_swipeRecognizer];
+        [_swipeRecognizer release];
+        _swipeRecognizer = NULL;
+    }
+    if((evt & Gesture::GESTURE_PINCH) == Gesture::GESTURE_PINCH && _pinchRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_pinchRecognizer];
+        [_pinchRecognizer release];
+        _pinchRecognizer = NULL;
+    }
+    if((evt & Gesture::GESTURE_TAP) == Gesture::GESTURE_TAP && _tapRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_tapRecognizer];
+        [_tapRecognizer release];
+        _tapRecognizer = NULL;
+    }
+}
+
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender
+{
+    CGPoint location = [sender locationInView:self];
+    _game->gestureTapEvent(location.x, location.y);
+}
+
+- (void)handlePinchGesture:(UIPinchGestureRecognizer *)sender
+{
+    CGFloat factor = [sender scale];
+    CGPoint location = [sender locationInView:self];
+    _game->gesturePinchEvent(location.x, location.y, factor);
+}
+
+- (void)handleSwipeGesture:(UISwipeGestureRecognizer *)sender
+{
+    UISwipeGestureRecognizerDirection direction = [sender direction];
+    CGPoint location = [sender locationInView:self];
+    int gameplayDirection = 0;
+    switch(direction) {
+        case UISwipeGestureRecognizerDirectionRight:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_RIGHT;
+            break;
+        case UISwipeGestureRecognizerDirectionLeft:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_LEFT;
+            break;
+        case UISwipeGestureRecognizerDirectionUp:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_UP;
+            break;
+        case UISwipeGestureRecognizerDirectionDown:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_DOWN;
+            break;
+    }
+    _game->gestureSwipeEvent(location.x, location.y, gameplayDirection);
 }
 
 @end
@@ -555,7 +651,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application 
-{	
+{    
     [viewController startUpdating];
 }
 
@@ -565,7 +661,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application 
-{	
+{    
     [viewController stopUpdating];
 }
 
@@ -990,16 +1086,24 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    return false;
+    return true;
 }
 
 void Platform::registerGesture(Gesture::GestureEvent evt)
 {
+    [__view registerGesture:evt];
 }
 
 void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
+    [__view unregisterGesture:evt];
 }
+
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return [__view isGestureRegistered:evt];
+}
+
 
 unsigned int Platform::getGamepadsConnected()
 {

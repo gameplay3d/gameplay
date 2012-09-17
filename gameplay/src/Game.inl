@@ -29,6 +29,11 @@ inline unsigned int Game::getHeight() const
     return _height;
 }
 
+inline float Game::getAspectRatio() const
+{
+    return (float)_width / (float)_height;
+}
+
 inline const Rectangle& Game::getViewport() const
 {
     return _viewport;

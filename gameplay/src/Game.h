@@ -174,6 +174,13 @@ public:
      * @return The game window height.
      */
     inline unsigned int getHeight() const;
+    
+    /**
+     * Gets the aspect ratio of the window. (width / height)
+     * 
+     * @return The aspect ratio of the window.
+     */
+    inline float getAspectRatio() const;
 
     /**
      * Gets the game current viewport.
@@ -183,7 +190,7 @@ public:
     inline const Rectangle& getViewport() const;
 
     /**
-     * Set the game current viewport.
+     * Sets the game current viewport.
      *
      * The x, y, width and height of the viewport must all be positive.
      *
@@ -354,7 +361,7 @@ public:
     inline bool isCursorVisible();
 
     /**
-     * Determines whether a specific gesture event is supported.
+     * Determines whether a specified gesture event is supported.
      *
      * Use Gesture::GESTURE_ANY_SUPPORTED to test if one or more gesture events are supported.
      *
@@ -388,6 +395,13 @@ public:
      * @param evt The gesture event to start recognizing for
      */
     void unregisterGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Determines whether a specified gesture event is registered to receive event callbacks.
+     *
+     * @return true if the specified gesture event is registered; false of not registered.
+     */
+    bool isGestureRegistered(Gesture::GestureEvent evt);
 
     /**
      * Gesture callback on Gesture::SWIPE events.

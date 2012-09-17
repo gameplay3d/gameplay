@@ -37,12 +37,12 @@ void MeshSkin::writeBinary(FILE* file)
     Object::writeBinary(file);
     write(_bindShape, 16, file);
     write(_joints.size(), file);
-    for (std::vector<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); i++)
+    for (std::vector<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); ++i)
     {
         (*i)->writeBinaryXref(file);
     }
     write(_bindPoses.size() * 16, file);
-    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
+    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
     {
         write(i->m, 16, file);
     }
@@ -68,13 +68,13 @@ void MeshSkin::writeText(FILE* file)
     fprintfMatrix4f(file, _bindShape);
     fprintf(file, "</bindShape>");
     fprintf(file, "<joints>");
-    for (std::vector<std::string>::const_iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
+    for (std::vector<std::string>::const_iterator i = _jointNames.begin(); i != _jointNames.end(); ++i)
     {
         fprintf(file, "%s ", i->c_str());
     }
     fprintf(file, "</joints>\n");
     fprintf(file, "<bindPoses count=\"%lu\">", _bindPoses.size() * 16);
-    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); i++)
+    for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
     {
         for (unsigned int j = 0; j < 16; ++j)
         {
@@ -129,7 +129,7 @@ void MeshSkin::setBindPoses(std::vector<Matrix>& list)
 
 bool MeshSkin::hasJoint(const char* id)
 {
-    for (std::vector<std::string>::iterator i = _jointNames.begin(); i != _jointNames.end(); i++)
+    for (std::vector<std::string>::iterator i = _jointNames.begin(); i != _jointNames.end(); ++i)
     {
         if (equals(*i, id))
         {
@@ -192,7 +192,7 @@ void MeshSkin::computeBounds()
     unsigned int jointCount = _joints.size();
     unsigned int vertexCount = _mesh->getVertexCount();
 
-    LOG(3, "  %d joints found.\n", jointCount);
+    LOG(3, "  %u joints found.\n", jointCount);
 
     std::vector<AnimationChannel*> channels;
     std::vector<Node*> channelTargets;

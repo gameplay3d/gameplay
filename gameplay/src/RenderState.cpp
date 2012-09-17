@@ -193,7 +193,7 @@ void RenderState::setNodeBinding(Node* node)
         while (itr != _autoBindings.end())
         {
             applyAutoBinding(itr->first.c_str(), itr->second);
-            itr++;
+            ++itr;
         }
     }
 }
