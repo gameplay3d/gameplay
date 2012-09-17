@@ -251,7 +251,7 @@ void RacerGame::update(float elapsedTime)
 
         if (_carVehicle)
         {
-            float blowdown = max(0.1f, 1 - 0.009f*fabs(_carVehicle->getSpeedKph()));
+            float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(_carVehicle->getSpeedKph()));
             _carVehicle->update(blowdown*_steering, braking, driving);
 
             if ( (_keyFlags & UPRIGHT) ||
