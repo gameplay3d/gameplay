@@ -227,7 +227,7 @@ private:
     /**
      * Constructor.
      */
-    PhysicsCollisionShape(Type type, btCollisionShape* shape);
+    PhysicsCollisionShape(Type type, btCollisionShape* shape, btStridingMeshInterface* meshInterface = NULL);
 
     /** 
      * Hidden copy constructor.
@@ -244,6 +244,9 @@ private:
 
     // Bullet shape object
     btCollisionShape* _shape;
+
+    // Bullet mesh interface for mesh types (NULL otherwise)
+    btStridingMeshInterface* _meshInterface;
 
     // Shape specific cached data
     union
