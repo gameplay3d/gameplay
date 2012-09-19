@@ -54,13 +54,15 @@ double getMachTimeInMilliseconds()
     return ((double)mach_absolute_time() * (double)s_timebase_info.numer) / (kOneMillion * (double)s_timebase_info.denom);
 }
 
-
 @class View;
 
 @interface View : NSOpenGLView <NSWindowDelegate>
 {
+@public
     CVDisplayLinkRef displayLink;
-    NSRecursiveLock* lock;
+    NSRecursiveLock* gameLock;
+
+@protected
     Game* _game;
     unsigned int _gestureEvents;    
 }
@@ -73,9 +75,9 @@ static View* __view = NULL;
 
 -(void)windowWillClose:(NSNotification*)note 
 {
-    [lock lock];
+    [gameLock lock];
     _game->exit();
-    [lock unlock];
+    [gameLock unlock];
     [[NSApplication sharedApplication] terminate:self];
 }
 
@@ -92,7 +94,7 @@ static View* __view = NULL;
 
 -(void) update
 {       
-    [lock lock];
+    [gameLock lock];
 
     [[self openGLContext] makeCurrentContext];
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
@@ -103,7 +105,7 @@ static View* __view = NULL;
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
     CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);  
     
-    [lock unlock];
+    [gameLock unlock];
 }
 
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, 
@@ -144,7 +146,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     if((self = [super initWithFrame:frame pixelFormat:[pf autorelease]])) 
     {
-        lock = [[NSRecursiveLock alloc] init];
+        gameLock = [[NSRecursiveLock alloc] init];
         _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
     }
@@ -195,30 +197,30 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) dealloc
 {   
-    [lock lock];
+    [gameLock lock];
     
     // Release the display link
     CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
     _game->exit();
     
-    [lock unlock];
+    [gameLock unlock];
 
     [super dealloc];
 }
 
 - (void)resumeDisplayRenderer 
 {
-    [lock lock];
+    [gameLock lock];
     CVDisplayLinkStop(displayLink);
-    [lock unlock]; 
+    [gameLock unlock]; 
 }
 
 - (void)haltDisplayRenderer 
 {
-    [lock lock];
+    [gameLock lock];
     CVDisplayLinkStop(displayLink);
-    [lock unlock];
+    [gameLock unlock];
 }
 
 - (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent x: (float) x y: (float) y s: (int) s 
@@ -238,16 +240,16 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) mouseUp: (NSEvent*) event
 {
-     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __leftMouseDown = false;
     [self mouse: Mouse::MOUSE_RELEASE_LEFT_BUTTON orTouchEvent: Touch::TOUCH_RELEASE x: point.x y: __height - point.y s: 0];
+
 }
 
 - (void)mouseMoved:(NSEvent*) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
-
     if (__mouseCaptured)
     {
         point.x = [event deltaX];
@@ -260,12 +262,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
     }
+    
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
 {
-     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     if (__leftMouseDown)
     {
         [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
@@ -277,14 +280,16 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __rightMouseDown = true;
      NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     __lx = point.x;
-    __ly = __height - point.y;    
+    __ly = __height - point.y;
+    
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, __height - point.y, 0);
 }
 
 - (void) rightMouseUp: (NSEvent*) event
 {
-   __rightMouseDown = false;
+    __rightMouseDown = false;
     NSPoint point = [event locationInWindow];
+    
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, __height - point.y, 0);
 }
 
@@ -589,8 +594,8 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 }
 
 - (void) keyDown: (NSEvent*) event
-{    
-    if([event isARepeat] == NO)
+{
+    if ([event isARepeat] == NO)
     {
         gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
     }
@@ -601,18 +606,21 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey([event keyCode], [event modifierFlags]));
 }
 
-
 // Gesture support for Mac OS X Trackpads
-- (bool)isGestureRegistered: (Gesture::GestureEvent) evt {
+- (bool)isGestureRegistered: (Gesture::GestureEvent) evt
+{
     return ((_gestureEvents & evt) == evt);
 }
-- (void)registerGesture: (Gesture::GestureEvent) evt {
+
+- (void)registerGesture: (Gesture::GestureEvent) evt
+{
     _gestureEvents |= evt;
 }
-- (void)unregisterGesture: (Gesture::GestureEvent) evt {
+
+- (void)unregisterGesture: (Gesture::GestureEvent) evt
+{
     _gestureEvents &= (~evt);
 }
-
 
 - (void)magnifyWithEvent:(NSEvent *)event
 {
@@ -630,8 +638,11 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     xavg /= [touches count];
     yavg /= [touches count];
     
+    [gameLock lock];
     _game->gesturePinchEvent((int)xavg, (int)yavg, [event magnification]);
+    [gameLock unlock];
 }
+
 - (void)swipeWithEvent:(NSEvent *)event
 {
     if([self isGestureRegistered:Gesture::GESTURE_SWIPE] == false) return;
@@ -647,7 +658,9 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
      * @see Gesture::SWIPE_DIRECTION_LEFT
      * @see Gesture::SWIPE_DIRECTION_RIGHT
      */
+    //[gameLock lock];
     //virtual void gestureSwipeEvent(int x, int y, int direction);
+    //[gameLock unlock];
 }
 
 @end
@@ -806,6 +819,8 @@ bool Platform::isVsync()
 void Platform::setVsync(bool enable)
 {
     __vsync = enable;
+    GLint swapInt = enable ? 1 : 0;
+    [[__view openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
 }
 
 void Platform::swapBuffers()
@@ -897,36 +912,47 @@ void Platform::displayKeyboard(bool display)
 
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
+    [__view->gameLock lock];
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
     {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
         Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
     }
+    [__view->gameLock unlock];
 }
     
 void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
+    [__view->gameLock lock];
     if (!Form::keyEventInternal(evt, key))
     {
         Game::getInstance()->keyEvent(evt, key);
         Game::getInstance()->getScriptController()->keyEvent(evt, key);
     }
+    [__view->gameLock unlock];
 }
 
 bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
+    [__view->gameLock lock];
+    
+    bool result;
     if (Form::mouseEventInternal(evt, x, y, wheelDelta))
     {
-        return true;
+        result = true;
     }
     else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
     {
-        return true;
+        result = true;
     }
     else
     {
-        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
+        result = Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
     }
+    
+    [__view->gameLock unlock];
+    
+    return result;
 }
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
@@ -956,9 +982,6 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 {
      return [__view isGestureRegistered:evt];
 }
-
-    
-
 
 unsigned int Platform::getGamepadsConnected()
 {

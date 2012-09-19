@@ -188,7 +188,7 @@ void TestsGame::activate(int x, int y)
 {
     if (_categories == NULL || _tests == NULL)
         return;
-    int temp = y / _font->getSize();
+    int temp = (y - 10) / _font->getSize();
     int itemIndex = 0;
     for (size_t i = 0; i < _categories->size(); ++i)
     {
