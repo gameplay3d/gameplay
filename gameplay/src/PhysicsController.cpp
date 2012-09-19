@@ -1273,7 +1273,8 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
     }
 
     // Create our collision shape object and store shapeMeshData in it.
-    PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true));
+    PhysicsCollisionShape* shape =
+        new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true), meshInterface);
     shape->_shapeData.meshData = shapeMeshData;
 
     _shapes.push_back(shape);
