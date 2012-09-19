@@ -232,7 +232,14 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                 // If the scene file specifies a rigid body model, use it for creating the collision object.
                 Properties* np = sceneProperties->getNamespace(sceneNode._nodeID);
                 const char* name = NULL;
-                if (np && (name = np->getString("rigidBodyModel")))
+
+                // Allow both property names
+                if (np && !(name = np->getString("rigidBodyModel")))
+                {
+                    name = np->getString("collisionMesh");
+                }
+
+                if (name)
                 {
                     GP_ASSERT(scene);
                     Node* modelNode = scene->findNode(name);
@@ -256,7 +263,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
                             if (model)
                                 model->addRef(); 
                         
-                            // Create collision object with new rigidBodyModel set.
+                            // Create collision object with new rigidBodyModel (aka collisionMesh) set.
                             node->setModel(modelNode->getModel());
                             node->setCollisionObject(p);
 
@@ -565,6 +572,10 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "rigidBodyModel") == 0)
                 {
                     // Ignore this for now. We process this when we do rigid body creation.
+                }
+                else if (strcmp(name, "collisionMesh") == 0)
+                {
+                    // Ignore this for now (new alias for rigidBodyModel). We process this when we do rigid body creation.
                 }
                 else if (strcmp(name, "translate") == 0)
                 {
