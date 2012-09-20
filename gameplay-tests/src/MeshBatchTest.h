@@ -45,6 +45,7 @@ private:
     MeshBatch* _meshBatch;
     Matrix _worldViewProjectionMatrix;
     std::vector<Vertex> _vertices;
+    double _lastTriangleAdded;
 };
 
 #endif

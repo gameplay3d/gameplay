@@ -32,7 +32,7 @@ static Vector3 randomColor()
 }
 
 MeshBatchTest::MeshBatchTest()
-    : _font(NULL), _meshBatch(NULL)
+    : _font(NULL), _meshBatch(NULL), _lastTriangleAdded(0)
 {
     _vertices.push_back(Vertex(Vector3(0, 50, 0), randomColor()));
     _vertices.push_back(Vertex(Vector3(-50, -50, 0), randomColor()));
@@ -73,7 +73,9 @@ void MeshBatchTest::render(float elapsedTime)
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
     _font->start();
-    _font->drawText("Touch to add triangles", 0, getHeight() - _font->getSize(), Vector4::one(), _font->getSize());
+    char text[1024];
+    sprintf(text, "Touch to add triangles (%d)", (int)(_vertices.size() / 3));
+    _font->drawText(text, 10, getHeight() - _font->getSize() - 10, Vector4::one(), _font->getSize());
     _font->finish();
 }
 
@@ -95,6 +97,10 @@ void MeshBatchTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     case Touch::TOUCH_RELEASE:
         break;
     case Touch::TOUCH_MOVE:
+        if (Game::getInstance()->getAbsoluteTime() - _lastTriangleAdded > 100)
+        {
+            addTriangle( x - (getWidth() >>1), (getHeight() >> 1) - y);
+        }
         break;
     };
 }
@@ -119,4 +125,6 @@ void MeshBatchTest::addTriangle(int x, int y)
     _vertices.push_back(Vertex(p1, randomColor()));
     _vertices.push_back(Vertex(p2, randomColor()));
     _vertices.push_back(Vertex(p3, randomColor()));
+    
+    _lastTriangleAdded = Game::getInstance()->getAbsoluteTime();
 }

@@ -22,7 +22,7 @@ void TestsGame::initialize()
     {
         std::sort((*_tests)[i].begin(), (*_tests)[i].end());
     }
-    registerGesture(Gesture::GESTURE_SWIPE);
+    //registerGesture(Gesture::GESTURE_SWIPE);
 }
 
 void TestsGame::finalize()
@@ -49,6 +49,11 @@ void TestsGame::render(float elapsedTime)
     if (_activeTest)
     {
         _activeTest->render(elapsedTime);
+        
+        // Draw back arrow
+        _font->start();
+        _font->drawText("<<", Game::getInstance()->getWidth() - 30, 10, Vector4::one());
+        _font->finish();
         return;
     }
     // Clear the color and depth buffers
@@ -60,7 +65,14 @@ void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 {
     if (_activeTest)
     {
-        _activeTest->touchEvent(evt, x, y, contactIndex);
+        if (evt == Touch::TOUCH_PRESS && x >= (Game::getInstance()->getWidth() - 40) && y <= 40)
+        {
+            exitActiveTest();
+        }
+        else
+        {
+            _activeTest->touchEvent(evt, x, y, contactIndex);
+        }
         return;
     }
 
@@ -230,5 +242,6 @@ void TestsGame::drawTextMenu()
             y += fontHeight;
         }
     }
+    
     _font->finish();
 }
