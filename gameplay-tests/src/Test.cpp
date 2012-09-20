@@ -1,4 +1,5 @@
 #include "Test.h"
+#include "TestsGame.h"
 
 const Game::State& Test::UNINITIALIZED = Game::UNINITIALIZED;
 const Game::State& Test::RUNNING = Game::RUNNING;
