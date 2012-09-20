@@ -102,6 +102,7 @@ private:
     AnimationClip* _virtualGamepadClip;
     PhysicsVehicle* _carVehicle;
     Vector3 _carPositionPrevious;
+    float _carSpeedLag;
 
     // Sounds
     AudioSource* _backgroundSound;
