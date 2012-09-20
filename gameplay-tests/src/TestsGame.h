@@ -69,7 +69,7 @@ public:
      * @param order The order of the test. Tests are sorted lowest order to highest.
      */
     static void addTest(const char* category, const char* title, void* func, unsigned int order);
-
+    
 protected:
 
     /**
@@ -107,11 +107,6 @@ private:
     void runTest(void* func);
 
     /**
-     * Exits the active test and returns to the main menu.
-     */
-    void exitActiveTest();
-
-    /**
      * Handles the activate when the user touches or clicks on a part of the screen.
      * 
      * @param x The x-coordinate in screen space where the user clicked.
@@ -119,6 +114,11 @@ private:
      */
     void activate(int x, int y);
 
+    /**
+     * Exits the active test and returns to the main menu.
+     */
+    void exitActiveTest();
+    
     /**
      * Draws the main menu, which is a list of all the available tests.
      */
