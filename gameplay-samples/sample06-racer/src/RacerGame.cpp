@@ -11,6 +11,7 @@ enum RenderQueue
 bool __viewFrusumCulling = true;
 bool __flythruCamera = false;
 bool __drawDebug = false;
+bool __useAccelerometer = false;
 
 // Declare our game instance
 RacerGame game;
@@ -34,11 +35,12 @@ RacerGame game;
 #define AIR_DENSITY (1.2f)
 #define KPH_TO_MPS (1.0f / 3.6f)
 #define REF_AREA (7.5f)
-#define LIFT_COEFF (0.2f)
+#define LIFT_COEFF (0.6f)
 #define DOWNFORCE_LUMPED (0.5f * AIR_DENSITY * KPH_TO_MPS * KPH_TO_MPS * REF_AREA * LIFT_COEFF)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
+    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL),
+    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _carSpeedLag(0)
 {
 }
 
@@ -166,6 +168,13 @@ void RacerGame::update(float elapsedTime)
             {
                 _steering -= STEERING_RESPONSE * dt;
             }
+            else if (__useAccelerometer)
+            {
+            	float pitch, roll;
+            	Game::getAccelerometerValues(&pitch, &roll);
+
+            	_steering = -0.16 * roll;
+            }
             else
             {
                 _steering = -direction.x;
@@ -181,7 +190,7 @@ void RacerGame::update(float elapsedTime)
             {
                 _engineSound->setGain(0.8f);
             }
-            float s = (int)_carVehicle->getSpeedKph() / 100.0f;
+            float s = _carSpeedLag / 100.0f;
             _engineSound->setPitch(max(0.2f, min(s, 2.0f)));
 
             // Reverse only below a reasonable speed
@@ -259,7 +268,9 @@ void RacerGame::update(float elapsedTime)
         if (_carVehicle)
         {
             float v = _carVehicle->getSpeedKph();
-            _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * v * v, 0));
+            float delta = v - _carSpeedLag;
+            _carSpeedLag += delta * dt / (dt + (delta > 0 ? 0 : 1.2));
+            _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * _carSpeedLag * _carSpeedLag, 0));
 
             float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(v));
             _carVehicle->update(blowdown*_steering, braking, driving);
@@ -399,6 +410,9 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_B:
             __drawDebug = !__drawDebug;
             break;
+        case Keyboard::KEY_J:
+        	__useAccelerometer = !__useAccelerometer;
+        	break;
         }
     }
     else if (evt == Keyboard::KEY_RELEASE)
@@ -509,8 +523,10 @@ void RacerGame::resetVehicle()
 
     _carVehicle->getRigidBody()->setEnabled(false);
     carNode->setTranslation(-328.0f, 20.0f, 371.0f);
+    _carPositionPrevious.set(carNode->getTranslation());
     carNode->setRotation(Vector3::unitY(), 143.15f*3.1415927f/180.0f);
     _carVehicle->getRigidBody()->setLinearVelocity(Vector3::zero());
+    _carSpeedLag = 0;
     _carVehicle->getRigidBody()->setAngularVelocity(Vector3::zero());
     _carVehicle->getRigidBody()->setEnabled(true);
 }
