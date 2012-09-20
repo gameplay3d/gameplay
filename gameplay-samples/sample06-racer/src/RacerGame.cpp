@@ -268,12 +268,23 @@ void RacerGame::update(float elapsedTime)
         if (_carVehicle)
         {
             float v = _carVehicle->getSpeedKph();
+
+            // Aerodynamic downforce
             float delta = v - _carSpeedLag;
             _carSpeedLag += delta * dt / (dt + (delta > 0 ? 0 : 1.2));
             _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * _carSpeedLag * _carSpeedLag, 0));
 
+            // Reduce control authority with speed
             float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(v));
-            _carVehicle->update(blowdown*_steering, braking, driving);
+            float throttleBack = max(0.0f, v - 110.0f) / 80.0f;
+            throttleBack *= throttleBack;
+            float brakeBack = max(0.0f, v - 130.0f) / 180.0f;
+            brakeBack *= brakeBack;
+
+            // Increase engine bottom-end
+            float boost = max(1.0f, 2.2f * (1.0f - fabs(v)/80.0f));
+
+            _carVehicle->update(blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
 
             if ( (_keyFlags & UPRIGHT) ||
                  (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
