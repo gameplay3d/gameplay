@@ -134,12 +134,15 @@ void Properties::readProperties(FILE* file)
                 rc = strchr(line, '}');
 
                 // First token should be the property name.
-                name = strtok(line, " =\t");
+                name = strtok(line, "=");
                 if (name == NULL)
                 {
                     GP_ERROR("Error parsing properties file: attribute without name.");
                     return;
                 }
+
+                // Remove white-space from name.
+                name = trimWhiteSpace(name);
 
                 // Scan for next token, the property's value.
                 value = strtok(NULL, "=");
