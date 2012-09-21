@@ -44,8 +44,8 @@ collisionObject carWheelFrontLeft
     wheelAxle = -1, 0, 0
     strutConnectionPoint = -1.08, -0.2, 1.8
     strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
+    strutStiffness = 25.0
+    strutDampingCompression = 5.1
     strutDampingRelaxation = 2.3
     frictionBreakout = 1000.0
     wheelRadius = 0.5
@@ -68,8 +68,8 @@ collisionObject carWheelFrontRight
     wheelAxle = -1, 0, 0
     strutConnectionPoint = 1.08, -0.2, 1.8
     strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
+    strutStiffness = 25.0
+    strutDampingCompression = 5.1
     strutDampingRelaxation = 2.3
     frictionBreakout = 1000.0
     wheelRadius = 0.5
@@ -92,8 +92,8 @@ collisionObject carWheelBackLeft
     wheelAxle = -1, 0, 0
     strutConnectionPoint = -1.08, -0.2, -1.8
     strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
+    strutStiffness = 25.0
+    strutDampingCompression = 5.1
     strutDampingRelaxation = 2.3
     frictionBreakout = 1000.0
     wheelRadius = 0.5
@@ -116,8 +116,8 @@ collisionObject carWheelBackRight
     wheelAxle = -1, 0, 0
     strutConnectionPoint = 1.08, -0.2, -1.8
     strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
+    strutStiffness = 25.0
+    strutDampingCompression = 5.1
     strutDampingRelaxation = 2.3
     frictionBreakout = 1000.0
     wheelRadius = 0.5
