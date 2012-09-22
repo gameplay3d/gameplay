@@ -737,6 +737,9 @@ bool initializeGL(WindowCreationParams* params)
 
     // Choose pixel format using wglChoosePixelFormatARB, which allows us to specify
     // additional attributes such as multisampling.
+    //
+    // Note: Keep multisampling attributes at the start of the attribute lists since code below
+    // assumes they are array elements 0 through 3.
     int attribList[] = {
         WGL_SAMPLES_ARB, params->samples,
         WGL_SAMPLE_BUFFERS_ARB, params->samples > 0 ? 1 : 0,
@@ -887,8 +890,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             // Read multisampling state.
             params.samples = config->getInt("samples");
-            if (params.samples == 0)
-                params.samples = 1;
         }
     }
 
