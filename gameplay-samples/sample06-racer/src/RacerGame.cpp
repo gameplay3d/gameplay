@@ -46,7 +46,7 @@ RacerGame::RacerGame()
 
 void RacerGame::initialize()
 {
-    setVsync(false);
+    //setVsync(false);
 
     setMultiTouch(true);
 
@@ -92,7 +92,7 @@ void RacerGame::initialize()
     {
         _backgroundSound->setLooped(true);
         _backgroundSound->play();
-        _backgroundSound->setGain(0.1f);
+        _backgroundSound->setGain(0.3f);
     }
 
     _engineSound = AudioSource::create("res/common/engine_loop.ogg");
