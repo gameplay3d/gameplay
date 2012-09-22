@@ -104,7 +104,7 @@ static View* __view = NULL;
     }
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
     CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);  
-    
+
     [gameLock unlock];
 }
 
@@ -116,9 +116,21 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 - (id) initWithFrame: (NSRect) frame
-{    
+{
+    _game = Game::getInstance();
+    
+    Properties* config = _game->getConfig()->getNamespace("window", true);
+    int samples = config ? config->getInt("samples") : 0;
+    if (samples < 0)
+        samples = 0;
+    
+    // Note: Keep multisampling attributes at the start of the attribute lists since code below
+    // assumes they are array elements 0 through 4.
     NSOpenGLPixelFormatAttribute windowedAttrs[] = 
     {
+        NSOpenGLPFAMultisample,
+        NSOpenGLPFASampleBuffers, samples ? 1 : 0,
+        NSOpenGLPFASamples, samples,
         NSOpenGLPFAAccelerated,
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAColorSize, 32,
@@ -129,6 +141,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     };
     NSOpenGLPixelFormatAttribute fullscreenAttrs[] = 
     {
+        NSOpenGLPFAMultisample,
+        NSOpenGLPFASampleBuffers, samples ? 1 : 0,
+        NSOpenGLPFASamples, samples,
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAScreenMask, (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
         NSOpenGLPFAFullScreen,
@@ -140,16 +155,38 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     };
     NSOpenGLPixelFormatAttribute* attrs = __fullscreen ? fullscreenAttrs : windowedAttrs;
     
+    // Try to choose a supported pixel format
     NSOpenGLPixelFormat* pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
     if (!pf)
-        NSLog(@"OpenGL pixel format not supported.");
+    {
+        bool valid = false;
+        while (!pf && samples > 0)
+        {
+            samples /= 2;
+            attrs[2] = samples ? 1 : 0;
+            attrs[4] = samples;
+            pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+            if (pf)
+            {
+                valid = true;
+                break;
+            }
+        }
+        
+        if (!valid)
+        {
+            NSLog(@"OpenGL pixel format not supported.");
+            GP_ERROR("Failed to create a valid OpenGL pixel format.");
+            return nil;
+        }
+    }
     
-    if((self = [super initWithFrame:frame pixelFormat:[pf autorelease]])) 
+    if ((self = [super initWithFrame:frame pixelFormat:[pf autorelease]])) 
     {
         gameLock = [[NSRecursiveLock alloc] init];
-        _game = Game::getInstance();
         __timeStart = getMachTimeInMilliseconds();
     }
+    
     return self;
 }
 
@@ -745,6 +782,11 @@ int Platform::enterMessagePump()
     NSRect viewBounds = NSMakeRect(0, 0, __width, __height);
     
     __view = [[View alloc] initWithFrame:viewBounds];
+    if (__view == NULL)
+    {
+        GP_ERROR("Failed to create view: exiting.");
+        return EXIT_FAILURE;
+    }
     
     NSRect centered = NSMakeRect(NSMidX(screenBounds) - NSMidX(viewBounds),
                                  NSMidY(screenBounds) - NSMidY(viewBounds),

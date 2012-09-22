@@ -14,6 +14,8 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape
     _rigidBody = new PhysicsRigidBody(node, shape, parameters);
 
     findAncestorAndBind();
+
+    _initialOffset = node->getTranslation();
 }
 
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody)
@@ -22,6 +24,8 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody
     _rigidBody = rigidBody;
 
     findAncestorAndBind();
+
+    _initialOffset = node->getTranslation();
 }
 
 PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* properties)
@@ -183,7 +187,11 @@ void PhysicsVehicleWheel::transform(Node* node) const
     const btQuaternion& rot = trans.getRotation();
     const btVector3& pos = trans.getOrigin();
     node->setRotation(rot.x(), rot.y(), rot.z(), rot.w());
-    node->setTranslation(pos.x(), pos.y(), pos.z());
+
+    // Ignore X and Z translation for wheel
+    Vector3 wheelPos = _initialOffset;
+    _host->_node->getMatrix().transformPoint(&wheelPos);
+    node->setTranslation(wheelPos.x, wheelPos.y, wheelPos.z);
 }
 
 bool PhysicsVehicleWheel::isFront() const
