@@ -123,19 +123,11 @@ material coloredUnlit
     }
 }
 
-material carbody : textured
+material car : textured
 {
     sampler u_diffuseTexture
     {
-        path = @car_body
-    }
-}
-
-material carwheels : textured
-{
-    sampler u_diffuseTexture
-    {
-        path = @car_wheels
+        path = @car
     }
 }
 

@@ -213,7 +213,6 @@ void RacerGame::update(float elapsedTime)
                 _brakingSound->stop();
             }
 
-
             // Make the camera follow the car
             Node* carNode = _carVehicle->getNode();
             Vector3 carPosition(carNode->getTranslation());
@@ -231,38 +230,6 @@ void RacerGame::update(float elapsedTime)
             m.getRotation(&q);
             cameraNode->setRotation(q);
             _carPositionPrevious.set(carPosition);
-        }
-        else
-        {
-            // Flythru Control (Dev Mode)
-            float speed = 0;
-            if ( (_keyFlags & ACCELERATOR) || _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
-            {
-                speed = 60.0f;
-            }
-            else if ( (_keyFlags & BRAKE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
-            {
-                speed = -60.0f;
-            }
-            cameraNode->translate(cameraNode->getForwardVector() * speed * dt);
-
-            if (_gamepad->isJoystickActive(0))
-            {
-                Vector2 direction;
-                _gamepad->getJoystickAxisValues(0, &direction);
-
-                speed = 0.8f;
-
-                // Yaw in world frame, pitch in body frame
-                Matrix m;
-                cameraNode->getWorldMatrix().transpose(&m);
-                Vector3 yaw;
-                m.getUpVector(&yaw);
-                cameraNode->rotate(yaw, -direction.x * speed * dt);
-                cameraNode->rotateX(direction.y * speed * dt);
-            }
-
-            _carPositionPrevious.set(0, 0, 0);
         }
 
         if (_carVehicle)
@@ -282,7 +249,7 @@ void RacerGame::update(float elapsedTime)
             brakeBack *= brakeBack;
 
             // Increase engine bottom-end
-            float boost = max(1.0f, 1.8f * (1.0f - fabs(v)/120.0f));
+            float boost = max(1.0f, 2.6f * (1.0f - fabs(v)/120.0f));
 
             _carVehicle->update(blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
 
@@ -417,6 +384,7 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_F:
             __flythruCamera = !__flythruCamera;
+            getScriptController()->executeFunction<void>("toggleCamera");
             break;
         case Keyboard::KEY_B:
             __drawDebug = !__drawDebug;
@@ -533,9 +501,9 @@ void RacerGame::resetVehicle()
     Node* carNode = _carVehicle->getNode();
 
     _carVehicle->getRigidBody()->setEnabled(false);
-    carNode->setTranslation(-328.0f, 20.0f, 371.0f);
+    carNode->setTranslation(-258, 1, 278);
     _carPositionPrevious.set(carNode->getTranslation());
-    carNode->setRotation(Vector3::unitY(), 143.15f*3.1415927f/180.0f);
+    carNode->setRotation(Vector3::unitY(), MATH_DEG_TO_RAD(143.201f));
     _carVehicle->getRigidBody()->setLinearVelocity(Vector3::zero());
     _carSpeedLag = 0;
     _carVehicle->getRigidBody()->setAngularVelocity(Vector3::zero());
