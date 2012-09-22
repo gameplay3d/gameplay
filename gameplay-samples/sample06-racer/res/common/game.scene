@@ -7,35 +7,35 @@ scene main
     node carbody
     {
         url = car_top
-        material = res/common/game.material#carbody
+        material = res/common/game.material#car
         collisionObject = res/common/game.physics#car
     }
 
     node wheelFrontLeft
     {
         url = Left_top
-        material = res/common/game.material#carwheels
+        material = res/common/game.material#car
         collisionObject = res/common/game.physics#carWheelFrontLeft
     }
 
     node wheelFrontRight
     {
         url = Right_top
-        material = res/common/game.material#carwheels
+        material = res/common/game.material#car
         collisionObject = res/common/game.physics#carWheelFrontRight
     }
 
     node wheelBackLeft
     {
         url = Left_bottom
-        material = res/common/game.material#carwheels
+        material = res/common/game.material#car
         collisionObject = res/common/game.physics#carWheelBackLeft
     }
 
     node wheelBackRight
     {
         url = Right_bottom
-        material = res/common/game.material#carwheels
+        material = res/common/game.material#car
         collisionObject = res/common/game.physics#carWheelBackRight
     }
 

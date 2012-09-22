@@ -329,6 +329,7 @@ private:
     PhysicsRigidBody* _rigidBody;
     PhysicsVehicle* _host;
     unsigned int _indexInHost;
+    Vector3 _initialOffset;
 };
 
 }

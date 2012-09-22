@@ -25,6 +25,10 @@ function setScene(scene)
     _cameraNode = scene:getActiveCamera():getNode()
 end
 
+function toggleCamera()
+    _useScriptCamera = not _useScriptCamera
+end
+
 function initialize()
 end
 
