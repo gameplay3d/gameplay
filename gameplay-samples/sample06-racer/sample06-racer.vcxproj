@@ -171,6 +171,9 @@
     <None Include="res\common\game.scene" />
     <None Include="res\common\gamepad.form" />
     <None Include="res\common\gamepad.theme" />
+    <None Include="res\common\menu.form" />
+    <None Include="res\common\menu.png" />
+    <None Include="res\common\menu.theme" />
     <None Include="res\shaders\textured-alphatest.frag" />
   </ItemGroup>
   <ItemGroup>
