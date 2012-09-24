@@ -251,7 +251,7 @@ void RacerGame::update(float elapsedTime)
             // Increase engine bottom-end
             float boost = max(1.0f, 2.6f * (1.0f - fabs(v)/120.0f));
 
-            _carVehicle->update(blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
+            _carVehicle->update(elapsedTime, blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
 
             if ( (_keyFlags & UPRIGHT) ||
                  (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
@@ -369,11 +369,10 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_S:
         case Keyboard::KEY_CAPITAL_S:
         case Keyboard::KEY_DOWN_ARROW:
-            _keyFlags |= BRAKE;
-            break;
-        case Keyboard::KEY_X:
-        case Keyboard::KEY_CAPITAL_X:
             _keyFlags |= REVERSE;
+            break;
+        case Keyboard::KEY_SPACE:
+            _keyFlags |= BRAKE;
             break;
         case Keyboard::KEY_Y:
         case Keyboard::KEY_CAPITAL_Y:
@@ -416,11 +415,10 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_S:
         case Keyboard::KEY_CAPITAL_S:
         case Keyboard::KEY_DOWN_ARROW:
-            _keyFlags &= ~BRAKE;
-            break;
-        case Keyboard::KEY_X:
-        case Keyboard::KEY_CAPITAL_X:
             _keyFlags &= ~REVERSE;
+            break;
+        case Keyboard::KEY_SPACE:
+            _keyFlags &= ~BRAKE;
             break;
         case Keyboard::KEY_Y:
         case Keyboard::KEY_CAPITAL_Y:
