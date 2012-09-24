@@ -369,11 +369,10 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_S:
         case Keyboard::KEY_CAPITAL_S:
         case Keyboard::KEY_DOWN_ARROW:
-            _keyFlags |= BRAKE;
-            break;
-        case Keyboard::KEY_X:
-        case Keyboard::KEY_CAPITAL_X:
             _keyFlags |= REVERSE;
+            break;
+        case Keyboard::KEY_SPACE:
+            _keyFlags |= BRAKE;
             break;
         case Keyboard::KEY_Y:
         case Keyboard::KEY_CAPITAL_Y:
@@ -416,11 +415,10 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         case Keyboard::KEY_S:
         case Keyboard::KEY_CAPITAL_S:
         case Keyboard::KEY_DOWN_ARROW:
-            _keyFlags &= ~BRAKE;
-            break;
-        case Keyboard::KEY_X:
-        case Keyboard::KEY_CAPITAL_X:
             _keyFlags &= ~REVERSE;
+            break;
+        case Keyboard::KEY_SPACE:
+            _keyFlags &= ~BRAKE;
             break;
         case Keyboard::KEY_Y:
         case Keyboard::KEY_CAPITAL_Y:
