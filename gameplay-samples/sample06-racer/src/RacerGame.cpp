@@ -251,7 +251,7 @@ void RacerGame::update(float elapsedTime)
             // Increase engine bottom-end
             float boost = max(1.0f, 2.6f * (1.0f - fabs(v)/120.0f));
 
-            _carVehicle->update(blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
+            _carVehicle->update(elapsedTime, blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
 
             if ( (_keyFlags & UPRIGHT) ||
                  (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
