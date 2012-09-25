@@ -4,7 +4,7 @@
 <cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.qnx.qcc.configuration.exe.debug.242437683">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.debug.242437683" moduleId="org.eclipse.cdt.core.settings" name="Device-Debug-IMG">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.debug.242437683" moduleId="org.eclipse.cdt.core.settings" name="Device-Debug">
 				<externalSettings/>
 				<extensions>
 					<extension id="com.qnx.tools.ide.qde.core.QDEBynaryParser" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -16,7 +16,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="Imagination GPUs" id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug-IMG" parent="com.qnx.qcc.configuration.exe.debug">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="Imagination GPUs" id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug" parent="com.qnx.qcc.configuration.exe.debug">
 					<folderInfo id="com.qnx.qcc.configuration.exe.debug.242437683." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.debug.1457920850" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.543140018" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>
@@ -92,7 +92,7 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.exe.release.693953760">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.release.693953760" moduleId="org.eclipse.cdt.core.settings" name="Device-Release-IMG">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.exe.release.693953760" moduleId="org.eclipse.cdt.core.settings" name="Device-Release">
 				<externalSettings/>
 				<extensions>
 					<extension id="com.qnx.tools.ide.qde.core.QDEBynaryParser" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -104,7 +104,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="Imagination GPUs" id="com.qnx.qcc.configuration.exe.release.693953760" name="Device-Release-IMG" parent="com.qnx.qcc.configuration.exe.release">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="Imagination GPUs" id="com.qnx.qcc.configuration.exe.release.693953760" name="Device-Release" parent="com.qnx.qcc.configuration.exe.release">
 					<folderInfo id="com.qnx.qcc.configuration.exe.release.693953760." name="/" resourcePath="">
 						<toolChain id="com.qnx.qcc.toolChain.exe.release.980420031" name="QNX QCC" superClass="com.qnx.qcc.toolChain">
 							<option id="com.qnx.qcc.option.cpu.1761526343" name="Target CPU:" superClass="com.qnx.qcc.option.cpu" value="com.qnx.qcc.option.gen.cpu.armle-v7" valueType="enumerated"/>

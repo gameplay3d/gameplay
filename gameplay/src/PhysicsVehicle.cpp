@@ -204,7 +204,7 @@ float PhysicsVehicle::getSpeedKph() const
     return _vehicle->getCurrentSpeedKmHour();
 }
 
-void PhysicsVehicle::update(float steering, float braking, float driving)
+void PhysicsVehicle::update(float elapsedTime, float steering, float braking, float driving)
 {
     PhysicsVehicleWheel* wheel;
     for (int i = 0; i < _vehicle->getNumWheels(); i++)
@@ -221,6 +221,7 @@ void PhysicsVehicle::update(float steering, float braking, float driving)
             _vehicle->setBrake(braking * _brakingForce, i);
         }
 
+        wheel->update(elapsedTime);
         wheel->transform(wheel->getNode());
     }
 }

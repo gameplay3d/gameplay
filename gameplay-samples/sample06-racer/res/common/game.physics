@@ -28,7 +28,7 @@ collisionObject car
     drivingForce = 2000.0
 }
 
-collisionObject carWheelFrontLeft
+collisionObject carWheel
 {
     type = VEHICLE_WHEEL
 
@@ -39,89 +39,40 @@ collisionObject carWheelFrontLeft
     linearDamping = 0.025
     angularDamping = 0.16
 
+    wheelDirection = 0, -1, 0
+    wheelAxle = -1, 0, 0
+
+    strutRestLength = 0.6
+    strutStiffness = 25.0
+    strutDampingCompression = 5.1
+    strutDampingRelaxation = 2.3
+    frictionBreakout = 1000.0
+    wheelRadius = 0.5
+    rollInfluence = 0.1
+}
+
+collisionObject carWheelFrontLeft : carWheel
+{
     isFront = true
-    wheelDirection = 0, -1, 0
-    wheelAxle = -1, 0, 0
-    strutConnectionPoint = -1.08, -0.2, 1.8
-    strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
-    strutDampingRelaxation = 2.3
-    frictionBreakout = 1000.0
-    wheelRadius = 0.5
-    rollInfluence = 0.1
+    strutConnectionPoint = 0.95, -0.08, 1.8
 }
 
-collisionObject carWheelFrontRight
+collisionObject carWheelFrontRight : carWheel
 {
-    type = VEHICLE_WHEEL
-
-    shape = MESH
-    mass = 1.0
-    friction = 0.5
-    restitution = 0.01
-    linearDamping = 0.025
-    angularDamping = 0.16
-
     isFront = true
-    wheelDirection = 0, -1, 0
-    wheelAxle = -1, 0, 0
-    strutConnectionPoint = 1.08, -0.2, 1.8
-    strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
-    strutDampingRelaxation = 2.3
-    frictionBreakout = 1000.0
-    wheelRadius = 0.5
-    rollInfluence = 0.1
+    strutConnectionPoint = -0.95, -0.08, 1.8
 }
 
-collisionObject carWheelBackLeft
+collisionObject carWheelBackLeft : carWheel
 {
-    type = VEHICLE_WHEEL
-
-    shape = MESH
-    mass = 1.0
-    friction = 0.5
-    restitution = 0.01
-    linearDamping = 0.025
-    angularDamping = 0.16
-
     isFront = false
-    wheelDirection = 0, -1, 0
-    wheelAxle = -1, 0, 0
-    strutConnectionPoint = -1.08, -0.2, -1.8
-    strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
-    strutDampingRelaxation = 2.3
-    frictionBreakout = 1000.0
-    wheelRadius = 0.5
-    rollInfluence = 0.1
+    strutConnectionPoint = 0.95, -0.15, -1.55
 }
 
-collisionObject carWheelBackRight
+collisionObject carWheelBackRight : carWheel
 {
-    type = VEHICLE_WHEEL
-
-    shape = MESH
-    mass = 1.0
-    friction = 0.5
-    restitution = 0.01
-    linearDamping = 0.025
-    angularDamping = 0.16
-
     isFront = false
-    wheelDirection = 0, -1, 0
-    wheelAxle = -1, 0, 0
-    strutConnectionPoint = 1.08, -0.2, -1.8
-    strutRestLength = 0.6
-    strutStiffness = 24.0
-    strutDampingCompression = 5.0
-    strutDampingRelaxation = 2.3
-    frictionBreakout = 1000.0
-    wheelRadius = 0.5
-    rollInfluence = 0.1
+    strutConnectionPoint = -0.95, -0.15, -1.55
 }
 
 collisionObject heightfield
