@@ -84,11 +84,12 @@ public:
      * Updates the vehicle state using the specified normalized command
      * inputs, and updates the transform on the visual node for each wheel.
      *
+     * @param elapsedTime The elapsed game time.
      * @param steering steering command (-1 to 1).
      * @param braking braking command (0 to 1).
      * @param driving net drivetrain command (0 to 1).
      */
-    void update(float steering, float braking, float driving);
+    void update(float elapsedTime, float steering, float braking, float driving);
 
     /**
      * Gets steering gain at full deflection.
