@@ -8,10 +8,11 @@ enum RenderQueue
     QUEUE_COUNT
 };
 
-bool __viewFrusumCulling = true;
+bool __viewFrustumCulling = true;
 bool __flythruCamera = false;
 bool __drawDebug = false;
 bool __useAccelerometer = false;
+bool __showMenu = false;
 
 // Declare our game instance
 RacerGame game;
@@ -54,6 +55,13 @@ void RacerGame::initialize()
 
     // Display the gameplay splash screen during loading, for at least 1 second.
     displayScreen(this, &RacerGame::drawSplash, NULL, 1000L);
+
+    // Create the menu and start listening to its controls.
+    _menu = Form::create("res/common/menu.form");
+    static_cast<Button*>(_menu->getControl("resetButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_menu->getControl("exitButton"))->addListener(this, Listener::CLICK);
+    static_cast<RadioButton*>(_menu->getControl("useGamepad"))->addListener(this, Listener::VALUE_CHANGED);
+    static_cast<RadioButton*>(_menu->getControl("useTilt"))->addListener(this, Listener::VALUE_CHANGED);
 
     // Load the scene
     _scene = Scene::load("res/common/game.scene");
@@ -142,6 +150,8 @@ void RacerGame::update(float elapsedTime)
     getGamepadsConnected();
     
     _gamepad->update(elapsedTime);
+
+	_menu->update(Game::getAbsoluteTime());
 
     Node* cameraNode;
     if (_scene->getActiveCamera() && (cameraNode = _scene->getActiveCamera()->getNode()))
@@ -283,6 +293,12 @@ void RacerGame::render(float elapsedTime)
 
     // Draw the gamepad
     _virtualGamepad->draw();
+
+    // Draw the menu
+    if (__showMenu)
+    {
+        _menu->draw();
+    }
         
     // Draw FPS and speed
     int carSpeed = _carVehicle ? (int)_carVehicle->getSpeedKph() : 0;
@@ -302,7 +318,7 @@ bool RacerGame::buildRenderQueues(Node* node)
     if (model)
     {
         // Perform view-frustum culling for this node
-        if (__viewFrusumCulling && !node->getBoundingSphere().intersects(_scene->getActiveCamera()->getFrustum()))
+        if (__viewFrustumCulling && !node->getBoundingSphere().intersects(_scene->getActiveCamera()->getFrustum()))
             return true;
 
         // Determine which render queue to insert the node into
@@ -349,7 +365,7 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
         switch (key)
         {
         case Keyboard::KEY_ESCAPE:
-            exit();
+            menuEvent();
             break;
         case Keyboard::KEY_A:
         case Keyboard::KEY_CAPITAL_A:
@@ -379,7 +395,7 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             _keyFlags |= UPRIGHT;
             break;
         case Keyboard::KEY_V:
-            __viewFrusumCulling = !__viewFrusumCulling;
+            __viewFrustumCulling = !__viewFrustumCulling;
             break;
         case Keyboard::KEY_F:
             __flythruCamera = !__flythruCamera;
@@ -491,7 +507,16 @@ void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 
 void RacerGame::menuEvent()
 {
-    resetVehicle();
+    __showMenu = !__showMenu;
+
+	if (__showMenu)
+	{
+		pause();
+	}
+	else
+	{
+		resume();
+	}
 }
 
 void RacerGame::resetVehicle()
@@ -506,4 +531,27 @@ void RacerGame::resetVehicle()
     _carSpeedLag = 0;
     _carVehicle->getRigidBody()->setAngularVelocity(Vector3::zero());
     _carVehicle->getRigidBody()->setEnabled(true);
+}
+
+void RacerGame::controlEvent(Control* control, EventType evt)
+{
+    if (strcmp(control->getId(), "resetButton") == 0)
+    {
+        resetVehicle();
+
+		// Close the menu and resume the game.
+		menuEvent();
+    }
+    else if (strcmp(control->getId(), "exitButton") == 0)
+    {
+        exit();
+    }
+    else if (strcmp(control->getId(), "useGamepad") == 0)
+    {
+        __useAccelerometer = false;
+    }
+    else if (strcmp(control->getId(), "useTilt") == 0)
+    {
+        __useAccelerometer = true;
+    }
 }
