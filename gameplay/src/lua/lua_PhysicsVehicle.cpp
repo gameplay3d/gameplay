@@ -1031,12 +1031,13 @@ int lua_PhysicsVehicle_update(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 4:
+        case 5:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 lua_type(state, 2) == LUA_TNUMBER &&
                 lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
                 float param1 = (float)luaL_checknumber(state, 2);
@@ -1047,8 +1048,11 @@ int lua_PhysicsVehicle_update(lua_State* state)
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
 
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 5);
+
                 PhysicsVehicle* instance = getInstance(state);
-                instance->update(param1, param2, param3);
+                instance->update(param1, param2, param3, param4);
                 
                 return 0;
             }
@@ -1061,7 +1065,7 @@ int lua_PhysicsVehicle_update(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 5).");
             lua_error(state);
             break;
         }
