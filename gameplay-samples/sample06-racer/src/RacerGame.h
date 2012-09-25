@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * Main game class.
  */
-class RacerGame: public Game
+class RacerGame: public Game, Control::Listener
 {
 public:
 
@@ -41,6 +41,11 @@ public:
      * @see Game::menuEvent
      */
     void menuEvent();
+
+    /**
+     * @see Control::controlEvent
+     */
+    void controlEvent(Control* control, EventType evt);
     
 protected:
 
@@ -93,6 +98,7 @@ private:
 
     Scene* _scene;
     Font* _font;
+    Form* _menu;
     std::vector<Node*> _renderQueues[2];
     unsigned int _keyFlags;
     unsigned int _mouseFlags;
