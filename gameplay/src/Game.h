@@ -661,6 +661,7 @@ private:
 
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
+    unsigned int _pausedCount;                  // Number of times pause() has been called.
     static double _pausedTimeLast;              // The last time paused.
     static double _pausedTimeTotal;             // The total time paused.
     double _frameLastFPS;                       // The last time the frame count was updated.
