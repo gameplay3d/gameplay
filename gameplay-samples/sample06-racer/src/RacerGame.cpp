@@ -41,7 +41,7 @@ RacerGame game;
 
 RacerGame::RacerGame()
     : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL),
-    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _carSpeedLag(0)
+    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _carSpeedLag(0), _upsetTimer(0)
 {
 }
 
@@ -91,7 +91,7 @@ void RacerGame::initialize()
     if (carNode && carNode->getCollisionObject()->getType() == PhysicsCollisionObject::VEHICLE)
     {
         _carVehicle = static_cast<PhysicsVehicle*>(carNode->getCollisionObject());
-        resetVehicle();
+        resetToStart();
     }
 
     // Create audio tracks
@@ -263,14 +263,36 @@ void RacerGame::update(float elapsedTime)
 
             _carVehicle->update(elapsedTime, blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
 
-            if ( (_keyFlags & UPRIGHT) ||
+            // Auto-detect an upset car
+            if (fabs(v) < 10.0f && isUpset())
+            {
+                _upsetTimer += dt;
+            }
+            else
+            {
+                _upsetTimer = 0;
+            }
+
+            if (_upsetTimer > 3.0f)
+            {
+                _upsetTimer = 0;
+                resetInPlace();
+            }
+            else if ( (_keyFlags & UPRIGHT) ||
                  (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
                  (_carVehicle->getNode()->getTranslationY() < -300.0f) )
             {
-                resetVehicle();
+                resetToStart();
             }
         }
     }
+}
+
+bool RacerGame::isUpset() const
+{
+    GP_ASSERT(_carVehicle);
+
+    return _carVehicle->getNode()->getUpVector().y < 0.4f;
 }
 
 void RacerGame::render(float elapsedTime)
@@ -519,14 +541,42 @@ void RacerGame::menuEvent()
 	}
 }
 
-void RacerGame::resetVehicle()
+void RacerGame::resetToStart()
+{
+    Vector3 pos(-258, 1, 278);
+    Quaternion rot(Vector3::unitY(), MATH_DEG_TO_RAD(143.201f));
+
+    reset(pos, rot);
+}
+
+void RacerGame::resetInPlace()
+{
+    Node* carNode = _carVehicle->getNode();
+
+    Vector3 pos;
+    carNode->getTranslation(&pos);
+    pos.y += 3.0f;
+
+    float angle = MATH_DEG_TO_RAD(90.0f);
+    Vector3 v;
+    carNode->getForwardVector(&v);
+    if (v.x*v.x + v.z*v.z > 0)
+    {
+        angle += atan2(v.z, -v.x);
+    }
+    Quaternion rot(Vector3::unitY(), angle);
+
+    reset(pos, rot);
+}
+
+void RacerGame::reset(const Vector3& pos, const Quaternion& rot)
 {
     Node* carNode = _carVehicle->getNode();
 
     _carVehicle->getRigidBody()->setEnabled(false);
-    carNode->setTranslation(-258, 1, 278);
+    carNode->setTranslation(pos);
     _carPositionPrevious.set(carNode->getTranslation());
-    carNode->setRotation(Vector3::unitY(), MATH_DEG_TO_RAD(143.201f));
+    carNode->setRotation(rot);
     _carVehicle->getRigidBody()->setLinearVelocity(Vector3::zero());
     _carSpeedLag = 0;
     _carVehicle->getRigidBody()->setAngularVelocity(Vector3::zero());
@@ -537,7 +587,7 @@ void RacerGame::controlEvent(Control* control, EventType evt)
 {
     if (strcmp(control->getId(), "resetButton") == 0)
     {
-        resetVehicle();
+        resetToStart();
 
 		// Close the menu and resume the game.
 		menuEvent();
