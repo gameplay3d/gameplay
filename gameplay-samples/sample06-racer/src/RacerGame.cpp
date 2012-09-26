@@ -230,6 +230,10 @@ void RacerGame::update(float elapsedTime)
             Vector3 carPosition(carNode->getTranslation());
             Vector3 fixedArm(Vector3::unitY()*4.0f - carNode->getBackVector()*10.0f);
             Vector3 swingArm(carPosition, _carPositionPrevious);
+            if (swingArm.lengthSquared() < 0.0001f)
+            {
+                swingArm.set(Vector3::zero());
+            }
             swingArm.y = max(0.0f, swingArm.y);
             swingArm += fixedArm*0.0001f;
             swingArm.normalize();
