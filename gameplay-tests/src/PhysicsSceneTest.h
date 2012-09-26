@@ -43,7 +43,8 @@ private:
     {
         SPHERE = 0, 
         BOX = 1,
-        CAPSULE = 2
+        CAPSULE = 2,
+        DUCK = 3
     };
 
     Font* _font;

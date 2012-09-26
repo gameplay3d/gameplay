@@ -23,6 +23,39 @@ void TestsGame::initialize()
         std::sort((*_tests)[i].begin(), (*_tests)[i].end());
     }
     //registerGesture(Gesture::GESTURE_SWIPE);
+
+    // Construct a form for selecting which test to run.
+    Theme* theme = Theme::create("res/common/mainMenu.theme");
+    Theme::Style* formStyle = theme->getStyle("basic");
+    Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
+    Theme::Style* titleStyle = theme->getStyle("title");
+    _testSelectForm = Form::create("testSelect", formStyle, Layout::LAYOUT_VERTICAL);
+    _testSelectForm->setAutoHeight(true);
+    _testSelectForm->setWidth(250.0f);
+    _testSelectForm->setScroll(Container::SCROLL_VERTICAL);
+
+    const size_t size = _tests->size();
+    for (size_t i = 0; i < size; ++i)
+    {
+        Label* categoryLabel = Label::create((*_categories)[i].c_str(), titleStyle);
+        categoryLabel->setAutoWidth(true);
+        categoryLabel->setHeight(40);
+        categoryLabel->setText((*_categories)[i].c_str());
+        _testSelectForm->addControl(categoryLabel);
+
+        TestRecordList list = (*_tests)[i];
+        const size_t listSize = list.size();
+        for (size_t j = 0; j < listSize; ++j)
+        {
+            TestRecord testRecord = list[j];
+            Button* testButton = Button::create(testRecord.title.c_str(), buttonStyle);
+            testButton->setText(testRecord.title.c_str());
+            testButton->setAutoWidth(true);
+            testButton->setHeight(40);
+            testButton->addListener(this, Control::Listener::CLICK);
+            _testSelectForm->addControl(testButton);
+        }
+    }
 }
 
 void TestsGame::finalize()
@@ -42,6 +75,8 @@ void TestsGame::update(float elapsedTime)
         _activeTest->update(elapsedTime);
         return;
     }
+
+    _testSelectForm->update(elapsedTime);
 }
 
 void TestsGame::render(float elapsedTime)
@@ -58,7 +93,7 @@ void TestsGame::render(float elapsedTime)
     }
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
-    drawTextMenu();
+    _testSelectForm->draw();
 }
 
 void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -75,17 +110,6 @@ void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
         }
         return;
     }
-
-    switch (evt)
-    {
-    case Touch::TOUCH_PRESS:
-        break;
-    case Touch::TOUCH_RELEASE:
-        activate(x, y);
-        break;
-    case Touch::TOUCH_MOVE:
-        break;
-    };
 }
 
 void TestsGame::keyEvent(Keyboard::KeyEvent evt, int key)
@@ -134,6 +158,26 @@ void TestsGame::gestureSwipeEvent(int x, int y, int direction)
         exitActiveTest();
 }
 
+void TestsGame::controlEvent(Control* control, EventType evt)
+{
+    const size_t size = _tests->size();
+    for (size_t i = 0; i < size; ++i)
+    {
+        TestRecordList list = (*_tests)[i];
+        const size_t listSize = list.size();
+        for (size_t j = 0; j < listSize; ++j)
+        {
+            TestRecord testRecord = list[j];
+            if (testRecord.title.compare(control->getId()) == 0)
+            {
+                _testSelectForm->disable();
+                runTest(testRecord.funcPtr);
+                return;
+            }
+        }
+    }
+}
+
 void TestsGame::runTest(void* func)
 {
     exitActiveTest();
@@ -151,6 +195,8 @@ void TestsGame::exitActiveTest()
     {
         _activeTest->finalize();
         SAFE_DELETE(_activeTest);
+
+        _testSelectForm->enable();
     }
     // Reset some game options
     setMultiTouch(false);
@@ -194,54 +240,4 @@ void TestsGame::addTest(const char* category, const char* title, void* func, uns
         _tests->resize(_categories->size());
     }
     (*_tests)[index].push_back(TestRecord(titleString, func, order));
-}
-
-void TestsGame::activate(int x, int y)
-{
-    if (_categories == NULL || _tests == NULL)
-        return;
-    int temp = (y - 10) / _font->getSize();
-    int itemIndex = 0;
-    for (size_t i = 0; i < _categories->size(); ++i)
-    {
-        ++itemIndex;
-        for (size_t testIndex = 0; testIndex < (*_tests)[i].size(); ++testIndex)
-        {
-            if (temp == itemIndex)
-            {
-                runTest((*_tests)[i][testIndex].funcPtr);
-                return;
-            }
-            ++itemIndex;
-        }
-    }
-}
-
-void TestsGame::drawTextMenu()
-{
-    if (_categories == NULL)
-        print("_categories null");
-    if (_tests == NULL)
-        print("_tests null");
-
-    if (_categories == NULL || _tests == NULL)
-        return;
-
-    static const int INDENT = 40;
-    int fontHeight = _font->getSize();
-    int x = 10;
-    int y = 10;
-    _font->start();
-    for (size_t i = 0; i < _categories->size(); ++i)
-    {
-        _font->drawText((*_categories)[i].c_str(), x, y, Vector4(0, 0.5f, 1, 1), fontHeight);
-        y += fontHeight;
-        for (TestRecordList::iterator it = (*_tests)[i].begin(); it != (*_tests)[i].end(); ++it)
-        {
-            _font->drawText(it->title.c_str(), x + INDENT, y, Vector4::one(), fontHeight);
-            y += fontHeight;
-        }
-    }
-    
-    _font->finish();
 }
