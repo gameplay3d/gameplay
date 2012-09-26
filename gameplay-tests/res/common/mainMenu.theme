@@ -131,14 +131,6 @@ theme mainMenu
         }
     }
 
-    style particleProps : basic
-    {
-        padding
-        {
-            left = 10
-        }
-    }
-
     style buttonStyle : basic
     {
         padding
@@ -207,7 +199,7 @@ theme mainMenu
             textColor = #ffffffff
             font = res/common/arial18.gpb
             fontSize = 26
-            textAlignment = ALIGN_TOP_HCENTER
+            textAlignment = ALIGN_BOTTOM_HCENTER
         }
 
         stateActive

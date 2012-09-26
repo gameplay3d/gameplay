@@ -26,7 +26,7 @@ using namespace gameplay;
 /**
  * Main game class.
  */
-class TestsGame : public Game
+class TestsGame : public Game, Control::Listener
 {
 public:
 
@@ -59,6 +59,11 @@ public:
      * @see Game::gestureSwipeEvent
      */
     void gestureSwipeEvent(int x, int y, int direction);
+
+    /**
+     * @see Control::controlEvent
+     */
+    void controlEvent(Control* control, EventType evt);
 
     /**
      * Adds a test.
@@ -151,23 +156,23 @@ private:
 
 
     /**
-     * The list of cateogry title strings.
+     * The list of category title strings.
      */
     static std::vector<std::string>* _categories;
 
     /**
      * The collection of test titles and the function pointers that create the tests.
-     * The pair represents that string title of the test and the function pointer that is used to create the test.
+     * The pair represents the string title of the test and the function pointer that is used to create the test.
      * The inner vector is a list of those pairs in the order that they were added.
-     * The outter vector represents the list of categories that contain the list of tests in the category.
-     * The index of _categories maps to the index of the outter vector. (Therefore their size should always be the same).
+     * The outer vector represents the list of categories that contain the list of tests in the category.
+     * The index of _categories maps to the index of the outer vector. (Therefore their size should always be the same).
      */
     typedef std::vector<TestRecord > TestRecordList;
     static std::vector<TestRecordList>* _tests;
 
     Test* _activeTest;
-
     Font* _font;
+    Form* _testSelectForm;
 };
 
 #endif

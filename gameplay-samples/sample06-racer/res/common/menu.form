@@ -1,40 +1,25 @@
 form menu
 {
     theme = res/common/menu.theme
-    width = 300
-    height = 300
-    alignment = ALIGN_TOP_HCENTER
-
-    // Reset
-    button resetButton
-    {
-        style = buttonStyle
-        position = 0, 0
-        size = 150, 50
-        text = Reset
-    }
-
-    // Exit
-    button exitButton : resetButton
-    {
-        position = 150, 0
-        text = Exit
-    }
+    width = 320
+    height = 140
+    alignment = ALIGN_VCENTER_HCENTER
+    style = basic
 
     // Controls
     container controlsContainer
     {
-        style = basic
-        position = 0, 50
+        style = noBorder
+        position = 0, 0
         autoWidth = true
-        height = 100
+        height = 60
 
         label controlsLabel
         {
             style = title
             alignment = ALIGN_TOP_HCENTER
             autoWidth = true
-            height = 40
+            height = 30
             text = Controls
         }
 
@@ -42,7 +27,7 @@ form menu
         {
             style = iconNoBorder
             group = controls
-            position = 0, 40
+            position = 0, 25
             size = 150, 40
             imageSize = 35, 35
             selected = true
@@ -51,9 +36,25 @@ form menu
 
         radioButton useTilt : useGamepad
         {
-            position = 150, 40
+            position = 150, 25
             text = Tilt
             selected = false
         }
+    }
+
+    // Reset
+    button resetButton
+    {
+        style = buttonStyle
+        position = 0, 70
+        size = 150, 50
+        text = Reset
+    }
+
+    // Exit
+    button exitButton : resetButton
+    {
+        position = 150, 70
+        text = Exit
     }
 }
