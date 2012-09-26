@@ -24,6 +24,8 @@ RacerGame game;
 #define UPRIGHT (1 << 3)
 #define STEER_LEFT (1 << 4)
 #define STEER_RIGHT (1 << 5)
+#define ACCELERATOR_MOUSE (1 << 6)
+#define BRAKE_MOUSE (1 << 7)
 
 #define STEERING_RESPONSE (7.0f)
 
@@ -191,7 +193,7 @@ void RacerGame::update(float elapsedTime)
             }
             _steering = max(-1.0f, min(_steering, 1.0f));
 
-            if ( (_keyFlags & ACCELERATOR) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED) )
+            if ( (_keyFlags & ACCELERATOR) || (_keyFlags & ACCELERATOR_MOUSE) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED) )
             {
                 driving = 1;
                 _engineSound->setGain(1.0f);
@@ -212,7 +214,7 @@ void RacerGame::update(float elapsedTime)
                 driving = -0.6f;
             }
 
-            if ( (_keyFlags & BRAKE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
+            if ( (_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
             {
                 braking = 1;
                 if (_brakingSound && _brakingSound->getState() != AudioSource::PLAYING && _carVehicle->getSpeedKph() > 30.0f)
@@ -486,16 +488,16 @@ bool RacerGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     switch (evt)
     {
     case Mouse::MOUSE_PRESS_LEFT_BUTTON:
-        _keyFlags |= ACCELERATOR;
+        _keyFlags |= ACCELERATOR_MOUSE;
         break;
     case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
-        _keyFlags |= BRAKE;
+        _keyFlags |= BRAKE_MOUSE;
         break;
     case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
-        _keyFlags &= ~ACCELERATOR;
+        _keyFlags &= ~ACCELERATOR_MOUSE;
         break;
     case Mouse::MOUSE_RELEASE_RIGHT_BUTTON:
-        _keyFlags &= ~BRAKE;
+        _keyFlags &= ~BRAKE_MOUSE;
         break;
     }
 
