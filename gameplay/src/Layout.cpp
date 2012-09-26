@@ -19,9 +19,11 @@ void Layout::align(Control* control, const Container* container)
         const Rectangle& containerBounds = container->getBounds();
         const Theme::Border& containerBorder = container->getBorder(container->getState());
         const Theme::Padding& containerPadding = container->getPadding();
+        const Rectangle& verticalScrollBarBounds = container->getImageRegion("verticalScrollBar", container->getState());
+        const Rectangle& horizontalScrollBarBounds = container->getImageRegion("horizontalScrollBar", container->getState());
 
-        float clipWidth = containerBounds.width - containerBorder.left - containerBorder.right - containerPadding.left - containerPadding.right;
-        float clipHeight = containerBounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom;
+        float clipWidth = containerBounds.width - containerBorder.left - containerBorder.right - containerPadding.left - containerPadding.right - verticalScrollBarBounds.width;
+        float clipHeight = containerBounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - horizontalScrollBarBounds.height;
 
         if (control->_autoWidth)
         {
