@@ -13,6 +13,9 @@
     <None Include="game.config" />
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
+    <None Include="res\common\mainMenu.theme">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MeshPrimitiveTest.h">

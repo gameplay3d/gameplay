@@ -8,12 +8,12 @@
 PhysicsSceneTest::PhysicsSceneTest()
     : _font(NULL), _scene(NULL), _lightNode(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false)
 {
-    const char* paths[] = {"res/common/physics.physics#ball","res/common/physics.physics#box", "res/common/physics.physics#capsule"};
-    _collisionObjectPaths.assign(paths, paths + 3);
-    const char* nodeIds[] = {"sphere", "box", "capsule"};
-    _nodeIds.assign(nodeIds, nodeIds + 3);
-    Vector4 colors[] = {Vector4(1, 0, 0, 1), Vector4(0.1f, 0.6f, 0.1f, 1), Vector4(0, 0, 1, 1)};
-    _colors.assign(colors, colors + 3);
+    const char* paths[] = {"res/common/physics.physics#ball","res/common/physics.physics#box", "res/common/physics.physics#capsule", "res/common/physics.physics#duck"};
+    _collisionObjectPaths.assign(paths, paths + 4);
+    const char* nodeIds[] = {"sphere", "box", "capsule", "duck"};
+    _nodeIds.assign(nodeIds, nodeIds + 4);
+    Vector4 colors[] = {Vector4(1, 0, 0, 1), Vector4(0.1f, 0.6f, 0.1f, 1), Vector4(0, 0, 1, 1), Vector4(1, 1, 0, 1)};
+    _colors.assign(colors, colors + 4);
 }
 
 void PhysicsSceneTest::initialize()
@@ -80,8 +80,11 @@ void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned 
                 _objectType = BOX;
             else if (_objectType == BOX)
                 _objectType = CAPSULE;
+            else if (_objectType == CAPSULE)
+                _objectType = DUCK;
             else
                 _objectType = SPHERE;
+
         }
         else if (x < optionWidth && y > (int)(getHeight() - _font->getSize() * 2))
         {
