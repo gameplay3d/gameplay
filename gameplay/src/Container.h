@@ -507,6 +507,8 @@ private:
     float _totalHeight;
 
     int _contactIndices;
+
+    bool _initializedWithScroll;
 };
 
 }

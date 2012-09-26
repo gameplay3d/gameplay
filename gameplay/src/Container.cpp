@@ -41,7 +41,7 @@ Container::Container()
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0),
-      _contactIndices(0)
+      _contactIndices(0), _initializedWithScroll(false)
 {
 }
 
@@ -615,6 +615,12 @@ Layout::Type Container::getLayoutType(const char* layoutString)
 
 void Container::updateScroll()
 {
+    if (!_initializedWithScroll)
+    {
+        _initializedWithScroll = true;
+        _layout->update(this, _scrollPosition);
+    }
+
     // Update Time.
     static double lastFrameTime = Game::getGameTime();
     double frameTime = Game::getGameTime();
