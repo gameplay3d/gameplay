@@ -4,7 +4,9 @@ theme menuTheme
 
     imageList normalImages
     {
-        color = #4A8799ff
+        //color = #4A8799ff
+        // "Battleship gray"
+        color = #848482ff
 
         image unchecked
         {
@@ -70,7 +72,9 @@ theme menuTheme
 
     imageList activeImages : normalImages
     {
-        color = #C3D9BFff
+        //color = #C3D9BFff
+        // "Cadet gray"
+        color = #91A3B0ff
 
         image unchecked
         {
@@ -104,12 +108,14 @@ theme menuTheme
         }
         
         region = 1, 1, 74, 74
-        color = #4A8799ff
+        //color = #4A8799ff
+        color = #848482ff
     }
 
     skin mainActive : mainNormal
     {
-        color = #C3D9BFff
+        //color = #C3D9BFff
+        color = #91A3B0ff
     }
 
     style basic
