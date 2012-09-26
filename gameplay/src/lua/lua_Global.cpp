@@ -554,7 +554,6 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("LAYOUT_FLOW", "LAYOUT_FLOW", scopePath);
         ScriptUtil::registerConstantString("LAYOUT_VERTICAL", "LAYOUT_VERTICAL", scopePath);
         ScriptUtil::registerConstantString("LAYOUT_ABSOLUTE", "LAYOUT_ABSOLUTE", scopePath);
-        ScriptUtil::registerConstantString("LAYOUT_SCROLL", "LAYOUT_SCROLL", scopePath);
     }
 
     // Register enumeration Light::Type.

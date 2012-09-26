@@ -602,10 +602,6 @@ Layout::Type Container::getLayoutType(const char* layoutString)
     {
         return Layout::LAYOUT_FLOW;
     }
-    else if (layoutName == "LAYOUT_SCROLL")
-    {
-        return Layout::LAYOUT_SCROLL;
-    }
     else
     {
         // Default.
