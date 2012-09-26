@@ -199,8 +199,6 @@ Form* Form::create(const char* url)
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
 
-    form->update(0.0f);
-
     SAFE_DELETE(properties);
 
     __forms.push_back(form);
