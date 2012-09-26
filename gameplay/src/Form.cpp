@@ -199,8 +199,6 @@ Form* Form::create(const char* url)
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
 
-    form->update(0.0f);
-
     SAFE_DELETE(properties);
 
     __forms.push_back(form);
@@ -240,7 +238,8 @@ void Form::setSize(float width, float height)
         height = Game::getInstance()->getHeight();
     }
 
-    if (width != _bounds.width || height != _bounds.height)
+    if (width != 0.0f && height != 0.0f &&
+        (width != _bounds.width || height != _bounds.height))
     {
         // Width and height must be powers of two to create a texture.
         unsigned int w = nextPowerOfTwo(width);
@@ -273,17 +272,27 @@ void Form::setSize(float width, float height)
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
         FrameBuffer::bindDefault();
         game->setViewport(prevViewport);
-
-        _bounds.width = width;
-        _bounds.height = height;
-        _dirty = true;
     }
+    
+    _bounds.width = width;
+    _bounds.height = height;
+    _dirty = true;
 }
 
 void Form::setBounds(const Rectangle& bounds)
 {
     setPosition(bounds.x, bounds.y);
     setSize(bounds.width, bounds.height);
+}
+
+void Form::setWidth(float width)
+{
+    setSize(width, _bounds.height);
+}
+
+void Form::setHeight(float height)
+{
+    setSize(_bounds.width, height);
 }
 
 void Form::setAutoWidth(bool autoWidth)
