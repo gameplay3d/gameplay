@@ -217,6 +217,12 @@ void PhysicsVehicle::update(float elapsedTime, float steering, float braking, fl
         }
         else
         {
+            // Allow braking to take precedence over driving.
+            if (driving > 0 && braking > 0)
+            {
+                driving = 0;
+            }
+
             _vehicle->applyEngineForce(driving * _drivingForce, i);
             _vehicle->setBrake(braking * _brakingForce, i);
         }
