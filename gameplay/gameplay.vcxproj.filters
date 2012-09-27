@@ -804,6 +804,9 @@
     <ClCompile Include="src\lua\lua_PhysicsVehicleWheel.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\MathUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">

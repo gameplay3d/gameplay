@@ -210,16 +210,13 @@ void PhysicsVehicleWheel::update(float elapsedTime)
     Vector3 commandedPosition(pos.x(), pos.y(), pos.z());
     Vector3 wheelPos = _initialOffset;
     _host->_node->getMatrix().transformPoint(&wheelPos);
+    commandedPosition -= wheelPos;
 
     // Filter out noise from Bullet
-    if (elapsedTime > 0.0f)
-    {
-        float dt = elapsedTime / 1000.0f;
-        Vector3 delta = commandedPosition - wheelPos - _positionDelta;
-        float threshold = getStrutRestLength() * 2.0f;
-        float tau = (delta.lengthSquared() > threshold*threshold) ? 0 : 0.06f;
-        _positionDelta += (commandedPosition - wheelPos - _positionDelta) * (dt / (dt + tau));
-    }
+    Vector3 delta(_positionDelta, commandedPosition);
+    float threshold = getStrutRestLength() * 2.0f;
+    float responseTime = (delta.lengthSquared() > threshold*threshold) ? 0 : 60;
+    _positionDelta.smooth(commandedPosition, elapsedTime, responseTime);
 }
 
 bool PhysicsVehicleWheel::isFront() const

@@ -307,4 +307,12 @@ void Vector3::subtract(const Vector3& v1, const Vector3& v2, Vector3* dst)
     dst->z = v1.z - v2.z;
 }
 
+void Vector3::smooth(const Vector3& target, float elapsedTime, float responseTime)
+{
+    if (elapsedTime > 0)
+    {
+        *this += (target - *this) * (elapsedTime / (elapsedTime + responseTime));
+    }
+}
+
 }
