@@ -255,7 +255,7 @@ void RacerGame::update(float elapsedTime)
 
             // Aerodynamic downforce
             float delta = v - _carSpeedLag;
-            _carSpeedLag += delta * dt / (dt + (delta > 0 ? 0 : 1.2));
+            _carSpeedLag += delta * dt / (dt + (delta > 0 ? 0.0001f : 1.2f));
             _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * _carSpeedLag * _carSpeedLag, 0));
 
             // Reduce control authority with speed
