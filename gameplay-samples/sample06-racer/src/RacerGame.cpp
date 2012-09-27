@@ -239,7 +239,7 @@ void RacerGame::update(float elapsedTime)
             swingArm += fixedArm*0.0001f;
             swingArm.normalize();
             Vector3 commandedPosition(carPosition + fixedArm + swingArm*5.0f);
-            cameraNode->translate((commandedPosition - cameraNode->getTranslation()) * (5.0f * dt));
+            cameraNode->translateSmooth(commandedPosition, dt, 0.2f);
             Matrix m;
             Matrix::createLookAt(cameraNode->getTranslation(), carPosition, Vector3::unitY(), &m);
             m.transpose();
@@ -254,8 +254,7 @@ void RacerGame::update(float elapsedTime)
             float v = _carVehicle->getSpeedKph();
 
             // Aerodynamic downforce
-            float delta = v - _carSpeedLag;
-            _carSpeedLag += delta * dt / (dt + (delta > 0 ? 0.0001f : 1.2f));
+            MathUtil::smooth(&_carSpeedLag, v, dt, 0, 1.2f);
             _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * _carSpeedLag * _carSpeedLag, 0));
 
             // Reduce control authority with speed
