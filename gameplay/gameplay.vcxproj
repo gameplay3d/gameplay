@@ -220,6 +220,7 @@
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp" />
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp" />
     <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MathUtil.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
     <ClCompile Include="src\Pass.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
