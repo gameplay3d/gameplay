@@ -566,12 +566,12 @@ void RacerGame::resetInPlace()
     carNode->getTranslation(&pos);
     pos.y += 3.0f;
 
-    float angle = MATH_DEG_TO_RAD(90.0f);
+    float angle = 0;
     Vector3 v;
     carNode->getForwardVector(&v);
     if (v.x*v.x + v.z*v.z > 0)
     {
-        angle += atan2(v.z, -v.x);
+        angle += atan2(-v.x, -v.z);
     }
     Quaternion rot(Vector3::unitY(), angle);
 
