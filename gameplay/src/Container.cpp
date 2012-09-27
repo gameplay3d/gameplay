@@ -172,6 +172,7 @@ void Container::addControls(Theme* theme, Properties* properties)
         if (control)
         {
             addControl(control);
+            control->release();
 
             if (control->getZIndex() == -1)
             {
@@ -204,32 +205,78 @@ Layout* Container::getLayout()
 unsigned int Container::addControl(Control* control)
 {
     GP_ASSERT(control);
-    _controls.push_back(control);
 
-    return _controls.size() - 1;
+    if (control->_parent && control->_parent != this)
+    {
+        control->_parent->removeControl(control);
+    }
+
+    if (control->_parent != this)
+    {
+        _controls.push_back(control);
+        control->addRef();
+        control->_parent = this;
+        return _controls.size() - 1;
+    }
+    else
+    {
+        // Control is already in this container.
+        // Do nothing but determine and return control's index.
+        const size_t size = _controls.size();
+        for (size_t i = 0; i < size; ++i)
+        {
+            Control* c = _controls[i];
+            if (c == control)
+            {
+                return i;
+            }
+        }
+
+        // Should never reach this.
+        GP_ASSERT(false);
+        return 0;
+    }
 }
 
 void Container::insertControl(Control* control, unsigned int index)
 {
     GP_ASSERT(control);
-    std::vector<Control*>::iterator it = _controls.begin() + index;
-    _controls.insert(it, control);
+
+    if (control->_parent && control->_parent != this)
+    {
+        control->_parent->removeControl(control);
+    }
+
+    if (control->_parent != this)
+    {
+        std::vector<Control*>::iterator it = _controls.begin() + index;
+        _controls.insert(it, control);
+        control->addRef();
+        control->_parent = this;
+    }
 }
 
 void Container::removeControl(unsigned int index)
 {
+    GP_ASSERT(index < _controls.size());
+
     std::vector<Control*>::iterator it = _controls.begin() + index;
     _controls.erase(it);
+    Control* control = *it;
+    control->_parent = NULL;
+    SAFE_RELEASE(control);
 }
 
 void Container::removeControl(const char* id)
 {
+    GP_ASSERT(id);
     std::vector<Control*>::iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* c = *it;
         if (strcmp(id, c->getId()) == 0)
         {
+            SAFE_RELEASE(c);
             _controls.erase(it);
             return;
         }
@@ -244,6 +291,7 @@ void Container::removeControl(Control* control)
     {
         if (*it == control)
         {
+            SAFE_RELEASE(control);
             _controls.erase(it);
             return;
         }
