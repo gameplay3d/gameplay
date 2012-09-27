@@ -689,6 +689,19 @@ public:
     void translateForward(float amount);
 
     /**
+     * Translates the camera towards the given target using a smoothing function.
+     * The given response time determines the amount of smoothing (lag). A longer
+     * response time yields a smoother result and more lag. To force the camera to
+     * follow the target closely, provide a response time that is very small relative
+     * to the given elapsed time.
+     *
+     * @param target target value.
+     * @param elapsedTime elapsed time between calls.
+     * @param responseTime response time (in the same units as elapsedTime).
+     */
+    void translateSmooth(const Vector3& target, float elapsedTime, float responseTime);
+
+    /**
      * Transforms the specified point and stores the
      * result in the original point.
      *

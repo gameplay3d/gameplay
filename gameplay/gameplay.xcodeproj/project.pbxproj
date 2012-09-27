@@ -1706,6 +1706,8 @@
 		5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */; };
 		5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
 		5BD52676150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
+		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
+		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2607,6 +2609,7 @@
 		5BD5266C150F8257004C9099 /* PhysicsCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCharacter.h; path = src/PhysicsCharacter.h; sourceTree = SOURCE_ROOT; };
 		5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionObject.cpp; path = src/PhysicsCollisionObject.cpp; sourceTree = SOURCE_ROOT; };
 		5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionObject.h; path = src/PhysicsCollisionObject.h; sourceTree = SOURCE_ROOT; };
+		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2780,6 +2783,7 @@
 				42CD0DE9147D8FF50000361E /* Material.h */,
 				42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */,
 				42CD0DEB147D8FF50000361E /* MaterialParameter.h */,
+				F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */,
 				4239DDF1157545C1005EA3F6 /* MathUtil.h */,
 				4239DDF2157545C1005EA3F6 /* MathUtil.inl */,
 				4239DDF3157545C1005EA3F6 /* MathUtilNeon.inl */,
@@ -4982,6 +4986,7 @@
 				421FBD531602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */,
 				421FBD5C1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
 				421FBD601602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
+				F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5405,6 +5410,7 @@
 				421FBD541602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */,
 				421FBD5D1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
 				421FBD611602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
+				F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

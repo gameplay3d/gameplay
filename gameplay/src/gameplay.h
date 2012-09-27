@@ -9,6 +9,7 @@
 #include "Gamepad.h"
 #include "FileSystem.h"
 #include "Bundle.h"
+#include "MathUtil.h"
 
 // Math
 #include "Rectangle.h"

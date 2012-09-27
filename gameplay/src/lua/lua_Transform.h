@@ -76,6 +76,7 @@ int lua_Transform_transformVector(lua_State* state);
 int lua_Transform_translate(lua_State* state);
 int lua_Transform_translateForward(lua_State* state);
 int lua_Transform_translateLeft(lua_State* state);
+int lua_Transform_translateSmooth(lua_State* state);
 int lua_Transform_translateUp(lua_State* state);
 int lua_Transform_translateX(lua_State* state);
 int lua_Transform_translateY(lua_State* state);
