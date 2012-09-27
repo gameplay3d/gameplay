@@ -348,6 +348,19 @@ public:
     static void subtract(const Vector3& v1, const Vector3& v2, Vector3* dst);
 
     /**
+     * Updates this vector towards the given target using a smoothing function.
+     * The given response time determines the amount of smoothing (lag). A longer
+     * response time yields a smoother result and more lag. To force this vector to
+     * follow the target closely, provide a response time that is very small relative
+     * to the given elapsed time.
+     *
+     * @param target target value.
+     * @param elapsedTime elapsed time between calls.
+     * @param responseTime response time (in the same units as elapsedTime).
+     */
+    void smooth(const Vector3& target, float elapsedTime, float responseTime);
+
+    /**
      * Calculates the sum of this vector with the given vector.
      * 
      * Note: this does not modify this vector.
