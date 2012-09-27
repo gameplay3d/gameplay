@@ -577,6 +577,15 @@ void Transform::translateForward(float amount)
     translate(forward);
 }
 
+void Transform::translateSmooth(const Vector3& target, float elapsedTime, float responseTime)
+{
+    if (elapsedTime > 0)
+    {
+        _translation += (target - _translation) * (elapsedTime / (elapsedTime + responseTime));
+        dirty(DIRTY_TRANSLATION);
+    }
+}
+
 void Transform::transformPoint(Vector3* point)
 {
     getMatrix();
