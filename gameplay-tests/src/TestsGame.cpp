@@ -42,6 +42,7 @@ void TestsGame::initialize()
         categoryLabel->setHeight(40);
         categoryLabel->setText((*_categories)[i].c_str());
         _testSelectForm->addControl(categoryLabel);
+        categoryLabel->release();
 
         TestRecordList list = (*_tests)[i];
         const size_t listSize = list.size();
@@ -54,6 +55,7 @@ void TestsGame::initialize()
             testButton->setHeight(40);
             testButton->addListener(this, Control::Listener::CLICK);
             _testSelectForm->addControl(testButton);
+            testButton->release();
         }
     }
 }
@@ -66,6 +68,7 @@ void TestsGame::finalize()
     SAFE_DELETE(_activeTest);
     SAFE_DELETE(_categories);
     SAFE_DELETE(_tests);
+    SAFE_RELEASE(_testSelectForm);
 }
 
 void TestsGame::update(float elapsedTime)
