@@ -7,10 +7,12 @@
 #include "Form.h"
 #include "ScriptController.h"
 #include <unistd.h>
+#include <IOKit/hid/IOHIDLib.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 #import <OpenGL/OpenGL.h>
 #import <mach/mach_time.h>
+#import <Foundation/Foundation.h>
 
 using namespace std;
 using namespace gameplay;
@@ -41,6 +43,23 @@ static bool __mouseCaptured = false;
 static CGPoint __mouseCapturePoint;
 static bool __cursorVisible = true;
 
+static NSMutableDictionary *__gameGamePads = NULL;
+static NSMutableDictionary *__gamePads = NULL;
+static IOHIDManagerRef __hidManagerRef = NULL;
+
+// IOHid Helper Functions
+CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, UInt32 inUsage);
+
+CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key);
+int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key);
+void IOHIDAxisXYValue(CFIndex value, CFIndex range, int * outX, int * outY);
+
+// IOHid Callbacks
+static void hidDeviceDiscoveredCallback(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef inIOHIDDeviceRef);
+
+static void hidDeviceRemovalCallback(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef inIOHIDDeviceRef);
+static void HidDeviceValueAvailableCallback(void *inContext, IOReturn inResult,  void *inSender);
+
 double getMachTimeInMilliseconds()
 {
     static const double kOneMillion = 1000 * 1000;
@@ -55,6 +74,278 @@ double getMachTimeInMilliseconds()
 }
 
 @class View;
+
+@interface OSXGamepadButtonState : NSObject
+{
+    IOHIDElementCookie cookie;
+    bool state;
+}
++ gamepadButtonStateWithCookie:(IOHIDElementCookie)cookie;
+- initWithCookie:(IOHIDElementCookie)cookie;
+- (IOHIDElementCookie)cookie;
+- (bool)state;
+- (void)setState:(bool)state;
+@end
+@implementation OSXGamepadButtonState
++ gamepadButtonStateWithCookie:(IOHIDElementCookie)cookie
+{
+    return [[[[self class] alloc] initWithCookie:cookie] autorelease];
+}
+- initWithCookie:(IOHIDElementCookie)c
+{
+    if((self = [super init]))
+    {
+        cookie = c;
+        state = false;
+    }
+    return self;
+}
+- (IOHIDElementCookie)cookie
+{
+    return cookie;
+}
+- (bool)state
+{
+    return state;
+}
+- (void)setState:(bool)s
+{
+    state = s;
+}
+@end
+
+@interface OSXGamepad : NSObject
+{
+    IOHIDDeviceRef hidDeviceRef;
+    IOHIDQueueRef queueRef;
+    NSMutableArray *buttons;
+    NSMutableArray *axis;
+    NSMutableArray *buttonStates;
+}
+@property (assign) IOHIDDeviceRef hidDeviceRef;
+@property (assign) IOHIDQueueRef queueRef;
+@property (retain) NSMutableArray *buttons;
+@property (retain) NSMutableArray *axis;
+@property (retain) NSMutableArray *buttonStates;
+
+- initWithDevice:(IOHIDDeviceRef)rawDevice;
+- (IOHIDDeviceRef)rawDevice;
+
+- (void)initializeGamepadElements;
+- (bool)startListening;
+- (void)stopListening;
+
+- (NSString *)identifierName;
+- (NSString *)productName;
+- (NSString *)manufacturerName;
+- (NSString *)serialNumber;
+- (int)vendorID;
+- (int)productID;
+
+- (NSUInteger)numberOfAxis;
+- (NSUInteger)numberOfButtons;
+- (NSUInteger)numberOfTriggers;
+- (bool)stateOfButton:(int)buttonIndex;
+@end
+
+@implementation OSXGamepad
+
+@synthesize hidDeviceRef;
+@synthesize queueRef;
+@synthesize buttons;
+@synthesize buttonStates;
+@synthesize axis;
+
+- initWithDevice:(IOHIDDeviceRef)rawDevice {
+    if((self = [super init])) {
+        [self setButtons:[NSMutableArray array]];
+        [self setAxis:[NSMutableArray array]];
+        [self setButtonStates:[NSMutableArray array]];
+
+        [self setHidDeviceRef:rawDevice];
+        [self setQueueRef:IOHIDQueueCreate(CFAllocatorGetDefault(), [self hidDeviceRef], 10, kIOHIDOptionsTypeNone)];
+        
+        [self initializeGamepadElements];
+        [self startListening];
+    }
+    return self;
+}
+- (void)dealloc {
+    [self stopListening];
+    CFRelease([self queueRef]);
+    [self setQueueRef:NULL];
+    [self setHidDeviceRef:NULL];
+    
+    [self setButtons:NULL];
+    [self setAxis:NULL];
+    [self setButtonStates:NULL];
+    
+    [super dealloc];
+}
+- (IOHIDDeviceRef)rawDevice {
+    return [self hidDeviceRef];
+}
+
+- (void)initializeGamepadElements {
+    CFArrayRef elements = IOHIDDeviceCopyMatchingElements([self rawDevice], NULL, kIOHIDOptionsTypeNone);
+    for(int i = 0; i < CFArrayGetCount(elements); i++) {
+        IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
+        IOHIDElementType type = IOHIDElementGetType(hidElement);
+        IOHIDElementCookie hidElementCookie = IOHIDElementGetCookie(hidElement);
+        
+        //uint32_t page = IOHIDElementGetUsagePage( hidElement );
+        //uint32_t usage = IOHIDElementGetUsage( hidElement );
+        //NSLog(@"Type: %d (%X) -- %x - %x", type, type, page, usage);
+        
+        if (type == kIOHIDElementTypeInput_Misc ||
+            type == kIOHIDElementTypeInput_Axis) {
+            [[self axis] addObject:(id)hidElement];
+        }
+        if(type == kIOHIDElementTypeInput_Button) {
+            [[self buttons] addObject:(id)hidElement];
+            [[self buttonStates] addObject:[OSXGamepadButtonState gamepadButtonStateWithCookie:hidElementCookie]];
+        }
+        /*
+         if(page == 1) {
+            CFArrayRef children = IOHIDElementGetChildren(hidElement);
+            if(children) {
+                for(int k = 0; k < CFArrayGetCount(children); k++) {
+                    IOHIDElementRef childHid = (IOHIDElementRef)CFArrayGetValueAtIndex(children, k);
+                    IOHIDElementType ctype = IOHIDElementGetType(childHid);
+                    uint32_t cpage = IOHIDElementGetUsagePage(childHid);
+                    uint32_t cusage = IOHIDElementGetUsage(childHid);
+                    NSLog(@"\t Child Type: %d (%X) -- %x - %x", ctype, ctype, cpage, cusage);
+                }
+            }
+         }
+         */
+    }
+    
+
+}
+
+- (bool)startListening {
+    IOReturn kr = IOHIDDeviceOpen([self hidDeviceRef], kIOHIDOptionsTypeNone);
+    if(kr != 0) {
+        return false;
+    }
+    IOHIDDeviceScheduleWithRunLoop([self hidDeviceRef], CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    
+    IOHIDQueueStart([self queueRef]);
+    IOHIDQueueRegisterValueAvailableCallback([self queueRef], HidDeviceValueAvailableCallback, self);
+    
+    CFArrayRef elements = (CFArrayRef)[self watchedElements];
+    for(int i = 0; i < CFArrayGetCount(elements); i++) {
+        IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
+        IOHIDQueueAddElement([self queueRef], hidElement);
+    }
+    IOHIDQueueScheduleWithRunLoop([self queueRef], CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    
+    return true;
+}
+- (void)stopListening {
+    IOHIDQueueUnscheduleFromRunLoop([self queueRef], CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    IOHIDQueueStop([self queueRef]);
+    
+    IOHIDDeviceUnscheduleFromRunLoop([self hidDeviceRef], CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    IOHIDDeviceClose([self hidDeviceRef], kIOHIDOptionsTypeNone);
+}
+
+- (NSString *)identifierName {
+    NSString *idName = NULL;
+    if(idName == NULL) idName = [self productName];
+    if(idName == NULL) idName = [self manufacturerName];
+    if(idName == NULL) idName = [self serialNumber];
+    if(idName == NULL) idName = [NSString stringWithFormat:@"%d-%d", [self vendorID], [self productID]];
+    return idName;
+}
+
+- (NSString *)productName {
+    return (NSString*)IOHIDDeviceGetStringProperty([self rawDevice], CFSTR(kIOHIDProductKey));
+}
+- (NSString *)manufacturerName {
+    return (NSString*)IOHIDDeviceGetStringProperty([self rawDevice], CFSTR(kIOHIDManufacturerKey));
+}
+- (NSString *)serialNumber {
+    return (NSString*)IOHIDDeviceGetStringProperty([self rawDevice], CFSTR(kIOHIDSerialNumberKey));
+}
+
+- (int)vendorID {
+    return IOHIDDeviceGetIntProperty([self rawDevice], CFSTR(kIOHIDVendorIDKey));
+}
+- (int)productID {
+    return IOHIDDeviceGetIntProperty([self rawDevice], CFSTR(kIOHIDProductIDKey));
+}
+
+
+- (NSUInteger)numberOfAxis {
+    return [[self axis] count];
+}
+- (NSUInteger)numberOfButtons {
+    return [[self buttons] count];
+}
+- (NSUInteger)numberOfTriggers {
+    return 0;
+}
+- (bool)stateOfButton:(int)buttonIndex {
+    if([[self buttonStates] count] > buttonIndex)
+    {
+        OSXGamepadButtonState *bs = [[self buttonStates] objectAtIndex:buttonIndex];
+        return [bs state];
+    }
+    return false;
+}
+
+
+
+- (NSArray*)watchedElements {
+    NSMutableArray *a = [NSMutableArray array];
+    [a addObjectsFromArray:[self buttons]];
+    [a addObjectsFromArray:[self axis]];
+    return [NSArray arrayWithArray:a];
+}
+- (void)hidValueAvailable:(IOHIDValueRef)value {
+    IOHIDElementRef element = IOHIDValueGetElement(value);
+	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
+    
+    for(int i = 0; i < [[self axis] count]; i++) {
+        IOHIDElementRef sElement = (IOHIDElementRef)[[self axis] objectAtIndex:i];
+        IOHIDElementCookie sCookie = IOHIDElementGetCookie(sElement);
+        if(cookie == sCookie) {
+			if(IOHIDValueGetLength(value) > 4) continue; // ignores odd value that crashes (appears to only be with my PS3 controller, not with my Gamepad PC
+			CFIndex integerValue = IOHIDValueGetIntegerValue(value);
+            CFIndex logMin = IOHIDElementGetLogicalMin(sElement);
+            CFIndex logMax = IOHIDElementGetLogicalMax(sElement);
+            int x, y;
+            
+            IOHIDAxisXYValue(integerValue, (logMax - logMin + 1), &x, &y);
+            
+            NSLog(@"Value: %ld -- %d, %d", integerValue, x, y);
+            NSLog(@"Value: %d, %d", x, y);
+            break;
+        }
+    }
+    
+    for(int i = 0; i < [[self buttons] count]; i++) {
+        IOHIDElementRef bElement = (IOHIDElementRef)[[self buttons] objectAtIndex:i];
+        IOHIDElementCookie bCookie = IOHIDElementGetCookie(bElement);
+        if(cookie == bCookie) {
+            for(OSXGamepadButtonState *bs in [self buttonStates])
+            {
+                if([bs cookie] == bCookie)
+                {
+                    bool pressed = IOHIDValueGetIntegerValue(value);
+                    [bs setState:pressed];
+                }
+            }
+            break;
+        }
+    }
+}
+
+
+@end
+
 
 @interface View : NSOpenGLView <NSWindowDelegate>
 {
@@ -680,25 +971,6 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
     [gameLock unlock];
 }
 
-- (void)swipeWithEvent:(NSEvent *)event
-{
-    if([self isGestureRegistered:Gesture::GESTURE_SWIPE] == false) return;
-    /**
-     * Gesture callback on Gesture::SWIPE events.
-     *
-     * @param x The x-coordinate of the start of the swipe.
-     * @param y The y-coordinate of the start of the swipe.
-     * @param direction The direction of the swipe
-     *
-     * @see Gesture::SWIPE_DIRECTION_UP
-     * @see Gesture::SWIPE_DIRECTION_DOWN
-     * @see Gesture::SWIPE_DIRECTION_LEFT
-     * @see Gesture::SWIPE_DIRECTION_RIGHT
-     */
-    //[gameLock lock];
-    //virtual void gestureSwipeEvent(int x, int y, int direction);
-    //[gameLock unlock];
-}
 
 @end
 
@@ -730,10 +1002,33 @@ extern void print(const char* format, ...)
 Platform::Platform(Game* game)
 : _game(game)
 {
+    __gameGamePads = [[NSMutableDictionary alloc] init];
+    __gamePads = [[NSMutableDictionary alloc] init];
+    __hidManagerRef = IOHIDManagerCreate(CFAllocatorGetDefault(), kIOHIDOptionsTypeNone);
+    IOHIDManagerRegisterDeviceMatchingCallback(__hidManagerRef, hidDeviceDiscoveredCallback, NULL);
+    IOHIDManagerRegisterDeviceRemovalCallback(__hidManagerRef, hidDeviceRemovalCallback, NULL);
+    
+    CFDictionaryRef matchingCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+    if (matchingCFDictRef) IOHIDManagerSetDeviceMatching(__hidManagerRef, matchingCFDictRef);
+    CFRelease(matchingCFDictRef);
+    
+    IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    IOReturn kr = IOHIDManagerOpen(__hidManagerRef, kIOHIDOptionsTypeNone);
+    assert(kr == 0);
 }
 
+    
 Platform::~Platform()
 {
+    IOHIDManagerUnscheduleFromRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    IOHIDManagerClose(__hidManagerRef, kIOHIDOptionsTypeNone);
+    
+    CFRelease(__hidManagerRef);
+    __hidManagerRef = NULL;
+    [__gamePads release];
+    __gamePads = NULL;
+    [__gameGamePads release];
+    __gameGamePads = NULL;
 }
 
 Platform* Platform::create(Game* game, void* attachToWindow)
@@ -999,7 +1294,11 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    // TODO: Support Swipe and Tap
+    // Swipe unsupported as it is considered moving mouse cursor
+    // Two fingers is scrolling
+    // Three fingers is swipe, but is not always enabled on users system
+    // Tap not supported as it is considered a mouse click/button click
+    // on some systems making it difficult to differentiate 
     switch(evt)
     {
         case Gesture::GESTURE_PINCH:
@@ -1012,12 +1311,12 @@ bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 
 void Platform::registerGesture(Gesture::GestureEvent evt)
 {
-    [__view registerGesture:evt];
+    [__view registerGesture:evt];   
 }
 
 void Platform::unregisterGesture(Gesture::GestureEvent evt)
 {
-    [__view unregisterGesture:evt];
+    [__view unregisterGesture:evt];        
 }
   
 bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
@@ -1027,31 +1326,81 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 
 unsigned int Platform::getGamepadsConnected()
 {
-    return 0;
+    Game* game = Game::getInstance();
+    
+    // Locate any newly connected devices
+    if(game->isInitialized()) {
+        for(NSNumber *key in __gamePads) {
+            OSXGamepad *gamepad = [__gamePads objectForKey:key];
+            if([__gameGamePads objectForKey:key] == NULL) {
+                unsigned int handle = game->createGamepad([[gamepad identifierName] cStringUsingEncoding:NSASCIIStringEncoding], [key unsignedIntValue], [gamepad numberOfButtons], [gamepad numberOfAxis], [gamepad numberOfTriggers]);
+                NSNumber *handleObj = [NSNumber numberWithUnsignedInt:handle];
+                [__gameGamePads setObject:handleObj forKey:key];
+            
+                game->gamepadEvent(Gamepad::CONNECTED_EVENT, game->getGamepad(handle));
+            }
+        }
+        
+        // Detect any disconnected gamepads
+        NSMutableArray *deadKeys = [NSMutableArray array];
+        for(NSNumber *key in __gameGamePads) {
+            if([__gamePads objectForKey:key] == NULL) {
+                game->gamepadEvent(Gamepad::DISCONNECTED_EVENT, game->getGamepad([key unsignedIntValue]));
+                [deadKeys addObject:key];
+            }
+        }
+        [__gameGamePads removeObjectsForKeys:deadKeys];
+    }
+    return [__gamePads count];
 }
 
 bool Platform::isGamepadConnected(unsigned int gamepadHandle)
 {
-    return false;
+    NSNumber *nID = [NSNumber numberWithInt:gamepadHandle];
+    return ([__gamePads objectForKey:nID] != NULL);
 }
 
 const char* Platform::getGamepadId(unsigned int gamepadHandle)
 {
+    NSNumber *nID = [NSNumber numberWithInt:gamepadHandle];
+    OSXGamepad *gamepad = [__gamePads objectForKey:nID];
+    if(gamepad)
+    {
+        return [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding];
+    }
     return NULL;
 }
 
 unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
 {
+    NSNumber *nID = [NSNumber numberWithInt:gamepadHandle];
+    OSXGamepad *gamepad = [__gamePads objectForKey:nID];
+    if(gamepad)
+    {
+        return [gamepad numberOfButtons];
+    }
     return 0;
 }
 
 bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
 {
+    NSNumber *nID = [NSNumber numberWithInt:gamepadHandle];
+    OSXGamepad *gamepad = [__gamePads objectForKey:nID];
+    if(gamepad)
+    {
+        return [gamepad stateOfButton:buttonIndex];
+    }
     return false;
 }
 
 unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
 {
+    NSNumber *nID = [NSNumber numberWithInt:gamepadHandle];
+    OSXGamepad *gamepad = [__gamePads objectForKey:nID];
+    if(gamepad)
+    {
+        return [gamepad numberOfAxis];
+    }
     return 0;
 }
 
@@ -1084,6 +1433,107 @@ float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int 
     return 0.0f;
 }
 
+}
+
+
+
+
+CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary( UInt32 inUsagePage, UInt32 inUsage ) {
+    // create a dictionary to add usage page/usages to
+    CFMutableDictionaryRef result = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    if (result) {
+        if (inUsagePage) {
+            // Add key for device type to refine the matching dictionary.
+            CFNumberRef pageCFNumberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &inUsagePage );
+            if (pageCFNumberRef) {
+                CFDictionarySetValue(result, CFSTR( kIOHIDDeviceUsagePageKey ), pageCFNumberRef);
+                CFRelease(pageCFNumberRef);
+                
+                // note: the usage is only valid if the usage page is also defined
+                if (inUsage) {
+                    CFNumberRef usageCFNumberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &inUsage );
+                    if (usageCFNumberRef) {
+                        CFDictionarySetValue(result, CFSTR(kIOHIDDeviceUsageKey), usageCFNumberRef);
+                        CFRelease(usageCFNumberRef);
+                    } else {
+                        fprintf(stderr, "%s: CFNumberCreate( usage ) failed.", __PRETTY_FUNCTION__ );
+                    }
+                }
+            } else {
+                fprintf( stderr, "%s: CFNumberCreate( usage page ) failed.", __PRETTY_FUNCTION__ );
+            }
+        }
+    } else {
+        fprintf( stderr, "%s: CFDictionaryCreateMutable failed.", __PRETTY_FUNCTION__ );
+    }
+    return result;
+}
+
+CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key) {
+	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) {
+		return NULL;
+	}
+    return (CFStringRef)typeRef;
+}
+int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key) {
+	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) {
+		return 0;
+	}
+    
+    int value;
+	CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
+	return value;
+}
+void IOHIDAxisXYValue(CFIndex value, CFIndex range, int * outX, int * outY) {
+	if (value == range) {
+		*outX = 0;
+        *outY = 0;
+	} else {
+		if (value > 0 && value < range / 2) {
+			*outX = 1;
+		} else if (value > range / 2) {
+			*outX = -1;
+		} else {
+			*outX = 0;
+		}
+		
+		if (value > range / 4 * 3 || value < range / 4) {
+			*outY = -1;
+		} else if (value > range / 4 && value < range / 4 * 3) {
+			*outY = 1;
+		} else {
+			*outY = 0;
+		}
+	}
+}
+
+static void hidDeviceDiscoveredCallback(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef inIOHIDDeviceRef) {
+    OSXGamepad *gamepad = [[OSXGamepad alloc] initWithDevice:inIOHIDDeviceRef];
+    NSNumber *locID = (NSNumber*)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDLocationIDKey));
+    if(locID)
+    {
+        [__gamePads setObject:gamepad forKey:locID];
+    }
+}
+static void hidDeviceRemovalCallback(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef inIOHIDDeviceRef) {
+    NSNumber *locID = (NSNumber*)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDLocationIDKey));
+    if(locID)
+    {
+        [__gamePads removeObjectForKey:locID];
+    }
+}
+
+static void HidDeviceValueAvailableCallback(void *inContext, IOReturn inResult,  void *inSender) {
+    //printf( "(context: %p, result: %p, sender: %p ).\n", inContext, ( void * ) inResult, inSender );
+    OSXGamepad *d = (OSXGamepad*)inContext;
+    do {
+        IOHIDValueRef valueRef = IOHIDQueueCopyNextValueWithTimeout( ( IOHIDQueueRef ) inSender, 0. );
+        if (!valueRef) break;
+        [d hidValueAvailable:valueRef];
+        CFRelease(valueRef); // Don't forget to release our HID value reference
+    } while (1);
 }
 
 #endif
