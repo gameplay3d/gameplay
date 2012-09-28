@@ -61,6 +61,7 @@ LOCAL_SRC_FILES := \
     Light.cpp \
     Material.cpp \
     MaterialParameter.cpp \
+    MathUtil.cpp \
     Matrix.cpp \
     Mesh.cpp \
     MeshBatch.cpp \
