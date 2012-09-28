@@ -90,7 +90,7 @@ void TestsGame::render(float elapsedTime)
         
         // Draw back arrow
         _font->start();
-        _font->drawText("<<", Game::getInstance()->getWidth() - 30, 10, Vector4::one());
+        _font->drawText("<<", getWidth() - 30, 10, Vector4::one());
         _font->finish();
         return;
     }
@@ -103,7 +103,7 @@ void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 {
     if (_activeTest)
     {
-        if (evt == Touch::TOUCH_PRESS && x >= (Game::getInstance()->getWidth() - 40) && y <= 40)
+        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 40) && y <= 40)
         {
             exitActiveTest();
         }
