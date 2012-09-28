@@ -24,6 +24,7 @@
 		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
 		42D604DF16058F89003F3C48 /* game.dxt.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604DE16058F89003F3C48 /* game.dxt.config */; };
 		42D604E216058F97003F3C48 /* game.pvr.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604E116058F97003F3C48 /* game.pvr.config */; };
+		5B21E9991615390D006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E9981615390D006EBEAC /* IOKit.framework */; };
 		5B61611614CCC24C0073B857 /* RacerGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* RacerGame.cpp */; };
 		5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
 		5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933201491A6C70098216A /* libbullet.a */; };
@@ -46,6 +47,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5B21E99D161539FE006EBEAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4234D99914686C52003031B3;
+			remoteInfo = "gameplay-macosx";
+		};
 		F1E135041607700200351BB4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
@@ -82,6 +90,7 @@
 		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		42D604DE16058F89003F3C48 /* game.dxt.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.dxt.config; sourceTree = "<group>"; };
 		42D604E116058F97003F3C48 /* game.pvr.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.pvr.config; sourceTree = "<group>"; };
+		5B21E9981615390D006EBEAC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		5B61611214CCC2200073B857 /* sample06-racer-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample06-racer-macosx.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* sample06-racer-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample06-racer-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample06-racer-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample06-racer-ios.plist"; sourceTree = "<group>"; };
@@ -101,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B21E9991615390D006EBEAC /* IOKit.framework in Frameworks */,
 				42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */,
 				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
 				42C933261491A6E50098216A /* libogg.a in Frameworks */,
@@ -169,6 +179,7 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B21E9981615390D006EBEAC /* IOKit.framework */,
 				5BC4E825150F8CE600CBE1C0 /* GamePlay */,
 				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
@@ -257,6 +268,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5B21E99E161539FE006EBEAC /* PBXTargetDependency */,
 			);
 			name = "sample06-racer-macosx";
 			productName = "sample06-racer";
@@ -402,6 +414,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5B21E99E161539FE006EBEAC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "gameplay-macosx";
+			targetProxy = 5B21E99D161539FE006EBEAC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		42C932D81491A0DB0098216A /* Debug */ = {

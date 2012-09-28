@@ -1622,6 +1622,7 @@
 		5B04C5C614BFCFE100EB0071 /* MeshBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4201818E14A41B18008C3F56 /* MeshBatch.h */; };
 		5B04C5CD14BFD48500EB0071 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */; };
 		5B04C5CE14BFD48500EB0071 /* PlatformiOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */; };
+		5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E99516153890006EBEAC /* IOKit.framework */; };
 		5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75D1512514500D176CD /* OpenAL.framework */; };
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
@@ -2549,6 +2550,7 @@
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
+		5B21E99516153890006EBEAC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		5B2BC75D1512514500D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		5B2BC75E1512514500D176CD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -2617,6 +2619,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */,
 				5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */,
 				5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */,
 				5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */,
@@ -2659,6 +2662,7 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
+				5B21E99516153890006EBEAC /* IOKit.framework */,
 				42B7FE7115B080EE002BB8C3 /* lua */,
 				5BC4E7D4150F8C3C00CBE1C0 /* res */,
 				4234D9A314686C52003031B3 /* src */,
