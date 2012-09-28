@@ -15,6 +15,8 @@
 namespace gameplay
 {
 
+class Container;
+
 /**
  * Base class for UI controls.
  */
