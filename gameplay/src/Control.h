@@ -1004,6 +1004,11 @@ protected:
      */
     int _focusIndex;
 
+    /**
+     * The control's parent container.
+     */
+    Container* _parent;
+
 private:
 
     /*
