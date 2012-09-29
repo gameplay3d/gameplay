@@ -581,6 +581,11 @@ bool Container::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
 {
+    // This event may run untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this container, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     std::vector<Control*>::const_iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
@@ -595,6 +600,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             if (control->keyEvent(evt, key))
             {
+                release();
                 return _consumeInputEvents;
             }
             else if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
@@ -614,6 +620,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
                     if (nextControl->getFocusIndex() == focusIndex)
                     {
                         nextControl->setState(Control::FOCUS);
+                        release();
                         return _consumeInputEvents;
                     }
                 }
@@ -621,6 +628,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
         }
     }
 
+    release();
     return false;
 }
 
@@ -1005,6 +1013,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         return false;
     }
 
+    // This event may run untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this container, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     bool eventConsumed = false;
     const Theme::Border& border = getBorder(_state);
     const Theme::Padding& padding = getPadding();
@@ -1058,6 +1071,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     if (!isEnabled())
     {
+        release();
         return (_consumeInputEvents | eventConsumed);
     }
     
@@ -1077,6 +1091,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         {
             setState(Control::NORMAL);
             _contactIndex = INVALID_CONTACT_INDEX;
+            release();
             return false;
         }
         break;
@@ -1100,6 +1115,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
     }
 
+    release();
     return (_consumeInputEvents | eventConsumed);
 }
 
