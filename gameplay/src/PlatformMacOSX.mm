@@ -112,6 +112,7 @@ double getMachTimeInMilliseconds()
     {
         e = (IOHIDElementRef)CFRetain(element);
     }
+    return self;
 }
 - (void)dealloc
 {
@@ -134,7 +135,6 @@ double getMachTimeInMilliseconds()
 {
     return IOHIDElementGetUsagePage(e);
 }
-
 - (CFIndex)logicalMinimum
 {
     return IOHIDElementGetLogicalMin(e);    
@@ -145,7 +145,9 @@ double getMachTimeInMilliseconds()
 }
 - (float)calibratedValue
 {
-    return 0.0f;
+    float cmax = 2.0f;
+    float cmin = 0.0f;
+    return ((((v - [self logicalMinimum]) * (cmax - cmin)) / ([self logicalMaximum] - [self logicalMinimum])) + cmin - 1.0f);    
 }
 - (CFIndex)value
 {
@@ -499,7 +501,6 @@ double getMachTimeInMilliseconds()
     Game* _game;
     unsigned int _gestureEvents;    
 }
-
 @end
 
 
@@ -1556,21 +1557,33 @@ unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
 
 bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
-    return false;
+    return true; // when are they not active??
 }
 
 float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
-    return 0.0f;
+    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepadAxis *xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
+    return [xAxis calibratedValue];
 }
 
 float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
-    return 0.0f;
+    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepadAxis *yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
+    return [yAxis calibratedValue];
 }
 
 void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
 {
+    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepadAxis *xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
+    OSXGamepadAxis *yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
+    if(outValue)
+    {
+        outValue->x = [xAxis calibratedValue];
+        outValue->y = [yAxis calibratedValue];
+    }
 }
 
 unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
