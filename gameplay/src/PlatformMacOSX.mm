@@ -53,6 +53,7 @@ static IOHIDManagerRef __hidManagerRef = NULL;
 
 // Gamepad Helper Function
 OSXGamepad *gamepadForLocationID(NSNumber *locationID);
+OSXGamepad *gamepadForLocationIDValue(unsigned int locationIDValue);
 OSXGamepad *gamepadForGameHandle(int gameHandle);
 
 // IOHid Helper Functions
@@ -332,7 +333,7 @@ double getMachTimeInMilliseconds()
         if(type == kIOHIDElementTypeInput_Button)
         {
             OSXGamepadButton *button = [OSXGamepadButton gamepadButtonWithButtonElement:hidElement];
-            [[self buttons] addObject:(id)hidElement];
+            [[self buttons] addObject:button];
         }
 
     }
@@ -447,24 +448,6 @@ double getMachTimeInMilliseconds()
     IOHIDElementRef element = IOHIDValueGetElement(value);
 	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
-    /*for(int i = 0; i < [[self axes] count]; i++)
-    {
-        IOHIDElementRef sElement = (IOHIDElementRef)[[self axes] objectAtIndex:i];
-        IOHIDElementCookie sCookie = IOHIDElementGetCookie(sElement);
-        if(cookie == sCookie) {
-			if(IOHIDValueGetLength(value) > 4) continue; // ignores odd value that crashes (appears to only be with my PS3 controller, not with my Gamepad PC
-			CFIndex integerValue = IOHIDValueGetIntegerValue(value);
-            CFIndex logMin = IOHIDElementGetLogicalMin(sElement);
-            CFIndex logMax = IOHIDElementGetLogicalMax(sElement);
-            int x, y;
-            
-            IOHIDAxisXYValue(integerValue, (logMax - logMin + 1), &x, &y);
-            
-            NSLog(@"Value: %ld -- %d, %d", integerValue, x, y);
-            NSLog(@"Value: %d, %d", x, y);
-            break;
-        }
-    }*/
     
     for(OSXGamepadAxis *a in [self axes])
     {
@@ -1510,13 +1493,13 @@ unsigned int Platform::getGamepadsConnected()
 
 bool Platform::isGamepadConnected(unsigned int gamepadHandle)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     return (gamepad != NULL);
 }
 
 const char* Platform::getGamepadId(unsigned int gamepadHandle)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     if(gamepad)
     {
         return [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding];
@@ -1526,7 +1509,7 @@ const char* Platform::getGamepadId(unsigned int gamepadHandle)
 
 unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     if(gamepad)
     {
         return [gamepad numberOfButtons];
@@ -1536,7 +1519,7 @@ unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
 
 bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     OSXGamepadButton *button = [gamepad buttonAtIndex:buttonIndex];
     if(button)
     {
@@ -1547,7 +1530,7 @@ bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int bu
 
 unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     if(gamepad)
     {
         return [gamepad numberOfSticks];
@@ -1562,21 +1545,21 @@ bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int 
 
 float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     OSXGamepadAxis *xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
     return [xAxis calibratedValue];
 }
 
 float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     OSXGamepadAxis *yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
     return [yAxis calibratedValue];
 }
 
 void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
 {
-    OSXGamepad *gamepad = gamepadForGameHandle(gamepadHandle);
+    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
     OSXGamepadAxis *xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
     OSXGamepadAxis *yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
     if(outValue)
@@ -1610,6 +1593,9 @@ OSXGamepad *gamepadForLocationID(NSNumber *locationID)
         }
     }
     return fgamepad;
+}
+OSXGamepad *gamepadForLocationIDValue(unsigned int locationIDValue) {
+    return gamepadForLocationID([NSNumber numberWithUnsignedInt:locationIDValue]);
 }
 OSXGamepad *gamepadForGameHandle(int gameHandle)
 {
