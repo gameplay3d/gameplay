@@ -14,6 +14,11 @@
 #import <mach/mach_time.h>
 #import <Foundation/Foundation.h>
 
+// These should probably be moved to a platform common file
+#define SONY_USB_VENDOR_ID          0x54c
+#define SONY_USB_PS3_PRODUCT_ID     0x268
+
+
 using namespace std;
 using namespace gameplay;
 
@@ -129,6 +134,9 @@ double getMachTimeInMilliseconds()
 {
     return IOHIDElementGetCookie(e);
 }
+- (bool)isHatSwitch {
+    return (IOHIDElementGetUsage(e) == kHIDUsage_GD_Hatswitch);
+}
 - (uint32_t)usage
 {
     return IOHIDElementGetUsage(e);
@@ -164,15 +172,24 @@ double getMachTimeInMilliseconds()
 @interface OSXGamepadButton : NSObject
 {
     IOHIDElementRef e;
+    IOHIDElementRef te;
     bool state;
+    int triggerValue;
 }
 + gamepadButtonWithButtonElement:(IOHIDElementRef)element;
 - initWithButtonElement:(IOHIDElementRef)element;
+- (void)setTriggerElement:(IOHIDElementRef)element;
 - (IOHIDElementRef)element;
 - (IOHIDElementCookie)cookie;
+- (IOHIDElementRef)triggerElement;
+- (IOHIDElementCookie)triggerCookie;
+
+- (bool)isTriggerButton;
 - (uint32_t)usage;
 - (uint32_t)usagePage;
-- (float)stateValue;
+- (int)stateValue;
+- (float)calibratedStateValue;
+- (void)setStateValue:(int)value;
 - (bool)state;
 - (void)setState:(bool)state;
 @end
@@ -186,6 +203,7 @@ double getMachTimeInMilliseconds()
     if((self = [super init]))
     {
         e = (IOHIDElementRef)CFRetain(element);
+        te = NULL;
         state = false;
     }
     return self;
@@ -193,7 +211,19 @@ double getMachTimeInMilliseconds()
 - (void)dealloc
 {
     CFRelease(e);
+    if(te != NULL) CFRelease(te);
     [super dealloc];
+}
+- (void)setTriggerElement:(IOHIDElementRef)element {
+    if(te)
+    {
+        CFRelease(te);
+        te = NULL;
+    }
+    if(element)
+    {
+        te = (IOHIDElementRef)CFRetain(element);
+    }
 }
 - (IOHIDElementRef)element
 {
@@ -203,6 +233,18 @@ double getMachTimeInMilliseconds()
 {
     return IOHIDElementGetCookie(e);
 }
+- (IOHIDElementRef)triggerElement
+{
+    return te;
+}
+- (IOHIDElementCookie)triggerCookie
+{
+    return IOHIDElementGetCookie(te);
+}
+- (bool)isTriggerButton
+{
+    return (te != NULL);
+}
 - (uint32_t)usage
 {
     return IOHIDElementGetUsage(e);
@@ -211,9 +253,16 @@ double getMachTimeInMilliseconds()
 {
     return IOHIDElementGetUsagePage(e);
 }
-- (float)stateValue
+- (void)setStateValue:(int)value {
+    triggerValue = value;
+}
+- (int)stateValue
 {
-    return 0.0f; // TODO
+    return triggerValue;
+}
+- (float)calibratedStateValue
+{
+    return (float)triggerValue; // TODO: Need to figure out expected range
 }
 - (bool)state
 {
@@ -230,11 +279,13 @@ double getMachTimeInMilliseconds()
     IOHIDDeviceRef hidDeviceRef;
     IOHIDQueueRef queueRef;
     NSMutableArray *buttons;
+    NSMutableArray *triggerButtons;
     NSMutableArray *axes;
 }
 @property (assign) IOHIDDeviceRef hidDeviceRef;
 @property (assign) IOHIDQueueRef queueRef;
 @property (retain) NSMutableArray *buttons;
+@property (retain) NSMutableArray *triggerButtons;
 @property (retain) NSMutableArray *axes;
 
 - initWithDevice:(IOHIDDeviceRef)rawDevice;
@@ -242,6 +293,8 @@ double getMachTimeInMilliseconds()
 - (NSNumber*)locationID;
 
 - (void)initializeGamepadElements;
+- (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie;
+
 - (bool)startListening;
 - (void)stopListening;
 
@@ -266,6 +319,7 @@ double getMachTimeInMilliseconds()
 @synthesize hidDeviceRef;
 @synthesize queueRef;
 @synthesize buttons;
+@synthesize triggerButtons;
 @synthesize axes;
 
 - initWithDevice:(IOHIDDeviceRef)rawDevice
@@ -273,9 +327,10 @@ double getMachTimeInMilliseconds()
     if((self = [super init]))
     {
         [self setButtons:[NSMutableArray array]];
+        [self setTriggerButtons:[NSMutableArray array]];
         [self setAxes:[NSMutableArray array]];
 
-        //CFRetain(rawDevice);
+        CFRetain(rawDevice);
         IOHIDQueueRef queue = IOHIDQueueCreate(CFAllocatorGetDefault(), rawDevice, 10, kIOHIDOptionsTypeNone);
         [self setHidDeviceRef:rawDevice];
         [self setQueueRef:queue];
@@ -289,12 +344,13 @@ double getMachTimeInMilliseconds()
 {
     [self stopListening];
     
-    //CFRelease([self rawDevice]);
+    CFRelease([self rawDevice]);
     CFRelease([self queueRef]);
     [self setQueueRef:NULL];
     [self setHidDeviceRef:NULL];
     
     [self setButtons:NULL];
+    [self setTriggerButtons:NULL];
     [self setAxes:NULL];
     [super dealloc];
 }
@@ -318,6 +374,7 @@ double getMachTimeInMilliseconds()
         if (type == kIOHIDElementTypeInput_Misc || type == kIOHIDElementTypeInput_Axis)
         {
             uint32_t pageUsage = IOHIDElementGetUsage(hidElement);
+            IOHIDElementCookie cookie = IOHIDElementGetCookie(hidElement);
 
             switch(pageUsage)
             {
@@ -334,17 +391,61 @@ double getMachTimeInMilliseconds()
                     break;
                 default:
                     // Ignore the pointers
-                    // Not: Some of the pointers are for the 6-axis accelerometer in a PS3 controller
+                    // Note: Some of the pointers are for the 6-axis accelerometer in a PS3 controller
+                    // Note: L2/R2 triggers are at cookie 39 and 40 base 10 tied to 9 and 10 button elements
                     break;
             }
+
         }
         if(type == kIOHIDElementTypeInput_Button)
         {
             OSXGamepadButton *button = [OSXGamepadButton gamepadButtonWithButtonElement:hidElement];
             [[self buttons] addObject:button];
         }
-
     }
+    // Go back and get proprietary information (e.g. triggers) and asscoaite with appropriate values
+    // Example for other trigger buttons
+    uint32_t vendorID = [self vendorID];
+    uint32_t productID = [self productID];
+    for(int i = 0; i < CFArrayGetCount(elements); i++)
+    {
+        IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
+        IOHIDElementType type = IOHIDElementGetType(hidElement);
+        IOHIDElementCookie cookie = IOHIDElementGetCookie(hidElement);
+        
+        // Gamepad specific code
+        // Not sure if there is a better way to associate buttons and misc hid elements :/
+        if(vendorID == SONY_USB_VENDOR_ID && productID == SONY_USB_PS3_PRODUCT_ID)
+        {
+            if((unsigned long)cookie == 39)
+            {
+                OSXGamepadButton *leftTrigger = [self buttonWithCookie:(IOHIDElementCookie)9];
+                if(leftTrigger)
+                {
+                    [leftTrigger setTriggerElement:hidElement];
+                    [[self triggerButtons] addObject:leftTrigger];
+                    //[[self buttons] removeObject:leftTrigger]; Defer to gamepad team on this line..  not sure how they intend to tackle
+                }
+            }
+            if((unsigned long)cookie == 40)
+            {
+                OSXGamepadButton *rightTrigger = [self buttonWithCookie:(IOHIDElementCookie)10];
+                if(rightTrigger)
+                {
+                    [rightTrigger setTriggerElement:hidElement];
+                    [[self triggerButtons] addObject:rightTrigger];
+                    //[[self buttons] removeObject:rightTrigger];
+                }
+            }
+        }
+    }
+    
+}
+- (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie {
+    for(OSXGamepadButton *b in [self buttons]) {
+        if([b cookie] == cookie) return b;
+    }
+    return NULL;
 }
 
 - (bool)startListening
@@ -387,18 +488,28 @@ double getMachTimeInMilliseconds()
     return idName;
 }
 
-- (NSString *)productName
-{
-    return (NSString*)IOHIDDeviceGetStringProperty([self rawDevice], CFSTR(kIOHIDProductKey));
+- (NSString *)productName {
+    CFStringRef productName = (CFStringRef)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDProductKey));
+    if(productName == NULL || CFGetTypeID(productName) != CFStringGetTypeID()) {
+        return NULL;
+    }
+    return (NSString*)productName;
 }
-- (NSString *)manufacturerName
-{
-    return (NSString*)IOHIDDeviceGetStringProperty([self rawDevice], CFSTR(kIOHIDManufacturerKey));
+- (NSString *)manufacturerName {
+    CFStringRef manufacturerName = (CFStringRef)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDManufacturerKey));
+    if(manufacturerName == NULL || CFGetTypeID(manufacturerName) != CFStringGetTypeID()) {
+        return NULL;
+    }
+    return (NSString*)manufacturerName;
 }
-- (NSString *)serialNumber
-{
-    return (NSString*)IOHIDDeviceGetStringProperty([self rawDevice], CFSTR(kIOHIDSerialNumberKey));
+- (NSString *)serialNumber {
+    CFStringRef serialNumber = (CFStringRef)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDSerialNumberKey));
+    if(serialNumber == NULL || CFGetTypeID(serialNumber) != CFStringGetTypeID()) {
+        return NULL;
+    }
+    return (NSString*)serialNumber;
 }
+
 
 - (int)vendorID
 {
@@ -424,11 +535,17 @@ double getMachTimeInMilliseconds()
 }
 - (NSUInteger)numberOfTriggerButtons
 {
-    return 0; // triggers not identified by api - need to manually configure?
+    return [[self triggerButtons] count];
 }
+
 - (OSXGamepadButton*)triggerButtonAtIndex:(NSUInteger)index
 {
-    return NULL; // todo
+    OSXGamepadButton *b = NULL;
+    if(index < [[self triggerButtons] count])
+    {
+        b = [[self triggerButtons] objectAtIndex:index];
+    }
+    return b;
 }
 
 - (OSXGamepadAxis*)axisAtIndex:(NSUInteger)index
@@ -467,12 +584,13 @@ double getMachTimeInMilliseconds()
     IOHIDElementRef element = IOHIDValueGetElement(value);
 	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
+    if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
+    CFIndex integerValue = IOHIDValueGetIntegerValue(value);
     
     for(OSXGamepadAxis *a in [self axes])
     {
         if([a cookie] == cookie)
         {
-            CFIndex integerValue = IOHIDValueGetIntegerValue(value);
             [a setValue:integerValue];
         }
     }
@@ -481,8 +599,16 @@ double getMachTimeInMilliseconds()
     {
         if([b cookie] == cookie)
         {
-            bool pressed = IOHIDValueGetIntegerValue(value);
-            [b setState:pressed];
+            [b setState:(bool)integerValue];
+            break;
+        }
+    }
+    
+    for(OSXGamepadButton *b in [self triggerButtons])
+    {
+        if([b triggerCookie] == cookie)
+        {
+            [b setStateValue:integerValue];
             break;
         }
     }
@@ -921,8 +1047,8 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
             return Keyboard::KEY_F10;
         
         // MACOS reserved:
-        //return Keyboard::KEY_F11;
-        //return Keyboard::KEY_F12;
+        // return Keyboard::KEY_F11;
+        // return Keyboard::KEY_F12;
         // return Keyboard::KEY_PAUSE;
         // return Keyboard::KEY_SCROLL_LOCK;
             
