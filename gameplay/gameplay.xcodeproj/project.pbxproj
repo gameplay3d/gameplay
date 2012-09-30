@@ -2662,7 +2662,6 @@
 		4234D98A14686BB6003031B3 = {
 			isa = PBXGroup;
 			children = (
-				5B21E99516153890006EBEAC /* IOKit.framework */,
 				42B7FE7115B080EE002BB8C3 /* lua */,
 				5BC4E7D4150F8C3C00CBE1C0 /* res */,
 				4234D9A314686C52003031B3 /* src */,
@@ -3586,6 +3585,7 @@
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B21E99516153890006EBEAC /* IOKit.framework */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
 				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
 			);
