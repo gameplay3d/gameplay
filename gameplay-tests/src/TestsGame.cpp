@@ -22,7 +22,6 @@ void TestsGame::initialize()
     {
         std::sort((*_tests)[i].begin(), (*_tests)[i].end());
     }
-    //registerGesture(Gesture::GESTURE_SWIPE);
 
     // Construct a form for selecting which test to run.
     Theme* theme = Theme::create("res/common/mainMenu.theme");
@@ -90,7 +89,7 @@ void TestsGame::render(float elapsedTime)
         
         // Draw back arrow
         _font->start();
-        _font->drawText("<<", getWidth() - 30, 10, Vector4::one());
+        _font->drawText("<<", getWidth() - 40, 20, Vector4::one(), 28);
         _font->finish();
         return;
     }
@@ -103,7 +102,7 @@ void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 {
     if (_activeTest)
     {
-        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 40) && y <= 40)
+        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 80) && y <= 80)
         {
             exitActiveTest();
         }
