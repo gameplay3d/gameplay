@@ -7,8 +7,8 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL),
-    _contactIndex(INVALID_CONTACT_INDEX), _styleOverridden(false), _skin(NULL)
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _autoWidth(false), _autoHeight(false), _listeners(NULL),
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(0), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
@@ -798,6 +798,11 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 void Control::notifyListeners(Listener::EventType eventType)
 {
+    // This method runs untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this control, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     if (_listeners)
     {
         std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->find(eventType);
@@ -813,6 +818,8 @@ void Control::notifyListeners(Listener::EventType eventType)
     }
 
     fireScriptEvent<void>("controlEvent", this, eventType);
+
+    release();
 }
 
 void Control::update(const Control* container, const Vector2& offset)

@@ -199,8 +199,6 @@ Form* Form::create(const char* url)
     // Add all the controls to the form.
     form->addControls(theme, formProperties);
 
-    form->update(0.0f);
-
     SAFE_DELETE(properties);
 
     __forms.push_back(form);
@@ -240,7 +238,8 @@ void Form::setSize(float width, float height)
         height = Game::getInstance()->getHeight();
     }
 
-    if (width != _bounds.width || height != _bounds.height)
+    if (width != 0.0f && height != 0.0f &&
+        (width != _bounds.width || height != _bounds.height))
     {
         // Width and height must be powers of two to create a texture.
         unsigned int w = nextPowerOfTwo(width);
@@ -273,17 +272,27 @@ void Form::setSize(float width, float height)
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
         FrameBuffer::bindDefault();
         game->setViewport(prevViewport);
-
-        _bounds.width = width;
-        _bounds.height = height;
-        _dirty = true;
     }
+    
+    _bounds.width = width;
+    _bounds.height = height;
+    _dirty = true;
 }
 
 void Form::setBounds(const Rectangle& bounds)
 {
     setPosition(bounds.x, bounds.y);
     setSize(bounds.width, bounds.height);
+}
+
+void Form::setWidth(float width)
+{
+    setSize(width, _bounds.height);
+}
+
+void Form::setHeight(float height)
+{
+    setSize(_bounds.width, height);
 }
 
 void Form::setAutoWidth(bool autoWidth)
@@ -583,10 +592,10 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
     // Check for a collision with each Form in __forms.
     // Pass the event on.
     bool eventConsumed = false;
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
     {
-        Form* form = *it;
+        Form* form = __forms[i];
         GP_ASSERT(form);
 
         if (form->isEnabled())
@@ -630,10 +639,10 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
 
 bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
     {
-        Form* form = *it;
+        Form* form = __forms[i];
         GP_ASSERT(form);
         if (form->isEnabled())
         {
@@ -648,10 +657,10 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
 {
     bool eventConsumed = false;
 
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
     {
-        Form* form = *it;
+        Form* form = __forms[i];
         GP_ASSERT(form);
 
         if (form->isEnabled())

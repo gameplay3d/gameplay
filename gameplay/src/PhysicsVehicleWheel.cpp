@@ -182,16 +182,41 @@ void PhysicsVehicleWheel::transform(Node* node) const
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
+    GP_ASSERT(_host->_node);
+
+    const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
+    const btVector3& pos = trans.getOrigin();
+    node->setRotation(_orientation);
+
+    // Use only the component parallel to the defined strut line
+    Vector3 strutLine;
+    getWheelDirection(&strutLine);
+    Vector3 wheelPos = _initialOffset;
+    _host->_node->getMatrix().transformPoint(&wheelPos);
+    node->setTranslation(wheelPos + strutLine*(strutLine.dot(_positionDelta) / strutLine.lengthSquared()));
+}
+
+void PhysicsVehicleWheel::update(float elapsedTime)
+{
+    GP_ASSERT(_host);
+    GP_ASSERT(_host->_vehicle);
+    GP_ASSERT(_host->_node);
 
     const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
     const btQuaternion& rot = trans.getRotation();
     const btVector3& pos = trans.getOrigin();
-    node->setRotation(rot.x(), rot.y(), rot.z(), rot.w());
+    _orientation.set(rot.x(), rot.y(), rot.z(), rot.w());
 
-    // Ignore X and Z translation for wheel
+    Vector3 commandedPosition(pos.x(), pos.y(), pos.z());
     Vector3 wheelPos = _initialOffset;
     _host->_node->getMatrix().transformPoint(&wheelPos);
-    node->setTranslation(wheelPos.x, wheelPos.y, wheelPos.z);
+    commandedPosition -= wheelPos;
+
+    // Filter out noise from Bullet
+    Vector3 delta(_positionDelta, commandedPosition);
+    float threshold = getStrutRestLength() * 2.0f;
+    float responseTime = (delta.lengthSquared() > threshold*threshold) ? 0 : 60;
+    _positionDelta.smooth(commandedPosition, elapsedTime, responseTime);
 }
 
 bool PhysicsVehicleWheel::isFront() const

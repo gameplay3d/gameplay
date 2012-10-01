@@ -135,6 +135,7 @@ int lua_Node_transformVector(lua_State* state);
 int lua_Node_translate(lua_State* state);
 int lua_Node_translateForward(lua_State* state);
 int lua_Node_translateLeft(lua_State* state);
+int lua_Node_translateSmooth(lua_State* state);
 int lua_Node_translateUp(lua_State* state);
 int lua_Node_translateX(lua_State* state);
 int lua_Node_translateY(lua_State* state);

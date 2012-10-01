@@ -15,6 +15,8 @@
 namespace gameplay
 {
 
+class Container;
+
 /**
  * Base class for UI controls.
  */
@@ -214,13 +216,15 @@ public:
 
     /** 
      * Set the desired width of the control, including it's border and padding, before clipping.
-     * @param width The width;
+     *
+     * @param width The width.
      */
     virtual void setWidth(float width);
 
     /** 
      * Set the desired height of the control, including it's border and padding, before clipping.
-     * @param height The height;
+     *
+     * @param height The height.
      */
     virtual void setHeight(float height);
 
@@ -1001,6 +1005,11 @@ protected:
      * The focus order of the control.
      */
     int _focusIndex;
+
+    /**
+     * The control's parent container.
+     */
+    Container* _parent;
 
 private:
 

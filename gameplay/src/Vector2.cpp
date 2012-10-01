@@ -269,4 +269,12 @@ void Vector2::subtract(const Vector2& v1, const Vector2& v2, Vector2* dst)
     dst->y = v1.y - v2.y;
 }
 
+void Vector2::smooth(const Vector2& target, float elapsedTime, float responseTime)
+{
+    if (elapsedTime > 0)
+    {
+        *this += (target - *this) * (elapsedTime / (elapsedTime + responseTime));
+    }
+}
+
 }
