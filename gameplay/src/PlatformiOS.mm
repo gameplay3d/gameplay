@@ -161,7 +161,7 @@ int getKey(unichar keyCode);
         multisampleDepthbuffer = 0;
         swapInterval = 1;        
         updating = FALSE;
-        game = Game::getInstance();
+        game = nil;
         
         // Set the resource path and initalize the game
         NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
@@ -172,7 +172,8 @@ int getKey(unichar keyCode);
 
 - (void) dealloc
 {
-    game->exit();
+    if (game)
+        game->exit();
     [self deleteFramebuffer];
     
     if ([EAGLContext currentContext] == context)
@@ -193,7 +194,10 @@ int getKey(unichar keyCode);
 {
     // Called on 'resize'.
     // Mark that framebuffer needs to be updated.
-    updateFramebuffer = YES;
+    // NOTE: Current disabled since we need to have a way to reset the default frame buffer handle
+    // in FrameBuffer.cpp (for FrameBuffer:bindDefault). This means that changing orientation at
+    // runtime is currently not supported until we fix this.
+    //updateFramebuffer = YES;
 }
 
 - (BOOL)createFramebuffer
@@ -209,7 +213,7 @@ int getKey(unichar keyCode);
     GL_ASSERT( glGenRenderbuffers(1, &colorRenderbuffer) );
     GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer) );
     
-    // Associate our render buffer with CAEAGLLauyer so that the rendered content is display on our UI layer.
+    // Associate render buffer storage with CAEAGLLauyer so that the rendered content is display on our UI layer.
     [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
     
     // Attach the color buffer to our frame buffer
@@ -219,35 +223,52 @@ int getKey(unichar keyCode);
     GL_ASSERT( glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth) );
     GL_ASSERT( glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight) );
     
+    NSLog(@"width: %d, height: %d", framebufferWidth, framebufferHeight);
+    
     // If multisampling is enabled in config, create and setup a multisample buffer
-    Properties* config = game->getConfig()->getNamespace("window");
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
     int samples = config ? config->getInt("samples") : 0;
     if (samples < 0)
         samples = 0;
     if (samples)
     {
+        // Create multisample framebuffer
         GL_ASSERT( glGenFramebuffers(1, &multisampleFramebuffer) );
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, multisampleFramebuffer) );
         
+        // Create multisample render and depth buffers
         GL_ASSERT( glGenRenderbuffers(1, &multisampleRenderbuffer) );
-        GL_ASSERT( glBindRenderbuffer(1, multisampleRenderbuffer) );
-        GL_ASSERT( glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_RGBA8_OES, framebufferWidth, framebufferHeight) );
-        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, multisampleRenderbuffer) );
-        
         GL_ASSERT( glGenRenderbuffers(1, &multisampleDepthbuffer) );
-        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, multisampleDepthbuffer) );
-        GL_ASSERT( glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24_OES, framebufferWidth, framebufferHeight) );
-        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, multisampleDepthbuffer) );
-        
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+
+        // Try to find a supported multisample configuration starting with the defined sample count
+        while (samples)
         {
-            NSLog(@"Failed to make complete multisample buffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
-            [self deleteFramebuffer];
-            return NO;
+            GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, multisampleRenderbuffer) );
+            GL_ASSERT( glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_RGBA8_OES, framebufferWidth, framebufferHeight) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, multisampleRenderbuffer) );
+
+            GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, multisampleDepthbuffer) );
+            GL_ASSERT( glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24_OES, framebufferWidth, framebufferHeight) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, multisampleDepthbuffer) );
+            
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+                break; // success!
+            
+            NSLog(@"Creation of multisample buffer with samples=%d failed. Attempting to use configuration with samples=%d instead: %x", samples, samples / 2, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+            samples /= 2;
         }
         
         // Re-bind the default framebuffer
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
+        
+        if (samples == 0)
+        {
+            // Unable to find a valid/supported multisample configuratoin - fallback to no multisampling
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleRenderbuffer) );
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleDepthbuffer) );
+            GL_ASSERT( glDeleteFramebuffers(1, &multisampleFramebuffer) );
+            multisampleFramebuffer = multisampleRenderbuffer = multisampleDepthbuffer = 0;
+        }
     }
     
     // Create default depth buffer and attach to the frame buffer.
@@ -269,6 +290,12 @@ int getKey(unichar keyCode);
         return NO;
     }
     
+    // If multisampling is enabled, set the currently bound framebuffer to the multisample buffer
+    // since that is the buffer code should be drawing into (and FrameBuffr::initialize will detect
+    // and set this bound buffer as the default one during initialization.
+    if (multisampleFramebuffer)
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, multisampleFramebuffer) );
+    
     return YES;
 }
 
@@ -279,32 +306,32 @@ int getKey(unichar keyCode);
         [EAGLContext setCurrentContext:context];        
         if (defaultFramebuffer) 
         {
-            glDeleteFramebuffers(1, &defaultFramebuffer);
+            GL_ASSERT( glDeleteFramebuffers(1, &defaultFramebuffer) );
             defaultFramebuffer = 0;
         }        
         if (colorRenderbuffer) 
         {
-            glDeleteRenderbuffers(1, &colorRenderbuffer);
+            GL_ASSERT( glDeleteRenderbuffers(1, &colorRenderbuffer) );
             colorRenderbuffer = 0;
         }
         if (depthRenderbuffer) 
         {
-            glDeleteRenderbuffers(1, &depthRenderbuffer);
+            GL_ASSERT( glDeleteRenderbuffers(1, &depthRenderbuffer) );
             depthRenderbuffer = 0;
         }
         if (multisampleFramebuffer)
         {
-            glDeleteFramebuffers(1, &multisampleFramebuffer);
+            GL_ASSERT( glDeleteFramebuffers(1, &multisampleFramebuffer) );
             multisampleFramebuffer = 0;
         }
         if (multisampleRenderbuffer)
         {
-            glDeleteRenderbuffers(1, &multisampleRenderbuffer);
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleRenderbuffer) );
             multisampleRenderbuffer = 0;
         }
         if (multisampleDepthbuffer)
         {
-            glDeleteRenderbuffers(1, &multisampleDepthbuffer);
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleDepthbuffer) );
             multisampleDepthbuffer = 0;
         }
     }
@@ -335,16 +362,16 @@ int getKey(unichar keyCode);
         if (multisampleFramebuffer)
         {
             // Multisampling is enabled: resolve the multisample buffer into the default framebuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, defaultFramebuffer);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, multisampleFramebuffer);
-            glResolveMultisampleFramebufferAPPLE();
+            GL_ASSERT( glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, defaultFramebuffer) );
+            GL_ASSERT( glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, multisampleFramebuffer) );
+            GL_ASSERT( glResolveMultisampleFramebufferAPPLE() );
             
             if (oglDiscardSupported)
             {
                 // Performance hint that the GL driver can discard the contents of the multisample buffers
                 // since they have now been resolved into the default framebuffer
                 const GLenum discards[]  = { GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT };
-                glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
+                GL_ASSERT( glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards) );
             }
         }
         else
@@ -353,22 +380,25 @@ int getKey(unichar keyCode);
             {
                 // Performance hint to the GL driver that the depth buffer is no longer required.
                 const GLenum discards[]  = { GL_DEPTH_ATTACHMENT };
-                glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-                glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards);
+                GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
+                GL_ASSERT( glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards) );
             }
         }
         
         // Present the color buffer
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer) );
         [context presentRenderbuffer:GL_RENDERBUFFER];
     }
 }
 
 - (void)startGame 
 {
-    game = Game::getInstance();
-    __timeStart = getMachTimeInMilliseconds();
-    game->run();
+    if (game == nil)
+    {
+        game = Game::getInstance();
+        __timeStart = getMachTimeInMilliseconds();
+        game->run();
+    }
 }
 
 - (void)startUpdating
@@ -378,7 +408,8 @@ int getKey(unichar keyCode);
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        game->resume();
+        if (game)
+            game->resume();
         updating = TRUE;
     }
 }
@@ -387,7 +418,8 @@ int getKey(unichar keyCode);
 {
     if (updating)
     {
-        game->pause();
+        if (game)
+            game->pause();
         [displayLink invalidate];
         displayLink = nil;
         updating = FALSE;
@@ -407,8 +439,14 @@ int getKey(unichar keyCode);
             updateFramebuffer = NO;
             [self deleteFramebuffer];
             [self createFramebuffer];
+            
+            // Start the game after our framebuffer is created for the first time.
+            if (game == nil)
+            {
+                [self startGame];
+            }
         }
-        
+
         // Bind our framebuffer for rendering.
         // If multisampling is enabled, bind the multisample buffer - otherwise bind the default buffer
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, multisampleFramebuffer ? multisampleFramebuffer : defaultFramebuffer) );
@@ -628,8 +666,6 @@ int getKey(unichar keyCode);
     {
         __view = (View*)self.view;
     }
-    // Start the game after assigning __view so Platform object knows about it on game start
-    [(View*)self.view startGame];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -556,6 +556,11 @@ void Game::loadConfig()
                 FileSystem::loadResourceAliases(aliases);
             }
         }
+        else
+        {
+            // Create an empty config
+            _properties = new Properties();
+        }
     }
 }
 
