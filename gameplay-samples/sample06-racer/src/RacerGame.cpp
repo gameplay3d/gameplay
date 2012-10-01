@@ -228,16 +228,7 @@ void RacerGame::update(float elapsedTime)
                 // Make the camera follow the car
                 Node* carNode = _carVehicle->getNode();
                 Vector3 carPosition(carNode->getTranslation());
-                Vector3 fixedArm(Vector3::unitY()*4.0f - carNode->getBackVector()*10.0f);
-                Vector3 swingArm(carPosition, _carPositionPrevious);
-                if (swingArm.lengthSquared() < 0.0001f)
-                {
-                    swingArm.set(Vector3::zero());
-                }
-                swingArm.y = max(0.0f, swingArm.y);
-                swingArm += fixedArm*0.0001f;
-                swingArm.normalize();
-                Vector3 commandedPosition(carPosition + fixedArm + swingArm*5.0f);
+                Vector3 commandedPosition(carPosition + Vector3::unitY()*4.0f - carNode->getBackVector()*10.0f);
                 cameraNode->translateSmooth(commandedPosition, dt, 0.2f);
                 Matrix m;
                 Matrix::createLookAt(cameraNode->getTranslation(), carPosition, Vector3::unitY(), &m);
@@ -245,7 +236,6 @@ void RacerGame::update(float elapsedTime)
                 Quaternion q;
                 m.getRotation(&q);
                 cameraNode->setRotation(q);
-                _carPositionPrevious.set(carPosition);
             }
 
             // Slightly different steering gain based on gamepad type.
@@ -566,7 +556,6 @@ void RacerGame::reset(const Vector3& pos, const Quaternion& rot)
 
     _carVehicle->getRigidBody()->setEnabled(false);
     carNode->setTranslation(pos);
-    _carPositionPrevious.set(carNode->getTranslation());
     carNode->setRotation(rot);
     _carVehicle->reset();
     _carVehicle->getRigidBody()->setEnabled(true);
