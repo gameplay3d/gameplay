@@ -34,16 +34,9 @@ RacerGame game;
 #define BUTTON_X (12)
 #define BUTTON_Y (13)
 
-// Aerodynamic downforce effect
-#define AIR_DENSITY (1.2f)
-#define KPH_TO_MPS (1.0f / 3.6f)
-#define REF_AREA (7.5f)
-#define LIFT_COEFF (0.6f)
-#define DOWNFORCE_LUMPED (0.5f * AIR_DENSITY * KPH_TO_MPS * KPH_TO_MPS * REF_AREA * LIFT_COEFF)
-
 RacerGame::RacerGame()
     : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL),
-    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _carSpeedLag(0), _upsetTimer(0)
+    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _upsetTimer(0)
 {
 }
 
@@ -164,111 +157,100 @@ void RacerGame::update(float elapsedTime)
         float braking = 0;
         float driving = 0;
 
-        if (!__flythruCamera && _carVehicle)
-        {
-            // Vehicle Control (Normal Mode)
-            Vector2 direction;
-            if (_gamepad->isJoystickActive(0))
-            {
-                _gamepad->getJoystickAxisValues(0, &direction);
-            }
-
-            // Allow keys to control steering
-            if (_keyFlags & STEER_LEFT)
-            {
-                _steering += STEERING_RESPONSE * dt;
-            }
-            else if (_keyFlags & STEER_RIGHT)
-            {
-                _steering -= STEERING_RESPONSE * dt;
-            }
-            else if (__useAccelerometer)
-            {
-            	float pitch, roll;
-            	Game::getAccelerometerValues(&pitch, &roll);
-
-            	_steering = -0.16 * roll;
-            }
-            else
-            {
-                _steering = -direction.x;
-            }
-            _steering = max(-1.0f, min(_steering, 1.0f));
-
-            if ( (_keyFlags & ACCELERATOR) || (_keyFlags & ACCELERATOR_MOUSE) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED) )
-            {
-                driving = 1;
-                _engineSound->setGain(1.0f);
-            }
-            else
-            {
-                _engineSound->setGain(0.8f);
-            }
-            float s = _carSpeedLag / 100.0f;
-            _engineSound->setPitch(max(0.2f, min(s, 2.0f)));
-
-            // Reverse only below a reasonable speed
-            bool isReverseCommanded = (_keyFlags & REVERSE) ||
-                                      (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED) ||
-                                      (direction.y < -0.1 && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
-            if (isReverseCommanded && _carVehicle->getSpeedKph() < 30.0f)
-            {
-                driving = -0.6f;
-            }
-
-            if ( (_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
-            {
-                braking = 1;
-                if (_brakingSound && _brakingSound->getState() != AudioSource::PLAYING && _carVehicle->getSpeedKph() > 30.0f)
-                    _brakingSound->play();
-            }
-            else
-            {
-                _brakingSound->stop();
-            }
-
-            // Make the camera follow the car
-            Node* carNode = _carVehicle->getNode();
-            Vector3 carPosition(carNode->getTranslation());
-            Vector3 fixedArm(Vector3::unitY()*4.0f - carNode->getBackVector()*10.0f);
-            Vector3 swingArm(carPosition, _carPositionPrevious);
-            if (swingArm.lengthSquared() < 0.0001f)
-            {
-                swingArm.set(Vector3::zero());
-            }
-            swingArm.y = max(0.0f, swingArm.y);
-            swingArm += fixedArm*0.0001f;
-            swingArm.normalize();
-            Vector3 commandedPosition(carPosition + fixedArm + swingArm*5.0f);
-            cameraNode->translateSmooth(commandedPosition, dt, 0.2f);
-            Matrix m;
-            Matrix::createLookAt(cameraNode->getTranslation(), carPosition, Vector3::unitY(), &m);
-            m.transpose();
-            Quaternion q;
-            m.getRotation(&q);
-            cameraNode->setRotation(q);
-            _carPositionPrevious.set(carPosition);
-        }
-
         if (_carVehicle)
         {
             float v = _carVehicle->getSpeedKph();
+            bool isVirt = _gamepad->isVirtual();
 
-            // Aerodynamic downforce
-            MathUtil::smooth(&_carSpeedLag, v, dt, 0, 1.2f);
-            _carVehicle->getRigidBody()->applyForce(Vector3(0, -DOWNFORCE_LUMPED * _carSpeedLag * _carSpeedLag, 0));
+            if (!__flythruCamera)
+            {
+                // Vehicle Control (Normal Mode)
+                Vector2 direction;
+                if (_gamepad->isJoystickActive(0))
+                {
+                    _gamepad->getJoystickAxisValues(0, &direction);
+                }
 
-            // Reduce control authority with speed
-            float blowdown = max(_gamepad->isVirtual() ? 0.15f : 0.22f, 1 - 0.009f*fabs(v));
-            float throttleBack = (braking > 0) ? 0 : max(0.0f, v - 105.0f) / 75.0f;
-            throttleBack *= throttleBack;
-            float brakeBack = max(0.0f, v - 100.0f) / 70.0f;
-            brakeBack *= brakeBack;
+                // Allow keys to control steering
+                if (_keyFlags & STEER_LEFT)
+                {
+                    _steering += STEERING_RESPONSE * dt;
+                }
+                else if (_keyFlags & STEER_RIGHT)
+                {
+                    _steering -= STEERING_RESPONSE * dt;
+                }
+                else if (__useAccelerometer)
+                {
+            	    float pitch, roll;
+            	    Game::getAccelerometerValues(&pitch, &roll);
 
-            // Increase engine bottom-end
-            float boost = max(1.0f, 2.6f * (1.0f - fabs(v)/120.0f));
+            	    _steering = -0.16 * roll;
+                }
+                else
+                {
+                    _steering = -direction.x;
+                }
+                _steering = max(-1.0f, min(_steering, 1.0f));
 
-            _carVehicle->update(elapsedTime, blowdown*_steering, max(0.0f, braking - brakeBack), boost*driving - throttleBack);
+                if ( (_keyFlags & ACCELERATOR) || (_keyFlags & ACCELERATOR_MOUSE) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED) )
+                {
+                    driving = 1;
+                    _engineSound->setGain(1.0f);
+                }
+                else
+                {
+                    _engineSound->setGain(0.8f);
+                }
+                float s = _carVehicle->getSpeedSmoothKph() / 100.0f;
+                _engineSound->setPitch(max(0.2f, min(s, 2.0f)));
+
+                // Reverse only below a reasonable speed
+                bool isReverseCommanded = (_keyFlags & REVERSE) ||
+                                          (!isVirt && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED) ||
+                                          (direction.y < -0.1 && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
+                if (isReverseCommanded && v < 30.0f)
+                {
+                    driving = -0.6f;
+                }
+
+                if ( (_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
+                {
+                    braking = 1;
+                    if (_brakingSound && (_brakingSound->getState() != AudioSource::PLAYING) && (v > 30.0f))
+                        _brakingSound->play();
+                }
+                else
+                {
+                    _brakingSound->stop();
+                }
+
+                // Make the camera follow the car
+                Node* carNode = _carVehicle->getNode();
+                Vector3 carPosition(carNode->getTranslation());
+                Vector3 fixedArm(Vector3::unitY()*4.0f - carNode->getBackVector()*10.0f);
+                Vector3 swingArm(carPosition, _carPositionPrevious);
+                if (swingArm.lengthSquared() < 0.0001f)
+                {
+                    swingArm.set(Vector3::zero());
+                }
+                swingArm.y = max(0.0f, swingArm.y);
+                swingArm += fixedArm*0.0001f;
+                swingArm.normalize();
+                Vector3 commandedPosition(carPosition + fixedArm + swingArm*5.0f);
+                cameraNode->translateSmooth(commandedPosition, dt, 0.2f);
+                Matrix m;
+                Matrix::createLookAt(cameraNode->getTranslation(), carPosition, Vector3::unitY(), &m);
+                m.transpose();
+                Quaternion q;
+                m.getRotation(&q);
+                cameraNode->setRotation(q);
+                _carPositionPrevious.set(carPosition);
+            }
+
+            // Slightly different steering gain based on gamepad type.
+            _carVehicle->setSteerdown( (isVirt ? 94.0f : 87.0f), (isVirt ? 0.15f : 0.22f) );
+            _carVehicle->update(elapsedTime, _steering, braking, driving);
 
             // Auto-detect an upset car
             if (fabs(v) < 10.0f && isUpset())
@@ -286,7 +268,7 @@ void RacerGame::update(float elapsedTime)
                 resetInPlace();
             }
             else if ( (_keyFlags & UPRIGHT) ||
-                 (!_gamepad->isVirtual() && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
+                 (!isVirt && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
                  (_carVehicle->getNode()->getTranslationY() < -300.0f) )
             {
                 resetToStart();
@@ -586,9 +568,7 @@ void RacerGame::reset(const Vector3& pos, const Quaternion& rot)
     carNode->setTranslation(pos);
     _carPositionPrevious.set(carNode->getTranslation());
     carNode->setRotation(rot);
-    _carVehicle->getRigidBody()->setLinearVelocity(Vector3::zero());
-    _carSpeedLag = 0;
-    _carVehicle->getRigidBody()->setAngularVelocity(Vector3::zero());
+    _carVehicle->reset();
     _carVehicle->getRigidBody()->setEnabled(true);
 }
 
