@@ -103,7 +103,7 @@ void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 {
     if (_activeTest)
     {
-        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 40) && y <= 40)
+        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 60) && y <= 60)
         {
             exitActiveTest();
         }
