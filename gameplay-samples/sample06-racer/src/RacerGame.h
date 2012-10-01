@@ -8,7 +8,7 @@ using namespace gameplay;
 /**
  * Main game class.
  */
-class RacerGame: public Game
+class RacerGame: public Game, Control::Listener
 {
 public:
 
@@ -41,6 +41,11 @@ public:
      * @see Game::menuEvent
      */
     void menuEvent();
+
+    /**
+     * @see Control::controlEvent
+     */
+    void controlEvent(Control* control, EventType evt);
     
 protected:
 
@@ -89,10 +94,29 @@ private:
     /**
      * Reset vehicle to its initial state.
      */
-    void resetVehicle();
+    void resetToStart();
+
+    /**
+     * Upright vehicle at its current location.
+     */
+    void resetInPlace();
+
+    /**
+     * Generic helper function for resets.
+     *
+     * @param pos desired position.
+     * @param rot desired rotation.
+     */
+    void reset(const Vector3& pos, const Quaternion& rot);
+
+    /**
+     * Indicates that the vehicle may be over-turned.
+     */
+    bool isUpset() const;
 
     Scene* _scene;
     Font* _font;
+    Form* _menu;
     std::vector<Node*> _renderQueues[2];
     unsigned int _keyFlags;
     unsigned int _mouseFlags;
@@ -102,7 +126,7 @@ private:
     AnimationClip* _virtualGamepadClip;
     PhysicsVehicle* _carVehicle;
     Vector3 _carPositionPrevious;
-    float _carSpeedLag;
+    float _upsetTimer;
 
     // Sounds
     AudioSource* _backgroundSound;

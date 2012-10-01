@@ -48,6 +48,15 @@
     <None Include="game.pvr.config">
       <Filter>config</Filter>
     </None>
+    <None Include="res\common\menu.form">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\common\menu.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\common\menu.theme">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RacerGame.h">

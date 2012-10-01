@@ -33,6 +33,25 @@ class PhysicsVehicleWheel;
         steeringGain   = <float>    // steering at full deflection
         brakingForce   = <float>    // braking force at full braking
         drivingForce   = <float>    // driving force at full throttle
+
+        // Steering gain reduction with speed (optional)
+        steerdownSpeed = <float>    // steering gain fades to this point
+        steerdownGain  = <float>    // gain value at that point (less than 1)
+
+        // Brake force reduction at high speeds (optional)
+        brakedownStart = <float>    // braking fades above this speed
+        brakedownFull  = <float>    // braking is fully faded at this speed
+
+        // Driving force reduction at high speeds (optional)
+        drivedownStart = <float>    // driving force fades above this speed
+        drivedownFull  = <float>    // driving force is fully faded at this speed
+
+        // Driving force boost at low speeds (optional)
+        boostSpeed     = <float>    // Boost fades to 1 at this point
+        boostGain      = <float>    // Boost at zero speed (greater than 1)
+
+        // Aerodynamic downforce effect (optional)
+        downforce      = <float>    // proportional control of downforce
     }
  @endverbatim
  */
@@ -81,14 +100,26 @@ public:
     float getSpeedKph() const;
 
     /**
+     * Returns a lagged version of vehicle speed in kilometers per hour,
+     * for example that might be used to control engine sounds.
+     */
+    float getSpeedSmoothKph() const;
+
+    /**
      * Updates the vehicle state using the specified normalized command
      * inputs, and updates the transform on the visual node for each wheel.
      *
+     * @param elapsedTime The elapsed game time.
      * @param steering steering command (-1 to 1).
      * @param braking braking command (0 to 1).
      * @param driving net drivetrain command (0 to 1).
      */
-    void update(float steering, float braking, float driving);
+    void update(float elapsedTime, float steering, float braking, float driving);
+
+    /**
+     * Resets the vehicle's state, for example in preparation for a reposition.
+     */
+    void reset();
 
     /**
      * Gets steering gain at full deflection.
@@ -131,6 +162,151 @@ public:
      * @param drivingForce driving force at full throttle.
      */
     void setDrivingForce(float drivingForce);
+
+    /**
+     * Returns speed at the point of reduced steering, in km/h.
+     * A point of reduced steering is defined by speed and gain.
+     * Steering authority will reduce linearly with speed up to
+     * this point, and remain constant above that.
+     *
+     * @return speed at the point of reduced steering, in km/h.
+     */
+    float getSteerdownSpeed() const;
+
+    /**
+     * Returns gain at the point of reduced steering, typically
+     * less than 1.
+     * A point of reduced steering is defined by speed and gain.
+     * Steering authority will reduce linearly with speed up to
+     * this point, and remain constant above that.
+     *
+     * @return gain at the point of reduced steering.
+     */
+    float getSteerdownGain() const;
+
+    /**
+     * Sets the point of reduced steering, defined by speed and
+     * gain. Typically the gain value is less than 1.
+     * Steering authority will reduce linearly with speed up to
+     * this point, and remain constant above that.
+     *
+     * @param steerdownSpeed speed at the point of reduced steering,
+     *     in km/h.
+     * @param steerdownGain gain at the point of reduced steering.
+     *     A gain of 1 will effectively disable the feature.
+     */
+    void setSteerdown(float steerdownSpeed, float steerdownGain);
+
+    /**
+     * Returns speed where braking starts to fade, in km/h.
+     *
+     * @return speed where braking starts to fade, in km/h.
+     */
+    float getBrakedownStart() const;
+
+    /**
+     * Returns speed where braking is fully faded, in km/h.
+     * This speed is typically greater than the brakedownStart
+     * speed.
+     *
+     * @return speed where braking is fully faded, in km/h.
+     */
+    float getBrakedownFull() const;
+
+    /**
+     * Sets points that control fade of brake force with speed,
+     * in km/h.
+     *
+     * @param brakedownStart braking fades above this speed.
+     *     A very large value will effectively disable the feature.
+     * @param brakedownFull braking is fully faded at this speed.
+     *     This speed is typically greater than the brakedownStart
+     *     speed.
+     */
+    void setBrakedown(float brakedownStart, float brakedownFull);
+
+    /**
+     * Returns speed where driving force starts to fade, in km/h.
+     *
+     * @return speed where driving force starts to fade, in km/h.
+     */
+    float getDrivedownStart() const;
+
+    /**
+     * Returns speed where driving force is fully faded, in km/h.
+     * This speed is typically greater than the drivedownStart
+     * speed.
+     *
+     * @return speed where driving force is fully faded, in km/h.
+     */
+    float getDrivedownFull() const;
+
+    /**
+     * Sets points that control fade of driving force with speed,
+     * in km/h.
+     *
+     * @param drivedownStart driving force fades above this speed.
+     *     A very large value will effectively disable the feature.
+     * @param drivedownFull driving force is fully faded at this speed.
+     *     This speed is typically greater than the drivedownStart
+     *     speed.
+     */
+    void setDrivedown(float drivedownStart, float drivedownFull);
+
+    /**
+     * Returns upper limit of low-speed boost effect, in km/h.
+     * Driving force is boosted by a specified factor at zero speed,
+     * and that factor fades linearly with speed reaching 1 at
+     * this speed.
+     *
+     * @return upper limit of low-speed boost effect, in km/h.
+     */
+    float getBoostSpeed() const;
+
+    /**
+     * Returns boost gain at zero speed, typically greater than 1.
+     * Driving force is boosted by this factor at zero speed, and
+     * that factor fades linearly with speed reaching 1 at a
+     * specified speed.
+     *
+     * @return boost gain at zero speed.
+     */
+    float getBoostGain() const;
+
+    /**
+     * Sets parameters that define low-speed boost of the driving force.
+     * Driving force is boosted by the specified factor at zero speed,
+     * and that factor fades linearly with speed reaching 1 at the
+     * specified speed.
+     *
+     * @param boostSpeed upper limit of low-speed boost effect, in km/h.
+     * @param boostGain boost gain at zero speed, typically greater than 1.
+     *     A gain of 1 will effectively disable the feature.
+     */
+    void setBoost(float boostSpeed, float boostGain);
+
+    /**
+     * Returns the lumped constant that controls aerodynamic downforce.
+     * Technically speaking, this constant lumps together the reference
+     * area and the down-force coefficient, and is in world-units squared.
+     * The actual aerodynamic down-force is calculated as a function of
+     * current speed, and is proportional to this constant.
+     *
+     * @return the lumped constant that controls aerodynamic downforce.
+     */
+    float getDownforce() const;
+
+    /**
+     * Sets the lumped constant that controls aerodynamic downforce.
+     * Technically speaking, this constant lumps together the reference
+     * area and the down-force coefficient, and is in world-units squared.
+     * The actual aerodynamic down-force is calculated as a function of
+     * current speed, and is proportional to this constant.
+     *
+     * @param downforce the lumped constant that controls aerodynamic downforce.
+     *     A value of 0 will effectively disable this feature.
+     */
+    void setDownforce(float downforce);
 
 protected:
 
@@ -186,6 +362,36 @@ private:
     void initialize();
 
     /**
+     * Returns adjusted steering value.
+     *
+     * @param v vehicle speed.
+     * @param rawSteering raw steering command.
+     */
+    float getSteering(float v, float rawSteering) const;
+
+    /**
+     * Returns adjusted braking force value.
+     *
+     * @param v vehicle speed.
+     * @param rawBraking raw braking force command.
+     */
+    float getBraking(float v, float rawBraking) const;
+
+    /**
+     * Returns adjusted driving force value.
+     *
+     * @param v vehicle speed.
+     * @param rawDriving raw driving force command.
+     * @param rawBraking raw braking force command.
+     */
+    float getDriving(float v, float rawDriving, float rawBraking) const;
+
+    /**
+     * Applies effect of aerodynamic downforce.
+     */
+    void applyDownforce();
+
+    /**
      * Destructor.
      */
     ~PhysicsVehicle();
@@ -193,6 +399,16 @@ private:
     float _steeringGain;
     float _brakingForce;
     float _drivingForce;
+    float _steerdownSpeed;
+    float _steerdownGain;
+    float _brakedownStart;
+    float _brakedownFull;
+    float _drivedownStart;
+    float _drivedownFull;
+    float _boostSpeed;
+    float _boostGain;
+    float _downforce;
+    float _speedSmoothed;
     PhysicsRigidBody* _rigidBody;
     btRaycastVehicle::btVehicleTuning _vehicleTuning;
     btVehicleRaycaster* _vehicleRaycaster;

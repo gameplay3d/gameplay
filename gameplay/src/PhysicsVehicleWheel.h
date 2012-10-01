@@ -326,10 +326,19 @@ private:
      */
     void addToVehicle(btRaycastVehicle* vehicle);
 
+    /**
+     * Update state of this wheel, per frame.
+     *
+     * @param elapsedTime The elapsed game time.
+     */
+    void update(float elapsedTime);
+
     PhysicsRigidBody* _rigidBody;
     PhysicsVehicle* _host;
     unsigned int _indexInHost;
     Vector3 _initialOffset;
+    Vector3 _positionDelta;
+    Quaternion _orientation;
 };
 
 }

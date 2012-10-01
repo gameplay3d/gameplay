@@ -19,7 +19,7 @@ double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 
 Game::Game() 
-    : _initialized(false), _state(UNINITIALIZED), 
+    : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
       _frameLastFPS(0), _frameCount(0), _frameRate(0), 
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL), 
@@ -235,22 +235,29 @@ void Game::pause()
         _physicsController->pause();
         _aiController->pause();
     }
+
+    ++_pausedCount;
 }
 
 void Game::resume()
 {
     if (_state == PAUSED)
     {
-        GP_ASSERT(_animationController);
-        GP_ASSERT(_audioController);
-        GP_ASSERT(_physicsController);
-        GP_ASSERT(_aiController);
-        _state = RUNNING;
-        _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
-        _animationController->resume();
-        _audioController->resume();
-        _physicsController->resume();
-        _aiController->resume();
+        --_pausedCount;
+
+        if (_pausedCount == 0)
+		{
+			GP_ASSERT(_animationController);
+			GP_ASSERT(_audioController);
+			GP_ASSERT(_physicsController);
+			GP_ASSERT(_aiController);
+			_state = RUNNING;
+			_pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
+			_animationController->resume();
+			_audioController->resume();
+			_physicsController->resume();
+			_aiController->resume();
+		}
     }
 }
 

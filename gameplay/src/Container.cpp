@@ -41,7 +41,7 @@ Container::Container()
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0),
-      _contactIndices(0)
+      _contactIndices(0), _initializedWithScroll(false)
 {
 }
 
@@ -172,6 +172,7 @@ void Container::addControls(Theme* theme, Properties* properties)
         if (control)
         {
             addControl(control);
+            control->release();
 
             if (control->getZIndex() == -1)
             {
@@ -204,32 +205,78 @@ Layout* Container::getLayout()
 unsigned int Container::addControl(Control* control)
 {
     GP_ASSERT(control);
-    _controls.push_back(control);
 
-    return _controls.size() - 1;
+    if (control->_parent && control->_parent != this)
+    {
+        control->_parent->removeControl(control);
+    }
+
+    if (control->_parent != this)
+    {
+        _controls.push_back(control);
+        control->addRef();
+        control->_parent = this;
+        return _controls.size() - 1;
+    }
+    else
+    {
+        // Control is already in this container.
+        // Do nothing but determine and return control's index.
+        const size_t size = _controls.size();
+        for (size_t i = 0; i < size; ++i)
+        {
+            Control* c = _controls[i];
+            if (c == control)
+            {
+                return i;
+            }
+        }
+
+        // Should never reach this.
+        GP_ASSERT(false);
+        return 0;
+    }
 }
 
 void Container::insertControl(Control* control, unsigned int index)
 {
     GP_ASSERT(control);
-    std::vector<Control*>::iterator it = _controls.begin() + index;
-    _controls.insert(it, control);
+
+    if (control->_parent && control->_parent != this)
+    {
+        control->_parent->removeControl(control);
+    }
+
+    if (control->_parent != this)
+    {
+        std::vector<Control*>::iterator it = _controls.begin() + index;
+        _controls.insert(it, control);
+        control->addRef();
+        control->_parent = this;
+    }
 }
 
 void Container::removeControl(unsigned int index)
 {
+    GP_ASSERT(index < _controls.size());
+
     std::vector<Control*>::iterator it = _controls.begin() + index;
     _controls.erase(it);
+    Control* control = *it;
+    control->_parent = NULL;
+    SAFE_RELEASE(control);
 }
 
 void Container::removeControl(const char* id)
 {
+    GP_ASSERT(id);
     std::vector<Control*>::iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* c = *it;
         if (strcmp(id, c->getId()) == 0)
         {
+            SAFE_RELEASE(c);
             _controls.erase(it);
             return;
         }
@@ -244,6 +291,7 @@ void Container::removeControl(Control* control)
     {
         if (*it == control)
         {
+            SAFE_RELEASE(control);
             _controls.erase(it);
             return;
         }
@@ -533,6 +581,11 @@ bool Container::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
 {
+    // This event may run untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this container, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     std::vector<Control*>::const_iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
@@ -547,6 +600,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             if (control->keyEvent(evt, key))
             {
+                release();
                 return _consumeInputEvents;
             }
             else if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
@@ -566,6 +620,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
                     if (nextControl->getFocusIndex() == focusIndex)
                     {
                         nextControl->setState(Control::FOCUS);
+                        release();
                         return _consumeInputEvents;
                     }
                 }
@@ -573,6 +628,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
         }
     }
 
+    release();
     return false;
 }
 
@@ -602,10 +658,6 @@ Layout::Type Container::getLayoutType(const char* layoutString)
     {
         return Layout::LAYOUT_FLOW;
     }
-    else if (layoutName == "LAYOUT_SCROLL")
-    {
-        return Layout::LAYOUT_SCROLL;
-    }
     else
     {
         // Default.
@@ -615,6 +667,12 @@ Layout::Type Container::getLayoutType(const char* layoutString)
 
 void Container::updateScroll()
 {
+    if (!_initializedWithScroll)
+    {
+        _initializedWithScroll = true;
+        _layout->update(this, _scrollPosition);
+    }
+
     // Update Time.
     static double lastFrameTime = Game::getGameTime();
     double frameTime = Game::getGameTime();
@@ -955,6 +1013,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         return false;
     }
 
+    // This event may run untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this container, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     bool eventConsumed = false;
     const Theme::Border& border = getBorder(_state);
     const Theme::Padding& padding = getPadding();
@@ -1008,6 +1071,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     if (!isEnabled())
     {
+        release();
         return (_consumeInputEvents | eventConsumed);
     }
     
@@ -1027,6 +1091,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         {
             setState(Control::NORMAL);
             _contactIndex = INVALID_CONTACT_INDEX;
+            release();
             return false;
         }
         break;
@@ -1050,6 +1115,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
     }
 
+    release();
     return (_consumeInputEvents | eventConsumed);
 }
 

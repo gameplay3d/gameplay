@@ -1622,6 +1622,7 @@
 		5B04C5C614BFCFE100EB0071 /* MeshBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4201818E14A41B18008C3F56 /* MeshBatch.h */; };
 		5B04C5CD14BFD48500EB0071 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */; };
 		5B04C5CE14BFD48500EB0071 /* PlatformiOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */; };
+		5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E99516153890006EBEAC /* IOKit.framework */; };
 		5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75D1512514500D176CD /* OpenAL.framework */; };
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
@@ -1706,6 +1707,8 @@
 		5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */; };
 		5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
 		5BD52676150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
+		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
+		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2547,6 +2550,7 @@
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
+		5B21E99516153890006EBEAC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		5B2BC75D1512514500D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		5B2BC75E1512514500D176CD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -2607,6 +2611,7 @@
 		5BD5266C150F8257004C9099 /* PhysicsCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCharacter.h; path = src/PhysicsCharacter.h; sourceTree = SOURCE_ROOT; };
 		5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionObject.cpp; path = src/PhysicsCollisionObject.cpp; sourceTree = SOURCE_ROOT; };
 		5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionObject.h; path = src/PhysicsCollisionObject.h; sourceTree = SOURCE_ROOT; };
+		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2614,6 +2619,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */,
 				5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */,
 				5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */,
 				5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */,
@@ -2780,6 +2786,7 @@
 				42CD0DE9147D8FF50000361E /* Material.h */,
 				42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */,
 				42CD0DEB147D8FF50000361E /* MaterialParameter.h */,
+				F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */,
 				4239DDF1157545C1005EA3F6 /* MathUtil.h */,
 				4239DDF2157545C1005EA3F6 /* MathUtil.inl */,
 				4239DDF3157545C1005EA3F6 /* MathUtilNeon.inl */,
@@ -3578,6 +3585,7 @@
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B21E99516153890006EBEAC /* IOKit.framework */,
 				5B04C5FD14BFE52300EB0071 /* iOS */,
 				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
 			);
@@ -4982,6 +4990,7 @@
 				421FBD531602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */,
 				421FBD5C1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
 				421FBD601602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
+				F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5405,6 +5414,7 @@
 				421FBD541602818800A61BC0 /* PhysicsVehicleWheel.cpp in Sources */,
 				421FBD5D1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
 				421FBD611602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
+				F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

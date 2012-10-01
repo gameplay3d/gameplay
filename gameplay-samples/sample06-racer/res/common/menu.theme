@@ -1,10 +1,12 @@
-theme mainMenu
+theme menuTheme
 {
-    texture = res/common/theme.png
+    texture = res/common/menu.png
 
     imageList normalImages
     {
-        color = #4A8799ff
+        //color = #4A8799ff
+        // "Battleship gray"
+        color = #848482ff
 
         image unchecked
         {
@@ -70,7 +72,9 @@ theme mainMenu
 
     imageList activeImages : normalImages
     {
-        color = #C3D9BFff
+        //color = #C3D9BFff
+        // "Cadet gray"
+        color = #91A3B0ff
 
         image unchecked
         {
@@ -104,12 +108,14 @@ theme mainMenu
         }
         
         region = 1, 1, 74, 74
-        color = #4A8799ff
+        //color = #4A8799ff
+        color = #848482ff
     }
 
     skin mainActive : mainNormal
     {
-        color = #C3D9BFff
+        //color = #C3D9BFff
+        color = #91A3B0ff
     }
 
     style basic
@@ -119,7 +125,7 @@ theme mainMenu
             skin = mainNormal
             imageList = normalImages
 
-            font = res/common/arial18.gpb
+            font = res/common/arial40.gpb
             textColor = #ffffffff
             fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -141,7 +147,7 @@ theme mainMenu
 
         stateNormal
         {
-            font = res/common/arial18.gpb
+            font = res/common/arial40.gpb
             fontSize = 20
         }
 
@@ -156,7 +162,7 @@ theme mainMenu
         stateNormal
         {
             imageList = normalImages
-            font = res/common/arial18.gpb
+            font = res/common/arial40.gpb
             textColor = #ffffffff
             fontSize = 14
             textAlignment = ALIGN_VCENTER_HCENTER
@@ -173,14 +179,14 @@ theme mainMenu
     {
         stateNormal
         {
-            font = res/common/arial18.gpb
+            font = res/common/arial40.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
 
         stateActive
         {
-            font = res/common/arial18.gpb
+            font = res/common/arial40.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
@@ -197,9 +203,9 @@ theme mainMenu
         stateNormal
         {
             textColor = #ffffffff
-            font = res/common/arial18.gpb
+            font = res/common/arial40.gpb
             fontSize = 26
-            textAlignment = ALIGN_BOTTOM_HCENTER
+            textAlignment = ALIGN_TOP_HCENTER
         }
 
         stateActive

@@ -26,6 +26,16 @@ collisionObject car
     steeringGain = 0.4
     brakingForce = 350.0
     drivingForce = 2000.0
+
+    steerdownSpeed = 87
+    steerdownGain = 0.22
+    brakedownStart = 100
+    brakedownFull = 170
+    drivedownStart = 105
+    drivedownFull = 180
+    boostSpeed = 74
+    boostGain = 2.6
+    downforce = 4.5
 }
 
 collisionObject carWheel
