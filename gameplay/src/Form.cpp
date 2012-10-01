@@ -592,10 +592,10 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
     // Check for a collision with each Form in __forms.
     // Pass the event on.
     bool eventConsumed = false;
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
     {
-        Form* form = *it;
+        Form* form = __forms[i];
         GP_ASSERT(form);
 
         if (form->isEnabled())
@@ -639,10 +639,10 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
 
 bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 {
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
     {
-        Form* form = *it;
+        Form* form = __forms[i];
         GP_ASSERT(form);
         if (form->isEnabled())
         {
@@ -657,10 +657,10 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
 {
     bool eventConsumed = false;
 
-    std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
     {
-        Form* form = *it;
+        Form* form = __forms[i];
         GP_ASSERT(form);
 
         if (form->isEnabled())
