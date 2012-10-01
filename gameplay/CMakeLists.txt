@@ -96,6 +96,7 @@ set(GAMEPLAY_SRC
     src/Material.h
     src/MaterialParameter.cpp
     src/MaterialParameter.h
+    src/MathUtil.cpp
     src/MathUtil.h
     src/MathUtil.inl
     src/MathUtilNeon.inl
