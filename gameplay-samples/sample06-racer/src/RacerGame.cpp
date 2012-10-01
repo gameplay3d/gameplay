@@ -138,6 +138,7 @@ void RacerGame::finalize()
     SAFE_RELEASE(_brakingSound);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
+    SAFE_RELEASE(_menu);
 }
 
 void RacerGame::update(float elapsedTime)
