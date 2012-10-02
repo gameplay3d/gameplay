@@ -62,6 +62,7 @@
     <asset path="../../gameplay/res/shaders/colored-unlit.vert">res/shaders/colored-unlit.vert</asset>
     <asset path="../../gameplay/res/shaders/colored-unlit.frag">res/shaders/colored-unlit.frag</asset>
     <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
+    <asset path="game.config">game.config</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
