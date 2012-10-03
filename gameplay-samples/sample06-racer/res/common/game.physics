@@ -59,30 +59,27 @@ collisionObject carWheel
     frictionBreakout = 1000.0
     wheelRadius = 0.5
     rollInfluence = 0.1
+    strutConnectionOffset = 0.0, 0.0, 1.4
 }
 
 collisionObject carWheelFrontLeft : carWheel
 {
     isFront = true
-    strutConnectionPoint = 0.95, -0.08, 1.8
 }
 
 collisionObject carWheelFrontRight : carWheel
 {
     isFront = true
-    strutConnectionPoint = -0.95, -0.08, 1.8
 }
 
 collisionObject carWheelBackLeft : carWheel
 {
     isFront = false
-    strutConnectionPoint = 0.95, -0.15, -1.55
 }
 
 collisionObject carWheelBackRight : carWheel
 {
     isFront = false
-    strutConnectionPoint = -0.95, -0.15, -1.55
 }
 
 collisionObject heightfield
