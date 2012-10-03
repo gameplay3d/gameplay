@@ -108,14 +108,26 @@ static EGLenum checkErrorEGL(const char* msg)
 // Initialized EGL resources.
 static bool initEGL()
 {
+	int samples = 0;
+	Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+	if (config)
+	{
+		samples = std::max(config->getInt("samples"), 0);
+	}
+
     // Hard-coded to 32-bit/OpenGL ES 2.0.
+    // NOTE: EGL_SAMPLE_BUFFERS, EGL_SAMPLES and EGL_DEPTH_SIZE MUST remain at the beginning of the attribute list
+    // since they are expected to be at indices 0-5 in config fallback code later.
+	// EGL_DEPTH_SIZE is also expected to
     EGLint eglConfigAttrs[] =
     {
+		EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+		EGL_SAMPLES,            samples,
+		EGL_DEPTH_SIZE,         24,
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
         EGL_BLUE_SIZE,          8,
         EGL_ALPHA_SIZE,         8,
-        EGL_DEPTH_SIZE,         24,
         EGL_STENCIL_SIZE,       8,
         EGL_SURFACE_TYPE,       EGL_WINDOW_BIT,
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
@@ -144,30 +156,59 @@ static bool initEGL()
             checkErrorEGL("eglGetDisplay");
             goto error;
         }
-    
+
         if (eglInitialize(__eglDisplay, NULL, NULL) != EGL_TRUE)
         {
             checkErrorEGL("eglInitialize");
             goto error;
         }
-    
-        if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE)
-        {
-            checkErrorEGL("eglChooseConfig");
-            goto error;
-        }
-        
-        if (eglConfigCount == 0)
-        {
-            // try 16 bit depth buffer instead
-            eglConfigAttrs[9] = 16;
-            if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
-            {
-                checkErrorEGL("eglChooseConfig");
-                goto error;
-            }
-        }
-    
+
+		// Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
+		bool validConfig = false;
+		EGLint depthSizes[] = { 24, 16 };
+		for (unsigned int i = 0; i < 2; ++i)
+		{
+			eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+			eglConfigAttrs[3] = samples;
+			eglConfigAttrs[5] = depthSizes[i];
+
+			if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+			{
+				validConfig = true;
+				break;
+			}
+
+			if (samples)
+			{
+				// Try lowering the MSAA sample size until we find a supported config
+				int sampleCount = samples;
+				while (sampleCount)
+				{
+					GP_WARN("No EGL config found for depth_size=%d and samples=%d. Trying samples=%d instead.", depthSizes[i], sampleCount, sampleCount / 2);
+					sampleCount /= 2;
+					eglConfigAttrs[1] = sampleCount > 0 ? 1 : 0;
+					eglConfigAttrs[3] = sampleCount;
+					if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+					{
+						validConfig = true;
+						break;
+					}
+				}
+				if (validConfig)
+					break;
+			}
+			else
+			{
+				GP_WARN("No EGL config found for depth_size=%d.", depthSizes[i]);
+			}
+		}
+
+		if (!validConfig)
+		{
+			checkErrorEGL("eglChooseConfig");
+			goto error;
+		}
+
         __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
         if (__eglContext == EGL_NO_CONTEXT)
         {

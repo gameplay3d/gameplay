@@ -421,7 +421,7 @@ EGLenum checkErrorEGL(const char* msg)
     GP_ASSERT(msg);
     static const char* errmsg[] =
     {
-        "EGL function succeeded",
+        "EGL function failed",
         "EGL is not initialized, or could not be initialized, for the specified display",
         "EGL cannot access a requested resource",
         "EGL failed to allocate resources for the requested operation",
@@ -544,6 +544,14 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
 
+    // Query game config
+    int samples = 0;
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+    if (config)
+    {
+        samples = std::max(config->getInt("samples"), 0);
+    }
+
     __gestureSet = gestures_set_alloc();
     swipe_gesture_alloc(NULL, gesture_callback, __gestureSet);
     pinch_gesture_alloc(NULL, gesture_callback, __gestureSet);
@@ -583,8 +591,12 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     EGLint eglConfigCount;
 
     // Hard-coded to 32-bit/OpenGL ES 2.0.
-    const EGLint eglConfigAttrs[] =
+    // NOTE: EGL_SAMPLE_BUFFERS and EGL_SAMPLES MUST remain at the beginning of the attribute list
+    // since they are expected to be at indices 0-3 in config fallback code later.
+    EGLint eglConfigAttrs[] =
     {
+        EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+        EGL_SAMPLES,            samples,
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
         EGL_BLUE_SIZE,          8,
@@ -766,8 +778,26 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
     {
-        checkErrorEGL("eglChooseConfig");
-        goto error;
+    	bool success = false;
+    	while (samples)
+    	{
+    		// Try lowering the MSAA sample count until we find a supported config
+    		GP_WARN("Failed to find a valid EGL configuration with EGL samples=%d. Trying samples=%d instead.", samples, samples/2);
+    		samples /= 2;
+    		eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+    		eglConfigAttrs[3] = samples;
+    		if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+    		{
+    			success = true;
+    			break;
+    		}
+    	}
+
+    	if (!success)
+    	{
+			checkErrorEGL("eglChooseConfig");
+			goto error;
+    	}
     }
 
     __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
@@ -1047,7 +1077,8 @@ int Platform::enterMessagePump()
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
                     case NAVIGATOR_WINDOW_INVISIBLE:
-                        _game->pause();
+                        if (!suspended)
+                            _game->pause();
                         suspended = true;
                         break;
                     }
