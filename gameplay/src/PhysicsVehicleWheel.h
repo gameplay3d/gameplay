@@ -21,10 +21,10 @@ class PhysicsVehicle;
     {
         type                     = VEHICLE_WHEEL
 
-        isFront                  = <bool>                // indicates whether this is a front wheel
+        steerable                = <bool>                // indicates whether wheel is steerable
         wheelDirection           = <float, float, float> // direction strut extension, in chassis space
         wheelAxle                = <float, float, float> // direction of axle (spin axis), in chassis space
-        strutConnectionPoint     = <float, float, float> // strut connection point, in chassis space
+        strutConnectionOffset    = <float, float, float> // offset from default strut connection point
         strutRestLength          = <float>               // strut rest length
         strutTravelMax           = <float>               // maximum strut travel
         strutStiffness           = <float>               // strut stiffness, normalized to chassis mass
@@ -51,6 +51,11 @@ public:
     PhysicsCollisionObject::Type getType() const;
 
     /**
+     * Operation not supported. Use host vehicle's setEnabled() instead.
+     */
+    void setEnabled(bool enable);
+
+    /**
      * Apply this wheel's world transform to the specified node.
      * Useful for updating the specified visual node with the current
      * transform.
@@ -61,18 +66,18 @@ public:
     void transform(Node* node) const;
 
     /**
-     * Returns true if this is a front wheel, false otherwise.
+     * Returns true if this wheel is steerable, false otherwise.
      *
-     * @return true if this is a front wheel, false otherwise.
+     * @return true if this wheel is steerable, false otherwise.
      */
-    bool isFront() const;
+    bool isSteerable() const;
 
     /**
-     * Sets whether this is a front wheel.
+     * Sets whether this wheel is steerable.
      *
-     * @param front true if this is a front wheel, false otherwise.
+     * @param steerable true if this wheel is steerable, false otherwise.
      */
-    void setFront(bool front);
+    void setSteerable(bool steerable);
 
     /**
      * Gets direction of strut extension, in chassis space.
@@ -103,18 +108,33 @@ public:
     void setWheelAxle(const Vector3& wheelAxle);
 
     /**
-     * Gets strut connection point, in chassis space.
+     * Gets offset from the default strut connection point.
+     * The default strut connection point is determined from the position
+     * of the wheel node relative to the chassis node, and uses the
+     * specified value for strut rest length to locate the connection
+     * point above it (i.e., in the specified direction of strut
+     * compression).
+     * Any non-zero strut connection offset acts as a delta from the
+     * computed default.
      *
-     * @param strutConnectionPoint address of where to store the result.
+     * @param strutConnectionOffset address of where to store the result.
      */
-    void getStrutConnectionPoint(Vector3* strutConnectionPoint) const;
+    void getStrutConnectionOffset(Vector3* strutConnectionOffset) const;
 
     /**
-     * Sets strut connection point, in chassis space.
+     * Sets offset from the default strut connection point.
+     * The default strut connection point is determined from the position
+     * of the wheel node relative to the chassis node, and uses the
+     * specified value for strut rest length to locate the connection
+     * point above it (i.e., in the specified direction of strut
+     * compression).
+     * Any non-zero strutConnectionOffset acts as a delta from the
+     * computed default.
      *
-     * @param strutConnectionPoint strut connection point.
+     * @param strutConnectionOffset offset from the default strut connection
+     *     point.
      */
-    void setStrutConnectionPoint(const Vector3& strutConnectionPoint);
+    void setStrutConnectionOffset(const Vector3& strutConnectionOffset);
 
     /**
      * Gets the strut rest length.
@@ -332,6 +352,26 @@ private:
      * @param elapsedTime The elapsed game time.
      */
     void update(float elapsedTime);
+
+    /**
+     * Computes the default strut connection point for
+     * this wheel.
+     * The default strut connection point is determined from the position
+     * of the wheel node relative to the chassis node, and uses the
+     * specified value for maximum strut travel to locate the connection
+     * point above it (i.e., in the specified direction of strut
+     * compression).
+     *
+     * @param result where to store the result.
+     */
+    void getConnectionDefault(Vector3* result) const;
+
+    /**
+     * Get wheel position at bind time relative to chassis.
+     *
+     * @param result where to store the result.
+     */
+    void getWheelPos(Vector3* result) const;
 
     PhysicsRigidBody* _rigidBody;
     PhysicsVehicle* _host;
