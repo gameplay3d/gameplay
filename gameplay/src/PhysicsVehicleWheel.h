@@ -51,6 +51,11 @@ public:
     PhysicsCollisionObject::Type getType() const;
 
     /**
+     * Operation not supported. Use host vehicle's setEnabled() instead.
+     */
+    void setEnabled(bool enable);
+
+    /**
      * Apply this wheel's world transform to the specified node.
      * Useful for updating the specified visual node with the current
      * transform.
