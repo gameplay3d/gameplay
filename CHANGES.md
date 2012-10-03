@@ -15,6 +15,7 @@
 - Fixes Lua print logging.
 - Fixes Lua errors to be treated as runtime warnings.
 - Fixes setVertexData to pointers instead of constant data.
+- Fixed AudioSource so that it doesn't loop by default.
 
 ## v1.4.0
 
