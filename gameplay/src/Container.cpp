@@ -601,7 +601,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             if (control->keyEvent(evt, key))
             {
                 release();
-                return _consumeInputEvents;
+                return true;
             }
             else if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
             {
