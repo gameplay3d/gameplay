@@ -1077,7 +1077,8 @@ int Platform::enterMessagePump()
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
                     case NAVIGATOR_WINDOW_INVISIBLE:
-                        _game->pause();
+                        if (!suspended)
+                            _game->pause();
                         suspended = true;
                         break;
                     }
