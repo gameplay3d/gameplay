@@ -46,7 +46,6 @@ private:
 private:
 
     FirstPersonCamera _fpCamera;
-    std::vector<std::string> _soundFiles;
     std::map<std::string, Node*> _audioNodes;
     Font* _font;
     Scene* _scene;
