@@ -53,9 +53,9 @@ PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* propert
         {
             wheel->setWheelAxle(v);
         }
-        else if (strcmp(name, "strutConnectionPoint") == 0 && properties->getVector3(name, &v))
+        else if (strcmp(name, "strutConnectionOffset") == 0 && properties->getVector3(name, &v))
         {
-            wheel->setStrutConnectionPoint(v);
+            wheel->setStrutConnectionOffset(v);
         }
         else if (strcmp(name, "strutRestLength") == 0)
         {
@@ -182,7 +182,6 @@ void PhysicsVehicleWheel::transform(Node* node) const
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
-    GP_ASSERT(_host->_node);
 
     const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
     const btVector3& pos = trans.getOrigin();
@@ -191,8 +190,8 @@ void PhysicsVehicleWheel::transform(Node* node) const
     // Use only the component parallel to the defined strut line
     Vector3 strutLine;
     getWheelDirection(&strutLine);
-    Vector3 wheelPos = _initialOffset;
-    _host->_node->getMatrix().transformPoint(&wheelPos);
+    Vector3 wheelPos;
+    getWheelPos(&wheelPos);
     node->setTranslation(wheelPos + strutLine*(strutLine.dot(_positionDelta) / strutLine.lengthSquared()));
 }
 
@@ -200,7 +199,6 @@ void PhysicsVehicleWheel::update(float elapsedTime)
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
-    GP_ASSERT(_host->_node);
 
     const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
     const btQuaternion& rot = trans.getRotation();
@@ -208,8 +206,8 @@ void PhysicsVehicleWheel::update(float elapsedTime)
     _orientation.set(rot.x(), rot.y(), rot.z(), rot.w());
 
     Vector3 commandedPosition(pos.x(), pos.y(), pos.z());
-    Vector3 wheelPos = _initialOffset;
-    _host->_node->getMatrix().transformPoint(&wheelPos);
+    Vector3 wheelPos;
+    getWheelPos(&wheelPos);
     commandedPosition -= wheelPos;
 
     // Filter out noise from Bullet
@@ -217,6 +215,34 @@ void PhysicsVehicleWheel::update(float elapsedTime)
     float threshold = getStrutRestLength() * 2.0f;
     float responseTime = (delta.lengthSquared() > threshold*threshold) ? 0 : 60;
     _positionDelta.smooth(commandedPosition, elapsedTime, responseTime);
+}
+
+void PhysicsVehicleWheel::getConnectionDefault(Vector3* result) const
+{
+    // projected strut length
+    getWheelDirection(result);
+    result->normalize();
+    float length = 0.58f * getStrutRestLength();
+    *result *= -length;
+
+    // nudge wheel contact point to outer edge of tire for stability
+    Vector3 nudge;
+    getWheelAxle(&nudge);
+    nudge *= nudge.dot(_initialOffset);
+    nudge.normalize();
+    *result += nudge * 0.068f * getWheelRadius(); // rough-in for tire width
+
+    // offset at bind time
+    *result += _initialOffset;
+}
+
+void PhysicsVehicleWheel::getWheelPos(Vector3* result) const
+{
+    GP_ASSERT(_host);
+    GP_ASSERT(_host->_node);
+
+    *result = _initialOffset;
+    _host->_node->getMatrix().transformPoint(result);
 }
 
 bool PhysicsVehicleWheel::isFront() const
@@ -269,19 +295,26 @@ void PhysicsVehicleWheel::setWheelAxle(const Vector3& wheelAxle)
     _host->_vehicle->getWheelInfo(_indexInHost).m_wheelAxleCS.setValue( wheelAxle.x, wheelAxle.y, wheelAxle.z);
 }
 
-void PhysicsVehicleWheel::getStrutConnectionPoint(Vector3* strutConnectionPoint) const
+void PhysicsVehicleWheel::getStrutConnectionOffset(Vector3* strutConnectionOffset) const
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
 
     const btVector3& v = _host->_vehicle->getWheelInfo(_indexInHost).m_chassisConnectionPointCS;
-    strutConnectionPoint->set(v.x(), v.y(), v.z());
+    strutConnectionOffset->set(v.x(), v.y(), v.z());
+    Vector3 strutConnectionDefault;
+    getConnectionDefault(&strutConnectionDefault);
+    *strutConnectionOffset -= strutConnectionDefault;
 }
 
-void PhysicsVehicleWheel::setStrutConnectionPoint(const Vector3& strutConnectionPoint)
+void PhysicsVehicleWheel::setStrutConnectionOffset(const Vector3& strutConnectionOffset)
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
+
+    Vector3 strutConnectionPoint;
+    getConnectionDefault(&strutConnectionPoint);
+    strutConnectionPoint += strutConnectionOffset;
     _host->_vehicle->getWheelInfo(_indexInHost).m_chassisConnectionPointCS.setValue(strutConnectionPoint.x,
                                                                                     strutConnectionPoint.y,
                                                                                     strutConnectionPoint.z);

@@ -27,7 +27,7 @@ void luaRegister_PhysicsVehicleWheel()
         {"getNode", lua_PhysicsVehicleWheel_getNode},
         {"getRollInfluence", lua_PhysicsVehicleWheel_getRollInfluence},
         {"getShapeType", lua_PhysicsVehicleWheel_getShapeType},
-        {"getStrutConnectionPoint", lua_PhysicsVehicleWheel_getStrutConnectionPoint},
+        {"getStrutConnectionOffset", lua_PhysicsVehicleWheel_getStrutConnectionOffset},
         {"getStrutDampingCompression", lua_PhysicsVehicleWheel_getStrutDampingCompression},
         {"getStrutDampingRelaxation", lua_PhysicsVehicleWheel_getStrutDampingRelaxation},
         {"getStrutForceMax", lua_PhysicsVehicleWheel_getStrutForceMax},
@@ -47,7 +47,7 @@ void luaRegister_PhysicsVehicleWheel()
         {"setFrictionBreakout", lua_PhysicsVehicleWheel_setFrictionBreakout},
         {"setFront", lua_PhysicsVehicleWheel_setFront},
         {"setRollInfluence", lua_PhysicsVehicleWheel_setRollInfluence},
-        {"setStrutConnectionPoint", lua_PhysicsVehicleWheel_setStrutConnectionPoint},
+        {"setStrutConnectionOffset", lua_PhysicsVehicleWheel_setStrutConnectionOffset},
         {"setStrutDampingCompression", lua_PhysicsVehicleWheel_setStrutDampingCompression},
         {"setStrutDampingRelaxation", lua_PhysicsVehicleWheel_setStrutDampingRelaxation},
         {"setStrutForceMax", lua_PhysicsVehicleWheel_setStrutForceMax},
@@ -405,7 +405,7 @@ int lua_PhysicsVehicleWheel_getShapeType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicleWheel_getStrutConnectionPoint(lua_State* state)
+int lua_PhysicsVehicleWheel_getStrutConnectionOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -422,13 +422,13 @@ int lua_PhysicsVehicleWheel_getStrutConnectionPoint(lua_State* state)
                 ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 PhysicsVehicleWheel* instance = getInstance(state);
-                instance->getStrutConnectionPoint(param1);
+                instance->getStrutConnectionOffset(param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_PhysicsVehicleWheel_getStrutConnectionPoint - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsVehicleWheel_getStrutConnectionOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1203,7 +1203,7 @@ int lua_PhysicsVehicleWheel_setRollInfluence(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicleWheel_setStrutConnectionPoint(lua_State* state)
+int lua_PhysicsVehicleWheel_setStrutConnectionOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1220,13 +1220,13 @@ int lua_PhysicsVehicleWheel_setStrutConnectionPoint(lua_State* state)
                 ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsVehicleWheel* instance = getInstance(state);
-                instance->setStrutConnectionPoint(*param1);
+                instance->setStrutConnectionOffset(*param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_PhysicsVehicleWheel_setStrutConnectionPoint - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsVehicleWheel_setStrutConnectionOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
