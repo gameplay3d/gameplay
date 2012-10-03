@@ -276,7 +276,7 @@ void PhysicsVehicle::update(float elapsedTime, float steering, float braking, fl
     {
         wheel = getWheel(i);
 
-        if (wheel->isFront())
+        if (wheel->isSteerable())
         {
             _vehicle->setSteeringValue(steering * _steeringGain, i);
         }
