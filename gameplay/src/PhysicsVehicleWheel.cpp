@@ -41,9 +41,9 @@ PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* propert
     const char* name;
     while ((name = properties->getNextProperty()) != NULL)
     {
-        if (strcmp(name, "isFront") == 0)
+        if (strcmp(name, "steerable") == 0)
         {
-            wheel->setFront(properties->getBool(name));
+            wheel->setSteerable(properties->getBool(name));
         }
         else if (strcmp(name, "wheelDirection") == 0 && properties->getVector3(name, &v))
         {
@@ -245,7 +245,7 @@ void PhysicsVehicleWheel::getWheelPos(Vector3* result) const
     _host->_node->getMatrix().transformPoint(result);
 }
 
-bool PhysicsVehicleWheel::isFront() const
+bool PhysicsVehicleWheel::isSteerable() const
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
@@ -253,12 +253,12 @@ bool PhysicsVehicleWheel::isFront() const
     return _host->_vehicle->getWheelInfo(_indexInHost).m_bIsFrontWheel;
 }
 
-void PhysicsVehicleWheel::setFront(bool front)
+void PhysicsVehicleWheel::setSteerable(bool steerable)
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
 
-    _host->_vehicle->getWheelInfo(_indexInHost).m_bIsFrontWheel = front;
+    _host->_vehicle->getWheelInfo(_indexInHost).m_bIsFrontWheel = steerable;
 }
 
 void PhysicsVehicleWheel::getWheelDirection(Vector3* wheelDirection) const

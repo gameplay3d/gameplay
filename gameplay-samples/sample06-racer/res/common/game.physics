@@ -64,22 +64,22 @@ collisionObject carWheel
 
 collisionObject carWheelFrontLeft : carWheel
 {
-    isFront = true
+    steerable = true
 }
 
 collisionObject carWheelFrontRight : carWheel
 {
-    isFront = true
+    steerable = true
 }
 
 collisionObject carWheelBackLeft : carWheel
 {
-    isFront = false
+    steerable = false
 }
 
 collisionObject carWheelBackRight : carWheel
 {
-    isFront = false
+    steerable = false
 }
 
 collisionObject heightfield
