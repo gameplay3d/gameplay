@@ -362,6 +362,11 @@ private:
     void initialize();
 
     /**
+     * Destructor.
+     */
+    ~PhysicsVehicle();
+
+    /**
      * Returns adjusted steering value.
      *
      * @param v vehicle speed.
@@ -390,11 +395,6 @@ private:
      * Applies effect of aerodynamic downforce.
      */
     void applyDownforce();
-
-    /**
-     * Destructor.
-     */
-    ~PhysicsVehicle();
 
     float _steeringGain;
     float _brakingForce;
