@@ -226,6 +226,11 @@ PhysicsRigidBody* PhysicsVehicle::getRigidBody() const
     return _rigidBody;
 }
 
+void PhysicsVehicle::setEnabled(bool enable)
+{
+    getRigidBody()->setEnabled(enable);
+}
+
 unsigned int PhysicsVehicle::getNumWheels() const
 {
     return _wheels.size();
