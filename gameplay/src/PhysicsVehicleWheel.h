@@ -21,7 +21,7 @@ class PhysicsVehicle;
     {
         type                     = VEHICLE_WHEEL
 
-        isFront                  = <bool>                // indicates whether this is a front wheel
+        steerable                = <bool>                // indicates whether wheel is steerable
         wheelDirection           = <float, float, float> // direction strut extension, in chassis space
         wheelAxle                = <float, float, float> // direction of axle (spin axis), in chassis space
         strutConnectionOffset    = <float, float, float> // offset from default strut connection point
@@ -61,18 +61,18 @@ public:
     void transform(Node* node) const;
 
     /**
-     * Returns true if this is a front wheel, false otherwise.
+     * Returns true if this wheel is steerable, false otherwise.
      *
-     * @return true if this is a front wheel, false otherwise.
+     * @return true if this wheel is steerable, false otherwise.
      */
-    bool isFront() const;
+    bool isSteerable() const;
 
     /**
-     * Sets whether this is a front wheel.
+     * Sets whether this wheel is steerable.
      *
-     * @param front true if this is a front wheel, false otherwise.
+     * @param steerable true if this wheel is steerable, false otherwise.
      */
-    void setFront(bool front);
+    void setSteerable(bool steerable);
 
     /**
      * Gets direction of strut extension, in chassis space.
