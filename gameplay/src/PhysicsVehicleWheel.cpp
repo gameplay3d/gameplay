@@ -119,6 +119,11 @@ PhysicsCollisionObject::Type PhysicsVehicleWheel::getType() const
     return PhysicsCollisionObject::VEHICLE_WHEEL;
 }
 
+void PhysicsVehicleWheel::setEnabled(bool enable)
+{
+    GP_ERROR("Operation not supported (PhysicsVehicleWheel::setEnabled(bool)). Use host vehicle instead.");
+}
+
 void PhysicsVehicleWheel::findAncestorAndBind()
 {
     GP_ASSERT(getNode());
