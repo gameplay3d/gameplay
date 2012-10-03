@@ -14,8 +14,6 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape
     _rigidBody = new PhysicsRigidBody(node, shape, parameters);
 
     findAncestorAndBind();
-
-    _initialOffset = node->getTranslation();
 }
 
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody)
@@ -24,8 +22,6 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody
     _rigidBody = rigidBody;
 
     findAncestorAndBind();
-
-    _initialOffset = node->getTranslation();
 }
 
 PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* properties)
@@ -119,6 +115,11 @@ PhysicsCollisionObject::Type PhysicsVehicleWheel::getType() const
     return PhysicsCollisionObject::VEHICLE_WHEEL;
 }
 
+void PhysicsVehicleWheel::setEnabled(bool enable)
+{
+    GP_ERROR("Operation not supported (PhysicsVehicleWheel::setEnabled(bool)). Use host vehicle instead.");
+}
+
 void PhysicsVehicleWheel::findAncestorAndBind()
 {
     GP_ASSERT(getNode());
@@ -152,6 +153,7 @@ void PhysicsVehicleWheel::findAncestorAndBind()
     if (host)
     {
         host->addWheel(this);
+        _initialOffset = _node->getTranslation() - host->_node->getTranslation();
     }
 }
 
@@ -181,15 +183,14 @@ void PhysicsVehicleWheel::addToVehicle(btRaycastVehicle* vehicle)
 void PhysicsVehicleWheel::transform(Node* node) const
 {
     GP_ASSERT(_host);
-    GP_ASSERT(_host->_vehicle);
+    GP_ASSERT(_host->_node);
 
-    const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
-    const btVector3& pos = trans.getOrigin();
     node->setRotation(_orientation);
 
     // Use only the component parallel to the defined strut line
     Vector3 strutLine;
     getWheelDirection(&strutLine);
+    _host->_node->getMatrix().transformVector(&strutLine);
     Vector3 wheelPos;
     getWheelPos(&wheelPos);
     node->setTranslation(wheelPos + strutLine*(strutLine.dot(_positionDelta) / strutLine.lengthSquared()));
