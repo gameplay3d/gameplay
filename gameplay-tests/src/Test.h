@@ -57,6 +57,15 @@ public:
     void getAccelerometerValues(float* pitch, float* roll);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
 
+    // gestures
+    bool isGestureSupported(Gesture::GestureEvent evt);
+    void registerGesture(Gesture::GestureEvent evt);
+    void unregisterGesture(Gesture::GestureEvent evt);
+    bool isGestureRegistered(Gesture::GestureEvent evt);
+    virtual void gestureSwipeEvent(int x, int y, int direction);
+    virtual void gesturePinchEvent(int x, int y, float scale);
+    virtual void gestureTapEvent(int x, int y);
+
 protected:
 
     Test();
