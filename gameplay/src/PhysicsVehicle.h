@@ -73,6 +73,14 @@ public:
     PhysicsRigidBody* getRigidBody() const;
 
     /**
+     * Sets whether the associated rigid body is enabled or disabled
+     * in the physics world.
+     *
+     * @param enable true enables the collision object, false disables it.
+     */
+    void setEnabled(bool enable);
+
+    /**
      * Returns the number of wheels on this vehicle.
      *
      * @return the number of wheels on this vehicle.
@@ -362,6 +370,11 @@ private:
     void initialize();
 
     /**
+     * Destructor.
+     */
+    ~PhysicsVehicle();
+
+    /**
      * Returns adjusted steering value.
      *
      * @param v vehicle speed.
@@ -390,11 +403,6 @@ private:
      * Applies effect of aerodynamic downforce.
      */
     void applyDownforce();
-
-    /**
-     * Destructor.
-     */
-    ~PhysicsVehicle();
 
     float _steeringGain;
     float _brakingForce;
