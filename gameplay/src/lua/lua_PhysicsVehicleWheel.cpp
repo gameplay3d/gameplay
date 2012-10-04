@@ -27,7 +27,7 @@ void luaRegister_PhysicsVehicleWheel()
         {"getNode", lua_PhysicsVehicleWheel_getNode},
         {"getRollInfluence", lua_PhysicsVehicleWheel_getRollInfluence},
         {"getShapeType", lua_PhysicsVehicleWheel_getShapeType},
-        {"getStrutConnectionPoint", lua_PhysicsVehicleWheel_getStrutConnectionPoint},
+        {"getStrutConnectionOffset", lua_PhysicsVehicleWheel_getStrutConnectionOffset},
         {"getStrutDampingCompression", lua_PhysicsVehicleWheel_getStrutDampingCompression},
         {"getStrutDampingRelaxation", lua_PhysicsVehicleWheel_getStrutDampingRelaxation},
         {"getStrutForceMax", lua_PhysicsVehicleWheel_getStrutForceMax},
@@ -40,14 +40,14 @@ void luaRegister_PhysicsVehicleWheel()
         {"getWheelRadius", lua_PhysicsVehicleWheel_getWheelRadius},
         {"isDynamic", lua_PhysicsVehicleWheel_isDynamic},
         {"isEnabled", lua_PhysicsVehicleWheel_isEnabled},
-        {"isFront", lua_PhysicsVehicleWheel_isFront},
         {"isKinematic", lua_PhysicsVehicleWheel_isKinematic},
+        {"isSteerable", lua_PhysicsVehicleWheel_isSteerable},
         {"removeCollisionListener", lua_PhysicsVehicleWheel_removeCollisionListener},
         {"setEnabled", lua_PhysicsVehicleWheel_setEnabled},
         {"setFrictionBreakout", lua_PhysicsVehicleWheel_setFrictionBreakout},
-        {"setFront", lua_PhysicsVehicleWheel_setFront},
         {"setRollInfluence", lua_PhysicsVehicleWheel_setRollInfluence},
-        {"setStrutConnectionPoint", lua_PhysicsVehicleWheel_setStrutConnectionPoint},
+        {"setSteerable", lua_PhysicsVehicleWheel_setSteerable},
+        {"setStrutConnectionOffset", lua_PhysicsVehicleWheel_setStrutConnectionOffset},
         {"setStrutDampingCompression", lua_PhysicsVehicleWheel_setStrutDampingCompression},
         {"setStrutDampingRelaxation", lua_PhysicsVehicleWheel_setStrutDampingRelaxation},
         {"setStrutForceMax", lua_PhysicsVehicleWheel_setStrutForceMax},
@@ -405,7 +405,7 @@ int lua_PhysicsVehicleWheel_getShapeType(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicleWheel_getStrutConnectionPoint(lua_State* state)
+int lua_PhysicsVehicleWheel_getStrutConnectionOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -422,13 +422,13 @@ int lua_PhysicsVehicleWheel_getStrutConnectionPoint(lua_State* state)
                 ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
 
                 PhysicsVehicleWheel* instance = getInstance(state);
-                instance->getStrutConnectionPoint(param1);
+                instance->getStrutConnectionOffset(param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_PhysicsVehicleWheel_getStrutConnectionPoint - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsVehicleWheel_getStrutConnectionOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -889,43 +889,6 @@ int lua_PhysicsVehicleWheel_isEnabled(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicleWheel_isFront(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                PhysicsVehicleWheel* instance = getInstance(state);
-                bool result = instance->isFront();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsVehicleWheel_isFront - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_PhysicsVehicleWheel_isKinematic(lua_State* state)
 {
     // Get the number of parameters.
@@ -949,6 +912,43 @@ int lua_PhysicsVehicleWheel_isKinematic(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_PhysicsVehicleWheel_isKinematic - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicleWheel_isSteerable(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicleWheel* instance = getInstance(state);
+                bool result = instance->isSteerable();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicleWheel_isSteerable - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -1127,44 +1127,6 @@ int lua_PhysicsVehicleWheel_setFrictionBreakout(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicleWheel_setFront(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TBOOLEAN)
-            {
-                // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
-
-                PhysicsVehicleWheel* instance = getInstance(state);
-                instance->setFront(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsVehicleWheel_setFront - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_PhysicsVehicleWheel_setRollInfluence(lua_State* state)
 {
     // Get the number of parameters.
@@ -1203,7 +1165,45 @@ int lua_PhysicsVehicleWheel_setRollInfluence(lua_State* state)
     return 0;
 }
 
-int lua_PhysicsVehicleWheel_setStrutConnectionPoint(lua_State* state)
+int lua_PhysicsVehicleWheel_setSteerable(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                PhysicsVehicleWheel* instance = getInstance(state);
+                instance->setSteerable(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicleWheel_setSteerable - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicleWheel_setStrutConnectionOffset(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -1220,13 +1220,13 @@ int lua_PhysicsVehicleWheel_setStrutConnectionPoint(lua_State* state)
                 ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
 
                 PhysicsVehicleWheel* instance = getInstance(state);
-                instance->setStrutConnectionPoint(*param1);
+                instance->setStrutConnectionOffset(*param1);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_PhysicsVehicleWheel_setStrutConnectionPoint - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_PhysicsVehicleWheel_setStrutConnectionOffset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
