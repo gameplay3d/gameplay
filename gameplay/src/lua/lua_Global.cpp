@@ -565,6 +565,15 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("SPOT", "SPOT", scopePath);
     }
 
+    // Register enumeration Logger::Level.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Logger");
+        ScriptUtil::registerConstantString("INFO", "INFO", scopePath);
+        ScriptUtil::registerConstantString("WARN", "WARN", scopePath);
+        ScriptUtil::registerConstantString("ERROR", "ERROR", scopePath);
+    }
+
     // Register enumeration Mesh::IndexFormat.
     {
         std::vector<std::string> scopePath;
@@ -824,6 +833,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_LayoutType((Layout::Type)value);
     if (enumname == "Light::Type")
         return lua_stringFromEnum_LightType((Light::Type)value);
+    if (enumname == "Logger::Level")
+        return lua_stringFromEnum_LoggerLevel((Logger::Level)value);
     if (enumname == "Mesh::IndexFormat")
         return lua_stringFromEnum_MeshIndexFormat((Mesh::IndexFormat)value);
     if (enumname == "Mesh::PrimitiveType")
