@@ -1707,6 +1707,18 @@
 		5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */; };
 		5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
 		5BD52676150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
+		B67EC8EB161DFC8E000B4D12 /* lua_Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */; };
+		B67EC8EC161DFC8E000B4D12 /* lua_Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */; };
+		B67EC8ED161DFC8E000B4D12 /* lua_Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8E8161DFC8E000B4D12 /* lua_Logger.h */; };
+		B67EC8EE161DFC8E000B4D12 /* lua_Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8E8161DFC8E000B4D12 /* lua_Logger.h */; };
+		B67EC8EF161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8E9161DFC8E000B4D12 /* lua_LoggerLevel.cpp */; };
+		B67EC8F0161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8E9161DFC8E000B4D12 /* lua_LoggerLevel.cpp */; };
+		B67EC8F1161DFC8E000B4D12 /* lua_LoggerLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8EA161DFC8E000B4D12 /* lua_LoggerLevel.h */; };
+		B67EC8F2161DFC8E000B4D12 /* lua_LoggerLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8EA161DFC8E000B4D12 /* lua_LoggerLevel.h */; };
+		B67EC8F6161DFCA8000B4D12 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8F4161DFCA8000B4D12 /* Logger.cpp */; };
+		B67EC8F7161DFCA8000B4D12 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8F4161DFCA8000B4D12 /* Logger.cpp */; };
+		B67EC8F8161DFCA8000B4D12 /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8F5161DFCA8000B4D12 /* Logger.h */; };
+		B67EC8F9161DFCA8000B4D12 /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8F5161DFCA8000B4D12 /* Logger.h */; };
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 /* End PBXBuildFile section */
@@ -2611,6 +2623,12 @@
 		5BD5266C150F8257004C9099 /* PhysicsCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCharacter.h; path = src/PhysicsCharacter.h; sourceTree = SOURCE_ROOT; };
 		5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionObject.cpp; path = src/PhysicsCollisionObject.cpp; sourceTree = SOURCE_ROOT; };
 		5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionObject.h; path = src/PhysicsCollisionObject.h; sourceTree = SOURCE_ROOT; };
+		B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Logger.cpp; sourceTree = "<group>"; };
+		B67EC8E8161DFC8E000B4D12 /* lua_Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Logger.h; sourceTree = "<group>"; };
+		B67EC8E9161DFC8E000B4D12 /* lua_LoggerLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_LoggerLevel.cpp; sourceTree = "<group>"; };
+		B67EC8EA161DFC8E000B4D12 /* lua_LoggerLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_LoggerLevel.h; sourceTree = "<group>"; };
+		B67EC8F4161DFCA8000B4D12 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger.cpp; path = src/Logger.cpp; sourceTree = SOURCE_ROOT; };
+		B67EC8F5161DFCA8000B4D12 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger.h; path = src/Logger.h; sourceTree = SOURCE_ROOT; };
 		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -2782,6 +2800,8 @@
 				5BD52643150F822A004C9099 /* Layout.h */,
 				42CD0DE6147D8FF50000361E /* Light.cpp */,
 				42CD0DE7147D8FF50000361E /* Light.h */,
+				B67EC8F4161DFCA8000B4D12 /* Logger.cpp */,
+				B67EC8F5161DFCA8000B4D12 /* Logger.h */,
 				42CD0DE8147D8FF50000361E /* Material.cpp */,
 				42CD0DE9147D8FF50000361E /* Material.h */,
 				42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */,
@@ -3397,6 +3417,10 @@
 				42BCD3A615EFD0F300C0E076 /* lua_Light.h */,
 				42BCD3A715EFD0F300C0E076 /* lua_LightType.cpp */,
 				42BCD3A815EFD0F300C0E076 /* lua_LightType.h */,
+				B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */,
+				B67EC8E8161DFC8E000B4D12 /* lua_Logger.h */,
+				B67EC8E9161DFC8E000B4D12 /* lua_LoggerLevel.cpp */,
+				B67EC8EA161DFC8E000B4D12 /* lua_LoggerLevel.h */,
 				42BCD3A915EFD0F300C0E076 /* lua_Material.cpp */,
 				42BCD3AA15EFD0F300C0E076 /* lua_Material.h */,
 				42BCD3AB15EFD0F300C0E076 /* lua_MaterialParameter.cpp */,
@@ -4076,6 +4100,9 @@
 				421FBD551602818800A61BC0 /* PhysicsVehicleWheel.h in Headers */,
 				421FBD5E1602827C00A61BC0 /* lua_PhysicsVehicle.h in Headers */,
 				421FBD621602827C00A61BC0 /* lua_PhysicsVehicleWheel.h in Headers */,
+				B67EC8ED161DFC8E000B4D12 /* lua_Logger.h in Headers */,
+				B67EC8F1161DFC8E000B4D12 /* lua_LoggerLevel.h in Headers */,
+				B67EC8F8161DFCA8000B4D12 /* Logger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4503,6 +4530,9 @@
 				421FBD561602818800A61BC0 /* PhysicsVehicleWheel.h in Headers */,
 				421FBD5F1602827C00A61BC0 /* lua_PhysicsVehicle.h in Headers */,
 				421FBD631602827C00A61BC0 /* lua_PhysicsVehicleWheel.h in Headers */,
+				B67EC8EE161DFC8E000B4D12 /* lua_Logger.h in Headers */,
+				B67EC8F2161DFC8E000B4D12 /* lua_LoggerLevel.h in Headers */,
+				B67EC8F9161DFCA8000B4D12 /* Logger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4991,6 +5021,9 @@
 				421FBD5C1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
 				421FBD601602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
 				F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */,
+				B67EC8EB161DFC8E000B4D12 /* lua_Logger.cpp in Sources */,
+				B67EC8EF161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */,
+				B67EC8F6161DFCA8000B4D12 /* Logger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5415,6 +5448,9 @@
 				421FBD5D1602827C00A61BC0 /* lua_PhysicsVehicle.cpp in Sources */,
 				421FBD611602827C00A61BC0 /* lua_PhysicsVehicleWheel.cpp in Sources */,
 				F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */,
+				B67EC8EC161DFC8E000B4D12 /* lua_Logger.cpp in Sources */,
+				B67EC8F0161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */,
+				B67EC8F7161DFCA8000B4D12 /* Logger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
