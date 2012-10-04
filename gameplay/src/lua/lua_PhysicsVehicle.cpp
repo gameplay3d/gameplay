@@ -3,6 +3,7 @@
 #include "lua_PhysicsVehicle.h"
 #include "Base.h"
 #include "Game.h"
+#include "MathUtil.h"
 #include "Node.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
@@ -23,14 +24,24 @@ void luaRegister_PhysicsVehicle()
         {"addCollisionListener", lua_PhysicsVehicle_addCollisionListener},
         {"addWheel", lua_PhysicsVehicle_addWheel},
         {"collidesWith", lua_PhysicsVehicle_collidesWith},
+        {"getBoostGain", lua_PhysicsVehicle_getBoostGain},
+        {"getBoostSpeed", lua_PhysicsVehicle_getBoostSpeed},
+        {"getBrakedownFull", lua_PhysicsVehicle_getBrakedownFull},
+        {"getBrakedownStart", lua_PhysicsVehicle_getBrakedownStart},
         {"getBrakingForce", lua_PhysicsVehicle_getBrakingForce},
         {"getCollisionShape", lua_PhysicsVehicle_getCollisionShape},
+        {"getDownforce", lua_PhysicsVehicle_getDownforce},
+        {"getDrivedownFull", lua_PhysicsVehicle_getDrivedownFull},
+        {"getDrivedownStart", lua_PhysicsVehicle_getDrivedownStart},
         {"getDrivingForce", lua_PhysicsVehicle_getDrivingForce},
         {"getNode", lua_PhysicsVehicle_getNode},
         {"getNumWheels", lua_PhysicsVehicle_getNumWheels},
         {"getRigidBody", lua_PhysicsVehicle_getRigidBody},
         {"getShapeType", lua_PhysicsVehicle_getShapeType},
         {"getSpeedKph", lua_PhysicsVehicle_getSpeedKph},
+        {"getSpeedSmoothKph", lua_PhysicsVehicle_getSpeedSmoothKph},
+        {"getSteerdownGain", lua_PhysicsVehicle_getSteerdownGain},
+        {"getSteerdownSpeed", lua_PhysicsVehicle_getSteerdownSpeed},
         {"getSteeringGain", lua_PhysicsVehicle_getSteeringGain},
         {"getType", lua_PhysicsVehicle_getType},
         {"getWheel", lua_PhysicsVehicle_getWheel},
@@ -38,9 +49,15 @@ void luaRegister_PhysicsVehicle()
         {"isEnabled", lua_PhysicsVehicle_isEnabled},
         {"isKinematic", lua_PhysicsVehicle_isKinematic},
         {"removeCollisionListener", lua_PhysicsVehicle_removeCollisionListener},
+        {"reset", lua_PhysicsVehicle_reset},
+        {"setBoost", lua_PhysicsVehicle_setBoost},
+        {"setBrakedown", lua_PhysicsVehicle_setBrakedown},
         {"setBrakingForce", lua_PhysicsVehicle_setBrakingForce},
+        {"setDownforce", lua_PhysicsVehicle_setDownforce},
+        {"setDrivedown", lua_PhysicsVehicle_setDrivedown},
         {"setDrivingForce", lua_PhysicsVehicle_setDrivingForce},
         {"setEnabled", lua_PhysicsVehicle_setEnabled},
+        {"setSteerdown", lua_PhysicsVehicle_setSteerdown},
         {"setSteeringGain", lua_PhysicsVehicle_setSteeringGain},
         {"update", lua_PhysicsVehicle_update},
         {NULL, NULL}
@@ -225,6 +242,154 @@ int lua_PhysicsVehicle_collidesWith(lua_State* state)
     return 0;
 }
 
+int lua_PhysicsVehicle_getBoostGain(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getBoostGain();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getBoostGain - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getBoostSpeed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getBoostSpeed();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getBoostSpeed - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getBrakedownFull(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getBrakedownFull();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getBrakedownFull - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getBrakedownStart(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getBrakedownStart();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getBrakedownStart - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_PhysicsVehicle_getBrakingForce(lua_State* state)
 {
     // Get the number of parameters.
@@ -294,6 +459,117 @@ int lua_PhysicsVehicle_getCollisionShape(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_PhysicsVehicle_getCollisionShape - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getDownforce(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getDownforce();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getDownforce - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getDrivedownFull(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getDrivedownFull();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getDrivedownFull - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getDrivedownStart(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getDrivedownStart();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getDrivedownStart - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -534,6 +810,117 @@ int lua_PhysicsVehicle_getSpeedKph(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_PhysicsVehicle_getSpeedKph - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getSpeedSmoothKph(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getSpeedSmoothKph();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getSpeedSmoothKph - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getSteerdownGain(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getSteerdownGain();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getSteerdownGain - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_getSteerdownSpeed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                float result = instance->getSteerdownSpeed();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_getSteerdownSpeed - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -871,6 +1258,124 @@ int lua_PhysicsVehicle_removeCollisionListener(lua_State* state)
     return 0;
 }
 
+int lua_PhysicsVehicle_reset(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                instance->reset();
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_reset - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_setBoost(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                PhysicsVehicle* instance = getInstance(state);
+                instance->setBoost(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_setBoost - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_setBrakedown(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                PhysicsVehicle* instance = getInstance(state);
+                instance->setBrakedown(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_setBrakedown - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_PhysicsVehicle_setBrakingForce(lua_State* state)
 {
     // Get the number of parameters.
@@ -902,6 +1407,86 @@ int lua_PhysicsVehicle_setBrakingForce(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_setDownforce(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                PhysicsVehicle* instance = getInstance(state);
+                instance->setDownforce(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_setDownforce - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_setDrivedown(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                PhysicsVehicle* instance = getInstance(state);
+                instance->setDrivedown(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_setDrivedown - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -978,6 +1563,48 @@ int lua_PhysicsVehicle_setEnabled(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_setSteerdown(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                PhysicsVehicle* instance = getInstance(state);
+                instance->setSteerdown(param1, param2);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsVehicle_setSteerdown - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
