@@ -23,6 +23,7 @@
 #include "lua_KeyboardKeyEvent.h"
 #include "lua_LayoutType.h"
 #include "lua_LightType.h"
+#include "lua_LoggerLevel.h"
 #include "lua_MeshIndexFormat.h"
 #include "lua_MeshPrimitiveType.h"
 #include "lua_MouseMouseEvent.h"

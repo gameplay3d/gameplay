@@ -10,6 +10,7 @@
 #include "FileSystem.h"
 #include "Bundle.h"
 #include "MathUtil.h"
+#include "Logger.h"
 
 // Math
 #include "Rectangle.h"
