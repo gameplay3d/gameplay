@@ -156,8 +156,20 @@ void TestsGame::menuEvent()
 
 void TestsGame::gestureSwipeEvent(int x, int y, int direction)
 {
-    if (direction == Gesture::SWIPE_DIRECTION_LEFT)
-        exitActiveTest();
+    if (_activeTest)
+        _activeTest->gestureSwipeEvent(x, y, direction);
+}
+
+void TestsGame::gesturePinchEvent(int x, int y, float scale)
+{
+    if (_activeTest)
+        _activeTest->gesturePinchEvent(x, y, scale);
+}
+    
+void TestsGame::gestureTapEvent(int x, int y)
+{
+    if (_activeTest)
+        _activeTest->gestureTapEvent(x, y);
 }
 
 void TestsGame::controlEvent(Control* control, EventType evt)
