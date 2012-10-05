@@ -23,7 +23,7 @@ COPY_RES( ${GAME_NAME} )
 COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
     res/logo_powered_white.png 
     res/shaders/*
-    )
+)
 
 # Just use the PNG config file (most compatible)
 configure_file( game.png.config game.config COPYONLY )
