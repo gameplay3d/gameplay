@@ -16,9 +16,6 @@ TestsGame::TestsGame()
 
 void TestsGame::initialize()
 {
-    // Disable V-Sync to see how just how many frames we can pump out for each test.
-    setVsync(false);
-
     _font = Font::create("res/common/arial18.gpb");
 
     for (size_t i = 0; i < _categories->size(); ++i)
@@ -45,7 +42,7 @@ void TestsGame::initialize()
     {
         Label* categoryLabel = Label::create((*_categories)[i].c_str(), titleStyle);
         categoryLabel->setAutoWidth(true);
-        categoryLabel->setTextAlignment(Font::ALIGN_LEFT);
+        categoryLabel->setTextAlignment(Font::ALIGN_BOTTOM_LEFT);
         categoryLabel->setHeight(40);
         categoryLabel->setText((*_categories)[i].c_str());
         categoryLabel->setConsumeInputEvents(false);
