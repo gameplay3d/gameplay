@@ -40,7 +40,6 @@ static std::vector<Form*> __forms;
 
 Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL), _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
 {
-    _consumeInputEvents = false;
 }
 
 Form::~Form()
@@ -94,6 +93,7 @@ Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
     form->_style = style;
     form->_layout = layout;
     form->_theme = style->getTheme();
+    form->_theme->addRef();
 
     // Get default projection matrix.
     Game* game = Game::getInstance();
@@ -168,7 +168,7 @@ Form* Form::create(const char* url)
     }
     form->initialize(style, formProperties);
 
-    form->_consumeInputEvents = formProperties->getBool("consumeEvents");
+    form->_consumeInputEvents = formProperties->getBool("consumeInputEvents", true);
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
