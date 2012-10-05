@@ -693,9 +693,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             else
                             {
                                 if (deltaY > 0)
-                                    direction = gameplay::Gesture::SWIPE_DIRECTION_UP;
-                                else if (deltaY < 0)
                                     direction = gameplay::Gesture::SWIPE_DIRECTION_DOWN;
+                                else if (deltaY < 0)
+                                    direction = gameplay::Gesture::SWIPE_DIRECTION_UP;
                             }
                             gameplay::Game::getInstance()->gestureSwipeEvent(x, y, direction);
                             __pointer0.pressed = false;
@@ -740,7 +740,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                     {
                         pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
                         pointerId = AMotionEvent_getPointerId(event, pointerIndex);
-                        gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, x, y, pointerId);
+                        gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
                     }
                 }
                 break;
@@ -748,7 +748,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
             case AMOTION_EVENT_ACTION_POINTER_UP:
                 {
                     pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-                    pointerId = AMotionEvent_getPointerId(event, 0);
+                    pointerId = AMotionEvent_getPointerId(event, pointerIndex);
                     x = AMotionEvent_getX(event, 0);
                     y = AMotionEvent_getY(event, 0);
 
@@ -770,9 +770,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                                 direction |= gameplay::Gesture::SWIPE_DIRECTION_LEFT;
                             
                             if (deltaY > 0)
-                                direction |= gameplay::Gesture::SWIPE_DIRECTION_UP;
-                            else if (deltaY < 0)
                                 direction |= gameplay::Gesture::SWIPE_DIRECTION_DOWN;
+                            else if (deltaY < 0)
+                                direction |= gameplay::Gesture::SWIPE_DIRECTION_UP;
 
                             gameplay::Game::getInstance()->gestureSwipeEvent(x, y, direction);
                             __pointer1.pressed = false;

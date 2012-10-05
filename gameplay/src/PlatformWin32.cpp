@@ -895,6 +895,13 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         }
     }
 
+    // If fullscreen is specified, and width is not, interpret this
+    // as meaning, "use the current resolution".
+    if (params.fullscreen && params.rect.right == 0){
+        params.rect.right = params.rect.left + GetSystemMetrics(SM_CXSCREEN);
+        params.rect.bottom = params.rect.top + GetSystemMetrics(SM_CYSCREEN);
+    }
+    
     // If window size was not specified, set it to a default value
     if (params.rect.right == 0)
         params.rect.right = params.rect.left + DEFAULT_RESOLUTION_X;
