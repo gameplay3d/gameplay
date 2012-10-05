@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 AudioSource::AudioSource(AudioBuffer* buffer, ALuint source) 
-    : _alSource(source), _buffer(buffer), _looped(true), _gain(1.0f), _pitch(1.0f), _node(NULL)
+    : _alSource(source), _buffer(buffer), _looped(false), _gain(1.0f), _pitch(1.0f), _node(NULL)
 {
     GP_ASSERT(buffer);
     AL_CHECK( alSourcei(_alSource, AL_BUFFER, buffer->_alBuffer) );

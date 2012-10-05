@@ -67,7 +67,7 @@ bool GPBFile::saveBinary(const std::string& filepath)
     size_t n = 0;
 
     // identifier
-    char identifier[] = { '«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n' };
+    char identifier[] = { 'ï¿½', 'G', 'P', 'B', 'ï¿½', '\r', '\n', '\x1A', '\n' };
     n = fwrite(identifier, 1, sizeof(identifier), _file);
     if (n != sizeof(identifier))
     {
@@ -310,7 +310,6 @@ void GPBFile::adjust()
         }
     }
 
-    LOG(1, "Computing bounding volumes.\n");
     for (std::list<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
     {
         computeBounds(*i);

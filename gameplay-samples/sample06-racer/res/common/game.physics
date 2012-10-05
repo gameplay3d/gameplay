@@ -26,6 +26,16 @@ collisionObject car
     steeringGain = 0.4
     brakingForce = 350.0
     drivingForce = 2000.0
+
+    steerdownSpeed = 87
+    steerdownGain = 0.22
+    brakedownStart = 100
+    brakedownFull = 170
+    drivedownStart = 105
+    drivedownFull = 180
+    boostSpeed = 74
+    boostGain = 2.6
+    downforce = 4.5
 }
 
 collisionObject carWheel
@@ -49,30 +59,27 @@ collisionObject carWheel
     frictionBreakout = 1000.0
     wheelRadius = 0.5
     rollInfluence = 0.1
+    strutConnectionOffset = 0.0, 0.0, 1.4
 }
 
 collisionObject carWheelFrontLeft : carWheel
 {
-    isFront = true
-    strutConnectionPoint = 0.95, -0.08, 1.8
+    steerable = true
 }
 
 collisionObject carWheelFrontRight : carWheel
 {
-    isFront = true
-    strutConnectionPoint = -0.95, -0.08, 1.8
+    steerable = true
 }
 
 collisionObject carWheelBackLeft : carWheel
 {
-    isFront = false
-    strutConnectionPoint = 0.95, -0.15, -1.55
+    steerable = false
 }
 
 collisionObject carWheelBackRight : carWheel
 {
-    isFront = false
-    strutConnectionPoint = -0.95, -0.15, -1.55
+    steerable = false
 }
 
 collisionObject heightfield

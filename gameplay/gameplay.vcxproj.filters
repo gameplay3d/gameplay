@@ -807,6 +807,15 @@
     <ClCompile Include="src\MathUtil.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Logger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_LoggerLevel.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_Logger.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1599,6 +1608,15 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\lua\lua_PhysicsVehicleWheel.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logger.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Logger.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_LoggerLevel.h">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>

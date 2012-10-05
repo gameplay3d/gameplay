@@ -22,7 +22,6 @@ void TestsGame::initialize()
     {
         std::sort((*_tests)[i].begin(), (*_tests)[i].end());
     }
-    //registerGesture(Gesture::GESTURE_SWIPE);
 
     // Construct a form for selecting which test to run.
     Theme* theme = Theme::create("res/common/mainMenu.theme");
@@ -90,7 +89,7 @@ void TestsGame::render(float elapsedTime)
         
         // Draw back arrow
         _font->start();
-        _font->drawText("<<", getWidth() - 30, 10, Vector4::one());
+        _font->drawText("<<", getWidth() - 40, 20, Vector4::one(), 28);
         _font->finish();
         return;
     }
@@ -103,7 +102,7 @@ void TestsGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 {
     if (_activeTest)
     {
-        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 40) && y <= 40)
+        if (evt == Touch::TOUCH_PRESS && x >= ((int)getWidth() - 80) && y <= 80)
         {
             exitActiveTest();
         }
@@ -157,8 +156,20 @@ void TestsGame::menuEvent()
 
 void TestsGame::gestureSwipeEvent(int x, int y, int direction)
 {
-    if (direction == Gesture::SWIPE_DIRECTION_LEFT)
-        exitActiveTest();
+    if (_activeTest)
+        _activeTest->gestureSwipeEvent(x, y, direction);
+}
+
+void TestsGame::gesturePinchEvent(int x, int y, float scale)
+{
+    if (_activeTest)
+        _activeTest->gesturePinchEvent(x, y, scale);
+}
+    
+void TestsGame::gestureTapEvent(int x, int y)
+{
+    if (_activeTest)
+        _activeTest->gestureTapEvent(x, y);
 }
 
 void TestsGame::controlEvent(Control* control, EventType evt)

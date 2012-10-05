@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04AB98B2161F38B800CF90C5 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AB98B1161F38B800CF90C5 /* IOKit.framework */; };
 		4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4217006214697FF100A45C02 /* Cocoa.framework */; };
 		4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E4146B121000CAEB3A /* QuartzCore.framework */; };
 		42685616157575030013522F /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04AB98B1161F38B800CF90C5 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4217005E14697FF100A45C02 /* sample00-mesh-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample00-mesh-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -80,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04AB98B2161F38B800CF90C5 /* IOKit.framework in Frameworks */,
 				5B928C6C1513E9960095E677 /* libgameplay.a in Frameworks */,
 				42CD0EE7147D92E60000361E /* libbullet.a in Frameworks */,
 				42CD0EE8147D92E60000361E /* libogg.a in Frameworks */,
@@ -182,6 +185,7 @@
 		5B04C5FF14BFE53F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				04AB98B1161F38B800CF90C5 /* IOKit.framework */,
 				4217006214697FF100A45C02 /* Cocoa.framework */,
 				4220A6E4146B121000CAEB3A /* QuartzCore.framework */,
 				42F68AA61469CDE100E0E3C4 /* OpenGL.framework */,
