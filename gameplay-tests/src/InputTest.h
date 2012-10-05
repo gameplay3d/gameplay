@@ -37,9 +37,7 @@ private:
 
 private:
 
-    static const unsigned int MAX_TOUCH_POINTS = 5;
-
-    std::vector<Vector2>  _touchPoints;
+    std::map<unsigned int, Vector2>  _touchPoints;
     std::set<int> _downKeys;
     Vector2 _mousePoint;
     Vector2 _mouseWheelPoint;

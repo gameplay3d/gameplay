@@ -59,6 +59,10 @@ public:
      * @see Game::gestureSwipeEvent
      */
     void gestureSwipeEvent(int x, int y, int direction);
+    
+    void gesturePinchEvent(int x, int y, float scale);
+    
+    void gestureTapEvent(int x, int y);
 
     /**
      * @see Control::controlEvent

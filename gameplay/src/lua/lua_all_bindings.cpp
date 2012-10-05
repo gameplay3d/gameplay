@@ -53,6 +53,7 @@ void lua_RegisterAllBindings()
     luaRegister_Label();
     luaRegister_Layout();
     luaRegister_Light();
+    luaRegister_Logger();
     luaRegister_Material();
     luaRegister_MaterialParameter();
     luaRegister_MathUtil();

@@ -161,6 +161,41 @@ void Test::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
     Game::getInstance()->schedule(timeOffset, timeListener, cookie);
 }
 
+bool Test::isGestureSupported(Gesture::GestureEvent evt)
+{
+    return Game::getInstance()->isGestureSupported(evt);
+}
+
+void Test::registerGesture(Gesture::GestureEvent evt)
+{
+    Game::getInstance()->registerGesture(evt);
+}
+
+void Test::unregisterGesture(Gesture::GestureEvent evt)
+{
+    Game::getInstance()->unregisterGesture(evt);
+}
+
+bool Test::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return Game::getInstance()->isGestureRegistered(evt);
+}
+
+void Test::gestureSwipeEvent(int x, int y, int direction)
+{
+
+}
+
+void Test::gesturePinchEvent(int x, int y, float scale)
+{
+
+}
+
+void Test::gestureTapEvent(int x, int y)
+{
+
+}
+
 void Test::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
     char buffer[10];
