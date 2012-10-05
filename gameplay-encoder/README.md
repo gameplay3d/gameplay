@@ -32,9 +32,9 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
 - Edit the project properties of "gameplay-encoder" for Debug
 - Add Preprocessor Definition "USE_FBX" (C++/Preprocessor)
 - Add the FBX SDK include directory to Additional Include Directories (C++/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.3/include
+  * Example: C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.3/lib/vs2010/x86
+  * Example: C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86
 - Add "fbxsdk-2013.3-mdd.lib"(Release) to the Additional Dependencies (Linker/Input)
   * Example: fbxsdk-2013.3-mdd.lib
 - Build gameplay-encoder
