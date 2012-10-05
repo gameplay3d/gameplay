@@ -310,10 +310,6 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
 {
     const char* name = fbxNode->GetName();
     Node* node = _gamePlayFile.getNode(name);
-    if (node)
-    {
-        targetId = &node->getId();
-    }
     
     // Determine which properties are animated on this node
     // Find the transform at each key frame

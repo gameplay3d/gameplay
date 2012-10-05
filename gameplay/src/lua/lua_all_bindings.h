@@ -48,6 +48,7 @@
 #include "lua_Label.h"
 #include "lua_Layout.h"
 #include "lua_Light.h"
+#include "lua_Logger.h"
 #include "lua_Material.h"
 #include "lua_MaterialParameter.h"
 #include "lua_MathUtil.h"

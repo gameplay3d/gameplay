@@ -1,10 +1,10 @@
 ## v1.5.0
 
-- Linux support.
+- Linux x64 support tested on Ubuntu 12+.
 - CMake support for Linux makefile generation.
 - Gamepad controllers support for desktops.
 - Touch gesture support for tap, swipe and pinch.
-- Vehicle phyics support via new PhysicsVehicle adn PhysicsVehicleWheels classes.
+- Vehicle phyics support via new PhysicsVehicle and PhysicsVehicleWheel classes.
 - Adds gameplay-tests project as a test app for various engine features with initial basic tests.
 - Adds support for Scene files for wildcard identifiers.
 - Web community forums at http://www.gameplay3d.org/forums
@@ -15,6 +15,7 @@
 - Fixes Lua print logging.
 - Fixes Lua errors to be treated as runtime warnings.
 - Fixes setVertexData to pointers instead of constant data.
+- Fixed AudioSource so that it doesn't loop by default.
 
 ## v1.4.0
 
