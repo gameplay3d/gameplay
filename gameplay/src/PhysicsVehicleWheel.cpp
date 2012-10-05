@@ -14,8 +14,6 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape
     _rigidBody = new PhysicsRigidBody(node, shape, parameters);
 
     findAncestorAndBind();
-
-    _initialOffset = node->getTranslation();
 }
 
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody)
@@ -24,8 +22,6 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody
     _rigidBody = rigidBody;
 
     findAncestorAndBind();
-
-    _initialOffset = node->getTranslation();
 }
 
 PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* properties)
@@ -41,9 +37,9 @@ PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* propert
     const char* name;
     while ((name = properties->getNextProperty()) != NULL)
     {
-        if (strcmp(name, "isFront") == 0)
+        if (strcmp(name, "steerable") == 0)
         {
-            wheel->setFront(properties->getBool(name));
+            wheel->setSteerable(properties->getBool(name));
         }
         else if (strcmp(name, "wheelDirection") == 0 && properties->getVector3(name, &v))
         {
@@ -53,9 +49,9 @@ PhysicsVehicleWheel* PhysicsVehicleWheel::create(Node* node, Properties* propert
         {
             wheel->setWheelAxle(v);
         }
-        else if (strcmp(name, "strutConnectionPoint") == 0 && properties->getVector3(name, &v))
+        else if (strcmp(name, "strutConnectionOffset") == 0 && properties->getVector3(name, &v))
         {
-            wheel->setStrutConnectionPoint(v);
+            wheel->setStrutConnectionOffset(v);
         }
         else if (strcmp(name, "strutRestLength") == 0)
         {
@@ -119,6 +115,11 @@ PhysicsCollisionObject::Type PhysicsVehicleWheel::getType() const
     return PhysicsCollisionObject::VEHICLE_WHEEL;
 }
 
+void PhysicsVehicleWheel::setEnabled(bool enable)
+{
+    GP_ERROR("Operation not supported (PhysicsVehicleWheel::setEnabled(bool)). Use host vehicle instead.");
+}
+
 void PhysicsVehicleWheel::findAncestorAndBind()
 {
     GP_ASSERT(getNode());
@@ -152,6 +153,7 @@ void PhysicsVehicleWheel::findAncestorAndBind()
     if (host)
     {
         host->addWheel(this);
+        _initialOffset = _node->getTranslation() - host->_node->getTranslation();
     }
 }
 
@@ -181,18 +183,16 @@ void PhysicsVehicleWheel::addToVehicle(btRaycastVehicle* vehicle)
 void PhysicsVehicleWheel::transform(Node* node) const
 {
     GP_ASSERT(_host);
-    GP_ASSERT(_host->_vehicle);
     GP_ASSERT(_host->_node);
 
-    const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
-    const btVector3& pos = trans.getOrigin();
     node->setRotation(_orientation);
 
     // Use only the component parallel to the defined strut line
     Vector3 strutLine;
     getWheelDirection(&strutLine);
-    Vector3 wheelPos = _initialOffset;
-    _host->_node->getMatrix().transformPoint(&wheelPos);
+    _host->_node->getMatrix().transformVector(&strutLine);
+    Vector3 wheelPos;
+    getWheelPos(&wheelPos);
     node->setTranslation(wheelPos + strutLine*(strutLine.dot(_positionDelta) / strutLine.lengthSquared()));
 }
 
@@ -200,7 +200,6 @@ void PhysicsVehicleWheel::update(float elapsedTime)
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
-    GP_ASSERT(_host->_node);
 
     const btTransform& trans = _host->_vehicle->getWheelInfo(_indexInHost).m_worldTransform;
     const btQuaternion& rot = trans.getRotation();
@@ -208,8 +207,8 @@ void PhysicsVehicleWheel::update(float elapsedTime)
     _orientation.set(rot.x(), rot.y(), rot.z(), rot.w());
 
     Vector3 commandedPosition(pos.x(), pos.y(), pos.z());
-    Vector3 wheelPos = _initialOffset;
-    _host->_node->getMatrix().transformPoint(&wheelPos);
+    Vector3 wheelPos;
+    getWheelPos(&wheelPos);
     commandedPosition -= wheelPos;
 
     // Filter out noise from Bullet
@@ -219,7 +218,35 @@ void PhysicsVehicleWheel::update(float elapsedTime)
     _positionDelta.smooth(commandedPosition, elapsedTime, responseTime);
 }
 
-bool PhysicsVehicleWheel::isFront() const
+void PhysicsVehicleWheel::getConnectionDefault(Vector3* result) const
+{
+    // projected strut length
+    getWheelDirection(result);
+    result->normalize();
+    float length = 0.58f * getStrutRestLength();
+    *result *= -length;
+
+    // nudge wheel contact point to outer edge of tire for stability
+    Vector3 nudge;
+    getWheelAxle(&nudge);
+    nudge *= nudge.dot(_initialOffset);
+    nudge.normalize();
+    *result += nudge * 0.068f * getWheelRadius(); // rough-in for tire width
+
+    // offset at bind time
+    *result += _initialOffset;
+}
+
+void PhysicsVehicleWheel::getWheelPos(Vector3* result) const
+{
+    GP_ASSERT(_host);
+    GP_ASSERT(_host->_node);
+
+    *result = _initialOffset;
+    _host->_node->getMatrix().transformPoint(result);
+}
+
+bool PhysicsVehicleWheel::isSteerable() const
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
@@ -227,12 +254,12 @@ bool PhysicsVehicleWheel::isFront() const
     return _host->_vehicle->getWheelInfo(_indexInHost).m_bIsFrontWheel;
 }
 
-void PhysicsVehicleWheel::setFront(bool front)
+void PhysicsVehicleWheel::setSteerable(bool steerable)
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
 
-    _host->_vehicle->getWheelInfo(_indexInHost).m_bIsFrontWheel = front;
+    _host->_vehicle->getWheelInfo(_indexInHost).m_bIsFrontWheel = steerable;
 }
 
 void PhysicsVehicleWheel::getWheelDirection(Vector3* wheelDirection) const
@@ -269,19 +296,26 @@ void PhysicsVehicleWheel::setWheelAxle(const Vector3& wheelAxle)
     _host->_vehicle->getWheelInfo(_indexInHost).m_wheelAxleCS.setValue( wheelAxle.x, wheelAxle.y, wheelAxle.z);
 }
 
-void PhysicsVehicleWheel::getStrutConnectionPoint(Vector3* strutConnectionPoint) const
+void PhysicsVehicleWheel::getStrutConnectionOffset(Vector3* strutConnectionOffset) const
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
 
     const btVector3& v = _host->_vehicle->getWheelInfo(_indexInHost).m_chassisConnectionPointCS;
-    strutConnectionPoint->set(v.x(), v.y(), v.z());
+    strutConnectionOffset->set(v.x(), v.y(), v.z());
+    Vector3 strutConnectionDefault;
+    getConnectionDefault(&strutConnectionDefault);
+    *strutConnectionOffset -= strutConnectionDefault;
 }
 
-void PhysicsVehicleWheel::setStrutConnectionPoint(const Vector3& strutConnectionPoint)
+void PhysicsVehicleWheel::setStrutConnectionOffset(const Vector3& strutConnectionOffset)
 {
     GP_ASSERT(_host);
     GP_ASSERT(_host->_vehicle);
+
+    Vector3 strutConnectionPoint;
+    getConnectionDefault(&strutConnectionPoint);
+    strutConnectionPoint += strutConnectionOffset;
     _host->_vehicle->getWheelInfo(_indexInHost).m_chassisConnectionPointCS.setValue(strutConnectionPoint.x,
                                                                                     strutConnectionPoint.y,
                                                                                     strutConnectionPoint.z);
