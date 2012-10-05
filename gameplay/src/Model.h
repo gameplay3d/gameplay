@@ -182,6 +182,13 @@ private:
      */
     void setMaterialNodeBinding(Material *m);
 
+    /**
+     * Gets the material used to draw with (this is potentially different than
+     * the result of the public getMaterial method if no explicit material is
+     * defined and a default material is being used.
+     */
+    Material* getMaterialInternal(int partIndex, bool draw);
+
     void validatePartCount();
 
     /**
