@@ -179,7 +179,6 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B21E9981615390D006EBEAC /* IOKit.framework */,
 				5BC4E825150F8CE600CBE1C0 /* GamePlay */,
 				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
@@ -227,6 +226,7 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				5B21E9981615390D006EBEAC /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
 				42C9331C1491A6750098216A /* QuartzCore.framework */,
 				42C933161491A5EB0098216A /* OpenGL.framework */,
