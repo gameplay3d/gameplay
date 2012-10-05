@@ -683,7 +683,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     _game = Game::getInstance();
     
-    Properties* config = _game->getConfig()->getNamespace("window", true);
+    Properties* config = _game->getConfig()->getNamespace("graphics", true);
     int samples = config ? config->getInt("samples") : 0;
     if (samples < 0)
         samples = 0;
