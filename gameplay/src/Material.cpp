@@ -6,18 +6,12 @@
 #include "Pass.h"
 #include "Properties.h"
 #include "Node.h"
-#include "Game.h"
-
-#define MATERIAL_DEFAULT_BIT 1
-#define MATERIAL_BUILTIN_BIT 2
 
 namespace gameplay
 {
 
-static Effect* __defaultEffect = NULL;
-
 Material::Material() :
-    _currentTechnique(NULL), _bits(0)
+    _currentTechnique(NULL)
 {
 }
 
@@ -28,13 +22,6 @@ Material::~Material()
     {
         Technique* technique = _techniques[i];
         SAFE_RELEASE(technique);
-    }
-
-    // If we're the last material that was using __defaultEffect, then release
-    // and unassign it.
-    if ((_bits & MATERIAL_DEFAULT_BIT) && __defaultEffect && __defaultEffect->getRefCount() == 1)
-    {
-        SAFE_RELEASE(__defaultEffect);
     }
 }
 
@@ -135,103 +122,6 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
     material->_currentTechnique = technique;
 
     return material;
-}
-
-bool isDefaultMaterialEnabled(const char*& customMaterial)
-{
-    customMaterial = NULL;
-
-    // Default materials are always enabled unless explicitly turned off in config
-    Properties* config = Game::getInstance()->getConfig()->getNamespace("graphics", true);
-    if (config)
-    {
-        const char* str = config->getString("defaultMaterial");
-        if (str && strlen(str) > 0)
-        {
-            // User set 'defaultMaterial = none', which disabled default materials
-            if (strcmp(str, "none") == 0)
-                return false;
-
-            customMaterial = str;
-        }
-    }
-
-    return true;
-}
-
-Material* Material::createDefault()
-{
-    // Check whether default materials are enabled only once, for performance reasons
-    static const char* customMaterial = NULL;
-    static bool enabled = isDefaultMaterialEnabled(customMaterial);
-    if (!enabled)
-        return NULL;
-
-    // If we've already loaded __defaultEffect, use that.
-    if (__defaultEffect)
-    {
-        Material* material = create(__defaultEffect);
-        if (material)
-        {
-            material->_bits = MATERIAL_DEFAULT_BIT | MATERIAL_BUILTIN_BIT;
-            return material;
-        }
-    }
-
-    // Attempt to load a custom material (if configured)
-    if (customMaterial)
-    {
-        Material* material = create(customMaterial);
-        if (material)
-        {
-            material->_bits = MATERIAL_DEFAULT_BIT;
-            return material;
-        }
-    }
-
-    // Create the built-in default material
-    const char* vshSource =
-        "uniform mat4 u_worldViewProjectionMatrix;\n" \
-        "attribute vec3 a_position;\n" \
-        "void main()\n" \
-        "{\n" \
-            "gl_Position = u_worldViewProjectionMatrix * vec4(a_position, 1);\n" \
-        "}\n";
-
-    const char* fshSource =
-        "#ifdef OPENGL_ES\n" \
-        "precision highp float;\n" \
-        "#endif\n" \
-        "void main()\n" \
-        "{\n" \
-            "gl_FragColor = vec4(0.97, 0.88, 0.83, 1.0);\n" \
-        "}\n";
-
-    // Create our default effect and leave the initial reference count so that it is not
-    // automatically released when the last Material/Pass referencing it is released.
-    // We use this to perform additional cleanup in ~Material() when we detect a
-    // default material being released and __defaultEffect has a ref count == 1.
-    __defaultEffect = Effect::createFromSource(vshSource, fshSource);
-    if (!__defaultEffect)
-        return NULL;
-
-    Material* material = create(__defaultEffect);
-    if (material)
-    {
-        material->_bits = MATERIAL_DEFAULT_BIT | MATERIAL_BUILTIN_BIT;
-    }
-
-    return material;
-}
-
-bool Material::isDefault() const
-{
-    return (_bits & MATERIAL_DEFAULT_BIT) == MATERIAL_DEFAULT_BIT;
-}
-
-bool Material::isBuiltin() const
-{
-    return (_bits & MATERIAL_BUILTIN_BIT) == MATERIAL_BUILTIN_BIT;
 }
 
 unsigned int Material::getTechniqueCount() const

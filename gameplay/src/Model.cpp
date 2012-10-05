@@ -54,12 +54,24 @@ unsigned int Model::getMeshPartCount() const
 
 Material* Model::getMaterial(int partIndex)
 {
-    Material* m = getMaterialInternal(partIndex, false);
+    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
 
-    // If our material is the default one, return NULL to signify that we
-    // don't actually have a specified material.
-    if (m && m->isDefault())
-        return NULL;
+    Material* m = NULL;
+
+    if (partIndex >= 0 && partIndex < (int)_partCount)
+    {
+        // Look up explicitly specified part material.
+        if (_partMaterials)
+        {
+            m = _partMaterials[partIndex];
+        }
+    }
+
+    if (m == NULL)
+    {
+        // Return the shared material.
+         m = _material;
+    }
 
     return m;
 }
@@ -241,50 +253,6 @@ void Model::setNode(Node* node)
     }
 }
 
-Material* Model::getMaterialInternal(int partIndex, bool draw)
-{
-    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
-
-    Material* m = NULL;
-
-    if (partIndex >= 0 && partIndex < (int)_partCount)
-    {
-        // Look up explicitly specified part material.
-        if (_partMaterials)
-        {
-            m = _partMaterials[partIndex];
-        }
-    }
-
-    if (m == NULL)
-    {
-        // Return the shared material.
-         m = _material;
-    }
-
-    // If we were called during a draw operation and no material is currently assigned,
-    // attempt to load a default material.
-    if (m == NULL && draw)
-    {
-        m = Material::createDefault();
-        if (m)
-        {
-            GP_WARN("No material defined for model in node '%s'. Setting default material.", _node->getId());
-
-            setMaterial(m);
-            m->release();
-
-            // If the returned material is the built-in one, setup auto-bindings
-            if (m->isBuiltin())
-            {
-                m->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
-            }
-        }
-    }
-
-    return m;
-}
-
 void Model::draw(bool wireframe)
 {
     GP_ASSERT(_mesh);
@@ -293,10 +261,9 @@ void Model::draw(bool wireframe)
     if (partCount == 0)
     {
         // No mesh parts (index buffers).
-        Material* material = getMaterialInternal(-1, true);
-        if (material)
+        if (_material)
         {
-            Technique* technique = material->getTechnique();
+            Technique* technique = _material->getTechnique();
             GP_ASSERT(technique);
             unsigned int passCount = technique->getPassCount();
             for (unsigned int i = 0; i < passCount; ++i)
@@ -329,7 +296,7 @@ void Model::draw(bool wireframe)
             GP_ASSERT(part);
 
             // Get the material for this mesh part.
-            Material* material = getMaterialInternal(i, true);
+            Material* material = getMaterial(i);
             if (material)
             {
                 Technique* technique = material->getTechnique();
