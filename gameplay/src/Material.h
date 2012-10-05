@@ -79,37 +79,6 @@ public:
     static Material* create(const char* vshPath, const char* fshPath, const char* defines = NULL);
 
     /**
-     * Creates a default material.
-     *
-     * The material returned from this method is normally used to draw
-     * models that have no explicitly defined material. By default, this
-     * method returns a material that draws objects using a solid pink color,
-     * which in intended to be easily spotted in a scene. However, if the
-     * graphics/defaultMaterial property is specified in a game.confg file,
-     * that material will be used as the default instead of the built-in one.
-     * It is also valid to specify 'none' for the defaultMaterial config
-     * property, in which case this method will return NULL and no default
-     * material will be used by models without explicitly set materials.
-     *
-     * @return A new default material, or NULL if no default material is available.
-     */
-    static Material* createDefault();
-
-    /**
-     * Determines if this is the default material (i.e. returned from createDefault).
-     *
-     * @return True if this is the default material, false otherwise.
-     */
-    bool isDefault() const;
-
-    /**
-     * Determines if this is the default built-in material (i.e. returned from createDefault).
-     *
-     * @return True if this is the default built-in material, false otherwise.
-     */
-    bool isBuiltin() const;
-
-    /**
      * Returns the number of techniques in the material.
      *
      * @return The technique count.
@@ -192,7 +161,6 @@ private:
 
     Technique* _currentTechnique;
     std::vector<Technique*> _techniques;
-    int _bits;
 };
 
 }

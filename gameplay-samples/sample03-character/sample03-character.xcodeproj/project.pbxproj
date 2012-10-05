@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		04AB98BB161F392400CF90C5 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AB98BA161F392400CF90C5 /* IOKit.framework */; };
 		4239E08715755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
 		4239E08815755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
 		42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7026215B0A8F2002BB8C3 /* liblua.a */; };
@@ -46,7 +45,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		04AB98BA161F392400CF90C5 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4239E08615755BDA005EA3F6 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
 		42B7026215B0A8F2002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
@@ -84,7 +82,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04AB98BB161F392400CF90C5 /* IOKit.framework in Frameworks */,
 				5B928C6F1513E9B80095E677 /* libgameplay.a in Frameworks */,
 				42CD0EFF147D93560000361E /* libbullet.a in Frameworks */,
 				42CD0F00147D93560000361E /* libogg.a in Frameworks */,
@@ -202,7 +199,6 @@
 		5B43D1F114C36054008A5D9D /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
-				04AB98BA161F392400CF90C5 /* IOKit.framework */,
 				42CCD570146EC4B300353661 /* Cocoa.framework */,
 				42CCD5A5146EC5CE00353661 /* QuartzCore.framework */,
 				42CCD5A3146EC5C600353661 /* OpenGL.framework */,
