@@ -17,7 +17,10 @@ add_subdirectory(gameplay)
 # gameplay samples
 add_subdirectory(gameplay-samples)
 
-# gameplay encoder
+# gameplay samples
+add_subdirectory(gameplay-tests)
+
+# gameplay encoder (See gameplay/bin)
 #add_subdirectory(gameplay-encoder)
 
 
