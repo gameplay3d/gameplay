@@ -7,6 +7,8 @@
 #include "Form.h"
 #include "ScriptController.h"
 #include <unistd.h>
+#include <IOKit/hid/IOHIDElement.h>
+#include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDLib.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
@@ -1335,6 +1337,13 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            
+            // If fullscreen is specified, and width is not, interpret this
+            // as meaning, "use the current resolution".
+            if (__fullscreen && width == 0){
+			    __width = [[NSScreen mainScreen] frame].size.width;
+                __height = [[NSScreen mainScreen] frame].size.height;
+            }
         }
     }
 
