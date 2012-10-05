@@ -206,12 +206,12 @@ void CharacterGame::update(float elapsedTime)
 {
     if (_applyKick)
     {
-        // apply force from kick.
-        Vector3 force(-_characterNode->getForwardVectorWorld());
-        force.normalize();
-        force.y = 1.0f; // add some loft to kick
-        force.scale(1000.0f); //scale the force.
-        ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyForce(force);
+        // apply impulse from kick.
+        Vector3 impulse(-_characterNode->getForwardVectorWorld());
+        impulse.normalize();
+        impulse.y = 1.0f; // add some loft to kick
+        impulse.scale(16.6f); //scale the impulse.
+        ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyImpulse(impulse);
         _hasBall = false;
         _applyKick = false;
     }

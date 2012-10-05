@@ -80,6 +80,7 @@ LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
     CreateSceneTest.cpp \
     FirstPersonCamera.cpp \
     Grid.cpp \
+    GestureTest.cpp \
     InputTest.cpp \
     LoadSceneTest.cpp \
 	MeshBatchTest.cpp \
