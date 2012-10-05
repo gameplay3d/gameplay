@@ -54,8 +54,8 @@ void RacerGame::initialize()
     // Create the menu and start listening to its controls.
     _menu = Form::create("res/common/menu.form");
     _menu->disable();
-    static_cast<Button*>(_menu->getControl("resetButton"))->addListener(this, Listener::CLICK);
-    static_cast<Button*>(_menu->getControl("exitButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_menu->getControl("newGameButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_menu->getControl("quitGameButton"))->addListener(this, Listener::CLICK);
     static_cast<RadioButton*>(_menu->getControl("useGamepad"))->addListener(this, Listener::VALUE_CHANGED);
     static_cast<RadioButton*>(_menu->getControl("useTilt"))->addListener(this, Listener::VALUE_CHANGED);
 
@@ -563,14 +563,13 @@ void RacerGame::reset(const Vector3& pos, const Quaternion& rot)
 
 void RacerGame::controlEvent(Control* control, EventType evt)
 {
-    if (strcmp(control->getId(), "resetButton") == 0)
+    if (strcmp(control->getId(), "newGameButton") == 0)
     {
         resetToStart();
-
 		// Close the menu and resume the game.
 		menuEvent();
     }
-    else if (strcmp(control->getId(), "exitButton") == 0)
+    else if (strcmp(control->getId(), "quitGameButton") == 0)
     {
         exit();
     }

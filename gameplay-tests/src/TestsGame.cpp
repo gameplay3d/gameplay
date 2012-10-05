@@ -38,6 +38,7 @@ void TestsGame::initialize()
     {
         Label* categoryLabel = Label::create((*_categories)[i].c_str(), titleStyle);
         categoryLabel->setAutoWidth(true);
+        categoryLabel->setTextAlignment(Font::ALIGN_LEFT);
         categoryLabel->setHeight(40);
         categoryLabel->setText((*_categories)[i].c_str());
         _testSelectForm->addControl(categoryLabel);
