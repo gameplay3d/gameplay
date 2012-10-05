@@ -154,7 +154,7 @@ private:
 class DLLSPEC daeSidRefCache {
 public:
 	daeSidRefCache();
-	~daeSidRefCache();
+	~daeSidRefCache() { };
 	
 	daeSidRef::resolveData lookup(const daeSidRef& sidRef);
 	void add(const daeSidRef& sidRef, const daeSidRef::resolveData& data);

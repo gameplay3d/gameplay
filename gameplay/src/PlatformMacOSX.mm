@@ -7,6 +7,8 @@
 #include "Form.h"
 #include "ScriptController.h"
 #include <unistd.h>
+#include <IOKit/hid/IOHIDElement.h>
+#include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDLib.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
@@ -360,7 +362,8 @@ double getMachTimeInMilliseconds()
 }
 - (NSNumber*)locationID
 {
-    return (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
+    NSNumber *n = (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
+    return [NSNumber numberWithUnsignedInt:[n unsignedIntValue]];
 }
 
 - (void)initializeGamepadElements
@@ -1278,9 +1281,17 @@ Platform::Platform(Game* game)
     IOHIDManagerRegisterDeviceMatchingCallback(__hidManagerRef, hidDeviceDiscoveredCallback, NULL);
     IOHIDManagerRegisterDeviceRemovalCallback(__hidManagerRef, hidDeviceRemovalCallback, NULL);
     
-    CFDictionaryRef matchingCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
-    if (matchingCFDictRef) IOHIDManagerSetDeviceMatching(__hidManagerRef, matchingCFDictRef);
-    CFRelease(matchingCFDictRef);
+    CFDictionaryRef matchingJoystickCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+    CFDictionaryRef matchingGamepadCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
+    CFMutableArrayRef matchingDicts = CFArrayCreateMutable(kCFAllocatorDefault, 2, NULL);
+    CFArrayAppendValue(matchingDicts, matchingJoystickCFDictRef);
+    CFArrayAppendValue(matchingDicts, matchingGamepadCFDictRef);
+
+    if (matchingDicts) IOHIDManagerSetDeviceMatchingMultiple(__hidManagerRef, matchingDicts);
+    
+    CFRelease(matchingJoystickCFDictRef);
+    CFRelease(matchingGamepadCFDictRef);
+    CFRelease(matchingDicts);
     
     IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOReturn kr = IOHIDManagerOpen(__hidManagerRef, kIOHIDOptionsTypeNone);
@@ -1335,6 +1346,13 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            
+            // If fullscreen is specified, and width is not, interpret this
+            // as meaning, "use the current resolution".
+            if (__fullscreen && width == 0){
+			    __width = [[NSScreen mainScreen] frame].size.width;
+                __height = [[NSScreen mainScreen] frame].size.height;
+            }
         }
     }
 

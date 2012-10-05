@@ -13,7 +13,6 @@ include_directories(
 
 add_definitions(-D__linux__)
 
-#TODO make this section variant per OS
 link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux
@@ -23,7 +22,7 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux
 )
 
-#TODO make this section variant per OS
+
 set(GAMEPLAY_LIBRARIES
     gameplay
     m
@@ -42,9 +41,8 @@ set(GAMEPLAY_LIBRARIES
     dl
     X11
 ) 
-#TODO: The above should be enough, no?
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL -lrt -ldl -lX11)
 
+add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL -lrt -ldl -lX11)
 
 add_subdirectory(sample00-mesh)
 add_subdirectory(sample01-longboard)
@@ -52,3 +50,5 @@ add_subdirectory(sample02-spaceship)
 add_subdirectory(sample03-character)
 add_subdirectory(sample04-particles)
 add_subdirectory(sample05-lua)
+add_subdirectory(sample06-racer)
+

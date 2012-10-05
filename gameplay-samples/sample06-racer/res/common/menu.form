@@ -2,7 +2,7 @@ form menu
 {
     theme = res/common/menu.theme
     width = 320
-    height = 140
+    height = 180
     alignment = ALIGN_VCENTER_HCENTER
     style = basic
 
@@ -17,9 +17,10 @@ form menu
         label controlsLabel
         {
             style = title
-            alignment = ALIGN_TOP_HCENTER
             autoWidth = true
+			textAlignment =  ALIGN_LEFT
             height = 30
+			position = 10, 0
             text = Controls
         }
 
@@ -42,19 +43,29 @@ form menu
         }
     }
 
+	label gameLabel
+	{
+		style = title
+        autoWidth = true
+		textAlignment =  ALIGN_LEFT
+        height = 30
+		position = 10, 70
+        text = Game
+	}
+
     // Reset
-    button resetButton
+    button newGameButton
     {
         style = buttonStyle
-        position = 0, 70
+        position = 0, 100
         size = 150, 50
-        text = Reset
+        text = New Game
     }
 
     // Exit
-    button exitButton : resetButton
+    button quitGameButton : newGameButton
     {
-        position = 150, 70
-        text = Exit
+        position = 150, 100
+        text = Quit Game
     }
 }

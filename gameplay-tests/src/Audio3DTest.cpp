@@ -72,16 +72,6 @@ void Audio3DTest::initialize()
     _fpCamera.setPosition(cameraPosition);
     _scene->addNode(_fpCamera.getRootNode());
     _scene->setActiveCamera(_fpCamera.getCamera());
-
-    std::vector<std::string> files;
-    FileSystem::listFiles("res/common", files);
-    for (std::vector<std::string>::const_iterator i = files.begin(); i != files.end(); ++i)
-    {
-        if (endsWith(*i, ".wav") || endsWith(*i, ".ogg"))
-        {
-            _soundFiles.push_back(*i);
-        }
-    }
 }
 
 void Audio3DTest::finalize()
@@ -220,7 +210,7 @@ void Audio3DTest::keyEvent(Keyboard::KeyEvent evt, int key)
 
         case Keyboard::KEY_ONE:
         case Keyboard::KEY_SPACE:
-            addSound(_soundFiles[0]);
+            addSound("Footsteps.wav");
             break;
         }
     }
