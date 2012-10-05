@@ -362,7 +362,8 @@ double getMachTimeInMilliseconds()
 }
 - (NSNumber*)locationID
 {
-    return (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
+    NSNumber *n = (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
+    return [NSNumber numberWithUnsignedInt:[n unsignedIntValue]];
 }
 
 - (void)initializeGamepadElements
@@ -1280,9 +1281,17 @@ Platform::Platform(Game* game)
     IOHIDManagerRegisterDeviceMatchingCallback(__hidManagerRef, hidDeviceDiscoveredCallback, NULL);
     IOHIDManagerRegisterDeviceRemovalCallback(__hidManagerRef, hidDeviceRemovalCallback, NULL);
     
-    CFDictionaryRef matchingCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
-    if (matchingCFDictRef) IOHIDManagerSetDeviceMatching(__hidManagerRef, matchingCFDictRef);
-    CFRelease(matchingCFDictRef);
+    CFDictionaryRef matchingJoystickCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+    CFDictionaryRef matchingGamepadCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
+    CFMutableArrayRef matchingDicts = CFArrayCreateMutable(kCFAllocatorDefault, 2, NULL);
+    CFArrayAppendValue(matchingDicts, matchingJoystickCFDictRef);
+    CFArrayAppendValue(matchingDicts, matchingGamepadCFDictRef);
+
+    if (matchingDicts) IOHIDManagerSetDeviceMatchingMultiple(__hidManagerRef, matchingDicts);
+    
+    CFRelease(matchingJoystickCFDictRef);
+    CFRelease(matchingGamepadCFDictRef);
+    CFRelease(matchingDicts);
     
     IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOReturn kr = IOHIDManagerOpen(__hidManagerRef, kIOHIDOptionsTypeNone);
