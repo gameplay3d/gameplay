@@ -10,6 +10,7 @@
 #include <cmath>
 #include <cfloat>
 #include <ctime>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -24,6 +25,7 @@
 
 // Collada includes
 #include <dae.h>
+#include <dom.h>
 #include <dae/daeSIDResolver.h>
 #include <dae/domAny.h>
 #include <dom/domCOLLADA.h>

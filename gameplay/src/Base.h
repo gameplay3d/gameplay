@@ -25,6 +25,7 @@
 #include <limits>
 #include <functional>
 #include <bitset>
+#include "Logger.h"
 
 // Bring common functions from C into global namespace
 using std::memcpy;
@@ -41,7 +42,6 @@ using std::size_t;
 using std::min;
 using std::max;
 using std::modf;
-
 
 // Common
 #ifndef NULL
@@ -77,9 +77,9 @@ extern void print(const char* format, ...);
 #else
 #define GP_ERROR(...) do \
     { \
-        gameplay::print("%s -- ", __current__func__); \
-        gameplay::print(__VA_ARGS__); \
-        gameplay::print("\n"); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "%s -- ", __current__func__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, __VA_ARGS__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "\n"); \
         assert(0); \
         std::exit(-1); \
     } while (0)
@@ -88,9 +88,9 @@ extern void print(const char* format, ...);
 // Warning macro.
 #define GP_WARN(...) do \
     { \
-        gameplay::print("%s -- ", __current__func__); \
-        gameplay::print(__VA_ARGS__); \
-        gameplay::print("\n"); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "%s -- ", __current__func__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, __VA_ARGS__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "\n"); \
     } while (0)
 
 // Bullet Physics
