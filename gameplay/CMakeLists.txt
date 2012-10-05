@@ -92,6 +92,8 @@ set(GAMEPLAY_SRC
     src/Layout.h
     src/Light.cpp
     src/Light.h
+    src/Logger.cpp
+    src/Logger.h
     src/Material.cpp
     src/Material.h
     src/MaterialParameter.cpp
@@ -361,6 +363,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_Light.h
     src/lua/lua_LightType.cpp
     src/lua/lua_LightType.h
+    src/lua/lua_Logger.cpp
+    src/lua/lua_Logger.h
+    src/lua/lua_LoggerLevel.cpp
+    src/lua/lua_LoggerLevel.h
     src/lua/lua_Material.cpp
     src/lua/lua_Material.h
     src/lua/lua_MaterialParameter.cpp

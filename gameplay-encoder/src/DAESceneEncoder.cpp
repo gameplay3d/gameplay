@@ -264,7 +264,7 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
     // Load the collada document
     _collada = new DAE();
     begin();
-    _dom = _collada->open(filepath);
+    _dom = (domCOLLADA*)_collada->open(filepath);
     end("Open file");
     if (!_dom)
     {
@@ -889,7 +889,7 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
     for (size_t i = 0; i < childCount; ++i)
     {
         daeElementRef childElement = children[i];
-        switch (childElement->getElementType())
+        switch (childElement->typeID())
         {
             case COLLADA_TYPE::TRANSLATE:
             {
@@ -1286,7 +1286,7 @@ void DAESceneEncoder::loadSkeleton(domNode* rootNode, MeshSkin* skin)
         domNode* topLevelParent = rootNode;
         while (
             topLevelParent->getParent() &&
-            topLevelParent->getParent()->getElementType() == COLLADA_TYPE::NODE &&
+            topLevelParent->getParent()->typeID() == COLLADA_TYPE::NODE &&
             _gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID()) == NULL)
         {
             topLevelParent = (domNode*)topLevelParent->getParent();
@@ -1295,7 +1295,7 @@ void DAESceneEncoder::loadSkeleton(domNode* rootNode, MeshSkin* skin)
         // Is the parent of this node loaded yet?
         Node* parentNode = NULL;
         if (topLevelParent->getParent() &&
-            topLevelParent->getParent()->getElementType() == COLLADA_TYPE::NODE &&
+            topLevelParent->getParent()->typeID() == COLLADA_TYPE::NODE &&
             _gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID()) != NULL)
         {
             parentNode = (Node*)_gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID());
@@ -1372,7 +1372,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
-                if (element && element->getElementType() == COLLADA_TYPE::NODE)
+                if (element && element->typeID() == COLLADA_TYPE::NODE)
                 {
                     domNodeRef node = daeSafeCast<domNode>(element);
                     const char* nodeId = node->getId();
