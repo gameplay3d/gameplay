@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04AB98AF161F382300CF90C5 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AB98AE161F382300CF90C5 /* IOKit.framework */; };
 		420D545815FE430D00AD0B91 /* Audio3DTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543A15FE430D00AD0B91 /* Audio3DTest.cpp */; };
 		420D545915FE430D00AD0B91 /* Audio3DTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543A15FE430D00AD0B91 /* Audio3DTest.cpp */; };
 		420D545A15FE430D00AD0B91 /* CreateSceneTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D543C15FE430D00AD0B91 /* CreateSceneTest.cpp */; };
@@ -72,6 +73,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04AB98AE161F382300CF90C5 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		420D543A15FE430D00AD0B91 /* Audio3DTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Audio3DTest.cpp; sourceTree = "<group>"; };
 		420D543B15FE430D00AD0B91 /* Audio3DTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio3DTest.h; sourceTree = "<group>"; };
 		420D543C15FE430D00AD0B91 /* CreateSceneTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreateSceneTest.cpp; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04AB98AF161F382300CF90C5 /* IOKit.framework in Frameworks */,
 				B6871F3E1611220C00900743 /* libgameplay.a in Frameworks */,
 				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
 				42C933261491A6E50098216A /* libogg.a in Frameworks */,
@@ -282,6 +285,7 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				04AB98AE161F382300CF90C5 /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
 				42C9331C1491A6750098216A /* QuartzCore.framework */,
 				42C933161491A5EB0098216A /* OpenGL.framework */,
