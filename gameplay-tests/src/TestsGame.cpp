@@ -16,6 +16,9 @@ TestsGame::TestsGame()
 
 void TestsGame::initialize()
 {
+    // Disable V-Sync to see how just how many frames we can pump out for each test.
+    setVsync(false);
+
     _font = Font::create("res/common/arial18.gpb");
 
     for (size_t i = 0; i < _categories->size(); ++i)
@@ -28,7 +31,11 @@ void TestsGame::initialize()
     Theme::Style* formStyle = theme->getStyle("basic");
     Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
     Theme::Style* titleStyle = theme->getStyle("title");
+
+    // Note: this calls addRef() on formStyle's Theme, which we created above.
     _testSelectForm = Form::create("testSelect", formStyle, Layout::LAYOUT_VERTICAL);
+    theme->release();   // So we can release it once we're done creating forms with it.
+
     _testSelectForm->setAutoHeight(true);
     _testSelectForm->setWidth(250.0f);
     _testSelectForm->setScroll(Container::SCROLL_VERTICAL);
@@ -40,6 +47,7 @@ void TestsGame::initialize()
         categoryLabel->setAutoWidth(true);
         categoryLabel->setHeight(40);
         categoryLabel->setText((*_categories)[i].c_str());
+        categoryLabel->setConsumeInputEvents(false);
         _testSelectForm->addControl(categoryLabel);
         categoryLabel->release();
 
@@ -51,7 +59,8 @@ void TestsGame::initialize()
             Button* testButton = Button::create(testRecord.title.c_str(), buttonStyle);
             testButton->setText(testRecord.title.c_str());
             testButton->setAutoWidth(true);
-            testButton->setHeight(40);
+            testButton->setHeight(60);      // Tall enough to touch easily on a BB10 device.
+            testButton->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
             testButton->addListener(this, Control::Listener::CLICK);
             _testSelectForm->addControl(testButton);
             testButton->release();
@@ -242,4 +251,9 @@ void TestsGame::addTest(const char* category, const char* title, void* func, uns
         _tests->resize(_categories->size());
     }
     (*_tests)[index].push_back(TestRecord(titleString, func, order));
+}
+
+TestsGame* TestsGame::getInstance()
+{
+    return &game;
 }

@@ -9,7 +9,7 @@ using namespace gameplay;
 /**
  * Test loading a physics scene from .scene file with .physics bindings
  */
-class PhysicsSceneTest : public Test
+class PhysicsSceneTest : public Test, Control::Listener
 {
 public:
 
@@ -18,6 +18,8 @@ public:
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     void keyEvent(Keyboard::KeyEvent evt, int key);
+
+    void controlEvent(Control* control, EventType evt);
 
 protected:
 
@@ -39,6 +41,8 @@ private:
 
     void incrementDebugDraw();
 
+    void toggleWireframe();
+
     enum ObjectsTypes
     {
         SPHERE = 0, 
@@ -50,12 +54,14 @@ private:
     Font* _font;
     Scene* _scene;
     Node* _lightNode;
+    Form* _form;
     int _objectType;
     bool _throw;
     int _drawDebug;
     bool _wireFrame;
     std::vector<const char*> _collisionObjectPaths;
     std::vector<const char*> _nodeIds;
+    std::vector<const char*> _nodeNames;
     std::vector<Vector4> _colors;
 };
 

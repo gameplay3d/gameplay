@@ -74,6 +74,8 @@ public:
      * @param order The order of the test. Tests are sorted lowest order to highest.
      */
     static void addTest(const char* category, const char* title, void* func, unsigned int order);
+
+    static TestsGame* getInstance();
     
 protected:
 
@@ -167,7 +169,7 @@ private:
      * The outer vector represents the list of categories that contain the list of tests in the category.
      * The index of _categories maps to the index of the outer vector. (Therefore their size should always be the same).
      */
-    typedef std::vector<TestRecord > TestRecordList;
+    typedef std::vector<TestRecord> TestRecordList;
     static std::vector<TestRecordList>* _tests;
 
     Test* _activeTest;
