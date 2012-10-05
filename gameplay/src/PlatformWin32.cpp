@@ -889,7 +889,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             params.fullscreen = config->getBool("fullscreen");
 
             // Read multisampling state.
-            params.samples = config->getInt("samples");
+            Properties* graphicsConfig = game->getConfig()->getNamespace("graphics", true);
+            if (graphicsConfig)
+                params.samples = std::max(graphicsConfig->getInt("samples"), 0);
         }
     }
 
