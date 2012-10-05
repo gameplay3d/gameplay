@@ -1,8 +1,8 @@
-set(GAME_NAME sample03-character)
+set(GAME_NAME sample06-racer)
 
 set(GAME_SRC
-	src/CharacterGame.cpp
-	src/CharacterGame.h
+	src/RacerGame.cpp
+	src/RacerGame.h
 )
 
 add_executable(${GAME_NAME}
