@@ -23,9 +23,6 @@ void InputTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
     assert(_font);
 
-    _touchPoints.resize(MAX_TOUCH_POINTS);
-    std::fill(_touchPoints.begin(), _touchPoints.end(), Vector2(-100.0f, -100.0f));
-
     _mousePoint.set(-100, -100);
 }
 
@@ -48,13 +45,12 @@ void InputTest::render(float elapsedTime)
     unsigned int width, height;
     char buffer[50];
     _font->start();
-    const unsigned int size = _touchPoints.size();
-    for (unsigned int i = 0; i < size; ++i)
+    for (std::map<unsigned int, Vector2>::const_iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
     {
-        sprintf(buffer, "%u", i);
+        sprintf(buffer, "%u", it->first);
         _font->measureText(buffer, _font->getSize(), &width, &height);
-        int x = _touchPoints[i].x - (int)(width>>1);
-        int y = _touchPoints[i].y - (int)(height>>1);
+        int x = it->second.x - (int)(width>>1);
+        int y = it->second.y - (int)(height>>1);
         _font->drawText(buffer, x, y, fontColor, _font->getSize());
     }
     // Pressed keys
@@ -127,8 +123,6 @@ bool InputTest::drawScene(Node* node)
 
 void InputTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    assert(contactIndex < MAX_TOUCH_POINTS);
-
     _touchPoints[contactIndex].x = x;
     _touchPoints[contactIndex].y = y;
 

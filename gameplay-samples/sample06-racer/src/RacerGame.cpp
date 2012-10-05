@@ -554,11 +554,11 @@ void RacerGame::reset(const Vector3& pos, const Quaternion& rot)
 {
     Node* carNode = _carVehicle->getNode();
 
-    _carVehicle->getRigidBody()->setEnabled(false);
+    _carVehicle->setEnabled(false);
     carNode->setTranslation(pos);
     carNode->setRotation(rot);
     _carVehicle->reset();
-    _carVehicle->getRigidBody()->setEnabled(true);
+    _carVehicle->setEnabled(true);
 }
 
 void RacerGame::controlEvent(Control* control, EventType evt)

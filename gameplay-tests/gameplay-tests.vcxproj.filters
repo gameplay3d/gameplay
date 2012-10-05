@@ -63,6 +63,9 @@
     <ClInclude Include="src\TriangleTest.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\GestureTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveTest.cpp">
@@ -108,6 +111,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TriangleTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GestureTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
