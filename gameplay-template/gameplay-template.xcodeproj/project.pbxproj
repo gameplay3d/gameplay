@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04AB98CB161F3A2100CF90C5 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AB98CA161F3A2100CF90C5 /* IOKit.framework */; };
 		42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
 		428F7BDE15CB131A009ED24C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
 		42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C932C01491A0DB0098216A /* Cocoa.framework */; };
@@ -43,8 +44,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		428F7BDD15CB131A009ED24C /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
+		04AB98CA161F3A2100CF90C5 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		428F7BDD15CB131A009ED24C /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932BC1491A0DB0098216A /* TEMPLATE_PROJECT-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TEMPLATE_PROJECT-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04AB98CB161F3A2100CF90C5 /* IOKit.framework in Frameworks */,
 				42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */,
 				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
 				42C933261491A6E50098216A /* libogg.a in Frameworks */,
@@ -192,6 +195,7 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				04AB98CA161F3A2100CF90C5 /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
 				42C9331C1491A6750098216A /* QuartzCore.framework */,
 				42C933161491A5EB0098216A /* OpenGL.framework */,
@@ -239,7 +243,7 @@
 				5B61611714CCC24C0073B857 /* Frameworks */,
 				5B61612414CCC24C0073B857 /* ShellScript */,
 				5B61612514CCC24C0073B857 /* Resources */,
-				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Resources Run Script */,
+				5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */,
 			);
 			buildRules = (
 			);
@@ -325,7 +329,7 @@
 			shellPath = /bin/sh;
 			shellScript = "touch -cm ${SRCROOT}/res";
 		};
-		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Resources Run Script */ = {
+		5BAF20A3152F2FCE003E2AC3 /* Copy Gameplay Reousrces Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -483,7 +487,7 @@
 		5B61612A14CCC24C0073B857 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-                ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -496,7 +500,7 @@
 					"GAMEPLAY_PATH/external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
-                IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"GAMEPLAY_PATH/external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
@@ -504,7 +508,7 @@
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
-                TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -513,7 +517,7 @@
 		5B61612B14CCC24C0073B857 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-                ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -526,7 +530,7 @@
 					"GAMEPLAY_PATH/external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "TEMPLATE_PROJECT-ios.plist";
-                IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"GAMEPLAY_PATH/external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
@@ -534,7 +538,7 @@
 					"\"GAMEPLAY_PATH/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
-                TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
