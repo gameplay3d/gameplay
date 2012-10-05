@@ -362,7 +362,8 @@ double getMachTimeInMilliseconds()
 }
 - (NSNumber*)locationID
 {
-    return (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
+    NSNumber *n = (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
+    return [NSNumber numberWithUnsignedInt:[n unsignedIntValue]];
 }
 
 - (void)initializeGamepadElements
