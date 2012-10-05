@@ -7,8 +7,6 @@
 #include "Form.h"
 #include "ScriptController.h"
 #include <unistd.h>
-#include <IOKit/hid/IOHIDElement.h>
-#include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDLib.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
@@ -362,8 +360,7 @@ double getMachTimeInMilliseconds()
 }
 - (NSNumber*)locationID
 {
-    NSNumber *n = (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
-    return [NSNumber numberWithUnsignedInt:[n unsignedIntValue]];
+    return (NSNumber*)IOHIDDeviceGetProperty([self rawDevice], CFSTR(kIOHIDLocationIDKey));
 }
 
 - (void)initializeGamepadElements
@@ -683,7 +680,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     _game = Game::getInstance();
     
-    Properties* config = _game->getConfig()->getNamespace("graphics", true);
+    Properties* config = _game->getConfig()->getNamespace("window", true);
     int samples = config ? config->getInt("samples") : 0;
     if (samples < 0)
         samples = 0;
@@ -1281,17 +1278,9 @@ Platform::Platform(Game* game)
     IOHIDManagerRegisterDeviceMatchingCallback(__hidManagerRef, hidDeviceDiscoveredCallback, NULL);
     IOHIDManagerRegisterDeviceRemovalCallback(__hidManagerRef, hidDeviceRemovalCallback, NULL);
     
-    CFDictionaryRef matchingJoystickCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
-    CFDictionaryRef matchingGamepadCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
-    CFMutableArrayRef matchingDicts = CFArrayCreateMutable(kCFAllocatorDefault, 2, NULL);
-    CFArrayAppendValue(matchingDicts, matchingJoystickCFDictRef);
-    CFArrayAppendValue(matchingDicts, matchingGamepadCFDictRef);
-
-    if (matchingDicts) IOHIDManagerSetDeviceMatchingMultiple(__hidManagerRef, matchingDicts);
-    
-    CFRelease(matchingJoystickCFDictRef);
-    CFRelease(matchingGamepadCFDictRef);
-    CFRelease(matchingDicts);
+    CFDictionaryRef matchingCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+    if (matchingCFDictRef) IOHIDManagerSetDeviceMatching(__hidManagerRef, matchingCFDictRef);
+    CFRelease(matchingCFDictRef);
     
     IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOReturn kr = IOHIDManagerOpen(__hidManagerRef, kIOHIDOptionsTypeNone);
@@ -1346,13 +1335,6 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
-            
-            // If fullscreen is specified, and width is not, interpret this
-            // as meaning, "use the current resolution".
-            if (__fullscreen && width == 0){
-			    __width = [[NSScreen mainScreen] frame].size.width;
-                __height = [[NSScreen mainScreen] frame].size.height;
-            }
         }
     }
 

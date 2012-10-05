@@ -226,7 +226,7 @@ int getKey(unichar keyCode);
     NSLog(@"width: %d, height: %d", framebufferWidth, framebufferHeight);
     
     // If multisampling is enabled in config, create and setup a multisample buffer
-    Properties* config = Game::getInstance()->getConfig()->getNamespace("graphics", true);
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
     int samples = config ? config->getInt("samples") : 0;
     if (samples < 0)
         samples = 0;

@@ -546,7 +546,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     // Query game config
     int samples = 0;
-    Properties* config = Game::getInstance()->getConfig()->getNamespace("graphics", true);
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
     if (config)
     {
         samples = std::max(config->getInt("samples"), 0);

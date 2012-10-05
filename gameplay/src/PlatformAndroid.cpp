@@ -109,7 +109,7 @@ static EGLenum checkErrorEGL(const char* msg)
 static bool initEGL()
 {
 	int samples = 0;
-	Properties* config = Game::getInstance()->getConfig()->getNamespace("graphics", true);
+	Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
 	if (config)
 	{
 		samples = std::max(config->getInt("samples"), 0);
