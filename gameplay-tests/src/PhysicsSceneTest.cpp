@@ -6,12 +6,14 @@
 #endif
 
 PhysicsSceneTest::PhysicsSceneTest()
-    : _font(NULL), _scene(NULL), _lightNode(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false)
+    : _font(NULL), _scene(NULL), _lightNode(NULL), _form(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false)
 {
     const char* paths[] = {"res/common/physics.physics#ball","res/common/physics.physics#box", "res/common/physics.physics#capsule", "res/common/physics.physics#duck"};
     _collisionObjectPaths.assign(paths, paths + 4);
     const char* nodeIds[] = {"sphere", "box", "capsule", "duck"};
     _nodeIds.assign(nodeIds, nodeIds + 4);
+    const char* nodeNames[] = {"Sphere", "Box", "Capsule", "Duck"};
+    _nodeNames.assign(nodeNames, nodeNames + 4);
     Vector4 colors[] = {Vector4(1, 0, 0, 1), Vector4(0.1f, 0.6f, 0.1f, 1), Vector4(0, 0, 1, 1), Vector4(1, 1, 0, 1)};
     _colors.assign(colors, colors + 4);
 }
@@ -26,16 +28,26 @@ void PhysicsSceneTest::initialize()
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
     _lightNode = _scene->findNode("directionalLight");
     _scene->visit(this, &PhysicsSceneTest::bindLights);
+
+    _form = Form::create("res/common/physicsScene.form");
+    static_cast<Button*>(_form->getControl("wireframeButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("drawDebugButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("throwButton"))->addListener(this, Control::Listener::CLICK);
+    Button* shapeButton = static_cast<Button*>(_form->getControl("shapeButton"));
+    shapeButton->addListener(this, Control::Listener::CLICK);
+    shapeButton->setTextColor(_colors[_objectType]);
 }
 
 void PhysicsSceneTest::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_form);
 }
 
 void PhysicsSceneTest::update(float elapsedTime)
 {
+    _form->update(elapsedTime);
 }
 
 void PhysicsSceneTest::render(float elapsedTime)
@@ -53,13 +65,8 @@ void PhysicsSceneTest::render(float elapsedTime)
     }
 
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
-    int y = getHeight() - _font->getSize() * 4;
-    _font->start();
-    _font->drawText(_wireFrame ? "Wireframe" : "Solid", 10, y, Vector4::one(), _font->getSize());
-    _font->drawText(_drawDebug == 0 ? "Normal" : "Debug", 10, y += _font->getSize(), Vector4::one(), _font->getSize());
-    _font->drawText(_throw ? "Throw" : "Drop", 10, y += _font->getSize(), Vector4::one(), _font->getSize());
-    _font->drawText(_nodeIds[_objectType], 10, getHeight() - _font->getSize(), _colors[_objectType], _font->getSize());
-    _font->finish();
+
+    _form->draw();
 }
 
 void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -72,32 +79,6 @@ void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned 
         {
             // Toggle Vsync if the user touches the top left corner.
             setVsync(!isVsync());
-        }
-        else if (x < optionWidth && y > (int)(getHeight() - _font->getSize()))
-        {
-            // Toggle the type of object to fire if the user touches the bottom left corner.
-            if (_objectType == SPHERE)
-                _objectType = BOX;
-            else if (_objectType == BOX)
-                _objectType = CAPSULE;
-            else if (_objectType == CAPSULE)
-                _objectType = DUCK;
-            else
-                _objectType = SPHERE;
-
-        }
-        else if (x < optionWidth && y > (int)(getHeight() - _font->getSize() * 2))
-        {
-            // Toggle the throw type if the user touches the throw text in the bottom left corner.
-            _throw = !_throw;
-        }
-        else if (x < optionWidth && y > (int)(getHeight() - _font->getSize() * 3))
-        {
-            incrementDebugDraw();
-        }
-        else if (x < optionWidth && y > (int)(getHeight() - _font->getSize() * 4))
-        {
-            _wireFrame = !_wireFrame;
         }
         else
         {
@@ -127,7 +108,7 @@ void PhysicsSceneTest::keyEvent(Keyboard::KeyEvent evt, int key)
             break;
         case Keyboard::KEY_M:
         case Keyboard::KEY_CAPITAL_M:
-            _wireFrame = !_wireFrame;
+            toggleWireframe();
             break;
         }
     }
@@ -210,4 +191,45 @@ void PhysicsSceneTest::fireProjectile(const Ray& ray)
 void PhysicsSceneTest::incrementDebugDraw()
 {
     _drawDebug = (_drawDebug + 1) % 2;
+    static_cast<Button*>(_form->getControl("drawDebugButton"))->setText(_drawDebug == 0 ? "Normal" : "Debug");
+}
+
+void PhysicsSceneTest::toggleWireframe()
+{
+    _wireFrame = !_wireFrame;
+    static_cast<Button*>(_form->getControl("wireframeButton"))->setText(_wireFrame ? "Wireframe" : "Solid");
+}
+
+void PhysicsSceneTest::controlEvent(Control* control, EventType evt)
+{
+    Button* button = static_cast<Button*>(control);
+
+    if (strcmp(button->getId(), "wireframeButton") == 0)
+    {
+        toggleWireframe();
+        
+    }
+    else if (strcmp(button->getId(), "drawDebugButton") == 0)
+    {
+        incrementDebugDraw();
+    }
+    else if (strcmp(button->getId(), "throwButton") == 0)
+    {
+        _throw = !_throw;
+        button->setText(_throw ? "Throw" : "Drop");
+    }
+    else if (strcmp(button->getId(), "shapeButton") == 0)
+    {
+        if (_objectType == SPHERE)
+            _objectType = BOX;
+        else if (_objectType == BOX)
+            _objectType = CAPSULE;
+        else if (_objectType == CAPSULE)
+            _objectType = DUCK;
+        else
+            _objectType = SPHERE;
+
+        button->setText(_nodeNames[_objectType]);
+        button->setTextColor(_colors[_objectType]);
+    }
 }
