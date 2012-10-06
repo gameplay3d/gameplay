@@ -2567,7 +2567,6 @@
 		5B2BC75E1512514500D176CD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B2BC7611512514D00D176CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B2BC7631512516B00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		5B2BC768151251EB00D176CD /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5B5DB92D14C25B7B007755DB /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/ios/i386/libbullet.a"; sourceTree = "<group>"; };
 		5B5DB92F14C25B94007755DB /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/ios/armv7/libpng.a"; sourceTree = "<group>"; };
 		5B5DB93114C25BA5007755DB /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libogg.a"; sourceTree = "<group>"; };
@@ -3609,9 +3608,8 @@
 		42CCD4AF146D811D00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B21E99516153890006EBEAC /* IOKit.framework */,
-				5B04C5FD14BFE52300EB0071 /* iOS */,
 				5B04C5FE14BFE52F00EB0071 /* MacOSX */,
+				5B04C5FD14BFE52300EB0071 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3619,7 +3617,6 @@
 		5B04C5FD14BFE52300EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5BAF201E152F2A6D003E2AC3 /* libz.dylib */,
 				5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */,
 				5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */,
 				5BAF2022152F2AF0003E2AC3 /* Foundation.framework */,
@@ -3634,6 +3631,7 @@
 		5B04C5FE14BFE52F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				5B21E99516153890006EBEAC /* IOKit.framework */,
 				5B2BC7611512514D00D176CD /* QuartzCore.framework */,
 				5B2BC75D1512514500D176CD /* OpenAL.framework */,
 				5B2BC75E1512514500D176CD /* OpenGL.framework */,
@@ -3652,7 +3650,7 @@
 				5B5DB93314C25BA5007755DB /* libvorbisenc.a */,
 				5B5DB93414C25BA5007755DB /* libvorbisfile.a */,
 				5B5DB92F14C25B94007755DB /* libpng.a */,
-				5B2BC768151251EB00D176CD /* libz.dylib */,
+				5BAF201E152F2A6D003E2AC3 /* libz.dylib */,
 			);
 			name = iOS;
 			sourceTree = "<group>";

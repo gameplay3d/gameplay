@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4217006214697FF100A45C02 /* Cocoa.framework */; };
 		4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4220A6E4146B121000CAEB3A /* QuartzCore.framework */; };
+		424CC02C161F8DDE00577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02B161F8DDE00577827 /* IOKit.framework */; };
 		42685616157575030013522F /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04C5EA14BFE25C00EB0071 /* libgameplay.a */; };
 		42A3C5DE146C96640091C1E4 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42A3C5DD146C96640091C1E4 /* res */; };
 		42A3C5E4146CB7420091C1E4 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A3C5E3146CB7420091C1E4 /* libpng.a */; };
@@ -49,6 +50,7 @@
 		4217006214697FF100A45C02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4220A6E4146B121000CAEB3A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42458CB514C3AB1600EFFB61 /* sample00-mesh-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample00-mesh-ios.plist"; sourceTree = "<group>"; };
+		424CC02B161F8DDE00577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		42A3C5DD146C96640091C1E4 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42A3C5E3146CB7420091C1E4 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42A3C5E5146CB7690091C1E4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -88,11 +90,12 @@
 				42CD0EEB147D92E60000361E /* libvorbisfile.a in Frameworks */,
 				42A3C5E4146CB7420091C1E4 /* libpng.a in Frameworks */,
 				42A3C5E6146CB7690091C1E4 /* libz.dylib in Frameworks */,
+				42B7025A15B0A897002BB8C3 /* liblua.a in Frameworks */,
+				424CC02C161F8DDE00577827 /* IOKit.framework in Frameworks */,
 				4217006314697FF100A45C02 /* Cocoa.framework in Frameworks */,
 				4220A6E5146B121000CAEB3A /* QuartzCore.framework in Frameworks */,
 				42F68AA81469CDE100E0E3C4 /* OpenGL.framework in Frameworks */,
 				42F68AA71469CDE100E0E3C4 /* OpenAL.framework in Frameworks */,
-				42B7025A15B0A897002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,8 +176,8 @@
 		42CCD4B1146D814F00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B04C60014BFE54200EB0071 /* iOS */,
 				5B04C5FF14BFE53F00EB0071 /* MacOSX */,
+				5B04C60014BFE54200EB0071 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 		5B04C5FF14BFE53F00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				424CC02B161F8DDE00577827 /* IOKit.framework */,
 				4217006214697FF100A45C02 /* Cocoa.framework */,
 				4220A6E4146B121000CAEB3A /* QuartzCore.framework */,
 				42F68AA61469CDE100E0E3C4 /* OpenGL.framework */,
