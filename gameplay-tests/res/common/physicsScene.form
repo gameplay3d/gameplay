@@ -1,0 +1,32 @@
+form physicsScene
+{
+    theme = res/common/mainMenu.theme
+    layout = LAYOUT_VERTICAL
+    style = noBorder
+    width = 250
+    height = 240
+    alignment = ALIGN_BOTTOM_LEFT
+
+    button wireframeButton
+    {
+        style = buttonStyle
+        autoWidth = true
+        height = 60
+        text = Solid
+    }
+
+    button drawDebugButton : wireframeButton
+    {
+        text = Normal
+    }
+
+    button throwButton : wireframeButton
+    {
+        text = Throw
+    }
+
+    button shapeButton : wireframeButton
+    {
+        text = Sphere
+    }
+}

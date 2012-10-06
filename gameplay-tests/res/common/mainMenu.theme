@@ -54,17 +54,17 @@ theme mainMenu
 
         image scrollBarTopCap
         {
-            region = 0, 99, 19, 5
+            region = 0, 99, 12, 5
         }
 
         image verticalScrollBar
         {
-            region = 0, 104, 19, 19
+            region = 0, 104, 12, 19
         }
 
         image scrollBarBottomCap
         {
-            region = 0, 138, 19, 5
+            region = 0, 138, 12, 5
         }
     }
 
@@ -188,12 +188,6 @@ theme mainMenu
 
     style title
     {
-        padding
-        {
-            left = -5
-            right = -5
-        }
-
         stateNormal
         {
             textColor = #ffffffff

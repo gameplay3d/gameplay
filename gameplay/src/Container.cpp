@@ -20,6 +20,8 @@ namespace gameplay
 static const long SCROLL_INERTIA_DELAY = 100L;
 // Factor to multiply friction by before applying to velocity.
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
+// Distance that must be scrolled before isScrolling() will return true, used e.g. to cancel button-click events.
+static const float SCROLL_THRESHOLD = 10.0f;
 
 /**
  * Sort function for use with _controls.sort(), based on Z-Order.
@@ -359,6 +361,13 @@ void Container::setScrollBarsAutoHide(bool autoHide)
 bool Container::isScrollBarsAutoHide() const
 {
     return _scrollBarsAutoHide;
+}
+
+bool Container::isScrolling() const
+{
+    return (_scrolling &&
+            (abs(_scrollingLastX - _scrollingFirstX) > SCROLL_THRESHOLD ||
+             abs(_scrollingLastY - _scrollingFirstY) > SCROLL_THRESHOLD));
 }
 
 Animation* Container::getAnimation(const char* id) const

@@ -63,7 +63,8 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         {
             _contactIndex = INVALID_CONTACT_INDEX;
             notifyListeners(Listener::RELEASE);
-            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            if (!_parent->isScrolling() &&
+                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
                 setState(Control::FOCUS);
