@@ -14,6 +14,8 @@ Gamepad::Gamepad(unsigned int handle, const char* formPath)
     _gamepadForm = Form::create(formPath);
     GP_ASSERT(_gamepadForm);
 
+    _gamepadForm->setConsumeInputEvents(false);
+
     _id = _gamepadForm->getId();
 
     bindGamepadControls(_gamepadForm);
