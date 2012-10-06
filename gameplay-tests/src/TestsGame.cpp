@@ -34,7 +34,7 @@ void TestsGame::initialize()
     theme->release();   // So we can release it once we're done creating forms with it.
 
     _testSelectForm->setAutoHeight(true);
-    _testSelectForm->setWidth(250.0f);
+    _testSelectForm->setWidth(200.0f);
     _testSelectForm->setScroll(Container::SCROLL_VERTICAL);
 
     const size_t size = _tests->size();
@@ -57,7 +57,7 @@ void TestsGame::initialize()
             Button* testButton = Button::create(testRecord.title.c_str(), buttonStyle);
             testButton->setText(testRecord.title.c_str());
             testButton->setAutoWidth(true);
-            testButton->setHeight(60);      // Tall enough to touch easily on a BB10 device.
+            testButton->setHeight(40);      // Tall enough to touch easily on a BB10 device.
             testButton->setConsumeInputEvents(false);   // This lets the user scroll the container if they swipe starting from a button.
             testButton->addListener(this, Control::Listener::CLICK);
             _testSelectForm->addControl(testButton);

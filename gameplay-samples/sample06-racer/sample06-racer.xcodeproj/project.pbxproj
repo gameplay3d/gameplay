@@ -46,30 +46,6 @@
 		F1E135091607709F00351BB4 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F188C94A15C1971F0025FC73 /* game.config */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		5B21E99D161539FE006EBEAC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4234D99914686C52003031B3;
-			remoteInfo = "gameplay-macosx";
-		};
-		F1E135041607700200351BB4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4234D99A14686C52003031B3;
-			remoteInfo = "gameplay-macosx";
-		};
-		F1E135061607700200351BB4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5B04C5CA14BFCFE100EB0071;
-			remoteInfo = "gameplay-ios";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 		42C932BC1491A0DB0098216A /* sample06-racer-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample06-racer-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,8 +76,6 @@
 		5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gameplay.xcodeproj; path = ../../gameplay/gameplay.xcodeproj; sourceTree = SOURCE_ROOT; };
-		5BC4E849150F911D00CBE1C0 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = text; name = shaders; path = ../../gameplay/res/shaders; sourceTree = SOURCE_ROOT; };
 		F188C94A15C1971F0025FC73 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,7 +84,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B21E9991615390D006EBEAC /* IOKit.framework in Frameworks */,
 				42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */,
 				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
 				42C933261491A6E50098216A /* libogg.a in Frameworks */,
@@ -119,6 +92,7 @@
 				42C933291491A6E50098216A /* libvorbisfile.a in Frameworks */,
 				42C9332C1491A7680098216A /* libpng.a in Frameworks */,
 				42C9332F1491A78D0098216A /* libz.dylib in Frameworks */,
+				5B21E9991615390D006EBEAC /* IOKit.framework in Frameworks */,
 				42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */,
 				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
 				42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */,
@@ -179,8 +153,6 @@
 		42C932BF1491A0DB0098216A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B21E9981615390D006EBEAC /* IOKit.framework */,
-				5BC4E825150F8CE600CBE1C0 /* GamePlay */,
 				5B61613A14CCC3590073B857 /* MacOSX */,
 				5B61613914CCC3560073B857 /* iOS */,
 			);
@@ -227,30 +199,13 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				5B21E9981615390D006EBEAC /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
 				42C9331C1491A6750098216A /* QuartzCore.framework */,
 				42C933161491A5EB0098216A /* OpenGL.framework */,
 				42C9331E1491A67F0098216A /* OpenAL.framework */,
 			);
 			name = MacOSX;
-			sourceTree = "<group>";
-		};
-		5BC4E825150F8CE600CBE1C0 /* GamePlay */ = {
-			isa = PBXGroup;
-			children = (
-				5BC4E849150F911D00CBE1C0 /* shaders */,
-				5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */,
-			);
-			name = GamePlay;
-			sourceTree = "<group>";
-		};
-		F1E135001607700200351BB4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F1E135051607700200351BB4 /* libgameplay.a */,
-				F1E135071607700200351BB4 /* libgameplay.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,7 +223,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5B21E99E161539FE006EBEAC /* PBXTargetDependency */,
 			);
 			name = "sample06-racer-macosx";
 			productName = "sample06-racer";
@@ -311,12 +265,6 @@
 			mainGroup = 42C932B11491A0DB0098216A;
 			productRefGroup = 42C932BD1491A0DB0098216A /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = F1E135001607700200351BB4 /* Products */;
-					ProjectRef = 5BC4E77F150F879E00CBE1C0 /* gameplay.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				42C932BB1491A0DB0098216A /* sample06-racer-macosx */,
@@ -324,23 +272,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		F1E135051607700200351BB4 /* libgameplay.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libgameplay.a;
-			remoteRef = F1E135041607700200351BB4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F1E135071607700200351BB4 /* libgameplay.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libgameplay.a;
-			remoteRef = F1E135061607700200351BB4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		42C932BA1491A0DB0098216A /* Resources */ = {
@@ -414,14 +345,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		5B21E99E161539FE006EBEAC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "gameplay-macosx";
-			targetProxy = 5B21E99D161539FE006EBEAC /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		42C932D81491A0DB0098216A /* Debug */ = {

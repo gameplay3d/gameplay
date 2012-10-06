@@ -35,6 +35,7 @@
 		420D547315FE430D00AD0B91 /* TextureTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545415FE430D00AD0B91 /* TextureTest.cpp */; };
 		420D547415FE430D00AD0B91 /* TriangleTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleTest.cpp */; };
 		420D547515FE430D00AD0B91 /* TriangleTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545615FE430D00AD0B91 /* TriangleTest.cpp */; };
+		424CC030161F8E3000577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC02F161F8E3000577827 /* IOKit.framework */; };
 		428F7BDE15CB131A009ED24C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
 		42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C932C01491A0DB0098216A /* Cocoa.framework */; };
 		42C932EE1491A4CB0098216A /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
@@ -100,6 +101,7 @@
 		420D545515FE430D00AD0B91 /* TextureTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureTest.h; sourceTree = "<group>"; };
 		420D545615FE430D00AD0B91 /* TriangleTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleTest.cpp; sourceTree = "<group>"; };
 		420D545715FE430D00AD0B91 /* TriangleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleTest.h; sourceTree = "<group>"; };
+		424CC02F161F8E3000577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		428F7BDD15CB131A009ED24C /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932BC1491A0DB0098216A /* gameplay-tests-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gameplay-tests-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -142,6 +144,7 @@
 				42C933291491A6E50098216A /* libvorbisfile.a in Frameworks */,
 				42C9332C1491A7680098216A /* libpng.a in Frameworks */,
 				42C9332F1491A78D0098216A /* libz.dylib in Frameworks */,
+				424CC030161F8E3000577827 /* IOKit.framework in Frameworks */,
 				42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */,
 				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
 				42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */,
@@ -282,6 +285,7 @@
 		5B61613A14CCC3590073B857 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				424CC02F161F8E3000577827 /* IOKit.framework */,
 				42C932C01491A0DB0098216A /* Cocoa.framework */,
 				42C9331C1491A6750098216A /* QuartzCore.framework */,
 				42C933161491A5EB0098216A /* OpenGL.framework */,
