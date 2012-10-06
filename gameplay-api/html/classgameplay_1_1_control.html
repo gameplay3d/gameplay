@@ -269,6 +269,7 @@ std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">L
 <tr class="memitem:a91b4d0f28ac8beab3c30c79e5fd9cf74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a91b4d0f28ac8beab3c30c79e5fd9cf74">_zIndex</a></td></tr>
 <tr class="memitem:a47d8c92a3d773672106b82ae8c66ef8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a47d8c92a3d773672106b82ae8c66ef8e">_contactIndex</a></td></tr>
 <tr class="memitem:a73150749073784d72da95375bb4ebd50"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a73150749073784d72da95375bb4ebd50">_focusIndex</a></td></tr>
+<tr class="memitem:a28174c6d21906a5b4a9793b82317631c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">_parent</a></td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
 <tr class="memitem:a1c549701ef58bc3cf2df6f8c7c783ede"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1c549701ef58bc3cf2df6f8c7c783ede">INVALID_CONTACT_INDEX</a> = -1</td></tr>
@@ -2081,13 +2082,15 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Set the desired height of the control, including it's border and padding, before clipping. </p>
+<p>Set the desired height of the control, including it's border and padding, before clipping.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">height</td><td>The height; </td></tr>
+    <tr><td class="paramname">height</td><td>The height. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#afa7e7903fea9b1131c5f30c6ab1799c7">gameplay::Form</a>.</p>
 
 </div>
 </div>
@@ -2617,13 +2620,15 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Set the desired width of the control, including it's border and padding, before clipping. </p>
+<p>Set the desired width of the control, including it's border and padding, before clipping.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">width</td><td>The width; </td></tr>
+    <tr><td class="paramname">width</td><td>The width. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a2833db258ab2d6b74772438d53552a38">gameplay::Form</a>.</p>
 
 </div>
 </div>
@@ -2952,6 +2957,20 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a28174c6d21906a5b4a9793b82317631c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_container.html">Container</a>* <a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">gameplay::Control::_parent</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The control's parent container. </p>
+
+</div>
+</div>
 <a class="anchor" id="a08e0c8e34c28edcddc7099281e9b423a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3152,7 +3171,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 30 2012 19:06:36 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Oct 6 2012 16:52:46 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

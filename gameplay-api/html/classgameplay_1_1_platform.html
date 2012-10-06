@@ -111,7 +111,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0573a19fc0d2f0134e424186c888f7f7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a0573a19fc0d2f0134e424186c888f7f7">isCursorVisible</a> ()</td></tr>
 <tr class="memitem:a388195e784d2820c0d6158c4a10c8a97"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a388195e784d2820c0d6158c4a10c8a97">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr class="memitem:aea3bd12f36c33c33824bc1ccdd4f32f3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#aea3bd12f36c33c33824bc1ccdd4f32f3">displayKeyboard</a> (bool display)</td></tr>
-<tr class="memitem:a14d1d8335db74b3d4db726461813e79f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a14d1d8335db74b3d4db726461813e79f">recognizeGesture</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:ac1205c897f3d90688bceaaaada91e5e7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ac1205c897f3d90688bceaaaada91e5e7">isGestureSupported</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:a78dbc6cf4a41d26e0d29e407e32c497c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a78dbc6cf4a41d26e0d29e407e32c497c">registerGesture</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:a2c9cef3415bf249d9efa546557640bf4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a2c9cef3415bf249d9efa546557640bf4">unregisterGesture</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:ace613d1548802246364c0f00668bac1d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ace613d1548802246364c0f00668bac1d">isGestureRegistered</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
 <tr class="memitem:a46cbd000fdf8110455159e9923f25e4c"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a46cbd000fdf8110455159e9923f25e4c">getGamepadsConnected</a> ()</td></tr>
 <tr class="memitem:a10d442bec11739d1432bef0ac0ea6a5a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a10d442bec11739d1432bef0ac0ea6a5a">isGamepadConnected</a> (unsigned int gamepadHandle)</td></tr>
 <tr class="memitem:a258c15843c4f0845fa20f1f83418efd4"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a258c15843c4f0845fa20f1f83418efd4">getGamepadId</a> (unsigned int gamepadHandle)</td></tr>
@@ -717,6 +720,49 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ace613d1548802246364c0f00668bac1d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_platform.html#ace613d1548802246364c0f00668bac1d">gameplay::Platform::isGestureRegistered</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Tests if the specified gesture is registered for gesture recognition for the specified gesture event</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The gesture event to register to start recognizing events for. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac1205c897f3d90688bceaaaada91e5e7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_platform.html#ac1205c897f3d90688bceaaaada91e5e7">gameplay::Platform::isGestureSupported</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Tests if the specified gesture is supported on the platform.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if it is supported; false if not supported. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a501a32d43e25f6ce2c75598462a04303"></a>
 <div class="memitem">
 <div class="memproto">
@@ -858,12 +904,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a14d1d8335db74b3d4db726461813e79f"></a>
+<a class="anchor" id="a78dbc6cf4a41d26e0d29e407e32c497c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a14d1d8335db74b3d4db726461813e79f">gameplay::Platform::recognizeGesture</a> </td>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a78dbc6cf4a41d26e0d29e407e32c497c">gameplay::Platform::registerGesture</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
           <td class="paramname"><em>evt</em></td><td>)</td>
@@ -875,7 +921,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Registers the platform for gesture recognition for the specified gesture event.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">evt</td><td>The gesture event to recognize or Gesture::NONE to disable gesture recognition events. </td></tr>
+    <tr><td class="paramname">evt</td><td>The gesture event to register to start recognizing events for. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1110,11 +1156,35 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2c9cef3415bf249d9efa546557640bf4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_platform.html#a2c9cef3415bf249d9efa546557640bf4">gameplay::Platform::unregisterGesture</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Registers the platform for gesture recognition for the specified gesture event.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The gesture event to register to start recognizing events for. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 30 2012 19:06:38 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Oct 6 2012 16:52:48 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
