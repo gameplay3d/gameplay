@@ -861,7 +861,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
     }
     
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -914,21 +914,21 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
 }
 
-- (void)otherMouseDown: (NSEvent *) event 
+- (void)otherMouseDown: (NSEvent*) event 
 {
     __otherMouseDown = true;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, __height - point.y, 0);
 }
 
-- (void)otherMouseUp: (NSEvent *) event 
+- (void)otherMouseUp: (NSEvent*) event 
 {
     __otherMouseDown = false;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, __height - point.y, 0);
 }
 
-- (void)otherMouseDragged: (NSEvent *) event 
+- (void)otherMouseDragged: (NSEvent*) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
@@ -939,7 +939,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __hasMouse = true;
 }
 
-- (void)scrollWheel: (NSEvent *) event 
+- (void)scrollWheel: (NSEvent*) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
