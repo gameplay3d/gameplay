@@ -16,6 +16,8 @@ var searchData=
   ['physicsrigidbody',['PhysicsRigidBody',['../classgameplay_1_1_physics_rigid_body.html',1,'gameplay']]],
   ['physicssocketconstraint',['PhysicsSocketConstraint',['../classgameplay_1_1_physics_socket_constraint.html',1,'gameplay']]],
   ['physicsspringconstraint',['PhysicsSpringConstraint',['../classgameplay_1_1_physics_spring_constraint.html',1,'gameplay']]],
+  ['physicsvehicle',['PhysicsVehicle',['../classgameplay_1_1_physics_vehicle.html',1,'gameplay']]],
+  ['physicsvehiclewheel',['PhysicsVehicleWheel',['../classgameplay_1_1_physics_vehicle_wheel.html',1,'gameplay']]],
   ['plane',['Plane',['../classgameplay_1_1_plane.html',1,'gameplay']]],
   ['platform',['Platform',['../classgameplay_1_1_platform.html',1,'gameplay']]],
   ['properties',['Properties',['../classgameplay_1_1_properties.html',1,'gameplay']]]
