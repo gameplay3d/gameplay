@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		424CC032161F8EDD00577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC031161F8EDD00577827 /* IOKit.framework */; };
 		42B7025D15B0A8C3002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7025C15B0A8C3002BB8C3 /* liblua.a */; };
 		42B7027515B0B259002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7027415B0B259002BB8C3 /* game.config */; };
 		42B7027615B0B259002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7027415B0B259002BB8C3 /* game.config */; };
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		42458CB314C3AAF900EFFB61 /* sample01-longboard-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-ios.plist"; sourceTree = "<group>"; };
+		424CC031161F8EDD00577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		42B7025C15B0A8C3002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
 		42B7027415B0B259002BB8C3 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932E01491A1640098216A /* sample01-longboard-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample01-longboard-macosx.plist"; sourceTree = "<group>"; };
@@ -88,11 +90,12 @@
 				42CD0EE1147D92CA0000361E /* libvorbisfile.a in Frameworks */,
 				42CCD4DB146D94AA00353661 /* libpng.a in Frameworks */,
 				42CCD4D7146D949200353661 /* libz.dylib in Frameworks */,
+				42B7025D15B0A8C3002BB8C3 /* liblua.a in Frameworks */,
+				424CC032161F8EDD00577827 /* IOKit.framework in Frameworks */,
 				42CCD493146D80DA00353661 /* Cocoa.framework in Frameworks */,
 				42CCD4D1146D93F900353661 /* QuartzCore.framework in Frameworks */,
 				42CCD4D5146D941A00353661 /* OpenGL.framework in Frameworks */,
 				42CCD4D3146D941000353661 /* OpenAL.framework in Frameworks */,
-				42B7025D15B0A8C3002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,8 +166,8 @@
 		42CCD491146D80DA00353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B04C6A214C0ED5D00EB0071 /* iOS */,
 				5B04C6A114C0ED5B00EB0071 /* MacOSX */,
+				5B04C6A214C0ED5D00EB0071 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 		5B04C6A114C0ED5B00EB0071 /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				424CC031161F8EDD00577827 /* IOKit.framework */,
 				42CCD492146D80DA00353661 /* Cocoa.framework */,
 				42CCD4D0146D93F900353661 /* QuartzCore.framework */,
 				42CCD4D4146D941A00353661 /* OpenGL.framework */,
