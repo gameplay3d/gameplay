@@ -1,12 +1,17 @@
 ## v1.5.0
 
-- Linux x64 support tested on Ubuntu 12+.
+- Linux support. (tested on Ubuntu 12)
 - CMake support for Linux makefile generation.
 - Gamepad controllers support for desktops.
 - Touch gesture support for tap, swipe and pinch.
 - Vehicle phyics support via new PhysicsVehicle and PhysicsVehicleWheel classes.
-- Adds gameplay-tests project as a test app for various engine features with initial basic tests.
+- Adds new racer sample (sample06-racer).
+- Adds gameplay-tests project as a test app for various basic engine features with some initial tests.
 - Adds support for Scene files for wildcard identifiers.
+- Adds Visual Studio Plug-in support for BlackBerry PlayBook and BlackBerry 10.
+- Adds configurable multi-sampling anti-aliasing support. 
+- Adds updates to latest FBX SDK 2013.3
+- Adds file formats documenation for game.config .scene, .material, .animation, .physics, .particle
 - Web community forums at http://www.gameplay3d.org/forums
 - Fixes the texture coordinates of Mesh::createQuad(float x, float y, float width, float height).
 - Fixes line-wise distortion when loading RGB png's into texture that are non-power of two.
@@ -16,6 +21,7 @@
 - Fixes Lua errors to be treated as runtime warnings.
 - Fixes setVertexData to pointers instead of constant data.
 - Fixed AudioSource so that it doesn't loop by default.
+- Fixes minor UI scrolling issues.
 
 ## v1.4.0
 
