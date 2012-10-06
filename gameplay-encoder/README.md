@@ -2,7 +2,7 @@
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
 The 'bin' folder contains pre-built versions of the gameplay-encoder executables for 
-Windows 7, MacOS X and Linux x64 (tested on Ubuntu 12+) with support built-in support for:
+Windows 7, MacOS X and Linux (tested on Ubuntu 12) with support built-in support for:
 
 ## TrueType Font
 TrueType Fonts represent a standard in defining outline fonts and has become the 
@@ -47,10 +47,9 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
   * Example: "/Applications/Autodesk/FBX SDK/2013.3/include" (Use quotes due to additional space in path)
 - Add the FBX library and dependency Library/Frameworks: (Build Phases -> Link Binary with Libraries)
   * Example: /Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a  (Add Other)
-  * Example: libiconv.dylib, Cocoa.framework, SystemConfiguration.framework
 - Build gameplay-encoder
 
-### Building with FBX Support on Linux x64
+### Building with FBX Support on Linux
 - Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
 - Edit the gameplay-encoder/CMakeLists.txt adding the following:
 - Add the FBX include directory to Header Search Paths: (Build Settings)
