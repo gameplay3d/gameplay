@@ -296,8 +296,8 @@ AnimationClip* Animation::findClip(const char* id) const
     if (_clips)
     {
         AnimationClip* clip = NULL;
-        unsigned int clipCount = _clips->size();
-        for (unsigned int i = 0; i < clipCount; i++)
+        size_t clipCount = _clips->size();
+        for (size_t i = 0; i < clipCount; i++)
         {
             clip = _clips->at(i);
             GP_ASSERT(clip);
