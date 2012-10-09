@@ -34,7 +34,7 @@ AudioSource* AudioSource::create(const char* url)
 {
     // Load from a .audio file.
     std::string pathStr = url;
-    if (pathStr.find(".audio") != pathStr.npos)
+    if (pathStr.find(".audio") != std::string::npos)
     {
         Properties* properties = Properties::create(url);
         if (properties == NULL)
