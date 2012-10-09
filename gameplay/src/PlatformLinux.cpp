@@ -687,7 +687,9 @@ int Platform::enterMessagePump()
             }
         }
 
-        _game->frame();
+        if (_game)
+            _game->frame();
+
         glXSwapBuffers(__display, __window);
     }
 
