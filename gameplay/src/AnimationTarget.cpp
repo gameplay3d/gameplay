@@ -164,11 +164,11 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     }
     
     char delimeter = ' ';
-    unsigned int startOffset = 0;
-    unsigned int endOffset = (unsigned int)std::string::npos;
+    size_t startOffset = 0;
+    size_t endOffset = std::string::npos;
     
     unsigned long* keyTimes = new unsigned long[keyCount];
-    for (unsigned int i = 0; i < keyCount; i++)
+    for (size_t i = 0; i < keyCount; i++)
     {
         endOffset = static_cast<std::string>(keyTimesStr).find_first_of(delimeter, startOffset);
         if (endOffset != std::string::npos)
@@ -183,7 +183,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     }
 
     startOffset = 0;
-    endOffset = (unsigned int)std::string::npos;
+    endOffset = std::string::npos;
     
     int componentCount = getAnimationPropertyComponentCount(propertyId);
     GP_ASSERT(componentCount > 0);
@@ -211,7 +211,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     {
         keyIn = new float[components];
         startOffset = 0;
-        endOffset = (unsigned int)std::string::npos;
+        endOffset = std::string::npos;
         for (unsigned int i = 0; i < components; i++)
         {
             endOffset = static_cast<std::string>(keyInStr).find_first_of(delimeter, startOffset);
@@ -233,7 +233,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     {   
         keyOut = new float[components];
         startOffset = 0;
-        endOffset = (unsigned int)std::string::npos;
+        endOffset = std::string::npos;
         for (unsigned int i = 0; i < components; i++)
         {
             endOffset = static_cast<std::string>(keyOutStr).find_first_of(delimeter, startOffset);
