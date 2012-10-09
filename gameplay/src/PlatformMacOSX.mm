@@ -659,7 +659,7 @@ double getMachTimeInMilliseconds()
 
     [[self openGLContext] makeCurrentContext];
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-    if (_game && _game->getState() == Game::RUNNING)
+    if (_game)
     {
         _game->frame();
     }
