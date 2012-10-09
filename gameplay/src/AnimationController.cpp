@@ -97,7 +97,7 @@ void AnimationController::update(float elapsedTime)
 {
     if (_state != RUNNING)
         return;
-
+    
     Transform::suspendTransformChanged();
 
     // Loop through running clips and call update() on them.
