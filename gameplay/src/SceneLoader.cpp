@@ -135,7 +135,7 @@ void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::
 
     // If there is a non-GPB file that needs to be loaded later, add an 
     // empty entry to the properties table to signify it.
-    if (urlStr.length() > 0 && urlStr.find(".") != urlStr.npos && urlStr.find(".gpb") == urlStr.npos && _properties.count(urlStr) == 0)
+    if (urlStr.length() > 0 && urlStr.find(".") != std::string::npos && urlStr.find(".gpb") == std::string::npos && _properties.count(urlStr) == 0)
         _properties[urlStr] = NULL;
 
     SceneNodeProperty prop(type, urlStr, index);
@@ -1071,14 +1071,14 @@ void splitURL(const std::string& url, std::string* file, std::string* id)
     }
 
     // Check if the url references a file (otherwise, it only references a node within the main GPB).
-    unsigned int loc = url.rfind(".");
-    if (loc != url.npos)
+    size_t loc = url.rfind(".");
+    if (loc != std::string::npos)
     {
         // If the url references a specific namespace within the file,
         // set the id out parameter appropriately. Otherwise, set the id out
         // parameter to the empty string so we know to load the first namespace.
         loc = url.rfind("#");
-        if (loc != url.npos)
+        if (loc != std::string::npos)
         {
             *file = url.substr(0, loc);
             *id = url.substr(loc + 1);

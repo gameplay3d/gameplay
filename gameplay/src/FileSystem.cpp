@@ -134,7 +134,6 @@ const char* FileSystem::resolvePath(const char* path)
 
 bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 {
-    // TODO make this method work with absolute and relative paths.
 #ifdef WIN32
     std::string path(FileSystem::getResourcePath());
     if (dirPath && strlen(dirPath) > 0)
@@ -211,7 +210,7 @@ bool FileSystem::fileExists(const char* filePath)
     createFileFromAsset(filePath);
 
     gp_stat_struct s;
-// Win32 doesn't support an asset or bundle definitions.
+
 #ifdef WIN32
     if (stat(fullPath.c_str(), &s) != 0)
     {
@@ -246,7 +245,6 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     
     FILE* fp = fopen(fullPath.c_str(), mode);
     
-// Win32 doesn't support an asset or bundle definitions.
 #ifdef WIN32
     if (fp == NULL)
     {
