@@ -22,7 +22,7 @@ class PhysicsVehicle;
         type                     = VEHICLE_WHEEL
 
         steerable                = <bool>                // indicates whether wheel is steerable
-        wheelDirection           = <float, float, float> // direction strut extension, in chassis space
+        wheelDirection           = <float, float, float> // direction of strut extension, in chassis space
         wheelAxle                = <float, float, float> // direction of axle (spin axis), in chassis space
         strutConnectionOffset    = <float, float, float> // offset from default strut connection point
         strutRestLength          = <float>               // strut rest length
