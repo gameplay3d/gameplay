@@ -569,9 +569,9 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Logger");
-        ScriptUtil::registerConstantString("INFO", "INFO", scopePath);
-        ScriptUtil::registerConstantString("WARN", "WARN", scopePath);
-        ScriptUtil::registerConstantString("ERROR", "ERROR", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_INFO", "LEVEL_INFO", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_WARN", "LEVEL_WARN", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_ERROR", "LEVEL_ERROR", scopePath);
     }
 
     // Register enumeration Mesh::IndexFormat.

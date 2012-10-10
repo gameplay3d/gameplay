@@ -63,6 +63,7 @@ int lua_Form_insertControl(lua_State* state);
 int lua_Form_isContainer(lua_State* state);
 int lua_Form_isEnabled(lua_State* state);
 int lua_Form_isScrollBarsAutoHide(lua_State* state);
+int lua_Form_isScrolling(lua_State* state);
 int lua_Form_release(lua_State* state);
 int lua_Form_removeControl(lua_State* state);
 int lua_Form_removeScriptCallback(lua_State* state);
