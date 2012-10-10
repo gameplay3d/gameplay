@@ -172,7 +172,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
         // Strip off the scope path part of the name.
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         std::size_t index = tablename.find(scopePath[0]);
-        if (index != tablename.npos)
+        if (index != std::string::npos)
             tablename = tablename.substr(index + scopePath[0].size());
         
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -181,7 +181,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
             lua_gettable(sc->_lua, -2);
 
             index = tablename.find(scopePath[i]);
-            if (index != tablename.npos)
+            if (index != std::string::npos)
                 tablename = tablename.substr(index + scopePath[i].size());
         }
 
@@ -544,7 +544,7 @@ static const char* lua_print_function =
     "    ScriptController.print(table.concat({...},\"\\t\"), \"\\n\")\n"
     "end\n";
 
-#ifndef WIN32
+#ifndef WIN32 
 static const char* lua_loadfile_function = 
     "do\n"
     "    local oldLoadfile = loadfile\n"
@@ -746,7 +746,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
 
                 // Calculate the unique Lua type name.
                 size_t i = type.find("::");
-                while (i != type.npos)
+                while (i != std::string::npos)
                 {
                     // We use "" as the replacement here-this must match the preprocessor
                     // define SCOPE_REPLACEMENT from the gameplay-luagen project.

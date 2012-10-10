@@ -97,6 +97,7 @@ void luaRegister_Form()
         {"isContainer", lua_Form_isContainer},
         {"isEnabled", lua_Form_isEnabled},
         {"isScrollBarsAutoHide", lua_Form_isScrollBarsAutoHide},
+        {"isScrolling", lua_Form_isScrolling},
         {"release", lua_Form_release},
         {"removeControl", lua_Form_removeControl},
         {"removeScriptCallback", lua_Form_removeScriptCallback},
@@ -3087,6 +3088,43 @@ int lua_Form_isScrollBarsAutoHide(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Form_isScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_isScrolling(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                bool result = instance->isScrolling();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Form_isScrolling - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

@@ -89,14 +89,14 @@ Font* Font::create(const char* path, const char* id)
     {
         // Get the ID of the first object in the bundle (assume it's a Font).
         const char* id;
-        if ((id = bundle->getObjectID(0)) == NULL)
+        if ((id = bundle->getObjectId(0)) == NULL)
         {
             GP_ERROR("Failed to load font without explicit id; the first object in the font bundle has a null id.");
             return NULL;
         }
 
         // Load the font using the ID of the first object in the bundle.
-        font = bundle->loadFont(bundle->getObjectID(0));
+        font = bundle->loadFont(bundle->getObjectId(0));
     }
     else
     {

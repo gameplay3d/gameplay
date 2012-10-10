@@ -453,7 +453,7 @@ int getKey(unichar keyCode);
         GL_ASSERT( glViewport(0, 0, framebufferWidth, framebufferHeight) );
         
         // Execute a single game frame
-        if (game && game->getState() == Game::RUNNING)
+        if (game)
             game->frame();
         
         // Present the contents of the color buffer
@@ -1093,6 +1093,11 @@ void Platform::signalShutdown()
     assert(false);
     [__view stopUpdating];
     exit(0);
+}
+
+bool Platform::canExit()
+{
+    return false;
 }
 
 unsigned int Platform::getDisplayWidth()
