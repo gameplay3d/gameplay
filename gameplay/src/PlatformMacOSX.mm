@@ -1397,6 +1397,11 @@ void Platform::signalShutdown()
     NSApplication* app = [NSApplication sharedApplication];
     [app performSelectorOnMainThread:@selector(terminate:) withObject:nil waitUntilDone:NO];
 }
+
+bool Platform::canExit()
+{
+    return true;
+}
     
 unsigned int Platform::getDisplayWidth()
 {
