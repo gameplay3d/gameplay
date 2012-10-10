@@ -17,26 +17,16 @@ static const float MOVE_SPEED = 15.0f;
 
 static const float UP_DOWN_SPEED = 10.0f;
 
-/**
- * Returns true if the string ends with the given suffix.
- */
-static bool endsWith(const std::string& str, const char* suffix)
-{
-    size_t suffixLength = strlen(suffix);
-    if (suffixLength == 0)
-        return true;
-    if (str.length() < suffixLength)
-        return false;
-    return std::equal(str.end() - suffixLength, str.end(), suffix);
-}
+#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
 
 Audio3DTest::Audio3DTest()
-    : _font(NULL), _scene(NULL), _cubeNode(NULL), _moveFlags(0), _prevX(0), _prevY(0)
+    : _font(NULL), _scene(NULL), _cubeNode(NULL), _gamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
 {
 }
 
 void Audio3DTest::initialize()
 {
+    setMultiTouch(true);
     _font = Font::create("res/common/arial18.gpb");
     // Load game scene from file
     Bundle* bundle = Bundle::create("res/common/box.gpb");
@@ -72,6 +62,10 @@ void Audio3DTest::initialize()
     _fpCamera.setPosition(cameraPosition);
     _scene->addNode(_fpCamera.getRootNode());
     _scene->setActiveCamera(_fpCamera.getCamera());
+
+    _gamepad = getGamepad(0);
+    GP_ASSERT(_gamepad);
+    _gamepad->getForm()->setConsumeInputEvents(false);
 }
 
 void Audio3DTest::finalize()
@@ -90,9 +84,12 @@ void Audio3DTest::update(float elapsedTime)
 {
     float time = (float)elapsedTime / 1000.0f;
 
+    _gamepad->update(elapsedTime);
+
+    Vector2 move;
+
     if (_moveFlags != 0)
     {
-        Vector2 move;
         // Forward motion
         if (_moveFlags & MOVE_FORWARD)
         {
@@ -111,10 +108,7 @@ void Audio3DTest::update(float elapsedTime)
         {
             move.x = -1;
         }
-
-        move.normalize().scale(time * MOVE_SPEED);
-        _fpCamera.moveForward(move.y);
-        _fpCamera.moveLeft(move.x);
+        move.normalize();
 
         // Up and down
         if (_moveFlags & MOVE_UP)
@@ -126,6 +120,24 @@ void Audio3DTest::update(float elapsedTime)
             _fpCamera.moveDown(time * UP_DOWN_SPEED);
         }
     }
+    else if (_gamepad->isJoystickActive(0))
+    {
+        _gamepad->getJoystickAxisValues(0, &move);
+        move.x = -move.x;
+    }
+
+    if (!move.isZero())
+    {
+        move.scale(time * MOVE_SPEED);
+        _fpCamera.moveForward(move.y);
+        _fpCamera.moveLeft(move.x);
+    }
+
+    if (!_buttonPressed && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
+    {
+        addSound("Footsteps.wav");
+    }
+    _buttonPressed = _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED;
 }
 
 void Audio3DTest::render(float elapsedTime)
@@ -137,6 +149,8 @@ void Audio3DTest::render(float elapsedTime)
     _scene->visit(this, &Audio3DTest::drawScene);
 
     drawDebugText();
+
+    _gamepad->draw();
 }
 
 bool Audio3DTest::drawScene(Node* node)
@@ -277,7 +291,12 @@ void Audio3DTest::addSound(const std::string& file)
         node->addRef();
     }
     assert(node);
-    node->setTranslation(_scene->getActiveCamera()->getNode()->getTranslationWorld());
+    Node* cameraNode = _scene->getActiveCamera()->getNode();
+    // Position the sound infront of the user
+    node->setTranslation(cameraNode->getTranslationWorld());
+    Vector3 dir = cameraNode->getForwardVectorWorld().normalize();
+    dir.scale(2);
+    node->translate(dir);
     _scene->addNode(node);
     node->getAudioSource()->play();
     node->release();

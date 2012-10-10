@@ -66,6 +66,12 @@ public:
     virtual void gesturePinchEvent(int x, int y, float scale);
     virtual void gestureTapEvent(int x, int y);
 
+    // gamepad
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    unsigned int getGamepadCount() const;
+    unsigned int getGamepadsConnected();
+    Gamepad* getGamepad(unsigned int index) const;
+
 protected:
 
     Test();

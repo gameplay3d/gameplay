@@ -62,8 +62,12 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
+	    <copy file="../game.config" tofile="assets/game.config"/>
         <copy todir="assets/res/common">
             <fileset dir="../res/common"/>
+        </copy>
+		<copy todir="assets/res/png">
+            <fileset dir="../res/png"/>
         </copy>
 		<copy todir="assets/res/shaders">
             <fileset dir="../../gameplay/res/shaders"/>
