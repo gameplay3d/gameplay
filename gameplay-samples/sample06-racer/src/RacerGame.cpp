@@ -58,10 +58,15 @@ void RacerGame::initialize()
     static_cast<Button*>(_menu->getControl("quitGameButton"))->addListener(this, Listener::CLICK);
     static_cast<RadioButton*>(_menu->getControl("useGamepad"))->addListener(this, Listener::VALUE_CHANGED);
     static_cast<RadioButton*>(_menu->getControl("useTilt"))->addListener(this, Listener::VALUE_CHANGED);
+    if (!canExit())
+    {
+        // Prevent a programmatic exit on platforms that don't allow it.
+        _menu->removeControl("quitGameButton");
+    }
 
     // Create a pause button to display the menu
     _overlay = Form::create("res/common/overlay.form");
-    static_cast<Button*>(_overlay->getControl("pauseButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_overlay->getControl("menuButton"))->addListener(this, Listener::CLICK);
 
     // Load the scene
     _scene = Scene::load("res/common/game.scene");
@@ -520,13 +525,13 @@ void RacerGame::menuEvent()
 
 	if (__showMenu)
 	{
-        static_cast<Button*>(_overlay->getControl("pauseButton"))->setText("Resume");
+        static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
 		pause();
         _menu->enable();
 	}
 	else
 	{
-        static_cast<Button*>(_overlay->getControl("pauseButton"))->setText("Pause");
+        static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Menu");
 		resume();
         _menu->disable();
 	}
@@ -591,7 +596,7 @@ void RacerGame::controlEvent(Control* control, EventType evt)
     {
         __useAccelerometer = true;
     }
-    else if (strcmp(control->getId(), "pauseButton") == 0)
+    else if (strcmp(control->getId(), "menuButton") == 0)
     {
         menuEvent();
     }

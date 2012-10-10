@@ -5,12 +5,12 @@ form menu
     height = 70
     alignment = ALIGN_TOP_RIGHT
 
-    // Pause
-    button pauseButton
+    // Pause and show menu
+    button menuButton
     {
         style = buttonStyle
         position = 10, 10
         size = 90, 50
-        text = Pause
+        text = Menu
     }
 }
