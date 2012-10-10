@@ -453,7 +453,7 @@ int getKey(unichar keyCode);
         GL_ASSERT( glViewport(0, 0, framebufferWidth, framebufferHeight) );
         
         // Execute a single game frame
-        if (game && game->getState() == Game::RUNNING)
+        if (game)
             game->frame();
         
         // Present the contents of the color buffer
