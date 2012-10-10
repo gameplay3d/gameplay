@@ -263,7 +263,11 @@ void PhysicsVehicle::update(float elapsedTime, float steering, float braking, fl
 {
     float v = getSpeedKph();
     MathUtil::smooth(&_speedSmoothed, v, elapsedTime, 0, 1200);
-    applyDownforce();
+    if (elapsedTime > 0)
+    {
+        // Avoid accumulation of downforce while paused (zero elapsedTime)
+        applyDownforce();
+    }
 
     // Adjust control inputs based on vehicle speed.
     steering = getSteering(v, steering);

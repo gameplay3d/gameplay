@@ -1,7 +1,6 @@
 var searchData=
 [
   ['deactivated',['DEACTIVATED',['../classgameplay_1_1_physics_controller_1_1_listener.html#a18b7daeec71d801c54838d967312a463afb412674f4b580a41c309eafc444a757',1,'gameplay::PhysicsController::Listener']]],
-  ['debugdraw',['debugDraw',['../classgameplay_1_1_physics_character.html#a75ef9f25d4663800e6180b350422a815',1,'gameplay::PhysicsCharacter']]],
   ['debugflags',['DebugFlags',['../classgameplay_1_1_scene.html#a85b8826e374340f3405029a7b0e5b325',1,'gameplay::Scene']]],
   ['debugvertex',['DebugVertex',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html',1,'gameplay::PhysicsController::DebugDrawer']]],
   ['decompose',['decompose',['../classgameplay_1_1_matrix.html#a239cd4f3f6359049b038f8b250085d49',1,'gameplay::Matrix']]],

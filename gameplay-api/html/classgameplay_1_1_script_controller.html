@@ -181,18 +181,18 @@ Static Public Member Functions</h2></td></tr>
 Friends</h2></td></tr>
 <tr class="memitem:ae762c160e7e3e6d5e800ac5595e6a86a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae762c160e7e3e6d5e800ac5595e6a86a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerLibrary</b> (const char *name, const luaL_Reg *functions)</td></tr>
-<tr class="memitem:ad0ab7be75342ad847d7beac5d7412cb1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0ab7be75342ad847d7beac5d7412cb1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantBool</b> (std::string name, bool value, std::vector&lt; std::string &gt; scopePath)</td></tr>
-<tr class="memitem:ab0ca1dbb60a6a43d2627cb809ce6c345"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0ca1dbb60a6a43d2627cb809ce6c345"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantNumber</b> (std::string name, double value, std::vector&lt; std::string &gt; scopePath)</td></tr>
-<tr class="memitem:a9c49002e4e5258b304c98680274a2063"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c49002e4e5258b304c98680274a2063"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantString</b> (std::string name, std::string value, std::vector&lt; std::string &gt; scopePath)</td></tr>
-<tr class="memitem:a966bf7c2777a57409eddb0139b70b009"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a966bf7c2777a57409eddb0139b70b009"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerClass</b> (const char *name, const luaL_Reg *members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg *statics, std::vector&lt; std::string &gt; scopePath)</td></tr>
+<tr class="memitem:a60218f4914949fc80d24afc868f99a63"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60218f4914949fc80d24afc868f99a63"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantBool</b> (const std::string &amp;name, bool value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
+<tr class="memitem:a5561c8111ffc22495b3ba5c7e5eb09a2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5561c8111ffc22495b3ba5c7e5eb09a2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantNumber</b> (const std::string &amp;name, double value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
+<tr class="memitem:a9b2fb76276706d6f245005ac08f82b0e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b2fb76276706d6f245005ac08f82b0e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantString</b> (const std::string &amp;name, const std::string &amp;value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
+<tr class="memitem:a4344f5f4e93e6d6fd2beef4aec3272fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4344f5f4e93e6d6fd2beef4aec3272fd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerClass</b> (const char *name, const luaL_Reg *members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg *statics, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
 <tr class="memitem:a1d465e18de50c584117562fffc938000"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d465e18de50c584117562fffc938000"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerFunction</b> (const char *luaFunction, lua_CFunction cppFunction)</td></tr>
-<tr class="memitem:a87b17f448f609a0367c92dbcc85dfc07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87b17f448f609a0367c92dbcc85dfc07"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::setGlobalHierarchyPair</b> (std::string base, std::string derived)</td></tr>
+<tr class="memitem:a8cc6da7a1715070876b1b5038d88666c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc6da7a1715070876b1b5038d88666c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::setGlobalHierarchyPair</b> (const std::string &amp;base, const std::string &amp;derived)</td></tr>
 <tr class="memitem:a0736c7938fc869e14af5b2df97c1db36"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0736c7938fc869e14af5b2df97c1db36"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::addStringFromEnumConversionFunction</b> (luaStringEnumConversionFunction stringFromEnum)</td></tr>
 <tr class="memitem:a90322c10329ee3a3e96b9b0cff25458d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90322c10329ee3a3e96b9b0cff25458d"></a>
@@ -2166,7 +2166,7 @@ template&lt;typename T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 30 2012 19:06:39 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 9 2012 21:00:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

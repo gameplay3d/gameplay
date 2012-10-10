@@ -266,6 +266,7 @@ void Audio3DTest::addSound(const std::string& file)
     {
         AudioSource* audioSource = AudioSource::create(path.c_str());
         assert(audioSource);
+        audioSource->setLooped(true);
 
         node = _cubeNode->clone();
         node->setId(file.c_str());

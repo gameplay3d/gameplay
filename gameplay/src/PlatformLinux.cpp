@@ -687,7 +687,9 @@ int Platform::enterMessagePump()
             }
         }
 
-        _game->frame();
+        if (_game)
+            _game->frame();
+
         glXSwapBuffers(__display, __window);
     }
 
@@ -699,6 +701,11 @@ int Platform::enterMessagePump()
 void Platform::signalShutdown() 
 { 
     // nothing to do  
+}
+
+bool Platform::canExit()
+{
+    return true;
 }
     
 unsigned int Platform::getDisplayWidth()

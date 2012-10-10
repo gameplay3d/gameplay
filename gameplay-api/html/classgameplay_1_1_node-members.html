@@ -79,6 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 This is the complete list of members for <a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a>, including all inherited members.<table>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a2eaf4d11aef057397c4c7114b98afab3">_advertisedDescendants</a></td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a248ebe9a1818fbfd310ba363855547e7">_agent</a></td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ac837c4ea233f97e5c6f1a8b7af82ca6d">_audioSource</a></td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#aa45f1a5609704c99849b77b5db57b4b5">_bounds</a></td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [mutable, protected]</code></td></tr>
@@ -109,6 +110,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#ae55de1fa0304d66135e16080f8585400">_translation</a></td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a823c329894dfe4364922ef34b55238a7">_userData</a></td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a2a0688d2ca497dcbfe1adbd4195f6d68">_world</a></td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [mutable, protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#af5d8e89c47edc26775c97229a4b163cc">addAdvertisedDescendant</a>(Node *node)</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_animation_target.html#a67ef6f7b9d1761e1e9dc97ebdd2a79e1">addChannel</a>(Animation::Channel *channel)</td><td><a class="el" href="classgameplay_1_1_animation_target.html">gameplay::AnimationTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a3ffe82ba00ede266397def70743198b3">addChild</a>(Node *child)</td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a2a160476a329ff502a5c64a5fa3fdb7a">addListener</a>(Transform::Listener *listener, long cookie=0)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
@@ -154,6 +156,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_script_target.html#a1399600b66d222fae0a1c5766dcfd473">fireScriptEvent</a>(const char *eventName,...)</td><td><a class="el" href="classgameplay_1_1_script_target.html">gameplay::ScriptTarget</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a1703ad8be4b10d3792ecb5cc3da7425e">getActiveCameraTranslationView</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#aef6bfae445794ad6c6b401cd36a2ac1d">getActiveCameraTranslationWorld</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#aceb187a9551a21887608c924026bd932">getAdvertisedDescendant</a>(unsigned int i) const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ac1fe498dda19054532dac9e33772ba40">getAgent</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a18ccc842b846acee10da31419e29545d">getAnimation</a>(const char *id=NULL) const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a>(int propertyId) const </td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td><code> [virtual]</code></td></tr>
@@ -185,6 +188,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a8a2d728985fcc879cf9de1c4d36b702b">getMatrix</a>() const </td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#af10e066b900230f93a8c24ca95f5df0d">getModel</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#ab7e18a29bc11c23c4a072c3fe3d33b5b">getNextSibling</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a174e7c94bbe7d251175c4b3011c8ef93">getNumAdvertisedDescendants</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#adc7c8761ae81d45f6a94edf471e0a0b0">getParent</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#aa962106c8c01e1604aa26be334c4f537">getParticleEmitter</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_node.html#a4ace33975d00751cd783819382293650">getPreviousSibling</a>() const </td><td><a class="el" href="classgameplay_1_1_node.html">gameplay::Node</a></td><td></td></tr>
@@ -308,6 +312,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#aa6ad8ccd1e4d24adb6d701b83ad98b6e">translate</a>(const Vector3 &amp;translation)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a8ca10de44224e1b71dca0d01dae45880">translateForward</a>(float amount)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#ac891c29a04d56dfe0debfe7cfb8241fd">translateLeft</a>(float amount)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a92da66f9abeeecb33680fa0e24e3b04a">translateSmooth</a>(const Vector3 &amp;target, float elapsedTime, float responseTime)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a7f30069e0296f4171188057bb5f11e66">translateUp</a>(float amount)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#a89140ea7eeab31437a7d04000fd81845">translateX</a>(float tx)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_transform.html#aa75a9ef16e419439df1b88fe31ac1d94">translateY</a>(float ty)</td><td><a class="el" href="classgameplay_1_1_transform.html">gameplay::Transform</a></td><td></td></tr>
@@ -322,7 +327,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_n
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 30 2012 19:06:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 9 2012 21:00:10 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

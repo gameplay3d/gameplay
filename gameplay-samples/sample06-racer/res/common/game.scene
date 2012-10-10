@@ -1,6 +1,6 @@
 scene main
 {
-    path = res/common/scene.gpb
+    path = res/common/game.gpb
 
     activeCamera = camera1
 

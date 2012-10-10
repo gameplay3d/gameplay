@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4239E08715755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
 		4239E08815755BDA005EA3F6 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 4239E08615755BDA005EA3F6 /* res */; };
+		424CC038161FCB7B00577827 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424CC037161FCB7B00577827 /* IOKit.framework */; };
 		42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B7026215B0A8F2002BB8C3 /* liblua.a */; };
 		42B7026915B0B137002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7026815B0B137002BB8C3 /* game.config */; };
 		42B7026A15B0B15D002BB8C3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 42B7026815B0B137002BB8C3 /* game.config */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		4239E08615755BDA005EA3F6 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		42458CBF14C3ABF800EFFB61 /* sample03-character-ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-ios.plist"; sourceTree = "<group>"; };
+		424CC037161FCB7B00577827 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		42B7026215B0A8F2002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
 		42B7026815B0B137002BB8C3 /* game.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
 		42C932E61491A1AC0098216A /* sample03-character-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample03-character-macosx.plist"; sourceTree = "<group>"; };
@@ -90,11 +92,12 @@
 				42CD0F03147D93560000361E /* libvorbisfile.a in Frameworks */,
 				42CCD5AA146EC5F000353661 /* libpng.a in Frameworks */,
 				42CCD5A8146EC5DE00353661 /* libz.dylib in Frameworks */,
+				42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */,
+				424CC038161FCB7B00577827 /* IOKit.framework in Frameworks */,
 				42CCD571146EC4B300353661 /* Cocoa.framework in Frameworks */,
 				42CCD5A6146EC5CE00353661 /* QuartzCore.framework in Frameworks */,
 				42CCD5A4146EC5C600353661 /* OpenGL.framework in Frameworks */,
 				42CCD5A2146EC5BF00353661 /* OpenAL.framework in Frameworks */,
-				42B7026315B0A8F2002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,8 +170,8 @@
 		42CCD56F146EC4B300353661 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B43D1F014C36051008A5D9D /* iOS */,
 				5B43D1F114C36054008A5D9D /* MacOSX */,
+				5B43D1F014C36051008A5D9D /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 		5B43D1F114C36054008A5D9D /* MacOSX */ = {
 			isa = PBXGroup;
 			children = (
+				424CC037161FCB7B00577827 /* IOKit.framework */,
 				42CCD570146EC4B300353661 /* Cocoa.framework */,
 				42CCD5A5146EC5CE00353661 /* QuartzCore.framework */,
 				42CCD5A3146EC5C600353661 /* OpenGL.framework */,

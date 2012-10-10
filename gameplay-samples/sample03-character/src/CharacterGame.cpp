@@ -209,7 +209,7 @@ void CharacterGame::update(float elapsedTime)
         // apply impulse from kick.
         Vector3 impulse(-_characterNode->getForwardVectorWorld());
         impulse.normalize();
-        impulse.y = 1.0f; // add some loft to kick
+        impulse.y = 1.0f; // add some lift to kick
         impulse.scale(16.6f); //scale the impulse.
         ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyImpulse(impulse);
         _hasBall = false;

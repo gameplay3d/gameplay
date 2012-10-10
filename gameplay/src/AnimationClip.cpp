@@ -43,7 +43,7 @@ AnimationClip::~AnimationClip()
 
     if (_scriptListeners)
     {
-        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        for (size_t i = 0; i < _scriptListeners->size(); i++)
         {
             SAFE_DELETE((*_scriptListeners)[i]);
         }
@@ -498,8 +498,8 @@ bool AnimationClip::update(float elapsedTime)
     Animation::Channel* channel = NULL;
     AnimationValue* value = NULL;
     AnimationTarget* target = NULL;
-    unsigned int channelCount = _animation->_channels.size();
-    for (unsigned int i = 0; i < channelCount; i++)
+    size_t channelCount = _animation->_channels.size();
+    for (size_t i = 0; i < channelCount; i++)
     {
         channel = _animation->_channels[i];
         GP_ASSERT(channel);

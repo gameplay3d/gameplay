@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a>  </div>
   <div class="headertitle">
@@ -97,6 +98,9 @@ Inheritance diagram for gameplay::PhysicsCharacter:</div>
 
 <p><a href="classgameplay_1_1_physics_character-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>ActionInterface</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5de393cc5dc5eadd102b2cc9d366ee04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">PhysicsCollisionObject::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a5de393cc5dc5eadd102b2cc9d366ee04">getType</a> () const </td></tr>
@@ -116,8 +120,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8861777624baf4a46e4dc144fbffe0e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a8861777624baf4a46e4dc144fbffe0e1">setRightVelocity</a> (float velocity=1.0f)</td></tr>
 <tr class="memitem:a1666989f683cb1b9aecf1d9c7048fe55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a1666989f683cb1b9aecf1d9c7048fe55">getCurrentVelocity</a> () const </td></tr>
 <tr class="memitem:a332f32377672d38a6e5fd3feb6de5615"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a332f32377672d38a6e5fd3feb6de5615">jump</a> (float height)</td></tr>
-<tr class="memitem:a5074f7f387164ac478b3587466991490"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a5074f7f387164ac478b3587466991490">updateAction</a> (btCollisionWorld *collisionWorld, btScalar deltaTimeStep)</td></tr>
-<tr class="memitem:a75ef9f25d4663800e6180b350422a815"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#a75ef9f25d4663800e6180b350422a815">debugDraw</a> (btIDebugDraw *debugDrawer)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:aac150c2dc76bf492747c2e6d8c1371e5"><td class="memItemLeft" align="right" valign="top">btCollisionObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_character.html#aac150c2dc76bf492747c2e6d8c1371e5">getCollisionObject</a> () const </td></tr>
@@ -126,24 +128,6 @@ Protected Member Functions</h2></td></tr>
 <div class="textblock"><p>Physics controller class for a game character.</p>
 <p>This class can be used to control the movements and collisions of a character in a game. It interacts with the Physics system to apply gravity and handle collisions, however dynamics are not applied to the character directly by the physics system. Instead, the character's movement is controlled directly by the <a class="el" href="classgameplay_1_1_physics_character.html">PhysicsCharacter</a> class. This results in a more responsive and typical game character than would be possible if trying to move a character by applying physical simulation with forces. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a75ef9f25d4663800e6180b350422a815"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_character.html#a75ef9f25d4663800e6180b350422a815">gameplay::PhysicsCharacter::debugDraw</a> </td>
-          <td>(</td>
-          <td class="paramtype">btIDebugDraw *&#160;</td>
-          <td class="paramname"><em>debugDrawer</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="section see"><dt>See also:</dt><dd>btActionInterface::debugDraw  </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="aac150c2dc76bf492747c2e6d8c1371e5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -592,39 +576,11 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5074f7f387164ac478b3587466991490"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_physics_character.html#a5074f7f387164ac478b3587466991490">gameplay::PhysicsCharacter::updateAction</a> </td>
-          <td>(</td>
-          <td class="paramtype">btCollisionWorld *&#160;</td>
-          <td class="paramname"><em>collisionWorld</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">btScalar&#160;</td>
-          <td class="paramname"><em>deltaTimeStep</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="section see"><dt>See also:</dt><dd>btActionInterface::updateAction  </dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 30 2012 19:06:37 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 9 2012 21:00:10 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
