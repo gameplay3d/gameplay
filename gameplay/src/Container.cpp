@@ -365,6 +365,9 @@ bool Container::isScrollBarsAutoHide() const
 
 bool Container::isScrolling() const
 {
+    if (_parent && _parent->isScrolling())
+        return true;
+
     return (_scrolling &&
             (abs(_scrollingLastX - _scrollingFirstX) > SCROLL_THRESHOLD ||
              abs(_scrollingLastY - _scrollingFirstY) > SCROLL_THRESHOLD));

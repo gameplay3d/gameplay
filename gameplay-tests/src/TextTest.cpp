@@ -5,15 +5,6 @@
     ADD_TEST("Graphics", "Text", TextTest, 100);
 #endif
 
-const char* _legend =  "F: Change font\n" \
-                        "W: Wrapping\n" \
-                        "C: Ignore clip-rect\n" \
-                        "R: Reverse\n" \
-                        "V: Switch clip regions.\n" \
-                        "S: Simple / Advanced\n" \
-                        "1-9: Alignments\n" \
-                        "+/-: Scaling\n";
-
 std::string _fontNames[] =
 {
     "arial14",
@@ -26,20 +17,21 @@ std::string _fontNames[] =
 };
 
 TextTest::TextTest()
-    : _font(NULL), _fontIndex(0), _stateBlock(NULL), _legendText(NULL), _viewport(250, 100, 512, 200), _alignment(Font::ALIGN_LEFT),  
-    _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _simple(false), _rightToLeft(false), _fontsCount(7)
+    : _font(NULL), _fontIndex(0), _stateBlock(NULL), _viewport(250, 100, 512, 200), _alignment(Font::ALIGN_LEFT),  
+    _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _simple(false), _rightToLeft(false), _fontsCount(7), _form(NULL)
 {
 }
 
 void TextTest::finalize()
 {
     SAFE_RELEASE(_stateBlock);
-    SAFE_DELETE(_legendText);
 
     for (unsigned int i = 0; i < _fonts.size(); i++)
     {
         SAFE_RELEASE(_fonts[i]);
     }
+
+    SAFE_RELEASE(_form);
 }
 
 void TextTest::initialize()
@@ -61,18 +53,37 @@ void TextTest::initialize()
         _fonts.push_back(f);
     }
     _font = _fonts[0];
-
-    _legendText = _fonts[0]->createText(_legend, Rectangle(5, 100, 1000, 500), Vector4(0, 1, 0, 1), _fonts[0]->getSize());
     
     _testString = std::string( "Lorem ipsum dolor sit amet, \n" \
                                 "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" \
-                                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n" \
-                                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.  \n" \
+                                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" \
+                                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n" \
                                 "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+
+    // Create and listen to form.
+    _form = Form::create("res/common/textTest.form");
+    static_cast<Button*>(_form->getControl("fontButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("wrapButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("clipRectButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("reverseButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("switchClipRegionButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("simpleAdvancedButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("smallerButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("biggerButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("topLeftButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("topCenterButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("topRightButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("centerLeftButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("centerButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("centerRightButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("bottomLeftButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("bottomCenterButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_form->getControl("bottomRightButton"))->addListener(this, Control::Listener::CLICK);
 }
 
 void TextTest::update(float elapsedTime)
 {
+    _form->update(elapsedTime);
 }
 
 void TextTest::render(float elapsedTime)
@@ -80,31 +91,16 @@ void TextTest::render(float elapsedTime)
     // Clear the screen.
     clear(CLEAR_COLOR_DEPTH, Vector4(0, 0, 0, 1), 1.0f, 0);
 
-    // Draw the FPS, font info and instructions.
+    // Draw the frame rate.
     char fps[5];
     sprintf(fps, "%u", getFrameRate());
-    
-    char fontSize[4];
-    sprintf(fontSize, "%u", _fonts[_fontIndex]->getSize());
-    char scale[9];
-    sprintf(scale, "%f", _scale);
-
-    std::string fontInfo = "Font: ";
-    fontInfo += _fontNames[_fontIndex];
-    fontInfo += "\tSize: ";
-    fontInfo += fontSize;
-    fontInfo += "\tScale: ";
-    fontInfo += scale;
-
     _fonts[1]->start();
-    _fonts[1]->drawText(fps, 5, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
-    _fonts[1]->drawText(fontInfo.c_str(), 250, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
-
-    _fonts[0]->start();
-    _fonts[0]->drawText(_legendText);
+    _fonts[1]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
+    
+    _form->draw();
 
     unsigned int size = (float)_font->getSize() * _scale;
-    if (_font != _fonts[0] && _font != _fonts[1])
+    if (_font != _fonts[1])
         _font->start();
 
     if (_simple)
@@ -137,11 +133,10 @@ void TextTest::render(float elapsedTime)
         _font->drawText(".", area.x + area.width, area.y + area.height, Vector4::fromColor(0x0000ffff), size);
     }
 
-    if (_font != _fonts[0] && _font != _fonts[1])
+    if (_font != _fonts[1])
     {
         _font->finish();
     }
-    _fonts[0]->finish();
     _fonts[1]->finish();
 }
 
@@ -151,69 +146,137 @@ void TextTest::touchEvent(Touch::TouchEvent event, int x, int y, unsigned int co
     _viewport.height = y - _viewport.y;
 }
 
-void TextTest::keyEvent(Keyboard::KeyEvent keyEvent, int key)
+void TextTest::controlEvent(Control* control, EventType evt)
 {
-    switch (keyEvent)
+    const char* id = control->getId();
+
+    if (strcmp(id, "fontButton") == 0)
     {
-    case Keyboard::KEY_PRESS:
-        switch (key)
+        _fontIndex++;
+        if (_fontIndex >= _fontsCount)
         {
-            case Keyboard::KEY_ONE:
-                _alignment = Font::ALIGN_TOP_LEFT;
-                break;
-            case Keyboard::KEY_TWO:
-                _alignment = Font::ALIGN_TOP_HCENTER;
-                break;
-            case Keyboard::KEY_THREE:
-                _alignment = Font::ALIGN_TOP_RIGHT;
-                break;
-            case Keyboard::KEY_FOUR:
-                _alignment = Font::ALIGN_VCENTER_LEFT;
-                break;
-            case Keyboard::KEY_FIVE:
-                _alignment = Font::ALIGN_VCENTER_HCENTER;
-                break;
-            case Keyboard::KEY_SIX:
-                _alignment = Font::ALIGN_VCENTER_RIGHT;
-                break;
-            case Keyboard::KEY_SEVEN:
-                _alignment = Font::ALIGN_BOTTOM_LEFT;
-                break;
-            case Keyboard::KEY_EIGHT:
-                _alignment = Font::ALIGN_BOTTOM_HCENTER;
-                break;
-            case Keyboard::KEY_NINE:
-                _alignment = Font::ALIGN_BOTTOM_RIGHT;
-                break;
-            case Keyboard::KEY_PLUS:
-                _scale += 0.1f;
-                break;
-            case Keyboard::KEY_MINUS:
-                _scale -= 0.1f;
-                break;
-            case Keyboard::KEY_C:
-                _ignoreClip = !_ignoreClip;
-                break;
-            case Keyboard::KEY_F:
-                _fontIndex++;
-                if (_fontIndex >= _fontsCount)
-                {
-                    _fontIndex = 0;
-                }
-                _font = _fonts[_fontIndex];
-                break;
-            case Keyboard::KEY_R:
-                _rightToLeft = !_rightToLeft;
-                break;
-            case Keyboard::KEY_S:
-                _simple = !_simple;
-                break;
-            case Keyboard::KEY_V:
-                _useViewport = !_useViewport;
-                break;
-            case Keyboard::KEY_W:
-                _wrap = !_wrap;
-                break;
+            _fontIndex = 0;
         }
+        _font = _fonts[_fontIndex];
+        std::string s = "Font (" + _fontNames[_fontIndex] + ")";
+        static_cast<Button*>(control)->setText(s.c_str());
+    }
+    else if (strcmp(id, "wrapButton") == 0)
+    {
+        _wrap = !_wrap;
+        Button* wrapButton = static_cast<Button*>(control);
+        if (_wrap)
+            wrapButton->setText("Word Wrap (On)");
+        else
+            wrapButton->setText("Word Wrap (Off)");
+    }
+    else if (strcmp(id, "clipRectButton") == 0)
+    {
+        _ignoreClip = !_ignoreClip;
+        Button* clipRectButton = static_cast<Button*>(control);
+        if (_ignoreClip)
+            clipRectButton->setText("Ignore Clip-Rect (On)");
+        else
+            clipRectButton->setText("Ignore Clip-Rect (Off)");
+    }
+    else if (strcmp(id, "reverseButton") == 0)
+    {
+        _rightToLeft = !_rightToLeft;
+        Button* reverseButton = static_cast<Button*>(control);
+        if (_rightToLeft)
+            reverseButton->setText("Reverse Text (On)");
+        else
+            reverseButton->setText("Reverse Text (Off)");
+    }
+    else if (strcmp(id, "switchClipRegionButton") == 0)
+    {
+        _useViewport = !_useViewport;
+        Button* switchClipButton = static_cast<Button*>(control);
+        if (_useViewport)
+            switchClipButton->setText("Switch Clip Regions (Viewport)");
+        else
+            switchClipButton->setText("Switch Clip Regions (Text Area)");
+    }
+    else if (strcmp(id, "simpleAdvancedButton") == 0)
+    {
+        _simple = !_simple;
+        Button* simpleAdvancedButton = static_cast<Button*>(control);
+        if (_simple)
+            simpleAdvancedButton->setText("Font API (Simple)");
+        else
+            simpleAdvancedButton->setText("Font API (Advanced)");
+    }
+    else if (strcmp(id, "smallerButton") == 0)
+    {
+        if (_scale > 0.11f)
+        {
+            _scale -= 0.1f;
+            Label* scaleLabel = static_cast<Label*>(_form->getControl("scaleLabel"));
+            char s[20];
+            sprintf(s, "Font Scale (%.1f)", _scale);
+            scaleLabel->setText(s);
+        }
+    }
+    else if (strcmp(id, "biggerButton") == 0)
+    {
+        _scale += 0.1f;
+        Label* scaleLabel = static_cast<Label*>(_form->getControl("scaleLabel"));
+        char s[20];
+        sprintf(s, "Font Scale (%.1f)", _scale);
+        scaleLabel->setText(s);
+    }
+    else if (strcmp(id, "topLeftButton") == 0)
+    {
+        _alignment = Font::ALIGN_TOP_LEFT;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Top-Left)");
+    }
+    else if (strcmp(id, "topCenterButton") == 0)
+    {
+        _alignment = Font::ALIGN_TOP_HCENTER;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Top-Center)");
+    }
+    else if (strcmp(id, "topRightButton") == 0)
+    {
+        _alignment = Font::ALIGN_TOP_RIGHT;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Top-Right)");
+    }
+    else if (strcmp(id, "centerLeftButton") == 0)
+    {
+        _alignment = Font::ALIGN_VCENTER_LEFT;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Center-Left)");
+    }
+    else if (strcmp(id, "centerButton") == 0)
+    {
+        _alignment = Font::ALIGN_VCENTER_HCENTER;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Center)");
+    }
+    else if (strcmp(id, "centerRightButton") == 0)
+    {
+        _alignment = Font::ALIGN_VCENTER_RIGHT;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Center-Right)");
+    }
+    else if (strcmp(id, "bottomLeftButton") == 0)
+    {
+        _alignment = Font::ALIGN_BOTTOM_LEFT;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Bottom-Left)");
+    }
+    else if (strcmp(id, "bottomCenterButton") == 0)
+    {
+        _alignment = Font::ALIGN_BOTTOM_HCENTER;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Bottom-Center)");
+    }
+    else if (strcmp(id, "bottomRightButton") == 0)
+    {
+        _alignment = Font::ALIGN_BOTTOM_RIGHT;
+        Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
+        alignmentLabel->setText("Alignment (Bottom-Right)");
     }
 }
