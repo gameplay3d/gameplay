@@ -1095,6 +1095,11 @@ void Platform::signalShutdown()
     exit(0);
 }
 
+bool Platform::canExit()
+{
+    return false;
+}
+
 unsigned int Platform::getDisplayWidth()
 {
     CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
