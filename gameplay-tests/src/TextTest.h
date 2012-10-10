@@ -9,7 +9,7 @@ using namespace gameplay;
 /**
  * Test the text and font class with various text functionality.
  */
-class TextTest : public Test
+class TextTest : public Test, public Control::Listener
 {
 public:
 
@@ -21,7 +21,7 @@ protected:
     void update(float elapsedTime);
     void render(float elapsedTime);
     void touchEvent(Touch::TouchEvent event, int x, int y, unsigned int contactIndex);
-    void keyEvent(Keyboard::KeyEvent keyEvent, int key);
+    void controlEvent(Control* control, EventType evt);
 
 private:
     void renderToTexture();
@@ -32,12 +32,10 @@ private:
     
     Font* _font;
     unsigned int _fontIndex;
-
     std::vector<Font*> _fonts;
     std::string _testString;
     gameplay::Rectangle _viewport;
     gameplay::Font::Justify _alignment;
-    Font::Text* _legendText;
     float _scale;
     bool _wrap;
     bool _ignoreClip;
@@ -45,6 +43,7 @@ private:
     bool _rightToLeft;
     bool _simple;
     unsigned int _fontsCount;
+    Form* _form;
 };
 
 #endif
