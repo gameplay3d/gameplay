@@ -53,6 +53,7 @@
     <category>core.games</category>
 
     <asset path="icon.png">icon.png</asset>
+	<asset path="game.config">game.config</asset>
     <asset path="../gameplay/res/shaders/colored.frag">res/shaders/colored.frag</asset>
     <asset path="../gameplay/res/shaders/colored.vert">res/shaders/colored.vert</asset>
 	<asset path="../gameplay/res/shaders/colored-unlit.frag">res/shaders/colored-unlit.frag</asset>
@@ -63,6 +64,7 @@
     <asset path="../gameplay/res/shaders/textured-unlit.vert">res/shaders/textured-unlit.vert</asset>
     <asset path="../gameplay/res/shaders/lib">res/shaders/lib</asset>
 	<asset path="res/common">res/common</asset>
+	<asset path="res/png">res/png</asset>
 
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
