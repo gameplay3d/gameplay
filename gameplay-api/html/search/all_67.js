@@ -213,7 +213,7 @@ var searchData=
   ['getnumadvertiseddescendants',['getNumAdvertisedDescendants',['../classgameplay_1_1_node.html#a174e7c94bbe7d251175c4b3011c8ef93',1,'gameplay::Node']]],
   ['getnumwheels',['getNumWheels',['../classgameplay_1_1_physics_vehicle.html#acd66e17305712e7543f4f36e6112c37c',1,'gameplay::PhysicsVehicle']]],
   ['getobjectcount',['getObjectCount',['../classgameplay_1_1_bundle.html#a996bf10d333c87bca3a442f98bc093c3',1,'gameplay::Bundle']]],
-  ['getobjectid',['getObjectID',['../classgameplay_1_1_bundle.html#a824140fb1a79dc8abc0896a0fe1df0a3',1,'gameplay::Bundle']]],
+  ['getobjectid',['getObjectId',['../classgameplay_1_1_bundle.html#a8b0d4240f4890dc08d386a7249d12054',1,'gameplay::Bundle']]],
   ['getobjectpointer',['getObjectPointer',['../classgameplay_1_1_script_controller.html#a415a7ab62655a32586ad91780c221cc1',1,'gameplay::ScriptController']]],
   ['getopacity',['getOpacity',['../classgameplay_1_1_control.html#a1873f512755b4370312f7cbb32fbf7a4',1,'gameplay::Control']]],
   ['getorientation',['getOrientation',['../classgameplay_1_1_audio_listener.html#a7a4a18371f76967e58fa7bd828a887a0',1,'gameplay::AudioListener']]],
