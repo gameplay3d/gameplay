@@ -95,7 +95,7 @@ public:
      * 
      * @return The ID of the object at the given index, or NULL if index is invalid.
      */
-    const char* getObjectID(unsigned int index) const;
+    const char* getObjectId(unsigned int index) const;
 
 private:
 

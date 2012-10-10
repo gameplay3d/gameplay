@@ -61,6 +61,7 @@ int lua_Container_insertControl(lua_State* state);
 int lua_Container_isContainer(lua_State* state);
 int lua_Container_isEnabled(lua_State* state);
 int lua_Container_isScrollBarsAutoHide(lua_State* state);
+int lua_Container_isScrolling(lua_State* state);
 int lua_Container_release(lua_State* state);
 int lua_Container_removeControl(lua_State* state);
 int lua_Container_removeScriptCallback(lua_State* state);
