@@ -106,6 +106,11 @@ inline bool Game::isMultiTouch() const
     return Platform::isMultiTouch();
 }
 
+inline bool Game::canExit() const
+{
+    return Platform::canExit();
+}
+
 inline void Game::getAccelerometerValues(float* pitch, float* roll)
 {
     Platform::getAccelerometerValues(pitch, roll);

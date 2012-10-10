@@ -117,6 +117,7 @@ private:
     Scene* _scene;
     Font* _font;
     Form* _menu;
+    Form* _overlay;
     std::vector<Node*> _renderQueues[2];
     unsigned int _keyFlags;
     unsigned int _mouseFlags;
