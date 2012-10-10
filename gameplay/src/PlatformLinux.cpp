@@ -702,6 +702,11 @@ void Platform::signalShutdown()
 { 
     // nothing to do  
 }
+
+bool Platform::canExit()
+{
+    return true;
+}
     
 unsigned int Platform::getDisplayWidth()
 {

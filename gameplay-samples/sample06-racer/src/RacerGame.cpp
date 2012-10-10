@@ -58,6 +58,15 @@ void RacerGame::initialize()
     static_cast<Button*>(_menu->getControl("quitGameButton"))->addListener(this, Listener::CLICK);
     static_cast<RadioButton*>(_menu->getControl("useGamepad"))->addListener(this, Listener::VALUE_CHANGED);
     static_cast<RadioButton*>(_menu->getControl("useTilt"))->addListener(this, Listener::VALUE_CHANGED);
+    if (!canExit())
+    {
+        // Prevent a programmatic exit on platforms that don't allow it.
+        _menu->removeControl("quitGameButton");
+    }
+
+    // Create a pause button to display the menu
+    _overlay = Form::create("res/common/overlay.form");
+    static_cast<Button*>(_overlay->getControl("menuButton"))->addListener(this, Listener::CLICK);
 
     // Load the scene
     _scene = Scene::load("res/common/game.scene");
@@ -139,6 +148,7 @@ void RacerGame::finalize()
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_menu);
+    SAFE_RELEASE(_overlay);
 }
 
 void RacerGame::update(float elapsedTime)
@@ -149,6 +159,7 @@ void RacerGame::update(float elapsedTime)
     _gamepad->update(elapsedTime);
 
 	_menu->update(Game::getAbsoluteTime());
+	_overlay->update(Game::getAbsoluteTime());
 
     Node* cameraNode;
     if (_scene->getActiveCamera() && (cameraNode = _scene->getActiveCamera()->getNode()))
@@ -300,6 +311,8 @@ void RacerGame::render(float elapsedTime)
     {
         _menu->draw();
     }
+    
+    _overlay->draw();
         
     // Draw FPS and speed
     int carSpeed = _carVehicle ? (int)_carVehicle->getSpeedKph() : 0;
@@ -512,11 +525,13 @@ void RacerGame::menuEvent()
 
 	if (__showMenu)
 	{
+        static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
 		pause();
         _menu->enable();
 	}
 	else
 	{
+        static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Menu");
 		resume();
         _menu->disable();
 	}
@@ -580,5 +595,9 @@ void RacerGame::controlEvent(Control* control, EventType evt)
     else if (strcmp(control->getId(), "useTilt") == 0)
     {
         __useAccelerometer = true;
+    }
+    else if (strcmp(control->getId(), "menuButton") == 0)
+    {
+        menuEvent();
     }
 }
