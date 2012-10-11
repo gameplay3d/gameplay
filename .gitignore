@@ -18,6 +18,18 @@ Thumbs.db
 /Device-Profile
 /Device-Release
 /build
+/gameplay-internal
+/gameplay-api/xml
+
+/gameplay-encoder/Debug
+/gameplay-encoder/Release
+/gameplay-encoder/gameplay-encoder.xcodeproj/xcuserdata
+
+/gameplay-luagen/Release
+/gameplay-luagen/Debug
+/gameplay-luagen/doxygen_entrydb_680.tmp
+/gameplay-luagen/doxygen_objdb_680.tmp
+/gameplay-luagen/xml
 
 /gameplay/Debug
 /gameplay/DebugMem
@@ -33,21 +45,36 @@ Thumbs.db
 /gameplay/gameplay.xcodeproj/xcuserdata
 /gameplay/android/NUL
 /gameplay/android/proguard.cfg
+/gameplay/android/proguard-project.txt
 /gameplay/android/local.properties
 /gameplay/android/project.properties
 /gameplay/android/obj
+/gameplay/linux
 
-/gameplay-api/xml
-
-/gameplay-encoder/Debug
-/gameplay-encoder/Release
-/gameplay-encoder/gameplay-encoder.xcodeproj/xcuserdata
-
-/gameplay-luagen/Release
-/gameplay-luagen/Debug
-/gameplay-luagen/doxygen_entrydb_680.tmp
-/gameplay-luagen/doxygen_objdb_680.tmp
-/gameplay-luagen/xml
+/gameplay-tests/Debug
+/gameplay-tests/DebugMem
+/gameplay-tests/Release
+/gameplay-tests/Simulator
+/gameplay-tests/Simulator-Coverage
+/gameplay-tests/Simulator-Profile
+/gameplay-tests/Device-Debug
+/gameplay-tests/Device-Coverage
+/gameplay-tests/Device-Profile
+/gameplay-tests/Device-Release
+/gameplay-tests/res/shaders
+/gameplay-tests/res/logo_powered_white.png
+/gameplay-tests/gameplay-tests.xcodeproj/xcuserdata
+/gameplay-tests/android/src
+/gameplay-tests/android/assets
+/gameplay-tests/android/bin
+/gameplay-tests/android/gen
+/gameplay-tests/android/libs
+/gameplay-tests/android/obj
+/gameplay-tests/android/NUL
+/gameplay-tests/android/local.properties
+/gameplay-tests/android/proguard-project.txt
+/gameplay-tests/android/project.properties
+/gameplay-tests/linux
 
 /gameplay-samples/sample00-mesh/Debug
 /gameplay-samples/sample00-mesh/DebugMem
@@ -72,6 +99,7 @@ Thumbs.db
 /gameplay-samples/sample00-mesh/android/local.properties
 /gameplay-samples/sample00-mesh/android/proguard.cfg
 /gameplay-samples/sample00-mesh/android/project.properties
+/gameplay-samples/sample00-mesh/linux
 
 /gameplay-samples/sample01-longboard/Debug
 /gameplay-samples/sample01-longboard/DebugMem
@@ -97,6 +125,7 @@ Thumbs.db
 /gameplay-samples/sample01-longboard/android/proguard.cfg
 /gameplay-samples/sample01-longboard/android/project.properties
 /gameplay-samples/sample01-longboard/android/local.properties
+/gameplay-samples/sample01-longboard/linux
 
 /gameplay-samples/sample02-spaceship/Debug
 /gameplay-samples/sample02-spaceship/DebugMem
@@ -121,6 +150,7 @@ Thumbs.db
 /gameplay-samples/sample02-spaceship/android/src
 /gameplay-samples/sample02-spaceship/android/proguard.cfg
 /gameplay-samples/sample02-spaceship/android/local.properties
+/gameplay-samples/sample02-spaceship/linux
 
 /gameplay-samples/sample03-character/Debug
 /gameplay-samples/sample03-character/DebugMem
@@ -147,6 +177,7 @@ Thumbs.db
 /gameplay-samples/sample03-character/android/obj
 /gameplay-samples/sample03-character/android/NUL
 /gameplay-samples/sample03-character/res/gamepad.xcf
+/gameplay-samples/sample03-character/linux
 
 /gameplay-samples/sample04-particles/Debug
 /gameplay-samples/sample04-particles/DebugMem
@@ -173,6 +204,7 @@ Thumbs.db
 /gameplay-samples/sample04-particles/android/proguard.cfg
 /gameplay-samples/sample04-particles/android/local.properties
 /gameplay-samples/sample04-particles/android/project.properties
+/gameplay-samples/sample04-particles/linux
 
 /gameplay-samples/sample05-lua/Debug
 /gameplay-samples/sample05-lua/DebugMem
@@ -197,6 +229,7 @@ Thumbs.db
 /gameplay-samples/sample05-lua/android/local.properties
 /gameplay-samples/sample05-lua/android/proguard.cfg
 /gameplay-samples/sample05-lua/android/project.properties
+/gameplay-samples/sample05-lua/linux
 
 /gameplay-samples/sample06-racer/Debug
 /gameplay-samples/sample06-racer/DebugMem
@@ -226,31 +259,6 @@ Thumbs.db
 /gameplay-samples/sample06-racer/android/local.properties
 /gameplay-samples/sample06-racer/android/proguard.cfg
 /gameplay-samples/sample06-racer/android/project.properties
+/gameplay-samples/sample06-racer/linux
 
-/gameplay-internal
-/gameplay/android/proguard-project.txt
-
-/gameplay-tests/Debug
-/gameplay-tests/DebugMem
-/gameplay-tests/Release
-/gameplay-tests/Simulator
-/gameplay-tests/Simulator-Coverage
-/gameplay-tests/Simulator-Profile
-/gameplay-tests/Device-Debug
-/gameplay-tests/Device-Coverage
-/gameplay-tests/Device-Profile
-/gameplay-tests/Device-Release
-/gameplay-tests/res/shaders
-/gameplay-tests/res/logo_powered_white.png
-/gameplay-tests/gameplay-tests.xcodeproj/xcuserdata
-/gameplay-tests/android/src
-/gameplay-tests/android/assets
-/gameplay-tests/android/bin
-/gameplay-tests/android/gen
-/gameplay-tests/android/libs
-/gameplay-tests/android/obj
-/gameplay-tests/android/NUL
-/gameplay-tests/android/local.properties
-/gameplay-tests/android/proguard-project.txt
-/gameplay-tests/android/project.properties
 

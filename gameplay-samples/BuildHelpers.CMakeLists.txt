@@ -22,7 +22,7 @@ endmacro()
 
 # convenience to call above with current directory and everything in "res"
 macro(COPY_RES GAME_NAME)
-    # a target for all addition asserts (will be done in defualt compile, but if you target the executable
+    # a target for all addition asserts (will be done in default compile, but if you target the executable
     # it won't be done -- good for testing)
     add_custom_target( ${GAME_NAME}_ASSETS ALL )
     
