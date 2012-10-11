@@ -71,7 +71,6 @@ void PhysicsSceneTest::render(float elapsedTime)
 
 void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    static const int optionWidth = 100;
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
