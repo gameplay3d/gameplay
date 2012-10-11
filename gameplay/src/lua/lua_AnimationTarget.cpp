@@ -13,7 +13,7 @@ namespace gameplay
 
 void luaRegister_AnimationTarget()
 {
-    const luaL_Reg lua_members[] = 
+    const luaL_Reg lua_members[] =
     {
         {"createAnimation", lua_AnimationTarget_createAnimation},
         {"createAnimationFromBy", lua_AnimationTarget_createAnimationFromBy},
@@ -129,7 +129,7 @@ int lua_AnimationTarget_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -183,7 +183,7 @@ int lua_AnimationTarget_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -385,7 +385,7 @@ int lua_AnimationTarget_destroyAnimation(lua_State* state)
             {
                 AnimationTarget* instance = getInstance(state);
                 instance->destroyAnimation();
-                
+
                 return 0;
             }
             else
@@ -405,7 +405,7 @@ int lua_AnimationTarget_destroyAnimation(lua_State* state)
 
                 AnimationTarget* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-                
+
                 return 0;
             }
             else
@@ -566,7 +566,7 @@ int lua_AnimationTarget_getAnimationPropertyValue(lua_State* state)
 
                 AnimationTarget* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -608,7 +608,7 @@ int lua_AnimationTarget_setAnimationPropertyValue(lua_State* state)
 
                 AnimationTarget* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -636,7 +636,7 @@ int lua_AnimationTarget_setAnimationPropertyValue(lua_State* state)
 
                 AnimationTarget* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-                
+
                 return 0;
             }
             else
