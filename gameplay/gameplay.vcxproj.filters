@@ -81,10 +81,16 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlatformQNX.cpp">
+    <ClCompile Include="src\main-blackberry.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlatformWin32.cpp">
+    <ClCompile Include="src\PlatformBlackBerry.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main-windows.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlatformWindows.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Quaternion.cpp">
@@ -165,12 +171,6 @@
     <ClCompile Include="src\RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\gameplay-main-qnx.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameplay-main-win32.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\DebugNew.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -216,7 +216,7 @@
     <ClCompile Include="src\MeshBatch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\gameplay-main-android.cpp">
+    <ClCompile Include="src\main-android.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformAndroid.cpp">
@@ -782,6 +782,9 @@
     </ClCompile>
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
       <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main-linux.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformLinux.cpp">
       <Filter>src</Filter>
@@ -1621,12 +1624,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\gameplay-main-macosx.mm">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\PlatformMacOSX.mm">
-      <Filter>src</Filter>
-    </None>
     <None Include="src\Game.inl">
       <Filter>src</Filter>
     </None>
@@ -1634,12 +1631,6 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\MeshBatch.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\gameplay-main-ios.mm">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\PlatformiOS.mm">
       <Filter>src</Filter>
     </None>
     <None Include="res\logo_black.png">
