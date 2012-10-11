@@ -52,7 +52,6 @@ LOCAL_SRC_FILES := \
     Frustum.cpp \
     Game.cpp \
     Gamepad.cpp \
-    main-android.cpp \
     Image.cpp \
     Joint.cpp \
     Joystick.cpp \

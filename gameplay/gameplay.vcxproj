@@ -73,6 +73,10 @@
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gamepad.cpp" />
+    <ClCompile Include="src\gameplay-main-android.cpp" />
+    <ClCompile Include="src\gameplay-main-blackberry.cpp" />
+    <ClCompile Include="src\gameplay-main-linux.cpp" />
+    <ClCompile Include="src\gameplay-main-windows.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
@@ -80,10 +84,6 @@
     <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Logger.cpp" />
-    <ClCompile Include="src\main-android.cpp" />
-    <ClCompile Include="src\main-blackberry.cpp" />
-    <ClCompile Include="src\main-linux.cpp" />
-    <ClCompile Include="src\main-windows.cpp" />
     <ClCompile Include="src\lua\lua_AbsoluteLayout.cpp" />
     <ClCompile Include="src\lua\lua_AIAgent.cpp" />
     <ClCompile Include="src\lua\lua_AIAgentListener.cpp" />
