@@ -71,9 +71,9 @@
 			<Add directory="../../external-deps/glew/lib/linux" />
 		</Linker>
 		<ExtraCommands>
-			<Add after="cp -rn ../../gameplay/res/shaders ./res" />
-			<Add after="cp -rn ../../gameplay/res/logo_powered_white.png ./res" />
-			<Add after="cp -rn ./game.png.config ./game.config" />
+			<Add after="cp -rf ../../gameplay/res/shaders ./res" />
+			<Add after="cp -rf ../../gameplay/res/logo_powered_white.png ./res" />
+			<Add after="cp -rf ./game.png.config ./game.config" />
 			<Mode after="always" />
 		</ExtraCommands>
 		<Unit filename="src/CharacterGame.cpp" />
