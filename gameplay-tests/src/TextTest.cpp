@@ -175,9 +175,9 @@ void TextTest::controlEvent(Control* control, EventType evt)
         _ignoreClip = !_ignoreClip;
         Button* clipRectButton = static_cast<Button*>(control);
         if (_ignoreClip)
-            clipRectButton->setText("Ignore Clip-Rect (On)");
+            clipRectButton->setText("Clipping (Off)");
         else
-            clipRectButton->setText("Ignore Clip-Rect (Off)");
+            clipRectButton->setText("Clipping (On)");
     }
     else if (strcmp(id, "reverseButton") == 0)
     {
@@ -193,9 +193,9 @@ void TextTest::controlEvent(Control* control, EventType evt)
         _useViewport = !_useViewport;
         Button* switchClipButton = static_cast<Button*>(control);
         if (_useViewport)
-            switchClipButton->setText("Switch Clip Regions (Viewport)");
+            switchClipButton->setText("Clip Regions (Viewport)");
         else
-            switchClipButton->setText("Switch Clip Regions (Text Area)");
+            switchClipButton->setText("Clip Regions (Text Area)");
     }
     else if (strcmp(id, "simpleAdvancedButton") == 0)
     {
@@ -222,61 +222,61 @@ void TextTest::controlEvent(Control* control, EventType evt)
         _scale += 0.1f;
         Label* scaleLabel = static_cast<Label*>(_form->getControl("scaleLabel"));
         char s[20];
-        sprintf(s, "Font Scale (%.1f)", _scale);
+        sprintf(s, "Scale (%.1f)", _scale);
         scaleLabel->setText(s);
     }
     else if (strcmp(id, "topLeftButton") == 0)
     {
         _alignment = Font::ALIGN_TOP_LEFT;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Top-Left)");
+        alignmentLabel->setText("Align (Top-Left)");
     }
     else if (strcmp(id, "topCenterButton") == 0)
     {
         _alignment = Font::ALIGN_TOP_HCENTER;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Top-Center)");
+        alignmentLabel->setText("Align (Top-Center)");
     }
     else if (strcmp(id, "topRightButton") == 0)
     {
         _alignment = Font::ALIGN_TOP_RIGHT;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Top-Right)");
+        alignmentLabel->setText("Align (Top-Right)");
     }
     else if (strcmp(id, "centerLeftButton") == 0)
     {
         _alignment = Font::ALIGN_VCENTER_LEFT;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Center-Left)");
+        alignmentLabel->setText("Align (Center-Left)");
     }
     else if (strcmp(id, "centerButton") == 0)
     {
         _alignment = Font::ALIGN_VCENTER_HCENTER;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Center)");
+        alignmentLabel->setText("Align (Center)");
     }
     else if (strcmp(id, "centerRightButton") == 0)
     {
         _alignment = Font::ALIGN_VCENTER_RIGHT;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Center-Right)");
+        alignmentLabel->setText("Align (Center-Right)");
     }
     else if (strcmp(id, "bottomLeftButton") == 0)
     {
         _alignment = Font::ALIGN_BOTTOM_LEFT;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Bottom-Left)");
+        alignmentLabel->setText("Align (Bottom-Left)");
     }
     else if (strcmp(id, "bottomCenterButton") == 0)
     {
         _alignment = Font::ALIGN_BOTTOM_HCENTER;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Bottom-Center)");
+        alignmentLabel->setText("Align (Bottom-Center)");
     }
     else if (strcmp(id, "bottomRightButton") == 0)
     {
         _alignment = Font::ALIGN_BOTTOM_RIGHT;
         Label* alignmentLabel = static_cast<Label*>(_form->getControl("alignmentLabel"));
-        alignmentLabel->setText("Alignment (Bottom-Right)");
+        alignmentLabel->setText("Align (Bottom-Right)");
     }
 }
