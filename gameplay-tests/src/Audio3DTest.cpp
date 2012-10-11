@@ -14,7 +14,6 @@ static const unsigned int MOVE_UP = 16;
 static const unsigned int MOVE_DOWN = 32;
 
 static const float MOVE_SPEED = 15.0f;
-
 static const float UP_DOWN_SPEED = 10.0f;
 
 #define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
@@ -148,9 +147,10 @@ void Audio3DTest::render(float elapsedTime)
     // Visit all the nodes in the scene for drawing
     _scene->visit(this, &Audio3DTest::drawScene);
 
-    drawDebugText();
+    drawDebugText(0, _font->getSize());
 
     _gamepad->draw();
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
 bool Audio3DTest::drawScene(Node* node)
@@ -169,6 +169,11 @@ void Audio3DTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
+        if (x < 75 && y < 50)
+        {
+            // Toggle Vsync if the user touches the top left corner
+            setVsync(!isVsync());
+        }
         _prevX = x;
         _prevY = y;
         break;
@@ -302,16 +307,15 @@ void Audio3DTest::addSound(const std::string& file)
     node->release();
 }
 
-void Audio3DTest::drawDebugText()
+void Audio3DTest::drawDebugText(int x, int y)
 {
     _font->start();
     static const int V_SPACE = 16;
-    int y = 0;
     AudioListener* audioListener = AudioListener::getInstance();
-    drawVector3("Listener Position", audioListener->getPosition(), 0, 0);
-    drawVector3("Listener Forward", audioListener->getOrientationForward(), 0, y+=V_SPACE);
-    drawVector3("Listener Up", audioListener->getOrientationUp(), 0, y+=V_SPACE);
-    drawVector3("Listener Velocity", audioListener->getVelocity(), 0, y+=V_SPACE);
+    drawVector3("Listener Position", audioListener->getPosition(), x, y);
+    drawVector3("Listener Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
+    drawVector3("Listener Up", audioListener->getOrientationUp(), x, y+=V_SPACE);
+    drawVector3("Listener Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
     _font->finish();
 }
 
