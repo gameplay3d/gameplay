@@ -7,9 +7,9 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="linux/Debug/libgameplay" prefix_auto="1" extension_auto="1" />
+				<Option output="Debug/libgameplay" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
-				<Option object_output="linux/Debug/" />
+				<Option object_output="Debug/" />
 				<Option type="2" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -18,9 +18,9 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="linux/Release/libgameplay" prefix_auto="1" extension_auto="1" />
+				<Option output="Release/libgameplay" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
-				<Option object_output="linux/Release/" />
+				<Option object_output="Release/" />
 				<Option type="2" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
