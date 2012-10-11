@@ -81,13 +81,13 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\main-blackberry.cpp">
+    <ClCompile Include="src\gameplay-main-blackberry.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformBlackBerry.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\main-windows.cpp">
+    <ClCompile Include="src\gameplay-main-windows.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformWindows.cpp">
@@ -216,7 +216,7 @@
     <ClCompile Include="src\MeshBatch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\main-android.cpp">
+    <ClCompile Include="src\gameplay-main-android.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformAndroid.cpp">
@@ -783,7 +783,7 @@
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\main-linux.cpp">
+    <ClCompile Include="src\gameplay-main-linux.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformLinux.cpp">

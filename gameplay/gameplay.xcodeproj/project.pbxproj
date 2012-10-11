@@ -1715,10 +1715,10 @@
 		B67EC8F9161DFCA8000B4D12 /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8F5161DFCA8000B4D12 /* Logger.h */; };
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
-		F18024A51627000D001BFF87 /* main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* main-ios.mm */; };
-		F18024A61627000D001BFF87 /* main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* main-ios.mm */; };
-		F18024A71627000D001BFF87 /* main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* main-macosx.mm */; };
-		F18024A81627000D001BFF87 /* main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* main-macosx.mm */; };
+		F18024A51627000D001BFF87 /* gameplay-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* gameplay-main-ios.mm */; };
+		F18024A61627000D001BFF87 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* gameplay-main-ios.mm */; };
+		F18024A71627000D001BFF87 /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */; };
+		F18024A81627000D001BFF87 /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2617,8 +2617,8 @@
 		B67EC8F4161DFCA8000B4D12 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger.cpp; path = src/Logger.cpp; sourceTree = SOURCE_ROOT; };
 		B67EC8F5161DFCA8000B4D12 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger.h; path = src/Logger.h; sourceTree = SOURCE_ROOT; };
 		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
-		F18024A31627000D001BFF87 /* main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "main-ios.mm"; path = "src/main-ios.mm"; sourceTree = SOURCE_ROOT; };
-		F18024A41627000D001BFF87 /* main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "main-macosx.mm"; path = "src/main-macosx.mm"; sourceTree = SOURCE_ROOT; };
+		F18024A31627000D001BFF87 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
+		F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macosx.mm"; path = "src/gameplay-main-macosx.mm"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2785,8 +2785,8 @@
 				42CD0DE7147D8FF50000361E /* Light.h */,
 				B67EC8F4161DFCA8000B4D12 /* Logger.cpp */,
 				B67EC8F5161DFCA8000B4D12 /* Logger.h */,
-				F18024A31627000D001BFF87 /* main-ios.mm */,
-				F18024A41627000D001BFF87 /* main-macosx.mm */,
+				F18024A31627000D001BFF87 /* gameplay-main-ios.mm */,
+				F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */,
 				42CD0DE8147D8FF50000361E /* Material.cpp */,
 				42CD0DE9147D8FF50000361E /* Material.h */,
 				42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */,
@@ -5001,8 +5001,8 @@
 				B67EC8EB161DFC8E000B4D12 /* lua_Logger.cpp in Sources */,
 				B67EC8EF161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */,
 				B67EC8F6161DFCA8000B4D12 /* Logger.cpp in Sources */,
-				F18024A51627000D001BFF87 /* main-ios.mm in Sources */,
-				F18024A71627000D001BFF87 /* main-macosx.mm in Sources */,
+				F18024A51627000D001BFF87 /* gameplay-main-ios.mm in Sources */,
+				F18024A71627000D001BFF87 /* gameplay-main-macosx.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5427,8 +5427,8 @@
 				B67EC8EC161DFC8E000B4D12 /* lua_Logger.cpp in Sources */,
 				B67EC8F0161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */,
 				B67EC8F7161DFCA8000B4D12 /* Logger.cpp in Sources */,
-				F18024A61627000D001BFF87 /* main-ios.mm in Sources */,
-				F18024A81627000D001BFF87 /* main-macosx.mm in Sources */,
+				F18024A61627000D001BFF87 /* gameplay-main-ios.mm in Sources */,
+				F18024A81627000D001BFF87 /* gameplay-main-macosx.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
