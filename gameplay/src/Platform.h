@@ -55,6 +55,14 @@ public:
      * This function is called automatically when the game shutdown function is called
      */
     static void signalShutdown();
+
+    /**
+     * Indicates whether a programmatic exit is allowed on this platform.
+     * Some platforms (eg. iOS) do not allow apps to exit programmatically.
+     *
+     * @return whether a programmatic exit is allowed on this platform.
+     */
+    static bool canExit();
     
     /**
      * Gets the display width.

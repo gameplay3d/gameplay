@@ -1749,7 +1749,7 @@ unsigned int Bundle::getObjectCount() const
     return _referenceCount;
 }
 
-const char* Bundle::getObjectID(unsigned int index) const
+const char* Bundle::getObjectId(unsigned int index) const
 {
     GP_ASSERT(_references);
     return (index >= _referenceCount ? NULL : _references[index].id.c_str());
