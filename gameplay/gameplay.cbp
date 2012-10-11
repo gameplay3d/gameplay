@@ -193,9 +193,9 @@
 		<Unit filename="src/Plane.h" />
 		<Unit filename="src/Platform.h" />
 		<Unit filename="src/PlatformAndroid.cpp" />
+		<Unit filename="src/PlatformBlackBerry.cpp" />
 		<Unit filename="src/PlatformLinux.cpp" />
-		<Unit filename="src/PlatformQNX.cpp" />
-		<Unit filename="src/PlatformWin32.cpp" />
+		<Unit filename="src/PlatformWindows.cpp" />
 		<Unit filename="src/Properties.cpp" />
 		<Unit filename="src/Properties.h" />
 		<Unit filename="src/Quaternion.cpp" />
@@ -252,10 +252,6 @@
 		<Unit filename="src/VertexFormat.h" />
 		<Unit filename="src/VerticalLayout.cpp" />
 		<Unit filename="src/VerticalLayout.h" />
-		<Unit filename="src/gameplay-main-android.cpp" />
-		<Unit filename="src/gameplay-main-linux.cpp" />
-		<Unit filename="src/gameplay-main-qnx.cpp" />
-		<Unit filename="src/gameplay-main-win32.cpp" />
 		<Unit filename="src/gameplay.h" />
 		<Unit filename="src/lua/lua_AIAgent.cpp" />
 		<Unit filename="src/lua/lua_AIAgent.h" />
@@ -583,6 +579,10 @@
 		<Unit filename="src/lua/lua_VerticalLayout.h" />
 		<Unit filename="src/lua/lua_all_bindings.cpp" />
 		<Unit filename="src/lua/lua_all_bindings.h" />
+		<Unit filename="src/main-android.cpp" />
+		<Unit filename="src/main-blackberry.cpp" />
+		<Unit filename="src/main-linux.cpp" />
+		<Unit filename="src/main-windows.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
