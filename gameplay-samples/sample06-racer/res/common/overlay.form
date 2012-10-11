@@ -1,0 +1,16 @@
+form menu
+{
+    theme = res/common/menu.theme
+    width = 110
+    height = 70
+    alignment = ALIGN_TOP_RIGHT
+
+    // Pause and show menu
+    button menuButton
+    {
+        style = buttonStyle
+        position = 10, 10
+        size = 90, 50
+        text = Menu
+    }
+}

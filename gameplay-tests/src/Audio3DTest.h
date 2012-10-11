@@ -50,9 +50,11 @@ private:
     Font* _font;
     Scene* _scene;
     Node* _cubeNode;
+    Gamepad* _gamepad;
     unsigned int _moveFlags;
     int _prevX;
     int _prevY;
+    bool _buttonPressed;
 };
 
 #endif

@@ -420,7 +420,7 @@ void SceneLoader::applyNodeUrls(Scene* scene)
                         unsigned int matchCount = 0;
                         for (unsigned int k = 0; k < objectCount; ++k)
                         {
-                            const char* objid = tmpBundle->getObjectID(k);
+                            const char* objid = tmpBundle->getObjectId(k);
                             if (strstr(objid, id.c_str()) == objid)
                             {
                                 // This object ID matches (starts with).

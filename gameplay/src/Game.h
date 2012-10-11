@@ -475,9 +475,16 @@ public:
     /**
      * Is multi-touch mode enabled.
      *
-     * @return true is multi-touch is enabled.
+     * @return true if multi-touch is enabled.
      */
     inline bool isMultiTouch() const;
+
+    /**
+     * Whether this game is allowed to exit programmatically.
+     *
+     * @return true if a programmatic exit is allowed.
+     */
+    inline bool canExit() const;
 
     /**
      * Gets the current accelerometer values.
