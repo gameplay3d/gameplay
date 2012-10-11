@@ -113,12 +113,12 @@ void RacerGame::initialize()
     {
         _engineSound->setLooped(true);
         _engineSound->play();
-        _engineSound->setGain(0.5f);
+        _engineSound->setGain(0.7f);
     }
 
-    _brakingSound = AudioSource::create("res/common/braking.ogg");
+    _brakingSound = AudioSource::create("res/common/braking.wav");
     _brakingSound->setLooped(false);
-    _brakingSound->setGain(10.0f);
+    _brakingSound->setGain(0.5f);
 }
 
 bool RacerGame::initializeScene(Node* node)
