@@ -67,6 +67,8 @@
 		5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */; };
 		5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */; };
 		5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206C152F2DDD003E2AC3 /* UIKit.framework */; };
+		9F4C6D00162735020076E137 /* GestureTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F4C6CFE162735020076E137 /* GestureTest.cpp */; };
+		9F4C6D01162735020076E137 /* GestureTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F4C6CFE162735020076E137 /* GestureTest.cpp */; };
 		B616B282161119EF00CB514C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
 		B6871F3D161121F900900743 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6871F391611206000900743 /* libgameplay.a */; };
 		B6871F3E1611220C00900743 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6871F391611206000900743 /* libgameplay.a */; };
@@ -128,6 +130,8 @@
 		5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		9F4C6CFE162735020076E137 /* GestureTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureTest.cpp; sourceTree = "<group>"; };
+		9F4C6CFF162735020076E137 /* GestureTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureTest.h; sourceTree = "<group>"; };
 		B6871F391611206000900743 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -232,6 +236,8 @@
 				420D543B15FE430D00AD0B91 /* Audio3DTest.h */,
 				420D543C15FE430D00AD0B91 /* CreateSceneTest.cpp */,
 				420D543D15FE430D00AD0B91 /* CreateSceneTest.h */,
+				9F4C6CFE162735020076E137 /* GestureTest.cpp */,
+				9F4C6CFF162735020076E137 /* GestureTest.h */,
 				420D544215FE430D00AD0B91 /* InputTest.cpp */,
 				420D544315FE430D00AD0B91 /* InputTest.h */,
 				420D544415FE430D00AD0B91 /* LoadSceneTest.cpp */,
@@ -431,6 +437,7 @@
 				420D547015FE430D00AD0B91 /* TextTest.cpp in Sources */,
 				420D547215FE430D00AD0B91 /* TextureTest.cpp in Sources */,
 				420D547415FE430D00AD0B91 /* TriangleTest.cpp in Sources */,
+				9F4C6D00162735020076E137 /* GestureTest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +460,7 @@
 				420D547115FE430D00AD0B91 /* TextTest.cpp in Sources */,
 				420D547315FE430D00AD0B91 /* TextureTest.cpp in Sources */,
 				420D547515FE430D00AD0B91 /* TriangleTest.cpp in Sources */,
+				9F4C6D01162735020076E137 /* GestureTest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
