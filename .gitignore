@@ -17,9 +17,14 @@ Thumbs.db
 /Device-Coverage
 /Device-Profile
 /Device-Release
-/build
+/cmake
+/linux
+/windows
+/blackberry
+
 /gameplay-internal
 /gameplay-api/xml
+
 
 /gameplay-encoder/Debug
 /gameplay-encoder/Release

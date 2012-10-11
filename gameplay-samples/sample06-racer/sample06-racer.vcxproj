@@ -130,6 +130,7 @@
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'">
     <LinkIncremental>true</LinkIncremental>
@@ -137,6 +138,7 @@
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>Device-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerrySimulator'">
     <LinkIncremental>true</LinkIncremental>
@@ -144,6 +146,7 @@
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>Simulator\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -151,6 +154,7 @@
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'">
     <LinkIncremental>true</LinkIncremental>
@@ -158,6 +162,7 @@
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>Device-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerrySimulator'">
     <LinkIncremental>true</LinkIncremental>
@@ -165,6 +170,7 @@
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>Simulator\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -172,18 +178,21 @@
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>Device-$(Configuration)\</OutDir>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>Device-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerrySimulator'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>Simulator\</OutDir>
     <CustomBuildBeforeTargets />
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <IntDir>Simulator\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -200,7 +209,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/win32;../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration);C:\directxsdk\Lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows;../../external-deps/bullet/lib/windows;../../external-deps/openal/lib/windows;../../external-deps/oggvorbis/lib/windows;../../external-deps/glew/lib/windows;../../external-deps/libpng/lib/windows;../../external-deps/zlib/lib/windows;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -228,7 +237,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>GLESv2;EGL;screen;m;png14;pps;bps;gestures;OpenAL;asound;gameplay;bullet;vorbis;lua</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/qnx/arm;../../external-deps/bullet/lib/qnx/arm;../../external-deps/oggvorbis/lib/qnx/arm;../../gameplay/Device-$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/blackberry/arm;../../external-deps/bullet/lib/blackberry/arm;../../external-deps/oggvorbis/lib/blackberry/arm;../../gameplay/Device-$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -255,7 +264,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>GLESv2;EGL;screen;m;png14;pps;bps;gestures;OpenAL;asound;gameplay;bullet;vorbis;lua</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/qnx/x86;../../external-deps/bullet/lib/qnx/x86;../../external-deps/oggvorbis/lib/qnx/x86;../../gameplay/Simulator</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/blackberry/x86;../../external-deps/bullet/lib/blackberry/x86;../../external-deps/oggvorbis/lib/blackberry/x86;../../gameplay/Simulator</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -284,7 +293,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/win32;../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows;../../external-deps/bullet/lib/windows;../../external-deps/openal/lib/windows;../../external-deps/oggvorbis/lib/windows;../../external-deps/glew/lib/windows;../../external-deps/libpng/lib/windows;../../external-deps/zlib/lib/windows;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -314,7 +323,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>GLESv2;EGL;screen;m;png14;pps;bps;gestures;OpenAL;asound;gameplay;bullet;vorbis;lua</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/qnx/arm;../../external-deps/bullet/lib/qnx/arm;../../external-deps/oggvorbis/lib/qnx/arm;../../gameplay/Device-$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/blackberry/arm;../../external-deps/bullet/lib/blackberry/arm;../../external-deps/oggvorbis/lib/blackberry/arm;../../gameplay/Device-$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -343,7 +352,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>GLESv2;EGL;screen;m;png14;pps;bps;gestures;OpenAL;asound;gameplay;bullet;vorbis;lua</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/qnx/x86;../../external-deps/bullet/lib/qnx/x86;../../external-deps/oggvorbis/lib/qnx/x86;../../gameplay/Simulator</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/blackberry/x86;../../external-deps/bullet/lib/blackberry/x86;../../external-deps/oggvorbis/lib/blackberry/x86;../../gameplay/Simulator</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -372,7 +381,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>lua.lib;OpenAL32.lib;OpenGL32.lib;GLU32.lib;glew32.lib;libpng14.lib;zlib.lib;gameplay.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/win32;../../external-deps/bullet/lib/win32;../../external-deps/openal/lib/win32;../../external-deps/oggvorbis/lib/win32;../../external-deps/glew/lib/win32;../../external-deps/libpng/lib/win32;../../external-deps/zlib/lib/win32;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/windows;../../external-deps/bullet/lib/windows;../../external-deps/openal/lib/windows;../../external-deps/oggvorbis/lib/windows;../../external-deps/glew/lib/windows;../../external-deps/libpng/lib/windows;../../external-deps/zlib/lib/windows;../../gameplay/$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -402,7 +411,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>GLESv2;EGL;screen;m;png14;pps;bps;gestures;OpenAL;asound;gameplay;bullet;vorbis;lua</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/qnx/arm;../../external-deps/bullet/lib/qnx/arm;../../external-deps/oggvorbis/lib/qnx/arm;../../gameplay/Device-$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/blackberry/arm;../../external-deps/bullet/lib/blackberry/arm;../../external-deps/oggvorbis/lib/blackberry/arm;../../gameplay/Device-$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -431,7 +440,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>GLESv2;EGL;screen;m;png14;pps;bps;gestures;OpenAL;asound;gameplay;bullet;vorbis;lua</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../external-deps/lua/lib/qnx/x86;../../external-deps/bullet/lib/qnx/x86;../../external-deps/oggvorbis/lib/qnx/x86;../../gameplay/Simulator</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../external-deps/lua/lib/blackberry/x86;../../external-deps/bullet/lib/blackberry/x86;../../external-deps/oggvorbis/lib/blackberry/x86;../../gameplay/Simulator</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
