@@ -1348,10 +1348,6 @@
 		42BCD6CD15EFD0F300C0E076 /* lua_VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BCD45715EFD0F300C0E076 /* lua_VerticalLayout.cpp */; };
 		42BCD6CE15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BCD45815EFD0F300C0E076 /* lua_VerticalLayout.h */; };
 		42BCD6CF15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BCD45815EFD0F300C0E076 /* lua_VerticalLayout.h */; };
-		42BCD6D015EFD0F300C0E076 /* PlatformLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BCD45915EFD0F300C0E076 /* PlatformLinux.cpp */; };
-		42BCD6D115EFD0F300C0E076 /* PlatformLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BCD45915EFD0F300C0E076 /* PlatformLinux.cpp */; };
-		42BCD6D415EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BCD6D315EFD14800C0E076 /* gameplay-main-linux.cpp */; };
-		42BCD6D515EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BCD6D315EFD14800C0E076 /* gameplay-main-linux.cpp */; };
 		42CCD556146EC1EB00353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD555146EC1EB00353661 /* libpng.a */; };
 		42CD0DAB147D8EA80000361E /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA6147D8EA80000361E /* libbullet.a */; };
 		42CD0DAC147D8EA80000361E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA7147D8EA80000361E /* libogg.a */; };
@@ -1401,7 +1397,6 @@
 		42CD0E6E147D8FF60000361E /* Frustum.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DDB147D8FF50000361E /* Frustum.h */; };
 		42CD0E6F147D8FF60000361E /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DDC147D8FF50000361E /* Game.cpp */; };
 		42CD0E70147D8FF60000361E /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DDD147D8FF50000361E /* Game.h */; };
-		42CD0E71147D8FF60000361E /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DDE147D8FF50000361E /* gameplay-main-macosx.mm */; };
 		42CD0E74147D8FF60000361E /* gameplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE1147D8FF50000361E /* gameplay.h */; };
 		42CD0E77147D8FF60000361E /* Joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE4147D8FF50000361E /* Joint.cpp */; };
 		42CD0E78147D8FF60000361E /* Joint.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DE5147D8FF50000361E /* Joint.h */; };
@@ -1620,7 +1615,6 @@
 		5B04C5C414BFCFE100EB0071 /* Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEEB14A407B900D3C511 /* Keyboard.h */; };
 		5B04C5C514BFCFE100EB0071 /* Touch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4208DEED14A407D500D3C511 /* Touch.h */; };
 		5B04C5C614BFCFE100EB0071 /* MeshBatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4201818E14A41B18008C3F56 /* MeshBatch.h */; };
-		5B04C5CD14BFD48500EB0071 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */; };
 		5B04C5CE14BFD48500EB0071 /* PlatformiOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */; };
 		5B21E99616153890006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E99516153890006EBEAC /* IOKit.framework */; };
 		5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75D1512514500D176CD /* OpenAL.framework */; };
@@ -1721,6 +1715,10 @@
 		B67EC8F9161DFCA8000B4D12 /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8F5161DFCA8000B4D12 /* Logger.h */; };
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
+		F18024A51627000D001BFF87 /* main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* main-ios.mm */; };
+		F18024A61627000D001BFF87 /* main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* main-ios.mm */; };
+		F18024A71627000D001BFF87 /* main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* main-macosx.mm */; };
+		F18024A81627000D001BFF87 /* main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* main-macosx.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2407,8 +2405,6 @@
 		42BCD45615EFD0F300C0E076 /* lua_VertexFormatUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_VertexFormatUsage.h; sourceTree = "<group>"; };
 		42BCD45715EFD0F300C0E076 /* lua_VerticalLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_VerticalLayout.cpp; sourceTree = "<group>"; };
 		42BCD45815EFD0F300C0E076 /* lua_VerticalLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_VerticalLayout.h; sourceTree = "<group>"; };
-		42BCD45915EFD0F300C0E076 /* PlatformLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformLinux.cpp; path = src/PlatformLinux.cpp; sourceTree = SOURCE_ROOT; };
-		42BCD6D315EFD14800C0E076 /* gameplay-main-linux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-linux.cpp"; path = "src/gameplay-main-linux.cpp"; sourceTree = SOURCE_ROOT; };
 		42C932AF14919FD10098216A /* Game.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Game.inl; path = src/Game.inl; sourceTree = SOURCE_ROOT; };
 		42CCD555146EC1EB00353661 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
 		42CD0DA6147D8EA80000361E /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
@@ -2461,9 +2457,6 @@
 		42CD0DDB147D8FF50000361E /* Frustum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Frustum.h; path = src/Frustum.h; sourceTree = SOURCE_ROOT; };
 		42CD0DDC147D8FF50000361E /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = src/Game.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DDD147D8FF50000361E /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = src/Game.h; sourceTree = SOURCE_ROOT; };
-		42CD0DDE147D8FF50000361E /* gameplay-main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-macosx.mm"; path = "src/gameplay-main-macosx.mm"; sourceTree = SOURCE_ROOT; };
-		42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-qnx.cpp"; path = "src/gameplay-main-qnx.cpp"; sourceTree = SOURCE_ROOT; };
-		42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-win32.cpp"; path = "src/gameplay-main-win32.cpp"; sourceTree = SOURCE_ROOT; };
 		42CD0DE1147D8FF50000361E /* gameplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gameplay.h; path = src/gameplay.h; sourceTree = SOURCE_ROOT; };
 		42CD0DE4147D8FF50000361E /* Joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Joint.cpp; path = src/Joint.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0DE5147D8FF50000361E /* Joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joint.h; path = src/Joint.h; sourceTree = SOURCE_ROOT; };
@@ -2516,8 +2509,6 @@
 		42CD0E18147D8FF50000361E /* Plane.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Plane.inl; path = src/Plane.inl; sourceTree = SOURCE_ROOT; };
 		42CD0E19147D8FF50000361E /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = src/Platform.h; sourceTree = SOURCE_ROOT; };
 		42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformMacOSX.mm; path = src/PlatformMacOSX.mm; sourceTree = SOURCE_ROOT; };
-		42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformQNX.cpp; path = src/PlatformQNX.cpp; sourceTree = SOURCE_ROOT; };
-		42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformWin32.cpp; path = src/PlatformWin32.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E1D147D8FF50000361E /* Properties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Properties.cpp; path = src/Properties.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E1E147D8FF50000361E /* Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Properties.h; path = src/Properties.h; sourceTree = SOURCE_ROOT; };
 		42CD0E1F147D8FF50000361E /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = src/Quaternion.cpp; sourceTree = SOURCE_ROOT; };
@@ -2560,7 +2551,6 @@
 		42F4B7D515994CED00B5A78D /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
 		42F4B7D615994CED00B5A78D /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
 		5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatformiOS.mm; path = src/PlatformiOS.mm; sourceTree = SOURCE_ROOT; };
 		5B21E99516153890006EBEAC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		5B2BC75D1512514500D176CD /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -2581,8 +2571,6 @@
 		5BAF2024152F2AF0003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2025152F2AF0003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2026152F2AF0003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gameplay-main-android.cpp"; path = "src/gameplay-main-android.cpp"; sourceTree = SOURCE_ROOT; };
-		5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlatformAndroid.cpp; path = src/PlatformAndroid.cpp; sourceTree = SOURCE_ROOT; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
 		5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Gesture.cpp; sourceTree = "<group>"; };
 		5BBAD0F015F5251D004C9639 /* lua_Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Gesture.h; sourceTree = "<group>"; };
@@ -2629,6 +2617,8 @@
 		B67EC8F4161DFCA8000B4D12 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger.cpp; path = src/Logger.cpp; sourceTree = SOURCE_ROOT; };
 		B67EC8F5161DFCA8000B4D12 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger.h; path = src/Logger.h; sourceTree = SOURCE_ROOT; };
 		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
+		F18024A31627000D001BFF87 /* main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "main-ios.mm"; path = "src/main-ios.mm"; sourceTree = SOURCE_ROOT; };
+		F18024A41627000D001BFF87 /* main-macosx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "main-macosx.mm"; path = "src/main-macosx.mm"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2777,12 +2767,6 @@
 				42F4B7D615994CED00B5A78D /* Gamepad.h */,
 				5BD5266A150F8257004C9099 /* gameplay.dox */,
 				42CD0DE1147D8FF50000361E /* gameplay.h */,
-				5BB0823814C6FEB10019975F /* gameplay-main-android.cpp */,
-				42CD0DE0147D8FF50000361E /* gameplay-main-win32.cpp */,
-				42CD0DDE147D8FF50000361E /* gameplay-main-macosx.mm */,
-				5B04C5CB14BFD48500EB0071 /* gameplay-main-ios.mm */,
-				42BCD6D315EFD14800C0E076 /* gameplay-main-linux.cpp */,
-				42CD0DDF147D8FF50000361E /* gameplay-main-qnx.cpp */,
 				42BCD31D15EFD0F300C0E076 /* Gesture.h */,
 				4208DEE614A4079F00D3C511 /* Image.cpp */,
 				4208DEE714A4079F00D3C511 /* Image.h */,
@@ -2801,6 +2785,8 @@
 				42CD0DE7147D8FF50000361E /* Light.h */,
 				B67EC8F4161DFCA8000B4D12 /* Logger.cpp */,
 				B67EC8F5161DFCA8000B4D12 /* Logger.h */,
+				F18024A31627000D001BFF87 /* main-ios.mm */,
+				F18024A41627000D001BFF87 /* main-macosx.mm */,
 				42CD0DE8147D8FF50000361E /* Material.cpp */,
 				42CD0DE9147D8FF50000361E /* Material.h */,
 				42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */,
@@ -2867,12 +2853,8 @@
 				421FBD4D1602818800A61BC0 /* PhysicsVehicleWheel.cpp */,
 				421FBD4E1602818800A61BC0 /* PhysicsVehicleWheel.h */,
 				42CD0E19147D8FF50000361E /* Platform.h */,
-				5BB0823914C6FEB10019975F /* PlatformAndroid.cpp */,
-				42CD0E1C147D8FF50000361E /* PlatformWin32.cpp */,
 				42CD0E1A147D8FF50000361E /* PlatformMacOSX.mm */,
 				5B04C5CC14BFD48500EB0071 /* PlatformiOS.mm */,
-				42BCD45915EFD0F300C0E076 /* PlatformLinux.cpp */,
-				42CD0E1B147D8FF50000361E /* PlatformQNX.cpp */,
 				42CD0E1D147D8FF50000361E /* Properties.cpp */,
 				42CD0E1E147D8FF50000361E /* Properties.h */,
 				42CD0E1F147D8FF50000361E /* Quaternion.cpp */,
@@ -4623,7 +4605,6 @@
 				42CD0E6B147D8FF60000361E /* FrameBuffer.cpp in Sources */,
 				42CD0E6D147D8FF60000361E /* Frustum.cpp in Sources */,
 				42CD0E6F147D8FF60000361E /* Game.cpp in Sources */,
-				42CD0E71147D8FF60000361E /* gameplay-main-macosx.mm in Sources */,
 				42CD0E77147D8FF60000361E /* Joint.cpp in Sources */,
 				42CD0E79147D8FF60000361E /* Light.cpp in Sources */,
 				42CD0E7B147D8FF60000361E /* Material.cpp in Sources */,
@@ -5010,8 +4991,6 @@
 				42BCD6C415EFD0F300C0E076 /* lua_VertexFormatElement.cpp in Sources */,
 				42BCD6C815EFD0F300C0E076 /* lua_VertexFormatUsage.cpp in Sources */,
 				42BCD6CC15EFD0F300C0E076 /* lua_VerticalLayout.cpp in Sources */,
-				42BCD6D015EFD0F300C0E076 /* PlatformLinux.cpp in Sources */,
-				42BCD6D415EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */,
 				5BBAD0F315F5251E004C9639 /* lua_Gesture.cpp in Sources */,
 				5BBAD0F715F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */,
 				421FBD4F1602818800A61BC0 /* PhysicsVehicle.cpp in Sources */,
@@ -5022,6 +5001,8 @@
 				B67EC8EB161DFC8E000B4D12 /* lua_Logger.cpp in Sources */,
 				B67EC8EF161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */,
 				B67EC8F6161DFCA8000B4D12 /* Logger.cpp in Sources */,
+				F18024A51627000D001BFF87 /* main-ios.mm in Sources */,
+				F18024A71627000D001BFF87 /* main-macosx.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5091,7 +5072,6 @@
 				5B04C57114BFCFE100EB0071 /* SceneLoader.cpp in Sources */,
 				5B04C57214BFCFE100EB0071 /* Image.cpp in Sources */,
 				5B04C57314BFCFE100EB0071 /* MeshBatch.cpp in Sources */,
-				5B04C5CD14BFD48500EB0071 /* gameplay-main-ios.mm in Sources */,
 				5B04C5CE14BFD48500EB0071 /* PlatformiOS.mm in Sources */,
 				5BD52670150F8258004C9099 /* PhysicsCharacter.cpp in Sources */,
 				5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */,
@@ -5437,8 +5417,6 @@
 				42BCD6C515EFD0F300C0E076 /* lua_VertexFormatElement.cpp in Sources */,
 				42BCD6C915EFD0F300C0E076 /* lua_VertexFormatUsage.cpp in Sources */,
 				42BCD6CD15EFD0F300C0E076 /* lua_VerticalLayout.cpp in Sources */,
-				42BCD6D115EFD0F300C0E076 /* PlatformLinux.cpp in Sources */,
-				42BCD6D515EFD14800C0E076 /* gameplay-main-linux.cpp in Sources */,
 				5BBAD0F415F5251E004C9639 /* lua_Gesture.cpp in Sources */,
 				5BBAD0F815F5251E004C9639 /* lua_GestureGestureEvent.cpp in Sources */,
 				421FBD501602818800A61BC0 /* PhysicsVehicle.cpp in Sources */,
@@ -5449,6 +5427,8 @@
 				B67EC8EC161DFC8E000B4D12 /* lua_Logger.cpp in Sources */,
 				B67EC8F0161DFC8E000B4D12 /* lua_LoggerLevel.cpp in Sources */,
 				B67EC8F7161DFCA8000B4D12 /* Logger.cpp in Sources */,
+				F18024A61627000D001BFF87 /* main-ios.mm in Sources */,
+				F18024A81627000D001BFF87 /* main-macosx.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
