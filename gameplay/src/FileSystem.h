@@ -48,6 +48,7 @@ public:
      * to the alias name instead of the actual hard file name.
      *
      * @param aliasFilePath Path to a properties file containing filesystem aliases.
+     * 
      * @see Properties
      */
     static void loadResourceAliases(const char* aliasFilePath);
@@ -65,6 +66,7 @@ public:
      * to the alias name instead of the actual hard file name.
      *
      * @param properties Properties object containing filesystem aliases.
+     * 
      * @see Properties
      */
     static void loadResourceAliases(Properties* properties);
@@ -79,6 +81,8 @@ public:
      * absolute filesystem path.
      *
      * @param path Path to resolve.
+     * 
+     * @return The resolved file path.
      */
     static const char* resolvePath(const char* path);
 
@@ -89,6 +93,7 @@ public:
      * @param files The vector to append the files to.
      * 
      * @return True if successful, false if error.
+     * 
      * @script{ignore}
      */
     static bool listFiles(const char* dirPath, std::vector<std::string>& files);
@@ -97,6 +102,7 @@ public:
      * Checks if the file at the given path exists.
      * 
      * @param filePath The path to the file.
+     * 
      * @return <code>true</code> if the file exists; <code>false</code> otherwise.
      */
     static bool fileExists(const char* filePath);
@@ -109,6 +115,8 @@ public:
      *
      * @param filePath The path to the file to be opened, relative to the currently set resource path.
      * @param mode The mode used to open the file, passed directly to fopen.
+     * 
+     * @return A pointer to a FILE object that can be used to identify the stream or NULL on error.
      * 
      * @see setResourcePath(const char*)
      * @script{ignore}
