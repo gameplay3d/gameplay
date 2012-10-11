@@ -120,6 +120,11 @@
 		<Unit filename="src/Game.h" />
 		<Unit filename="src/Gamepad.cpp" />
 		<Unit filename="src/Gamepad.h" />
+		<Unit filename="src/gameplay.h" />
+        <Unit filename="src/gameplay-main-android.cpp" />
+		<Unit filename="src/gameplay-main-blackberry.cpp" />
+		<Unit filename="src/gameplay-main-linux.cpp" />
+		<Unit filename="src/gameplay-main-windows.cpp" />
 		<Unit filename="src/Gesture.h" />
 		<Unit filename="src/Image.cpp" />
 		<Unit filename="src/Image.h" />
@@ -252,7 +257,6 @@
 		<Unit filename="src/VertexFormat.h" />
 		<Unit filename="src/VerticalLayout.cpp" />
 		<Unit filename="src/VerticalLayout.h" />
-		<Unit filename="src/gameplay.h" />
 		<Unit filename="src/lua/lua_AIAgent.cpp" />
 		<Unit filename="src/lua/lua_AIAgent.h" />
 		<Unit filename="src/lua/lua_AIAgentListener.cpp" />
@@ -579,10 +583,6 @@
 		<Unit filename="src/lua/lua_VerticalLayout.h" />
 		<Unit filename="src/lua/lua_all_bindings.cpp" />
 		<Unit filename="src/lua/lua_all_bindings.h" />
-		<Unit filename="src/main-android.cpp" />
-		<Unit filename="src/main-blackberry.cpp" />
-		<Unit filename="src/main-linux.cpp" />
-		<Unit filename="src/main-windows.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
