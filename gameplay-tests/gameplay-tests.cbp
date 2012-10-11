@@ -71,8 +71,8 @@
 			<Add directory="../external-deps/glew/lib/linux" />
 		</Linker>
 		<ExtraCommands>
-			<Add after="cp -rn ../gameplay/res/shaders ../gameplay-tests/res" />
-			<Add after="cp -rn ../gameplay/res/logo_powered_white.png ../gameplay-tests/res" />
+			<Add after="cp -rf ../gameplay/res/shaders ../gameplay-tests/res" />
+			<Add after="cp -rf ../gameplay/res/logo_powered_white.png ../gameplay-tests/res" />
 			<Mode after="always" />
 		</ExtraCommands>
 		<Unit filename="src/Audio3DTest.cpp" />
