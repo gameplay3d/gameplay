@@ -18,12 +18,12 @@ static Game* __gameInstance = NULL;
 double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 
-Game::Game() 
+Game::Game()
     : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
-      _frameLastFPS(0), _frameCount(0), _frameRate(0), 
+      _frameLastFPS(0), _frameCount(0), _frameRate(0),
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), 
-      _physicsController(NULL), _aiController(NULL), _audioListener(NULL), 
+      _animationController(NULL), _audioController(NULL),
+      _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
       _gamepads(NULL), _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
@@ -111,7 +111,7 @@ bool Game::startup()
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
     RenderState::initialize();
     FrameBuffer::initialize();
-    
+
     // Load any gamepads, ui or physical.
     loadGamepads();
 
@@ -183,7 +183,7 @@ void Game::shutdown()
         Platform::signalShutdown();
         finalize();
 
-        
+
         std::vector<Gamepad*>::iterator itr = _gamepads->begin();
         std::vector<Gamepad*>::iterator end = _gamepads->end();
         while (itr != end)
@@ -193,7 +193,7 @@ void Game::shutdown()
         }
         _gamepads->clear();
         SAFE_DELETE(_gamepads);
-        
+
         _scriptController->finalizeGame();
 
         _animationController->finalize();
@@ -294,7 +294,7 @@ void Game::frame()
 
         // Fire time events to scheduled TimeListeners
         fireTimeEvents(frameTime);
-    
+
         // Update the physics.
         _physicsController->update(elapsedTime);
 
@@ -371,7 +371,7 @@ void Game::updateOnce()
 void Game::setViewport(const Rectangle& viewport)
 {
     _viewport = viewport;
-    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height); 
+    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height);
 }
 
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
@@ -400,7 +400,7 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
         bits |= GL_DEPTH_BUFFER_BIT;
 
         // We need to explicitly call the static enableDepthWrite() method on StateBlock
-        // to ensure depth writing is enabled before clearing the depth buffer (and to 
+        // to ensure depth writing is enabled before clearing the depth buffer (and to
         // update the global StateBlock render state to reflect this).
         RenderState::StateBlock::enableDepthWrite();
     }
@@ -555,7 +555,7 @@ void Game::loadConfig()
         if (FileSystem::fileExists("game.config"))
         {
             _properties = Properties::create("game.config");
-            
+
             // Load filesystem aliases.
             Properties* aliases = _properties->getNamespace("aliases", true);
             if (aliases)

@@ -31,7 +31,7 @@ AnimationTarget::~AnimationTarget()
     }
 }
 
-Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type)
+Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, Curve::InterpolationType type)
 {
     GP_ASSERT(type != Curve::BEZIER && type != Curve::HERMITE);
     GP_ASSERT(keyCount >= 1 && keyTimes && keyValues);
@@ -41,7 +41,7 @@ Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsi
     return animation;
 }
 
-Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type)
+Animation* AnimationTarget::createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type)
 {
     GP_ASSERT(keyCount >= 1 && keyTimes && keyValues && keyInValue && keyOutValue);
     Animation* animation = new Animation(id, this, propertyId, keyCount, keyTimes, keyValues, keyInValue, keyOutValue, type);
@@ -73,9 +73,9 @@ Animation* AnimationTarget::createAnimationFromTo(const char* id, int propertyId
     memcpy(keyValues, from, sizeof(float) * propertyComponentCount);
     memcpy(keyValues + propertyComponentCount, to, sizeof(float) * propertyComponentCount);
 
-    unsigned long* keyTimes = new unsigned long[2];
+    unsigned int* keyTimes = new unsigned int[2];
     keyTimes[0] = 0;
-    keyTimes[1] = duration;
+    keyTimes[1] = (unsigned int)duration;
 
     Animation* animation = createAnimation(id, propertyId, 2, keyTimes, keyValues, type);
 
@@ -99,9 +99,9 @@ Animation* AnimationTarget::createAnimationFromBy(const char* id, int propertyId
     convertByValues(propertyId, propertyComponentCount, from, by);
     memcpy(keyValues + propertyComponentCount, by, sizeof(float) * propertyComponentCount);
 
-    unsigned long* keyTimes = new unsigned long[2];
+    unsigned int* keyTimes = new unsigned int[2];
     keyTimes[0] = 0;
-    keyTimes[1] = duration;
+    keyTimes[1] = (unsigned int)duration;
 
     Animation* animation = createAnimation(id, propertyId, 2, keyTimes, keyValues, type);
 
@@ -119,14 +119,14 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         GP_ERROR("Invalid animation namespace '%s'.", animationProperties->getNamespace());
         return NULL;
     }
-    
+
     const char* propertyIdStr = animationProperties->getString("property");
     if (propertyIdStr == NULL)
     {
         GP_ERROR("Attribute 'property' must be specified for an animation.");
         return NULL;
     }
-    
+
     // Get animation target property id
     int propertyId = AnimationTarget::getPropertyId(_targetType, propertyIdStr);
     if (propertyId == -1)
@@ -134,7 +134,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         GP_ERROR("Property ID is invalid.");
         return NULL;
     }
-    
+
     unsigned int keyCount = animationProperties->getInt("keyCount");
     if (keyCount == 0)
     {
@@ -148,26 +148,26 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         GP_ERROR("Attribute 'keyTimes' must be specified for an animation.");
         return NULL;
     }
-    
+
     const char* keyValuesStr = animationProperties->getString("keyValues");
     if (keyValuesStr == NULL)
     {
         GP_ERROR("Attribute 'keyValues' must be specified for an animation.");
         return NULL;
     }
-    
+
     const char* curveStr = animationProperties->getString("curve");
     if (curveStr == NULL)
     {
         GP_ERROR("Attribute 'curve' must be specified for an animation.");
         return NULL;
     }
-    
+
     char delimeter = ' ';
     size_t startOffset = 0;
     size_t endOffset = std::string::npos;
-    
-    unsigned long* keyTimes = new unsigned long[keyCount];
+
+    unsigned int* keyTimes = new unsigned int[keyCount];
     for (size_t i = 0; i < keyCount; i++)
     {
         endOffset = static_cast<std::string>(keyTimesStr).find_first_of(delimeter, startOffset);
@@ -184,18 +184,18 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
 
     startOffset = 0;
     endOffset = std::string::npos;
-    
+
     int componentCount = getAnimationPropertyComponentCount(propertyId);
     GP_ASSERT(componentCount > 0);
-    
+
     unsigned int components = keyCount * componentCount;
-    
+
     float* keyValues = new float[components];
     for (unsigned int i = 0; i < components; i++)
     {
         endOffset = static_cast<std::string>(keyValuesStr).find_first_of(delimeter, startOffset);
         if (endOffset != std::string::npos)
-        {   
+        {
             keyValues[i] = std::atof(static_cast<std::string>(keyValuesStr).substr(startOffset, endOffset - startOffset).c_str());
         }
         else
@@ -216,7 +216,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         {
             endOffset = static_cast<std::string>(keyInStr).find_first_of(delimeter, startOffset);
             if (endOffset != std::string::npos)
-            {   
+            {
                 keyIn[i] = std::atof(static_cast<std::string>(keyInStr).substr(startOffset, endOffset - startOffset).c_str());
             }
             else
@@ -226,11 +226,11 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
             startOffset = endOffset + 1;
         }
     }
-    
+
     const char* keyOutStr = animationProperties->getString("keyOut");
     float* keyOut = NULL;
     if (keyOutStr)
-    {   
+    {
         keyOut = new float[components];
         startOffset = 0;
         endOffset = std::string::npos;
@@ -238,7 +238,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         {
             endOffset = static_cast<std::string>(keyOutStr).find_first_of(delimeter, startOffset);
             if (endOffset != std::string::npos)
-            {   
+            {
                 keyOut[i] = std::atof(static_cast<std::string>(keyOutStr).substr(startOffset, endOffset - startOffset).c_str());
             }
             else
@@ -325,7 +325,7 @@ Animation* AnimationTarget::getAnimation(const char* id) const
 int AnimationTarget::getPropertyId(TargetType type, const char* propertyIdStr)
 {
     GP_ASSERT(propertyIdStr);
-    
+
     if (type == AnimationTarget::TRANSFORM)
     {
         if (strcmp(propertyIdStr, "ANIMATE_SCALE") == 0)
@@ -467,7 +467,7 @@ void AnimationTarget::cloneInto(AnimationTarget* target, NodeCloneContext &conte
 void AnimationTarget::convertByValues(unsigned int propertyId, unsigned int componentCount, float* from, float* by)
 {
     if (_targetType == AnimationTarget::TRANSFORM)
-    {    
+    {
         switch(propertyId)
         {
             case Transform::ANIMATE_SCALE:
@@ -497,7 +497,7 @@ void AnimationTarget::convertByValues(unsigned int propertyId, unsigned int comp
                 convertQuaternionByValues(from, by);
                 convertByValues(from + 4, by + 4, 3);
                 break;
-            }   
+            }
             case Transform::ANIMATE_SCALE_ROTATE_TRANSLATE:
             {
                 convertScaleByValues(from, by, 3);
