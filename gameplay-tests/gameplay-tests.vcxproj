@@ -466,7 +466,6 @@
     </None>
     <None Include="game.config" />
     <None Include="icon.png" />
-    <None Include="res\common\mainMenu.theme" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Audio3DTest.cpp" />

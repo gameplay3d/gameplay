@@ -9,11 +9,12 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 ## Supported Desktop Platforms
 - Microsoft Windows 7 (using Microsoft Visual Studio 2010)
 - Apple MacOS X (using Apple XCode 4.3.2)
-- Linux
+- Linux (using CMake or CodeBlocks 10)
 
 ## Roadmap for 'next' branch
-- AI pathfinding
-- Asset pipeline improvements
+- AI Pathfinding
+- Terrain and Water
+- Asset Pipeline improvements
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.
