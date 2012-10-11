@@ -73,10 +73,6 @@ set(GAMEPLAY_SRC
     src/Game.inl
     src/Gamepad.cpp
     src/Gamepad.h
-    src/gameplay-main-android.cpp
-    src/gameplay-main-linux.cpp
-    src/gameplay-main-qnx.cpp
-    src/gameplay-main-win32.cpp
 	src/Gesture.h
     src/Image.cpp
     src/Image.h
@@ -94,6 +90,10 @@ set(GAMEPLAY_SRC
     src/Light.h
     src/Logger.cpp
     src/Logger.h
+    src/main-android.cpp
+    src/main-blackberry.cpp
+    src/main-linux.cpp
+    src/main-windows.cpp
     src/Material.cpp
     src/Material.h
     src/MaterialParameter.cpp
@@ -155,9 +155,9 @@ set(GAMEPLAY_SRC
     src/Plane.inl
     src/Platform.h
     src/PlatformAndroid.cpp
+    src/PlatformBlackBerry.cpp
     src/PlatformLinux.cpp
-    src/PlatformQNX.cpp
-    src/PlatformWin32.cpp
+    src/PlatformWindows.cpp
     src/Properties.cpp
     src/Properties.h
     src/Quaternion.cpp

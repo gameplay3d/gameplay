@@ -73,9 +73,6 @@
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gamepad.cpp" />
-    <ClCompile Include="src\gameplay-main-android.cpp" />
-    <ClCompile Include="src\gameplay-main-qnx.cpp" />
-    <ClCompile Include="src\gameplay-main-win32.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
@@ -83,6 +80,10 @@
     <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\main-android.cpp" />
+    <ClCompile Include="src\main-blackberry.cpp" />
+    <ClCompile Include="src\main-linux.cpp" />
+    <ClCompile Include="src\main-windows.cpp" />
     <ClCompile Include="src\lua\lua_AbsoluteLayout.cpp" />
     <ClCompile Include="src\lua\lua_AIAgent.cpp" />
     <ClCompile Include="src\lua\lua_AIAgentListener.cpp" />
@@ -275,9 +276,9 @@
     <ClCompile Include="src\PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
+    <ClCompile Include="src\PlatformBlackBerry.cpp" />
     <ClCompile Include="src\PlatformLinux.cpp" />
-    <ClCompile Include="src\PlatformQNX.cpp" />
-    <ClCompile Include="src\PlatformWin32.cpp" />
+    <ClCompile Include="src\PlatformWindows.cpp" />
     <ClCompile Include="src\Properties.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\RadioButton.cpp" />
@@ -602,8 +603,6 @@
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Game.inl" />
-    <None Include="src\gameplay-main-ios.mm" />
-    <None Include="src\gameplay-main-macosx.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\MathUtil.inl" />
     <None Include="src\MathUtilNeon.inl" />
@@ -611,8 +610,6 @@
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
-    <None Include="src\PlatformiOS.mm" />
-    <None Include="src\PlatformMacOSX.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />
     <None Include="src\ScriptController.inl" />
