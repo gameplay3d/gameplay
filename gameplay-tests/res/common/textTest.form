@@ -14,7 +14,7 @@ form textTest
         height = 40
         textAlignment = ALIGN_BOTTOM_LEFT
         consumeInputEvents = false
-        text = Font Options
+        text = Text
     }
 
     // Change font
@@ -23,7 +23,7 @@ form textTest
     {
         style = buttonStyle
         autoWidth = true
-        height = 60
+        height = 50
         consumeInputEvents = false
         text = Font (arial14)
     }
@@ -35,7 +35,7 @@ form textTest
 
     button clipRectButton : fontButton
     {
-        text = Ignore Clip-Rect (Off)
+        text = Clipping (On)
     }
 
     button reverseButton : fontButton
@@ -45,7 +45,7 @@ form textTest
 
     button switchClipRegionButton : fontButton
     {
-        text = Switch Clip Regions (Viewport)
+        text = Clip Region (Viewport)
     }
 
     button simpleAdvancedButton : fontButton
@@ -55,7 +55,7 @@ form textTest
 
     label scaleLabel : topLabel
     {
-        text = Font Scale (1.0)
+        text = Scale (1.0)
     }
 
     container scaling
@@ -68,15 +68,15 @@ form textTest
         button smallerButton
         {
             style = buttonStyle
-            width = 100
-            height = 60
+            width = 50
+            height = 50
             consumeInputEvents = false
             text = -
         }
 
         button biggerButton : smallerButton
         {
-            x = 100
+            x = 50
             text = +
         }
     }
@@ -84,7 +84,7 @@ form textTest
     label alignmentLabel : topLabel
     {
         height = 60
-        text = Alignment (Top-left)
+        text = Align (Top-left)
     }
 
     // Grid layout would be best, but flow should work.

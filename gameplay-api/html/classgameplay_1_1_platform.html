@@ -94,6 +94,7 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a60e8f036665c1b3ab0f36f7cfb55622d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_platform.html">Platform</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a60e8f036665c1b3ab0f36f7cfb55622d">create</a> (<a class="el" href="classgameplay_1_1_game.html">Game</a> *game, void *attachToWindow=NULL)</td></tr>
 <tr class="memitem:abbb42d7ac405bad0db3eb642495c84b3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abbb42d7ac405bad0db3eb642495c84b3">signalShutdown</a> ()</td></tr>
+<tr class="memitem:a423d1c68e5dc83548f6f0562efddc7a6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a423d1c68e5dc83548f6f0562efddc7a6">canExit</a> ()</td></tr>
 <tr class="memitem:abf163f9db26aac12f9bb9fca70eb061a"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#abf163f9db26aac12f9bb9fca70eb061a">getDisplayWidth</a> ()</td></tr>
 <tr class="memitem:ae041cb899960eda243f144dd8d1a917b"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#ae041cb899960eda243f144dd8d1a917b">getDisplayHeight</a> ()</td></tr>
 <tr class="memitem:a59244b6b8ac83ea029339e3974a40282"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_platform.html#a59244b6b8ac83ea029339e3974a40282">getAbsoluteTime</a> ()</td></tr>
@@ -152,6 +153,24 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a423d1c68e5dc83548f6f0562efddc7a6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_platform.html#a423d1c68e5dc83548f6f0562efddc7a6">gameplay::Platform::canExit</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Indicates whether a programmatic exit is allowed on this platform. Some platforms (eg. iOS) do not allow apps to exit programmatically.</p>
+<dl class="section return"><dt>Returns:</dt><dd>whether a programmatic exit is allowed on this platform. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a60e8f036665c1b3ab0f36f7cfb55622d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1184,7 +1203,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Oct 9 2012 21:00:11 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:44 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

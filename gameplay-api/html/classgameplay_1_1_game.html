@@ -158,6 +158,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5805e7c99ade22092fb6059eb149e034"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5805e7c99ade22092fb6059eb149e034">getGamepad</a> (unsigned int index) const </td></tr>
 <tr class="memitem:ade96e57a1dbd20ab2dfb4203b4c0d6f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr class="memitem:a04720fabcd25eba03eaee2f81cfcdc16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
+<tr class="memitem:a73ee5f2487783de209ec5321d2f140c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">canExit</a> () const </td></tr>
 <tr class="memitem:a11c781fe9845aa0e787f72844059e028"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr class="memitem:a3b8adb5a096f735bfcfec801f02ea0da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">schedule</a> (float timeOffset, <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> *timeListener, void *cookie=0)</td></tr>
 <tr class="memitem:aae0c5115535c01bcac52aae65b7f4bbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aae0c5115535c01bcac52aae65b7f4bbb">schedule</a> (float timeOffset, const char *function)</td></tr>
@@ -247,6 +248,24 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a73ee5f2487783de209ec5321d2f140c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">gameplay::Game::canExit</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether this game is allowed to exit programmatically.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if a programmatic exit is allowed. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aed3bfa9c1cfcdd4eb0729284d5e10a8d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1136,7 +1155,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Is multi-touch mode enabled.</p>
-<dl class="section return"><dt>Returns:</dt><dd>true is multi-touch is enabled. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>true if multi-touch is enabled. </dd></dl>
 
 </div>
 </div>
@@ -1742,7 +1761,7 @@ template&lt;class T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Oct 9 2012 21:00:09 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
