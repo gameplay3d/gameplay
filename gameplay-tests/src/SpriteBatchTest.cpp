@@ -108,7 +108,6 @@ void SpriteBatchTest::render(float elapsedTime)
     _spriteBatch->draw(Vector3(640, 64, 0), src, Vector2(128, 128), Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f), MATH_DEG_TO_RAD(0));
     
     // Lots of them now small
-    float alpha = 1.0;
     unsigned int pointCount = 16;
     unsigned int x = 0;
     unsigned int y = 192;
