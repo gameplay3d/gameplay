@@ -7,22 +7,22 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="linux/Debug/sample02-spaceship" prefix_auto="1" extension_auto="1" />
+				<Option output="Debug/sample02-spaceship" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="../sample02-spaceship" />
-				<Option object_output="linux/Debug/" />
+				<Option object_output="Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add directory="../../gameplay/linux/Debug" />
+					<Add directory="../../gameplay/Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="linux/Release/sample02-spaceship" prefix_auto="1" extension_auto="1" />
+				<Option output="Release/sample02-spaceship" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="../sample02-spaceship" />
-				<Option object_output="linux/Release/" />
+				<Option object_output="Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -30,7 +30,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="../../gameplay/linux/Release" />
+					<Add directory="../../gameplay/Release" />
 				</Linker>
 			</Target>
 		</Build>
