@@ -444,6 +444,11 @@ int getKey(unichar keyCode);
             if (game == nil)
             {
                 [self startGame];
+                
+                // HACK: Skip the first display update after creating buffers and initializing the game.
+                // If we don't do this, the first frame (which includes any drawing during initialization)
+                // does not make it to the display for some reason.
+                return;
             }
         }
 
