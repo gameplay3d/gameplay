@@ -29,7 +29,7 @@
 
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-    <description>Lua Game</description>
+    <description>Lua Sample</description>
     
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
