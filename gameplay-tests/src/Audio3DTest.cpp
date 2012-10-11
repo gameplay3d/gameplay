@@ -134,7 +134,7 @@ void Audio3DTest::update(float elapsedTime)
 
     if (!_buttonPressed && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
     {
-        addSound("Footsteps.wav");
+        addSound("footsteps.wav");
     }
     _buttonPressed = _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED;
 }
