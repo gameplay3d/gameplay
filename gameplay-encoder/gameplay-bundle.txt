@@ -15,7 +15,7 @@ File Structure
 Section      Name            Type
 ------------------------------------------------------------------------------------------------------
 Header
-             Identifier      byte[9]     = { '«', 'G', 'P', 'B', '»', '\r', '\n', '\x1A', '\n' } 
+             Identifier      byte[9]     = { '\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n' } 
              Version         byte[2]     = { 1, 1 }
              References      Reference[]
 Data
