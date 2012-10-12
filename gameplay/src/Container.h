@@ -444,11 +444,19 @@ protected:
      */
     bool _scrolling;
     /** 
-     * First scrolling touch x position
+	 * First scrolling touch x position
+	 */
+	int _scrollingVeryFirstX;
+	/**
+	 * First scrolling touch y position
+	 */
+	int _scrollingVeryFirstY;
+    /**
+     * First scrolling touch x position since last change in direction.
      */ 
     int _scrollingFirstX;
     /** 
-     * First scrolling touch y position
+     * First scrolling touch y position since last change in direction.
      */ 
     int _scrollingFirstY;
     /** 
