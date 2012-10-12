@@ -104,6 +104,20 @@ public:
      */
     virtual void setBounds(const Rectangle& bounds);
 
+    /** 
+     * Set the desired width of the form.
+     *
+     * @param width The width.
+     */
+    virtual void setWidth(float width);
+
+    /** 
+     * Set the desired height of the form.
+     *
+     * @param height The height.
+     */
+    virtual void setHeight(float height);
+
     /**
      * Set this form's width to that of the display.
      *

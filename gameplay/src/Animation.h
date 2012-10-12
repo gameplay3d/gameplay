@@ -27,14 +27,14 @@ class Animation : public Ref
     friend class Bundle;
 
 public:
-    
+
     /**
      * Gets the Animation's ID.
-     * 
+     *
      * @return The Animation's ID.
      */
     const char* getId() const;
-    
+
     /**
      * Gets the Animation's duration.
      *
@@ -43,28 +43,29 @@ public:
     unsigned long getDuration() const;
 
     /**
-     * Creates an AnimationClip from the Properties object defined at the specified URL, 
+     * Creates an AnimationClip from the Properties object defined at the specified URL,
      * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
      * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
-     * 
+     *
      * @param url The URL pointing to the Properties object containing the clip definitions.
      */
     void createClips(const char* url);
-    
+
     /**
      * Creates an AnimationClip from the Animation.
-     * 
+     *
      * @param id The ID to the give the AnimationClip.
      * @param start The time (in milliseconds) that the AnimationClip will begin from.
      * @param end The time (in milliseconds) that the AnimationClip will end.
-     * 
+     *
      * @return The newly created AnimationClip; NULL if an AnimationClip already exists with the same ID.
+     * @script{create}
      */
     AnimationClip* createClip(const char* id, unsigned long start, unsigned long end);
-    
+
     /**
      * Finds the AnimationClip with the specified name. If NULL, gets the default clip.
-     * 
+     *
      * @param clipId The ID of the AnimationClip to get.
      *
      * @return The AnimationClip with the specified ID; NULL if an AnimationClip with the given ID is not found.
@@ -82,22 +83,22 @@ public:
      * Returns the number of animation clips in this animation.
      */
     unsigned int getClipCount() const;
-    
+
     /**
-     * Plays the AnimationClip with the specified name. 
+     * Plays the AnimationClip with the specified name.
      *
      * @param clipId The ID of the AnimationClip to play. If NULL, plays the default clip.
-     */ 
+     */
     void play(const char* clipId = NULL);
 
     /**
-     * Stops the AnimationClip with the specified name. 
-     * 
+     * Stops the AnimationClip with the specified name.
+     *
      * @param clipId The ID of the AnimationClip to stop. If NULL, stops the default clip.
      */
     void stop(const char* clipId = NULL);
 
-    /** 
+    /**
      * Pauses the AnimationClip with the specified name.
      *
      * @param clipId The ID of the AnimationClip to pause. If NULL, pauses the default clip.
@@ -108,7 +109,7 @@ public:
      * Returns true if this animation targets the given AnimationTarget.
      */
     bool targets(AnimationTarget* target) const;
-    
+
 private:
 
     /**
@@ -147,12 +148,12 @@ private:
     /**
      * Constructor.
      */
-    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type);
-    
+    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type);
+
     /**
      * Constructor.
      */
-    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type);
+    Animation(const char* id, AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, unsigned int type);
 
     /**
      * Constructor.
@@ -163,12 +164,12 @@ private:
      * Destructor.
      */
     ~Animation();
-    
+
     /**
      * Hidden copy assignment operator.
      */
     Animation& operator=(const Animation&);
-    
+
     /**
      * Creates the default clip.
      */
@@ -191,13 +192,13 @@ private:
 
     /**
      * Creates a channel within this animation.
-     */ 
-    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, unsigned int type);
+     */
+    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, unsigned int type);
 
     /**
      * Creates a channel within this animation.
      */
-    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type);
+    Channel* createChannel(AnimationTarget* target, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, unsigned int type);
 
     /**
      * Adds a channel to the animation.
@@ -216,17 +217,17 @@ private:
 
     /**
      * Clones this animation.
-     * 
+     *
      * @param channel The channel to clone and add to the animation.
      * @param target The target of the animation.
-     * 
+     *
      * @return The newly created animation.
      */
     Animation* clone(Channel* channel, AnimationTarget* target);
-    
+
     AnimationController* _controller;       // The AnimationController that this Animation will run on.
     std::string _id;                        // The Animation's ID.
-    unsigned long _duration;                // the length of the animation (in milliseconds).
+    unsigned long _duration;              // the length of the animation (in milliseconds).
     std::vector<Channel*> _channels;        // The channels within this Animation.
     AnimationClip* _defaultClip;            // The Animation's default clip.
     std::vector<AnimationClip*>* _clips;    // All the clips created from this Animation.

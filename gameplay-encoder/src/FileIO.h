@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <list>
 #include <vector>
+#include <cstring>
+#include <string>
 
 #include "Vector2.h"
 #include "Vector3.h"

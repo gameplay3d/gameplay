@@ -224,7 +224,7 @@ void Light::setFalloffExponent(float value)
     _falloffExponent = value;
     if ( value != 1.0)
     {
-        printf("Warning: spot light falloff_exponent must be 1.0. \n");
+        LOG(1, "Warning: spot light falloff_exponent must be 1.0. \n");
     }
 }
 

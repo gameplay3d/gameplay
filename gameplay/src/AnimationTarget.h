@@ -23,9 +23,9 @@ class AnimationTarget
 public:
 
     /**
-     * Creates an animation on this target from a set of key value and key time pairs. 
+     * Creates an animation on this target from a set of key value and key time pairs.
      * Cannot use Curve::BEZIER or CURVE::HERMITE as the interpolation type since they require tangents/control points.
-     * 
+     *
      * @param id The ID of the animation.
      * @param propertyId The property on this target to animate.
      * @param keyCount The number of keyframes in the animation. Must be greater than one.
@@ -35,11 +35,11 @@ public:
      *
      * @return The newly created animation.
      */
-    Animation* createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, Curve::InterpolationType type);
+    Animation* createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, Curve::InterpolationType type);
 
     /**
      * Creates an animation on this target from a set of key value and key time pairs.
-     * 
+     *
      * @param id The ID of the animation.
      * @param propertyId The property on this target to animate.
      * @param keyCount The number of keyframes in the animation. Must be greater than one.
@@ -51,13 +51,13 @@ public:
      *
      * @return The newly created animation.
      */
-    Animation* createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned long* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
+    Animation* createAnimation(const char* id, int propertyId, unsigned int keyCount, unsigned int* keyTimes, float* keyValues, float* keyInValue, float* keyOutValue, Curve::InterpolationType type);
 
     /**
-     * Creates an animation on this target using the data from the Properties object defined at the specified URL, 
+     * Creates an animation on this target using the data from the Properties object defined at the specified URL,
      * where the URL is of the format "<file-path>.<extension>#<namespace-id>/<namespace-id>/.../<namespace-id>"
-     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional). 
-     * 
+     * (and "#<namespace-id>/<namespace-id>/.../<namespace-id>" is optional).
+     *
      * @param id The ID of the animation.
      * @param url The URL pointing to the Properties object defining the animation data.
      *
@@ -66,8 +66,8 @@ public:
     Animation* createAnimation(const char* id, const char* url);
 
     /**
-     * Creates an animation on this target using the data from the given properties object. 
-     * 
+     * Creates an animation on this target using the data from the given properties object.
+     *
      * @param id The ID of the animation.
      * @param animationProperties The properties object defining the animation data.
      *
@@ -109,14 +109,14 @@ public:
      * Destroys the animation with the specified ID. Destroys the first animation if ID is NULL.
      *
      * @param id The ID of the animation to destroy.
-     */ 
+     */
     void destroyAnimation(const char* id = NULL);
 
     /**
      * Abstract method to return the property component count of the given property ID on the AnimationTarget.
-     * 
+     *
      * @param propertyId The ID of the property on the AnimationTarget to obtain the component count for.
-     * 
+     *
      * @return The property component count of the given property.
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const = 0;
@@ -131,14 +131,14 @@ public:
 
     /**
      * Abstract method for setting the animation property value for the given property ID on the AnimationTarget.
-     * 
+     *
      * @param propertyId The ID of the property on the AnimationTarget to set the animation property value on.
      * @param value The container to set the animation property value in.
      * @param blendWeight The blend weight.
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f) = 0;
 
-    /** 
+    /**
      * Gets the animation with the specified ID. If the ID is NULL, this function will return the first animation it finds.
      *
      * @param id The name of the animation to get.
@@ -146,9 +146,9 @@ public:
     Animation* getAnimation(const char* id = NULL) const;
 
 protected:
-    
+
     /**
-     * The type of animation target. 
+     * The type of animation target.
      */
     enum TargetType
     {
@@ -168,14 +168,14 @@ protected:
 
     /**
      * Adds the given animation channel to this animation target.
-     * 
+     *
      * @param channel The animation channel to add.
      */
     void addChannel(Animation::Channel* channel);
 
     /**
      * Removes the given animation channel from this animation target.
-     * 
+     *
      * @param channel The animation channel to delete.
      */
     void removeChannel(Animation::Channel* channel);
@@ -189,14 +189,14 @@ protected:
 
     /**
      * Copies data from this animation target into the given target for the purpose of cloning.
-     * 
+     *
      * @param target The target to copy into.
      * @param context The clone context.
      */
     void cloneInto(AnimationTarget* target, NodeCloneContext &context) const;
 
     /**
-     * The target's type. 
+     * The target's type.
      *
      * @see TargetType::SCALAR
      * @see TargetType::TRANSFORM
@@ -212,7 +212,7 @@ private:
 
     /**
      * Gets the TargetType's property ID value for the specified property ID string.
-     * 
+     *
      * @param type The TargetType of the AnimationTarget.
      * @param propertyIdStr The property ID string.
      * @return The property ID value for teh property ID string; -1 if the propertyIdStr does not exist
@@ -241,7 +241,7 @@ private:
     void convertByValues(float* from, float* by, unsigned int componentCount);
 
     std::vector<Animation::Channel*>* _animationChannels;   // Collection of all animation channels that target the AnimationTarget
-    
+
 };
 }
 

@@ -28,8 +28,9 @@ public:
      * Creates a new empty scene.
      * 
      * @return The newly created empty scene.
+     * @script{create}
      */
-    static Scene* createScene();
+    static Scene* create();
 
     /**
      * Loads a scene from the given '.scene' file.
@@ -37,6 +38,7 @@ public:
      * @param filePath The path to the '.scene' file to load from.
      * @return The loaded scene or <code>NULL</code> if the scene
      *      could not be loaded from the given file.
+     * @script{create}
      */
     static Scene* load(const char* filePath);
 

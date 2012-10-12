@@ -20,7 +20,7 @@ void luaRegister_Bundle()
         {"addRef", lua_Bundle_addRef},
         {"contains", lua_Bundle_contains},
         {"getObjectCount", lua_Bundle_getObjectCount},
-        {"getObjectID", lua_Bundle_getObjectID},
+        {"getObjectId", lua_Bundle_getObjectId},
         {"getRefCount", lua_Bundle_getRefCount},
         {"loadFont", lua_Bundle_loadFont},
         {"loadMesh", lua_Bundle_loadMesh},
@@ -198,7 +198,7 @@ int lua_Bundle_getObjectCount(lua_State* state)
     return 0;
 }
 
-int lua_Bundle_getObjectID(lua_State* state)
+int lua_Bundle_getObjectId(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -215,7 +215,7 @@ int lua_Bundle_getObjectID(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 Bundle* instance = getInstance(state);
-                const char* result = instance->getObjectID(param1);
+                const char* result = instance->getObjectId(param1);
 
                 // Push the return value onto the stack.
                 lua_pushstring(state, result);
@@ -224,7 +224,7 @@ int lua_Bundle_getObjectID(lua_State* state)
             }
             else
             {
-                lua_pushstring(state, "lua_Bundle_getObjectID - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_Bundle_getObjectId - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

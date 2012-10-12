@@ -1,20 +1,20 @@
-## gameplay v1.4.0
+## gameplay v1.5.0
 An open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
 
 ## Supported Mobile Platforms
 - BlackBerry 10 and PlayBook 2.0 (using BlackBerry Native SDK)
-- Google Android 2.3+ (using Google Android NDK, SDK API level 9+)
 - Apple iOS 5.1 (using Apple XCode 4.3.2)
+- Google Android 2.3+ (using Google Android NDK, SDK API level 9+)
 
 ## Supported Desktop Platforms
 - Microsoft Windows 7 (using Microsoft Visual Studio 2010)
 - Apple MacOS X (using Apple XCode 4.3.2)
+- Linux (using CMake or CodeBlocks 10)
 
 ## Roadmap for 'next' branch
-- Linux support
-- Vehicle physics
-- Shadows
-- AI pathfinding
+- AI Pathfinding
+- Terrain and Water
+- Asset Pipeline improvements
 
 ## Licence
 The project is open sourced under the Apache 2.0 license.

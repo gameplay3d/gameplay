@@ -393,8 +393,8 @@ Scene* Bundle::loadScene(const char* id)
             return NULL;
         }
     }
-    
-    Scene* scene = Scene::createScene();
+
+    Scene* scene = Scene::create();
     scene->setId(getIdFromOffset());
 
     // Read the number of children.
@@ -505,7 +505,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                 SAFE_DELETE(_trackedNodes);
                 return NULL;
             }
-            
+
             // Read the number of animations in this object.
             unsigned int animationCount;
             if (!read(&animationCount))
@@ -573,8 +573,8 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                             SAFE_DELETE(_trackedNodes);
                             return NULL;
                         }
-                        
-                        // Skip the animation channel (passing a target attribute of 
+
+                        // Skip the animation channel (passing a target attribute of
                         // 0 causes the animation to not be created).
                         readAnimationChannelData(NULL, id.c_str(), NULL, 0);
                     }
@@ -636,7 +636,7 @@ bool Bundle::skipNode()
         GP_ERROR("Failed to skip node type for node '%s'.", id);
         return false;
     }
-    
+
     // Skip over the node's transform and parent ID.
     if (fseek(_file, sizeof(float) * 16, SEEK_CUR) != 0)
     {
@@ -660,7 +660,7 @@ bool Bundle::skipNode()
                 return false;
         }
     }
-    
+
     // Skip over the node's camera, light, and model attachments.
     Camera* camera = readCamera(); SAFE_RELEASE(camera);
     Light* light = readLight(); SAFE_RELEASE(light);
@@ -1109,7 +1109,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
             Node* node = rootJoint;
             GP_ASSERT(node);
             Node* parent = node->getParent();
-            
+
             std::vector<Node*> loadedNodes;
             while (true)
             {
@@ -1151,7 +1151,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                             return;
                         }
                         std::string parentID = readString(_file);
-                        
+
                         if (!parentID.empty())
                             nodeId = parentID;
                         else
@@ -1259,11 +1259,11 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
 {
     GP_ASSERT(id);
 
-    std::vector<unsigned long> keyTimes;
+    std::vector<unsigned int> keyTimes;
     std::vector<float> values;
     std::vector<float> tangentsIn;
     std::vector<float> tangentsOut;
-    std::vector<unsigned long> interpolation;
+    std::vector<unsigned int> interpolation;
 
     // Length of the arrays.
     unsigned int keyTimesCount;
@@ -1278,28 +1278,28 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
         GP_ERROR("Failed to read key times for animation '%s'.", id);
         return NULL;
     }
-    
+
     // Read key values.
     if (!readArray(&valuesCount, &values))
     {
         GP_ERROR("Failed to read key values for animation '%s'.", id);
         return NULL;
     }
-    
+
     // Read in-tangents.
     if (!readArray(&tangentsInCount, &tangentsIn))
     {
         GP_ERROR("Failed to read in tangents for animation '%s'.", id);
         return NULL;
     }
-    
+
     // Read out-tangents.
     if (!readArray(&tangentsOutCount, &tangentsOut))
     {
         GP_ERROR("Failed to read out tangents for animation '%s'.", id);
         return NULL;
     }
-    
+
     // Read interpolations.
     if (!readArray(&interpolationCount, &interpolation, sizeof(unsigned int)))
     {
@@ -1307,7 +1307,6 @@ Animation* Bundle::readAnimationChannelData(Animation* animation, const char* id
         return NULL;
     }
 
-    // TODO: Handle other target attributes later.
     if (targetAttribute > 0)
     {
         GP_ASSERT(target);
@@ -1520,7 +1519,7 @@ Bundle::MeshData* Bundle::readMeshData()
 
         partData->primitiveType = (Mesh::PrimitiveType)pType;
         partData->indexFormat = (Mesh::IndexFormat)iFormat;
-        
+
         unsigned int indexSize = 0;
         switch (partData->indexFormat)
         {
@@ -1684,7 +1683,7 @@ Font* Bundle::loadFont(const char* id)
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
-    
+
     // Read texture data.
     unsigned char* textureData = new unsigned char[textureByteCount];
     if (fread(textureData, 1, textureByteCount, _file) != textureByteCount)
@@ -1750,7 +1749,7 @@ unsigned int Bundle::getObjectCount() const
     return _referenceCount;
 }
 
-const char* Bundle::getObjectID(unsigned int index) const
+const char* Bundle::getObjectId(unsigned int index) const
 {
     GP_ASSERT(_references);
     return (index >= _referenceCount ? NULL : _references[index].id.c_str());

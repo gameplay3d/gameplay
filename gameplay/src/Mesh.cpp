@@ -68,17 +68,17 @@ Mesh* Mesh::createMesh(const VertexFormat& vertexFormat, unsigned int vertexCoun
 }
 
 
-Mesh* Mesh::createQuad(float x, float y, float width, float height)
+Mesh* Mesh::createQuad(float x, float y, float width, float height, float s1, float t1, float s2, float t2)
 {
     float x2 = x + width;
     float y2 = y + height;
 
     float vertices[] =
     {
-        x, y2, 0,   0, 0, 1,    0, 0,
-        x, y, 0,    0, 0, 1,    0, 1,
-        x2, y2, 0,  0, 0, 1,    1, 0,
-        x2, y, 0,   0, 0, 1,    1, 1
+        x, y2, 0,   0, 0, 1,    s1, t2,
+        x, y, 0,    0, 0, 1,    s1, t1,
+        x2, y2, 0,  0, 0, 1,    s2, t2,
+        x2, y, 0,   0, 0, 1,    s2, t1,
     };
 
     VertexFormat::Element elements[] =
@@ -109,10 +109,10 @@ Mesh* Mesh::createQuadFullscreen()
 
     float vertices[] =
     {
-        x, y2,   0, 0,
-        x, y,    0, 1,
-        x2, y2,  1, 0,
-        x2, y,   1, 1
+        x, y2,   0, 1,
+        x, y,    0, 0,
+        x2, y2,  1, 1,
+        x2, y,   1, 0
     };
 
     VertexFormat::Element elements[] =
@@ -282,7 +282,7 @@ void Mesh::setPrimitiveType(PrimitiveType type)
     _primitiveType = type;
 }
 
-void Mesh::setVertexData(float* vertexData, unsigned int vertexStart, unsigned int vertexCount)
+void Mesh::setVertexData(const float* vertexData, unsigned int vertexStart, unsigned int vertexCount)
 {
     GL_ASSERT( glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer) );
 

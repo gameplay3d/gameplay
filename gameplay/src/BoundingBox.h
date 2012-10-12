@@ -37,6 +37,18 @@ public:
     BoundingBox(const Vector3& min, const Vector3& max);
 
     /**
+     * Constructs a new bounding box from the specified values.
+     * 
+     * @param minX The x coordinate of the minimum point of the bounding box.
+     * @param minY The y coordinate of the minimum point of the bounding box.
+     * @param minZ The z coordinate of the minimum point of the bounding box.
+     * @param maxX The x coordinate of the maximum point of the bounding box.
+     * @param maxY The y coordinate of the maximum point of the bounding box.
+     * @param maxZ The z coordinate of the maximum point of the bounding box.
+     */
+    BoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
+
+    /**
      * Constructs a new bounding box from the given bounding box.
      *
      * @param copy The bounding box to copy.
@@ -162,6 +174,18 @@ public:
      * @param max The maximum point of the bounding box.
      */
     void set(const Vector3& min, const Vector3& max);
+
+    /**
+     * Sets this bounding box to the specified values.
+     * 
+     * @param minX The x coordinate of the minimum point of the bounding box.
+     * @param minY The y coordinate of the minimum point of the bounding box.
+     * @param minZ The z coordinate of the minimum point of the bounding box.
+     * @param maxX The x coordinate of the maximum point of the bounding box.
+     * @param maxY The y coordinate of the maximum point of the bounding box.
+     * @param maxZ The z coordinate of the maximum point of the bounding box.
+     */
+    void set(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
 
     /**
      * Sets this bounding box to the specified bounding box.

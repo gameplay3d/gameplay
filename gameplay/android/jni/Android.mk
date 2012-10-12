@@ -52,15 +52,16 @@ LOCAL_SRC_FILES := \
     Frustum.cpp \
     Game.cpp \
     Gamepad.cpp \
-    gameplay-main-android.cpp \
     Image.cpp \
     Joint.cpp \
     Joystick.cpp \
     Label.cpp \
     Layout.cpp \
     Light.cpp \
+    Logger.cpp \
     Material.cpp \
     MaterialParameter.cpp \
+    MathUtil.cpp \
     Matrix.cpp \
     Mesh.cpp \
     MeshBatch.cpp \
@@ -82,6 +83,8 @@ LOCAL_SRC_FILES := \
     PhysicsRigidBody.cpp \
     PhysicsSocketConstraint.cpp \
     PhysicsSpringConstraint.cpp \
+    PhysicsVehicle.cpp \
+    PhysicsVehicleWheel.cpp \
     Plane.cpp \
     PlatformAndroid.cpp \
     Properties.cpp \
@@ -167,6 +170,8 @@ LOCAL_SRC_FILES := \
     lua/lua_GamepadButtonState.cpp \
     lua/lua_GamepadGamepadEvent.cpp \
     lua/lua_GameState.cpp \
+    lua/lua_Gesture.cpp \
+    lua/lua_GestureGestureEvent.cpp \
     lua/lua_Global.cpp \
     lua/lua_Image.cpp \
     lua/lua_ImageFormat.cpp \
@@ -180,6 +185,8 @@ LOCAL_SRC_FILES := \
     lua/lua_LayoutType.cpp \
     lua/lua_Light.cpp \
     lua/lua_LightType.cpp \
+    lua/lua_Logger.cpp \
+    lua/lua_LoggerLevel.cpp \
     lua/lua_Material.cpp \
     lua/lua_MaterialParameter.cpp \
     lua/lua_MathUtil.cpp \
@@ -222,6 +229,8 @@ LOCAL_SRC_FILES := \
     lua/lua_PhysicsRigidBodyParameters.cpp \
     lua/lua_PhysicsSocketConstraint.cpp \
     lua/lua_PhysicsSpringConstraint.cpp \
+    lua/lua_PhysicsVehicle.cpp \
+    lua/lua_PhysicsVehicleWheel.cpp \
     lua/lua_Plane.cpp \
     lua/lua_Platform.cpp \
     lua/lua_Properties.cpp \

@@ -21,6 +21,7 @@ int lua_Vector3_negate(lua_State* state);
 int lua_Vector3_normalize(lua_State* state);
 int lua_Vector3_scale(lua_State* state);
 int lua_Vector3_set(lua_State* state);
+int lua_Vector3_smooth(lua_State* state);
 int lua_Vector3_static_add(lua_State* state);
 int lua_Vector3_static_angle(lua_State* state);
 int lua_Vector3_static_clamp(lua_State* state);

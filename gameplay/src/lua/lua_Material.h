@@ -7,7 +7,6 @@ namespace gameplay
 // Lua bindings for Material.
 int lua_Material__gc(lua_State* state);
 int lua_Material_addRef(lua_State* state);
-int lua_Material_clone(lua_State* state);
 int lua_Material_getParameter(lua_State* state);
 int lua_Material_getRefCount(lua_State* state);
 int lua_Material_getStateBlock(lua_State* state);

@@ -45,15 +45,7 @@ public:
          * Absolute layout: Controls are not modified at all by this layout.
          * They must be positioned and sized manually.
          */
-        LAYOUT_ABSOLUTE,
-
-        /**
-         * Scroll layout: Controls may be placed outside the bounds of the container.
-         * The user can then touch and drag to scroll.  By default controls are placed
-         * based on absolute positions in the .form file, but vertical or horizontal
-         * automatic positioning is an available option.
-         */
-        LAYOUT_SCROLL
+        LAYOUT_ABSOLUTE
     };
 
     /**

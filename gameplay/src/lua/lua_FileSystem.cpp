@@ -18,6 +18,7 @@ void luaRegister_FileSystem()
     {
         {"fileExists", lua_FileSystem_static_fileExists},
         {"getResourcePath", lua_FileSystem_static_getResourcePath},
+        {"isAbsolutePath", lua_FileSystem_static_isAbsolutePath},
         {"loadResourceAliases", lua_FileSystem_static_loadResourceAliases},
         {"readAll", lua_FileSystem_static_readAll},
         {"resolvePath", lua_FileSystem_static_resolvePath},
@@ -136,6 +137,45 @@ int lua_FileSystem_static_getResourcePath(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_FileSystem_static_isAbsolutePath(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+
+                bool result = FileSystem::isAbsolutePath(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_FileSystem_static_isAbsolutePath - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

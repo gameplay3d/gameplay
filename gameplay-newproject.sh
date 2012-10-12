@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 # ********************************************************************
 #
 # generate-project.sh
@@ -12,6 +12,21 @@
 # source tree.
 #
 # ********************************************************************
+
+#Find out which OS we're on. 
+unamestr=$(uname)
+
+#Switch-on alias expansion within the script (see http://chiefsandendians.blogspot.co.uk/2010/07/linux-scripts-and-alias.html)
+shopt -s expand_aliases
+
+#alias the sed in-place command for OSX and Linux - incompatibilities between BSD and Linux sed args
+if [[ "$unamestr" == "Darwin" ]]; then
+	alias aliassedinplace='sed -i ""'
+else
+	#For Linux, notice no space after the '-i' 
+	alias aliassedinplace='sed -i""'
+fi
+
 
 echo
 echo "1. Enter a name for the new project."
@@ -161,15 +176,15 @@ fi
 # Copy Microsoft Visual Studio project files
 #############################################
 cp "gameplay-template/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
-sed -i "" "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj"
+aliassedinplace "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj"
 
 cp "gameplay-template/gameplay-template.vcxproj.filters" "$projPath/$projName.vcxproj.filters"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj.filters"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj.filters"
 
 cp "gameplay-template/gameplay-template.vcxproj.user" "$projPath/$projName.vcxproj.user"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
 
 
 #############################################
@@ -177,36 +192,36 @@ sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj.user"
 #############################################
 mkdir -p "$projPath/$projName.xcodeproj"
 cp "gameplay-template/gameplay-template.xcodeproj/project.pbxproj" "$projPath/$projName.xcodeproj/project.pbxproj"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/project.pbxproj"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/$projName.xcodeproj/project.pbxproj"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.xcodeproj/project.pbxproj"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.xcodeproj/project.pbxproj"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.xcodeproj/project.pbxproj"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.xcodeproj/project.pbxproj"
 
 cp "gameplay-template/TEMPLATE_PROJECT-macosx.plist" "$projPath/$projName-macosx.plist"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
+aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
+aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
 
 cp "gameplay-template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
+aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
+aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"
+aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
 
 #############################################
 # Copy BlackBerry NDK project files
 #############################################
 cp "gameplay-template/template.cproject" "$projPath/.cproject"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.cproject"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/.cproject"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/.cproject"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.cproject"
+aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/.cproject"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/.cproject"
 
 cp "gameplay-template/template.project" "$projPath/.project"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.project"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/.project"
 
 cp "gameplay-template/template.bar-descriptor.xml" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_AUTHOR*$author*g" "$projPath/bar-descriptor.xml"
-sed -i "" "s*TEMPLATE_DESCRIPTION*$desc*g" "$projPath/bar-descriptor.xml"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/bar-descriptor.xml"
+aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/bar-descriptor.xml"
+aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/bar-descriptor.xml"
+aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/bar-descriptor.xml"
+aliassedinplace "s*TEMPLATE_DESCRIPTION*$desc*g" "$projPath/bar-descriptor.xml"
 
 #############################################
 # Copy Android NDK project files
@@ -217,23 +232,23 @@ mkdir -p "$projPath/android/res/values"
 mkdir -p "$projPath/android/res/drawable"
 
 cp "gameplay-template/android/template.AndroidManifest.xml" "$projPath/android/AndroidManifest.xml"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/AndroidManifest.xml"
-sed -i "" "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/AndroidManifest.xml"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/AndroidManifest.xml"
+aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/android/AndroidManifest.xml"
 
 cp "gameplay-template/android/template.build.xml" "$projPath/android/build.xml"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
 
 cp "gameplay-template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
 
 cp "gameplay-template/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"
-sed -i "" "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
-sed -i "" "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
+aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
 
 
 cp "gameplay-template/icon.png" "$projPath/android/res/drawable/icon.png"
 cp "gameplay-template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
+aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
 
 
 #############################################
@@ -241,8 +256,8 @@ sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
 #############################################
 cp "gameplay-template/src/TemplateGame.h" "$projPath/src/$className.h"
 cp "gameplay-template/src/TemplateGame.cpp" "$projPath/src/$className.cpp"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/src/$className.h"
-sed -i "" "s*TemplateGame*$className*g" "$projPath/src/$className.cpp"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/src/$className.h"
+aliassedinplace "s*TemplateGame*$className*g" "$projPath/src/$className.cpp"
 
 # Copy resource files
 cp "gameplay-template/res/"* "$projPath/res/"
@@ -252,10 +267,13 @@ cp "gameplay-template/icon.png" "$projPath/icon.png"
 
 # Copy config
 cp "gameplay-template/game.config" "$projPath/game.config"
-sed -i "" "s*TEMPLATE_TITLE*$title*g" "$projPath/game.config"
+aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/game.config"
 
-
-# Open the new project folder
-open $projPath
+# Open the new project folder, use xdg-open on Linux
+if [[ "$unamestr" == "Linux" ]]; then
+	xdg-open $projPath
+else
+	open $projPath
+fi
 
 exit 0

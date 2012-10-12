@@ -6,6 +6,9 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+// Maximum number of supported UV sets
+#define MAX_UV_SETS 8
+
 namespace gameplay
 {
 
@@ -36,13 +39,13 @@ public:
     Vector3 normal;
     Vector3 tangent;
     Vector3 binormal;
-    Vector2 texCoord;
+    Vector2 texCoord[MAX_UV_SETS];
     Vector4 diffuse;
 
     Vector4 blendWeights;
     Vector4 blendIndices;
 
-    bool hasNormal, hasTangent, hasBinormal, hasTexCoord, hasDiffuse, hasWeights;
+    bool hasNormal, hasTangent, hasBinormal, hasTexCoord[MAX_UV_SETS], hasDiffuse, hasWeights;
 
     inline bool operator<(const Vertex& v) const
     {
@@ -54,23 +57,24 @@ public:
                 {
                     if (binormal == v.binormal)
                     {
-                        if (texCoord == v.texCoord)
+                        if (diffuse == v.diffuse)
                         {
-                            if (diffuse == v.diffuse)
+                            if (blendWeights == v.blendWeights)
                             {
-                                if (blendWeights == v.blendWeights)
+                                if (blendIndices == v.blendIndices)
                                 {
-                                    if (blendIndices == v.blendIndices)
+                                    for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
                                     {
-                                        return false;
+                                        if (!(texCoord[i] == v.texCoord[i]))
+                                            return texCoord[i] < v.texCoord[i];
                                     }
-                                    return blendIndices < v.blendIndices;
+                                    return false;
                                 }
-                                return blendWeights < v.blendWeights;
+                                return blendIndices < v.blendIndices;
                             }
-                            return diffuse < v.diffuse;
+                            return blendWeights < v.blendWeights;
                         }
-                        return texCoord < v.texCoord;
+                        return diffuse < v.diffuse;
                     }
                     return binormal < v.binormal;
                 }
@@ -83,7 +87,12 @@ public:
 
     inline bool operator==(const Vertex& v) const
     {
-        return position==v.position && normal==v.normal && tangent==v.tangent && binormal==v.binormal && texCoord==v.texCoord &&
+        for (unsigned int i = 0; i < MAX_UV_SETS; ++i)
+        {
+            if (!(texCoord[i] == v.texCoord[i]))
+                return false;
+        }
+        return position==v.position && normal==v.normal && tangent==v.tangent && binormal==v.binormal &&
             diffuse==v.diffuse && blendWeights==v.blendWeights && blendIndices==v.blendIndices;
     }
 

@@ -988,7 +988,7 @@ int lua_Mesh_static_createBoundingBox(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1040,7 +1040,7 @@ int lua_Mesh_static_createLines(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1092,7 +1092,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1130,7 +1130,7 @@ int lua_Mesh_static_createMesh(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1190,7 +1190,7 @@ int lua_Mesh_static_createQuad(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1223,7 +1223,215 @@ int lua_Mesh_static_createQuad(lua_State* state)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                     object->instance = returnPtr;
-                    object->owns = false;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Mesh");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Mesh_static_createQuad - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 5:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                void* returnPtr = (void*)Mesh::createQuad(param1, param2, param3, param4, param5);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Mesh");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Mesh_static_createQuad - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 6:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 6);
+
+                void* returnPtr = (void*)Mesh::createQuad(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Mesh");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Mesh_static_createQuad - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 7:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 7 off the stack.
+                float param7 = (float)luaL_checknumber(state, 7);
+
+                void* returnPtr = (void*)Mesh::createQuad(param1, param2, param3, param4, param5, param6, param7);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Mesh");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Mesh_static_createQuad - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 8:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER &&
+                lua_type(state, 8) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 7 off the stack.
+                float param7 = (float)luaL_checknumber(state, 7);
+
+                // Get parameter 8 off the stack.
+                float param8 = (float)luaL_checknumber(state, 8);
+
+                void* returnPtr = (void*)Mesh::createQuad(param1, param2, param3, param4, param5, param6, param7, param8);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
                     luaL_getmetatable(state, "Mesh");
                     lua_setmetatable(state, -2);
                 }
@@ -1243,7 +1451,7 @@ int lua_Mesh_static_createQuad(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 4, 5, 6, 7 or 8).");
             lua_error(state);
             break;
         }
@@ -1266,7 +1474,7 @@ int lua_Mesh_static_createQuadFullscreen(lua_State* state)
             {
                 ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                 object->instance = returnPtr;
-                object->owns = false;
+                object->owns = true;
                 luaL_getmetatable(state, "Mesh");
                 lua_setmetatable(state, -2);
             }

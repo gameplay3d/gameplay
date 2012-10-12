@@ -89,14 +89,14 @@ Font* Font::create(const char* path, const char* id)
     {
         // Get the ID of the first object in the bundle (assume it's a Font).
         const char* id;
-        if ((id = bundle->getObjectID(0)) == NULL)
+        if ((id = bundle->getObjectId(0)) == NULL)
         {
             GP_ERROR("Failed to load font without explicit id; the first object in the font bundle has a null id.");
             return NULL;
         }
 
         // Load the font using the ID of the first object in the bundle.
-        font = bundle->loadFont(bundle->getObjectID(0));
+        font = bundle->loadFont(bundle->getObjectId(0));
     }
     else
     {
@@ -139,11 +139,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
 
     // Create batch for the font.
     SpriteBatch* batch = SpriteBatch::create(texture, __fontEffect, 128);
-
-    // Add linear filtering for better font quality.
-    Texture::Sampler* sampler = batch->getSampler();
-    sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
-
+    
     // Release __fontEffect since the SpriteBatch keeps a reference to it
     SAFE_RELEASE(__fontEffect);
 
@@ -152,6 +148,10 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
         GP_ERROR("Failed to create batch for font.");
         return NULL;
     }
+
+    // Add linear filtering for better font quality.
+    Texture::Sampler* sampler = batch->getSampler();
+    sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
 
     // Increase the ref count of the texture to retain it.
     texture->addRef();
@@ -193,7 +193,6 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         size = _size;
     GP_ASSERT(_size);
     float scale = (float)size / _size;
-    const int length = strlen(text);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -541,6 +540,11 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
     }
 }
 
+void Font::drawText(const char* text, int x, int y, float red, float green, float blue, float alpha, unsigned int size, bool rightToLeft)
+{
+    drawText(text, x, y, Vector4(red, green, blue, alpha), size, rightToLeft);
+}
+
 void Font::drawText(const char* text, const Rectangle& area, const Vector4& color, unsigned int size, Justify justify, bool wrap, bool rightToLeft, const Rectangle* clip)
 {
     GP_ASSERT(text);
@@ -549,7 +553,6 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         size = _size;
     GP_ASSERT(_size);
     float scale = (float)size / _size;
-    const int length = strlen(text);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;
@@ -1322,7 +1325,6 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
 
     // Essentially need to measure text until we reach inLocation.
     float scale = (float)size / _size;
-    const int length = strlen(text);
     int yPos = area.y;
     const float areaHeight = area.height - size;
     std::vector<int> xPositions;

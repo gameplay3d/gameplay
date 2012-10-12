@@ -55,9 +55,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1174766388" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -67,6 +67,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
@@ -139,9 +140,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.380839761" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -151,6 +152,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
@@ -226,9 +228,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.248496823" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -238,6 +240,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
@@ -314,9 +317,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/armle-v7/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/arm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/arm&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/arm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/arm&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.955918617" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -326,6 +329,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
@@ -399,9 +403,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/x86&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/x86&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/x86&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.298922406" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -411,6 +415,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
@@ -486,9 +491,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/x86&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/x86&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/x86&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.1203875316" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -498,6 +503,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>
@@ -573,9 +579,9 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/lib"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/x86/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/gameplay/${ConfigName}&quot;"/>
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/qnx/x86&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/qnx/x86&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/qnx/x86&quot;"/>
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/lua/lib/blackberry/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/bullet/lib/blackberry/x86&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/GAMEPLAY_PATH/external-deps/oggvorbis/lib/blackberry/x86&quot;"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraries.2055007034" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="GLESv2"/>
@@ -585,6 +591,7 @@
 									<listOptionValue builtIn="false" value="png14"/>
 									<listOptionValue builtIn="false" value="pps"/>
 									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="gestures"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="asound"/>
 									<listOptionValue builtIn="false" value="gameplay"/>

@@ -173,8 +173,8 @@ bool PhysicsController::rayTest(const Ray& ray, float distance, PhysicsControlle
         {
         }
 
-		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
-		{
+        virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+        {
             if (!btCollisionWorld::ClosestRayResultCallback::needsCollision(proxy0))
                 return false;
 
@@ -248,8 +248,8 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
         {
         }
 
-		virtual bool needsCollision(btBroadphaseProxy* proxy0) const
-		{
+        virtual bool needsCollision(btBroadphaseProxy* proxy0) const
+        {
             if (!btCollisionWorld::ClosestConvexResultCallback::needsCollision(proxy0))
                 return false;
 
@@ -1273,7 +1273,8 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
     }
 
     // Create our collision shape object and store shapeMeshData in it.
-    PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true));
+    PhysicsCollisionShape* shape =
+        new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_MESH, bullet_new<btBvhTriangleMeshShape>(meshInterface, true), meshInterface);
     shape->_shapeData.meshData = shapeMeshData;
 
     _shapes.push_back(shape);

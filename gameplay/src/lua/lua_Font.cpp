@@ -689,6 +689,41 @@ int lua_Font_drawText(lua_State* state)
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER &&
+                lua_type(state, 8) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 3 off the stack.
+                int param3 = (int)luaL_checkint(state, 4);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 7);
+
+                // Get parameter 7 off the stack.
+                float param7 = (float)luaL_checknumber(state, 8);
+
+                Font* instance = getInstance(state);
+                instance->drawText(param1, param2, param3, param4, param5, param6, param7);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
                 lua_type(state, 5) == LUA_TNUMBER &&
@@ -732,6 +767,45 @@ int lua_Font_drawText(lua_State* state)
         case 9:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER &&
+                lua_type(state, 8) == LUA_TNUMBER &&
+                lua_type(state, 9) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 3 off the stack.
+                int param3 = (int)luaL_checkint(state, 4);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 7);
+
+                // Get parameter 7 off the stack.
+                float param7 = (float)luaL_checknumber(state, 8);
+
+                // Get parameter 8 off the stack.
+                unsigned int param8 = (unsigned int)luaL_checkunsigned(state, 9);
+
+                Font* instance = getInstance(state);
+                instance->drawText(param1, param2, param3, param4, param5, param6, param7, param8);
+                
+                return 0;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
@@ -777,9 +851,61 @@ int lua_Font_drawText(lua_State* state)
             }
             break;
         }
+        case 10:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER &&
+                lua_type(state, 8) == LUA_TNUMBER &&
+                lua_type(state, 9) == LUA_TNUMBER &&
+                lua_type(state, 10) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 3 off the stack.
+                int param3 = (int)luaL_checkint(state, 4);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 7);
+
+                // Get parameter 7 off the stack.
+                float param7 = (float)luaL_checknumber(state, 8);
+
+                // Get parameter 8 off the stack.
+                unsigned int param8 = (unsigned int)luaL_checkunsigned(state, 9);
+
+                // Get parameter 9 off the stack.
+                bool param9 = ScriptUtil::luaCheckBool(state, 10);
+
+                Font* instance = getInstance(state);
+                instance->drawText(param1, param2, param3, param4, param5, param6, param7, param8, param9);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2, 4, 5, 6, 7, 8 or 9).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 4, 5, 6, 7, 8, 9 or 10).");
             lua_error(state);
             break;
         }

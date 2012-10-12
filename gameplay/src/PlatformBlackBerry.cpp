@@ -10,6 +10,10 @@
 #include <sys/keycodes.h>
 #include <screen/screen.h>
 #include <input/screen_helpers.h>
+#include <gestures/set.h>
+#include <gestures/swipe.h>
+#include <gestures/pinch.h>
+#include <gestures/tap.h>
 #include <bps/bps.h>
 #include <bps/event.h>
 #include <bps/screen.h>
@@ -39,6 +43,9 @@ static bool __multiTouch = false;
 static float __pitch;
 static float __roll;
 static const char* __glExtensions;
+static struct gestures_set * __gestureSet;
+static bitset<3> __gestureEventsProcessed;
+static bool __gestureSwipeRecognized = false;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
@@ -400,7 +407,7 @@ static int getUnicode(int qnxKeyCode)
     return qnxKeyCode;
 }
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
@@ -414,7 +421,7 @@ EGLenum checkErrorEGL(const char* msg)
     GP_ASSERT(msg);
     static const char* errmsg[] =
     {
-        "EGL function succeeded",
+        "EGL function failed",
         "EGL is not initialized, or could not be initialized, for the specified display",
         "EGL cannot access a requested resource",
         "EGL failed to allocate resources for the requested operation",
@@ -433,6 +440,54 @@ EGLenum checkErrorEGL(const char* msg)
     EGLenum error = eglGetError();
     fprintf(stderr, "%s: %s\n", msg, errmsg[error - EGL_SUCCESS]);
     return error;
+}
+
+void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* param, int async)
+{
+    switch (gesture->type)
+    {
+    case GESTURE_SWIPE:
+        {
+            if ( __gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) )
+            {
+                gesture_swipe_t* swipe = (gesture_swipe_t*)gesture;
+                if (!__gestureSwipeRecognized)
+                {
+                    Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+                    __gestureSwipeRecognized = true;
+                }
+
+            }
+            break;
+        }
+
+    case GESTURE_PINCH:
+        {
+            if ( __gestureEventsProcessed.test(Gesture::GESTURE_PINCH) )
+            {
+                gesture_pinch_t* pinch = (gesture_pinch_t*)gesture;
+                float dist_x = (float)pinch->last_distance.x - (float)pinch->distance.x;
+                float dist_y = (float)pinch->last_distance.y - (float)pinch->distance.y;
+                float scale = sqrt( (dist_x * dist_x) + (dist_y * dist_y) );
+                Game::getInstance()->gesturePinchEvent(pinch->centroid.x, pinch->centroid.y, scale);
+            }
+            break;
+        }
+
+    case GESTURE_TAP:
+        {
+            if ( __gestureEventsProcessed.test(Gesture::GESTURE_TAP) )
+            {
+                gesture_tap_t* tap = (gesture_tap_t*)gesture;
+                Game::getInstance()->gestureTapEvent(tap->touch_coords.x, tap->touch_coords.y);
+            }
+            break;
+        }
+
+    default:
+        break;
+
+    }
 }
 
 Platform::Platform(Game* game)
@@ -489,17 +544,28 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
 
+    // Query game config
+    int samples = 0;
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+    if (config)
+    {
+        samples = std::max(config->getInt("samples"), 0);
+    }
+
+    __gestureSet = gestures_set_alloc();
+    swipe_gesture_alloc(NULL, gesture_callback, __gestureSet);
+    pinch_gesture_alloc(NULL, gesture_callback, __gestureSet);
+    tap_gesture_alloc(NULL, gesture_callback, __gestureSet);
+
     bps_initialize();
 
+    // Initialize navigator and orientation
     static const int SENSOR_RATE = 25000;
     sensor_set_rate(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, SENSOR_RATE);
     sensor_set_skip_duplicates(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, true);
     sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
-
     navigator_request_events(0);
     navigator_rotation_lock(true);
-
-    // Determine initial orientation angle.
     orientation_direction_t direction;
     orientation_get(&direction, &__orientationAngle);
 
@@ -512,7 +578,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 #endif
     int screenSwapInterval = WINDOW_VSYNC ? 1 : 0;
     int screenTransparency = SCREEN_TRANSPARENCY_NONE;
-    int angle = atoi(getenv("ORIENTATION"));
+
+    char *width_str = getenv("WIDTH");
+    char *height_str = getenv("HEIGHT");
 
     // Hard-coded to (0,0).
     int windowPosition[] =
@@ -523,8 +591,12 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     EGLint eglConfigCount;
 
     // Hard-coded to 32-bit/OpenGL ES 2.0.
-    const EGLint eglConfigAttrs[] =
+    // NOTE: EGL_SAMPLE_BUFFERS and EGL_SAMPLES MUST remain at the beginning of the attribute list
+    // since they are expected to be at indices 0-3 in config fallback code later.
+    EGLint eglConfigAttrs[] =
     {
+        EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+        EGL_SAMPLES,            samples,
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
         EGL_BLUE_SIZE,          8,
@@ -579,68 +651,79 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         goto error;
     }
 
-    screen_display_t screen_display;
-    rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
-    if (rc)
+    if (width_str && height_str)
     {
-        perror("screen_get_window_property_pv(SCREEN_PROPERTY_DISPLAY)");
-        goto error;
-    }
-
-    screen_display_mode_t screen_mode;
-    rc = screen_get_display_property_pv(screen_display, SCREEN_PROPERTY_MODE, (void**)&screen_mode);
-    if (rc)
-    {
-        perror("screen_get_display_property_pv(SCREEN_PROPERTY_MODE)");
-        goto error;
-    }
-
-    int size[2];
-    rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, size);
-    if (rc)
-    {
-        perror("screen_get_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
-        goto error;
-    }
-
-    __screenWindowSize[0] = size[0];
-    __screenWindowSize[1] = size[1];
-
-    if ((angle == 0) || (angle == 180))
-    {
-        if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
-            ((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
-        {
-            __screenWindowSize[1] = size[0];
-            __screenWindowSize[0] = size[1];
-        }
-    }
-    else if ((angle == 90) || (angle == 270))
-    {
-        if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
-            ((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
-        {
-            __screenWindowSize[1] = size[0];
-            __screenWindowSize[0] = size[1];
-        }
+        __screenWindowSize[0] = atoi(width_str);
+        __screenWindowSize[1] = atoi(height_str);
     }
     else
     {
-        perror("Navigator returned an unexpected orientation angle.");
-        goto error;
+        int angle = atoi(getenv("ORIENTATION"));
+
+        screen_display_t screen_display;
+        rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
+        if (rc)
+        {
+            perror("screen_get_window_property_pv(SCREEN_PROPERTY_DISPLAY)");
+            goto error;
+        }
+
+        screen_display_mode_t screen_mode;
+        rc = screen_get_display_property_pv(screen_display, SCREEN_PROPERTY_MODE, (void**)&screen_mode);
+        if (rc)
+        {
+            perror("screen_get_display_property_pv(SCREEN_PROPERTY_MODE)");
+            goto error;
+        }
+
+        int size[2];
+        rc = screen_get_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, size);
+        if (rc)
+        {
+            perror("screen_get_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
+            goto error;
+        }
+
+        __screenWindowSize[0] = size[0];
+        __screenWindowSize[1] = size[1];
+
+        if ((angle == 0) || (angle == 180))
+        {
+            if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
+                ((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
+            {
+                __screenWindowSize[1] = size[0];
+                __screenWindowSize[0] = size[1];
+            }
+        }
+        else if ((angle == 90) || (angle == 270))
+        {
+            if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
+                ((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
+            {
+                __screenWindowSize[1] = size[0];
+                __screenWindowSize[0] = size[1];
+            }
+        }
+        else
+        {
+            perror("Navigator returned an unexpected orientation angle.");
+            goto error;
+        }
+
+
+        rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
+        if (rc)
+        {
+            perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
+            goto error;
+        }
     }
 
     rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_BUFFER_SIZE, __screenWindowSize);
     if (rc)
     {
         perror("screen_set_window_property_iv(SCREEN_PROPERTY_BUFFER_SIZE)");
-        goto error;
-    }
-
-    rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
-    if (rc)
-    {
-        perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
         goto error;
     }
 
@@ -695,8 +778,26 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
     {
-        checkErrorEGL("eglChooseConfig");
-        goto error;
+    	bool success = false;
+    	while (samples)
+    	{
+    		// Try lowering the MSAA sample count until we find a supported config
+    		GP_WARN("Failed to find a valid EGL configuration with EGL samples=%d. Trying samples=%d instead.", samples, samples/2);
+    		samples /= 2;
+    		eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+    		eglConfigAttrs[3] = samples;
+    		if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+    		{
+    			success = true;
+    			break;
+    		}
+    	}
+
+    	if (!success)
+    	{
+			checkErrorEGL("eglChooseConfig");
+			goto error;
+    	}
     }
 
     __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
@@ -738,7 +839,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 error:
 
     // TODO: cleanup
-    //
 
     return NULL;
 }
@@ -780,7 +880,6 @@ int Platform::enterMessagePump()
     int position[2];
     int domain;
     mtouch_event_t touchEvent;
-    int touchId = 0;
     bool suspended = false;
 
     // Get the initial time.
@@ -814,7 +913,10 @@ int Platform::enterMessagePump()
                     case SCREEN_EVENT_MTOUCH_TOUCH:
                     {
                         screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                        if (__multiTouch || touchEvent.contact_id == 0)
+                        if (__gestureEventsProcessed.any())
+                            rc = gestures_set_process_event(__gestureSet, &touchEvent, NULL);
+
+                        if ( !rc && (__multiTouch || touchEvent.contact_id == 0) )
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
@@ -824,9 +926,16 @@ int Platform::enterMessagePump()
                     case SCREEN_EVENT_MTOUCH_RELEASE:
                     {
                         screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                        if (__multiTouch || touchEvent.contact_id == 0)
+                        if (__gestureEventsProcessed.any())
+                            rc = gestures_set_process_event(__gestureSet, &touchEvent, NULL);
+
+                        if ( !rc && (__multiTouch || touchEvent.contact_id == 0) )
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
+                        }
+                        if (__gestureSwipeRecognized)
+                        {
+                            __gestureSwipeRecognized = false;
                         }
                         break;
                     }
@@ -834,7 +943,10 @@ int Platform::enterMessagePump()
                     case SCREEN_EVENT_MTOUCH_MOVE:
                     {
                         screen_get_mtouch_event(__screenEvent, &touchEvent, 0);
-                        if (__multiTouch ||touchEvent.contact_id == 0)
+                        if (__gestureEventsProcessed.any())
+                            rc = gestures_set_process_event(__gestureSet, &touchEvent, NULL);
+
+                        if ( !rc && (__multiTouch || touchEvent.contact_id == 0) )
                         {
                             gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, touchEvent.x, touchEvent.y, touchEvent.contact_id);
                         }
@@ -965,7 +1077,8 @@ int Platform::enterMessagePump()
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
                     case NAVIGATOR_WINDOW_INVISIBLE:
-                        _game->pause();
+                        if (!suspended)
+                            _game->pause();
                         suspended = true;
                         break;
                     }
@@ -1028,7 +1141,12 @@ void Platform::signalShutdown()
 {
     // nothing to do  
 }
-    
+
+bool Platform::canExit()
+{
+    return true;
+}
+
 unsigned int Platform::getDisplayWidth()
 {
     return __screenWindowSize[0];
@@ -1062,6 +1180,17 @@ void Platform::setVsync(bool enable)
 {
     eglSwapInterval(__eglDisplay, enable ? 1 : 0);
     __vsync = enable;
+}
+
+void Platform::swapBuffers()
+{
+    if (__eglDisplay && __eglSurface)
+        eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 void Platform::setMultiTouch(bool enabled)
@@ -1143,12 +1272,6 @@ bool Platform::isCursorVisible()
     return false;
 }
 
-void Platform::swapBuffers()
-{
-    if (__eglDisplay && __eglSurface)
-        eglSwapBuffers(__eglDisplay, __eglSurface);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     if (display)
@@ -1191,9 +1314,112 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::sleep(long ms)
+bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
+    // All are supported no need to test th bitset
+    return true;
+}
+
+void Platform::registerGesture(Gesture::GestureEvent evt)
+{
+    switch(evt)
+    {
+    case Gesture::GESTURE_ANY_SUPPORTED:
+        __gestureEventsProcessed.set();
+        break;
+
+    case Gesture::GESTURE_SWIPE:
+    case Gesture::GESTURE_PINCH:
+    case Gesture::GESTURE_TAP:
+        __gestureEventsProcessed.set(evt);
+        break;
+
+    default:
+        break;
+    }
+}
+
+void Platform::unregisterGesture(Gesture::GestureEvent evt)
+{
+    switch(evt)
+    {
+    case Gesture::GESTURE_ANY_SUPPORTED:
+        __gestureEventsProcessed.reset();
+        break;
+
+    case Gesture::GESTURE_SWIPE:
+    case Gesture::GESTURE_PINCH:
+    case Gesture::GESTURE_TAP:
+        __gestureEventsProcessed.set(evt, 0);
+        break;
+
+    default:
+        break;
+    }
+}
+    
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return __gestureEventsProcessed.test(evt);
+}
+
+unsigned int Platform::getGamepadsConnected()
+{
+    return 0;
+}
+
+bool Platform::isGamepadConnected(unsigned int gamepadHandle)
+{
+    return false;
+}
+
+const char* Platform::getGamepadId(unsigned int gamepadHandle)
+{
+    return NULL;
+}
+
+unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
+{
+    return false;
+}
+
+unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return false;
+}
+
+float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return 0.0f;
+}
+
+float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return 0.0f;
+}
+
+void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValues)
+{
+}
+
+unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
+{
+    return 0.0f;
 }
 
 }

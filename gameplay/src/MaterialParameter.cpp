@@ -68,6 +68,13 @@ const char* MaterialParameter::getName() const
     return _name.c_str();
 }
 
+Texture::Sampler* MaterialParameter::getSampler() const
+{
+    if (_type == MaterialParameter::SAMPLER)
+        return const_cast<Texture::Sampler*>(_value.samplerValue);
+    return NULL;
+}
+
 void MaterialParameter::setValue(float value)
 {
     clearValue();
@@ -458,22 +465,13 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                     }
                     break;
                 case VECTOR2:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->setFloat(_value.floatPtrValue, i * 2, 2);
-                    }
+                    value->setFloats(0, _value.floatPtrValue, _count * 2);
                     break;
                 case VECTOR3:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->setFloat(_value.floatPtrValue, i * 3, 3);
-                    }
+                    value->setFloats(0, _value.floatPtrValue, _count * 3);
                     break;
                 case VECTOR4:
-                    for (unsigned int i = 0; i < _count; i++)
-                    {
-                        value->setFloat(_value.floatPtrValue, i * 4, 4);
-                    }
+                    value->setFloats(0, _value.floatPtrValue, _count * 4);
                     break;
                 case NONE:
                 case MATRIX:

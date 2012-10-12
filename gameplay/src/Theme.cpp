@@ -457,7 +457,7 @@ Theme::Style* Theme::getEmptyStyle()
         overlay->addRef();
         overlay->addRef();
         overlay->addRef();
-        emptyStyle = new Theme::Style((Theme*)this, "EMPTY_STYLE", 1.0f / _texture->getWidth(), 1.0f / _texture->getHeight(),
+        emptyStyle = new Theme::Style(const_cast<Theme*>(this), "EMPTY_STYLE", 1.0f / _texture->getWidth(), 1.0f / _texture->getHeight(),
             Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
 
         _styles.push_back(emptyStyle);
@@ -584,12 +584,10 @@ Theme::ImageList::ImageList(const Vector4& color) : _color(color)
 }
 
 Theme::ImageList::ImageList(const ImageList& copy)
+    : _id(copy._id), _color(copy._color)
 {
-    _id = copy._id;
-    _color = copy._color;
-
     std::vector<ThemeImage*>::const_iterator it;
-    for (it = copy._images.begin(); it != copy._images.end(); it++)
+    for (it = copy._images.begin(); it != copy._images.end(); ++it)
     {
         ThemeImage* image = *it;
         GP_ASSERT(image);
@@ -600,7 +598,7 @@ Theme::ImageList::ImageList(const ImageList& copy)
 Theme::ImageList::~ImageList()
 {
     std::vector<ThemeImage*>::const_iterator it;
-    for (it = _images.begin(); it != _images.end(); it++)
+    for (it = _images.begin(); it != _images.end(); ++it)
     {
         ThemeImage* image = *it;
         SAFE_RELEASE(image);
@@ -647,7 +645,7 @@ Theme::ThemeImage* Theme::ImageList::getImage(const char* imageId) const
     GP_ASSERT(imageId);
 
     std::vector<ThemeImage*>::const_iterator it;
-    for (it = _images.begin(); it != _images.end(); it++)
+    for (it = _images.begin(); it != _images.end(); ++it)
     {
         ThemeImage* image = *it;
         GP_ASSERT(image);

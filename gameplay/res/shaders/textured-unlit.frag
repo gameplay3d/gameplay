@@ -15,16 +15,23 @@ uniform float u_modulateAlpha;              // Modulation alpha
 #endif
 
 // Inputs
-varying vec2 v_texCoord;                	// Texture coordinate(u, v)
+varying vec2 v_texCoord0;                	// Texture coordinate(u, v)
+#if defined(TEXCOORD1)
+varying vec2 v_texCoord1;                   // Second tex coord for multi-texturing
+#endif
 
 // Fragment Program
 void main()
 {
     // Sample the texture for the color
-    gl_FragColor = texture2D(u_diffuseTexture, v_texCoord);
+    gl_FragColor = texture2D(u_diffuseTexture, v_texCoord0);
 	#if defined(TEXTURE_LIGHTMAP)
-	vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord);
-	gl_FragColor.a *= lightColor.a;
+    #if defined(TEXCOORD1)
+    vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord1);
+    #else
+    vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord0);
+    #endif
+    gl_FragColor.rgb *= lightColor.rgb;
 	#endif
 	// Global color modulation
 	#if defined(MODULATE_COLOR)

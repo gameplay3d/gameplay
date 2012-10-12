@@ -142,6 +142,15 @@ public:
     void setVelocity(const Vector3& velocity);
 
     /**
+     * Sets the velocity of the audio source.
+     *
+     * @param x The x coordinate of the velocity.
+     * @param y The y coordinate of the velocity.
+     * @param z The z coordinate of the velocity.
+     */
+    void setVelocity(float x, float y, float z);
+
+    /**
      * Gets the node that this source is attached to.
      * 
      * @return The node that this audio source is attached to.
