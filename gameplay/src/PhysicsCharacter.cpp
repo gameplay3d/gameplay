@@ -309,7 +309,7 @@ void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
 
     if (_verticalVelocity.isZero())
     {
-        // Simply increase our poisiton by step height to enable us
+        // Simply increase our position by step height to enable us
         // to smoothly move over steps.
         targetPosition += btVector3(0, _stepHeight, 0);
     }
@@ -521,7 +521,7 @@ static btVector3 parallelComponent(const btVector3& direction, const btVector3& 
 }
 
 /*
- * Returns the portion of 'direction' that is perpindicular to 'normal'.
+ * Returns the portion of 'direction' that is perpendicular to 'normal'.
  */
 static btVector3 perpindicularComponent(const btVector3& direction, const btVector3& normal)
 {
@@ -572,7 +572,7 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
     _node->getWorldMatrix().getTranslation(&startPosition);
     btVector3 currentPosition = BV(startPosition);
 
-    // Handle all collisions/overlappign pairs.
+    // Handle all collisions/overlapping pairs.
     btScalar maxPenetration = btScalar(0.0);
     for (int i = 0, count = pairCache->getNumOverlappingPairs(); i < count; ++i)
     {

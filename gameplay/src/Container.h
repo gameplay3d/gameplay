@@ -27,7 +27,7 @@ namespace gameplay
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
          scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
-         consumeEvents = <bool>             // Whether the container propogates input events to the Game's input event handler. Default is true.
+         consumeEvents = <bool>             // Whether the container propagates input events to the Game's input event handler. Default is true.
 
          // All the nested controls within this container.
          container 
