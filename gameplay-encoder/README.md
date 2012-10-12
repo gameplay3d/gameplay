@@ -22,7 +22,7 @@ For more information goto "http://www.autodesk.com/fbx".
 
 ## Building gameplay-encoder
 The gameplay-encoder comes pre-built for Windows 7, MacOS X and Linux x64 in the 'bin' folder.
-However, to build the gameplay-ecoder yourself just open either the 
+However, to build the gameplay-encoder yourself just open either the 
 Visual Studio 2010 project "gameplay-encoder.vccproj" on Windows 7 or
 XCode project "gameplay-encoder.xcodeproj" on MacOSX.
 Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake .. from build then make.
