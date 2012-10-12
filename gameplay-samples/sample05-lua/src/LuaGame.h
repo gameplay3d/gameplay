@@ -15,7 +15,7 @@ class LuaGame: public Game
 public:
 
     /**
-     * Constructror.
+     * Constructor.
      */
     LuaGame();
 
