@@ -134,6 +134,10 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:af804f53b2bedc6a2b40fa29a3914ca49"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#af804f53b2bedc6a2b40fa29a3914ca49">_max</a></td></tr>
 <tr class="memitem:a774a0cadb40c9b32d787f993fb3ac48f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a774a0cadb40c9b32d787f993fb3ac48f">_step</a></td></tr>
 <tr class="memitem:aa7b0603bc0506c1d0cb72b3c8219ee2e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#aa7b0603bc0506c1d0cb72b3c8219ee2e">_value</a></td></tr>
+<tr class="memitem:a26a4e2d2a8002ddebdbabcbd60703614"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a26a4e2d2a8002ddebdbabcbd60703614">_originalX</a></td></tr>
+<tr class="memitem:a9d97e4af0c43053d79f39b85bcb8ae34"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a9d97e4af0c43053d79f39b85bcb8ae34">_originalValue</a></td></tr>
+<tr class="memitem:a6836c23137db82e5b9e72c8ea4f44755"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a6836c23137db82e5b9e72c8ea4f44755">_originalConsumeInputEvents</a></td></tr>
+<tr class="memitem:a2b6a9008f5e107ffdca4f9565e5f407b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a2b6a9008f5e107ffdca4f9565e5f407b">_moveCancelled</a></td></tr>
 <tr class="memitem:ace1e63eabbe3143ef17c53902c4a1cdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ace1e63eabbe3143ef17c53902c4a1cdf">_minImage</a></td></tr>
 <tr class="memitem:a9021365461d3586d5eb71f8a108b8732"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a9021365461d3586d5eb71f8a108b8732">_maxImage</a></td></tr>
 <tr class="memitem:a0dde79480ac87baed30e237cae89bc7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a0dde79480ac87baed30e237cae89bc7b">_trackImage</a></td></tr>
@@ -151,6 +155,7 @@ Protected Attributes</h2></td></tr>
         value       = &lt;float&gt;                   // The default position of the marker.
         step        = &lt;float&gt;                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
         text        = &lt;string&gt;                  // Text to display above, below or alongside the slider (depending on the style).
+        consumeEvents = &lt;bool&gt;                  // Whether the slider propogates input events to the Game's input event handler. Default is true.
         // TODO: orientation = &lt;HORIZONTAL or VERTICAL&gt;  // Determines whether a slider is stretched along its width or its height
     }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a180e1a81c7c384de48cd28524873f436"></a>
@@ -739,6 +744,62 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2b6a9008f5e107ffdca4f9565e5f407b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_slider.html#a2b6a9008f5e107ffdca4f9565e5f407b">gameplay::Slider::_moveCancelled</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether the <a class="el" href="classgameplay_1_1_slider.html">Slider</a>'s current movement has been cancelled, e.g. because the user is scrolling the parent container. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6836c23137db82e5b9e72c8ea4f44755"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_slider.html#a6836c23137db82e5b9e72c8ea4f44755">gameplay::Slider::_originalConsumeInputEvents</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The <a class="el" href="classgameplay_1_1_slider.html">Slider</a>'s original setting of _consumeInputEvents at the start of a sequence of touch events. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9d97e4af0c43053d79f39b85bcb8ae34"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_slider.html#a9d97e4af0c43053d79f39b85bcb8ae34">gameplay::Slider::_originalValue</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The <a class="el" href="classgameplay_1_1_slider.html">Slider</a>'s original value at the start of a sequence of touch events. </p>
+
+</div>
+</div>
+<a class="anchor" id="a26a4e2d2a8002ddebdbabcbd60703614"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_slider.html#a26a4e2d2a8002ddebdbabcbd60703614">gameplay::Slider::_originalX</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The X coordinate of the first touch event in a sequence. </p>
+
+</div>
+</div>
 <a class="anchor" id="a774a0cadb40c9b32d787f993fb3ac48f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -785,7 +846,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:15 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:45 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

@@ -183,6 +183,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac891c29a04d56dfe0debfe7cfb8241fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#ac891c29a04d56dfe0debfe7cfb8241fd">translateLeft</a> (float amount)</td></tr>
 <tr class="memitem:a7f30069e0296f4171188057bb5f11e66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a7f30069e0296f4171188057bb5f11e66">translateUp</a> (float amount)</td></tr>
 <tr class="memitem:a8ca10de44224e1b71dca0d01dae45880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a8ca10de44224e1b71dca0d01dae45880">translateForward</a> (float amount)</td></tr>
+<tr class="memitem:a92da66f9abeeecb33680fa0e24e3b04a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a92da66f9abeeecb33680fa0e24e3b04a">translateSmooth</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;target, float elapsedTime, float responseTime)</td></tr>
 <tr class="memitem:a4667c774f027b6e650ed88deabb5428b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a4667c774f027b6e650ed88deabb5428b">transformPoint</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *point)</td></tr>
 <tr class="memitem:a57c8c04c7ee458c7b390ba9b0716d665"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a57c8c04c7ee458c7b390ba9b0716d665">transformPoint</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;point, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst)</td></tr>
 <tr class="memitem:a783ebcd198aff74ba2296834952624c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *vector)</td></tr>
@@ -212,6 +213,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:aa129fc2df5e41f17d2ddad45dea2724a"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aa129fc2df5e41f17d2ddad45dea2724a">ANIMATE_TRANSLATE_Z</a> = 12</td></tr>
 <tr class="memitem:a64374775dcf7197d9e946b5dd2438b3e"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a64374775dcf7197d9e946b5dd2438b3e">ANIMATE_ROTATE_TRANSLATE</a> = 16</td></tr>
 <tr class="memitem:a261529193110fa83fb8abb30a81bdb85"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a261529193110fa83fb8abb30a81bdb85">ANIMATE_SCALE_ROTATE_TRANSLATE</a> = 17</td></tr>
+<tr class="memitem:aadccf56405534bac339ee7462d7ff768"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#aadccf56405534bac339ee7462d7ff768">ANIMATE_SCALE_TRANSLATE</a> = 18</td></tr>
+<tr class="memitem:a39b713faacd90529ae1b18bc87c5eed1"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a39b713faacd90529ae1b18bc87c5eed1">ANIMATE_SCALE_ROTATE</a> = 19</td></tr>
 <tr><td colspan="2"><h2><a name="pro-types"></a>
 Protected Types</h2></td></tr>
 <tr class="memitem:afb33ec484f82efed700b67b879ec06ff"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#afb33ec484f82efed700b67b879ec06ff">MatrixDirtyBits</a> { <b>DIRTY_TRANSLATION</b> =  0x01, 
@@ -2511,6 +2514,48 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a92da66f9abeeecb33680fa0e24e3b04a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_transform.html#a92da66f9abeeecb33680fa0e24e3b04a">gameplay::Transform::translateSmooth</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>responseTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Translates the camera towards the given target using a smoothing function. The given response time determines the amount of smoothing (lag). A longer response time yields a smoother result and more lag. To force the camera to follow the target closely, provide a response time that is very small relative to the given elapsed time.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>target value. </td></tr>
+    <tr><td class="paramname">elapsedTime</td><td>elapsed time between calls. </td></tr>
+    <tr><td class="paramname">responseTime</td><td>response time (in the same units as elapsedTime). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a7f30069e0296f4171188057bb5f11e66"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2734,6 +2779,20 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a39b713faacd90529ae1b18bc87c5eed1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_transform.html#a39b713faacd90529ae1b18bc87c5eed1">gameplay::Transform::ANIMATE_SCALE_ROTATE</a> = 19<code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scale + Rotation animation property. Data=sx,sy,sz,qx,qy,qz,qw </p>
+
+</div>
+</div>
 <a class="anchor" id="a261529193110fa83fb8abb30a81bdb85"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2745,6 +2804,20 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Scale, Rotation + Translation animation property. Data=sx,sy,sz,qx,qy,qz,qw,tx,ty,tz </p>
+
+</div>
+</div>
+<a class="anchor" id="aadccf56405534bac339ee7462d7ff768"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int <a class="el" href="classgameplay_1_1_transform.html#aadccf56405534bac339ee7462d7ff768">gameplay::Transform::ANIMATE_SCALE_TRANSLATE</a> = 18<code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Scale + Translation animation property. Data=sx,sy,sz,tx,ty,tz </p>
 
 </div>
 </div>
@@ -2864,7 +2937,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:15 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:45 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

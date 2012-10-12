@@ -108,7 +108,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae81d7f2f357ef5a570f20c6767f6b999"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#ae81d7f2f357ef5a570f20c6767f6b999">intersects</a> (float <a class="el" href="classgameplay_1_1_rectangle.html#aa7725e7da44d019348918868aa47e137">x</a>, float <a class="el" href="classgameplay_1_1_rectangle.html#a28c51d3eb94fa7fb4e86c726157860d5">y</a>, float <a class="el" href="classgameplay_1_1_rectangle.html#a3d3e1019a36549d6b7025119ad063d22">width</a>, float <a class="el" href="classgameplay_1_1_rectangle.html#aed5d50931e284d00d61aaf9a129ed828">height</a>) const </td></tr>
 <tr class="memitem:a5d5d806d339daa701bf78e0b1d02467d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a5d5d806d339daa701bf78e0b1d02467d">intersects</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r) const </td></tr>
 <tr class="memitem:a5b5eeaf4a5ff5832ea179b28c8bd9e26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a5b5eeaf4a5ff5832ea179b28c8bd9e26">inflate</a> (float horizontalAmount, float verticalAmount)</td></tr>
-<tr class="memitem:a1d095b6ed6492a2b5ebb4e2ac9968034"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a1d095b6ed6492a2b5ebb4e2ac9968034">operator=</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r)</td></tr>
+<tr class="memitem:a225a1873fa1c2b12cf6e242649eeb441"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a225a1873fa1c2b12cf6e242649eeb441">operator=</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r)</td></tr>
 <tr class="memitem:a336ffc0e059355dc71aaf9855f5b86ed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#a336ffc0e059355dc71aaf9855f5b86ed">operator==</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r) const </td></tr>
 <tr class="memitem:ab895cc79823a7bcfbb031e862d54c5f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_rectangle.html#ab895cc79823a7bcfbb031e862d54c5f4">operator!=</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;r) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -529,7 +529,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Determines whether a specified rectangle intersects with this rectangle.</p>
+<p>Determines whether a specified rectangle intersects with this rectangle. Rectangles intersect if there is a common point that is contained in both rectangles.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the rectangle. </td></tr>
@@ -622,12 +622,12 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1d095b6ed6492a2b5ebb4e2ac9968034"></a>
+<a class="anchor" id="a225a1873fa1c2b12cf6e242649eeb441"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; gameplay::Rectangle::operator= </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; gameplay::Rectangle::operator= </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
           <td class="paramname"><em>r</em></td><td>)</td>
@@ -863,7 +863,7 @@ Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:44 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

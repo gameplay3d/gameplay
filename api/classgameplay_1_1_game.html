@@ -124,9 +124,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a12905bcd46f0e3dca0c9475d7b2c0268"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a12905bcd46f0e3dca0c9475d7b2c0268">getFrameRate</a> () const </td></tr>
 <tr class="memitem:a6a0ab2f3c261627aaf03068a2d43c36e"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a6a0ab2f3c261627aaf03068a2d43c36e">getWidth</a> () const </td></tr>
 <tr class="memitem:a03206e4c2b39564fbae3b7cef5c2bdb0"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a03206e4c2b39564fbae3b7cef5c2bdb0">getHeight</a> () const </td></tr>
+<tr class="memitem:aa8d4236a3d18c934d5d6dc52db1afed0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aa8d4236a3d18c934d5d6dc52db1afed0">getAspectRatio</a> () const </td></tr>
 <tr class="memitem:a4c863d4796f8868814e9b62c00d87348"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4c863d4796f8868814e9b62c00d87348">getViewport</a> () const </td></tr>
 <tr class="memitem:a2afdced18b9679670acac30262daccbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a2afdced18b9679670acac30262daccbd">setViewport</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport)</td></tr>
 <tr class="memitem:aed3bfa9c1cfcdd4eb0729284d5e10a8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aed3bfa9c1cfcdd4eb0729284d5e10a8d">clear</a> (<a class="el" href="classgameplay_1_1_game.html#a7866ef6e9e0ee3b812b408a75cc13cdb">ClearFlags</a> flags, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;clearColor, float clearDepth, int clearStencil)</td></tr>
+<tr class="memitem:a92c3e37e7a5b128982573762818af4fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a92c3e37e7a5b128982573762818af4fd">clear</a> (<a class="el" href="classgameplay_1_1_game.html#a7866ef6e9e0ee3b812b408a75cc13cdb">ClearFlags</a> flags, float red, float green, float blue, float alpha, float clearDepth, int clearStencil)</td></tr>
 <tr class="memitem:af35d8c9469d7de33c85268dbf55b2e3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_audio_controller.html">AudioController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#af35d8c9469d7de33c85268dbf55b2e3b">getAudioController</a> () const </td></tr>
 <tr class="memitem:a71d1446883b0071469a2a3b1c2378d64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation_controller.html">AnimationController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a71d1446883b0071469a2a3b1c2378d64">getAnimationController</a> () const </td></tr>
 <tr class="memitem:a4b8fb643c2ce70b29e139823f61d3201"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_controller.html">PhysicsController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4b8fb643c2ce70b29e139823f61d3201">getPhysicsController</a> () const </td></tr>
@@ -143,11 +145,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7a63e56a8f4995cbc2eabc0a28c24937"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7a63e56a8f4995cbc2eabc0a28c24937">setMouseCaptured</a> (bool captured)</td></tr>
 <tr class="memitem:a1d483ce8404c0fc9662762b19e8abbf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a1d483ce8404c0fc9662762b19e8abbf3">setCursorVisible</a> (bool visible)</td></tr>
 <tr class="memitem:a299c4a1a679f593d8ab596ecaed4dcf9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a299c4a1a679f593d8ab596ecaed4dcf9">isCursorVisible</a> ()</td></tr>
+<tr class="memitem:a5df34b34e43f6886a121dbe64a7f7373"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5df34b34e43f6886a121dbe64a7f7373">isGestureSupported</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:a04c115a3adec770a3a682e2a1a462fe6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04c115a3adec770a3a682e2a1a462fe6">registerGesture</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:a5aa6475d827f8cfd12d16b8d259a3906"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5aa6475d827f8cfd12d16b8d259a3906">unregisterGesture</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:a50324c58dde49681f70a46d01c950f6d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a50324c58dde49681f70a46d01c950f6d">isGestureRegistered</a> (<a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a> evt)</td></tr>
+<tr class="memitem:ac99596b24be12650f1280dbee3b16754"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ac99596b24be12650f1280dbee3b16754">gestureSwipeEvent</a> (int x, int y, int direction)</td></tr>
+<tr class="memitem:a51e9c3ea567f7c01297fd8a864a6f6f8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a51e9c3ea567f7c01297fd8a864a6f6f8">gesturePinchEvent</a> (int x, int y, float scale)</td></tr>
+<tr class="memitem:a3616fd8d58c48099ddc7e7f0ffa1645a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3616fd8d58c48099ddc7e7f0ffa1645a">gestureTapEvent</a> (int x, int y)</td></tr>
 <tr class="memitem:a15ebb285ef4dfafbe1cc0875ca2593d2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a15ebb285ef4dfafbe1cc0875ca2593d2">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
 <tr class="memitem:a7f1b9a0142092d4f73bb159b93a37d7a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
+<tr class="memitem:ab08aee001e85726de757de38c3836065"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ab08aee001e85726de757de38c3836065">getGamepadsConnected</a> ()</td></tr>
 <tr class="memitem:a5805e7c99ade22092fb6059eb149e034"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5805e7c99ade22092fb6059eb149e034">getGamepad</a> (unsigned int index) const </td></tr>
 <tr class="memitem:ade96e57a1dbd20ab2dfb4203b4c0d6f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr class="memitem:a04720fabcd25eba03eaee2f81cfcdc16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
+<tr class="memitem:a73ee5f2487783de209ec5321d2f140c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">canExit</a> () const </td></tr>
 <tr class="memitem:a11c781fe9845aa0e787f72844059e028"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
 <tr class="memitem:a3b8adb5a096f735bfcfec801f02ea0da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">schedule</a> (float timeOffset, <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> *timeListener, void *cookie=0)</td></tr>
 <tr class="memitem:aae0c5115535c01bcac52aae65b7f4bbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aae0c5115535c01bcac52aae65b7f4bbb">schedule</a> (float timeOffset, const char *function)</td></tr>
@@ -237,6 +248,24 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a73ee5f2487783de209ec5321d2f140c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">gameplay::Game::canExit</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether this game is allowed to exit programmatically.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if a programmatic exit is allowed. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aed3bfa9c1cfcdd4eb0729284d5e10a8d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -278,6 +307,76 @@ Protected Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">flags</td><td>The flags indicating which buffers to be cleared. </td></tr>
     <tr><td class="paramname">clearColor</td><td>The color value to clear to when the flags includes the color buffer. </td></tr>
+    <tr><td class="paramname">clearDepth</td><td>The depth value to clear to when the flags includes the color buffer. </td></tr>
+    <tr><td class="paramname">clearStencil</td><td>The stencil value to clear to when the flags includes the color buffer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a92c3e37e7a5b128982573762818af4fd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#aed3bfa9c1cfcdd4eb0729284d5e10a8d">gameplay::Game::clear</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_game.html#a7866ef6e9e0ee3b812b408a75cc13cdb">ClearFlags</a>&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>red</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>green</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>blue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>clearDepth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>clearStencil</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Clears the specified resource buffers to the specified clear values.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flags</td><td>The flags indicating which buffers to be cleared. </td></tr>
+    <tr><td class="paramname">red</td><td>The red channel. </td></tr>
+    <tr><td class="paramname">green</td><td>The green channel. </td></tr>
+    <tr><td class="paramname">blue</td><td>The blue channel. </td></tr>
+    <tr><td class="paramname">alpha</td><td>The alpha channel. </td></tr>
     <tr><td class="paramname">clearDepth</td><td>The depth value to clear to when the flags includes the color buffer. </td></tr>
     <tr><td class="paramname">clearStencil</td><td>The stencil value to clear to when the flags includes the color buffer. </td></tr>
   </table>
@@ -386,11 +485,137 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events.</p>
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT and Gamepad::DISCONNECTED_EVENT.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
     <tr><td class="paramname">gamepad</td><td>the gamepad the event occurred on </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a51e9c3ea567f7c01297fd8a864a6f6f8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a51e9c3ea567f7c01297fd8a864a6f6f8">gameplay::Game::gesturePinchEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>scale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gesture.html">Gesture</a> callback on Gesture::PINCH events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The centroid x-coordinate of the pinch. </td></tr>
+    <tr><td class="paramname">y</td><td>The centroid y-coordinate of the pinch. </td></tr>
+    <tr><td class="paramname">scale</td><td>The scale of the pinch. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac99596b24be12650f1280dbee3b16754"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#ac99596b24be12650f1280dbee3b16754">gameplay::Game::gestureSwipeEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>direction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gesture.html">Gesture</a> callback on Gesture::SWIPE events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the start of the swipe. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the start of the swipe. </td></tr>
+    <tr><td class="paramname">direction</td><td>The direction of the swipe</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_gesture.html#a94434fbae0339eae7ebca4f1a94974d9">Gesture::SWIPE_DIRECTION_UP</a> </dd>
+<dd>
+<a class="el" href="classgameplay_1_1_gesture.html#ae79afdf8a7be2893dc403859b98e7f19">Gesture::SWIPE_DIRECTION_DOWN</a> </dd>
+<dd>
+<a class="el" href="classgameplay_1_1_gesture.html#a5e14bba89ae2c032b42109c930a9427d">Gesture::SWIPE_DIRECTION_LEFT</a> </dd>
+<dd>
+<a class="el" href="classgameplay_1_1_gesture.html#ab1d52f1d9ced27b9957f842f15f59585">Gesture::SWIPE_DIRECTION_RIGHT</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3616fd8d58c48099ddc7e7f0ffa1645a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#a3616fd8d58c48099ddc7e7f0ffa1645a">gameplay::Game::gestureTapEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gesture.html">Gesture</a> callback on Gesture::TAP events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x-coordinate of the tap. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the tap. </td></tr>
   </table>
   </dd>
 </dl>
@@ -483,6 +708,24 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the animation controller for managing control of animations associated with the game.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The animation controller for this game. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa8d4236a3d18c934d5d6dc52db1afed0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_game.html#aa8d4236a3d18c934d5d6dc52db1afed0">gameplay::Game::getAspectRatio</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the aspect ratio of the window. (width / height)</p>
+<dl class="section return"><dt>Returns:</dt><dd>The aspect ratio of the window. </dd></dl>
 
 </div>
 </div>
@@ -596,8 +839,26 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the number of gamepad's connected to the game.</p>
-<dl class="section return"><dt>Returns:</dt><dd>The number of gamepad's connected to the game. </dd></dl>
+<p>Gets the number of gamepad's that can be used in the game. Includes gamepads not connected.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The number of gamepad's that can be used in the game. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab08aee001e85726de757de38c3836065"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_game.html#ab08aee001e85726de757de38c3836065">gameplay::Game::getGamepadsConnected</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the number of physical gamepad's attached/connected to the game. Can be called to detects if any gamepads have been attached or detached.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The number of gamepads attached to the <a class="el" href="classgameplay_1_1_platform.html">Platform</a>. </dd></dl>
 
 </div>
 </div>
@@ -799,6 +1060,51 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a50324c58dde49681f70a46d01c950f6d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_game.html#a50324c58dde49681f70a46d01c950f6d">gameplay::Game::isGestureRegistered</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines whether a specified gesture event is registered to receive event callbacks.</p>
+<dl class="section return"><dt>Returns:</dt><dd>true if the specified gesture event is registered; false of not registered. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5df34b34e43f6886a121dbe64a7f7373"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_game.html#a5df34b34e43f6886a121dbe64a7f7373">gameplay::Game::isGestureSupported</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines whether a specified gesture event is supported.</p>
+<p>Use Gesture::GESTURE_ANY_SUPPORTED to test if one or more gesture events are supported.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The gesture event to test and see if it is supported. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>true if the gesture tested is supported; false if not supported. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af5b343706792c40e1e8d0339a5980ab2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -849,7 +1155,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Is multi-touch mode enabled.</p>
-<dl class="section return"><dt>Returns:</dt><dd>true is multi-touch is enabled. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>true if multi-touch is enabled. </dd></dl>
 
 </div>
 </div>
@@ -922,7 +1228,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Menu callback on menu events for platforms with special menu keys or gestures. </p>
+<p>Menu callback on menu events for platforms with special menu keys or special platform gestures. </p>
 
 </div>
 </div>
@@ -991,6 +1297,33 @@ Protected Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Pauses the game after being run. </p>
+
+</div>
+</div>
+<a class="anchor" id="a04c115a3adec770a3a682e2a1a462fe6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#a04c115a3adec770a3a682e2a1a462fe6">gameplay::Game::registerGesture</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Requests the game to register and start recognizing the specified gesture event.</p>
+<p>Call with Gesture::GESTURE_ANY_SUPPORTED to recognize all supported gestures. Once a gesture is recognized the specific gesture event methods will begin to be called.</p>
+<p>Registering for:</p>
+<p>Gesture::GESTURE_SWIPE calls gestureSwipeEvent(..) Gesture::GESTURE_PINCH calls gesturePinchEvent(..) Gesture::GESTURE_TAP calls gestureTapEvent(..)</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The gesture event to start recognizing for </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1275,7 +1608,7 @@ template&lt;class T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
-<p>Set the game current viewport.</p>
+<p>Sets the game current viewport.</p>
 <p>The x, y, width and height of the viewport must all be positive.</p>
 <p>viewport The custom viewport to be set on the game. </p>
 
@@ -1355,6 +1688,31 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a5aa6475d827f8cfd12d16b8d259a3906"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#a5aa6475d827f8cfd12d16b8d259a3906">gameplay::Game::unregisterGesture</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gesture.html#add9439ee8ca0c425d69e62ccd9f30253">Gesture::GestureEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Requests the game to unregister for and stop recognizing the specified gesture event.</p>
+<p>Call with Gesture::GESTURE_ANY_SUPPORTED to unregister events from all supported gestures.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">evt</td><td>The gesture event to start recognizing for </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a519bcb0fb67b399e8246aceefdfc7d0e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1403,7 +1761,7 @@ template&lt;class T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

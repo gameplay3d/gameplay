@@ -76,6 +76,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::ScriptController Class Reference</div>  </div>
@@ -172,47 +173,55 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a685b160db54d4d98f1cf07e2e0b41a57"><td class="memTemplItemLeft" align="right" valign="top">float&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a685b160db54d4d98f1cf07e2e0b41a57">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
 <tr class="memitem:a9bcd4db738f2993a2c99a901efe7aee1"><td class="memTemplParams" colspan="2">template&lt;&gt; </td></tr>
 <tr class="memitem:a9bcd4db738f2993a2c99a901efe7aee1"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a9bcd4db738f2993a2c99a901efe7aee1">executeFunction</a> (const char *func, const char *args, va_list *list)</td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a344980c5588d2845b74efae26d860eaf"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a344980c5588d2845b74efae26d860eaf">print</a> (const char *str)</td></tr>
+<tr class="memitem:a74610ca6a756aec69ec16912f722eb7e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a74610ca6a756aec69ec16912f722eb7e">print</a> (const char *str1, const char *str2)</td></tr>
 <tr><td colspan="2"><h2><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:ae762c160e7e3e6d5e800ac5595e6a86a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae762c160e7e3e6d5e800ac5595e6a86a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerLibrary</b> (const char *name, const luaL_Reg *functions)</td></tr>
-<tr class="memitem:ad0ab7be75342ad847d7beac5d7412cb1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0ab7be75342ad847d7beac5d7412cb1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantBool</b> (std::string name, bool value, std::vector&lt; std::string &gt; scopePath)</td></tr>
-<tr class="memitem:ab0ca1dbb60a6a43d2627cb809ce6c345"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0ca1dbb60a6a43d2627cb809ce6c345"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantNumber</b> (std::string name, double value, std::vector&lt; std::string &gt; scopePath)</td></tr>
-<tr class="memitem:a9c49002e4e5258b304c98680274a2063"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c49002e4e5258b304c98680274a2063"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantString</b> (std::string name, std::string value, std::vector&lt; std::string &gt; scopePath)</td></tr>
-<tr class="memitem:a966bf7c2777a57409eddb0139b70b009"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a966bf7c2777a57409eddb0139b70b009"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerClass</b> (const char *name, const luaL_Reg *members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg *statics, std::vector&lt; std::string &gt; scopePath)</td></tr>
+<tr class="memitem:a60218f4914949fc80d24afc868f99a63"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60218f4914949fc80d24afc868f99a63"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantBool</b> (const std::string &amp;name, bool value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
+<tr class="memitem:a5561c8111ffc22495b3ba5c7e5eb09a2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5561c8111ffc22495b3ba5c7e5eb09a2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantNumber</b> (const std::string &amp;name, double value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
+<tr class="memitem:a9b2fb76276706d6f245005ac08f82b0e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b2fb76276706d6f245005ac08f82b0e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerConstantString</b> (const std::string &amp;name, const std::string &amp;value, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
+<tr class="memitem:a4344f5f4e93e6d6fd2beef4aec3272fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4344f5f4e93e6d6fd2beef4aec3272fd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerClass</b> (const char *name, const luaL_Reg *members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg *statics, const std::vector&lt; std::string &gt; &amp;scopePath)</td></tr>
 <tr class="memitem:a1d465e18de50c584117562fffc938000"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d465e18de50c584117562fffc938000"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::registerFunction</b> (const char *luaFunction, lua_CFunction cppFunction)</td></tr>
-<tr class="memitem:a87b17f448f609a0367c92dbcc85dfc07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87b17f448f609a0367c92dbcc85dfc07"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::setGlobalHierarchyPair</b> (std::string base, std::string derived)</td></tr>
+<tr class="memitem:a8cc6da7a1715070876b1b5038d88666c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc6da7a1715070876b1b5038d88666c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::setGlobalHierarchyPair</b> (const std::string &amp;base, const std::string &amp;derived)</td></tr>
 <tr class="memitem:a0736c7938fc869e14af5b2df97c1db36"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0736c7938fc869e14af5b2df97c1db36"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::addStringFromEnumConversionFunction</b> (luaStringEnumConversionFunction stringFromEnum)</td></tr>
-<tr class="memitem:a13a2705ce36236a209ceaf8dc777e0c4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13a2705ce36236a209ceaf8dc777e0c4"></a>
-bool *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getBoolPointer</b> (int index)</td></tr>
-<tr class="memitem:ab6f2640e4e7f92cc10ca2d61de0959ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6f2640e4e7f92cc10ca2d61de0959ea"></a>
-short *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getShortPointer</b> (int index)</td></tr>
-<tr class="memitem:ac4d77c30aa6cd9af02d080fc80dee341"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac4d77c30aa6cd9af02d080fc80dee341"></a>
-int *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getIntPointer</b> (int index)</td></tr>
-<tr class="memitem:ab33575d8b1269af4ee24ada62b172724"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab33575d8b1269af4ee24ada62b172724"></a>
-long *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getLongPointer</b> (int index)</td></tr>
-<tr class="memitem:a2d8ad9f1c0bc7aa15e120cfd0a72bbfa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d8ad9f1c0bc7aa15e120cfd0a72bbfa"></a>
-unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedCharPointer</b> (int index)</td></tr>
-<tr class="memitem:afc6bcda2107f87ed76a0edd562552080"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc6bcda2107f87ed76a0edd562552080"></a>
-unsigned short *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedShortPointer</b> (int index)</td></tr>
-<tr class="memitem:a69666649798aa176b80baf59f623ce9c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69666649798aa176b80baf59f623ce9c"></a>
-unsigned int *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedIntPointer</b> (int index)</td></tr>
-<tr class="memitem:a7e8cba4291e20c6f615094d463882991"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e8cba4291e20c6f615094d463882991"></a>
-unsigned long *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedLongPointer</b> (int index)</td></tr>
-<tr class="memitem:a6b4bd6976b55719d07cc9b0834ec7371"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b4bd6976b55719d07cc9b0834ec7371"></a>
-float *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getFloatPointer</b> (int index)</td></tr>
-<tr class="memitem:a22119eb5cdcd519b973e171caef2a762"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22119eb5cdcd519b973e171caef2a762"></a>
-double *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getDoublePointer</b> (int index)</td></tr>
-<tr class="memitem:a62641a97edbf4d1a5dbae692c831983c"><td class="memTemplParams" colspan="2"><a class="anchor" id="a62641a97edbf4d1a5dbae692c831983c"></a>
+<tr class="memitem:a90322c10329ee3a3e96b9b0cff25458d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90322c10329ee3a3e96b9b0cff25458d"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getBoolPointer</b> (int index)</td></tr>
+<tr class="memitem:acab092c54cc5512058da19ab898cb775"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acab092c54cc5512058da19ab898cb775"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; short &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getShortPointer</b> (int index)</td></tr>
+<tr class="memitem:a0656b023604ea41981c334ae43f1ad23"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0656b023604ea41981c334ae43f1ad23"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getIntPointer</b> (int index)</td></tr>
+<tr class="memitem:a047e2875fb6bc9bd57240f17db82d1aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a047e2875fb6bc9bd57240f17db82d1aa"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; long &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getLongPointer</b> (int index)</td></tr>
+<tr class="memitem:aba9c1129aadba94da01f14ee492847f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba9c1129aadba94da01f14ee492847f6"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
+char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedCharPointer</b> (int index)</td></tr>
+<tr class="memitem:a0a335250b811808a9a358a50b2adec95"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a335250b811808a9a358a50b2adec95"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
+short &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedShortPointer</b> (int index)</td></tr>
+<tr class="memitem:a908fbf00789d50edce5b37741115a9d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a908fbf00789d50edce5b37741115a9d1"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
+int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedIntPointer</b> (int index)</td></tr>
+<tr class="memitem:aaec3bea5c9a840c601a7ab0173adf9f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaec3bea5c9a840c601a7ab0173adf9f2"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; unsigned <br class="typebreak"/>
+long &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getUnsignedLongPointer</b> (int index)</td></tr>
+<tr class="memitem:aab3dd14ca7d0a278669b83992bb3bee1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab3dd14ca7d0a278669b83992bb3bee1"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getFloatPointer</b> (int index)</td></tr>
+<tr class="memitem:aaeabab96f608d06cb41777d5e4ea3f1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaeabab96f608d06cb41777d5e4ea3f1f"></a>
+<a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getDoublePointer</b> (int index)</td></tr>
+<tr class="memitem:a40957ba085eec73b24927a06d616939b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a40957ba085eec73b24927a06d616939b"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a62641a97edbf4d1a5dbae692c831983c"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ScriptUtil::getObjectPointer</b> (int index, const char *type, bool nonNull)</td></tr>
+<tr class="memitem:a40957ba085eec73b24927a06d616939b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_script_util_1_1_lua_array.html">ScriptUtil::LuaArray</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ScriptUtil::getObjectPointer</b> (int index, const char *type, bool nonNull)</td></tr>
 <tr class="memitem:a667f44e40c1c8d32cf06d8ba3f936d14"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a667f44e40c1c8d32cf06d8ba3f936d14"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>ScriptUtil::getString</b> (int index, bool isStdString)</td></tr>
 </table>
@@ -1630,6 +1639,65 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a344980c5588d2845b74efae26d860eaf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_script_controller.html#a344980c5588d2845b74efae26d860eaf">gameplay::ScriptController::print</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Prints the string to the platform's output stream or log file. Used for overriding Lua's print function.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to print. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a74610ca6a756aec69ec16912f722eb7e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_script_controller.html#a344980c5588d2845b74efae26d860eaf">gameplay::ScriptController::print</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Prints the strings to the platform's output stream or log file. Used for overriding Lua's print function.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str1</td><td>The first string to print. </td></tr>
+    <tr><td class="paramname">str2</td><td>The second string to print on the same line as str1. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a7b02af8e375d3d60d3585eae4e5d40c0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2098,7 +2166,7 @@ template&lt;typename T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:14 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:45 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
