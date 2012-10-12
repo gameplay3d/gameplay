@@ -12,7 +12,9 @@ void luaRegister_AnimationValue()
     const luaL_Reg lua_members[] = 
     {
         {"getFloat", lua_AnimationValue_getFloat},
+        {"getFloats", lua_AnimationValue_getFloats},
         {"setFloat", lua_AnimationValue_setFloat},
+        {"setFloats", lua_AnimationValue_setFloats},
         {NULL, NULL}
     };
     const luaL_Reg* lua_statics = NULL;
@@ -59,37 +61,55 @@ int lua_AnimationValue_getFloat(lua_State* state)
             }
             break;
         }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationValue_getFloats(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
         case 4:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 AnimationValue* instance = getInstance(state);
-                instance->getFloat(param1, param2, param3);
+                instance->getFloats(param1, param2, param3);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_AnimationValue_getFloat - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationValue_getFloats - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
             lua_error(state);
             break;
         }
@@ -129,37 +149,55 @@ int lua_AnimationValue_setFloat(lua_State* state)
             }
             break;
         }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationValue_setFloats(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
         case 4:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                (lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TLIGHTUSERDATA) &&
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 AnimationValue* instance = getInstance(state);
-                instance->setFloat(param1, param2, param3);
+                instance->setFloats(param1, param2, param3);
                 
                 return 0;
             }
             else
             {
-                lua_pushstring(state, "lua_AnimationValue_setFloat - Failed to match the given parameters to a valid function signature.");
+                lua_pushstring(state, "lua_AnimationValue_setFloats - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
             lua_error(state);
             break;
         }

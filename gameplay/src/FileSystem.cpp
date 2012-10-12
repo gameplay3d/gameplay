@@ -134,7 +134,6 @@ const char* FileSystem::resolvePath(const char* path)
 
 bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
 {
-    // TODO make this method work with absolute and relative paths.
 #ifdef WIN32
     std::string path(FileSystem::getResourcePath());
     if (dirPath && strlen(dirPath) > 0)
@@ -211,7 +210,7 @@ bool FileSystem::fileExists(const char* filePath)
     createFileFromAsset(filePath);
 
     gp_stat_struct s;
-// Win32 doesn't support an asset or bundle definitions.
+
 #ifdef WIN32
     if (stat(fullPath.c_str(), &s) != 0)
     {
@@ -219,7 +218,14 @@ bool FileSystem::fileExists(const char* filePath)
         fullPath += "../../gameplay/";
         fullPath += filePath;
         
-        return stat(fullPath.c_str(), &s) == 0;
+        int result = stat(fullPath.c_str(), &s);
+        if (result != 0)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += filePath;
+            return stat(fullPath.c_str(), &s) == 0;
+        }
     }
     return true;
 #else
@@ -239,7 +245,6 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     
     FILE* fp = fopen(fullPath.c_str(), mode);
     
-// Win32 doesn't support an asset or bundle definitions.
 #ifdef WIN32
     if (fp == NULL)
     {
@@ -248,6 +253,13 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
         fullPath += path;
         
         fp = fopen(fullPath.c_str(), mode);
+        if (!fp)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += path;
+            fp = fopen(fullPath.c_str(), mode);
+        }
     }
 #endif
 
@@ -305,6 +317,23 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     return buffer;
 }
 
+bool FileSystem::isAbsolutePath(const char* filePath)
+{
+    if (filePath == 0 || filePath[0] == '\0')
+        return false;
+#ifdef WIN32
+    if (strlen(filePath) >= 2)
+    {
+        char first = filePath[0];
+        if (filePath[1] == ':' && ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')))
+            return true;
+    }
+    return false;
+#else
+    return filePath[0] == '/';
+#endif
+}
+
 void createFileFromAsset(const char* path)
 {
 #ifdef __ANDROID__
@@ -318,7 +347,7 @@ void createFileFromAsset(const char* path)
     std::string directoryPath = fullPath.substr(0, fullPath.rfind('/'));
     struct stat s;
     if (stat(directoryPath.c_str(), &s) != 0)
-        makepath(directoryPath.c_str(), 0777);
+        makepath(directoryPath, 0777);
 
     // To ensure that the files on the file system corresponding to the assets in the APK bundle
     // are always up to date (and in sync), we copy them from the APK to the file system once

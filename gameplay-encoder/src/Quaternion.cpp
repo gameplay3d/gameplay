@@ -52,7 +52,7 @@ bool Quaternion::isIdentity() const
 
 bool Quaternion::isZero() const
 {
-    return x == 0.0f && y == 0.0f && z == 0.0f && z == 0.0f;
+    return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
 void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternion* dst)
@@ -60,14 +60,14 @@ void Quaternion::createFromAxisAngle(const Vector3& axis, float angle, Quaternio
     assert(dst);
 
     float halfAngle = angle * 0.5f;
-    float sinHalfAngle = sinf(halfAngle);
+    float sinHalfAngle = sin(halfAngle);
 
     Vector3 normal(axis);
     normal.normalize();
     dst->x = normal.x * sinHalfAngle;
     dst->y = normal.y * sinHalfAngle;
     dst->z = normal.z * sinHalfAngle;
-    dst->w = cosf(halfAngle);
+    dst->w = cos(halfAngle);
 }
 
 void Quaternion::conjugate()

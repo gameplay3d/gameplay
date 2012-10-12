@@ -10,7 +10,7 @@ namespace gameplay
 {
 
 AudioSource::AudioSource(AudioBuffer* buffer, ALuint source) 
-    : _alSource(source), _buffer(buffer), _looped(true), _gain(1.0f), _pitch(1.0f), _node(NULL)
+    : _alSource(source), _buffer(buffer), _looped(false), _gain(1.0f), _pitch(1.0f), _node(NULL)
 {
     GP_ASSERT(buffer);
     AL_CHECK( alSourcei(_alSource, AL_BUFFER, buffer->_alBuffer) );
@@ -34,7 +34,7 @@ AudioSource* AudioSource::create(const char* url)
 {
     // Load from a .audio file.
     std::string pathStr = url;
-    if (pathStr.find(".audio") != pathStr.npos)
+    if (pathStr.find(".audio") != std::string::npos)
     {
         Properties* properties = Properties::create(url);
         if (properties == NULL)
@@ -231,6 +231,11 @@ void AudioSource::setVelocity(const Vector3& velocity)
 {
     AL_CHECK( alSourcefv(_alSource, AL_VELOCITY, (ALfloat*)&velocity) );
     _velocity = velocity;
+}
+
+void AudioSource::setVelocity(float x, float y, float z)
+{
+    setVelocity(Vector3(x, y, z));
 }
 
 Node* AudioSource::getNode() const

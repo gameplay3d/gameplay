@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4228A3FF1620A5A300955433 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A3FE1620A5A300955433 /* Cocoa.framework */; };
+		4228A4011620A5EC00955433 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A4001620A5EC00955433 /* SystemConfiguration.framework */; };
+		4228A4031620A63F00955433 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A4021620A63F00955433 /* libiconv.dylib */; };
 		42475D7C14720ECE00610A6A /* libdom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42475D7B14720ECE00610A6A /* libdom.a */; };
 		4251B12C152D044B002F6199 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B128152D044B002F6199 /* Curve.cpp */; };
 		42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */; };
@@ -58,6 +61,7 @@
 		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
 		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
 		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
+		F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCD0315D554B800DB35DB /* Heightmap.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,6 +77,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4228A3FE1620A5A300955433 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4228A4001620A5EC00955433 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4228A4021620A63F00955433 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = ../../../../../usr/lib/libiconv.dylib; sourceTree = "<group>"; };
 		42475CE6147208A000610A6A /* gameplay-encoder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "gameplay-encoder"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42475D7B14720ECE00610A6A /* libdom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdom.a; path = "../external-deps/collada-dom/lib/macosx/libdom.a"; sourceTree = "<group>"; };
 		4251B128152D044B002F6199 /* Curve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Curve.cpp; path = src/Curve.cpp; sourceTree = SOURCE_ROOT; };
@@ -172,6 +179,9 @@
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
 		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		F18DCD0315D554B800DB35DB /* Heightmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heightmap.cpp; path = src/Heightmap.cpp; sourceTree = SOURCE_ROOT; };
+		F18DCD0415D554B800DB35DB /* Heightmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightmap.h; path = src/Heightmap.h; sourceTree = SOURCE_ROOT; };
+		F18DCD0515D554B800DB35DB /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = src/Thread.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,17 +197,30 @@
 				42C8EE391472DAA300E43619 /* libz.dylib in Frameworks */,
 				42C8EE371472D7E700E43619 /* libxml2.dylib in Frameworks */,
 				5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */,
+				4228A3FF1620A5A300955433 /* Cocoa.framework in Frameworks */,
+				4228A4011620A5EC00955433 /* SystemConfiguration.framework in Frameworks */,
+				4228A4031620A63F00955433 /* libiconv.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4228A3FD1620A58000955433 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4228A4001620A5EC00955433 /* SystemConfiguration.framework */,
+				4228A3FE1620A5A300955433 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
 				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
+				4228A3FD1620A58000955433 /* Frameworks */,
 				42475CE7147208A000610A6A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -213,6 +236,9 @@
 		42475CE9147208A000610A6A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F18DCD0315D554B800DB35DB /* Heightmap.cpp */,
+				F18DCD0415D554B800DB35DB /* Heightmap.h */,
+				F18DCD0515D554B800DB35DB /* Thread.h */,
 				42C8EDB714724CD700E43619 /* Animation.cpp */,
 				42C8EDB814724CD700E43619 /* Animation.h */,
 				42C8EDB914724CD700E43619 /* AnimationChannel.cpp */,
@@ -319,6 +345,7 @@
 				42C8EE361472D7E700E43619 /* libxml2.dylib */,
 				42C8EE341472B60100E43619 /* libfreetype.a */,
 				42475D7B14720ECE00610A6A /* libdom.a */,
+				4228A4021620A63F00955433 /* libiconv.dylib */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -416,6 +443,7 @@
 				4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */,
 				42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */,
 				4251B12C152D044B002F6199 /* Curve.cpp in Sources */,
+				F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

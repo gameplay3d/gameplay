@@ -116,19 +116,25 @@ public:
     void renameAnimations(std::vector<std::string>& animationIds, const char* newId);
 
 private:
+
     /**
      * Computes the bounds of all meshes in the node hierarchy.
      */
     void computeBounds(Node* node);
-    void optimizeTransformAnimations();
+
+    /**
+     * Optimizes animation data by removing unneccessary channels and keyframes.
+     */
+    void optimizeAnimations();
 
     /**
      * Decomposes an ANIMATE_SCALE_ROTATE_TRANSLATE channel into 3 new channels. (Scale, Rotate and Translate)
      * 
      * @param animation The animation that the channel belongs to.
      * @param channel The animation channel to decompose.
+     * @param channelIndex Index of the channel.
      */
-    void decomposeTransformAnimationChannel(Animation* animation, const AnimationChannel* channel);
+    void decomposeTransformAnimationChannel(Animation* animation, AnimationChannel* channel, int channelIndex);
 
     /**
      * Moves the animation channels that target the given node and its children to be under the given animation.

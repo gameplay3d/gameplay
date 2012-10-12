@@ -126,8 +126,17 @@ Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a55dbd7843d68cab06ed712c36cf46409"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_joystick.html">Joystick</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joystick.html#a55dbd7843d68cab06ed712c36cf46409">create</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>Defines a control representing a joystick (axis). </p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<div class="textblock"><p>Defines a control representing a joystick (axis).</p>
+<div class="fragment"><pre class="fragment">    slider
+    {
+        style       = &lt;styleID&gt;                 // A Style from the Theme.
+        position    = &lt;x, y&gt;                    // Position of the Control on-screen, measured in pixels.
+        alignment   = &lt;Control::Alignment constant&gt; // Note: 'position' will be ignored.
+        size        = &lt;width, height&gt;           // Size of the Control, measured in pixels.
+        radius      = &lt;float&gt;                   // The value of the left- / bottom-most point on the slider.
+        consumeEvents = &lt;bool&gt;                  // Whether the slider propogates input events to the Game's input event handler. Default is true.
+        
+    }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a8bd49e3a90a1380d86d8b07dbaacc767"></a>
 <div class="memitem">
 <div class="memproto">
@@ -561,7 +570,7 @@ Static Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

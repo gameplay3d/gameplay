@@ -15,6 +15,11 @@ BoundingBox::BoundingBox(const Vector3& min, const Vector3& max)
     set(min, max);
 }
 
+BoundingBox::BoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
+{
+    set(minX, minY, minZ, maxX, maxY, maxZ);
+}
+
 BoundingBox::BoundingBox(const BoundingBox& copy)
 {
     set(copy);
@@ -245,6 +250,12 @@ void BoundingBox::set(const Vector3& min, const Vector3& max)
 {
     this->min = min;
     this->max = max;
+}
+
+void BoundingBox::set(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
+{
+    min.set(minX, minY, minZ);
+    max.set(maxX, maxY, maxZ);
 }
 
 static void updateMinMax(Vector3* point, Vector3* min, Vector3* max)

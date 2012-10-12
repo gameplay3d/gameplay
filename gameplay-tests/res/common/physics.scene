@@ -1,0 +1,66 @@
+scene
+{
+	path = res/common/physics.gpb
+	
+	node duck
+	{
+		url = res/common/duck.gpb#duck
+		material = res/common/duck.material
+		translate = -4, 5, 0
+		rotate = 0.0, 1.0, 0.0, 180
+		collisionObject = res/common/physics.physics#duck
+	}
+	
+	node floor
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/physics.physics#staticBox
+	}
+	
+	node wall01
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/physics.physics#staticBox
+	}
+	
+	node wall02
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/physics.physics#staticBox
+	}
+	
+	node wall03
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/physics.physics#staticBox
+	}
+	
+	node wall04
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/physics.physics#staticBox
+	}
+	
+	node box
+	{
+		material = res/common/physics.material#green
+		collisionObject = res/common/physics.physics#box
+	}
+	
+	node sphere
+	{
+		material = res/common/physics.material#red
+		collisionObject = res/common/physics.physics#ball
+	}
+	
+	node capsule
+	{
+		material = res/common/physics.material#blue
+		collisionObject = res/common/physics.physics#capsule
+	}
+	
+	physics
+	{
+		gravity = 0.0, -9.8, 0.0
+	}
+}

@@ -60,13 +60,6 @@ public:
 
     unsigned int getVertexIndex(const Vertex& vertex);
 
-    /**
-     * Generates a heightmap with the given filename for this mesh.
-     * Optional high precision uses packed 24-bit (RGB) instead of
-     * standard 8-bit grayscale.
-     */
-    void generateHeightmap(const char* filename, bool highP = false);
-
     void computeBounds();
 
     Model* model;

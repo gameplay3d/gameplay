@@ -89,8 +89,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab41575a733d683ed48cd760ca87dc4db"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_value.html#ab41575a733d683ed48cd760ca87dc4db">getFloat</a> (unsigned int index) const </td></tr>
 <tr class="memitem:a86d2401f2c55ffe3b715cb68973b7a7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_value.html#a86d2401f2c55ffe3b715cb68973b7a7b">setFloat</a> (unsigned int index, float value)</td></tr>
-<tr class="memitem:aba1eb07032e918a18cc325048a6b71b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_value.html#aba1eb07032e918a18cc325048a6b71b9">getFloat</a> (float *value, unsigned int offset, unsigned int length) const </td></tr>
-<tr class="memitem:ab5345bebedcaccda1ad6074faa6bdc50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_value.html#ab5345bebedcaccda1ad6074faa6bdc50">setFloat</a> (float *value, unsigned int offset, unsigned int length)</td></tr>
+<tr class="memitem:a35a541a2cf0f3b1b3a8dd3f0a6b21569"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_value.html#a35a541a2cf0f3b1b3a8dd3f0a6b21569">getFloats</a> (unsigned int index, float *values, unsigned int count) const </td></tr>
+<tr class="memitem:aea662313b25d4d65970b06685131533c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_value.html#aea662313b25d4d65970b06685131533c">setFloats</a> (unsigned int index, float *values, unsigned int count)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The runtime interface to represent an animation value. </p>
@@ -120,27 +120,27 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aba1eb07032e918a18cc325048a6b71b9"></a>
+<a class="anchor" id="a35a541a2cf0f3b1b3a8dd3f0a6b21569"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_value.html#ab41575a733d683ed48cd760ca87dc4db">gameplay::AnimationValue::getFloat</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_value.html#a35a541a2cf0f3b1b3a8dd3f0a6b21569">gameplay::AnimationValue::getFloats</a> </td>
           <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
+          <td class="paramname"><em>values</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -150,12 +150,12 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the value of the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> in a float array.</p>
+<p>Copies one or more float values from this <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> into the specified array.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>The array to populate with the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a>'s values. </td></tr>
-    <tr><td class="paramname">offset</td><td>The offset into the value to start populating. </td></tr>
-    <tr><td class="paramname">length</td><td>The number of values to copy into the array. </td></tr>
+    <tr><td class="paramname">index</td><td>The index to start copying from. </td></tr>
+    <tr><td class="paramname">values</td><td>Pointer to float array to copy values into. </td></tr>
+    <tr><td class="paramname">count</td><td>Number of values to copy. </td></tr>
   </table>
   </dd>
 </dl>
@@ -197,27 +197,27 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab5345bebedcaccda1ad6074faa6bdc50"></a>
+<a class="anchor" id="aea662313b25d4d65970b06685131533c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_value.html#a86d2401f2c55ffe3b715cb68973b7a7b">gameplay::AnimationValue::setFloat</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_value.html#aea662313b25d4d65970b06685131533c">gameplay::AnimationValue::setFloats</a> </td>
           <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
+          <td class="paramname"><em>values</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -227,12 +227,12 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Sets the value of the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a>.</p>
+<p>Copies one or more float values into the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>The array to populate the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a>'s values. </td></tr>
-    <tr><td class="paramname">offset</td><td>The offset into the value array to start populating from. </td></tr>
-    <tr><td class="paramname">length</td><td>The number of values to copy into the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a>. </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the first component to set the value for. </td></tr>
+    <tr><td class="paramname">values</td><td>Array of values to copy into the <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a>. </td></tr>
+    <tr><td class="paramname">count</td><td>Number of values to in the array to copy in. </td></tr>
   </table>
   </dd>
 </dl>
@@ -243,7 +243,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

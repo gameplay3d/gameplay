@@ -192,16 +192,6 @@ private:
      */
     static void triangulateRecursive(FbxNode* fbxNode);
 
-    /**
-     * Prints a warning message.
-     */
-    static void warning(const std::string& message);
-
-    /**
-     * Prints a warning message.
-     */
-    static void warning(const char* message);
-
 private:
 
     /**

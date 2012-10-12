@@ -148,6 +148,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8e31f6fd1f18ffd5d5766f3993410c0f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8e31f6fd1f18ffd5d5766f3993410c0f">getId</a> () const </td></tr>
 <tr class="memitem:a3c1f7dee87df548854e36ddf909e39ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3c1f7dee87df548854e36ddf909e39ee">setPosition</a> (float x, float y)</td></tr>
 <tr class="memitem:ae09909f17b37e986195d8091482eed77"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae09909f17b37e986195d8091482eed77">setSize</a> (float width, float height)</td></tr>
+<tr class="memitem:ae7281d8ef901f277b72c29ec184a049f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae7281d8ef901f277b72c29ec184a049f">setWidth</a> (float width)</td></tr>
+<tr class="memitem:ac794ce5a5271ec9cf4d931c09a842167"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac794ce5a5271ec9cf4d931c09a842167">setHeight</a> (float height)</td></tr>
 <tr class="memitem:af0913ff556aba2f03a258fac46e814d8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af0913ff556aba2f03a258fac46e814d8">setBounds</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;bounds)</td></tr>
 <tr class="memitem:aea9a349ac83a36d7bea4207b03e80d5b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aea9a349ac83a36d7bea4207b03e80d5b">getBounds</a> () const </td></tr>
 <tr class="memitem:a3b67523de27b0159fa3cb72a03478a1b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3b67523de27b0159fa3cb72a03478a1b">getX</a> () const </td></tr>
@@ -267,6 +269,7 @@ std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">L
 <tr class="memitem:a91b4d0f28ac8beab3c30c79e5fd9cf74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a91b4d0f28ac8beab3c30c79e5fd9cf74">_zIndex</a></td></tr>
 <tr class="memitem:a47d8c92a3d773672106b82ae8c66ef8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a47d8c92a3d773672106b82ae8c66ef8e">_contactIndex</a></td></tr>
 <tr class="memitem:a73150749073784d72da95375bb4ebd50"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a73150749073784d72da95375bb4ebd50">_focusIndex</a></td></tr>
+<tr class="memitem:a28174c6d21906a5b4a9793b82317631c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html">Container</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">_parent</a></td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
 <tr class="memitem:a1c549701ef58bc3cf2df6f8c7c783ede"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1c549701ef58bc3cf2df6f8c7c783ede">INVALID_CONTACT_INDEX</a> = -1</td></tr>
@@ -499,7 +502,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#acc5889195d133684a3375e7174a04d8f">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac87db1d15aa3d773b994466d09cb0f7c">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a1b44c932cb97ef676bfff5734d92638c">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_text_box.html#a5d121ad1ba1a14d8204c61368a09f326">gameplay::TextBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#acc5889195d133684a3375e7174a04d8f">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a1b44c932cb97ef676bfff5734d92638c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac87db1d15aa3d773b994466d09cb0f7c">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_text_box.html#a5d121ad1ba1a14d8204c61368a09f326">gameplay::TextBox</a>.</p>
 
 </div>
 </div>
@@ -1374,7 +1377,7 @@ Static Protected Attributes</h2></td></tr>
 <p>Gets the type of the <a class="el" href="classgameplay_1_1_control.html">Control</a> and returns it as a string.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The string of the <a class="el" href="classgameplay_1_1_control.html">Control</a> type, all in lower-case. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -2065,6 +2068,32 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac794ce5a5271ec9cf4d931c09a842167"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ac794ce5a5271ec9cf4d931c09a842167">gameplay::Control::setHeight</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set the desired height of the control, including it's border and padding, before clipping.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">height</td><td>The height. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#afa7e7903fea9b1131c5f30c6ab1799c7">gameplay::Form</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a77d4952d92a85fdb4ebda383a1385a5f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2577,6 +2606,32 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae7281d8ef901f277b72c29ec184a049f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#ae7281d8ef901f277b72c29ec184a049f">gameplay::Control::setWidth</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>width</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set the desired width of the control, including it's border and padding, before clipping.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>The width. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_form.html#a2833db258ab2d6b74772438d53552a38">gameplay::Form</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ac7b612312a3af38cad20e0a20a40b371"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2650,7 +2705,7 @@ Static Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns:</dt><dd>Whether the touch event was consumed by this control.</dd></dl>
 <dl class="section see"><dt>See also:</dt><dd><a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a1eb7f9e877fd66b22d386d3b5ee07c94">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#a3ea3ed50c7d5bb7555c4a67efb5d4a84">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#af22bc32cf3c51611cf61bb99da51ba89">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#ab4365e628465e070baf404047f74dac4">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a29c96c8eb4cefdf71806fbf3d048bb8f">gameplay::Button</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a1eb7f9e877fd66b22d386d3b5ee07c94">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#a3ea3ed50c7d5bb7555c4a67efb5d4a84">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_radio_button.html#af22bc32cf3c51611cf61bb99da51ba89">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a3849a62e5b3895b684592eacd6dd18b2">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#ab4365e628465e070baf404047f74dac4">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a29c96c8eb4cefdf71806fbf3d048bb8f">gameplay::Button</a>.</p>
 
 </div>
 </div>
@@ -2687,7 +2742,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a8308d5eb53e115aa12e2a9d45ae3f0f9">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#a7c87574c9c392287b870c94a32aac75a">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -2902,6 +2957,20 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a28174c6d21906a5b4a9793b82317631c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_container.html">Container</a>* <a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">gameplay::Control::_parent</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>The control's parent container. </p>
+
+</div>
+</div>
 <a class="anchor" id="a08e0c8e34c28edcddc7099281e9b423a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3102,7 +3171,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

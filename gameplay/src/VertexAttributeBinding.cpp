@@ -171,15 +171,17 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
             attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_BLENDINDICES_NAME);
             break;
         case VertexFormat::TEXCOORD0:
-            attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME);
-            // Try adding a "0" after the texcoord attrib name (flexible name for this case).
+            if ((attrib = effect->getVertexAttribute(VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME)) != -1)
+                break;
+
+            /*// Try adding a "0" after the texcoord attrib name (flexible name for this case).
             if (attrib == -1)
             {
                 name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
-                name += "0";
+                name += '0';
                 attrib = effect->getVertexAttribute(name.c_str());
             }
-            break; 
+            break;*/
         case VertexFormat::TEXCOORD1:
         case VertexFormat::TEXCOORD2:
         case VertexFormat::TEXCOORD3:
@@ -188,7 +190,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, const VertexF
         case VertexFormat::TEXCOORD6:
         case VertexFormat::TEXCOORD7:
             name = VERTEX_ATTRIBUTE_TEXCOORD_PREFIX_NAME;
-            name += (e.usage - VertexFormat::TEXCOORD0);
+            name += '0' + (e.usage - VertexFormat::TEXCOORD0);
             attrib = effect->getVertexAttribute(name.c_str());
             break;
         default:

@@ -39,6 +39,16 @@ public:
          */
         GHOST_OBJECT,
 
+        /** 
+         * PhysicsVehicle type.
+         */
+        VEHICLE,
+
+        /** 
+         * PhysicsVehicleWheel type.
+         */
+        VEHICLE_WHEEL,
+
         /**
          * No collision object.
          */

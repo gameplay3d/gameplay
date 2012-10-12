@@ -1,0 +1,550 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
+		42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C932C01491A0DB0098216A /* Cocoa.framework */; };
+		42C932EE1491A4CB0098216A /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
+		42C932F11491A5160098216A /* RacerGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* RacerGame.cpp */; };
+		42C932F31491A53E0098216A /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
+		42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933161491A5EB0098216A /* OpenGL.framework */; };
+		42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331C1491A6750098216A /* QuartzCore.framework */; };
+		42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331E1491A67F0098216A /* OpenAL.framework */; };
+		42C933211491A6C70098216A /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933201491A6C70098216A /* libbullet.a */; };
+		42C933261491A6E50098216A /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933221491A6E50098216A /* libogg.a */; };
+		42C933271491A6E50098216A /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933231491A6E50098216A /* libvorbis.a */; };
+		42C933281491A6E50098216A /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933241491A6E50098216A /* libvorbisenc.a */; };
+		42C933291491A6E50098216A /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933251491A6E50098216A /* libvorbisfile.a */; };
+		42C9332C1491A7680098216A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332A1491A7390098216A /* libpng.a */; };
+		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
+		42D604DF16058F89003F3C48 /* game.dxt.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604DE16058F89003F3C48 /* game.dxt.config */; };
+		42D604E216058F97003F3C48 /* game.pvr.config in Resources */ = {isa = PBXBuildFile; fileRef = 42D604E116058F97003F3C48 /* game.pvr.config */; };
+		5B21E9991615390D006EBEAC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B21E9981615390D006EBEAC /* IOKit.framework */; };
+		5B61611614CCC24C0073B857 /* RacerGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* RacerGame.cpp */; };
+		5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42438B521491AD2000D218B8 /* libgameplay.a */; };
+		5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933201491A6C70098216A /* libbullet.a */; };
+		5B61611A14CCC24C0073B857 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933221491A6E50098216A /* libogg.a */; };
+		5B61611B14CCC24C0073B857 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933231491A6E50098216A /* libvorbis.a */; };
+		5B61611C14CCC24C0073B857 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933241491A6E50098216A /* libvorbisenc.a */; };
+		5B61611D14CCC24C0073B857 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933251491A6E50098216A /* libvorbisfile.a */; };
+		5B61611E14CCC24C0073B857 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332A1491A7390098216A /* libpng.a */; };
+		5B61611F14CCC24C0073B857 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
+		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
+		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
+		5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */; };
+		5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2068152F2DDD003E2AC3 /* Foundation.framework */; };
+		5BAF206F152F2DDD003E2AC3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */; };
+		5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */; };
+		5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */; };
+		5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206C152F2DDD003E2AC3 /* UIKit.framework */; };
+		F188C94B15C1971F0025FC73 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F188C94A15C1971F0025FC73 /* game.config */; };
+		F1E135091607709F00351BB4 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F188C94A15C1971F0025FC73 /* game.config */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		42438B521491AD2000D218B8 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		42C932BC1491A0DB0098216A /* sample06-racer-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample06-racer-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C932C01491A0DB0098216A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		42C932ED1491A4CB0098216A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		42C932EF1491A5160098216A /* RacerGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RacerGame.cpp; path = src/RacerGame.cpp; sourceTree = SOURCE_ROOT; };
+		42C932F01491A5160098216A /* RacerGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RacerGame.h; path = src/RacerGame.h; sourceTree = SOURCE_ROOT; };
+		42C932F21491A53E0098216A /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
+		42C933161491A5EB0098216A /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		42C9331C1491A6750098216A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42C9331E1491A67F0098216A /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		42C933201491A6C70098216A /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "../../external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
+		42C933221491A6E50098216A /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "../../external-deps/oggvorbis/lib/macosx/libogg.a"; sourceTree = "<group>"; };
+		42C933231491A6E50098216A /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbis.a"; sourceTree = "<group>"; };
+		42C933241491A6E50098216A /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisenc.a"; sourceTree = "<group>"; };
+		42C933251491A6E50098216A /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../external-deps/oggvorbis/lib/macosx/libvorbisfile.a"; sourceTree = "<group>"; };
+		42C9332A1491A7390098216A /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		42C9332D1491A7810098216A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		42D604DE16058F89003F3C48 /* game.dxt.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.dxt.config; sourceTree = "<group>"; };
+		42D604E116058F97003F3C48 /* game.pvr.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.pvr.config; sourceTree = "<group>"; };
+		5B21E9981615390D006EBEAC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		5B61611214CCC2200073B857 /* sample06-racer-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample06-racer-macosx.plist"; sourceTree = "<group>"; };
+		5B61612C14CCC24C0073B857 /* sample06-racer-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample06-racer-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B61612E14CCC24D0073B857 /* sample06-racer-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample06-racer-ios.plist"; sourceTree = "<group>"; };
+		5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2068152F2DDD003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		F188C94A15C1971F0025FC73 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		42C932B91491A0DB0098216A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */,
+				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
+				42C933261491A6E50098216A /* libogg.a in Frameworks */,
+				42C933271491A6E50098216A /* libvorbis.a in Frameworks */,
+				42C933281491A6E50098216A /* libvorbisenc.a in Frameworks */,
+				42C933291491A6E50098216A /* libvorbisfile.a in Frameworks */,
+				42C9332C1491A7680098216A /* libpng.a in Frameworks */,
+				42C9332F1491A78D0098216A /* libz.dylib in Frameworks */,
+				5B21E9991615390D006EBEAC /* IOKit.framework in Frameworks */,
+				42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */,
+				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
+				42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */,
+				42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B61611714CCC24C0073B857 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */,
+				5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */,
+				5BAF206F152F2DDD003E2AC3 /* OpenAL.framework in Frameworks */,
+				5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */,
+				5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */,
+				5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */,
+				5B61611814CCC24C0073B857 /* libgameplay.a in Frameworks */,
+				5B61611914CCC24C0073B857 /* libbullet.a in Frameworks */,
+				5B61611A14CCC24C0073B857 /* libogg.a in Frameworks */,
+				5B61611B14CCC24C0073B857 /* libvorbis.a in Frameworks */,
+				5B61611C14CCC24C0073B857 /* libvorbisenc.a in Frameworks */,
+				5B61611D14CCC24C0073B857 /* libvorbisfile.a in Frameworks */,
+				5B61611E14CCC24C0073B857 /* libpng.a in Frameworks */,
+				5B61611F14CCC24C0073B857 /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		42C932B11491A0DB0098216A = {
+			isa = PBXGroup;
+			children = (
+				5B61611214CCC2200073B857 /* sample06-racer-macosx.plist */,
+				5B61612E14CCC24D0073B857 /* sample06-racer-ios.plist */,
+				42C932ED1491A4CB0098216A /* icon.png */,
+				F188C94A15C1971F0025FC73 /* game.config */,
+				42D604DE16058F89003F3C48 /* game.dxt.config */,
+				42D604E116058F97003F3C48 /* game.pvr.config */,
+				42C932F21491A53E0098216A /* res */,
+				42C932C61491A0DB0098216A /* src */,
+				42C932DD1491A1050098216A /* Libraries */,
+				42C932BF1491A0DB0098216A /* Frameworks */,
+				42C932BD1491A0DB0098216A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42C932BD1491A0DB0098216A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42C932BC1491A0DB0098216A /* sample06-racer-macosx.app */,
+				5B61612C14CCC24C0073B857 /* sample06-racer-ios.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		42C932BF1491A0DB0098216A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B61613A14CCC3590073B857 /* MacOSX */,
+				5B61613914CCC3560073B857 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		42C932C61491A0DB0098216A /* src */ = {
+			isa = PBXGroup;
+			children = (
+				42C932EF1491A5160098216A /* RacerGame.cpp */,
+				42C932F01491A5160098216A /* RacerGame.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		42C932DD1491A1050098216A /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				42438B521491AD2000D218B8 /* libgameplay.a */,
+				42C933201491A6C70098216A /* libbullet.a */,
+				42C933221491A6E50098216A /* libogg.a */,
+				42C933231491A6E50098216A /* libvorbis.a */,
+				42C933241491A6E50098216A /* libvorbisenc.a */,
+				42C933251491A6E50098216A /* libvorbisfile.a */,
+				42C9332A1491A7390098216A /* libpng.a */,
+				42C9332D1491A7810098216A /* libz.dylib */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		5B61613914CCC3560073B857 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5BAF2067152F2DDD003E2AC3 /* CoreMotion.framework */,
+				5BAF2068152F2DDD003E2AC3 /* Foundation.framework */,
+				5BAF2069152F2DDD003E2AC3 /* OpenAL.framework */,
+				5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */,
+				5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */,
+				5BAF206C152F2DDD003E2AC3 /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		5B61613A14CCC3590073B857 /* MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				5B21E9981615390D006EBEAC /* IOKit.framework */,
+				42C932C01491A0DB0098216A /* Cocoa.framework */,
+				42C9331C1491A6750098216A /* QuartzCore.framework */,
+				42C933161491A5EB0098216A /* OpenGL.framework */,
+				42C9331E1491A67F0098216A /* OpenAL.framework */,
+			);
+			name = MacOSX;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42C932BB1491A0DB0098216A /* sample06-racer-macosx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample06-racer-macosx" */;
+			buildPhases = (
+				42C932B81491A0DB0098216A /* Sources */,
+				42C932B91491A0DB0098216A /* Frameworks */,
+				42C933301491A7B50098216A /* ShellScript */,
+				42C932BA1491A0DB0098216A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sample06-racer-macosx";
+			productName = "sample06-racer";
+			productReference = 42C932BC1491A0DB0098216A /* sample06-racer-macosx.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5B61611414CCC24C0073B857 /* sample06-racer-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "sample06-racer-ios" */;
+			buildPhases = (
+				5B61611514CCC24C0073B857 /* Sources */,
+				5B61611714CCC24C0073B857 /* Frameworks */,
+				5B61612414CCC24C0073B857 /* ShellScript */,
+				5B61612514CCC24C0073B857 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sample06-racer-ios";
+			productName = "sample06-racer";
+			productReference = 5B61612C14CCC24C0073B857 /* sample06-racer-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42C932B31491A0DB0098216A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 42C932B61491A0DB0098216A /* Build configuration list for PBXProject "sample06-racer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 42C932B11491A0DB0098216A;
+			productRefGroup = 42C932BD1491A0DB0098216A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42C932BB1491A0DB0098216A /* sample06-racer-macosx */,
+				5B61611414CCC24C0073B857 /* sample06-racer-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42C932BA1491A0DB0098216A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42C932EE1491A4CB0098216A /* icon.png in Resources */,
+				42C932F31491A53E0098216A /* res in Resources */,
+				F188C94B15C1971F0025FC73 /* game.config in Resources */,
+				42D604DF16058F89003F3C48 /* game.dxt.config in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B61612514CCC24C0073B857 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B61612614CCC24C0073B857 /* icon.png in Resources */,
+				5B61612714CCC24C0073B857 /* res in Resources */,
+				F1E135091607709F00351BB4 /* game.config in Resources */,
+				42D604E216058F97003F3C48 /* game.pvr.config in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		42C933301491A7B50098216A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/game.dxt.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
+		};
+		5B61612414CCC24C0073B857 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/game.pvr.config ${SRCROOT}/game.config\ntouch -cm ${SRCROOT}/res";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		42C932B81491A0DB0098216A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42C932F11491A5160098216A /* RacerGame.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B61611514CCC24C0073B857 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B61611614CCC24C0073B857 /* RacerGame.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		42C932D81491A0DB0098216A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PKGINFO_FILE = YES;
+				INFOPLIST_FILE = "sample06-racer-macosx.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		42C932D91491A0DB0098216A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PKGINFO_FILE = YES;
+				INFOPLIST_FILE = "sample06-racer-macosx.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		42C932DB1491A0DB0098216A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+					"../../external-deps/lua/include",
+				);
+				INFOPLIST_FILE = "sample06-racer-macosx.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"../../external-deps/libpng/lib/macosx\"",
+					"\"../../external-deps/bullet/lib/macosx\"",
+					"\"../../external-deps/oggvorbis/lib/macosx\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		42C932DC1491A0DB0098216A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+					"../../external-deps/lua/include",
+				);
+				INFOPLIST_FILE = "sample06-racer-macosx.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"../../external-deps/libpng/lib/macosx\"",
+					"\"../../external-deps/bullet/lib/macosx\"",
+					"\"../../external-deps/oggvorbis/lib/macosx\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		5B61612A14CCC24C0073B857 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+					"../../external-deps/lua/include",
+				);
+				INFOPLIST_FILE = "sample06-racer-ios.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		5B61612B14CCC24C0073B857 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					../../gameplay/src,
+					"../../external-deps/libpng/include",
+					"../../external-deps/bullet/include",
+					"../../external-deps/oggvorbis/include",
+					"../../external-deps/lua/include",
+				);
+				INFOPLIST_FILE = "sample06-racer-ios.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
+					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42C932B61491A0DB0098216A /* Build configuration list for PBXProject "sample06-racer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42C932D81491A0DB0098216A /* Debug */,
+				42C932D91491A0DB0098216A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42C932DA1491A0DB0098216A /* Build configuration list for PBXNativeTarget "sample06-racer-macosx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42C932DB1491A0DB0098216A /* Debug */,
+				42C932DC1491A0DB0098216A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B61612914CCC24C0073B857 /* Build configuration list for PBXNativeTarget "sample06-racer-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B61612A14CCC24C0073B857 /* Debug */,
+				5B61612B14CCC24C0073B857 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 42C932B31491A0DB0098216A /* Project object */;
+}

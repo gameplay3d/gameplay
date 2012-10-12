@@ -18,6 +18,11 @@ Ray::Ray(const Vector3& origin, const Vector3& direction)
     set(origin, direction);
 }
 
+Ray::Ray(float originX, float originY, float originZ, float dirX, float dirY, float dirZ)
+{
+    set(Vector3(originX, originY, originZ), Vector3(dirX, dirY, dirZ));
+}
+
 Ray::Ray(const Ray& copy)
 {
     set(copy);
@@ -37,6 +42,11 @@ void Ray::setOrigin(const Vector3& origin)
     _origin = origin;
 }
 
+void Ray::setOrigin(float x, float y, float z)
+{
+    _origin.set(x, y, z);
+}
+
 const Vector3& Ray::getDirection() const
 {
     return _direction;
@@ -45,6 +55,12 @@ const Vector3& Ray::getDirection() const
 void Ray::setDirection(const Vector3& direction)
 {
     _direction = direction;
+    normalize();
+}
+
+void Ray::setDirection(float x, float y, float z)
+{
+    _direction.set(x, y, z);
     normalize();
 }
 

@@ -55,6 +55,7 @@ public:
      * @param dynamic true if the mesh is dynamic; false otherwise.
      * 
      * @return The created mesh.
+     * @script{create}
      */
     static Mesh* createMesh(const VertexFormat& vertexFormat, unsigned int vertexCount, bool dynamic = false);
 
@@ -71,6 +72,7 @@ public:
      * @param p4 The fourth point.
      * 
      * @return The created mesh.
+     * @script{create}
      */
     static Mesh* createQuad(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& p4);
 
@@ -81,10 +83,15 @@ public:
      * @param y The y coordinate.
      * @param width The width of the quad.
      * @param height The height of the quad.
+     * @param s1 The S texture coordinate of the bottom left point.
+     * @param t1 The T texture coordinate of the bottom left point.
+     * @param s2 The S texture coordinate of the top right point.
+     * @param t2 The T texture coordinate of the top right point.
      * 
      * @return The newly created mesh.
+     * @script{create}
      */
-    static Mesh* createQuad(float x, float y, float width, float height);
+    static Mesh* createQuad(float x, float y, float width, float height, float s1 = 0.0f, float t1 = 0.0f, float s2 = 1.0f, float t2 = 1.0f);
 
     /**
      * Creates a new full-screen 2D quad.
@@ -96,6 +103,7 @@ public:
      * normalized device coordinates for vertex positions.
      * 
      * @return The newly created mesh.
+     * @script{create}
      */
     static Mesh* createQuadFullscreen();
 
@@ -109,6 +117,7 @@ public:
      * @param pointCount The number of points.
      * 
      * @return The newly created mesh.
+     * @script{create}
      */
     static Mesh* createLines(Vector3* points, unsigned int pointCount);
 
@@ -120,6 +129,7 @@ public:
      * @param box The BoundingBox that will be used to create the mesh.
      * 
      * @return The newly created bounding box mesh.
+     * @script{create}
      */
     static Mesh* createBoundingBox(const BoundingBox& box);
 
@@ -197,7 +207,7 @@ public:
      * @param vertexStart The index of the starting vertex (0 by default).
      * @param vertexCount The number of vertices to be set (default is 0, for all vertices).
      */
-    void setVertexData(float* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
+    void setVertexData(const float* vertexData, unsigned int vertexStart = 0, unsigned int vertexCount = 0);
 
     /**
      * Creates and adds a new part of primitive data defining how the vertices are connected.

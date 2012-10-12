@@ -35,8 +35,21 @@ public:
      * @param color Color of the light.
      * 
      * @return The new directional light.
+     * @script{create}
      */
     static Light* createDirectional(const Vector3& color);
+
+    /**
+     * Creates a directional light.
+     * 
+     * @param red The red channel.
+     * @param green The green channel.
+     * @param blue The blue channel.
+     * 
+     * @return The new directional light.
+     * @script{create}
+     */
+    static Light* createDirectional(float red, float green, float blue);
 
     /**
      * Creates a point light.
@@ -45,8 +58,22 @@ public:
      * @param range The light's range.
      * 
      * @return The new point light.
+     * @script{create}
      */
     static Light* createPoint(const Vector3& color, float range);
+
+    /**
+     * Creates a point light.
+     * 
+     * @param red The red channel.
+     * @param green The green channel.
+     * @param blue The blue channel.
+     * @param range The light's range.
+     * 
+     * @return The new point light.
+     * @script{create}
+     */
+    static Light* createPoint(float red, float green, float blue, float range);
 
     /**
      * Creates a spot light.
@@ -57,8 +84,24 @@ public:
      * @param outerAngle The light's outer angle (in radians).
      * 
      * @return The new spot light.
+     * @script{create}
      */
     static Light* createSpot(const Vector3& color, float range, float innerAngle, float outerAngle);
+
+    /**
+     * Creates a spot light.
+     * 
+     * @param red The red channel.
+     * @param green The green channel.
+     * @param blue The blue channel.
+     * @param range The light's range.
+     * @param innerAngle The light's inner angle (in radians).
+     * @param outerAngle The light's outer angle (in radians).
+     * 
+     * @return The new spot light.
+     * @script{create}
+     */
+    static Light* createSpot(float red, float green, float blue, float range, float innerAngle, float outerAngle);
 
     /**
      * Destructor.
@@ -90,6 +133,15 @@ public:
      * @param color The light color to set.
      */
     void setColor(const Vector3& color);
+
+    /**
+     * Sets the light color.
+     * 
+     * @param red The red channel.
+     * @param green The green channel.
+     * @param blue The blue channel.
+     */
+    void setColor(float red, float green, float blue);
 
     /**
      * Returns the node associated with this light.

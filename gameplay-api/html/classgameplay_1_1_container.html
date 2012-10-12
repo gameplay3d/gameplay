@@ -126,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c5258a887647fa01203824e04a8a882"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_container.html#a0c3e32288adc78753990d36f95d4de3b">Scroll</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a3c5258a887647fa01203824e04a8a882">getScroll</a> () const </td></tr>
 <tr class="memitem:a8bab8623b4fdfa70abb77a640a2c50e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a8bab8623b4fdfa70abb77a640a2c50e0">setScrollBarsAutoHide</a> (bool autoHide)</td></tr>
 <tr class="memitem:a7e7f9a9742c5aedcc8532794eda753f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a7e7f9a9742c5aedcc8532794eda753f1">isScrollBarsAutoHide</a> () const </td></tr>
+<tr class="memitem:a0ae9affa0dc851920bcc1bd5d84081fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a0ae9affa0dc851920bcc1bd5d84081fd">isScrolling</a> () const </td></tr>
 <tr class="memitem:a1f88ffbc4b0fcf37d5e0be9cf76cac22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#a1f88ffbc4b0fcf37d5e0be9cf76cac22">getAnimation</a> (const char *id=NULL) const </td></tr>
 <tr class="memitem:aab3cb736de9572f4d6b6850b505fe35f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#aab3cb736de9572f4d6b6850b505fe35f">isContainer</a> () const </td></tr>
 <tr class="memitem:ae82a9d7043153cdc100fc49e84340ea3"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">getType</a> () const </td></tr>
@@ -206,7 +207,8 @@ Protected Attributes</h2></td></tr>
          height      = &lt;height&gt;  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          scroll      = &lt;Container::Scroll constant&gt; // Whether scrolling is allowed and in which directions.
          scrollBarsAutoHide = &lt;bool&gt;    // Whether scrollbars fade out when not in use.
-  
+         consumeEvents = &lt;bool&gt;             // Whether the container propogates input events to the Game's input event handler. Default is true.
+
          // All the nested controls within this container.
          container 
          { 
@@ -833,6 +835,24 @@ Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Whether scrollbars are always visible, or only visible while scrolling.</p>
 <dl class="section return"><dt>Returns:</dt><dd>Whether scrollbars are always visible. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0ae9affa0dc851920bcc1bd5d84081fd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_container.html#a0ae9affa0dc851920bcc1bd5d84081fd">gameplay::Container::isScrolling</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether this container is currently being scrolled.</p>
+<dl class="section return"><dt>Returns:</dt><dd>Whether this container is currently being scrolled. </dd></dl>
 
 </div>
 </div>
@@ -1752,7 +1772,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

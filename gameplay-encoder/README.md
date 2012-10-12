@@ -1,8 +1,8 @@
 ## gameplay-encoder
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
-The 'bin' folder contains pre-built versions of the gameplay-encoder executables for both 
-Windows 7 and MacOS X with support built-in support for:
+The 'bin' folder contains pre-built versions of the gameplay-encoder executables for 
+Windows 7, MacOS X and Linux (tested on Ubuntu 12) with support built-in support for:
 
 ## TrueType Font
 TrueType Fonts represent a standard in defining outline fonts and has become the 
@@ -21,21 +21,22 @@ Autodesk® Maya®, Autodesk® 3ds Max®, Autodesk® MotionBuilder®, Autodesk® 
 For more information goto "http://www.autodesk.com/fbx".
 
 ## Building gameplay-encoder
-The gameplay-encoder comes pre-built for both Windows 7 and MacOS X in the 'bin' folder.
+The gameplay-encoder comes pre-built for Windows 7, MacOS X and Linux x64 in the 'bin' folder.
 However, to build the gameplay-ecoder yourself just open either the 
 Visual Studio 2010 project "gameplay-encoder.vccproj" on Windows 7 or
 XCode project "gameplay-encoder.xcodeproj" on MacOSX.
+Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake .. from build then make.
 
 ### Building with FBX Support on Windows 7 using Visual Studio 2010
 - Download and install the FBX SDK for Window VS2010. (http://www.autodesk.com/fbx)
 - Edit the project properties of "gameplay-encoder" for Debug
 - Add Preprocessor Definition "USE_FBX" (C++/Preprocessor)
 - Add the FBX SDK include directory to Additional Include Directories (C++/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.2/include
+  * Example: C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
-  * Example: C:/Program Files/Autodesk/FBX/FbxSdk/2013.2/lib/vs2010/x86
-- Add "fbxsdk-2013.2-mdd.lib"(Release) to the Additional Dependencies (Linker/Input)
-  * Example: fbxsdk-2013.2-mdd.lib
+  * Example: C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86
+- Add "fbxsdk-2013.3-mdd.lib"(Release) to the Additional Dependencies (Linker/Input)
+  * Example: fbxsdk-2013.3-mdd.lib
 - Build gameplay-encoder
 
 ### Building with FBX Support on Mac OS X using XCode 4.3.2+
@@ -43,11 +44,24 @@ XCode project "gameplay-encoder.xcodeproj" on MacOSX.
 - Edit the project properties of target "gameplay-encoder".
 - Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
 - Add the FBX include directory to Header Search Paths: (Build Settings)
-  * Example: "/Applications/Autodesk/FBX SDK/2013.2/include" (Use quotes due to additional space in path)
+  * Example: "/Applications/Autodesk/FBX SDK/2013.3/include" (Use quotes due to additional space in path)
 - Add the FBX library and dependency Library/Frameworks: (Build Phases -> Link Binary with Libraries)
-  * Example: /Applications/Autodesk/FBX SDK/2013.2/lib/gcc4/ub/libfbxsdk-2013.2-static.a  (Add Other)
-  * Example: libiconv.dylib, Cocoa.framework, SystemConfiguration.framework
+  * Example: /Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a  (Add Other)
 - Build gameplay-encoder
+
+### Building with FBX Support on Linux
+- Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
+- Edit the gameplay-encoder/CMakeLists.txt adding the following:
+- Add the FBX include directory to Header Search Paths: (Build Settings)
+  * Example: /usr/include/fbxsdk
+- Add Preprocessor Macro to the add"-DUSE_FBX" to the end of the add_definitions(...) section of the CMakeLists.txt
+- Add the FBX library path to the link_directories(...) section of the CMakeLists.txt
+  * Example: /usr/lib/gcc4
+- Add the FBX library to the set(APP_LIBRARIES {...} )
+  * Example: fbxsdk-2013.3-static
+- Add the FBX library to the library to the add_definitions(-l...) section of the CMakeLists.txt
+  * Example -lfbxsdk-2013.3-static
+- Build gameplay-encoder via main cmake .. in build then make.
 
 ## Bundle File Format
 The gameplay bundle file format is well defined in the gameplay-encoder/gameplay-bundle.txt file.

@@ -156,9 +156,6 @@ private:
      */
     void calcTransform(domNode* domNode, Matrix& dstTransform);
 
-    void warning(const std::string& message);
-    void warning(const char* message);
-
     /**
      * Loads the target data into the animation from the given channel's target.
      * Example: <channel target="Cube/location.X" />

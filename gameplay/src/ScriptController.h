@@ -39,47 +39,46 @@ class LuaArray
 {
 public:
 
-	/**
-	 * Creates a LuaArray to store a single pointer value.
-	 */
-	LuaArray(T* param);
+    /**
+     * Creates a LuaArray to store a single pointer value.
+     */
+    LuaArray(T* param);
 
-	/**
-	 * Allocates a LuaArray to store an array of values.
-	 *
-	 * Individual items in the array can be set using the 
-	 * set(unsigned int, const T&) method.
-	 * 
-	 * @param object Parameter object.
-	 * @param count Number of elements to store in the parameter.
-	 */
-	LuaArray(int count);
+    /**
+     * Allocates a LuaArray to store an array of values.
+     *
+     * Individual items in the array can be set using the 
+     * set(unsigned int, const T&) method.
+     * 
+     * @param count Number of elements to store in the parameter.
+     */
+    LuaArray(int count);
 
-	/**
-	 * Copy construcotr.
-	 */
-	LuaArray(const LuaArray<T>& copy);
+    /**
+     * Copy construcotr.
+     */
+    LuaArray(const LuaArray<T>& copy);
 
-	/**
-	 * Destructor.
-	 */
-	~LuaArray();
+    /**
+     * Destructor.
+     */
+    ~LuaArray();
 
-	/**
-	 * Assignment operator.
-	 */
-	LuaArray<T>& operator = (const LuaArray<T>& p);
+    /**
+     * Assignment operator.
+     */
+    LuaArray<T>& operator = (const LuaArray<T>& p);
 
-	/**
-	 * Copies the value of the object pointed to by itemPtr into the specified
+    /**
+     * Copies the value of the object pointed to by itemPtr into the specified
      * index of this LuaArray's array.
-	 */
-	void set(unsigned int index, const T* itemPtr);
+     */
+    void set(unsigned int index, const T* itemPtr);
 
-	/**
-	 * Conversion operator from LuaArray to T*.
-	 */
-	operator T* () const;
+    /**
+     * Conversion operator from LuaArray to T*.
+     */
+    operator T* () const;
 
     /**
      * Overloades [] operator to get/set item value at index.
@@ -88,14 +87,14 @@ public:
 
 private:
 
-	struct Data
-	{
+    struct Data
+    {
         Data() : value(NULL), refCount(0) { }
-		T* value;
-		int refCount;
-	};
+        T* value;
+        int refCount;
+    };
 
-	Data* _data;
+    Data* _data;
 };
 
 /**
@@ -115,7 +114,7 @@ void registerLibrary(const char* name, const luaL_Reg* functions);
  * @param scopePath The list of containing classes, going inward from the most outer class.
  * @script{ignore}
  */
-void registerConstantBool(std::string name, bool value, std::vector<std::string> scopePath);
+void registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
 
 /**
  * Registers the given number constant as valid for the given scope path.
@@ -125,7 +124,7 @@ void registerConstantBool(std::string name, bool value, std::vector<std::string>
  * @param scopePath The list of containing classes, going inward from the most outer class.
  * @script{ignore}
  */
-void registerConstantNumber(std::string name, double value, std::vector<std::string> scopePath);
+void registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
 
 /**
  * Registers the given string constant as valid for the given scope path.
@@ -135,7 +134,7 @@ void registerConstantNumber(std::string name, double value, std::vector<std::str
  * @param scopePath The list of containing classes, going inward from the most outer class.
  * @script{ignore}
  */
-void registerConstantString(std::string name, std::string value, std::vector<std::string> scopePath);
+void registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
 
 /**
  * Registers the given class type with Lua.
@@ -149,7 +148,7 @@ void registerConstantString(std::string name, std::string value, std::vector<std
  * @script{ignore}
  */
 void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg* statics,
-    std::vector<std::string> scopePath = std::vector<std::string>());
+    const std::vector<std::string>& scopePath);
 
 /**
  * Register a function with Lua.
@@ -167,7 +166,7 @@ void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
  * @param derived The derived class of the inheritance pair.
  * @script{ignore}
  */
-void setGlobalHierarchyPair(std::string base, std::string derived);
+void setGlobalHierarchyPair(const std::string& base, const std::string& derived);
 
 /**
  * Adds the given function as a string-from-enumerated value conversion function.
@@ -782,7 +781,7 @@ private:
      * @param callback The script callback to register for.
      * @param function The name of the function within the Lua script to call.
      */
-    void registerCallback(ScriptCallback callback, std::string function);
+    void registerCallback(ScriptCallback callback, const std::string& function);
 
     /**
      * Converts the given string to a valid script callback enumeration value
@@ -795,13 +794,13 @@ private:
 
     // Friend functions (used by Lua script bindings).
     friend void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions);
-    friend void ScriptUtil::registerConstantBool(std::string name, bool value, std::vector<std::string> scopePath);
-    friend void ScriptUtil::registerConstantNumber(std::string name, double value, std::vector<std::string> scopePath);
-    friend void ScriptUtil::registerConstantString(std::string name, std::string value, std::vector<std::string> scopePath);
+    friend void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
+    friend void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
+    friend void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
     friend void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction,
-        lua_CFunction deleteFunction, const luaL_Reg* statics, std::vector<std::string> scopePath);
+        lua_CFunction deleteFunction, const luaL_Reg* statics, const std::vector<std::string>& scopePath);
     friend void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction);
-    friend void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived);
+    friend void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived);
     friend void ScriptUtil::addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
     friend ScriptUtil::LuaArray<bool> ScriptUtil::getBoolPointer(int index);
     friend ScriptUtil::LuaArray<short> ScriptUtil::getShortPointer(int index);

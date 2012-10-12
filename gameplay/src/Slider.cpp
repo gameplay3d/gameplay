@@ -5,8 +5,11 @@ namespace gameplay
 
 // Fraction of slider to scroll when mouse scrollwheel is used.
 static const float SCROLL_FRACTION = 0.1f;
+// Distance that a slider must be moved before it starts consuming input events,
+// e.g. to prevent its parent container from scrolling at the same time.
+static const float SLIDER_THRESHOLD = 5.0f;
 
-Slider::Slider() : _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
+Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
 {
 }
 
@@ -104,12 +107,43 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         if (_contactIndex != INVALID_CONTACT_INDEX)
             return false;
         _state = Control::ACTIVE;
+        _originalX = x;
+        _originalValue = _value;
+        _originalConsumeInputEvents = _consumeInputEvents;
+        _moveCancelled = false;
         
         // Fall through to calculate new value.
     case Touch::TOUCH_MOVE:
     
         if (evt != Touch::TOUCH_PRESS && _contactIndex != (int)contactIndex)
             return false;
+
+        if (_moveCancelled)
+        {
+            break;
+        }
+        else if (abs(x - _originalX) > SLIDER_THRESHOLD)
+        {
+            // Start consuming input events once we've passed the slider's threshold.
+            _consumeInputEvents = true;
+        }
+        else if (_parent->isScrolling())
+        {
+            // Cancel the change in slider value if we pass the parent container's scrolling threshold.
+            float oldValue = _value;
+            _value = _originalValue;
+            if (_value != oldValue)
+            {
+                notifyListeners(Listener::VALUE_CHANGED);
+            }
+
+            _dirty = true;
+            _moveCancelled = true;
+            _state = NORMAL;
+            _contactIndex = INVALID_CONTACT_INDEX;
+            _consumeInputEvents = _originalConsumeInputEvents;
+            break;
+        }
 
         if (_state == ACTIVE &&
             x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
@@ -153,8 +187,9 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         }
         break;
     case Touch::TOUCH_RELEASE:
+        _consumeInputEvents = _originalConsumeInputEvents;
 
-        if (_contactIndex != (int) contactIndex)// (evt == Touch::TOUCH_RELEASE)
+        if (_contactIndex != (int) contactIndex)
             return false;
 
         _dirty = true;
@@ -240,9 +275,6 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     // The slider is drawn in the center of the control (perpendicular to orientation).
     // The track is stretched according to orientation.
     // Caps and marker are not stretched.
-    const Theme::Border& border = getBorder(_state);
-    const Theme::Padding& padding = getPadding();
-
     const Rectangle& minCapRegion = _minImage->getRegion();
     const Rectangle& maxCapRegion = _maxImage->getRegion();
     const Rectangle& markerRegion = _markerImage->getRegion();

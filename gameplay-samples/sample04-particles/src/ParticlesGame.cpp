@@ -36,7 +36,7 @@ void ParticlesGame::initialize()
     // The camera node is a child of a node at the same location as the particle emitter.
     // The camera node is offset from its parent, looking straight at it.
     // That way, when we rotate the parent node, the camera stays aimed at the particle emitter.
-    _scene = Scene::createScene();
+    _scene = Scene::create();
     Node* cameraNode = _scene->addNode("Camera");
     _cameraParent = _scene->addNode("CameraParent");
     _cameraParent->addChild(cameraNode);

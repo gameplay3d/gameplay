@@ -134,6 +134,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37eadad72bb882e24a656c9efb0ebda1"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a37eadad72bb882e24a656c9efb0ebda1">getSize</a> ()</td></tr>
 <tr class="memitem:a9c1ba229364193649f71d5e93c7f5637"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a9c1ba229364193649f71d5e93c7f5637">start</a> ()</td></tr>
 <tr class="memitem:a755172c9976d27f46600f58ae539cfc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">drawText</a> (const char *text, int x, int y, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, bool rightToLeft=false)</td></tr>
+<tr class="memitem:a570322bf3209492e5778554ef6292dc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a570322bf3209492e5778554ef6292dc5">drawText</a> (const char *text, int x, int y, float red, float green, float blue, float alpha, unsigned int size=0, bool rightToLeft=false)</td></tr>
 <tr class="memitem:a3ba343b3fe49855972933fe0ee969447"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a3ba343b3fe49855972933fe0ee969447">drawText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;area, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *clip=NULL)</td></tr>
 <tr class="memitem:a2f4128b68c10983b3e70a7fb31aeb65d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a2f4128b68c10983b3e70a7fb31aeb65d">drawText</a> (<a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> *text)</td></tr>
 <tr class="memitem:a093006c4587bdd79ccf7eec38c8f483a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_font_1_1_text.html">Text</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_font.html#a093006c4587bdd79ccf7eec38c8f483a">createText</a> (const char *text, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;area, const <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> &amp;color, unsigned int size=0, <a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Justify</a> justify=ALIGN_TOP_LEFT, bool wrap=true, bool rightToLeft=false, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> *clip=NULL)</td></tr>
@@ -351,6 +352,90 @@ Static Public Member Functions</h2></td></tr>
     <tr><td class="paramname">x</td><td>The viewport x position to draw text at. </td></tr>
     <tr><td class="paramname">y</td><td>The viewport y position to draw text at. </td></tr>
     <tr><td class="paramname">color</td><td>The color of text. </td></tr>
+    <tr><td class="paramname">size</td><td>The size to draw text (0 for default size). </td></tr>
+    <tr><td class="paramname">rightToLeft</td><td>Whether to draw text from right to left. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a570322bf3209492e5778554ef6292dc5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_font.html#a755172c9976d27f46600f58ae539cfc3">gameplay::Font::drawText</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>red</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>green</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>blue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>size</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>rightToLeft</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Draws the specified text in a solid color, with a scaling factor.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">text</td><td>The text to draw. </td></tr>
+    <tr><td class="paramname">x</td><td>The viewport x position to draw text at. </td></tr>
+    <tr><td class="paramname">y</td><td>The viewport y position to draw text at. </td></tr>
+    <tr><td class="paramname">red</td><td>The red channel of the text color. </td></tr>
+    <tr><td class="paramname">green</td><td>The green channel of the text color. </td></tr>
+    <tr><td class="paramname">blue</td><td>The blue channel of the text color. </td></tr>
+    <tr><td class="paramname">alpha</td><td>The alpha channel of the text color. </td></tr>
     <tr><td class="paramname">size</td><td>The size to draw text (0 for default size). </td></tr>
     <tr><td class="paramname">rightToLeft</td><td>Whether to draw text from right to left. </td></tr>
   </table>
@@ -805,7 +890,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

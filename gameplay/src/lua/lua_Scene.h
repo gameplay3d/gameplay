@@ -23,7 +23,7 @@ int lua_Scene_removeNode(lua_State* state);
 int lua_Scene_setActiveCamera(lua_State* state);
 int lua_Scene_setAmbientColor(lua_State* state);
 int lua_Scene_setId(lua_State* state);
-int lua_Scene_static_createScene(lua_State* state);
+int lua_Scene_static_create(lua_State* state);
 int lua_Scene_static_load(lua_State* state);
 int lua_Scene_visit(lua_State* state);
 

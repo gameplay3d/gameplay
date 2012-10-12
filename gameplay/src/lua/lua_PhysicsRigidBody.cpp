@@ -1279,9 +1279,37 @@ int lua_PhysicsRigidBody_setAngularVelocity(lua_State* state)
             }
             break;
         }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                PhysicsRigidBody* instance = getInstance(state);
+                instance->setAngularVelocity(param1, param2, param3);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsRigidBody_setAngularVelocity - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
             lua_error(state);
             break;
         }
@@ -1317,9 +1345,37 @@ int lua_PhysicsRigidBody_setAnisotropicFriction(lua_State* state)
             }
             break;
         }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                PhysicsRigidBody* instance = getInstance(state);
+                instance->setAnisotropicFriction(param1, param2, param3);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsRigidBody_setAnisotropicFriction - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
             lua_error(state);
             break;
         }
@@ -1473,9 +1529,37 @@ int lua_PhysicsRigidBody_setGravity(lua_State* state)
             }
             break;
         }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                PhysicsRigidBody* instance = getInstance(state);
+                instance->setGravity(param1, param2, param3);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsRigidBody_setGravity - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
             lua_error(state);
             break;
         }
@@ -1549,9 +1633,37 @@ int lua_PhysicsRigidBody_setLinearVelocity(lua_State* state)
             }
             break;
         }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                PhysicsRigidBody* instance = getInstance(state);
+                instance->setLinearVelocity(param1, param2, param3);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsRigidBody_setLinearVelocity - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 4).");
             lua_error(state);
             break;
         }

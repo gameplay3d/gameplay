@@ -53,12 +53,10 @@ private:
             TRANSLATE = 16,
             ROTATE = 32,
             SCALE = 64,
-            URL = 128,
-            TRANSPARENT = 256,
-            DYNAMIC = 512
+            URL = 128
         };
 
-        SceneNodeProperty(Type type, std::string url, int index) : _type(type), _url(url), _index(index) { }
+        SceneNodeProperty(Type type, const std::string& url, int index);
 
         Type _type;
         std::string _url;
@@ -67,49 +65,53 @@ private:
 
     struct SceneNode
     {
-        SceneNode() : _nodeID("") { }
+        SceneNode();
 
         const char* _nodeID;
+        bool _exactMatch;
+        std::vector<Node*> _nodes;
         std::vector<SceneNodeProperty> _properties;
+        std::map<std::string, std::string> _tags;
     };
 
-    static void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
+    Scene* loadInternal(const char* url);
 
-    static void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url = NULL, int index = 0);
+    void addSceneAnimation(const char* animationID, const char* targetID, const char* url);
 
-    static void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
+    void addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::Type type, const char* url = NULL, int index = 0);
 
-    static void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene);
+    void applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags);
 
-    static void applyNodeUrls(Scene* scene);
+    void applyNodeProperty(SceneNode& sceneNode, Node* node, const Properties* sceneProperties, const SceneNodeProperty& snp, const Scene* scene);
 
-    static void buildReferenceTables(Properties* sceneProperties);
+    void applyNodeUrls(Scene* scene);
 
-    static void calculateNodesWithMeshRigidBodies(const Properties* sceneProperties);
+    void buildReferenceTables(Properties* sceneProperties);
 
-    static void createAnimations(const Scene* scene);
+    void calculateNodesWithMeshRigidBodies(const Properties* sceneProperties);
 
-    static PhysicsConstraint* loadGenericConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+    void createAnimations(const Scene* scene);
 
-    static PhysicsConstraint* loadHingeConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+    PhysicsConstraint* loadGenericConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
-    static Scene* loadMainSceneData(const Properties* sceneProperties);
+    PhysicsConstraint* loadHingeConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
 
-    static void loadPhysics(Properties* physics, Scene* scene);
+    Scene* loadMainSceneData(const Properties* sceneProperties);
 
-    static void loadReferencedFiles();
+    void loadPhysics(Properties* physics, Scene* scene);
 
-    static PhysicsConstraint* loadSocketConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+    void loadReferencedFiles();
 
-    static PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
-    
-    
-    static std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file.
-    static std::map<std::string, Properties*> _properties;              // Holds the properties object for a given URL.
-    static std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
-    static std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
-    static std::string _gpbPath;                                        // The path of the main GPB for the scene being loaded.
-    static std::string _path;                                           // The path of the scene file being loaded.
+    PhysicsConstraint* loadSocketConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
+    PhysicsConstraint* loadSpringConstraint(const Properties* constraint, PhysicsRigidBody* rbA, PhysicsRigidBody* rbB);
+
+    std::map<std::string, Properties*> _propertiesFromFile;      // Holds the properties object for a given file.
+    std::map<std::string, Properties*> _properties;              // Holds the properties object for a given URL.
+    std::vector<SceneAnimation> _animations;                     // Holds the animations declared in the .scene file.
+    std::vector<SceneNode> _sceneNodes;                          // Holds all the nodes+properties declared in the .scene file.
+    std::string _gpbPath;                                        // The path of the main GPB for the scene being loaded.
+    std::string _path;                                           // The path of the scene file being loaded.
 };
 
 /**

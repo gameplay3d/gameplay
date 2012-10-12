@@ -4,7 +4,7 @@
 namespace gameplay
 {
 
-Joystick::Joystick() : _relative(true), _innerSize(NULL), _outerSize(NULL)
+Joystick::Joystick() : _radius(1.0f), _relative(true), _innerSize(NULL), _outerSize(NULL)
 {
 }
 
@@ -47,6 +47,7 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         return;
     }
     _radius = properties->getFloat("radius");
+    GP_ASSERT(_radius != 0.0f);
 
     if (properties->exists("relative"))
     {
@@ -95,7 +96,6 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
         if (inner)
         {
             const Rectangle& rect = inner->getRegion();
-            float radiusx2 = _radius * 2;;
             _screenRegion.width = rect.width;
             _screenRegion.height = rect.height;
         }
@@ -147,7 +147,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 
                 // If the displacement is greater than the radius, then cap the displacement to the
                 // radius.
-            
+                
                 Vector2 value;
                 if ((fabs(_displacement.x) > _radius) || (fabs(_displacement.y) > _radius))
                 {

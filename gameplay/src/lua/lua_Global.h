@@ -17,11 +17,13 @@
 #include "lua_GameState.h"
 #include "lua_GamepadButtonState.h"
 #include "lua_GamepadGamepadEvent.h"
+#include "lua_GestureGestureEvent.h"
 #include "lua_ImageFormat.h"
 #include "lua_KeyboardKey.h"
 #include "lua_KeyboardKeyEvent.h"
 #include "lua_LayoutType.h"
 #include "lua_LightType.h"
+#include "lua_LoggerLevel.h"
 #include "lua_MeshIndexFormat.h"
 #include "lua_MeshPrimitiveType.h"
 #include "lua_MouseMouseEvent.h"
@@ -43,9 +45,6 @@
 
 namespace gameplay
 {
-
-// Lua bindings for global functions.
-int lua__printError(lua_State* state);
 
 // Global enum to string conversion function (used to pass enums to Lua from C++).
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value);

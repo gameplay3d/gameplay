@@ -5,7 +5,7 @@ namespace gameplay
 {
 static std::vector<RadioButton*> __radioButtons;
 
-RadioButton::RadioButton() : _selected(false)
+RadioButton::RadioButton() : _selected(false), _image(NULL)
 {
 }
 
@@ -27,6 +27,8 @@ RadioButton* RadioButton::create(const char* id, Theme::Style* style)
     if (id)
         radioButton->_id = id;
     radioButton->setStyle(style);
+
+    __radioButtons.push_back(radioButton);
 
     return radioButton;
 }
@@ -62,6 +64,11 @@ bool RadioButton::isSelected() const
     return _selected;
 }
 
+void RadioButton::setSelected(bool selected)
+{
+    _selected = selected;
+}
+
 void RadioButton::setImageSize(float width, float height)
 {
     _imageSize.set(width, height);
@@ -95,16 +102,17 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
         {
             if (_contactIndex == (int) _contactIndex && _state == Control::ACTIVE)
             {
-				if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-					y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-				{
-					if (!_selected)
-					{
-						RadioButton::clearSelected(_groupId);
-						_selected = true;
-						notifyListeners(Listener::VALUE_CHANGED);
-					}
-				}
+                if (!_parent->isScrolling() &&
+                    x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                    y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+                {
+                    if (!_selected)
+                    {
+                        RadioButton::clearSelected(_groupId);
+                        _selected = true;
+                        notifyListeners(Listener::VALUE_CHANGED);
+                    }
+                }
             }
         }
         break;
@@ -116,7 +124,7 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
 void RadioButton::clearSelected(const std::string& groupId)
 {
     std::vector<RadioButton*>::const_iterator it;
-    for (it = __radioButtons.begin(); it < __radioButtons.end(); it++)
+    for (it = __radioButtons.begin(); it < __radioButtons.end(); ++it)
     {
         RadioButton* radioButton = *it;
         GP_ASSERT(radioButton);
@@ -196,6 +204,16 @@ void RadioButton::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 const char* RadioButton::getType() const
 {
     return "radioButton";
+}
+
+void RadioButton::setGroupId(const char* groupId)
+{
+    _groupId = groupId;
+}
+
+const char* RadioButton::getGroupId() const
+{
+    return _groupId.c_str();
 }
 
 }

@@ -10,6 +10,7 @@
 #include <cmath>
 #include <cfloat>
 #include <ctime>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -24,6 +25,7 @@
 
 // Collada includes
 #include <dae.h>
+#include <dom.h>
 #include <dae/daeSIDResolver.h>
 #include <dae/domAny.h>
 #include <dom/domCOLLADA.h>
@@ -86,7 +88,8 @@ void fillArray(float values[], float value, size_t length);
  */
 std::string getBaseName(const std::string& filepath);
 
-#define ISZERO(x) (fabs(x) < 0.000001f)
+#define ISZERO(x) (fabs(x) < MATH_EPSILON)
+#define ISONE(x) ((x - 1.0f) < MATH_EPSILON)
 
 // Object deletion macro
 #define SAFE_DELETE(x) \
@@ -96,13 +99,14 @@ std::string getBaseName(const std::string& filepath);
         x = NULL; \
     }
 
-#ifdef NDEBUG
-#define DEBUGPRINT(x)
-#define DEBUGPRINT_VARG(x, ...)
-#else
-#define DEBUGPRINT(x)  printf(x)
-#define DEBUGPRINT_VARG(x, ...) printf(x, __VA_ARGS__)
-#endif
+extern int __logVerbosity;
+
+// Logging macro (level is verbosity level, 1-4).
+#define LOG(level, ...) \
+    { \
+        if (level <= __logVerbosity) \
+            printf(__VA_ARGS__); \
+    }
 
 }
 

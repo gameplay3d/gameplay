@@ -91,7 +91,7 @@ bool Vector4::isZero() const
 
 bool Vector4::isOne() const
 {
-    return x == 1.0f && y == 1.0f && z == 1.0f && z == 1.0f;
+    return x == 1.0f && y == 1.0f && z == 1.0f && w == 1.0f;
 }
 
 float Vector4::angle(const Vector4& v1, const Vector4& v2)

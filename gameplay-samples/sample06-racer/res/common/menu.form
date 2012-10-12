@@ -1,0 +1,71 @@
+form menu
+{
+    theme = res/common/menu.theme
+    width = 320
+    height = 180
+    alignment = ALIGN_VCENTER_HCENTER
+    style = basic
+
+    // Controls
+    container controlsContainer
+    {
+        style = noBorder
+        position = 0, 0
+        autoWidth = true
+        height = 60
+
+        label controlsLabel
+        {
+            style = title
+            autoWidth = true
+			textAlignment =  ALIGN_LEFT
+            height = 30
+			position = 10, 0
+            text = Controls
+        }
+
+        radioButton useGamepad
+        {
+            style = iconNoBorder
+            group = controls
+            position = 0, 25
+            size = 150, 40
+            imageSize = 35, 35
+            selected = true
+            text = Gamepad
+        }
+
+        radioButton useTilt : useGamepad
+        {
+            position = 150, 25
+            text = Tilt
+            selected = false
+        }
+    }
+
+	label gameLabel
+	{
+		style = title
+        autoWidth = true
+		textAlignment =  ALIGN_LEFT
+        height = 30
+		position = 10, 70
+        text = Game
+	}
+
+    // Reset
+    button newGameButton
+    {
+        style = buttonStyle
+        position = 0, 100
+        size = 150, 50
+        text = New Game
+    }
+
+    // Exit
+    button quitGameButton : newGameButton
+    {
+        position = 150, 100
+        text = Quit Game
+    }
+}

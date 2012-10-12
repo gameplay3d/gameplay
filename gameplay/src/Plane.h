@@ -50,6 +50,16 @@ public:
     Plane(const Vector3& normal, float distance);
 
     /**
+     * Constructs a new plane from the specified values.
+     * 
+     * @param normalX The x coordinate of the normal.
+     * @param normalY The y coordinate of the normal.
+     * @param normalZ The z coordinate of the normal.
+     * @param distance The distance from this plane along its (unit) normal to the origin.
+     */
+    Plane(float normalX, float normalY, float normalZ, float distance);
+
+    /**
      * Constructs a new plane from the given plane.
      *
      * @param copy The plane to copy.
@@ -74,6 +84,15 @@ public:
      * @param normal The new normal vector.
      */
     void setNormal(const Vector3& normal);
+
+    /**
+     * Sets the plane's normal.
+     * 
+     * @param x The x coordinate of the normal.
+     * @param y The y coordinate of the normal.
+     * @param z The z coordinate of the normal.
+     */
+    void setNormal(float x, float y, float z);
 
     /**
      * Gets the plane's distance to the origin along its normal.

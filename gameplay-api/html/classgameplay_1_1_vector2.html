@@ -115,6 +115,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac554b1a58e76d89430fc3ac3ae28969f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#ac554b1a58e76d89430fc3ac3ae28969f">set</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;v)</td></tr>
 <tr class="memitem:ad364294055293d80a0619835f82c6b54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#ad364294055293d80a0619835f82c6b54">set</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;p1, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;p2)</td></tr>
 <tr class="memitem:a636cae020ce28aa751fbeeb3a7d89503"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#a636cae020ce28aa751fbeeb3a7d89503">subtract</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;v)</td></tr>
+<tr class="memitem:a82b889ec7f4d07d685d858ce8642e4c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#a82b889ec7f4d07d685d858ce8642e4c2">smooth</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;target, float elapsedTime, float responseTime)</td></tr>
 <tr class="memitem:a849490f44a32c0ccbd9892e45359665a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#a849490f44a32c0ccbd9892e45359665a">operator+</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;v) const </td></tr>
 <tr class="memitem:ab5163339235eec5e66befb567d5198d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#ab5163339235eec5e66befb567d5198d7">operator+=</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;v)</td></tr>
 <tr class="memitem:a0afbd9a25cd32364c0717d298507ec23"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_vector2.html#a0afbd9a25cd32364c0717d298507ec23">operator-</a> (const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;v) const </td></tr>
@@ -1199,6 +1200,48 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a82b889ec7f4d07d685d858ce8642e4c2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_vector2.html#a82b889ec7f4d07d685d858ce8642e4c2">gameplay::Vector2::smooth</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>responseTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Updates this vector towards the given target using a smoothing function. The given response time determines the amount of smoothing (lag). A longer response time yields a smoother result and more lag. To force this vector to follow the target closely, provide a response time that is very small relative to the given elapsed time.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>target value. </td></tr>
+    <tr><td class="paramname">elapsedTime</td><td>elapsed time between calls. </td></tr>
+    <tr><td class="paramname">responseTime</td><td>response time (in the same units as elapsedTime). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a636cae020ce28aa751fbeeb3a7d89503"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1352,7 +1395,7 @@ Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:15 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:45 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

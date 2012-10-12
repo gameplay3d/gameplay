@@ -389,7 +389,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
     <tr><td class="paramname">scale</td><td>The X and Y scale. </td></tr>
     <tr><td class="paramname">color</td><td>The color to tint the sprite. Use white for no tint. </td></tr>
     <tr><td class="paramname">rotationPoint</td><td>The point to rotate around, relative to dst's x and y values. (e.g. Use <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>(0.5f, 0.5f) to rotate around the quad's center.) </td></tr>
-    <tr><td class="paramname">rotationAngle</td><td>The rotation angle. </td></tr>
+    <tr><td class="paramname">rotationAngle</td><td>The rotation angle in radians. </td></tr>
   </table>
   </dd>
 </dl>
@@ -486,7 +486,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
     <tr><td class="paramname">v2</td><td><a class="el" href="classgameplay_1_1_texture.html">Texture</a> coordinate. </td></tr>
     <tr><td class="paramname">color</td><td>The color to tint the sprite. Use white for no tint. </td></tr>
     <tr><td class="paramname">rotationPoint</td><td>The point to rotate around, relative to dst's x and y values. (e.g. Use <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>(0.5f, 0.5f) to rotate around the quad's center.) </td></tr>
-    <tr><td class="paramname">rotationAngle</td><td>The rotation angle. </td></tr>
+    <tr><td class="paramname">rotationAngle</td><td>The rotation angle in radians. </td></tr>
     <tr><td class="paramname">positionIsCenter</td><td>Specified whether the given destination is to be the center of the sprite or not (if not, it is treated as the bottom-left). </td></tr>
   </table>
   </dd>
@@ -598,7 +598,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
     <tr><td class="paramname">v2</td><td><a class="el" href="classgameplay_1_1_texture.html">Texture</a> coordinate. </td></tr>
     <tr><td class="paramname">color</td><td>The color to tint the sprite. Use white for no tint. </td></tr>
     <tr><td class="paramname">rotationPoint</td><td>The point to rotate around, relative to dst's x and y values. (e.g. Use <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>(0.5f, 0.5f) to rotate around the quad's center.) </td></tr>
-    <tr><td class="paramname">rotationAngle</td><td>The rotation angle. </td></tr>
+    <tr><td class="paramname">rotationAngle</td><td>The rotation angle in radians. </td></tr>
     <tr><td class="paramname">positionIsCenter</td><td>Specified whether the given destination is to be the center of the sprite or not (if not, it is treated as the bottom-left). </td></tr>
   </table>
   </dd>
@@ -704,7 +704,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
     <tr><td class="paramname">v2</td><td><a class="el" href="classgameplay_1_1_texture.html">Texture</a> coordinate. </td></tr>
     <tr><td class="paramname">color</td><td>The color to tint the sprite. Use white for no tint. </td></tr>
     <tr><td class="paramname">rotationPoint</td><td>The point to rotate around, relative to dst's x and y values. (e.g. Use <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>(0.5f, 0.5f) to rotate around the quad's center.) </td></tr>
-    <tr><td class="paramname">rotationAngle</td><td>The rotation angle. </td></tr>
+    <tr><td class="paramname">rotationAngle</td><td>The rotation angle in radians. </td></tr>
   </table>
   </dd>
 </dl>
@@ -998,7 +998,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 </div>
 <div class="memdoc">
 <p>Finishes sprite drawing.</p>
-<p>This method flushes the batch and commits rendering of all sprites that were drawn since the last call to begin(). </p>
+<p>This method flushes the batch and commits rendering of all sprites that were drawn since the last call to <a class="el" href="classgameplay_1_1_sprite_batch.html#adce62aeefcc3145ba6bf8ae652f48c60">start()</a>. </p>
 
 </div>
 </div>
@@ -1122,7 +1122,7 @@ The fragment shader must define at least a single sampler/texture uniform. </li>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:15 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:45 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

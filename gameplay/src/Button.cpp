@@ -40,41 +40,42 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     case Touch::TOUCH_PRESS:
         if (_contactIndex == INVALID_CONTACT_INDEX)
         {
-			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-			{
-				_contactIndex = (int) contactIndex;
+            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+            {
+                _contactIndex = (int) contactIndex;
 
-				setState(Control::ACTIVE);
+                setState(Control::ACTIVE);
 
-				notifyListeners(Listener::PRESS);
+                notifyListeners(Listener::PRESS);
 
-				return _consumeInputEvents;
-			}
-			else
-			{
-				setState(Control::NORMAL);
-			}
+                return _consumeInputEvents;
+            }
+            else
+            {
+                setState(Control::NORMAL);
+            }
         }
         break;
 
     case Touch::TOUCH_RELEASE:
         if (_contactIndex == (int) contactIndex)
         {
-			_contactIndex = INVALID_CONTACT_INDEX;
-			notifyListeners(Listener::RELEASE);
-			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-			{
-				setState(Control::FOCUS);
+            _contactIndex = INVALID_CONTACT_INDEX;
+            notifyListeners(Listener::RELEASE);
+            if (!_parent->isScrolling() &&
+                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+            {
+                setState(Control::FOCUS);
 
-				notifyListeners(Listener::CLICK);
-			}
-			else
-			{
-				setState(Control::NORMAL);
-			}
-			return _consumeInputEvents;
+                notifyListeners(Listener::CLICK);
+            }
+            else
+            {
+                setState(Control::NORMAL);
+            }
+            return _consumeInputEvents;
         }
         break;
     case Touch::TOUCH_MOVE:

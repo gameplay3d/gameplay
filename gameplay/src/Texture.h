@@ -152,12 +152,27 @@ public:
 
     /**
      * Creates a texture from the given image.
+     *
+     * @param image The image containing the texture data.
+     * @param generateMipmaps True to generate a full mipmap chain, false otherwise.
+     *
+     * @return The new texture, or NULL if the image is not of a supported texture format.
      * @script{create}
      */
     static Texture* create(Image* image, bool generateMipmaps = false);
 
     /**
      * Creates a texture from the given texture data.
+     *
+     * The data in the texture is expected to be tightly packed (no padding at the end of rows).
+     *
+     * @param format Format of the texture data.
+     * @param width Width of the texture data.
+     * @param height Height of the texture data.
+     * @param data Raw texture data (expected to be tightly packed).
+     * @param generateMipmaps True to generate a full mipmap chain, false otherwise.
+     *
+     * @return The new texture.
      * @script{create}
      */
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);

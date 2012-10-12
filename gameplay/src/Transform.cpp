@@ -577,6 +577,15 @@ void Transform::translateForward(float amount)
     translate(forward);
 }
 
+void Transform::translateSmooth(const Vector3& target, float elapsedTime, float responseTime)
+{
+    if (elapsedTime > 0)
+    {
+        _translation += (target - _translation) * (elapsedTime / (elapsedTime + responseTime));
+        dirty(DIRTY_TRANSLATION);
+    }
+}
+
 void Transform::transformPoint(Vector3* point)
 {
     getMatrix();
@@ -624,7 +633,10 @@ unsigned int Transform::getAnimationPropertyComponentCount(int propertyId) const
             return 3;
         case ANIMATE_ROTATE:
             return 4;
+        case ANIMATE_SCALE_TRANSLATE:
+            return 6;
         case ANIMATE_ROTATE_TRANSLATE:
+        case ANIMATE_SCALE_ROTATE:
             return 7;
         case ANIMATE_SCALE_ROTATE_TRANSLATE:
             return 10;
@@ -643,9 +655,7 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
             value->setFloat(0, _scale.x);
             break;
         case ANIMATE_SCALE:
-            value->setFloat(0, _scale.x);
-            value->setFloat(1, _scale.y);
-            value->setFloat(2, _scale.z);
+            value->setFloats(0, &_scale.x, 3);
             break;
         case ANIMATE_SCALE_X:
             value->setFloat(0, _scale.x);
@@ -657,15 +667,10 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
             value->setFloat(0, _scale.z);
             break;
         case ANIMATE_ROTATE:
-            value->setFloat(0, _rotation.x);
-            value->setFloat(1, _rotation.y);
-            value->setFloat(2, _rotation.z);
-            value->setFloat(3, _rotation.w);
+            value->setFloats(0, &_rotation.x, 4);
             break;
         case ANIMATE_TRANSLATE:
-            value->setFloat(0, _translation.x);
-            value->setFloat(1, _translation.y);
-            value->setFloat(2, _translation.z);
+            value->setFloats(0, &_translation.x, 3);
             break;
         case ANIMATE_TRANSLATE_X:
             value->setFloat(0, _translation.x);
@@ -677,25 +682,21 @@ void Transform::getAnimationPropertyValue(int propertyId, AnimationValue* value)
             value->setFloat(0, _translation.z);
             break;
         case ANIMATE_ROTATE_TRANSLATE:
-            value->setFloat(0, _rotation.x);
-            value->setFloat(1, _rotation.y);
-            value->setFloat(2, _rotation.z);
-            value->setFloat(3, _rotation.w);
-            value->setFloat(4, _translation.x);
-            value->setFloat(5, _translation.y);
-            value->setFloat(6, _translation.z);
+            value->setFloats(0, &_rotation.x, 4);
+            value->setFloats(4, &_translation.x, 3);
+            break;
+        case ANIMATE_SCALE_ROTATE:
+            value->setFloats(0, &_scale.x, 3);
+            value->setFloats(3, &_rotation.x, 4);
+            break;
+        case ANIMATE_SCALE_TRANSLATE:
+            value->setFloats(0, &_scale.x, 3);
+            value->setFloats(3, &_translation.x, 3);
             break;
         case ANIMATE_SCALE_ROTATE_TRANSLATE:
-            value->setFloat(0, _scale.x);
-            value->setFloat(1, _scale.y);
-            value->setFloat(2, _scale.z);
-            value->setFloat(3, _rotation.x);
-            value->setFloat(4, _rotation.y);
-            value->setFloat(5, _rotation.z);
-            value->setFloat(6, _rotation.w);
-            value->setFloat(7, _translation.x);
-            value->setFloat(8, _translation.y);
-            value->setFloat(9, _translation.z);
+            value->setFloats(0, &_scale.x, 3);
+            value->setFloats(3, &_rotation.x, 4);
+            value->setFloats(7, &_translation.x, 3);
             break;
         default:
             break;
@@ -766,6 +767,18 @@ void Transform::setAnimationPropertyValue(int propertyId, AnimationValue* value,
             setTranslation(Curve::lerp(blendWeight, _translation.x, value->getFloat(4)), Curve::lerp(blendWeight, _translation.y, value->getFloat(5)), Curve::lerp(blendWeight, _translation.z, value->getFloat(6)));
             break;
         }
+        case ANIMATE_SCALE_ROTATE:
+        {
+            setScale(Curve::lerp(blendWeight, _scale.x, value->getFloat(0)), Curve::lerp(blendWeight, _scale.y, value->getFloat(1)), Curve::lerp(blendWeight, _scale.z, value->getFloat(2)));
+            applyAnimationValueRotation(value, 3, blendWeight);
+            break;
+        }
+        case ANIMATE_SCALE_TRANSLATE:
+        {
+            setScale(Curve::lerp(blendWeight, _scale.x, value->getFloat(0)), Curve::lerp(blendWeight, _scale.y, value->getFloat(1)), Curve::lerp(blendWeight, _scale.z, value->getFloat(2)));
+            setTranslation(Curve::lerp(blendWeight, _translation.x, value->getFloat(3)), Curve::lerp(blendWeight, _translation.y, value->getFloat(4)), Curve::lerp(blendWeight, _translation.z, value->getFloat(5)));
+            break;
+        }
         case ANIMATE_SCALE_ROTATE_TRANSLATE:
         {
             setScale(Curve::lerp(blendWeight, _scale.x, value->getFloat(0)), Curve::lerp(blendWeight, _scale.y, value->getFloat(1)), Curve::lerp(blendWeight, _scale.z, value->getFloat(2)));
@@ -825,7 +838,7 @@ void Transform::removeListener(Transform::Listener* listener)
 
     if (_listeners)
     {
-        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
         {
             if ((*itr).listener == listener)
             {
@@ -840,7 +853,7 @@ void Transform::transformChanged()
 {
     if (_listeners)
     {
-        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+        for (std::list<TransformListener>::iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
         {
             TransformListener& l = *itr;
             GP_ASSERT(l.listener);

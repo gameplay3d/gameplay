@@ -84,15 +84,16 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     switch (evt)
     {
     case Touch::TOUCH_RELEASE:
-		if (_contactIndex == (int) contactIndex && _state == Control::ACTIVE)
-		{
-			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-			{
-				_checked = !_checked;
-				notifyListeners(Control::Listener::VALUE_CHANGED);
-			}
-		}
+        if (_contactIndex == (int) contactIndex && _state == Control::ACTIVE)
+        {
+            if (!_parent->isScrolling() &&
+                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+            {
+                _checked = !_checked;
+                notifyListeners(Control::Listener::VALUE_CHANGED);
+            }
+        }
         break;
     }
 

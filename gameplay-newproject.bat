@@ -127,7 +127,7 @@ echo.
 call:replacevar projPath "/" "\"
 
 REM Does this path already exist?
-if exist %projPath% (
+if exist "%projPath%" (
     echo.
     echo ERROR: Path '%projPath%' already exists, aborting.
     echo.
@@ -151,124 +151,124 @@ REM    rmdir /S /Q %projPath%
 
 REM Generate relative path from project folder to GamePlay folder
 set gpPath=%cd%
-call:makerelative gpPath %projPath%\
+call:makerelative gpPath "%projPath%\"
 call:replacevar gpPath "\" "/"
 
-mkdir %projPath%
-mkdir %projPath%\src
-mkdir %projPath%\res
+mkdir "%projPath%"
+mkdir "%projPath%\src"
+mkdir "%projPath%\res"
 
 REM Copy Microsoft Visual Studio project files
-copy gameplay-template\gameplay-template.vcxproj %projPath%\%projName%.vcxproj
-call:replace %projPath%\%projName%.vcxproj TEMPLATE_PROJECT "%projName%"
-call:replace %projPath%\%projName%.vcxproj TemplateGame "%className%"
-call:replace %projPath%\%projName%.vcxproj GAMEPLAY_PATH "%gpPath%"
+copy gameplay-template\gameplay-template.vcxproj "%projPath%\%projName%.vcxproj"
+call:replace "%projPath%\%projName%.vcxproj" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\%projName%.vcxproj" TemplateGame "%className%"
+call:replace "%projPath%\%projName%.vcxproj" GAMEPLAY_PATH "%gpPath%"
 
-copy gameplay-template\gameplay-template.vcxproj.filters %projPath%\%projName%.vcxproj.filters
-call:replace %projPath%\%projName%.vcxproj.filters TemplateGame "%className%"
+copy gameplay-template\gameplay-template.vcxproj.filters "%projPath%\%projName%.vcxproj.filters"
+call:replace "%projPath%\%projName%.vcxproj.filters" TemplateGame "%className%"
 
-copy gameplay-template\gameplay-template.vcxproj.user %projPath%\%projName%.vcxproj.user
-call:replace %projPath%\%projName%.vcxproj.user GAMEPLAY_PATH "%gpPath%"
+copy gameplay-template\gameplay-template.vcxproj.user "%projPath%\%projName%.vcxproj.user"
+call:replace "%projPath%\%projName%.vcxproj.user" GAMEPLAY_PATH "%gpPath%"
 
 REM Copy Apple XCode project files
-mkdir %projPath%\%projName%.xcodeproj
-copy gameplay-template\gameplay-template.xcodeproj\project.pbxproj %projPath%\%projName%.xcodeproj\project.pbxproj
-call:replace %projPath%\%projName%.xcodeproj\project.pbxproj GAMEPLAY_PATH "%gpPath%"
-call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TemplateGame "%className%"
-call:replace %projPath%\%projName%.xcodeproj\project.pbxproj TEMPLATE_PROJECT "%projName%"
+mkdir "%projPath%\%projName%.xcodeproj"
+copy gameplay-template\gameplay-template.xcodeproj\project.pbxproj "%projPath%\%projName%.xcodeproj\project.pbxproj"
+call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" GAMEPLAY_PATH "%gpPath%"
+call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" TemplateGame "%className%"
+call:replace "%projPath%\%projName%.xcodeproj\project.pbxproj" TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\TEMPLATE_PROJECT-macosx.plist %projPath%\%projName%-macosx.plist
-call:replace %projPath%\%projName%-macosx.plist TEMPLATE_UUID "%uuid%"
-call:replace %projPath%\%projName%-macosx.plist TEMPLATE_AUTHOR "%author%"
+copy gameplay-template\TEMPLATE_PROJECT-macosx.plist "%projPath%\%projName%-macosx.plist"
+call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_UUID "%uuid%"
+call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_AUTHOR "%author%"
 
-copy gameplay-template\TEMPLATE_PROJECT-ios.plist %projPath%\%projName%-ios.plist
-call:replace %projPath%\%projName%-ios.plist TEMPLATE_TITLE "%title%"
-call:replace %projPath%\%projName%-ios.plist TEMPLATE_UUID "%uuid%"
-call:replace %projPath%\%projName%-ios.plist TEMPLATE_AUTHOR "%author%"
+copy gameplay-template\TEMPLATE_PROJECT-ios.plist "%projPath%\%projName%-ios.plist"
+call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_TITLE "%title%"
+call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_UUID "%uuid%"
+call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_AUTHOR "%author%"
 
 REM Copy BlackBerry NDK project files
-copy gameplay-template\template.cproject %projPath%\.cproject
-call:replace %projPath%\.cproject TEMPLATE_PROJECT "%projName%"
-call:replace %projPath%\.cproject TEMPLATE_UUID "%uuid%"
-call:replace %projPath%\.cproject GAMEPLAY_PATH "%gpPath%"
+copy gameplay-template\template.cproject "%projPath%\.cproject"
+call:replace "%projPath%\.cproject" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\.cproject" TEMPLATE_UUID "%uuid%"
+call:replace "%projPath%\.cproject" GAMEPLAY_PATH "%gpPath%"
 
-copy gameplay-template\template.project %projPath%\.project
-call:replace %projPath%\.project TEMPLATE_PROJECT "%projName%"
+copy gameplay-template\template.project "%projPath%\.project"
+call:replace "%projPath%\.project" TEMPLATE_PROJECT "%projName%"
 
-copy gameplay-template\template.bar-descriptor.xml %projPath%\bar-descriptor.xml
-call:replace %projPath%\bar-descriptor.xml TEMPLATE_PROJECT "%projName%"
-call:replace %projPath%\bar-descriptor.xml TEMPLATE_TITLE "%title%"
-call:replace %projPath%\bar-descriptor.xml TEMPLATE_UUID "%uuid%"
-call:replace %projPath%\bar-descriptor.xml TEMPLATE_AUTHOR "%author%"
-call:replace %projPath%\bar-descriptor.xml TEMPLATE_DESCRIPTION "%desc%"
+copy gameplay-template\template.bar-descriptor.xml "%projPath%\bar-descriptor.xml"
+call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_TITLE "%title%"
+call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_UUID "%uuid%"
+call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_AUTHOR "%author%"
+call:replace "%projPath%\bar-descriptor.xml" TEMPLATE_DESCRIPTION "%desc%"
 
 REM Copy Android NDK project files
-mkdir %projPath%\android
+mkdir "%projPath%\android"
 
-copy gameplay-template\android\template.AndroidManifest.xml %projPath%\android\AndroidManifest.xml
-call:replace %projPath%\android\AndroidManifest.xml TEMPLATE_PROJECT "%projName%"
-call:replace %projPath%\android\AndroidManifest.xml TEMPLATE_UUID "%uuid%"
+copy gameplay-template\android\template.AndroidManifest.xml "%projPath%\android\AndroidManifest.xml"
+call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\android\AndroidManifest.xml" TEMPLATE_UUID "%uuid%"
 
-copy gameplay-template\android\template.build.xml %projPath%\android\build.xml
-call:replace %projPath%\android\build.xml TEMPLATE_PROJECT "%projName%"
+copy gameplay-template\android\template.build.xml "%projPath%\android\build.xml"
+call:replace "%projPath%\android\build.xml" TEMPLATE_PROJECT "%projName%"
 
-mkdir %projPath%\android\jni
+mkdir "%projPath%\android\jni"
 
-copy gameplay-template\android\jni\Application.mk %projPath%\android\jni\Application.mk
+copy gameplay-template\android\jni\Application.mk "%projPath%\android\jni\Application.mk"
 
-copy gameplay-template\android\jni\template.Android.mk %projPath%\android\jni\Android.mk
-call:replace %projPath%\android\jni\Android.mk TemplateGame "%className%"
-call:replace %projPath%\android\jni\Android.mk TEMPLATE_PROJECT "%projName%"
-call:replace %projPath%\android\jni\Android.mk GAMEPLAY_PATH "%gpPath%"
+copy gameplay-template\android\jni\template.Android.mk "%projPath%\android\jni\Android.mk"
+call:replace "%projPath%\android\jni\Android.mk" TemplateGame "%className%"
+call:replace "%projPath%\android\jni\Android.mk" TEMPLATE_PROJECT "%projName%"
+call:replace "%projPath%\android\jni\Android.mk" GAMEPLAY_PATH "%gpPath%"
 
-mkdir %projPath%\android\res\drawable
+mkdir "%projPath%\android\res\drawable"
 
-copy gameplay-template\icon.png %projPath%\android\res\drawable\icon.png
+copy gameplay-template\icon.png "%projPath%\android\res\drawable\icon.png"
 
-mkdir %projPath%\android\res\values
+mkdir "%projPath%\android\res\values"
 
-copy gameplay-template\android\res\values\template.strings.xml %projPath%\android\res\values\strings.xml
-call:replace %projPath%\android\res\values\strings.xml TEMPLATE_TITLE "%title%"
+copy gameplay-template\android\res\values\template.strings.xml "%projPath%\android\res\values\strings.xml"
+call:replace "%projPath%\android\res\values\strings.xml" TEMPLATE_TITLE "%title%"
 
 
 REM Copy source files
-copy gameplay-template\src\TemplateGame.h %projPath%\src\%className%.h
-copy gameplay-template\src\TemplateGame.cpp %projPath%\src\%className%.cpp
-call:replace %projPath%\src\%className%.h TemplateGame "%className%"
-call:replace %projPath%\src\%className%.cpp TemplateGame "%className%"
+copy gameplay-template\src\TemplateGame.h "%projPath%\src\%className%.h"
+copy gameplay-template\src\TemplateGame.cpp "%projPath%\src\%className%.cpp"
+call:replace "%projPath%\src\%className%.h" TemplateGame "%className%"
+call:replace "%projPath%\src\%className%.cpp" TemplateGame "%className%"
 
 REM Copy resource files
-copy gameplay-template\res\* %projPath%\res\
+copy gameplay-template\res\* "%projPath%\res\"
 
 REM Copy icon
-copy gameplay-template\icon.png %projPath%\icon.png
+copy gameplay-template\icon.png "%projPath%\icon.png"
 
 REM Copy config
-copy gameplay-template\game.config %projPath%\game.config
-call:replace %projPath%\game.config TEMPLATE_TITLE "%title%"
+copy gameplay-template\game.config "%projPath%\game.config"
+call:replace "%projPath%\game.config" TEMPLATE_TITLE "%title%"
 
 REM Open new project folder
-start %projPath%
+start "" "%projPath%"
 
 goto done
 
 :replace
-set rtemp=%1.rtemp
-if exist %rtemp% del /Q %rtemp%
-for /f "tokens=1* eol=€ delims=€]" %%j in ('type "%1" ^| find /V /N ""') do (
+set rtemp=%~1.rtemp
+if exist "%rtemp%" del /Q "%rtemp%"
+for /f "tokens=1* eol=€ delims=€]" %%j in ('type "%~1" ^| find /V /N ""') do (
     set line=%%k
     setlocal EnableDelayedExpansion
     if "!line!" == "" (
-        echo.>>%rtemp%
+        echo.>>"%rtemp%"
     ) else (
         set linput=!line!
         set loutput=!linput:%~2=%~3!
-        echo.!loutput!>>%rtemp%
+        echo.!loutput!>>"%rtemp%"
     )
     endlocal
 )
-copy /Y %rtemp% %1
-del /Q %rtemp%
+copy /Y "%rtemp%" "%~1"
+del /Q "%rtemp%"
 exit /b
 goto done
 

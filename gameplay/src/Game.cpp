@@ -18,12 +18,12 @@ static Game* __gameInstance = NULL;
 double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 
-Game::Game() 
-    : _initialized(false), _state(UNINITIALIZED), 
-      _frameLastFPS(0), _frameCount(0), _frameRate(0), 
+Game::Game()
+    : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
+      _frameLastFPS(0), _frameCount(0), _frameRate(0),
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
-      _animationController(NULL), _audioController(NULL), 
-      _physicsController(NULL), _aiController(NULL), _audioListener(NULL), 
+      _animationController(NULL), _audioController(NULL),
+      _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
       _gamepads(NULL), _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
@@ -111,7 +111,10 @@ bool Game::startup()
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
     RenderState::initialize();
     FrameBuffer::initialize();
-    
+
+    // Load any gamepads, ui or physical.
+    loadGamepads();
+
     _animationController = new AnimationController();
     _animationController->initialize();
 
@@ -124,8 +127,6 @@ bool Game::startup()
     _aiController = new AIController();
     _aiController->initialize();
 
-    loadGamepads();
-    
     _scriptController = new ScriptController();
     _scriptController->initialize();
 
@@ -182,7 +183,7 @@ void Game::shutdown()
         Platform::signalShutdown();
         finalize();
 
-        
+
         std::vector<Gamepad*>::iterator itr = _gamepads->begin();
         std::vector<Gamepad*>::iterator end = _gamepads->end();
         while (itr != end)
@@ -192,7 +193,7 @@ void Game::shutdown()
         }
         _gamepads->clear();
         SAFE_DELETE(_gamepads);
-        
+
         _scriptController->finalizeGame();
 
         _animationController->finalize();
@@ -234,22 +235,29 @@ void Game::pause()
         _physicsController->pause();
         _aiController->pause();
     }
+
+    ++_pausedCount;
 }
 
 void Game::resume()
 {
     if (_state == PAUSED)
     {
-        GP_ASSERT(_animationController);
-        GP_ASSERT(_audioController);
-        GP_ASSERT(_physicsController);
-        GP_ASSERT(_aiController);
-        _state = RUNNING;
-        _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
-        _animationController->resume();
-        _audioController->resume();
-        _physicsController->resume();
-        _aiController->resume();
+        --_pausedCount;
+
+        if (_pausedCount == 0)
+		{
+			GP_ASSERT(_animationController);
+			GP_ASSERT(_audioController);
+			GP_ASSERT(_physicsController);
+			GP_ASSERT(_aiController);
+			_state = RUNNING;
+			_pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
+			_animationController->resume();
+			_audioController->resume();
+			_physicsController->resume();
+			_aiController->resume();
+		}
     }
 }
 
@@ -265,6 +273,7 @@ void Game::frame()
         initialize();
         _scriptController->initializeGame();
         _initialized = true;
+        triggerGamepadEvents(); // Now that the game has been initialized, trigger any gamepad attached events.
     }
 
     if (_state == Game::RUNNING)
@@ -285,7 +294,7 @@ void Game::frame()
 
         // Fire time events to scheduled TimeListeners
         fireTimeEvents(frameTime);
-    
+
         // Update the physics.
         _physicsController->update(elapsedTime);
 
@@ -362,7 +371,7 @@ void Game::updateOnce()
 void Game::setViewport(const Rectangle& viewport)
 {
     _viewport = viewport;
-    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height); 
+    glViewport((GLuint)viewport.x, (GLuint)viewport.y, (GLuint)viewport.width, (GLuint)viewport.height);
 }
 
 void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil)
@@ -391,7 +400,7 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
         bits |= GL_DEPTH_BUFFER_BIT;
 
         // We need to explicitly call the static enableDepthWrite() method on StateBlock
-        // to ensure depth writing is enabled before clearing the depth buffer (and to 
+        // to ensure depth writing is enabled before clearing the depth buffer (and to
         // update the global StateBlock render state to reflect this).
         RenderState::StateBlock::enableDepthWrite();
     }
@@ -406,6 +415,11 @@ void Game::clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, 
         bits |= GL_STENCIL_BUFFER_BIT;
     }
     glClear(bits);
+}
+
+void Game::clear(ClearFlags flags, float red, float green, float blue, float alpha, float clearDepth, int clearStencil)
+{
+    clear(flags, Vector4(red, green, blue, alpha), clearDepth, clearStencil);
 }
 
 AudioListener* Game::getAudioListener()
@@ -432,6 +446,38 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
+}
+
+bool Game::isGestureSupported(Gesture::GestureEvent evt)
+{
+    return Platform::isGestureSupported(evt);
+}
+
+void Game::registerGesture(Gesture::GestureEvent evt)
+{
+    Platform::registerGesture(evt);
+}
+
+void Game::unregisterGesture(Gesture::GestureEvent evt)
+{
+    Platform::unregisterGesture(evt);
+}
+
+bool Game::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return Platform::isGestureRegistered(evt);
+}
+
+void Game::gestureSwipeEvent(int x, int y, int direction)
+{
+}
+
+void Game::gesturePinchEvent(int x, int y, float scale)
+{
+}
+
+void Game::gestureTapEvent(int x, int y)
+{
 }
 
 void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
@@ -509,7 +555,7 @@ void Game::loadConfig()
         if (FileSystem::fileExists("game.config"))
         {
             _properties = Properties::create("game.config");
-            
+
             // Load filesystem aliases.
             Properties* aliases = _properties->getNamespace("aliases", true);
             if (aliases)
@@ -517,34 +563,54 @@ void Game::loadConfig()
                 FileSystem::loadResourceAliases(aliases);
             }
         }
+        else
+        {
+            // Create an empty config
+            _properties = new Properties();
+        }
     }
 }
 
 void Game::loadGamepads()
 {
+    // Load virtual gamepads.
     if (_properties)
     {
         // Check if there is a virtual keyboard included in the .config file.
         // If there is, try to create it and assign it to "player one".
         Properties* gamepadProperties = _properties->getNamespace("gamepads", true);
+        unsigned int gamepadCount = 0;
         if (gamepadProperties && gamepadProperties->exists("form"))
         {
             const char* gamepadFormPath = gamepadProperties->getString("form");
             GP_ASSERT(gamepadFormPath);
-            Gamepad* gamepad = createGamepad(gamepadProperties->getId(), gamepadFormPath);
+            Gamepad* gamepad = new Gamepad(gamepadCount, gamepadFormPath);
             GP_ASSERT(gamepad);
+
+            _gamepads->push_back(gamepad);
+            gamepadCount++;
         }
     }
+
+    // Checks for any physical gamepads
+    getGamepadCount();
 }
 
-Gamepad* Game::createGamepad(const char* gamepadId, const char* gamepadFormPath)
+unsigned int Game::createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount)
 {
-    GP_ASSERT(gamepadFormPath);
-    Gamepad* gamepad = new Gamepad(gamepadId, gamepadFormPath);
+    Gamepad* gamepad = new Gamepad(id, handle, buttonCount, joystickCount, triggerCount);
     GP_ASSERT(gamepad);
     _gamepads->push_back(gamepad);
+    return _gamepads->size() - 1;
+}
 
-    return gamepad;
+void Game::triggerGamepadEvents()
+{
+    for (std::vector<Gamepad*>::iterator itr = _gamepads->begin(); itr != _gamepads->end(); itr++)
+    {
+        if ((*itr)->isConnected())
+            gamepadEvent(Gamepad::CONNECTED_EVENT, (*itr));
+    }
 }
 
 }

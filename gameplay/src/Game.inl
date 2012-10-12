@@ -29,6 +29,11 @@ inline unsigned int Game::getHeight() const
     return _height;
 }
 
+inline float Game::getAspectRatio() const
+{
+    return (float)_width / (float)_height;
+}
+
 inline const Rectangle& Game::getViewport() const
 {
     return _viewport;
@@ -66,8 +71,6 @@ void Game::renderOnce(T* instance, void (T::*method)(void*), void* cookie)
     Platform::swapBuffers();
 }
 
-
-
 inline bool Game::hasMouse()
 {
     return Platform::hasMouse();
@@ -103,6 +106,11 @@ inline bool Game::isMultiTouch() const
     return Platform::isMultiTouch();
 }
 
+inline bool Game::canExit() const
+{
+    return Platform::canExit();
+}
+
 inline void Game::getAccelerometerValues(float* pitch, float* roll)
 {
     Platform::getAccelerometerValues(pitch, roll);
@@ -116,6 +124,11 @@ inline void Game::displayKeyboard(bool display)
 inline unsigned int Game::getGamepadCount() const
 {
     return _gamepads->size();
+}
+
+inline unsigned int Game::getGamepadsConnected()
+{
+    return Platform::getGamepadsConnected();
 }
 
 inline Gamepad* Game::getGamepad(unsigned int index) const

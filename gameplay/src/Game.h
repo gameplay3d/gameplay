@@ -4,8 +4,10 @@
 #include <queue>
 
 #include "Keyboard.h"
-#include "Touch.h"
 #include "Mouse.h"
+#include "Touch.h"
+#include "Gesture.h"
+#include "Gamepad.h"
 #include "AudioController.h"
 #include "AnimationController.h"
 #include "PhysicsController.h"
@@ -14,7 +16,7 @@
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
-#include "Gamepad.h"
+
 
 namespace gameplay
 {
@@ -26,6 +28,9 @@ class ScriptController;
  */
 class Game
 {
+
+    friend class Platform;
+
 public:
     
     /**
@@ -169,6 +174,13 @@ public:
      * @return The game window height.
      */
     inline unsigned int getHeight() const;
+    
+    /**
+     * Gets the aspect ratio of the window. (width / height)
+     * 
+     * @return The aspect ratio of the window.
+     */
+    inline float getAspectRatio() const;
 
     /**
      * Gets the game current viewport.
@@ -178,7 +190,7 @@ public:
     inline const Rectangle& getViewport() const;
 
     /**
-     * Set the game current viewport.
+     * Sets the game current viewport.
      *
      * The x, y, width and height of the viewport must all be positive.
      *
@@ -195,6 +207,19 @@ public:
      * @param clearStencil The stencil value to clear to when the flags includes the color buffer.
      */
     void clear(ClearFlags flags, const Vector4& clearColor, float clearDepth, int clearStencil);
+
+    /**
+     * Clears the specified resource buffers to the specified clear values. 
+     * 
+     * @param flags The flags indicating which buffers to be cleared.
+     * @param red The red channel.
+     * @param green The green channel.
+     * @param blue The blue channel.
+     * @param alpha The alpha channel.
+     * @param clearDepth The depth value to clear to when the flags includes the color buffer.
+     * @param clearStencil The stencil value to clear to when the flags includes the color buffer.
+     */
+    void clear(ClearFlags flags, float red, float green, float blue, float alpha, float clearDepth, int clearStencil);
 
     /**
      * Gets the audio controller for managing control of audio
@@ -244,7 +269,7 @@ public:
     AudioListener* getAudioListener();
 
     /**
-     * Menu callback on menu events for platforms with special menu keys or gestures.
+     * Menu callback on menu events for platforms with special menu keys or special platform gestures.
      */
     virtual void menuEvent();
     
@@ -336,7 +361,82 @@ public:
     inline bool isCursorVisible();
 
     /**
-     * Gamepad callback on gamepad events.
+     * Determines whether a specified gesture event is supported.
+     *
+     * Use Gesture::GESTURE_ANY_SUPPORTED to test if one or more gesture events are supported.
+     *
+     * @param evt The gesture event to test and see if it is supported.
+     * @return true if the gesture tested is supported; false if not supported.
+     */
+    bool isGestureSupported(Gesture::GestureEvent evt);
+
+    /**
+     * Requests the game to register and start recognizing the specified gesture event.
+     *
+     * Call with Gesture::GESTURE_ANY_SUPPORTED to recognize all supported gestures.
+     * Once a gesture is recognized the specific gesture event methods will
+     * begin to be called.
+     *
+     * Registering for:
+     *
+     * Gesture::GESTURE_SWIPE calls gestureSwipeEvent(..)
+     * Gesture::GESTURE_PINCH calls gesturePinchEvent(..)
+     * Gesture::GESTURE_TAP calls gestureTapEvent(..)
+     *
+     * @param evt The gesture event to start recognizing for
+     */
+    void registerGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Requests the game to unregister for and stop recognizing the specified gesture event.
+     *
+     * Call with Gesture::GESTURE_ANY_SUPPORTED to unregister events from all supported gestures.
+     *
+     * @param evt The gesture event to start recognizing for
+     */
+    void unregisterGesture(Gesture::GestureEvent evt);
+
+    /**
+     * Determines whether a specified gesture event is registered to receive event callbacks.
+     *
+     * @return true if the specified gesture event is registered; false of not registered.
+     */
+    bool isGestureRegistered(Gesture::GestureEvent evt);
+
+    /**
+     * Gesture callback on Gesture::SWIPE events.
+     *
+     * @param x The x-coordinate of the start of the swipe.
+     * @param y The y-coordinate of the start of the swipe.
+     * @param direction The direction of the swipe
+     *
+     * @see Gesture::SWIPE_DIRECTION_UP
+     * @see Gesture::SWIPE_DIRECTION_DOWN
+     * @see Gesture::SWIPE_DIRECTION_LEFT
+     * @see Gesture::SWIPE_DIRECTION_RIGHT
+     */
+    virtual void gestureSwipeEvent(int x, int y, int direction);
+
+    /**
+     * Gesture callback on Gesture::PINCH events.
+     *
+     * @param x The centroid x-coordinate of the pinch.
+     * @param y The centroid y-coordinate of the pinch.
+     * @param scale The scale of the pinch.
+     */
+    virtual void gesturePinchEvent(int x, int y, float scale);
+
+    /**
+     * Gesture callback on Gesture::TAP events.
+     *
+     * @param x The x-coordinate of the tap.
+     * @param y The y-coordinate of the tap.
+     */
+    virtual void gestureTapEvent(int x, int y);
+
+    /**
+     * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
+     * and Gamepad::DISCONNECTED_EVENT.
      *
      * @param evt The gamepad event that occurred.
      * @param gamepad the gamepad the event occurred on
@@ -344,11 +444,19 @@ public:
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
-     * Gets the number of gamepad's connected to the game.
+     * Gets the number of gamepad's that can be used in the game. Includes gamepads not connected.
      * 
-     * @return The number of gamepad's connected to the game.
+     * @return The number of gamepad's that can be used in the game.
      */
     inline unsigned int getGamepadCount() const;
+
+    /**
+     * Gets the number of physical gamepad's attached/connected to the game.
+     * Can be called to detects if any gamepads have been attached or detached.
+     * 
+     * @return The number of gamepads attached to the Platform.
+     */
+    inline unsigned int getGamepadsConnected();
 
     /**
      * Gets the gamepad at the specified index.
@@ -367,9 +475,16 @@ public:
     /**
      * Is multi-touch mode enabled.
      *
-     * @return true is multi-touch is enabled.
+     * @return true if multi-touch is enabled.
      */
     inline bool isMultiTouch() const;
+
+    /**
+     * Whether this game is allowed to exit programmatically.
+     *
+     * @return true if a programmatic exit is allowed.
+     */
+    inline bool canExit() const;
 
     /**
      * Gets the current accelerometer values.
@@ -541,8 +656,19 @@ private:
      */
     Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
 
+    /**
+     * Creates a Gamepad object for a physical gamepad.
+     */
+    unsigned int createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount);
+
+    /**
+     * Triggers any Gamepad::CONNECTED_EVENTS after initialization.
+     */
+    void triggerGamepadEvents();
+
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
+    unsigned int _pausedCount;                  // Number of times pause() has been called.
     static double _pausedTimeLast;              // The last time paused.
     static double _pausedTimeTotal;             // The total time paused.
     double _frameLastFPS;                       // The last time the frame count was updated.

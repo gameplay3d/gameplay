@@ -88,8 +88,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ab79068c8eeaa3a4daf6ea1f7a8adc3c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">GamepadEvent</a> { <b>ATTACHED_EVENT</b>, 
-<b>DETACHED_EVENT</b>
+<tr class="memitem:ab79068c8eeaa3a4daf6ea1f7a8adc3c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">GamepadEvent</a> { <b>CONNECTED_EVENT</b>, 
+<b>DISCONNECTED_EVENT</b>
  }</td></tr>
 <tr class="memitem:a694e7bfa39b124303ee059e0635e9486"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a694e7bfa39b124303ee059e0635e9486">ButtonState</a> { <b>BUTTON_PRESSED</b> =  gameplay::Button::Listener::PRESS, 
 <b>BUTTON_RELEASED</b> =  gameplay::Button::Listener::RELEASE
@@ -101,7 +101,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a17eb6b6e18cd4755e0ed2fc487d30336"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html#a694e7bfa39b124303ee059e0635e9486">ButtonState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a17eb6b6e18cd4755e0ed2fc487d30336">getButtonState</a> (unsigned int buttonId) const </td></tr>
 <tr class="memitem:af6b0a3adba913eb7b987e98934016137"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#af6b0a3adba913eb7b987e98934016137">getJoystickCount</a> () const </td></tr>
 <tr class="memitem:a80676c4185a605488f575a07e78c9fd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a80676c4185a605488f575a07e78c9fd8">isJoystickActive</a> (unsigned int joystickId) const </td></tr>
-<tr class="memitem:a9c8d804945e850442fba1351c7d9f6b5"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a9c8d804945e850442fba1351c7d9f6b5">getJoystickValue</a> (unsigned int joystickId) const </td></tr>
+<tr class="memitem:aa006baca6d604dc66d20a7455beed03c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#aa006baca6d604dc66d20a7455beed03c">getJoystickAxisValues</a> (unsigned int joystickId, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *outValues) const </td></tr>
+<tr class="memitem:a38b5868764530a03ea6a6d064d2d2be5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a38b5868764530a03ea6a6d064d2d2be5">getJoystickAxisX</a> (unsigned int joystickId) const </td></tr>
+<tr class="memitem:a57bba5356136f49491caedd0fd7cb470"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a57bba5356136f49491caedd0fd7cb470">getJoystickAxisY</a> (unsigned int joystickId) const </td></tr>
 <tr class="memitem:aad447cbdd1a03ae1fd27b7d7ac2da17d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#aad447cbdd1a03ae1fd27b7d7ac2da17d">isVirtual</a> () const </td></tr>
 <tr class="memitem:a0b2de80713f58635c141a66717b9683a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_form.html">Form</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#a0b2de80713f58635c141a66717b9683a">getForm</a> () const </td></tr>
 <tr class="memitem:ad38b2f6bee5c6cdf8a9a4222a84df7c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_gamepad.html#ad38b2f6bee5c6cdf8a9a4222a84df7c5">update</a> (float elapsedTime)</td></tr>
@@ -236,6 +238,91 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa006baca6d604dc66d20a7455beed03c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_gamepad.html#aa006baca6d604dc66d20a7455beed03c">gameplay::Gamepad::getJoystickAxisValues</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>joystickId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *&#160;</td>
+          <td class="paramname"><em>outValues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the specified joystick's value as a <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">joystickId</td><td>The index of the joystick to get the value for. </td></tr>
+    <tr><td class="paramname">outValues</td><td>The current x-axis and y-asix value displacement of the joystick. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a38b5868764530a03ea6a6d064d2d2be5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_gamepad.html#a38b5868764530a03ea6a6d064d2d2be5">gameplay::Gamepad::getJoystickAxisX</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>joystickId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the specified joystick's x-axis value.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">joystickId</td><td>The index of the joystick to get the x-axis value for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The current value of the joystick's x-axis value. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a57bba5356136f49491caedd0fd7cb470"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_gamepad.html#a57bba5356136f49491caedd0fd7cb470">gameplay::Gamepad::getJoystickAxisY</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>joystickId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the specified joystick's y-axis value.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">joystickId</td><td>The index of the joystick to get the y-axis value for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The current value of the joystick's y-axis value. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af6b0a3adba913eb7b987e98934016137"></a>
 <div class="memitem">
 <div class="memproto">
@@ -251,31 +338,6 @@ Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the number of joysticks on the gamepad.</p>
 <dl class="section return"><dt>Returns:</dt><dd>the number of joysticks on the gamepad. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9c8d804945e850442fba1351c7d9f6b5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>&amp; <a class="el" href="classgameplay_1_1_gamepad.html#a9c8d804945e850442fba1351c7d9f6b5">gameplay::Gamepad::getJoystickValue</a> </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>joystickId</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the specified joystick's value as a <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a>.</p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">joystickId</td><td>The unique integer ID of the joystick to set. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns:</dt><dd>A <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> of the joystick displacement for the specified joystick. </dd></dl>
 
 </div>
 </div>
@@ -344,7 +406,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

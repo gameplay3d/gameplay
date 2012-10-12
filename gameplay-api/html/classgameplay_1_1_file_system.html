@@ -100,6 +100,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6a2fa61565252c8652bc4b972444d905"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a6a2fa61565252c8652bc4b972444d905">fileExists</a> (const char *filePath)</td></tr>
 <tr class="memitem:ad51e142f9305ac652edd4989197dba87"><td class="memItemLeft" align="right" valign="top">static FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ad51e142f9305ac652edd4989197dba87">openFile</a> (const char *filePath, const char *mode)</td></tr>
 <tr class="memitem:af65e3195958242239fcb8db228a9db0c"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#af65e3195958242239fcb8db228a9db0c">readAll</a> (const char *filePath, int *fileSize=NULL)</td></tr>
+<tr class="memitem:a0e8074b04446a8087899d3559e9b0d09"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a0e8074b04446a8087899d3559e9b0d09">isAbsolutePath</a> (const char *filePath)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a set of functions for interacting with the device filesystem. </p>
@@ -162,6 +163,31 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Returns the currently set resource path.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The currently set resource path. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0e8074b04446a8087899d3559e9b0d09"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classgameplay_1_1_file_system.html#a0e8074b04446a8087899d3559e9b0d09">gameplay::FileSystem::isAbsolutePath</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Determines if the file path is an absolute path for the current platform.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>The file path to test.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>True if the path is an absolute path or false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -384,7 +410,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:12 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

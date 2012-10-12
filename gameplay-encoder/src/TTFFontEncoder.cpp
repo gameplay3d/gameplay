@@ -43,7 +43,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     FT_Error error = FT_Init_FreeType(&library);
     if (error)
     {
-        fprintf(stderr, "FT_Init_FreeType error: %d \n", error);
+        LOG(1, "FT_Init_FreeType error: %d \n", error);
         return -1;
     }
     
@@ -52,7 +52,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     error = FT_New_Face(library, inFilePath, 0, &face);
     if (error)
     {
-        fprintf(stderr, "FT_New_Face error: %d \n", error);
+        LOG(1, "FT_New_Face error: %d \n", error);
         return -1;
     }
     
@@ -66,7 +66,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     
     if (error)
     {
-        fprintf(stderr, "FT_Set_Char_Size error: %d \n", error);
+        LOG(1, "FT_Set_Char_Size error: %d \n", error);
         return -1;
     }
 
@@ -74,7 +74,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     error = FT_Set_Pixel_Sizes(face, FONT_SIZE, 0);
     if (error)
     {
-        fprintf(stderr, "FT_Set_Pixel_Sizes error : %d \n", error);
+        LOG(1, "FT_Set_Pixel_Sizes error : %d \n", error);
         exit(1);
     }
     */
@@ -92,7 +92,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
         if (error)
         {
-            fprintf(stderr, "FT_Load_Char error : %d \n", error);
+            LOG(1, "FT_Load_Char error : %d \n", error);
         }
         
         int bitmapRows = slot->bitmap.rows;
@@ -137,7 +137,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
             if (error)
             {
-                fprintf(stderr, "FT_Load_Char error : %d \n", error);
+                LOG(1, "FT_Load_Char error : %d \n", error);
             }
 
             // Glyph image.
@@ -204,7 +204,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         error = FT_Load_Char(face, ascii, FT_LOAD_RENDER);
         if (error)
         {
-            fprintf(stderr, "FT_Load_Char error : %d \n", error);
+            LOG(1, "FT_Load_Char error : %d \n", error);
         }
 
         // Glyph image.
@@ -222,10 +222,10 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             penY = row * rowSize;
             if (penY + rowSize > (int)imageHeight)
             {
-                fprintf(stderr, "Image size exceeded!");
-               return -1;
+                free(imageBuffer);
+				LOG(1, "Image size exceeded!");
+				return -1;
             }
-
         }
         
         // penY should include the glyph offsets.
@@ -298,7 +298,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
     // Close file.
     fclose(gpbFp);
 
-    printf("%s.gpb created successfully. \n", getBaseName(outFilePath).c_str());
+    LOG(1, "%s.gpb created successfully. \n", getBaseName(outFilePath).c_str());
 
     if (fontpreview)
     {
@@ -306,7 +306,7 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
         std::string pgmFilePath = getFilenameNoExt(outFilePath);
         pgmFilePath.append(".pgm");
         FILE *imageFp = fopen(pgmFilePath.c_str(), "wb");
-        fprintf(imageFp, "P5 %d %d 255\n", imageWidth, imageHeight);
+        fprintf(imageFp, "P5 %u %u 255\n", imageWidth, imageHeight);
         fwrite((const char *)imageBuffer, sizeof(unsigned char), imageWidth * imageHeight, imageFp);
         fclose(imageFp);
     }

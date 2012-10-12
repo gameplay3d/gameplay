@@ -7,10 +7,8 @@
 #include "Form.h"
 #include "ScriptController.h"
 #include <unistd.h>
-
 #include <android/sensor.h>
 #include <android_native_app_glue.h>
-
 #include <android/log.h>
 
 // Externally referenced global variables.
@@ -45,6 +43,24 @@ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
 PFNGLISVERTEXARRAYOESPROC glIsVertexArray = NULL;
 
+#define GESTURE_TAP_DURATION_MAX    200
+#define GESTURE_SWIPE_DURATION_MAX  400
+#define GESTURE_SWIPE_DISTANCE_MIN  50
+
+static std::bitset<3> __gestureEventsProcessed;
+
+struct TouchPointerData
+{
+    size_t pointerId;
+    bool pressed;
+    double time;
+    int x;
+    int y;
+};
+
+TouchPointerData __pointer0;
+TouchPointerData __pointer1;
+
 namespace gameplay
 {
 
@@ -54,7 +70,7 @@ static double timespec2millis(struct timespec *a)
     return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
@@ -85,21 +101,33 @@ static EGLenum checkErrorEGL(const char* msg)
         "EGL power management event has occurred",
     };
     EGLenum error = eglGetError();
-    printError("%s: %s.", msg, errmsg[error - EGL_SUCCESS]);
+    print("%s: %s.", msg, errmsg[error - EGL_SUCCESS]);
     return error;
 }
 
 // Initialized EGL resources.
 static bool initEGL()
 {
+	int samples = 0;
+	Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+	if (config)
+	{
+		samples = std::max(config->getInt("samples"), 0);
+	}
+
     // Hard-coded to 32-bit/OpenGL ES 2.0.
+    // NOTE: EGL_SAMPLE_BUFFERS, EGL_SAMPLES and EGL_DEPTH_SIZE MUST remain at the beginning of the attribute list
+    // since they are expected to be at indices 0-5 in config fallback code later.
+	// EGL_DEPTH_SIZE is also expected to
     EGLint eglConfigAttrs[] =
     {
+		EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+		EGL_SAMPLES,            samples,
+		EGL_DEPTH_SIZE,         24,
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
         EGL_BLUE_SIZE,          8,
         EGL_ALPHA_SIZE,         8,
-        EGL_DEPTH_SIZE,         24,
         EGL_STENCIL_SIZE,       8,
         EGL_SURFACE_TYPE,       EGL_WINDOW_BIT,
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
@@ -128,30 +156,59 @@ static bool initEGL()
             checkErrorEGL("eglGetDisplay");
             goto error;
         }
-    
+
         if (eglInitialize(__eglDisplay, NULL, NULL) != EGL_TRUE)
         {
             checkErrorEGL("eglInitialize");
             goto error;
         }
-    
-        if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE)
-        {
-            checkErrorEGL("eglChooseConfig");
-            goto error;
-        }
-        
-        if (eglConfigCount == 0)
-        {
-            // try 16 bit depth buffer instead
-            eglConfigAttrs[9] = 16;
-            if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
-            {
-                checkErrorEGL("eglChooseConfig");
-                goto error;
-            }
-        }
-    
+
+		// Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
+		bool validConfig = false;
+		EGLint depthSizes[] = { 24, 16 };
+		for (unsigned int i = 0; i < 2; ++i)
+		{
+			eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+			eglConfigAttrs[3] = samples;
+			eglConfigAttrs[5] = depthSizes[i];
+
+			if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+			{
+				validConfig = true;
+				break;
+			}
+
+			if (samples)
+			{
+				// Try lowering the MSAA sample size until we find a supported config
+				int sampleCount = samples;
+				while (sampleCount)
+				{
+					GP_WARN("No EGL config found for depth_size=%d and samples=%d. Trying samples=%d instead.", depthSizes[i], sampleCount, sampleCount / 2);
+					sampleCount /= 2;
+					eglConfigAttrs[1] = sampleCount > 0 ? 1 : 0;
+					eglConfigAttrs[3] = sampleCount;
+					if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+					{
+						validConfig = true;
+						break;
+					}
+				}
+				if (validConfig)
+					break;
+			}
+			else
+			{
+				GP_WARN("No EGL config found for depth_size=%d.", depthSizes[i]);
+			}
+		}
+
+		if (!validConfig)
+		{
+			checkErrorEGL("eglChooseConfig");
+			goto error;
+		}
+
         __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
         if (__eglContext == EGL_NO_CONTEXT)
         {
@@ -579,50 +636,177 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
         size_t pointerIndex;
         size_t pointerId;
         size_t pointerCount;
+        int x;
+        int y;
+        
         switch (action & AMOTION_EVENT_ACTION_MASK)
         {
             case AMOTION_EVENT_ACTION_DOWN:
-                // Primary pointer down.
-                pointerId = AMotionEvent_getPointerId(event, 0);
-                gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
-                __primaryTouchId = pointerId;
-                break;
-            case AMOTION_EVENT_ACTION_UP:
-                pointerId = AMotionEvent_getPointerId(event, 0);
-                if (__multiTouch || __primaryTouchId == pointerId)
                 {
-                    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, 0), AMotionEvent_getY(event, 0), pointerId);
+                    pointerId = AMotionEvent_getPointerId(event, 0);
+                    x = AMotionEvent_getX(event, 0);
+                    y = AMotionEvent_getY(event, 0);
+
+                    // Gesture handling
+                    if ( __gestureEventsProcessed.test(Gesture::GESTURE_TAP) ||
+                         __gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) )
+                    {
+                        __pointer0.pressed = true;
+                        __pointer0.time = Game::getInstance()->getAbsoluteTime();
+                        __pointer0.pointerId = pointerId;
+                        __pointer0.x = x;
+                        __pointer0.y = y;
+                    }
+
+                    // Primary pointer down.
+                    gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, x, y, pointerId);
+                    __primaryTouchId = pointerId;
                 }
-                __primaryTouchId = -1;
                 break;
+
+            case AMOTION_EVENT_ACTION_UP:
+                {
+                    pointerId = AMotionEvent_getPointerId(event, 0);
+                    x = AMotionEvent_getX(event, 0);
+                    y = AMotionEvent_getY(event, 0);
+                    
+                    // Gestures
+                    bool gestureDetected = false;
+                    if ( __pointer0.pressed &&  __pointer0.pointerId == pointerId)
+                    {
+                        int deltaX = x - __pointer0.x;
+                        int deltaY = y - __pointer0.y;
+
+                        // Test for swipe
+                        if (__gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) &&
+                            gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time < GESTURE_SWIPE_DURATION_MAX && 
+                            (abs(deltaX) > GESTURE_SWIPE_DISTANCE_MIN || abs(deltaY) > GESTURE_SWIPE_DISTANCE_MIN) )
+                        {
+                            int direction = 0;
+                            if ( abs(deltaX) > abs(deltaY) )
+                            {
+                                if (deltaX > 0)
+                                    direction = gameplay::Gesture::SWIPE_DIRECTION_RIGHT;
+                                else if (deltaX < 0)
+                                    direction = gameplay::Gesture::SWIPE_DIRECTION_LEFT;
+                            }
+                            else
+                            {
+                                if (deltaY > 0)
+                                    direction = gameplay::Gesture::SWIPE_DIRECTION_DOWN;
+                                else if (deltaY < 0)
+                                    direction = gameplay::Gesture::SWIPE_DIRECTION_UP;
+                            }
+                            gameplay::Game::getInstance()->gestureSwipeEvent(x, y, direction);
+                            __pointer0.pressed = false;
+                            gestureDetected = true;
+                        }
+                        else if(__gestureEventsProcessed.test(Gesture::GESTURE_TAP) &&
+                               gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time < GESTURE_TAP_DURATION_MAX)
+                        {
+                            gameplay::Game::getInstance()->gestureTapEvent(x, y);
+                            __pointer0.pressed = false;
+                            gestureDetected = true;
+                        }
+                    }
+
+                    if (!gestureDetected && (__multiTouch || __primaryTouchId == pointerId) )
+                    {
+                        gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, x, y, pointerId);
+                    }
+                    __primaryTouchId = -1;
+                }
+                break;
+
             case AMOTION_EVENT_ACTION_POINTER_DOWN:
-                // Non-primary pointer down.
-                if (__multiTouch)
+                {
+                    pointerId = AMotionEvent_getPointerId(event, 0);
+                    x = AMotionEvent_getX(event, 0);
+                    y = AMotionEvent_getY(event, 0);
+
+                    // Gesture handling
+                    if ( __gestureEventsProcessed.test(Gesture::GESTURE_TAP) ||
+                         __gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) )
+                    {
+                        __pointer1.pressed = true;
+                        __pointer1.time = Game::getInstance()->getAbsoluteTime();
+                        __pointer1.pointerId = pointerId;
+                        __pointer1.x = x;
+                        __pointer1.y = y;
+                    }
+
+                    // Non-primary pointer down.
+                    if (__multiTouch)
+                    {
+                        pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                        pointerId = AMotionEvent_getPointerId(event, pointerIndex);
+                        gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
+                    }
+                }
+                break;
+
+            case AMOTION_EVENT_ACTION_POINTER_UP:
                 {
                     pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
                     pointerId = AMotionEvent_getPointerId(event, pointerIndex);
-                    gameplay::Platform::touchEventInternal(Touch::TOUCH_PRESS, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
-                }
-                break;
-            case AMOTION_EVENT_ACTION_POINTER_UP:
-                pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-                pointerId = AMotionEvent_getPointerId(event, pointerIndex);
-                if (__multiTouch || __primaryTouchId == pointerId)
-                {
-                    gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
-                }
-                if (__primaryTouchId == pointerId)
-                    __primaryTouchId = -1;
-                break;
-            case AMOTION_EVENT_ACTION_MOVE:
-                // ACTION_MOVE events are batched, unlike the other events.
-                pointerCount = AMotionEvent_getPointerCount(event);
-                for (size_t i = 0; i < pointerCount; ++i)
-                {
-                    pointerId = AMotionEvent_getPointerId(event, i);
-                    if (__multiTouch || __primaryTouchId == pointerId)
+                    x = AMotionEvent_getX(event, 0);
+                    y = AMotionEvent_getY(event, 0);
+
+                    bool gestureDetected = false;
+                    if ( __pointer1.pressed &&  __pointer1.pointerId == pointerId)
                     {
-                        gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+                        int deltaX = x - __pointer1.x;
+                        int deltaY = y - __pointer1.y;
+
+                        // Test for swipe
+                        if (__gestureEventsProcessed.test(Gesture::GESTURE_SWIPE) &&
+                            gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time < GESTURE_SWIPE_DURATION_MAX && 
+                            (abs(deltaX) > GESTURE_SWIPE_DISTANCE_MIN || abs(deltaY) > GESTURE_SWIPE_DISTANCE_MIN) )
+                        {
+                            int direction;
+                            if (deltaX > 0)
+                                direction |= gameplay::Gesture::SWIPE_DIRECTION_RIGHT;
+                            else if (deltaX < 0)
+                                direction |= gameplay::Gesture::SWIPE_DIRECTION_LEFT;
+                            
+                            if (deltaY > 0)
+                                direction |= gameplay::Gesture::SWIPE_DIRECTION_DOWN;
+                            else if (deltaY < 0)
+                                direction |= gameplay::Gesture::SWIPE_DIRECTION_UP;
+
+                            gameplay::Game::getInstance()->gestureSwipeEvent(x, y, direction);
+                            __pointer1.pressed = false;
+                            gestureDetected = true;
+                        }
+                        else if(__gestureEventsProcessed.test(Gesture::GESTURE_TAP) &&
+                               gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time < GESTURE_TAP_DURATION_MAX)
+                        {
+                            gameplay::Game::getInstance()->gestureTapEvent(x, y);
+                            __pointer1.pressed = false;
+                            gestureDetected = true;
+                        }
+                    }
+
+                    if (!gestureDetected && (__multiTouch || __primaryTouchId == pointerId) )
+                    {
+                        gameplay::Platform::touchEventInternal(Touch::TOUCH_RELEASE, AMotionEvent_getX(event, pointerIndex), AMotionEvent_getY(event, pointerIndex), pointerId);
+                    }
+                    if (__primaryTouchId == pointerId)
+                        __primaryTouchId = -1;
+                }
+                break;
+
+            case AMOTION_EVENT_ACTION_MOVE:
+                {
+                    // ACTION_MOVE events are batched, unlike the other events.
+                    pointerCount = AMotionEvent_getPointerCount(event);
+                    for (size_t i = 0; i < pointerCount; ++i)
+                    {
+                        pointerId = AMotionEvent_getPointerId(event, i);
+                        if (__multiTouch || __primaryTouchId == pointerId)
+                        {
+                            gameplay::Platform::touchEventInternal(Touch::TOUCH_MOVE, AMotionEvent_getX(event, i), AMotionEvent_getY(event, i), pointerId);
+                        }
                     }
                 }
                 break;
@@ -853,6 +1037,11 @@ void Platform::signalShutdown()
 {
     // nothing to do  
 }
+
+bool Platform::canExit()
+{
+    return true;
+}
    
 unsigned int Platform::getDisplayWidth()
 {
@@ -887,6 +1076,18 @@ void Platform::setVsync(bool enable)
 {
     eglSwapInterval(__eglDisplay, enable ? 1 : 0);
     __vsync = enable;
+}
+
+
+void Platform::swapBuffers()
+{
+    if (__eglDisplay && __eglSurface)
+        eglSwapBuffers(__eglDisplay, __eglSurface);
+}
+
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 void Platform::setMultiTouch(bool enabled)
@@ -958,12 +1159,6 @@ bool Platform::isCursorVisible()
     return false;
 }
 
-void Platform::swapBuffers()
-{
-    if (__eglDisplay && __eglSurface)
-        eglSwapBuffers(__eglDisplay, __eglSurface);
-}
-
 void Platform::displayKeyboard(bool display)
 {
     if (display)
@@ -1006,9 +1201,110 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::sleep(long ms)
+bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
+    // Pinch currently not implemented
+    return evt == gameplay::Gesture::GESTURE_SWIPE || evt == gameplay::Gesture::GESTURE_TAP;
+}
+
+void Platform::registerGesture(Gesture::GestureEvent evt)
+{
+    switch(evt)
+    {
+    case Gesture::GESTURE_ANY_SUPPORTED:
+        __gestureEventsProcessed.set();
+        break;
+
+    case Gesture::GESTURE_TAP:
+    case Gesture::GESTURE_SWIPE:
+        __gestureEventsProcessed.set(evt);
+        break;
+
+    default:
+        break;
+    }
+}
+
+void Platform::unregisterGesture(Gesture::GestureEvent evt)
+{
+    switch(evt)
+    {
+    case Gesture::GESTURE_ANY_SUPPORTED:
+        __gestureEventsProcessed.reset();
+        break;
+
+    case Gesture::GESTURE_TAP:
+    case Gesture::GESTURE_SWIPE:
+        __gestureEventsProcessed.set(evt, 0);
+        break;
+
+    default:
+        break;
+    }
+}
+    
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return __gestureEventsProcessed.test(evt);
+}
+
+unsigned int Platform::getGamepadsConnected()
+{
+    return 0;
+}
+
+bool Platform::isGamepadConnected(unsigned int gamepadHandle)
+{
+    return false;
+}
+
+const char* Platform::getGamepadId(unsigned int gamepadHandle)
+{
+    return NULL;
+}
+
+unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
+{
+    return false;
+}
+
+unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return false;
+}
+
+float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return 0.0f;
+}
+
+float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return 0.0f;
+}
+
+void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
+{
+}
+
+unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
+{
+    return 0.0f;
 }
 
 }

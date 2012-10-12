@@ -45,6 +45,13 @@ public:
     const char* getName() const;
 
     /**
+     * Returns the texture sampler or NULL if this MaterialParameter is not a sampler type.
+     * 
+     * @return The texture sampler or NULL if this MaterialParameter is not a sampler type.
+     */
+    Texture::Sampler* getSampler() const;
+
+    /**
      * Sets the value of this parameter to a float value.
      */
     void setValue(float value);

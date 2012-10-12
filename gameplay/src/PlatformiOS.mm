@@ -51,16 +51,25 @@ int getKey(unichar keyCode);
 
 @interface View : UIView <UIKeyInput>
 {
-    EAGLContext* context;	
+    EAGLContext* context;
     CADisplayLink* displayLink;
+    BOOL updateFramebuffer;
     GLuint defaultFramebuffer;
     GLuint colorRenderbuffer;
     GLuint depthRenderbuffer;
     GLint framebufferWidth;
-    GLint framebufferHeight;    
+    GLint framebufferHeight;
+    GLuint multisampleFramebuffer;
+    GLuint multisampleRenderbuffer;
+    GLuint multisampleDepthbuffer;
     NSInteger swapInterval;
     BOOL updating;
-    Game* _game;
+    Game* game;
+    BOOL oglDiscardSupported;
+    
+    UITapGestureRecognizer *_tapRecognizer;
+    UIPinchGestureRecognizer *_pinchRecognizer;
+    UISwipeGestureRecognizer *_swipeRecognizer;
 }
 
 @property (readonly, nonatomic, getter=isUpdating) BOOL updating;
@@ -78,10 +87,9 @@ int getKey(unichar keyCode);
 @end
 
 @interface View (Private)
-- (void)createFramebuffer;
+- (BOOL)createFramebuffer;
 - (void)deleteFramebuffer;
 @end
-
 
 @implementation View
 
@@ -107,9 +115,19 @@ int getKey(unichar keyCode);
         }
         else
         {
-            printError("Invalid OS Version: %s\n", (currSysVer == NULL?"NULL":[currSysVer cStringUsingEncoding:NSASCIIStringEncoding]));
+            GP_ERROR("Invalid OS Version: %s\n", (currSysVer == NULL?"NULL":[currSysVer cStringUsingEncoding:NSASCIIStringEncoding]));
             [self release];
             return nil;
+        }
+        
+        // Check for OS 4.0+ features
+        if ([currSysVer compare:@"4.0" options:NSNumericSearch] != NSOrderedAscending)
+        {
+            oglDiscardSupported = YES;
+        }
+        else
+        {
+            oglDiscardSupported = NO;
         }
         
         // Configure the CAEAGLLayer and setup out the rendering context
@@ -125,42 +143,37 @@ int getKey(unichar keyCode);
         context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!context || ![EAGLContext setCurrentContext:context])
         {
+            GP_ERROR("Failed to make context current.");
             [self release];
             return nil;
         }
 
-        if (!defaultFramebuffer)
-        {
-            [self createFramebuffer];
-        }
-            
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-        glViewport(0, 0, framebufferWidth, framebufferHeight);
-
         // Initialize Internal Defaults
         displayLink = nil;
+        updateFramebuffer = YES;
         defaultFramebuffer = 0;
         colorRenderbuffer = 0;
         depthRenderbuffer = 0;
         framebufferWidth = 0;
         framebufferHeight = 0;
+        multisampleFramebuffer = 0;
+        multisampleRenderbuffer = 0;
+        multisampleDepthbuffer = 0;
         swapInterval = 1;        
         updating = FALSE;
-        
-        [self createFramebuffer];
+        game = nil;
         
         // Set the resource path and initalize the game
         NSString* bundlePath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/"];
         FileSystem::setResourcePath([bundlePath fileSystemRepresentation]); 
-        
     }
     return self;
 }
 
-
 - (void) dealloc
 {
-    _game->exit();
+    if (game)
+        game->exit();
     [self deleteFramebuffer];
     
     if ([EAGLContext currentContext] == context)
@@ -179,35 +192,111 @@ int getKey(unichar keyCode);
 
 - (void) layoutSubviews
 {
-    // Called on 'resize'
-    [self deleteFramebuffer];
+    // Called on 'resize'.
+    // Mark that framebuffer needs to be updated.
+    // NOTE: Current disabled since we need to have a way to reset the default frame buffer handle
+    // in FrameBuffer.cpp (for FrameBuffer:bindDefault). This means that changing orientation at
+    // runtime is currently not supported until we fix this.
+    //updateFramebuffer = YES;
 }
 
-- (void)createFramebuffer
+- (BOOL)createFramebuffer
 {
     // iOS Requires all content go to a rendering buffer then it is swapped into the windows rendering surface
     assert(defaultFramebuffer == 0);
     
-    // Create the default frame buffer, and render buffer
-    glGenFramebuffers(1, &defaultFramebuffer);
-    glGenRenderbuffers(1, &colorRenderbuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);    
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+    // Create the default frame buffer
+    GL_ASSERT( glGenFramebuffers(1, &defaultFramebuffer) );
+    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
     
-    // request storage, width, and height of the view that we will render in
+    // Create a color buffer to attach to the frame buffer
+    GL_ASSERT( glGenRenderbuffers(1, &colorRenderbuffer) );
+    GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer) );
+    
+    // Associate render buffer storage with CAEAGLLauyer so that the rendered content is display on our UI layer.
     [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight);
     
-    glGenRenderbuffers(1, &depthRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, framebufferWidth, framebufferHeight);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+    // Attach the color buffer to our frame buffer
+    GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer) );
+    
+    // Retrieve framebuffer size
+    GL_ASSERT( glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth) );
+    GL_ASSERT( glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight) );
+    
+    NSLog(@"width: %d, height: %d", framebufferWidth, framebufferHeight);
+    
+    // If multisampling is enabled in config, create and setup a multisample buffer
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+    int samples = config ? config->getInt("samples") : 0;
+    if (samples < 0)
+        samples = 0;
+    if (samples)
+    {
+        // Create multisample framebuffer
+        GL_ASSERT( glGenFramebuffers(1, &multisampleFramebuffer) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, multisampleFramebuffer) );
+        
+        // Create multisample render and depth buffers
+        GL_ASSERT( glGenRenderbuffers(1, &multisampleRenderbuffer) );
+        GL_ASSERT( glGenRenderbuffers(1, &multisampleDepthbuffer) );
+
+        // Try to find a supported multisample configuration starting with the defined sample count
+        while (samples)
+        {
+            GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, multisampleRenderbuffer) );
+            GL_ASSERT( glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_RGBA8_OES, framebufferWidth, framebufferHeight) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, multisampleRenderbuffer) );
+
+            GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, multisampleDepthbuffer) );
+            GL_ASSERT( glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24_OES, framebufferWidth, framebufferHeight) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, multisampleDepthbuffer) );
+            
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+                break; // success!
+            
+            NSLog(@"Creation of multisample buffer with samples=%d failed. Attempting to use configuration with samples=%d instead: %x", samples, samples / 2, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+            samples /= 2;
+        }
+        
+        // Re-bind the default framebuffer
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
+        
+        if (samples == 0)
+        {
+            // Unable to find a valid/supported multisample configuratoin - fallback to no multisampling
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleRenderbuffer) );
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleDepthbuffer) );
+            GL_ASSERT( glDeleteFramebuffers(1, &multisampleFramebuffer) );
+            multisampleFramebuffer = multisampleRenderbuffer = multisampleDepthbuffer = 0;
+        }
+    }
+    
+    // Create default depth buffer and attach to the frame buffer.
+    // Note: If we are using multisample buffers, we can skip depth buffer creation here since we only
+    // need the color buffer to resolve to.
+    if (multisampleFramebuffer == 0)
+    {
+        GL_ASSERT( glGenRenderbuffers(1, &depthRenderbuffer) );
+        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer) );
+        GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, framebufferWidth, framebufferHeight) );
+        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer) );
+    }
     
     // Sanity check, ensure that the framebuffer is valid
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
         NSLog(@"ERROR: Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        [self deleteFramebuffer];
+        return NO;
+    }
+    
+    // If multisampling is enabled, set the currently bound framebuffer to the multisample buffer
+    // since that is the buffer code should be drawing into (and FrameBuffr::initialize will detect
+    // and set this bound buffer as the default one during initialization.
+    if (multisampleFramebuffer)
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, multisampleFramebuffer) );
+    
+    return YES;
 }
 
 - (void)deleteFramebuffer
@@ -217,18 +306,33 @@ int getKey(unichar keyCode);
         [EAGLContext setCurrentContext:context];        
         if (defaultFramebuffer) 
         {
-            glDeleteFramebuffers(1, &defaultFramebuffer);
+            GL_ASSERT( glDeleteFramebuffers(1, &defaultFramebuffer) );
             defaultFramebuffer = 0;
         }        
         if (colorRenderbuffer) 
         {
-            glDeleteRenderbuffers(1, &colorRenderbuffer);
+            GL_ASSERT( glDeleteRenderbuffers(1, &colorRenderbuffer) );
             colorRenderbuffer = 0;
         }
         if (depthRenderbuffer) 
         {
-            glDeleteRenderbuffers(1, &depthRenderbuffer);
+            GL_ASSERT( glDeleteRenderbuffers(1, &depthRenderbuffer) );
             depthRenderbuffer = 0;
+        }
+        if (multisampleFramebuffer)
+        {
+            GL_ASSERT( glDeleteFramebuffers(1, &multisampleFramebuffer) );
+            multisampleFramebuffer = 0;
+        }
+        if (multisampleRenderbuffer)
+        {
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleRenderbuffer) );
+            multisampleRenderbuffer = 0;
+        }
+        if (multisampleDepthbuffer)
+        {
+            GL_ASSERT( glDeleteRenderbuffers(1, &multisampleDepthbuffer) );
+            multisampleDepthbuffer = 0;
         }
     }
 }
@@ -237,7 +341,7 @@ int getKey(unichar keyCode);
 {
     if (interval >= 1)
     {
-        swapInterval = interval;		
+        swapInterval = interval;        
         if (updating)
         {
             [self stopUpdating];
@@ -253,18 +357,48 @@ int getKey(unichar keyCode);
 
 - (void)swapBuffers
 {
-    if (context != nil)
+    if (context)
     {
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+        if (multisampleFramebuffer)
+        {
+            // Multisampling is enabled: resolve the multisample buffer into the default framebuffer
+            GL_ASSERT( glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, defaultFramebuffer) );
+            GL_ASSERT( glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, multisampleFramebuffer) );
+            GL_ASSERT( glResolveMultisampleFramebufferAPPLE() );
+            
+            if (oglDiscardSupported)
+            {
+                // Performance hint that the GL driver can discard the contents of the multisample buffers
+                // since they have now been resolved into the default framebuffer
+                const GLenum discards[]  = { GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT };
+                GL_ASSERT( glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards) );
+            }
+        }
+        else
+        {
+            if (oglDiscardSupported)
+            {
+                // Performance hint to the GL driver that the depth buffer is no longer required.
+                const GLenum discards[]  = { GL_DEPTH_ATTACHMENT };
+                GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
+                GL_ASSERT( glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards) );
+            }
+        }
+        
+        // Present the color buffer
+        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer) );
         [context presentRenderbuffer:GL_RENDERBUFFER];
     }
 }
 
 - (void)startGame 
 {
-    _game = Game::getInstance();
-    __timeStart = getMachTimeInMilliseconds();
-    _game->run();  
+    if (game == nil)
+    {
+        game = Game::getInstance();
+        __timeStart = getMachTimeInMilliseconds();
+        game->run();
+    }
 }
 
 - (void)startUpdating
@@ -274,7 +408,8 @@ int getKey(unichar keyCode);
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
         [displayLink setFrameInterval:swapInterval];
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        _game->resume();
+        if (game)
+            game->resume();
         updating = TRUE;
     }
 }
@@ -283,7 +418,8 @@ int getKey(unichar keyCode);
 {
     if (updating)
     {
-        _game->pause();
+        if (game)
+            game->pause();
         [displayLink invalidate];
         displayLink = nil;
         updating = FALSE;
@@ -294,18 +430,39 @@ int getKey(unichar keyCode);
 {   
     if (context != nil)
     {
+        // Ensure our context is current
         [EAGLContext setCurrentContext:context];
-        if (!defaultFramebuffer)
+        
+        // If the framebuffer needs (re)creating, do so
+        if (updateFramebuffer)
+        {
+            updateFramebuffer = NO;
+            [self deleteFramebuffer];
             [self createFramebuffer];
-        
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-        glViewport(0, 0, framebufferWidth, framebufferHeight);
+            
+            // Start the game after our framebuffer is created for the first time.
+            if (game == nil)
+            {
+                [self startGame];
+                
+                // HACK: Skip the first display update after creating buffers and initializing the game.
+                // If we don't do this, the first frame (which includes any drawing during initialization)
+                // does not make it to the display for some reason.
+                return;
+            }
+        }
 
-        if (_game && _game->getState() == Game::RUNNING)       
-            _game->frame();
+        // Bind our framebuffer for rendering.
+        // If multisampling is enabled, bind the multisample buffer - otherwise bind the default buffer
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, multisampleFramebuffer ? multisampleFramebuffer : defaultFramebuffer) );
+        GL_ASSERT( glViewport(0, 0, framebufferWidth, framebufferHeight) );
         
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-        [context presentRenderbuffer:GL_RENDERBUFFER];
+        // Execute a single game frame
+        if (game)
+            game->frame();
+        
+        // Present the contents of the color buffer
+        [self swapBuffers];
     }
 }
 
@@ -384,6 +541,98 @@ int getKey(unichar keyCode);
     }
 }
 
+// Gesture support for Mac OS X Trackpads
+- (bool)isGestureRegistered: (Gesture::GestureEvent) evt
+{
+    switch(evt) {
+        case Gesture::GESTURE_SWIPE:
+            return (_swipeRecognizer != NULL);
+        case Gesture::GESTURE_PINCH:
+            return (_pinchRecognizer != NULL);
+        case Gesture::GESTURE_TAP:
+            return (_tapRecognizer != NULL);
+        default:
+            break;
+    }
+    return false;
+}
+
+- (void)registerGesture: (Gesture::GestureEvent) evt
+{
+    if((evt & Gesture::GESTURE_SWIPE) == Gesture::GESTURE_SWIPE && _swipeRecognizer == NULL)
+    {
+        _swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+        [self addGestureRecognizer:_swipeRecognizer];
+    }
+    if((evt & Gesture::GESTURE_PINCH) == Gesture::GESTURE_PINCH && _pinchRecognizer == NULL)
+    {
+        _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
+        [self addGestureRecognizer:_pinchRecognizer];
+    }
+    if((evt & Gesture::GESTURE_TAP) == Gesture::GESTURE_TAP && _tapRecognizer == NULL)
+    {
+        _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [self addGestureRecognizer:_tapRecognizer];
+    }
+}
+
+- (void)unregisterGesture: (Gesture::GestureEvent) evt
+{
+    if((evt & Gesture::GESTURE_SWIPE) == Gesture::GESTURE_SWIPE && _swipeRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_swipeRecognizer];
+        [_swipeRecognizer release];
+        _swipeRecognizer = NULL;
+    }
+    if((evt & Gesture::GESTURE_PINCH) == Gesture::GESTURE_PINCH && _pinchRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_pinchRecognizer];
+        [_pinchRecognizer release];
+        _pinchRecognizer = NULL;
+    }
+    if((evt & Gesture::GESTURE_TAP) == Gesture::GESTURE_TAP && _tapRecognizer != NULL)
+    {
+        [self removeGestureRecognizer:_tapRecognizer];
+        [_tapRecognizer release];
+        _tapRecognizer = NULL;
+    }
+}
+
+- (void)handleTapGesture:(UITapGestureRecognizer*)sender
+{
+    CGPoint location = [sender locationInView:self];
+    game->gestureTapEvent(location.x, location.y);
+}
+
+- (void)handlePinchGesture:(UIPinchGestureRecognizer*)sender
+{
+    CGFloat factor = [sender scale];
+    CGPoint location = [sender locationInView:self];
+    game->gesturePinchEvent(location.x, location.y, factor);
+}
+
+- (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
+{
+    UISwipeGestureRecognizerDirection direction = [sender direction];
+    CGPoint location = [sender locationInView:self];
+    int gameplayDirection = 0;
+    switch(direction) {
+        case UISwipeGestureRecognizerDirectionRight:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_RIGHT;
+            break;
+        case UISwipeGestureRecognizerDirectionLeft:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_LEFT;
+            break;
+        case UISwipeGestureRecognizerDirectionUp:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_UP;
+            break;
+        case UISwipeGestureRecognizerDirectionDown:
+            gameplayDirection = Gesture::SWIPE_DIRECTION_DOWN;
+            break;
+    }
+    game->gestureSwipeEvent(location.x, location.y, gameplayDirection);
+}
+
 @end
 
 
@@ -422,8 +671,6 @@ int getKey(unichar keyCode);
     {
         __view = (View*)self.view;
     }
-    // Start the game after assigning __view so Platform object knows about it on game start
-    [(View*)self.view startGame];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -555,7 +802,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application 
-{	
+{    
     [viewController startUpdating];
 }
 
@@ -565,7 +812,7 @@ int getKey(unichar keyCode);
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application 
-{	
+{    
     [viewController stopUpdating];
 }
 
@@ -813,7 +1060,7 @@ int getKey(unichar keyCode)
 namespace gameplay
 {
     
-extern void printError(const char* format, ...)
+extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
     va_list argptr;
@@ -844,7 +1091,7 @@ int Platform::enterMessagePump()
     [pool release];
     return EXIT_SUCCESS;
 }
-    
+
 void Platform::signalShutdown() 
 {
     // Cannot 'exit' an iOS Application
@@ -852,7 +1099,12 @@ void Platform::signalShutdown()
     [__view stopUpdating];
     exit(0);
 }
-    
+
+bool Platform::canExit()
+{
+    return false;
+}
+
 unsigned int Platform::getDisplayWidth()
 {
     CGSize size = DeviceOrientedSize([__appDelegate.viewController interfaceOrientation]);
@@ -884,6 +1136,16 @@ bool Platform::isVsync()
 void Platform::setVsync(bool enable)
 {
     __vsync = enable;
+}
+
+void Platform::swapBuffers()
+{
+    if (__view)
+        [__view swapBuffers];
+}
+void Platform::sleep(long ms)
+{
+    usleep(ms * 1000);
 }
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
@@ -927,12 +1189,6 @@ void Platform::setMultiTouch(bool enabled)
 bool Platform::isMultiTouch() 
 {
     return __view.multipleTouchEnabled;
-}
-
-void Platform::swapBuffers()
-{
-    if (__view)
-        [__view swapBuffers];
 }
 
 void Platform::displayKeyboard(bool display) 
@@ -984,9 +1240,84 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }    
 
-void Platform::sleep(long ms)
+bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    usleep(ms * 1000);
+    return true;
+}
+
+void Platform::registerGesture(Gesture::GestureEvent evt)
+{
+    [__view registerGesture:evt];
+}
+
+void Platform::unregisterGesture(Gesture::GestureEvent evt)
+{
+    [__view unregisterGesture:evt];
+}
+
+bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
+{
+    return [__view isGestureRegistered:evt];
+}
+
+
+unsigned int Platform::getGamepadsConnected()
+{
+    return 0;
+}
+
+bool Platform::isGamepadConnected(unsigned int gamepadHandle)
+{
+    return false;
+}
+
+const char* Platform::getGamepadId(unsigned int gamepadHandle)
+{
+    return NULL;
+}
+
+unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
+{
+    return false;
+}
+
+unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return false;
+}
+
+float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return 0.0f;
+}
+
+float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
+{
+    return 0.0f;
+}
+
+void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
+{
+}
+
+unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
+{
+    return 0;
+}
+
+float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
+{
+    return 0.0f;
 }
     
 }

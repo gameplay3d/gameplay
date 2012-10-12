@@ -16,7 +16,7 @@
 SAMPLE_PATH := $(call my-dir)/../../src
 LIBPNG_PATH := $(call my-dir)/../../../../external-deps/libpng/lib/android/arm
 ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
-LUA_PATH := ../../../../gameplay/external-deps/lua/lib/android/arm
+LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
 VORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
@@ -78,7 +78,7 @@ LOCAL_MODULE    := sample00-mesh
 LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp MeshGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../../GamePlay/external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
+LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
 
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libbullet libvorbis libOpenAL
 

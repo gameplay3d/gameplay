@@ -13,13 +13,15 @@ namespace gameplay
 
 static EncoderArguments* __instance;
 
+extern int __logVerbosity = 1;
+
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontSize(0),
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
     _daeOutput(false),
-    _isHeightmapHighP(false)
+    _optimizeAnimations(false)
 {
     __instance = this;
 
@@ -135,7 +137,6 @@ bool EncoderArguments::containsGroupNodeId(const std::string& nodeId) const
 
 const std::string EncoderArguments::getAnimationId(const std::string& nodeId) const
 {
-    std::vector<std::string>::const_iterator it = find(_groupAnimationNodeId.begin(), _groupAnimationNodeId.end(), nodeId);
     for (size_t i = 0, size = _groupAnimationNodeId.size(); i < size; ++i)
     {
         if (_groupAnimationNodeId[i].compare(nodeId) == 0)
@@ -146,14 +147,9 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
     return "";
 }
 
-const std::vector<std::string>& EncoderArguments::getHeightmapNodeIds() const
+const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeightmapOptions() const
 {
-    return _heightmapNodeIds;
-}
-
-bool EncoderArguments::isHeightmapHighP() const
-{
-    return _isHeightmapHighP;
+    return _heightmaps;
 }
 
 bool EncoderArguments::parseErrorOccured() const
@@ -176,26 +172,36 @@ bool EncoderArguments::fileExists() const
 
 void EncoderArguments::printUsage() const
 {
-    fprintf(stderr,"Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
-    fprintf(stderr,"Supported file extensions:\n");
-    fprintf(stderr,"  .dae\t(COLLADA)\n");
-    fprintf(stderr,"  .fbx\t(FBX)\n");
-    fprintf(stderr,"  .ttf\t(TrueType Font)\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"COLLADA and FBX file options:\n");
-    fprintf(stderr,"  -i <id>\t\tFilter by node ID.\n");
-    fprintf(stderr,"  -t\t\t\tWrite text/xml.\n");
-    fprintf(stderr,"  -g <node id> <animation id>\n" \
-        "\t\t\tGroup all animation channels targeting the nodes into a new animation.\n");
-    fprintf(stderr,"  -h \"<node ids>\"\n" \
-        "\t\t\tList of nodes to generate heightmaps for.\n" \
-        "\t\t\tNode id list should be in quotes with a space between each id.\n" \
-        "\t\t\tHeightmaps will be saved in files named <nodeid>.png.\n" \
-        "\t\t\tFor 24-bit packed height data use -hp instead of -h.\n");
-    fprintf(stderr,"\n");
-    fprintf(stderr,"TTF file options:\n");
-    fprintf(stderr,"  -s <size of font>\tSize of the font.\n");
-    fprintf(stderr,"  -p\t\t\tOutput font preview.\n");
+    LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
+    LOG(1, "Supported file extensions:\n");
+    LOG(1, "  .dae\t(COLLADA)\n");
+    LOG(1, "  .fbx\t(FBX)\n");
+    LOG(1, "  .ttf\t(TrueType Font)\n");
+    LOG(1, "\n");
+    LOG(1, "General Options:\n");
+    LOG(1, "  -v <verbosity>\tVerbosity level (0-4).\n");
+    LOG(1, "\n");
+    LOG(1, "COLLADA and FBX file options:\n");
+    LOG(1, "  -i <id>\tFilter by node ID.\n");
+    LOG(1, "  -t\t\tWrite text/xml.\n");
+    LOG(1, "  -g <node id> <animation id>\n" \
+        "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
+    LOG(1, "  -oa\n" \
+        "\t\tOptimizes animations by analyzing animation channel data and\n" \
+        "\t\tremoving any channels that contain default/identity values\n" \
+        "\t\tand removing any duplicate contiguous keyframes, which are common\n" \
+        "\t\twhen exporting baked animation data.\n");
+    LOG(1, "  -h \"<node ids>\" <filename>\n" \
+        "\t\tGenerates a single heightmap image using meshes from the specified\n" \
+        "\t\tnodes. Node id list should be in quotes with a space between each id.\n" \
+        "\t\tFilename is the name of the image (PNG) to be saved.\n" \
+        "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n" \
+        "\t\tFor 24-bit packed height data use -hp instead of -h.\n");
+    LOG(1, "\n");
+    LOG(1, "TTF file options:\n");
+    LOG(1, "  -s <size>\tSize of the font.\n");
+    LOG(1, "  -p\t\tOutput font preview.\n");
+    LOG(1, "\n");
     exit(8);
 }
 
@@ -212,6 +218,11 @@ bool EncoderArguments::textOutputEnabled() const
 bool EncoderArguments::DAEOutputEnabled() const
 {
     return _daeOutput;
+}
+
+bool EncoderArguments::optimizeAnimationsEnabled() const
+{
+    return _optimizeAnimations;
 }
 
 const char* EncoderArguments::getNodeId() const
@@ -278,7 +289,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             // read one string, make sure not to go out of bounds
             if ((*index + 1) >= options.size())
             {
-                fprintf(stderr, "Error: -dae requires 1 argument.\n");
+                LOG(1, "Error: -dae requires 1 argument.\n");
                 _parseError = true;
                 return;
             }
@@ -293,7 +304,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             // read two strings, make sure not to go out of bounds
             if ((*index + 2) >= options.size())
             {
-                fprintf(stderr, "Error: -g requires 2 arguments.\n");
+                LOG(1, "Error: -g requires 2 arguments.\n");
                 _parseError = true;
                 return;
             }
@@ -304,7 +315,6 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         break;
     case 'i':
-    case 'o':
         // Node ID
         (*index)++;
         if (*index < options.size())
@@ -313,20 +323,32 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         else
         {
-            fprintf(stderr, "Error: missing arguemnt for -%c.\n", str[1]);
+            LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
             _parseError = true;
             return;
+        }
+        break;
+    case 'o':
+        // Optimization flag
+        if (str == "-oa")
+        {
+            // Optimize animations
+            _optimizeAnimations = true;
         }
         break;
     case 'h':
         {
             bool isHighPrecision = str.compare("-hp") == 0;
-            if (str.compare("-heightmaps") == 0 || str.compare("-h") == 0 || isHighPrecision)
+            if (str.compare("-heightmap") == 0 || str.compare("-h") == 0 || isHighPrecision)
             {
-                _isHeightmapHighP = isHighPrecision;
                 (*index)++;
-                if (*index < options.size())
+                if (*index < (options.size() + 1))
                 {
+                    _heightmaps.resize(_heightmaps.size() + 1);
+                    HeightmapOption& heightmap = _heightmaps.back();
+                    
+                    heightmap.isHighPrecision = isHighPrecision;
+
                     // Split node id list into tokens
                     unsigned int length = options[*index].size() + 1;
                     char* nodeIds = new char[length];
@@ -335,14 +357,36 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                     char* id = strtok(nodeIds, " ");
                     while (id)
                     {
-                        _heightmapNodeIds.push_back(id);
+                        heightmap.nodeIds.push_back(id);
                         id = strtok(NULL, " ");
                     }
                     delete[] nodeIds;
+
+                    // Store output filename
+                    (*index)++;
+                    heightmap.filename = options[*index];
+                    if (heightmap.filename.empty())
+                    {
+                        LOG(1, "Error: missing filename argument for -h|-heightmap.\n");
+                        _parseError = true;
+                        return;
+                    }
+                    
+                    // Ensure the output filename has a .png extention
+                    if (heightmap.filename.length() > 5)
+                    {
+                        const char* ext = heightmap.filename.c_str() + (heightmap.filename.length() - 4);
+                        if (ext[0] != '.' || tolower(ext[1]) != 'p' || tolower(ext[2]) != 'n' || tolower(ext[3]) != 'g')
+                            heightmap.filename += ".png";
+                    }
+                    else
+                        heightmap.filename += ".png";
                 }
                 else
                 {
-                    fprintf(stderr, "Error: missing argument for -heightmaps.\n");
+                    LOG(1, "Error: missing argument for -h|-heightmap.\n");
+                    _parseError = true;
+                    return;
                 }
             }
         }
@@ -372,7 +416,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         else
         {
-            fprintf(stderr, "Error: missing arguemnt for -%c.\n", str[1]);
+            LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
             _parseError = true;
             return;
         }
@@ -380,6 +424,16 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     case 't':
         _textOutput = true;
         break;
+    case 'v':
+        (*index)++;
+        if (*index < options.size())
+        {
+            __logVerbosity = atoi(options[*index].c_str());
+            if (__logVerbosity < 0)
+                __logVerbosity = 0;
+            else if (__logVerbosity > 4)
+                __logVerbosity = 4;
+        }
     default:
         break;
     }

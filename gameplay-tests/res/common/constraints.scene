@@ -1,0 +1,67 @@
+scene
+{
+	path = res/common/constraints.gpb
+	
+	node floor
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#staticBox
+	}
+	
+	node wall01
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#staticBox
+	}
+	
+	node wall02
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#staticBox
+	}
+	
+	node door01
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#box
+	}
+	
+	node door02
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#staticBox
+	}
+	
+	node wall03
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#staticBox
+	}
+	
+	node wall04
+	{
+		material = res/common/physics.material#floor
+		collisionObject = res/common/constraints.physics#staticBox
+	}
+	
+	node sphere
+	{
+		material = res/common/physics.material#red
+		collisionObject = res/common/constraints.physics#ball
+	}
+	
+	physics
+	{
+		gravity = 0.0, -9.8, 0.0
+		
+		constraint
+        {
+            type = HINGE
+            rigidBodyA = door01
+            //rotationOffsetA = 0.0, 1.0, 0.0, 90.0
+            translationOffsetA = -5.0, 0.0, 0
+            limits = 0.0, 360.0, 0.0
+            //breakingImpulse = 80.0
+        }
+	}
+}
