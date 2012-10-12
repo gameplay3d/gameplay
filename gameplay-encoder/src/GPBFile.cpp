@@ -67,7 +67,7 @@ bool GPBFile::saveBinary(const std::string& filepath)
     size_t n = 0;
 
     // identifier
-    char identifier[] = { '�', 'G', 'P', 'B', '�', '\r', '\n', '\x1A', '\n' };
+    char identifier[] = { '\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n' };
     n = fwrite(identifier, 1, sizeof(identifier), _file);
     if (n != sizeof(identifier))
     {
