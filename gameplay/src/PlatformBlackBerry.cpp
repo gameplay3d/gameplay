@@ -636,7 +636,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         goto error;
     }
 
-    // Set/get any window prooperties.
+    // Set/get any window properties.
     rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_FORMAT, &screenFormat);
     if (rc)
     {
@@ -1316,7 +1316,7 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
-    // All are supported no need to test th bitset
+    // All are supported no need to test the bitset
     return true;
 }
 
