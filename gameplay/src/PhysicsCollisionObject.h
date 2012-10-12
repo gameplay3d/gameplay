@@ -251,7 +251,7 @@ protected:
         ScriptListener(const char* url);
 
         /**
-         * @see PhysicsColliionObject::CollisionListener
+         * @see PhysicsCollisionObject::CollisionListener
          */
         void collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type, const PhysicsCollisionObject::CollisionPair& collisionPair,
                                     const Vector3& contactPointA, const Vector3& contactPointB);

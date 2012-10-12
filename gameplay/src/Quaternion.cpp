@@ -389,7 +389,7 @@ void Quaternion::slerpForSquad(const Quaternion& q1, const Quaternion& q2, float
     // cos(omega) = q1 * q2;
     // slerp(q1, q2, t) = (q1*sin((1-t)*omega) + q2*sin(t*omega))/sin(omega);
     // q1 = +- q2, slerp(q1,q2,t) = q1.
-    // This is a straight-foward implementation of the formula of slerp. It does not do any sign switching.
+    // This is a straight-forward implementation of the formula of slerp. It does not do any sign switching.
     float c = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 
     if (fabs(c) >= 1.0f)

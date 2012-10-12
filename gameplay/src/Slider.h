@@ -25,7 +25,7 @@ namespace gameplay
         value       = <float>                   // The default position of the marker.
         step        = <float>                   // If greater than 0, force the marker to snap to discrete multiples of 'step'.
         text        = <string>                  // Text to display above, below or alongside the slider (depending on the style).
-        consumeEvents = <bool>                  // Whether the slider propogates input events to the Game's input event handler. Default is true.
+        consumeEvents = <bool>                  // Whether the slider propagates input events to the Game's input event handler. Default is true.
         // TODO: orientation = <HORIZONTAL or VERTICAL>  // Determines whether a slider is stretched along its width or its height
     }
  @endverbatim
