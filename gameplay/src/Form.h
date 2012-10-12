@@ -32,7 +32,7 @@ class Theme;
         size       = <width, height>       // Size of the form, measured in pixels.
         width      = <width>               // Can be used in place of 'size', e.g. with 'autoHeight = true'
         height     = <height>              // Can be used in place of 'size', e.g. with 'autoWidth = true'
-        consumeEvents = <bool>             // Whether the form propogates input events to the Game's input event handler. Default is false
+        consumeEvents = <bool>             // Whether the form propagates input events to the Game's input event handler. Default is false
       
         // All the nested controls within this form.
         container { }

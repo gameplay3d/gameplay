@@ -215,7 +215,7 @@ private:
      *
      * @param type The TargetType of the AnimationTarget.
      * @param propertyIdStr The property ID string.
-     * @return The property ID value for teh property ID string; -1 if the propertyIdStr does not exist
+     * @return The property ID value for the property ID string; -1 if the propertyIdStr does not exist
      *    for the TargetType.
      */
     static int getPropertyId(TargetType type, const char* propertyIdStr);

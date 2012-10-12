@@ -957,7 +957,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                 if (x + _viewportBounds.x >= vBounds.x &&
                     x + _viewportBounds.x <= vBounds.x + vBounds.width)
                 {
-                    // Then we're within the horizontal bounds of the verticle scrollbar.
+                    // Then we're within the horizontal bounds of the vertical scrollbar.
                     // We want to either jump up or down, or drag the scrollbar itself.
                     if (y < vBounds.y)
                     {
