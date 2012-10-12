@@ -9,7 +9,7 @@ int lua_Bundle__gc(lua_State* state);
 int lua_Bundle_addRef(lua_State* state);
 int lua_Bundle_contains(lua_State* state);
 int lua_Bundle_getObjectCount(lua_State* state);
-int lua_Bundle_getObjectID(lua_State* state);
+int lua_Bundle_getObjectId(lua_State* state);
 int lua_Bundle_getRefCount(lua_State* state);
 int lua_Bundle_loadFont(lua_State* state);
 int lua_Bundle_loadMesh(lua_State* state);

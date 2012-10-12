@@ -23,7 +23,7 @@
         return LuaArray<type>((type*)NULL); \
     \
     /* Declare a LuaArray to store the values. */ \
-	LuaArray<type> arr(size); \
+    LuaArray<type> arr(size); \
     \
     /* Push the first key. */ \
     lua_pushnil(sc->_lua); \
@@ -59,13 +59,13 @@ void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
     lua_setglobal(sc->_lua, name);
 }
 
-void ScriptUtil::registerConstantBool(std::string name, bool value, std::vector<std::string> scopePath)
+void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -92,13 +92,13 @@ void ScriptUtil::registerConstantBool(std::string name, bool value, std::vector<
     }
 }
 
-void ScriptUtil::registerConstantNumber(std::string name, double value, std::vector<std::string> scopePath)
+void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -125,13 +125,13 @@ void ScriptUtil::registerConstantNumber(std::string name, double value, std::vec
     }
 }
 
-void ScriptUtil::registerConstantString(std::string name, std::string value, std::vector<std::string> scopePath)
+void ScriptUtil::registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -159,20 +159,20 @@ void ScriptUtil::registerConstantString(std::string name, std::string value, std
 }
 
 void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, 
-    lua_CFunction deleteFunction, const luaL_Reg* statics,  std::vector<std::string> scopePath)
+    lua_CFunction deleteFunction, const luaL_Reg* statics,  const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
     // If the type is an inner type, get the correct parent 
     // table on the stack before creating the table for the class.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         std::string tablename = name;
 
         // Strip off the scope path part of the name.
         lua_getglobal(sc->_lua, scopePath[0].c_str());
         std::size_t index = tablename.find(scopePath[0]);
-        if (index != tablename.npos)
+        if (index != std::string::npos)
             tablename = tablename.substr(index + scopePath[0].size());
         
         for (unsigned int i = 1; i < scopePath.size(); i++)
@@ -181,7 +181,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
             lua_gettable(sc->_lua, -2);
 
             index = tablename.find(scopePath[i]);
-            if (index != tablename.npos)
+            if (index != std::string::npos)
                 tablename = tablename.substr(index + scopePath[i].size());
         }
 
@@ -229,7 +229,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
     }
 
     // Set the table we just created within the correct parent table.
-    if (scopePath.size() > 0)
+    if (!scopePath.empty())
     {
         lua_settable(sc->_lua, -3);
 
@@ -250,7 +250,7 @@ void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunc
     lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
 }
 
-void ScriptUtil::setGlobalHierarchyPair(std::string base, std::string derived)
+void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived)
 {
     Game::getInstance()->getScriptController()->_hierarchy[base].push_back(derived);
 }
@@ -342,7 +342,7 @@ void ScriptController::loadScript(const char* path, bool forceReload)
     {
         const char* scriptContents = FileSystem::readAll(path);
         if (luaL_dostring(_lua, scriptContents))
-            GP_ERROR("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+            GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
 
         SAFE_DELETE_ARRAY(scriptContents);
 
@@ -518,12 +518,12 @@ void ScriptController::setString(const char* name, const char* v)
 
 void ScriptController::print(const char* str)
 {
-    printError("%s", str);
+    gameplay::print("%s", str);
 }
 
 void ScriptController::print(const char* str1, const char* str2)
 {
-    printError("%s%s", str1, str2);
+    gameplay::print("%s%s", str1, str2);
 }
 
 ScriptController::ScriptController() : _lua(NULL)
@@ -544,6 +544,30 @@ static const char* lua_print_function =
     "    ScriptController.print(table.concat({...},\"\\t\"), \"\\n\")\n"
     "end\n";
 
+#ifndef WIN32 
+static const char* lua_loadfile_function = 
+    "do\n"
+    "    local oldLoadfile = loadfile\n"
+    "    loadfile = function(filename)\n"
+    "        if filename ~= nil and not FileSystem.isAbsolutePath(filename) then\n"
+    "            filename = FileSystem.getResourcePath() .. filename\n"
+    "        end\n"
+    "        return oldLoadfile(filename)\n"
+    "    end\n"
+    "end\n";
+
+static const char* lua_dofile_function = 
+    "do\n"
+    "    local oldDofile = dofile\n"
+    "    dofile = function(filename)\n"
+    "        if filename ~= nil and not FileSystem.isAbsolutePath(filename) then\n"
+    "            filename = FileSystem.getResourcePath() .. filename\n"
+    "        end\n"
+    "        return oldDofile(filename)\n"
+    "    end\n"
+    "end\n";
+#endif
+
 void ScriptController::initialize()
 {
     _lua = luaL_newstate();
@@ -552,9 +576,17 @@ void ScriptController::initialize()
     luaL_openlibs(_lua);
     lua_RegisterAllBindings();
 
-    // Create our own print() function that uses gameplay::printError.
+    // Create our own print() function that uses gameplay::print.
     if (luaL_dostring(_lua, lua_print_function))
         GP_ERROR("Failed to load custom print() function with error: '%s'.", lua_tostring(_lua, -1));
+
+#ifndef WIN32
+    // Change the functions that read a file to use FileSystem.getResourcePath as their base path.
+    if (luaL_dostring(_lua, lua_loadfile_function))
+        GP_ERROR("Failed to load custom loadfile() function with error: '%s'.", lua_tostring(_lua, -1));
+    if (luaL_dostring(_lua, lua_dofile_function))
+        GP_ERROR("Failed to load custom dofile() function with error: '%s'.", lua_tostring(_lua, -1));
+#endif
 }
 
 void ScriptController::initializeGame()
@@ -714,7 +746,7 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
 
                 // Calculate the unique Lua type name.
                 size_t i = type.find("::");
-                while (i != type.npos)
+                while (i != std::string::npos)
                 {
                     // We use "" as the replacement here-this must match the preprocessor
                     // define SCOPE_REPLACEMENT from the gameplay-luagen project.
@@ -749,10 +781,10 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
 
     // Perform the function call.
     if (lua_pcall(_lua, argumentCount, resultCount, 0) != 0)
-        GP_ERROR("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
+        GP_WARN("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
 }
 
-void ScriptController::registerCallback(ScriptCallback callback, std::string function)
+void ScriptController::registerCallback(ScriptCallback callback, const std::string& function)
 {
     SAFE_DELETE(_callbacks[callback]);
     _callbacks[callback] = new std::string(function);

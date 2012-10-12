@@ -43,7 +43,7 @@ AnimationClip::~AnimationClip()
 
     if (_scriptListeners)
     {
-        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
+        for (size_t i = 0; i < _scriptListeners->size(); i++)
         {
             SAFE_DELETE((*_scriptListeners)[i]);
         }
@@ -169,7 +169,7 @@ float AnimationClip::getBlendWeight() const
 
 bool AnimationClip::isPlaying() const
 {
-    return isClipStateBitSet(CLIP_IS_PLAYING_BIT);
+    return (isClipStateBitSet(CLIP_IS_PLAYING_BIT) && !isClipStateBitSet(CLIP_IS_PAUSED_BIT));
 }
 
 void AnimationClip::play()
@@ -498,8 +498,8 @@ bool AnimationClip::update(float elapsedTime)
     Animation::Channel* channel = NULL;
     AnimationValue* value = NULL;
     AnimationTarget* target = NULL;
-    unsigned int channelCount = _animation->_channels.size();
-    for (unsigned int i = 0; i < channelCount; i++)
+    size_t channelCount = _animation->_channels.size();
+    for (size_t i = 0; i < channelCount; i++)
     {
         channel = _animation->_channels[i];
         GP_ASSERT(channel);

@@ -93,6 +93,11 @@ bool Frustum::intersects(const Vector3& point) const
     return true;
 }
 
+bool Frustum::intersects(float x, float y, float z) const
+{
+    return intersects(Vector3(x, y, z));
+}
+
 bool Frustum::intersects(const BoundingSphere& sphere) const
 {
     return sphere.intersects(*this);

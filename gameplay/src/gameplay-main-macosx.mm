@@ -15,7 +15,7 @@ int main(int argc, char** argv)
     Platform* platform = Platform::create(game);
     GP_ASSERT(platform);
     int result = platform->enterMessagePump();
-	delete platform;
+    delete platform;
     [p release];
     return result;
 }

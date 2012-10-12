@@ -20,6 +20,13 @@ public:
         FILEFORMAT_GPB
     };
 
+    struct HeightmapOption
+    {
+        std::vector<std::string> nodeIds;
+        std::string filename;
+        bool isHighPrecision;
+    };
+
     /**
      * Constructor.
      */
@@ -73,12 +80,7 @@ public:
     bool containsGroupNodeId(const std::string& nodeId) const;
     const std::string getAnimationId(const std::string& nodeId) const;
 
-    const std::vector<std::string>& getHeightmapNodeIds() const;
-    
-    /**
-     * Returns true if the heightmap is to be high precision (24-bit packed).
-     */
-    bool isHeightmapHighP() const;
+    const std::vector<HeightmapOption>& getHeightmapOptions() const;
 
     /**
      * Returns true if an error occurred while parsing the command line arguments.
@@ -100,6 +102,7 @@ public:
     bool fontPreviewEnabled() const;
     bool textOutputEnabled() const;
     bool DAEOutputEnabled() const;
+    bool optimizeAnimationsEnabled() const;
 
     const char* getNodeId() const;
     unsigned int getFontSize() const;
@@ -144,11 +147,11 @@ private:
     bool _fontPreview;
     bool _textOutput;
     bool _daeOutput;
-    bool _isHeightmapHighP;
+    bool _optimizeAnimations;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
-    std::vector<std::string> _heightmapNodeIds;
+    std::vector<HeightmapOption> _heightmaps;
 
 };
 

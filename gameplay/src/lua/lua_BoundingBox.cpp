@@ -172,9 +172,59 @@ int lua_BoundingBox__init(lua_State* state)
             }
             break;
         }
+        case 6:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 6);
+
+                void* returnPtr = (void*)new BoundingBox(param1, param2, param3, param4, param5, param6);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "BoundingBox");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_BoundingBox__init - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 0, 1 or 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0, 1, 2 or 6).");
             lua_error(state);
             break;
         }
@@ -608,9 +658,49 @@ int lua_BoundingBox_set(lua_State* state)
             }
             break;
         }
+        case 7:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TNUMBER &&
+                lua_type(state, 7) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 6);
+
+                // Get parameter 6 off the stack.
+                float param6 = (float)luaL_checknumber(state, 7);
+
+                BoundingBox* instance = getInstance(state);
+                instance->set(param1, param2, param3, param4, param5, param6);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_BoundingBox_set - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2, 3 or 7).");
             lua_error(state);
             break;
         }

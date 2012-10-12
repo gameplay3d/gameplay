@@ -15,6 +15,7 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <list>
 #include <set>
@@ -23,6 +24,8 @@
 #include <algorithm>
 #include <limits>
 #include <functional>
+#include <bitset>
+#include "Logger.h"
 
 // Bring common functions from C into global namespace
 using std::memcpy;
@@ -40,7 +43,6 @@ using std::min;
 using std::max;
 using std::modf;
 
-
 // Common
 #ifndef NULL
 #define NULL     0
@@ -48,8 +50,11 @@ using std::modf;
 
 namespace gameplay
 {
-/** Print logging (implemented per platform). */
-extern void printError(const char* format, ...);
+/**
+ * Print logging (implemented per platform).
+ * @script{ignore}
+ */
+extern void print(const char* format, ...);
 }
 
 // Current function macro.
@@ -72,9 +77,9 @@ extern void printError(const char* format, ...);
 #else
 #define GP_ERROR(...) do \
     { \
-        printError("%s -- ", __current__func__); \
-        printError(__VA_ARGS__); \
-        printError("\n"); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "%s -- ", __current__func__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, __VA_ARGS__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_ERROR, "\n"); \
         assert(0); \
         std::exit(-1); \
     } while (0)
@@ -83,9 +88,9 @@ extern void printError(const char* format, ...);
 // Warning macro.
 #define GP_WARN(...) do \
     { \
-        printError("%s -- ", __current__func__); \
-        printError(__VA_ARGS__); \
-        printError("\n"); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "%s -- ", __current__func__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, __VA_ARGS__); \
+        gameplay::Logger::log(gameplay::Logger::LEVEL_WARN, "\n"); \
     } while (0)
 
 // Bullet Physics
@@ -152,7 +157,13 @@ extern void printError(const char* format, ...);
 #endif
 
 // Audio (OpenAL/Vorbis)
-#if defined (__QNX__) || defined(__ANDROID__)
+#ifdef __QNX__
+#include <AL/al.h>
+#include <AL/alc.h>
+#elif __ANDROID__
+#include <AL/al.h>
+#include <AL/alc.h>
+#elif __linux__
 #include <AL/al.h>
 #include <AL/alc.h>
 #elif WIN32
@@ -190,7 +201,7 @@ using std::va_list;
         #define USE_NEON
     #endif
 #elif __ANDROID__
-	#include <EGL/egl.h>
+    #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
@@ -202,8 +213,13 @@ using std::va_list;
     #define OPENGL_ES
 #elif WIN32
     #define WIN32_LEAN_AND_MEAN
+    #define GLEW_STATIC
     #include <GL/glew.h>
     #define USE_VAO
+#elif __linux__
+        #define GLEW_STATIC
+        #include <GL/glew.h>
+        #define USE_VAO
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR

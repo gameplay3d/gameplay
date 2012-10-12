@@ -45,6 +45,7 @@ void lua_RegisterAllBindings()
     luaRegister_Frustum();
     luaRegister_Game();
     luaRegister_Gamepad();
+    luaRegister_Gesture();
     luaRegister_Image();
     luaRegister_Joint();
     luaRegister_Joystick();
@@ -52,6 +53,7 @@ void lua_RegisterAllBindings()
     luaRegister_Label();
     luaRegister_Layout();
     luaRegister_Light();
+    luaRegister_Logger();
     luaRegister_Material();
     luaRegister_MaterialParameter();
     luaRegister_MathUtil();
@@ -85,6 +87,8 @@ void lua_RegisterAllBindings()
     luaRegister_PhysicsRigidBodyParameters();
     luaRegister_PhysicsSocketConstraint();
     luaRegister_PhysicsSpringConstraint();
+    luaRegister_PhysicsVehicle();
+    luaRegister_PhysicsVehicleWheel();
     luaRegister_Plane();
     luaRegister_Platform();
     luaRegister_Properties();

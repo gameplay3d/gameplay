@@ -146,6 +146,7 @@ Protected Attributes</h2></td></tr>
          width       = &lt;width&gt;   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = &lt;height&gt;  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          text        = &lt;string&gt;
+         consumeEvents = &lt;bool&gt;  // Whether the label propogates input events to the Game's input event handler. Default is true.
     }</pre></div> </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a1b85fc1bebe9cd82da2f5b8891fbd452"></a>
 <div class="memitem">
@@ -255,7 +256,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns:</dt><dd>The new label.  </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a1845972d801788eacc8922a36c576d57">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a5232963cb6e1b0af4ca6ea437961f48b">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_button.html#a61ee6eca719e35574b69599f750f614d">gameplay::Button</a>, and <a class="el" href="classgameplay_1_1_slider.html#acf5f46209988f03a11bcf84274409d8c">gameplay::Slider</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a1845972d801788eacc8922a36c576d57">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a5232963cb6e1b0af4ca6ea437961f48b">gameplay::TextBox</a>, <a class="el" href="classgameplay_1_1_button.html#a61ee6eca719e35574b69599f750f614d">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_slider.html#acf5f46209988f03a11bcf84274409d8c">gameplay::Slider</a>.</p>
 
 </div>
 </div>
@@ -293,7 +294,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns:</dt><dd>The new label. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a7b159ca5aaa5d75ed41825d8f89e8721">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#a5c979c1aed5bdfbee7d933177ebc1e78">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d4743577d90447020b20044068c329c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a8a595c015a634c9277411a0bb4a190e4">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a89fd260b1ce03446a86fb4e5a51898b4">gameplay::Button</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a7b159ca5aaa5d75ed41825d8f89e8721">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d4743577d90447020b20044068c329c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a5c979c1aed5bdfbee7d933177ebc1e78">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#a8a595c015a634c9277411a0bb4a190e4">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a89fd260b1ce03446a86fb4e5a51898b4">gameplay::Button</a>.</p>
 
 </div>
 </div>
@@ -451,7 +452,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">gameplay::Control</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a4b2996e4d19631c34fc4bbeff50dfffa">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a95c22e5a84d40dcede9994be2b943db3">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_text_box.html#ac14dbc09fe764007d75632c707f2ca2b">gameplay::TextBox</a>.</p>
 
 </div>
 </div>
@@ -516,7 +517,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

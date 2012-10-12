@@ -21,7 +21,6 @@ public:
         TOUCH_MOVE
     };
 
-
 private:
 
     /**

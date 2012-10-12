@@ -6,8 +6,8 @@
 namespace gameplay
 {
 
-PhysicsCollisionShape::PhysicsCollisionShape(Type type, btCollisionShape* shape)
-    : _type(type), _shape(shape)
+PhysicsCollisionShape::PhysicsCollisionShape(Type type, btCollisionShape* shape, btStridingMeshInterface* meshInterface)
+    : _type(type), _shape(shape), _meshInterface(meshInterface)
 {
     memset(&_shapeData, 0, sizeof(_shapeData));
 }
@@ -29,6 +29,10 @@ PhysicsCollisionShape::~PhysicsCollisionShape()
                 }
                 SAFE_DELETE(_shapeData.meshData);
             }
+
+            // Also need to delete the btTriangleIndexVertexArray, if it exists.
+            SAFE_DELETE(_meshInterface);
+
             break;
         case SHAPE_HEIGHTFIELD:
             if (_shapeData.heightfieldData)

@@ -10,14 +10,20 @@ scene
     node boymesh
     {
         material = res/common/scene.material#boy
-        dynamic = true
+        tags
+        {
+            dynamic
+        }
     }
 
     node boyshadow
     {
         material = res/common/scene.material#boyshadow
-        transparent = true
-        dynamic = true
+        tags
+        {
+            transparent
+            dynamic
+        }
     }
 
     node camera
@@ -59,7 +65,10 @@ scene
     {
         material = res/common/scene.material#green
         collisionObject = res/common/scene.physics#chair
-        dynamic = true
+        tags
+        {
+            dynamic
+        }
     }
     node greenchair2 : greenchair1 {}
     node greenchair3 : greenchair1 {}
@@ -68,7 +77,10 @@ scene
     {
         material = res/common/scene.material#lightblue
         collisionObject = res/common/scene.physics#chair
-        dynamic = true
+        tags
+        {
+            dynamic
+        }
     }
     node bluechair2 : bluechair1 {}
     node bluechair3 : bluechair1 {}
@@ -170,7 +182,10 @@ scene
     {
         material = res/common/scene.material#basketball
         collisionObject = res/common/scene.physics#basketball
-        dynamic = true
+        tags
+        {
+            dynamic
+        }
     }
 
     node basketballnet

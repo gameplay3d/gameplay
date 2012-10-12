@@ -35,7 +35,7 @@ namespace gameplay
 
 void luaRegister_Container()
 {
-    const luaL_Reg lua_members[] = 
+    const luaL_Reg lua_members[] =
     {
         {"addControl", lua_Container_addControl},
         {"addListener", lua_Container_addListener},
@@ -92,6 +92,7 @@ void luaRegister_Container()
         {"isContainer", lua_Container_isContainer},
         {"isEnabled", lua_Container_isEnabled},
         {"isScrollBarsAutoHide", lua_Container_isScrollBarsAutoHide},
+        {"isScrolling", lua_Container_isScrolling},
         {"release", lua_Container_release},
         {"removeControl", lua_Container_removeControl},
         {"removeScriptCallback", lua_Container_removeScriptCallback},
@@ -107,6 +108,7 @@ void luaRegister_Container()
         {"setFocusIndex", lua_Container_setFocusIndex},
         {"setFont", lua_Container_setFont},
         {"setFontSize", lua_Container_setFontSize},
+        {"setHeight", lua_Container_setHeight},
         {"setImageColor", lua_Container_setImageColor},
         {"setImageRegion", lua_Container_setImageRegion},
         {"setMargin", lua_Container_setMargin},
@@ -123,10 +125,11 @@ void luaRegister_Container()
         {"setTextAlignment", lua_Container_setTextAlignment},
         {"setTextColor", lua_Container_setTextColor},
         {"setTextRightToLeft", lua_Container_setTextRightToLeft},
+        {"setWidth", lua_Container_setWidth},
         {"setZIndex", lua_Container_setZIndex},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] = 
+    const luaL_Reg lua_statics[] =
     {
         {"ANIMATE_OPACITY", lua_Container_static_ANIMATE_OPACITY},
         {"ANIMATE_POSITION", lua_Container_static_ANIMATE_POSITION},
@@ -171,7 +174,7 @@ int lua_Container__gc(lua_State* state)
                     Container* instance = (Container*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-                
+
                 return 0;
             }
             else
@@ -254,7 +257,7 @@ int lua_Container_addListener(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->addListener(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -288,7 +291,7 @@ int lua_Container_addRef(lua_State* state)
             {
                 Container* instance = getInstance(state);
                 instance->addRef();
-                
+
                 return 0;
             }
             else
@@ -330,7 +333,7 @@ int lua_Container_addScriptCallback(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -441,7 +444,7 @@ int lua_Container_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -495,7 +498,7 @@ int lua_Container_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -697,7 +700,7 @@ int lua_Container_destroyAnimation(lua_State* state)
             {
                 Container* instance = getInstance(state);
                 instance->destroyAnimation();
-                
+
                 return 0;
             }
             else
@@ -717,7 +720,7 @@ int lua_Container_destroyAnimation(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-                
+
                 return 0;
             }
             else
@@ -751,7 +754,7 @@ int lua_Container_disable(lua_State* state)
             {
                 Container* instance = getInstance(state);
                 instance->disable();
-                
+
                 return 0;
             }
             else
@@ -785,7 +788,7 @@ int lua_Container_enable(lua_State* state)
             {
                 Container* instance = getInstance(state);
                 instance->enable();
-                
+
                 return 0;
             }
             else
@@ -983,7 +986,7 @@ int lua_Container_getAnimationPropertyValue(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -2880,7 +2883,7 @@ int lua_Container_insertControl(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->insertControl(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3011,6 +3014,43 @@ int lua_Container_isScrollBarsAutoHide(lua_State* state)
     return 0;
 }
 
+int lua_Container_isScrolling(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->isScrolling();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_isScrolling - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -3025,7 +3065,7 @@ int lua_Container_release(lua_State* state)
             {
                 Container* instance = getInstance(state);
                 instance->release();
-                
+
                 return 0;
             }
             else
@@ -3063,7 +3103,7 @@ int lua_Container_removeControl(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->removeControl(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -3074,7 +3114,7 @@ int lua_Container_removeControl(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->removeControl(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -3085,7 +3125,7 @@ int lua_Container_removeControl(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->removeControl(param1);
-                
+
                 return 0;
             }
             else
@@ -3127,7 +3167,7 @@ int lua_Container_removeScriptCallback(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3165,7 +3205,7 @@ int lua_Container_setAlignment(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setAlignment(param1);
-                
+
                 return 0;
             }
             else
@@ -3207,7 +3247,7 @@ int lua_Container_setAnimationPropertyValue(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3235,7 +3275,7 @@ int lua_Container_setAnimationPropertyValue(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-                
+
                 return 0;
             }
             else
@@ -3273,7 +3313,7 @@ int lua_Container_setAutoHeight(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setAutoHeight(param1);
-                
+
                 return 0;
             }
             else
@@ -3311,7 +3351,7 @@ int lua_Container_setAutoWidth(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setAutoWidth(param1);
-                
+
                 return 0;
             }
             else
@@ -3361,7 +3401,7 @@ int lua_Container_setBorder(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4);
-                
+
                 return 0;
             }
             else
@@ -3397,7 +3437,7 @@ int lua_Container_setBorder(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4, param5);
-                
+
                 return 0;
             }
             else
@@ -3435,7 +3475,7 @@ int lua_Container_setBounds(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setBounds(*param1);
-                
+
                 return 0;
             }
             else
@@ -3473,7 +3513,7 @@ int lua_Container_setConsumeInputEvents(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setConsumeInputEvents(param1);
-                
+
                 return 0;
             }
             else
@@ -3515,7 +3555,7 @@ int lua_Container_setCursorColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setCursorColor(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3557,7 +3597,7 @@ int lua_Container_setCursorRegion(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setCursorRegion(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3595,7 +3635,7 @@ int lua_Container_setFocusIndex(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setFocusIndex(param1);
-                
+
                 return 0;
             }
             else
@@ -3633,7 +3673,7 @@ int lua_Container_setFont(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setFont(param1);
-                
+
                 return 0;
             }
             else
@@ -3657,7 +3697,7 @@ int lua_Container_setFont(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setFont(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3695,7 +3735,7 @@ int lua_Container_setFontSize(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setFontSize(param1);
-                
+
                 return 0;
             }
             else
@@ -3719,7 +3759,7 @@ int lua_Container_setFontSize(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setFontSize(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3732,6 +3772,44 @@ int lua_Container_setFontSize(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setHeight(param1);
+
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3761,7 +3839,7 @@ int lua_Container_setImageColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
-                
+
                 return 0;
             }
             else
@@ -3789,7 +3867,7 @@ int lua_Container_setImageColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setImageColor(param1, *param2, param3);
-                
+
                 return 0;
             }
             else
@@ -3831,7 +3909,7 @@ int lua_Container_setImageRegion(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
-                
+
                 return 0;
             }
             else
@@ -3859,7 +3937,7 @@ int lua_Container_setImageRegion(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2, param3);
-                
+
                 return 0;
             }
             else
@@ -3909,7 +3987,7 @@ int lua_Container_setMargin(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setMargin(param1, param2, param3, param4);
-                
+
                 return 0;
             }
             else
@@ -3947,7 +4025,7 @@ int lua_Container_setOpacity(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setOpacity(param1);
-                
+
                 return 0;
             }
             else
@@ -3971,7 +4049,7 @@ int lua_Container_setOpacity(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setOpacity(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4021,7 +4099,7 @@ int lua_Container_setPadding(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setPadding(param1, param2, param3, param4);
-                
+
                 return 0;
             }
             else
@@ -4063,7 +4141,7 @@ int lua_Container_setPosition(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setPosition(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4101,7 +4179,7 @@ int lua_Container_setScroll(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setScroll(param1);
-                
+
                 return 0;
             }
             else
@@ -4139,7 +4217,7 @@ int lua_Container_setScrollBarsAutoHide(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setScrollBarsAutoHide(param1);
-                
+
                 return 0;
             }
             else
@@ -4181,7 +4259,7 @@ int lua_Container_setSize(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setSize(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4219,7 +4297,7 @@ int lua_Container_setSkinColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setSkinColor(*param1);
-                
+
                 return 0;
             }
             else
@@ -4243,7 +4321,7 @@ int lua_Container_setSkinColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setSkinColor(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4281,7 +4359,7 @@ int lua_Container_setSkinRegion(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
-                
+
                 return 0;
             }
             else
@@ -4305,7 +4383,7 @@ int lua_Container_setSkinRegion(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setSkinRegion(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4343,7 +4421,7 @@ int lua_Container_setState(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setState(param1);
-                
+
                 return 0;
             }
             else
@@ -4381,7 +4459,7 @@ int lua_Container_setStyle(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setStyle(param1);
-                
+
                 return 0;
             }
             else
@@ -4419,7 +4497,7 @@ int lua_Container_setTextAlignment(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setTextAlignment(param1);
-                
+
                 return 0;
             }
             else
@@ -4443,7 +4521,7 @@ int lua_Container_setTextAlignment(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setTextAlignment(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4481,7 +4559,7 @@ int lua_Container_setTextColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setTextColor(*param1);
-                
+
                 return 0;
             }
             else
@@ -4505,7 +4583,7 @@ int lua_Container_setTextColor(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setTextColor(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4543,7 +4621,7 @@ int lua_Container_setTextRightToLeft(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setTextRightToLeft(param1);
-                
+
                 return 0;
             }
             else
@@ -4567,7 +4645,7 @@ int lua_Container_setTextRightToLeft(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setTextRightToLeft(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4580,6 +4658,44 @@ int lua_Container_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setWidth(param1);
+
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Container_setWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4605,7 +4721,7 @@ int lua_Container_setZIndex(lua_State* state)
 
                 Container* instance = getInstance(state);
                 instance->setZIndex(param1);
-                
+
                 return 0;
             }
             else

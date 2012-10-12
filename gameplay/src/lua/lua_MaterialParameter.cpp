@@ -15,7 +15,7 @@ namespace gameplay
 
 void luaRegister_MaterialParameter()
 {
-    const luaL_Reg lua_members[] = 
+    const luaL_Reg lua_members[] =
     {
         {"addRef", lua_MaterialParameter_addRef},
         {"bindValue", lua_MaterialParameter_bindValue},
@@ -28,12 +28,13 @@ void luaRegister_MaterialParameter()
         {"getAnimationPropertyValue", lua_MaterialParameter_getAnimationPropertyValue},
         {"getName", lua_MaterialParameter_getName},
         {"getRefCount", lua_MaterialParameter_getRefCount},
+        {"getSampler", lua_MaterialParameter_getSampler},
         {"release", lua_MaterialParameter_release},
         {"setAnimationPropertyValue", lua_MaterialParameter_setAnimationPropertyValue},
         {"setValue", lua_MaterialParameter_setValue},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] = 
+    const luaL_Reg lua_statics[] =
     {
         {"ANIMATE_UNIFORM", lua_MaterialParameter_static_ANIMATE_UNIFORM},
         {NULL, NULL}
@@ -70,7 +71,7 @@ int lua_MaterialParameter__gc(lua_State* state)
                     MaterialParameter* instance = (MaterialParameter*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-                
+
                 return 0;
             }
             else
@@ -104,7 +105,7 @@ int lua_MaterialParameter_addRef(lua_State* state)
             {
                 MaterialParameter* instance = getInstance(state);
                 instance->addRef();
-                
+
                 return 0;
             }
             else
@@ -146,7 +147,7 @@ int lua_MaterialParameter_bindValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->bindValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -257,7 +258,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -311,7 +312,7 @@ int lua_MaterialParameter_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -513,7 +514,7 @@ int lua_MaterialParameter_destroyAnimation(lua_State* state)
             {
                 MaterialParameter* instance = getInstance(state);
                 instance->destroyAnimation();
-                
+
                 return 0;
             }
             else
@@ -533,7 +534,7 @@ int lua_MaterialParameter_destroyAnimation(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-                
+
                 return 0;
             }
             else
@@ -694,7 +695,7 @@ int lua_MaterialParameter_getAnimationPropertyValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -788,6 +789,52 @@ int lua_MaterialParameter_getRefCount(lua_State* state)
     return 0;
 }
 
+int lua_MaterialParameter_getSampler(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                MaterialParameter* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getSampler();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "TextureSampler");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_MaterialParameter_getSampler - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_MaterialParameter_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -802,7 +849,7 @@ int lua_MaterialParameter_release(lua_State* state)
             {
                 MaterialParameter* instance = getInstance(state);
                 instance->release();
-                
+
                 return 0;
             }
             else
@@ -844,7 +891,7 @@ int lua_MaterialParameter_setAnimationPropertyValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -872,7 +919,7 @@ int lua_MaterialParameter_setAnimationPropertyValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-                
+
                 return 0;
             }
             else
@@ -910,7 +957,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -921,7 +968,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -932,7 +979,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -943,7 +990,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -954,7 +1001,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(*param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -965,7 +1012,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -976,7 +1023,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(*param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -987,7 +1034,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -998,7 +1045,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(*param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1009,7 +1056,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1020,7 +1067,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(*param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1031,7 +1078,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1042,7 +1089,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else
@@ -1066,7 +1113,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1, param2);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1081,7 +1128,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1, param2);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1096,7 +1143,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1, param2);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1111,7 +1158,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1, param2);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1126,7 +1173,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1, param2);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1141,7 +1188,7 @@ int lua_MaterialParameter_setValue(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setValue(param1, param2);
-                
+
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&

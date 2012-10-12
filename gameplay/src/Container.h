@@ -176,6 +176,13 @@ public:
     bool isScrollBarsAutoHide() const;
 
     /**
+     * Whether this container is currently being scrolled.
+     *
+     * @return Whether this container is currently being scrolled.
+     */
+    bool isScrolling() const;
+
+    /**
      * @see AnimationTarget::getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
@@ -507,6 +514,8 @@ private:
     float _totalHeight;
 
     int _contactIndices;
+
+    bool _initializedWithScroll;
 };
 
 }

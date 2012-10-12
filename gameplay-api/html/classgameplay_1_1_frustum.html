@@ -100,6 +100,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad1ae967dc50ed4c262af0727cf4a701d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#ad1ae967dc50ed4c262af0727cf4a701d">getMatrix</a> (<a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> *dst) const </td></tr>
 <tr class="memitem:a2570da2f955daec8fb44a95fe25af049"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a2570da2f955daec8fb44a95fe25af049">getCorners</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *corners) const </td></tr>
 <tr class="memitem:a796be313f7c0d1e4f9e604eca635cd33"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a796be313f7c0d1e4f9e604eca635cd33">intersects</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;point) const </td></tr>
+<tr class="memitem:aec557e485662234c4d36b616d11b4ab0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#aec557e485662234c4d36b616d11b4ab0">intersects</a> (float x, float y, float z) const </td></tr>
 <tr class="memitem:a36cccd1d74cec754ffc8d4a239f60521"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a36cccd1d74cec754ffc8d4a239f60521">intersects</a> (const <a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> &amp;sphere) const </td></tr>
 <tr class="memitem:a30b343395cbc095eb70144e1f81caf03"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a30b343395cbc095eb70144e1f81caf03">intersects</a> (const <a class="el" href="classgameplay_1_1_bounding_box.html">BoundingBox</a> &amp;box) const </td></tr>
 <tr class="memitem:af0e15b937bf1146962b02045d2be03ef"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#af0e15b937bf1146962b02045d2be03ef">intersects</a> (const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;plane) const </td></tr>
@@ -378,6 +379,49 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aec557e485662234c4d36b616d11b4ab0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_frustum.html#a796be313f7c0d1e4f9e604eca635cd33">gameplay::Frustum::intersects</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Tests whether this frustum instersects the specified point.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The x coordinate. </td></tr>
+    <tr><td class="paramname">y</td><td>The y coordinate. </td></tr>
+    <tr><td class="paramname">z</td><td>The z coordinate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>true if the specified point intersects this frustum; false otherwise. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a36cccd1d74cec754ffc8d4a239f60521"></a>
 <div class="memitem">
 <div class="memproto">
@@ -530,7 +574,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

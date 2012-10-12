@@ -21,7 +21,7 @@ CharacterGame game;
 
 CharacterGame::CharacterGame()
     : _font(NULL), _scene(NULL), _character(NULL), _characterNode(NULL), _characterMeshNode(NULL), _characterShadowNode(NULL), _basketballNode(NULL),
-      _ceiling(NULL), _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
+      _animation(NULL), _currentClip(NULL), _jumpClip(NULL), _kickClip(NULL), _rotateX(0), _materialParameterAlpha(NULL),
       _keyFlags(0), _drawDebug(0), _wireframe(false), _hasBall(false), _applyKick(false), _gamepad(NULL)
 {
     _buttonPressed = new bool[2];
@@ -51,16 +51,15 @@ void CharacterGame::initialize()
     initializeGamepad();
 
     // Create a collision object for the ceiling.
-    _scene->addNode("ceiling");
-    _ceiling = Node::create("ceiling");
-    _ceiling->setTranslationY(14.5f);
+    Node* ceiling = _scene->addNode("ceiling");
+    ceiling->setTranslationY(14.5f);
     PhysicsRigidBody::Parameters rbParams;
     rbParams.mass = 0.0f;
     rbParams.friction = 0.5f;
     rbParams.restitution = 0.75f;
     rbParams.linearDamping = 0.025f;
     rbParams.angularDamping = 0.16f;
-    _ceiling->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, PhysicsCollisionShape::box(Vector3(49.5f, 1.0f, 49.5f)), &rbParams);
+    ceiling->setCollisionObject(PhysicsCollisionObject::RIGID_BODY, PhysicsCollisionShape::box(Vector3(49.5f, 1.0f, 49.5f)), &rbParams);
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initializeScene);
@@ -80,7 +79,7 @@ bool CharacterGame::initializeScene(Node* node)
 void CharacterGame::initializeMaterial(Scene* scene, Node* node, Material* material)
 {
     // Bind light shader parameters to dynamic objects only
-    if (node->isDynamic())
+    if (node->hasTag("dynamic"))
     {
         Node* lightNode = scene->findNode("sun");
         material->getParameter("u_ambientColor")->bindValue(scene, &Scene::getAmbientColor);
@@ -147,7 +146,7 @@ void CharacterGame::drawSplash(void* param)
 
 bool CharacterGame::drawScene(Node* node, bool transparent)
 {
-    if (node->getModel() && (transparent == node->isTransparent()))
+    if (node->getModel() && (transparent == node->hasTag("transparent")))
         node->getModel()->draw(_wireframe);
 
     return true;
@@ -207,12 +206,12 @@ void CharacterGame::update(float elapsedTime)
 {
     if (_applyKick)
     {
-        // apply force from kick.
-        Vector3 force(-_characterNode->getForwardVectorWorld());
-        force.normalize();
-        force.y = 1.0f; // add some loft to kick
-        force.scale(1000.0f); //scale the force.
-        ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyForce(force);
+        // apply impulse from kick.
+        Vector3 impulse(-_characterNode->getForwardVectorWorld());
+        impulse.normalize();
+        impulse.y = 1.0f; // add some lift to kick
+        impulse.scale(16.6f); //scale the impulse.
+        ((PhysicsRigidBody*)_basketballNode->getCollisionObject())->applyImpulse(impulse);
         _hasBall = false;
         _applyKick = false;
     }
@@ -250,7 +249,7 @@ void CharacterGame::update(float elapsedTime)
 
     if (_gamepad->isJoystickActive(0))
     {
-        _currentDirection = _gamepad->getJoystickValue(0);
+        _gamepad->getJoystickAxisValues(0, &_currentDirection);
     }
     else
     {
@@ -549,12 +548,12 @@ void CharacterGame::adjustCamera(float elapsedTime)
     {
         float d = _scene->getActiveCamera()->getNode()->getTranslationWorld().distance(_characterNode->getTranslationWorld());
         float alpha = d < 10 ? (d * 0.1f) : 1.0f;
-        _characterMeshNode->setTransparent(alpha < 1.0f);
+        _characterMeshNode->setTag("transparent", alpha < 1.0f ? "true" : NULL);
         _materialParameterAlpha->setValue(alpha);
     }
     else
     {
-        _characterMeshNode->setTransparent(false);
+        _characterMeshNode->setTag("transparent", NULL);
         _materialParameterAlpha->setValue(1.0f);
     }
 }

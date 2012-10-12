@@ -45,7 +45,7 @@ private:
     
     static bool loadWav(FILE* file, ALuint buffer);
     
-    static bool loadOgg(FILE* file, ALuint buffer);
+    static bool loadOgg(FILE*& file, ALuint buffer);
 
     std::string _filePath;
     ALuint _alBuffer;

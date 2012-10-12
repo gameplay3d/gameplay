@@ -271,7 +271,10 @@ void Theme::Style::Overlay::setTextColor(const Vector4& color)
 
 const Rectangle& Theme::Style::Overlay::getImageRegion(const char* id) const
 {
-    GP_ASSERT(_imageList);
+    if (!_imageList)
+    {
+        return Rectangle::empty();
+    }
 
     ThemeImage* image = _imageList->getImage(id);
     if (image)

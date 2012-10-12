@@ -23,7 +23,6 @@ void luaRegister_Material()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_Material_addRef},
-        {"clone", lua_Material_clone},
         {"getParameter", lua_Material_getParameter},
         {"getRefCount", lua_Material_getRefCount},
         {"getStateBlock", lua_Material_getStateBlock},
@@ -120,56 +119,6 @@ int lua_Material_addRef(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Material_clone(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 2:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<NodeCloneContext> param1 = ScriptUtil::getObjectPointer<NodeCloneContext>(2, "NodeCloneContext", true);
-
-                Material* instance = getInstance(state);
-                void* returnPtr = (void*)instance->clone(*param1);
-                if (returnPtr)
-                {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Material");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Material_clone - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

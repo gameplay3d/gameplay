@@ -1,13 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugMem|BlackBerry">
+      <Configuration>DebugMem</Configuration>
+      <Platform>BlackBerry</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugMem|BlackBerrySimulator">
+      <Configuration>DebugMem</Configuration>
+      <Platform>BlackBerrySimulator</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="DebugMem|Win32">
       <Configuration>DebugMem</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|BlackBerry">
+      <Configuration>Debug</Configuration>
+      <Platform>BlackBerry</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|BlackBerrySimulator">
+      <Configuration>Debug</Configuration>
+      <Platform>BlackBerrySimulator</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|BlackBerry">
+      <Configuration>Release</Configuration>
+      <Platform>BlackBerry</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|BlackBerrySimulator">
+      <Configuration>Release</Configuration>
+      <Platform>BlackBerrySimulator</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
@@ -50,14 +74,16 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gamepad.cpp" />
     <ClCompile Include="src\gameplay-main-android.cpp" />
-    <ClCompile Include="src\gameplay-main-qnx.cpp" />
-    <ClCompile Include="src\gameplay-main-win32.cpp" />
+    <ClCompile Include="src\gameplay-main-blackberry.cpp" />
+    <ClCompile Include="src\gameplay-main-linux.cpp" />
+    <ClCompile Include="src\gameplay-main-windows.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
     <ClCompile Include="src\Label.cpp" />
     <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\lua\lua_AbsoluteLayout.cpp" />
     <ClCompile Include="src\lua\lua_AIAgent.cpp" />
     <ClCompile Include="src\lua\lua_AIAgentListener.cpp" />
@@ -114,6 +140,8 @@
     <ClCompile Include="src\lua\lua_GamepadButtonState.cpp" />
     <ClCompile Include="src\lua\lua_GamepadGamepadEvent.cpp" />
     <ClCompile Include="src\lua\lua_GameState.cpp" />
+    <ClCompile Include="src\lua\lua_Gesture.cpp" />
+    <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp" />
     <ClCompile Include="src\lua\lua_Global.cpp" />
     <ClCompile Include="src\lua\lua_Image.cpp" />
     <ClCompile Include="src\lua\lua_ImageFormat.cpp" />
@@ -127,6 +155,8 @@
     <ClCompile Include="src\lua\lua_LayoutType.cpp" />
     <ClCompile Include="src\lua\lua_Light.cpp" />
     <ClCompile Include="src\lua\lua_LightType.cpp" />
+    <ClCompile Include="src\lua\lua_Logger.cpp" />
+    <ClCompile Include="src\lua\lua_LoggerLevel.cpp" />
     <ClCompile Include="src\lua\lua_Material.cpp" />
     <ClCompile Include="src\lua\lua_MaterialParameter.cpp" />
     <ClCompile Include="src\lua\lua_MathUtil.cpp" />
@@ -169,6 +199,8 @@
     <ClCompile Include="src\lua\lua_PhysicsRigidBodyParameters.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\lua\lua_PhysicsSpringConstraint.cpp" />
+    <ClCompile Include="src\lua\lua_PhysicsVehicle.cpp" />
+    <ClCompile Include="src\lua\lua_PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\lua\lua_Plane.cpp" />
     <ClCompile Include="src\lua\lua_Platform.cpp" />
     <ClCompile Include="src\lua\lua_Properties.cpp" />
@@ -216,6 +248,7 @@
     <ClCompile Include="src\lua\lua_VertexFormatUsage.cpp" />
     <ClCompile Include="src\lua\lua_VerticalLayout.cpp" />
     <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\MathUtil.cpp" />
     <ClCompile Include="src\MeshBatch.cpp" />
     <ClCompile Include="src\Pass.cpp" />
     <ClCompile Include="src\MaterialParameter.cpp" />
@@ -239,10 +272,13 @@
     <ClCompile Include="src\PhysicsRigidBody.cpp" />
     <ClCompile Include="src\PhysicsSocketConstraint.cpp" />
     <ClCompile Include="src\PhysicsSpringConstraint.cpp" />
+    <ClCompile Include="src\PhysicsVehicle.cpp" />
+    <ClCompile Include="src\PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
-    <ClCompile Include="src\PlatformQNX.cpp" />
-    <ClCompile Include="src\PlatformWin32.cpp" />
+    <ClCompile Include="src\PlatformBlackBerry.cpp" />
+    <ClCompile Include="src\PlatformLinux.cpp" />
+    <ClCompile Include="src\PlatformWindows.cpp" />
     <ClCompile Include="src\Properties.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\RadioButton.cpp" />
@@ -308,6 +344,7 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\gameplay.h" />
+    <ClInclude Include="src\Gesture.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Joystick.h" />
@@ -315,6 +352,7 @@
     <ClInclude Include="src\Label.h" />
     <ClInclude Include="src\Layout.h" />
     <ClInclude Include="src\Light.h" />
+    <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\lua\lua_AbsoluteLayout.h" />
     <ClInclude Include="src\lua\lua_AIAgent.h" />
     <ClInclude Include="src\lua\lua_AIAgentListener.h" />
@@ -371,6 +409,8 @@
     <ClInclude Include="src\lua\lua_GamepadButtonState.h" />
     <ClInclude Include="src\lua\lua_GamepadGamepadEvent.h" />
     <ClInclude Include="src\lua\lua_GameState.h" />
+    <ClInclude Include="src\lua\lua_Gesture.h" />
+    <ClInclude Include="src\lua\lua_GestureGestureEvent.h" />
     <ClInclude Include="src\lua\lua_Global.h" />
     <ClInclude Include="src\lua\lua_Image.h" />
     <ClInclude Include="src\lua\lua_ImageFormat.h" />
@@ -384,6 +424,8 @@
     <ClInclude Include="src\lua\lua_LayoutType.h" />
     <ClInclude Include="src\lua\lua_Light.h" />
     <ClInclude Include="src\lua\lua_LightType.h" />
+    <ClInclude Include="src\lua\lua_Logger.h" />
+    <ClInclude Include="src\lua\lua_LoggerLevel.h" />
     <ClInclude Include="src\lua\lua_Material.h" />
     <ClInclude Include="src\lua\lua_MaterialParameter.h" />
     <ClInclude Include="src\lua\lua_MathUtil.h" />
@@ -426,6 +468,8 @@
     <ClInclude Include="src\lua\lua_PhysicsRigidBodyParameters.h" />
     <ClInclude Include="src\lua\lua_PhysicsSocketConstraint.h" />
     <ClInclude Include="src\lua\lua_PhysicsSpringConstraint.h" />
+    <ClInclude Include="src\lua\lua_PhysicsVehicle.h" />
+    <ClInclude Include="src\lua\lua_PhysicsVehicleWheel.h" />
     <ClInclude Include="src\lua\lua_Plane.h" />
     <ClInclude Include="src\lua\lua_Platform.h" />
     <ClInclude Include="src\lua\lua_Properties.h" />
@@ -498,6 +542,8 @@
     <ClInclude Include="src\PhysicsRigidBody.h" />
     <ClInclude Include="src\PhysicsSocketConstraint.h" />
     <ClInclude Include="src\PhysicsSpringConstraint.h" />
+    <ClInclude Include="src\PhysicsVehicle.h" />
+    <ClInclude Include="src\PhysicsVehicleWheel.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\Properties.h" />
@@ -557,8 +603,6 @@
     <None Include="src\BoundingBox.inl" />
     <None Include="src\BoundingSphere.inl" />
     <None Include="src\Game.inl" />
-    <None Include="src\gameplay-main-ios.mm" />
-    <None Include="src\gameplay-main-macosx.mm" />
     <None Include="src\Image.inl" />
     <None Include="src\MathUtil.inl" />
     <None Include="src\MathUtilNeon.inl" />
@@ -566,8 +610,6 @@
     <None Include="src\Matrix.inl" />
     <None Include="src\MeshBatch.inl" />
     <None Include="src\Plane.inl" />
-    <None Include="src\PlatformiOS.mm" />
-    <None Include="src\PlatformMacOSX.mm" />
     <None Include="src\Quaternion.inl" />
     <None Include="src\Ray.inl" />
     <None Include="src\ScriptController.inl" />
@@ -593,12 +635,44 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerrySimulator'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerrySimulator'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerrySimulator'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -610,32 +684,127 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerrySimulator'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerrySimulator'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerrySimulator'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(Configuration)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'">
+    <OutDir>Device-$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerrySimulator'">
+    <OutDir>Simulator\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'">
+    <OutDir>Device-$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerrySimulator'">
+    <OutDir>Simulator\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'">
+    <IntDir>Device-$(Configuration)\</IntDir>
+    <TargetName>lib$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerrySimulator'">
+    <IntDir>Simulator\</IntDir>
+    <TargetName>lib$(ProjectName)</TargetName>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|Win32'">
     <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'">
+    <IntDir>Device-$(Configuration)\</IntDir>
+    <TargetName>lib$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerrySimulator'">
+    <IntDir>Simulator\</IntDir>
+    <TargetName>lib$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(Configuration)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'">
+    <OutDir>Device-$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerrySimulator'">
+    <OutDir>Simulator\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'">
+    <IntDir>Device-$(Configuration)\</IntDir>
+    <TargetName>lib$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerrySimulator'">
+    <IntDir>Simulator\</IntDir>
+    <TargetName>lib$(ProjectName)</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerry'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>-mfpu=neon %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|BlackBerrySimulator'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -672,7 +841,85 @@
       </Verbose>
     </Lib>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerry'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>-mfpu=neon %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <Verbose>
+      </Verbose>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|BlackBerrySimulator'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <Verbose>
+      </Verbose>
+    </Lib>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerry'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-mfpu=neon %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|BlackBerrySimulator'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>

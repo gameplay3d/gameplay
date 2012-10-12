@@ -11,6 +11,8 @@
 #include "PhysicsCharacter.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 #include "Ref.h"
 #include "Scene.h"
 #include "ScriptController.h"

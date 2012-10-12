@@ -20,6 +20,8 @@ class PhysicsRigidBody : public PhysicsCollisionObject, public Transform::Listen
 {
     friend class Node;
     friend class PhysicsCharacter;
+    friend class PhysicsVehicle;
+    friend class PhysicsVehicleWheel;
     friend class PhysicsConstraint;
     friend class PhysicsController;
     friend class PhysicsFixedConstraint;
@@ -169,6 +171,15 @@ public:
     inline void setLinearVelocity(const Vector3& velocity);
 
     /**
+     * Sets the rigid body's linear velocity.
+     * 
+     * @param x The x coordinate of the linear velocity vector.
+     * @param y The y coordinate of the linear velocity vector.
+     * @param z The z coordinate of the linear velocity vector.
+     */
+    inline void setLinearVelocity(float x, float y, float z);
+
+    /**
      * Gets the rigid body's angular velocity.
      * 
      * @return The angular velocity.
@@ -181,6 +192,15 @@ public:
      * @param velocity The angular velocity.
      */
     inline void setAngularVelocity(const Vector3& velocity);
+
+    /**
+     * Sets the rigid body's angular velocity.
+     * 
+     * @param x The x coordinate of the angular velocity vector.
+     * @param y The y coordinate of the angular velocity vector.
+     * @param z The z coordinate of the angular velocity vector.
+     */
+    inline void setAngularVelocity(float x, float y, float z);
 
     /**
      * Gets the rigid body's anisotropic friction.
@@ -197,6 +217,15 @@ public:
     inline void setAnisotropicFriction(const Vector3& friction);
 
     /**
+     * Sets the rigid body's anisotropic friction.
+     * 
+     * @param x The x coordinate of the anisotropic friction.
+     * @param y The y coordinate of the anisotropic friction.
+     * @param z The z coordinate of the anisotropic friction.
+     */
+    inline void setAnisotropicFriction(float x, float y, float z);
+
+    /**
      * Gets the gravity that affects the rigid body (this can
      * be different from the global gravity; @see setGravity(Vector3)).
      * 
@@ -210,6 +239,15 @@ public:
      * @param gravity The gravity.
      */
     inline void setGravity(const Vector3& gravity);
+
+    /**
+     * Sets the rigid body's gravity (this overrides the global gravity for this rigid body).
+     * 
+     * @param x The x coordinate of the gravity vector.
+     * @param y The y coordinate of the gravity vector.
+     * @param z The z coordinate of the gravity vector.
+     */
+    inline void setGravity(float x, float y, float z);
 
     /**
      * Sets whether the rigid body is a kinematic rigid body or not.
@@ -244,6 +282,8 @@ public:
 
     /**
      * Applies the given force to the rigid body (optionally, from the given relative position).
+     * Note that the total force applied depends on the duration of the next frame.
+     * If you want to apply an "impulse" irrespective of the frame duration, consider using applyImpulse.
      * 
      * @param force The force to be applied.
      * @param relativePosition The relative position from which to apply the force.
@@ -304,12 +344,12 @@ private:
     /**
      * Creates a rigid body from the specified properties object.
      * 
-     * @param node The node to create a rigid body for; note that the node must have
-     *      a model attached to it prior to creating a rigid body for it.
-     * @param properties The properties object defining the rigid body (must have namespace equal to 'rigidBody').
+     * @param node The node to create a rigid body for; note that the node must have a model attached to it prior to creating a rigid body for it.
+     * @param properties The properties object defining the rigid body.
+     * @param nspace The namespace expected (default is "RIGID_BODY").
      * @return The newly created rigid body, or <code>NULL</code> if the rigid body failed to load.
      */
-    static PhysicsRigidBody* create(Node* node, Properties* properties);
+    static PhysicsRigidBody* create(Node* node, Properties* properties, const char* nspace = "RIGID_BODY");
 
     // Adds a constraint to this rigid body.
     void addConstraint(PhysicsConstraint* constraint);

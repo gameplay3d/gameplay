@@ -60,8 +60,6 @@ void Label::addListener(Control::Listener* listener, int eventFlags)
         GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
     }
 
-    _consumeInputEvents = true;
-
     Control::addListener(listener, eventFlags);
 }
     

@@ -64,6 +64,12 @@ inline void PhysicsRigidBody::setLinearVelocity(const Vector3& velocity)
     _body->setLinearVelocity(BV(velocity));
 }
 
+inline void PhysicsRigidBody::setLinearVelocity(float x, float y, float z)
+{
+    GP_ASSERT(_body);
+    _body->setLinearVelocity(btVector3(x, y, z));
+}
+
 inline Vector3 PhysicsRigidBody::getAngularVelocity() const
 {
     GP_ASSERT(_body);
@@ -75,6 +81,12 @@ inline void PhysicsRigidBody::setAngularVelocity(const Vector3& velocity)
 {
     GP_ASSERT(_body);
     _body->setAngularVelocity(BV(velocity));
+}
+
+inline void PhysicsRigidBody::setAngularVelocity(float x, float y, float z)
+{
+    GP_ASSERT(_body);
+    _body->setAngularVelocity(btVector3(x, y, z));
 }
 
 inline Vector3 PhysicsRigidBody::getAnisotropicFriction() const
@@ -90,6 +102,12 @@ inline void PhysicsRigidBody::setAnisotropicFriction(const Vector3& friction)
     _body->setAnisotropicFriction(BV(friction));
 }
 
+inline void PhysicsRigidBody::setAnisotropicFriction(float x, float y, float z)
+{
+    GP_ASSERT(_body);
+    _body->setAnisotropicFriction(btVector3(x, y, z));
+}
+
 inline Vector3 PhysicsRigidBody::getGravity() const
 {
     GP_ASSERT(_body);
@@ -101,6 +119,12 @@ inline void PhysicsRigidBody::setGravity(const Vector3& gravity)
 {
     GP_ASSERT(_body);
     _body->setGravity(BV(gravity));
+}
+
+inline void PhysicsRigidBody::setGravity(float x, float y, float z)
+{
+    GP_ASSERT(_body);
+    _body->setGravity(btVector3(x, y, z));
 }
 
 inline bool PhysicsRigidBody::isStatic() const

@@ -39,24 +39,6 @@ public:
         if (object == _me || object->getType() == PhysicsCollisionObject::GHOST_OBJECT)
             return 1.0f;
 
-        /*
-        btVector3 hitNormalWorld;
-        if (normalInWorldSpace)
-        {
-            hitNormalWorld = convexResult.m_hitNormalLocal;
-        } else
-        {
-            // transform normal into worldspace
-            hitNormalWorld = convexResult.m_hitCollisionObject->getWorldTransform().getBasis()*convexResult.m_hitNormalLocal;
-        }
-
-        btScalar dotUp = _up.dot(hitNormalWorld);
-        if (dotUp < _minSlopeDot)
-        {
-            return btScalar(1.0);
-        }
-        */
-
         return ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
     }
 
@@ -71,7 +53,7 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
     : PhysicsGhostObject(node, shape), _moveVelocity(0,0,0), _forwardVelocity(0.0f), _rightVelocity(0.0f),
     _verticalVelocity(0, 0, 0), _currentVelocity(0,0,0), _normalizedVelocity(0,0,0),
     _colliding(false), _collisionNormal(0,0,0), _currentPosition(0,0,0), _stepHeight(0.1f),
-    _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass)
+    _slopeAngle(0.0f), _cosSlopeAngle(0.0f), _physicsEnabled(true), _mass(mass), _actionInterface(NULL)
 {
     setMaxSlopeAngle(45.0f);
 
@@ -81,14 +63,17 @@ PhysicsCharacter::PhysicsCharacter(Node* node, const PhysicsCollisionShape::Defi
 
     // Register ourselves as an action on the physics world so we are called back during physics ticks.
     GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
-    Game::getInstance()->getPhysicsController()->_world->addAction(this);
+    _actionInterface = new ActionInterface(this);
+    Game::getInstance()->getPhysicsController()->_world->addAction(_actionInterface);
 }
 
 PhysicsCharacter::~PhysicsCharacter()
 {
     // Unregister ourselves as action from world.
     GP_ASSERT(Game::getInstance()->getPhysicsController() && Game::getInstance()->getPhysicsController()->_world);
-    Game::getInstance()->getPhysicsController()->_world->removeAction(this);
+    Game::getInstance()->getPhysicsController()->_world->removeAction(_actionInterface);
+    SAFE_DELETE(_actionInterface);
+
 }
 
 PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
@@ -202,6 +187,11 @@ void PhysicsCharacter::setVelocity(const Vector3& velocity)
     _moveVelocity.setValue(velocity.x, velocity.y, velocity.z);
 }
 
+void PhysicsCharacter::setVelocity(float x, float y, float z)
+{
+    _moveVelocity.setValue(x, y, z);
+}
+
 void PhysicsCharacter::rotate(const Vector3& axis, float angle)
 {
     GP_ASSERT(_node);
@@ -311,53 +301,6 @@ void PhysicsCharacter::updateCurrentVelocity()
         _normalizedVelocity.normalize();
         _currentVelocity = _normalizedVelocity * std::sqrt(velocity2);
     }
-}
-
-void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
-{
-    GP_ASSERT(_ghostObject);
-    GP_ASSERT(_node);
-
-    // First check for existing collisions and attempt to respond/fix them.
-    // Basically we are trying to move the character so that it does not penetrate
-    // any other collision objects in the scene. We need to do this to ensure that
-    // the following steps (movement) start from a clean slate, where the character
-    // is not colliding with anything. Also, this step handles collision between
-    // dynamic objects (i.e. objects that moved and now intersect the character).
-    if (_physicsEnabled)
-    {
-        _colliding = false;
-        int stepCount = 0;
-        while (fixCollision(collisionWorld))
-        {
-            _colliding = true;
-
-            if (++stepCount > 4)
-            {
-                // Most likely we are wedged between a number of different collision objects.
-                break;
-            }
-        }
-    }
-
-    // Update current and target world positions.
-    btVector3 startPosition = _ghostObject->getWorldTransform().getOrigin();
-    _currentPosition = startPosition;
-
-    // Process movement in the up direction.
-    if (_physicsEnabled)
-        stepUp(collisionWorld, deltaTimeStep);
-    
-    // Process horizontal movement.
-    stepForwardAndStrafe(collisionWorld, deltaTimeStep);
-
-    // Process movement in the down direction.
-    if (_physicsEnabled)
-        stepDown(collisionWorld, deltaTimeStep);
-
-    // Set new position.
-    btVector3 translation = _currentPosition - startPosition;
-    _node->translate(translation.x(), translation.y(), translation.z());
 }
 
 void PhysicsCharacter::stepUp(btCollisionWorld* collisionWorld, btScalar time)
@@ -687,9 +630,66 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
     return collision;
 }
 
-void PhysicsCharacter::debugDraw(btIDebugDraw* debugDrawer)
+PhysicsCharacter::ActionInterface::ActionInterface(PhysicsCharacter* character) : character(character)
 {
-    // debug drawing handled by PhysicsController
 }
+
+void PhysicsCharacter::ActionInterface::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
+{
+    character->updateAction(collisionWorld, deltaTimeStep);
+}
+
+void PhysicsCharacter::ActionInterface::debugDraw(btIDebugDraw* debugDrawer)
+{
+    // Not used yet.
+}
+
+void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
+{
+    GP_ASSERT(_ghostObject);
+    GP_ASSERT(_node);
+
+    // First check for existing collisions and attempt to respond/fix them.
+    // Basically we are trying to move the character so that it does not penetrate
+    // any other collision objects in the scene. We need to do this to ensure that
+    // the following steps (movement) start from a clean slate, where the character
+    // is not colliding with anything. Also, this step handles collision between
+    // dynamic objects (i.e. objects that moved and now intersect the character).
+    if (_physicsEnabled)
+    {
+        _colliding = false;
+        int stepCount = 0;
+        while (fixCollision(collisionWorld))
+        {
+            _colliding = true;
+
+            if (++stepCount > 4)
+            {
+                // Most likely we are wedged between a number of different collision objects.
+                break;
+            }
+        }
+    }
+
+    // Update current and target world positions.
+    btVector3 startPosition = _ghostObject->getWorldTransform().getOrigin();
+    _currentPosition = startPosition;
+
+    // Process movement in the up direction.
+    if (_physicsEnabled)
+        stepUp(collisionWorld, deltaTimeStep);
+    
+    // Process horizontal movement.
+    stepForwardAndStrafe(collisionWorld, deltaTimeStep);
+
+    // Process movement in the down direction.
+    if (_physicsEnabled)
+        stepDown(collisionWorld, deltaTimeStep);
+
+    // Set new position.
+    btVector3 translation = _currentPosition - startPosition;
+    _node->translate(translation.x(), translation.y(), translation.z());
+}
+
 
 }

@@ -3,11 +3,14 @@
 #include "Platform.h"
 #include "Game.h"
 #include "Keyboard.h"
-#include "Touch.h"
 #include "Mouse.h"
+#include "Touch.h"
+#include "Gesture.h"
+#include "Gamepad.h"
 #include "FileSystem.h"
 #include "Bundle.h"
-#include "Gamepad.h"
+#include "MathUtil.h"
+#include "Logger.h"
 
 // Math
 #include "Rectangle.h"
@@ -73,6 +76,8 @@
 #include "PhysicsRigidBody.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 
 // AI
 #include "AIController.h"
@@ -95,4 +100,4 @@
 #include "Layout.h"
 #include "AbsoluteLayout.h"
 #include "VerticalLayout.h"
-
+#include "FlowLayout.h"

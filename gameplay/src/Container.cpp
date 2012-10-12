@@ -20,6 +20,8 @@ namespace gameplay
 static const long SCROLL_INERTIA_DELAY = 100L;
 // Factor to multiply friction by before applying to velocity.
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
+// Distance that must be scrolled before isScrolling() will return true, used e.g. to cancel button-click events.
+static const float SCROLL_THRESHOLD = 10.0f;
 
 /**
  * Sort function for use with _controls.sort(), based on Z-Order.
@@ -41,7 +43,7 @@ Container::Container()
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0),
-      _contactIndices(0)
+      _contactIndices(0), _initializedWithScroll(false)
 {
 }
 
@@ -172,6 +174,7 @@ void Container::addControls(Theme* theme, Properties* properties)
         if (control)
         {
             addControl(control);
+            control->release();
 
             if (control->getZIndex() == -1)
             {
@@ -204,32 +207,78 @@ Layout* Container::getLayout()
 unsigned int Container::addControl(Control* control)
 {
     GP_ASSERT(control);
-    _controls.push_back(control);
 
-    return _controls.size() - 1;
+    if (control->_parent && control->_parent != this)
+    {
+        control->_parent->removeControl(control);
+    }
+
+    if (control->_parent != this)
+    {
+        _controls.push_back(control);
+        control->addRef();
+        control->_parent = this;
+        return _controls.size() - 1;
+    }
+    else
+    {
+        // Control is already in this container.
+        // Do nothing but determine and return control's index.
+        const size_t size = _controls.size();
+        for (size_t i = 0; i < size; ++i)
+        {
+            Control* c = _controls[i];
+            if (c == control)
+            {
+                return i;
+            }
+        }
+
+        // Should never reach this.
+        GP_ASSERT(false);
+        return 0;
+    }
 }
 
 void Container::insertControl(Control* control, unsigned int index)
 {
     GP_ASSERT(control);
-    std::vector<Control*>::iterator it = _controls.begin() + index;
-    _controls.insert(it, control);
+
+    if (control->_parent && control->_parent != this)
+    {
+        control->_parent->removeControl(control);
+    }
+
+    if (control->_parent != this)
+    {
+        std::vector<Control*>::iterator it = _controls.begin() + index;
+        _controls.insert(it, control);
+        control->addRef();
+        control->_parent = this;
+    }
 }
 
 void Container::removeControl(unsigned int index)
 {
+    GP_ASSERT(index < _controls.size());
+
     std::vector<Control*>::iterator it = _controls.begin() + index;
     _controls.erase(it);
+    Control* control = *it;
+    control->_parent = NULL;
+    SAFE_RELEASE(control);
 }
 
 void Container::removeControl(const char* id)
 {
+    GP_ASSERT(id);
     std::vector<Control*>::iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* c = *it;
         if (strcmp(id, c->getId()) == 0)
         {
+            SAFE_RELEASE(c);
             _controls.erase(it);
             return;
         }
@@ -244,6 +293,7 @@ void Container::removeControl(Control* control)
     {
         if (*it == control)
         {
+            SAFE_RELEASE(control);
             _controls.erase(it);
             return;
         }
@@ -311,6 +361,16 @@ void Container::setScrollBarsAutoHide(bool autoHide)
 bool Container::isScrollBarsAutoHide() const
 {
     return _scrollBarsAutoHide;
+}
+
+bool Container::isScrolling() const
+{
+    if (_parent && _parent->isScrolling())
+        return true;
+
+    return (_scrolling &&
+            (abs(_scrollingLastX - _scrollingFirstX) > SCROLL_THRESHOLD ||
+             abs(_scrollingLastY - _scrollingFirstY) > SCROLL_THRESHOLD));
 }
 
 Animation* Container::getAnimation(const char* id) const
@@ -533,6 +593,11 @@ bool Container::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
 {
+    // This event may run untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this container, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     std::vector<Control*>::const_iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
@@ -547,7 +612,8 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             if (control->keyEvent(evt, key))
             {
-                return _consumeInputEvents;
+                release();
+                return true;
             }
             else if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
             {
@@ -566,6 +632,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
                     if (nextControl->getFocusIndex() == focusIndex)
                     {
                         nextControl->setState(Control::FOCUS);
+                        release();
                         return _consumeInputEvents;
                     }
                 }
@@ -573,6 +640,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
         }
     }
 
+    release();
     return false;
 }
 
@@ -602,10 +670,6 @@ Layout::Type Container::getLayoutType(const char* layoutString)
     {
         return Layout::LAYOUT_FLOW;
     }
-    else if (layoutName == "LAYOUT_SCROLL")
-    {
-        return Layout::LAYOUT_SCROLL;
-    }
     else
     {
         // Default.
@@ -615,6 +679,12 @@ Layout::Type Container::getLayoutType(const char* layoutString)
 
 void Container::updateScroll()
 {
+    if (!_initializedWithScroll)
+    {
+        _initializedWithScroll = true;
+        _layout->update(this, _scrollPosition);
+    }
+
     // Update Time.
     static double lastFrameTime = Game::getGameTime();
     double frameTime = Game::getGameTime();
@@ -730,26 +800,26 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
     switch(evt)
     {
     case Touch::TOUCH_PRESS:
-    	if (_contactIndex == INVALID_CONTACT_INDEX)
-    	{
-    		_contactIndex = (int) contactIndex;
-    		_contactIndices++;
-			_scrollingLastX = _scrollingFirstX = x;
-			_scrollingLastY = _scrollingFirstY = y;
-			_scrollingVelocity.set(0, 0);
-			_scrolling = true;
-			_scrollingStartTimeX = _scrollingStartTimeY = 0;
+        if (_contactIndex == INVALID_CONTACT_INDEX)
+        {
+            _contactIndex = (int) contactIndex;
+            _contactIndices++;
+            _scrollingLastX = _scrollingFirstX = x;
+            _scrollingLastY = _scrollingFirstY = y;
+            _scrollingVelocity.set(0, 0);
+            _scrolling = true;
+            _scrollingStartTimeX = _scrollingStartTimeY = 0;
 
-			if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
-			{
-				_scrollBarOpacityClip->stop();
-				_scrollBarOpacityClip = NULL;
-			}
-			_scrollBarOpacity = 1.0f;
+            if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+            {
+                _scrollBarOpacityClip->stop();
+                _scrollBarOpacityClip = NULL;
+            }
+            _scrollBarOpacity = 1.0f;
             _dirty = true;
-			return _consumeInputEvents;
-    	}
-		break;
+            return _consumeInputEvents;
+        }
+        break;
     case Touch::TOUCH_MOVE:
         if (_scrolling && _contactIndex == (int) contactIndex)
         {
@@ -814,58 +884,58 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         break;
 
     case Touch::TOUCH_RELEASE:
-    	if (_contactIndex == (int) contactIndex)
-    	{
-    		_contactIndex = INVALID_CONTACT_INDEX;
-    		_contactIndices--;
-			_scrolling = false;
-			double gameTime = Game::getAbsoluteTime();
-			float timeSinceLastMove = (float)(gameTime - _scrollingLastTime);
-			if (timeSinceLastMove > SCROLL_INERTIA_DELAY)
-			{
-				_scrollingVelocity.set(0, 0);
-				_scrollingMouseVertically = _scrollingMouseHorizontally = false;
+        if (_contactIndex == (int) contactIndex)
+        {
+            _contactIndex = INVALID_CONTACT_INDEX;
+            _contactIndices--;
+            _scrolling = false;
+            double gameTime = Game::getAbsoluteTime();
+            float timeSinceLastMove = (float)(gameTime - _scrollingLastTime);
+            if (timeSinceLastMove > SCROLL_INERTIA_DELAY)
+            {
+                _scrollingVelocity.set(0, 0);
+                _scrollingMouseVertically = _scrollingMouseHorizontally = false;
                 _dirty = true;
-				return _consumeInputEvents;
-			}
+                return _consumeInputEvents;
+            }
 
-			int dx = _scrollingLastX - _scrollingFirstX;
-			int dy = _scrollingLastY - _scrollingFirstY;
+            int dx = _scrollingLastX - _scrollingFirstX;
+            int dy = _scrollingLastY - _scrollingFirstY;
 
-			float timeTakenX = (float)(gameTime - _scrollingStartTimeX);
-			float elapsedSecsX = timeTakenX * 0.001f;
-			float timeTakenY = (float)(gameTime - _scrollingStartTimeY);
-			float elapsedSecsY = timeTakenY * 0.001f;
+            float timeTakenX = (float)(gameTime - _scrollingStartTimeX);
+            float elapsedSecsX = timeTakenX * 0.001f;
+            float timeTakenY = (float)(gameTime - _scrollingStartTimeY);
+            float elapsedSecsY = timeTakenY * 0.001f;
 
-			float vx = dx;
-			float vy = dy;
-			if (elapsedSecsX > 0)
-				vx = (float)dx / elapsedSecsX;
-			if (elapsedSecsY > 0)
-				vy = (float)dy / elapsedSecsY;
+            float vx = dx;
+            float vy = dy;
+            if (elapsedSecsX > 0)
+                vx = (float)dx / elapsedSecsX;
+            if (elapsedSecsY > 0)
+                vy = (float)dy / elapsedSecsY;
 
-			if (_scrollingMouseVertically)
-			{
-				float yRatio = _totalHeight / _absoluteBounds.height;
-				vy *= yRatio;
-				_scrollingVelocity.set(0, -vy);
-			}
-			else if (_scrollingMouseHorizontally)
-			{
-				float xRatio = _totalWidth / _absoluteBounds.width;
-				vx *= xRatio;
-				_scrollingVelocity.set(-vx, 0);
-			}
-			else
-			{
-				_scrollingVelocity.set(vx, vy);
-			}
+            if (_scrollingMouseVertically)
+            {
+                float yRatio = _totalHeight / _absoluteBounds.height;
+                vy *= yRatio;
+                _scrollingVelocity.set(0, -vy);
+            }
+            else if (_scrollingMouseHorizontally)
+            {
+                float xRatio = _totalWidth / _absoluteBounds.width;
+                vx *= xRatio;
+                _scrollingVelocity.set(-vx, 0);
+            }
+            else
+            {
+                _scrollingVelocity.set(vx, vy);
+            }
 
-			_scrollingMouseVertically = _scrollingMouseHorizontally = false;
+            _scrollingMouseVertically = _scrollingMouseHorizontally = false;
             _dirty = true;
-			return _consumeInputEvents;
-    	}
-    	break;
+            return _consumeInputEvents;
+        }
+        break;
     }
 
     return false;
@@ -955,6 +1025,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         return false;
     }
 
+    // This event may run untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this container, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     bool eventConsumed = false;
     const Theme::Border& border = getBorder(_state);
     const Theme::Padding& padding = getPadding();
@@ -987,8 +1062,8 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
 
         Control::State currentState = control->getState();
-        if ((control->isContainer() && currentState == Control::FOCUS) || 
-            (currentState != Control::NORMAL) ||// && control->_contactIndex == data) ||
+        if ((control->isContainer() && currentState == Control::FOCUS) ||
+            (currentState != Control::NORMAL) ||
             ((evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
@@ -1008,6 +1083,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     if (!isEnabled())
     {
+        release();
         return (_consumeInputEvents | eventConsumed);
     }
     
@@ -1027,6 +1103,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         {
             setState(Control::NORMAL);
             _contactIndex = INVALID_CONTACT_INDEX;
+            release();
             return false;
         }
         break;
@@ -1050,6 +1127,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
     }
 
+    release();
     return (_consumeInputEvents | eventConsumed);
 }
 

@@ -5,6 +5,7 @@ namespace gameplay
 {
 
 Camera::Camera(void) :
+    _cameraType(CameraPerspective), 
     _fieldOfView(0.0f),
     _aspectRatio(0.0f),
     _nearPlane(0.0f),

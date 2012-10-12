@@ -126,7 +126,7 @@ void Rectangle::inflate(float horizontalAmount, float verticalAmount)
     height += verticalAmount * 2;
 }
 
-const Rectangle& Rectangle::operator = (const Rectangle& r)
+Rectangle& Rectangle::operator = (const Rectangle& r)
 {
     x = r.x;
     y = r.y;

@@ -151,7 +151,7 @@ void PhysicsRigidBody::applyTorqueImpulse(const Vector3& torque)
     }
 }
 
-PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
+PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties, const char* nspace)
 {
     // Check if the properties is valid and has a valid namespace.
     if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
@@ -167,9 +167,9 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties)
         GP_ERROR("Failed to load physics rigid body from properties object; required attribute 'type' is missing.");
         return NULL;
     }
-    if (strcmp(type, "RIGID_BODY") != 0)
+    if (strcmp(type, nspace) != 0)
     {
-        GP_ERROR("Failed to load physics rigid body from properties object; attribute 'type' must be equal to 'RIGID_BODY'.");
+        GP_ERROR("Failed to load physics rigid body from properties object; attribute 'type' must be equal to '%s'.", nspace);
         return NULL;
     }
 

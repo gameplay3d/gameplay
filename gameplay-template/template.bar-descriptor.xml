@@ -39,8 +39,6 @@
 
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
-    
-    <platformVersion>2.0.0.7971</platformVersion>
 
     <initialWindow>
         <aspectRatio>landscape</aspectRatio>

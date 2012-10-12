@@ -33,22 +33,22 @@ public:
     void setFloat(unsigned int index, float value);
 
     /**
-     * Gets the value of the AnimationValue in a float array.
+     * Copies one or more float values from this AnimationValue into the specified array.
      *
-     * @param value The array to populate with the AnimationValue's values.
-     * @param offset The offset into the value to start populating.
-     * @param length The number of values to copy into the array.
+     * @param index The index to start copying from.
+     * @param values Pointer to float array to copy values into.
+     * @param count Number of values to copy.
      */
-    void getFloat(float* value, unsigned int offset, unsigned int length) const;
+    void getFloats(unsigned int index, float* values, unsigned int count) const;
 
     /**
-     * Sets the value of the AnimationValue.
+     * Copies one or more float values into the AnimationValue.
      *
-     * @param value The array to populate the AnimationValue's values.
-     * @param offset The offset into the value array to start populating from.
-     * @param length The number of values to copy into the AnimationValue.
+     * @param index The index of the first component to set the value for.
+     * @param values Array of values to copy into the AnimationValue.
+     * @param count Number of values to in the array to copy in.
      */
-    void setFloat(float* value, unsigned int offset, unsigned int length);
+    void setFloats(unsigned int index, float* values, unsigned int count);
 
 private:
 

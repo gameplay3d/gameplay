@@ -17,6 +17,7 @@ int lua_MaterialParameter_getAnimationPropertyComponentCount(lua_State* state);
 int lua_MaterialParameter_getAnimationPropertyValue(lua_State* state);
 int lua_MaterialParameter_getName(lua_State* state);
 int lua_MaterialParameter_getRefCount(lua_State* state);
+int lua_MaterialParameter_getSampler(lua_State* state);
 int lua_MaterialParameter_release(lua_State* state);
 int lua_MaterialParameter_setAnimationPropertyValue(lua_State* state);
 int lua_MaterialParameter_setValue(lua_State* state);

@@ -159,6 +159,7 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
+    GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
     GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
 
 
@@ -401,6 +402,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     read = fread(data, 1, dataSize, file);
     if (read != dataSize)
     {
+        SAFE_DELETE_ARRAY(data);
         GP_ERROR("Failed to read texture data from PVR file '%s'.", path);
         return NULL;
     }
@@ -722,13 +724,13 @@ Texture* Texture::createCompressedDDS(const char* path)
         }
         else
         {
+            // TODO: For uncompressed formats, set GL_UNPACK_ALIGNMENT based on stride
             GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, i, internalFormat, mipLevels[i].width, mipLevels[i].height, 0, format, GL_UNSIGNED_INT, mipLevels[i].data) );
         }
-        
+
         // Clean up the texture data.
         SAFE_DELETE_ARRAY(mipLevels[i].data);
     }
-    
 
     // Clean up mip levels structure.
     SAFE_DELETE_ARRAY(mipLevels);

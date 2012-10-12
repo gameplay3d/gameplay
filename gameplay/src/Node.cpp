@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Joint.h"
 #include "PhysicsRigidBody.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
 #include "Game.h"
@@ -13,17 +15,12 @@
 #define NODE_DIRTY_BOUNDS 2
 #define NODE_DIRTY_ALL (NODE_DIRTY_WORLD | NODE_DIRTY_BOUNDS)
 
-// Node property flags
-#define NODE_FLAG_VISIBLE 1
-#define NODE_FLAG_TRANSPARENT 2
-#define NODE_FLAG_DYNAMIC 4
-
 namespace gameplay
 {
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
-    _nodeFlags(NODE_FLAG_VISIBLE), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
@@ -52,6 +49,7 @@ Node::~Node()
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
     SAFE_DELETE(_collisionObject);
+    SAFE_DELETE(_tags);
 
     setAgent(NULL);
 
@@ -213,43 +211,46 @@ Node* Node::getParent() const
     return _parent;
 }
 
-bool Node::isVisible() const
+bool Node::hasTag(const char* name) const
 {
-    return ((_nodeFlags & NODE_FLAG_VISIBLE) == NODE_FLAG_VISIBLE);
+    GP_ASSERT(name);
+
+    return (_tags ? _tags->find(name) != _tags->end() : false);
 }
 
-void Node::setVisible(bool visible)
+const char* Node::getTag(const char* name) const
 {
-    if (visible)
-        _nodeFlags |= NODE_FLAG_VISIBLE;
+    GP_ASSERT(name);
+
+    if (!_tags)
+        return NULL;
+
+    std::map<std::string, std::string>::const_iterator itr = _tags->find(name);
+    return (itr == _tags->end() ? NULL : itr->second.c_str());
+}
+
+void Node::setTag(const char* name, const char* value)
+{
+    GP_ASSERT(name);
+
+    if (value == NULL)
+    {
+        // Removing tag
+        if (_tags)
+        {
+            _tags->erase(name);
+            if (_tags->size() == 0)
+                SAFE_DELETE(_tags);
+        }
+    }
     else
-        _nodeFlags &= ~NODE_FLAG_VISIBLE;
-}
+    {
+        // Setting tag
+        if (_tags == NULL)
+            _tags = new std::map<std::string, std::string>();
 
-bool Node::isTransparent() const
-{
-    return ((_nodeFlags & NODE_FLAG_TRANSPARENT) == NODE_FLAG_TRANSPARENT);
-}
-
-void Node::setTransparent(bool transparent)
-{
-    if (transparent)
-        _nodeFlags |= NODE_FLAG_TRANSPARENT;
-    else
-        _nodeFlags &= ~NODE_FLAG_TRANSPARENT;
-}
-
-bool Node::isDynamic() const
-{
-    return ((_nodeFlags & NODE_FLAG_DYNAMIC) == NODE_FLAG_DYNAMIC);
-}
-
-void Node::setDynamic(bool dynamic)
-{
-    if (dynamic)
-        _nodeFlags |= NODE_FLAG_DYNAMIC;
-    else
-        _nodeFlags &= ~NODE_FLAG_DYNAMIC;
+        (*_tags)[name] = value;
+    }
 }
 
 void* Node::getUserPointer() const
@@ -950,6 +951,10 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     }
     node->_world = _world;
     node->_bounds = _bounds;
+    if (_tags)
+    {
+        node->_tags = new std::map<std::string, std::string>(_tags->begin(), _tags->end());
+    }
 }
 
 AudioSource* Node::getAudioSource() const
@@ -1031,6 +1036,27 @@ PhysicsCollisionObject* Node::setCollisionObject(PhysicsCollisionObject::Type ty
         }
         break;
 
+    case PhysicsCollisionObject::VEHICLE:
+        {
+            _collisionObject = new PhysicsVehicle(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
+
+    case PhysicsCollisionObject::VEHICLE_WHEEL:
+        {
+            //
+            // PhysicsVehicleWheel is special because this call will traverse up the scene graph for the
+            // first ancestor node that is shared with another node of collision type VEHICLE, and then
+            // proceed to add itself as a wheel onto that vehicle. This is by design, and allows the
+            // visual scene hierarchy to be the sole representation of the relationship between physics
+            // objects rather than forcing that upon the otherwise-flat ".physics" (properties) file.
+            //
+            // IMPORTANT: The VEHICLE must come before the VEHICLE_WHEEL in the ".scene" (properties) file!
+            //
+            _collisionObject = new PhysicsVehicleWheel(this, shape, rigidBodyParameters ? *rigidBodyParameters : PhysicsRigidBody::Parameters());
+        }
+        break;
+
     case PhysicsCollisionObject::NONE:
         break;  // Already deleted, Just don't add a new collision object back.
     }
@@ -1079,6 +1105,23 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
         {
             _collisionObject = PhysicsRigidBody::create(this, properties);
         }
+        else if (strcmp(type, "VEHICLE") == 0)
+        {
+            _collisionObject = PhysicsVehicle::create(this, properties);
+        }
+        else if (strcmp(type, "VEHICLE_WHEEL") == 0)
+        {
+            //
+            // PhysicsVehicleWheel is special because this call will traverse up the scene graph for the
+            // first ancestor node that is shared with another node of collision type VEHICLE, and then
+            // proceed to add itself as a wheel onto that vehicle. This is by design, and allows the
+            // visual scene hierarchy to be the sole representation of the relationship between physics
+            // objects rather than forcing that upon the otherwise-flat ".physics" (properties) file.
+            //
+            // IMPORTANT: The VEHICLE must come before the VEHICLE_WHEEL in the ".scene" (properties) file!
+            //
+            _collisionObject = PhysicsVehicleWheel::create(this, properties);
+        }
         else
         {
             GP_ERROR("Unsupported collision object type '%s'.", type);
@@ -1092,6 +1135,21 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
     }
 
     return _collisionObject;
+}
+
+unsigned int Node::getNumAdvertisedDescendants() const
+{
+    return _advertisedDescendants.size();
+}
+
+Node* Node::getAdvertisedDescendant(unsigned int i) const
+{
+    return _advertisedDescendants.at(i);
+}
+
+void Node::addAdvertisedDescendant(Node* node)
+{
+    _advertisedDescendants.push_back(node);
 }
 
 AIAgent* Node::getAgent() const

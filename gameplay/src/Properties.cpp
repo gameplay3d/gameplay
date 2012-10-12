@@ -17,15 +17,11 @@ Properties::Properties()
 }
 
 Properties::Properties(const Properties& copy)
+    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties)
 {
-    _namespace = copy._namespace;
-    _id = copy._id;
-    _parentID = copy._parentID;
-    _properties = copy._properties;
-    
     _namespaces = std::vector<Properties*>();
     std::vector<Properties*>::const_iterator it;
-    for (it = copy._namespaces.begin(); it < copy._namespaces.end(); it++)
+    for (it = copy._namespaces.begin(); it < copy._namespaces.end(); ++it)
     {
         GP_ASSERT(*it);
         _namespaces.push_back(new Properties(**it));
@@ -138,12 +134,15 @@ void Properties::readProperties(FILE* file)
                 rc = strchr(line, '}');
 
                 // First token should be the property name.
-                name = strtok(line, " =\t");
+                name = strtok(line, "=");
                 if (name == NULL)
                 {
                     GP_ERROR("Error parsing properties file: attribute without name.");
                     return;
                 }
+
+                // Remove white-space from name.
+                name = trimWhiteSpace(name);
 
                 // Scan for next token, the property's value.
                 value = strtok(NULL, "=");
@@ -327,7 +326,7 @@ void Properties::readProperties(FILE* file)
 Properties::~Properties()
 {
     unsigned int count = _namespaces.size();
-    for (unsigned int i = 0; i < count; i++)
+    for (unsigned int i = 0; i < count; ++i)
     {
         SAFE_DELETE(_namespaces[i]);
     }
@@ -423,7 +422,7 @@ void Properties::resolveInheritance(const char* id)
                 derived->_properties = parent->_properties;
                 derived->_namespaces = std::vector<Properties*>();
                 std::vector<Properties*>::const_iterator itt;
-                for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); itt++)
+                for (itt = parent->_namespaces.begin(); itt < parent->_namespaces.end(); ++itt)
                 {
                     GP_ASSERT(*itt);
                     derived->_namespaces.push_back(new Properties(**itt));
@@ -466,7 +465,7 @@ void Properties::mergeWith(Properties* overrides)
         this->_properties[name] = value;
         name = overrides->getNextProperty(&value);
     }
-    SAFE_DELETE(value);
+    SAFE_DELETE_ARRAY(value);
     this->_propertiesItr = this->_properties.end();
 
     // Merge all common nested namespaces, add new ones.
@@ -512,7 +511,7 @@ const char* Properties::getNextProperty(char** value)
     else
     {
         // Move to the next property
-        _propertiesItr++;
+        ++_propertiesItr;
     }
 
     if (_propertiesItr != _properties.end())
@@ -540,7 +539,7 @@ Properties* Properties::getNextNamespace()
     }
     else
     {
-        _namespacesItr++;
+        ++_namespacesItr;
     }
 
     if (_namespacesItr != _namespaces.end())
@@ -565,7 +564,7 @@ Properties* Properties::getNamespace(const char* id, bool searchNames) const
     Properties* ret = NULL;
     std::vector<Properties*>::const_iterator it;
     
-    for (it = _namespaces.begin(); it < _namespaces.end(); it++)
+    for (it = _namespaces.begin(); it < _namespaces.end(); ++it)
     {
         ret = *it;
         if (strcmp(searchNames ? ret->_namespace.c_str() : ret->_id.c_str(), id) == 0)
@@ -976,12 +975,12 @@ void calculateNamespacePath(const std::string& urlString, std::string& fileStrin
 {
     // If the url references a specific namespace within the file,
     // calculate the full namespace path to the final namespace.
-    unsigned int loc = urlString.rfind("#");
-    if (loc != urlString.npos)
+    size_t loc = urlString.rfind("#");
+    if (loc != std::string::npos)
     {
         fileString = urlString.substr(0, loc);
         std::string namespacePathString = urlString.substr(loc + 1);
-        while ((loc = namespacePathString.find("/")) != namespacePathString.npos)
+        while ((loc = namespacePathString.find("/")) != std::string::npos)
         {
             namespacePath.push_back(namespacePathString.substr(0, loc));
             namespacePathString = namespacePathString.substr(loc + 1);
@@ -998,11 +997,9 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
 {
     // If the url references a specific namespace within the file,
     // return the specified namespace or notify the user if it cannot be found.
-    Properties* originalProperties = properties;
     if (namespacePath.size() > 0)
     {
         unsigned int size = namespacePath.size();
-        const char* tmp = namespacePath[0].c_str();
         properties->rewind();
         Properties* iter = properties->getNextNamespace();
         for (unsigned int i = 0; i < size;)

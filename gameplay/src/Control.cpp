@@ -7,8 +7,8 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _listeners(NULL),
-    _contactIndex(INVALID_CONTACT_INDEX), _styleOverridden(false), _skin(NULL)
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _autoWidth(false), _autoHeight(false), _listeners(NULL),
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(0), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
@@ -41,7 +41,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
 
-    _consumeInputEvents = properties->getBool("consumeEvents", true);
+    _consumeInputEvents = properties->getBool("consumeInputEvents", true);
 
     if (properties->exists("zIndex"))
     {
@@ -148,6 +148,24 @@ void Control::setSize(float width, float height)
     if (width != _bounds.width || height != _bounds.height)
     {
         _bounds.width = width;
+        _bounds.height = height;
+        _dirty = true;
+    }
+}
+
+void Control::setWidth(float width)
+{
+    if (width != _bounds.width)
+    {
+        _bounds.width = width;
+        _dirty = true;
+    }
+}
+
+void Control::setHeight(float height)
+{
+    if (height != _bounds.height)
+    {
         _bounds.height = height;
         _dirty = true;
     }
@@ -726,20 +744,20 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
     case Touch::TOUCH_RELEASE:
         if (_contactIndex == (int)contactIndex)
         {
-			_contactIndex = INVALID_CONTACT_INDEX;
+            _contactIndex = INVALID_CONTACT_INDEX;
 
-			// Always trigger Listener::RELEASE
-			notifyListeners(Listener::RELEASE);
+            // Always trigger Listener::RELEASE
+            notifyListeners(Listener::RELEASE);
 
-			// Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
-			if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-				y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-			{
-				// Leave this control in the FOCUS state.
-				notifyListeners(Listener::CLICK);
-			}
+            // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
+            if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+            {
+                // Leave this control in the FOCUS state.
+                notifyListeners(Listener::CLICK);
+            }
 
-			return _consumeInputEvents;
+            return _consumeInputEvents;
         }
         break;
     }
@@ -780,6 +798,11 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 void Control::notifyListeners(Listener::EventType eventType)
 {
+    // This method runs untrusted code by notifying listeners of events.
+    // If the user calls exit() or otherwise releases this control, we
+    // need to keep it alive until the method returns.
+    addRef();
+
     if (_listeners)
     {
         std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->find(eventType);
@@ -795,6 +818,8 @@ void Control::notifyListeners(Listener::EventType eventType)
     }
 
     fireScriptEvent<void>("controlEvent", this, eventType);
+
+    release();
 }
 
 void Control::update(const Control* container, const Vector2& offset)

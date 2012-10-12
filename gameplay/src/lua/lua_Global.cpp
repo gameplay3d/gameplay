@@ -6,7 +6,6 @@ namespace gameplay
 
 void luaRegister_lua_Global()
 {
-    ScriptUtil::registerFunction("printError", lua__printError);
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Button");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "CheckBox");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
@@ -45,6 +44,8 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsCharacter");
     ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsGhostObject");
     ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsRigidBody");
+    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsVehicle");
+    ScriptUtil::setGlobalHierarchyPair("PhysicsCollisionObject", "PhysicsVehicleWheel");
     ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsFixedConstraint");
     ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsGenericConstraint");
     ScriptUtil::setGlobalHierarchyPair("PhysicsConstraint", "PhysicsHingeConstraint");
@@ -353,8 +354,18 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Gamepad");
-        ScriptUtil::registerConstantString("ATTACHED_EVENT", "ATTACHED_EVENT", scopePath);
-        ScriptUtil::registerConstantString("DETACHED_EVENT", "DETACHED_EVENT", scopePath);
+        ScriptUtil::registerConstantString("CONNECTED_EVENT", "CONNECTED_EVENT", scopePath);
+        ScriptUtil::registerConstantString("DISCONNECTED_EVENT", "DISCONNECTED_EVENT", scopePath);
+    }
+
+    // Register enumeration Gesture::GestureEvent.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Gesture");
+        ScriptUtil::registerConstantString("GESTURE_TAP", "GESTURE_TAP", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_SWIPE", "GESTURE_SWIPE", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_PINCH", "GESTURE_PINCH", scopePath);
+        ScriptUtil::registerConstantString("GESTURE_ANY_SUPPORTED", "GESTURE_ANY_SUPPORTED", scopePath);
     }
 
     // Register enumeration Image::Format.
@@ -543,7 +554,6 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("LAYOUT_FLOW", "LAYOUT_FLOW", scopePath);
         ScriptUtil::registerConstantString("LAYOUT_VERTICAL", "LAYOUT_VERTICAL", scopePath);
         ScriptUtil::registerConstantString("LAYOUT_ABSOLUTE", "LAYOUT_ABSOLUTE", scopePath);
-        ScriptUtil::registerConstantString("LAYOUT_SCROLL", "LAYOUT_SCROLL", scopePath);
     }
 
     // Register enumeration Light::Type.
@@ -553,6 +563,15 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("DIRECTIONAL", "DIRECTIONAL", scopePath);
         ScriptUtil::registerConstantString("POINT", "POINT", scopePath);
         ScriptUtil::registerConstantString("SPOT", "SPOT", scopePath);
+    }
+
+    // Register enumeration Logger::Level.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Logger");
+        ScriptUtil::registerConstantString("LEVEL_INFO", "LEVEL_INFO", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_WARN", "LEVEL_WARN", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_ERROR", "LEVEL_ERROR", scopePath);
     }
 
     // Register enumeration Mesh::IndexFormat.
@@ -623,6 +642,8 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("RIGID_BODY", "RIGID_BODY", scopePath);
         ScriptUtil::registerConstantString("CHARACTER", "CHARACTER", scopePath);
         ScriptUtil::registerConstantString("GHOST_OBJECT", "GHOST_OBJECT", scopePath);
+        ScriptUtil::registerConstantString("VEHICLE", "VEHICLE", scopePath);
+        ScriptUtil::registerConstantString("VEHICLE_WHEEL", "VEHICLE_WHEEL", scopePath);
         ScriptUtil::registerConstantString("NONE", "NONE", scopePath);
     }
 
@@ -764,42 +785,6 @@ void luaRegister_lua_Global()
     }
 }
 
-int lua__printError(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
-
-                printError(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua__printError - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 static const char* enumStringEmpty = "";
 
 const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
@@ -836,6 +821,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_GamepadButtonState((Gamepad::ButtonState)value);
     if (enumname == "Gamepad::GamepadEvent")
         return lua_stringFromEnum_GamepadGamepadEvent((Gamepad::GamepadEvent)value);
+    if (enumname == "Gesture::GestureEvent")
+        return lua_stringFromEnum_GestureGestureEvent((Gesture::GestureEvent)value);
     if (enumname == "Image::Format")
         return lua_stringFromEnum_ImageFormat((Image::Format)value);
     if (enumname == "Keyboard::Key")
@@ -846,6 +833,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_LayoutType((Layout::Type)value);
     if (enumname == "Light::Type")
         return lua_stringFromEnum_LightType((Light::Type)value);
+    if (enumname == "Logger::Level")
+        return lua_stringFromEnum_LoggerLevel((Logger::Level)value);
     if (enumname == "Mesh::IndexFormat")
         return lua_stringFromEnum_MeshIndexFormat((Mesh::IndexFormat)value);
     if (enumname == "Mesh::PrimitiveType")

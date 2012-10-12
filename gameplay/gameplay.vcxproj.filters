@@ -81,10 +81,16 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlatformQNX.cpp">
+    <ClCompile Include="src\gameplay-main-blackberry.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PlatformWin32.cpp">
+    <ClCompile Include="src\PlatformBlackBerry.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-windows.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlatformWindows.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Quaternion.cpp">
@@ -163,12 +169,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderState.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameplay-main-qnx.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameplay-main-win32.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DebugNew.cpp">
@@ -781,6 +781,42 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameplay-main-linux.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlatformLinux.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_Gesture.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsVehicle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsVehicleWheel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_PhysicsVehicle.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_PhysicsVehicleWheel.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MathUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_LoggerLevel.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_Logger.cpp">
       <Filter>lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1556,14 +1592,38 @@
     <ClInclude Include="src\lua\lua_ScriptTarget.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\Gesture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Gesture.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_GestureGestureEvent.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsVehicleWheel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsVehicle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_PhysicsVehicle.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_PhysicsVehicleWheel.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logger.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Logger.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_LoggerLevel.h">
+      <Filter>lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\gameplay-main-macosx.mm">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\PlatformMacOSX.mm">
-      <Filter>src</Filter>
-    </None>
     <None Include="src\Game.inl">
       <Filter>src</Filter>
     </None>
@@ -1571,12 +1631,6 @@
       <Filter>src</Filter>
     </None>
     <None Include="src\MeshBatch.inl">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\gameplay-main-ios.mm">
-      <Filter>src</Filter>
-    </None>
-    <None Include="src\PlatformiOS.mm">
       <Filter>src</Filter>
     </None>
     <None Include="res\logo_black.png">

@@ -94,6 +94,8 @@ Inheritance diagram for gameplay::PhysicsCollisionObject:</div>
   <map id="gameplay::PhysicsCollisionObject_map" name="gameplay::PhysicsCollisionObject_map">
 <area href="classgameplay_1_1_physics_ghost_object.html" alt="gameplay::PhysicsGhostObject" shape="rect" coords="0,56,201,80"/>
 <area href="classgameplay_1_1_physics_rigid_body.html" alt="gameplay::PhysicsRigidBody" shape="rect" coords="211,56,412,80"/>
+<area href="classgameplay_1_1_physics_vehicle.html" alt="gameplay::PhysicsVehicle" shape="rect" coords="422,56,623,80"/>
+<area href="classgameplay_1_1_physics_vehicle_wheel.html" alt="gameplay::PhysicsVehicleWheel" shape="rect" coords="633,56,834,80"/>
 <area href="classgameplay_1_1_physics_character.html" alt="gameplay::PhysicsCharacter" shape="rect" coords="0,112,201,136"/>
 </map>
  </div></div>
@@ -108,10 +110,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgameplay_1_1_physics_collision_object_1_1_script_listener.html">ScriptListener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a99aa09f043883dcd33865cd582de463e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">Type</a> { <a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea07cc1b95ca294433692b4d81591cff82">RIGID_BODY</a>, 
+<tr class="memitem:a99aa09f043883dcd33865cd582de463e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463e">Type</a> { <br/>
+&#160;&#160;<a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea07cc1b95ca294433692b4d81591cff82">RIGID_BODY</a>, 
 <a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea0ea1b525bda57a5cceb5daf9969340d4">CHARACTER</a>, 
 <a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ead53b782e6493799fe204347a135c5b0f">GHOST_OBJECT</a>, 
+<a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea1dca7e68482bbb04661ddd74cb078009">VEHICLE</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea1eaecb5422b90503505e6bbbd6173591">VEHICLE_WHEEL</a>, 
 <a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea029d6253cd9568502b63edec460ee0ce">NONE</a>
+<br/>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -165,6 +172,12 @@ Protected Attributes</h2></td></tr>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a99aa09f043883dcd33865cd582de463ead53b782e6493799fe204347a135c5b0f"></a>GHOST_OBJECT</em>&nbsp;</td><td>
 <p><a class="el" href="classgameplay_1_1_physics_ghost_object.html">PhysicsGhostObject</a> type. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a99aa09f043883dcd33865cd582de463ea1dca7e68482bbb04661ddd74cb078009"></a>VEHICLE</em>&nbsp;</td><td>
+<p><a class="el" href="classgameplay_1_1_physics_vehicle.html">PhysicsVehicle</a> type. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a99aa09f043883dcd33865cd582de463ea1eaecb5422b90503505e6bbbd6173591"></a>VEHICLE_WHEEL</em>&nbsp;</td><td>
+<p><a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html">PhysicsVehicleWheel</a> type. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a99aa09f043883dcd33865cd582de463ea029d6253cd9568502b63edec460ee0ce"></a>NONE</em>&nbsp;</td><td>
 <p>No collision object. </p>
@@ -324,7 +337,7 @@ Protected Attributes</h2></td></tr>
 <p>Returns the Bullet Physics collision object.</p>
 <dl class="section return"><dt>Returns:</dt><dd>The Bullet collision object. </dd></dl>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a0542fd62b1949e5f0f49fe94c4917509">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_character.html#aac150c2dc76bf492747c2e6d8c1371e5">gameplay::PhysicsCharacter</a>, and <a class="el" href="classgameplay_1_1_physics_ghost_object.html#a1c68d089ef5fc05135fefb05cdb82aa3">gameplay::PhysicsGhostObject</a>.</p>
+<p>Implemented in <a class="el" href="classgameplay_1_1_physics_vehicle.html#aa180111dc79ff8a25094f2b83ffeb9a2">gameplay::PhysicsVehicle</a>, <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a0542fd62b1949e5f0f49fe94c4917509">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html#a78a18f9a2b05b865774fdc809d8cf8b2">gameplay::PhysicsVehicleWheel</a>, <a class="el" href="classgameplay_1_1_physics_character.html#aac150c2dc76bf492747c2e6d8c1371e5">gameplay::PhysicsCharacter</a>, and <a class="el" href="classgameplay_1_1_physics_ghost_object.html#a1c68d089ef5fc05135fefb05cdb82aa3">gameplay::PhysicsGhostObject</a>.</p>
 
 </div>
 </div>
@@ -395,7 +408,7 @@ Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Returns the type of the collision object. </p>
 
-<p>Implemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a5bea09a08f4a5bcdbbcad16ce66cf218">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_character.html#a5de393cc5dc5eadd102b2cc9d366ee04">gameplay::PhysicsCharacter</a>, and <a class="el" href="classgameplay_1_1_physics_ghost_object.html#a49ac0020b175c9affe4b18e4ef89ae6b">gameplay::PhysicsGhostObject</a>.</p>
+<p>Implemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a5bea09a08f4a5bcdbbcad16ce66cf218">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_vehicle.html#a787ac4de341777c2c717b70f41fde574">gameplay::PhysicsVehicle</a>, <a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html#a2926421daef459560bab73c76396049c">gameplay::PhysicsVehicleWheel</a>, <a class="el" href="classgameplay_1_1_physics_character.html#a5de393cc5dc5eadd102b2cc9d366ee04">gameplay::PhysicsCharacter</a>, and <a class="el" href="classgameplay_1_1_physics_ghost_object.html#a49ac0020b175c9affe4b18e4ef89ae6b">gameplay::PhysicsGhostObject</a>.</p>
 
 </div>
 </div>
@@ -547,7 +560,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a2197beb224bd4f7f008a01aad866e112">gameplay::PhysicsRigidBody</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a2197beb224bd4f7f008a01aad866e112">gameplay::PhysicsRigidBody</a>, <a class="el" href="classgameplay_1_1_physics_vehicle.html#a4179b1f23f21ebd31fcb1847791fbed9">gameplay::PhysicsVehicle</a>, and <a class="el" href="classgameplay_1_1_physics_vehicle_wheel.html#a917d749a134892a223c4970d1c905e01">gameplay::PhysicsVehicleWheel</a>.</p>
 
 </div>
 </div>
@@ -626,7 +639,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

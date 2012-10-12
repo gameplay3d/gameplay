@@ -6,6 +6,9 @@ precision highp float;
 #if defined(VERTEX_COLOR)
 varying vec3 v_color;						// Input Vertex color ( r g b )
 #endif
+#if defined(TEXTURE_LIGHTMAP)
+varying vec2 v_texCoord;
+#endif
 
 // Uniforms
 uniform vec4 u_diffuseColor;               	// Diffuse color
@@ -30,7 +33,7 @@ void main()
     #endif
 	#if defined(TEXTURE_LIGHTMAP)
 	vec4 lightColor = texture2D(u_lightmapTexture, v_texCoord);
-	gl_FragColor.a *= lightColor.a;
+	gl_FragColor.rgb *= lightColor.rgb;
 	#endif
 	// Global color modulation
 	#if defined(MODULATE_COLOR)

@@ -104,6 +104,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa7dba8897cf876a8ae25520726b370c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme.html">Theme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#afa7dba8897cf876a8ae25520726b370c">getTheme</a> () const </td></tr>
 <tr class="memitem:aa6d0faa4255c19da30cf65e7630dd718"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#aa6d0faa4255c19da30cf65e7630dd718">setSize</a> (float width, float height)</td></tr>
 <tr class="memitem:aa45423c8be779f56c582c508049d9cd9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#aa45423c8be779f56c582c508049d9cd9">setBounds</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;bounds)</td></tr>
+<tr class="memitem:a2833db258ab2d6b74772438d53552a38"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a2833db258ab2d6b74772438d53552a38">setWidth</a> (float width)</td></tr>
+<tr class="memitem:afa7e7903fea9b1131c5f30c6ab1799c7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#afa7e7903fea9b1131c5f30c6ab1799c7">setHeight</a> (float height)</td></tr>
 <tr class="memitem:a114b7be61c46f05865f0e34b2be0bbc8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#a114b7be61c46f05865f0e34b2be0bbc8">setAutoWidth</a> (bool autoWidth)</td></tr>
 <tr class="memitem:affcd586c3e3dfb7f0e7f766cda357302"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#affcd586c3e3dfb7f0e7f766cda357302">setAutoHeight</a> (bool autoHeight)</td></tr>
 <tr class="memitem:aedb8f5113ddebf12d30c7dea5cba1191"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_form.html#aedb8f5113ddebf12d30c7dea5cba1191">setNode</a> (<a class="el" href="classgameplay_1_1_node.html">Node</a> *node)</td></tr>
@@ -131,6 +133,7 @@ Static Public Member Functions</h2></td></tr>
         size       = &lt;width, height&gt;       // Size of the form, measured in pixels.
         width      = &lt;width&gt;               // Can be used in place of 'size', e.g. with 'autoHeight = true'
         height     = &lt;height&gt;              // Can be used in place of 'size', e.g. with 'autoWidth = true'
+        consumeEvents = &lt;bool&gt;             // Whether the form propogates input events to the Game's input event handler. Default is false
       
         // All the nested controls within this form.
         container { }
@@ -367,6 +370,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="afa7e7903fea9b1131c5f30c6ab1799c7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_form.html#afa7e7903fea9b1131c5f30c6ab1799c7">gameplay::Form::setHeight</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set the desired height of the form.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">height</td><td>The height. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ac794ce5a5271ec9cf4d931c09a842167">gameplay::Control</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aedb8f5113ddebf12d30c7dea5cba1191"></a>
 <div class="memitem">
 <div class="memproto">
@@ -429,6 +458,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2833db258ab2d6b74772438d53552a38"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_form.html#a2833db258ab2d6b74772438d53552a38">gameplay::Form::setWidth</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>width</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Set the desired width of the form.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>The width. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#ae7281d8ef901f277b72c29ec184a049f">gameplay::Control</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a0a6bdd50ceecb5f41566d92aa6735af4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -451,7 +506,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:42 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

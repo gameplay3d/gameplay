@@ -19,7 +19,7 @@ namespace gameplay
  * character than would be possible if trying to move a character by applying
  * physical simulation with forces.
  */
-class PhysicsCharacter : public PhysicsGhostObject, public btActionInterface
+class PhysicsCharacter : public PhysicsGhostObject
 {
     friend class Node;
 
@@ -98,6 +98,20 @@ public:
     void setVelocity(const Vector3& velocity);
 
     /**
+     * Sets the velocity of the character.
+     *
+     * Calling this function sets the velocity (speed and direction) for the character.
+     * The velocity is maintained until this method is called again. The final velocity
+     * of the character is determined by product of the current velocity, right and
+     * forward vectors.
+     * 
+     * @param x The x coordinate of the velocity vector.
+     * @param y The y coordinate of the velocity vector.
+     * @param z The z coordinate of the velocity vector.
+     */
+    void setVelocity(float x, float y, float z);
+
+    /**
      * Rotates the character.
      *
      * @param axis Axis of rotation.
@@ -165,18 +179,6 @@ public:
      */
     void jump(float height);
 
-    /**
-     * @see btActionInterface::updateAction
-     * @script{ignore}
-     */
-    void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
-
-    /**
-     * @see btActionInterface::debugDraw
-     * @script{ignore}
-     */
-    void debugDraw(btIDebugDraw* debugDrawer);
-
 protected:
 
     /**
@@ -226,6 +228,25 @@ private:
 
     bool fixCollision(btCollisionWorld* world);
 
+    /**
+     * Hides the callback interfaces within the PhysicsCharacter.
+     * @script{ignore}
+     */
+    class ActionInterface : public btActionInterface
+    {
+    public:
+
+        ActionInterface(PhysicsCharacter* character);
+
+        void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
+
+        void debugDraw(btIDebugDraw* debugDrawer);
+        
+        PhysicsCharacter* character;
+    };
+
+    void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
+
     btVector3 _moveVelocity;
     float _forwardVelocity;
     float _rightVelocity;
@@ -241,6 +262,7 @@ private:
     float _cosSlopeAngle;
     bool _physicsEnabled;
     float _mass;
+    ActionInterface* _actionInterface;
 };
 
 }

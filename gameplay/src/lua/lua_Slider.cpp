@@ -23,7 +23,7 @@ namespace gameplay
 
 void luaRegister_Slider()
 {
-    const luaL_Reg lua_members[] = 
+    const luaL_Reg lua_members[] =
     {
         {"addListener", lua_Slider_addListener},
         {"addRef", lua_Slider_addRef},
@@ -93,6 +93,7 @@ void luaRegister_Slider()
         {"setFocusIndex", lua_Slider_setFocusIndex},
         {"setFont", lua_Slider_setFont},
         {"setFontSize", lua_Slider_setFontSize},
+        {"setHeight", lua_Slider_setHeight},
         {"setImageColor", lua_Slider_setImageColor},
         {"setImageRegion", lua_Slider_setImageRegion},
         {"setMargin", lua_Slider_setMargin},
@@ -112,10 +113,11 @@ void luaRegister_Slider()
         {"setTextColor", lua_Slider_setTextColor},
         {"setTextRightToLeft", lua_Slider_setTextRightToLeft},
         {"setValue", lua_Slider_setValue},
+        {"setWidth", lua_Slider_setWidth},
         {"setZIndex", lua_Slider_setZIndex},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] = 
+    const luaL_Reg lua_statics[] =
     {
         {"ANIMATE_OPACITY", lua_Slider_static_ANIMATE_OPACITY},
         {"ANIMATE_POSITION", lua_Slider_static_ANIMATE_POSITION},
@@ -159,7 +161,7 @@ int lua_Slider__gc(lua_State* state)
                     Slider* instance = (Slider*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-                
+
                 return 0;
             }
             else
@@ -201,7 +203,7 @@ int lua_Slider_addListener(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->addListener(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -235,7 +237,7 @@ int lua_Slider_addRef(lua_State* state)
             {
                 Slider* instance = getInstance(state);
                 instance->addRef();
-                
+
                 return 0;
             }
             else
@@ -277,7 +279,7 @@ int lua_Slider_addScriptCallback(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -388,7 +390,7 @@ int lua_Slider_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -442,7 +444,7 @@ int lua_Slider_createAnimation(lua_State* state)
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned long> param4 = ScriptUtil::getUnsignedLongPointer(5);
+                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
                 // Get parameter 5 off the stack.
                 ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
@@ -644,7 +646,7 @@ int lua_Slider_destroyAnimation(lua_State* state)
             {
                 Slider* instance = getInstance(state);
                 instance->destroyAnimation();
-                
+
                 return 0;
             }
             else
@@ -664,7 +666,7 @@ int lua_Slider_destroyAnimation(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-                
+
                 return 0;
             }
             else
@@ -698,7 +700,7 @@ int lua_Slider_disable(lua_State* state)
             {
                 Slider* instance = getInstance(state);
                 instance->disable();
-                
+
                 return 0;
             }
             else
@@ -732,7 +734,7 @@ int lua_Slider_enable(lua_State* state)
             {
                 Slider* instance = getInstance(state);
                 instance->enable();
-                
+
                 return 0;
             }
             else
@@ -930,7 +932,7 @@ int lua_Slider_getAnimationPropertyValue(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -2922,7 +2924,7 @@ int lua_Slider_release(lua_State* state)
             {
                 Slider* instance = getInstance(state);
                 instance->release();
-                
+
                 return 0;
             }
             else
@@ -2964,7 +2966,7 @@ int lua_Slider_removeScriptCallback(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3002,7 +3004,7 @@ int lua_Slider_setAlignment(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setAlignment(param1);
-                
+
                 return 0;
             }
             else
@@ -3044,7 +3046,7 @@ int lua_Slider_setAnimationPropertyValue(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3072,7 +3074,7 @@ int lua_Slider_setAnimationPropertyValue(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-                
+
                 return 0;
             }
             else
@@ -3110,7 +3112,7 @@ int lua_Slider_setAutoHeight(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setAutoHeight(param1);
-                
+
                 return 0;
             }
             else
@@ -3148,7 +3150,7 @@ int lua_Slider_setAutoWidth(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setAutoWidth(param1);
-                
+
                 return 0;
             }
             else
@@ -3198,7 +3200,7 @@ int lua_Slider_setBorder(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4);
-                
+
                 return 0;
             }
             else
@@ -3234,7 +3236,7 @@ int lua_Slider_setBorder(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4, param5);
-                
+
                 return 0;
             }
             else
@@ -3272,7 +3274,7 @@ int lua_Slider_setBounds(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setBounds(*param1);
-                
+
                 return 0;
             }
             else
@@ -3310,7 +3312,7 @@ int lua_Slider_setConsumeInputEvents(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setConsumeInputEvents(param1);
-                
+
                 return 0;
             }
             else
@@ -3352,7 +3354,7 @@ int lua_Slider_setCursorColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setCursorColor(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3394,7 +3396,7 @@ int lua_Slider_setCursorRegion(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setCursorRegion(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3432,7 +3434,7 @@ int lua_Slider_setFocusIndex(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setFocusIndex(param1);
-                
+
                 return 0;
             }
             else
@@ -3470,7 +3472,7 @@ int lua_Slider_setFont(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setFont(param1);
-                
+
                 return 0;
             }
             else
@@ -3494,7 +3496,7 @@ int lua_Slider_setFont(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setFont(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3532,7 +3534,7 @@ int lua_Slider_setFontSize(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setFontSize(param1);
-                
+
                 return 0;
             }
             else
@@ -3556,7 +3558,7 @@ int lua_Slider_setFontSize(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setFontSize(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3569,6 +3571,44 @@ int lua_Slider_setFontSize(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_setHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Slider* instance = getInstance(state);
+                instance->setHeight(param1);
+
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Slider_setHeight - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3598,7 +3638,7 @@ int lua_Slider_setImageColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
-                
+
                 return 0;
             }
             else
@@ -3626,7 +3666,7 @@ int lua_Slider_setImageColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setImageColor(param1, *param2, param3);
-                
+
                 return 0;
             }
             else
@@ -3668,7 +3708,7 @@ int lua_Slider_setImageRegion(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
-                
+
                 return 0;
             }
             else
@@ -3696,7 +3736,7 @@ int lua_Slider_setImageRegion(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2, param3);
-                
+
                 return 0;
             }
             else
@@ -3746,7 +3786,7 @@ int lua_Slider_setMargin(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setMargin(param1, param2, param3, param4);
-                
+
                 return 0;
             }
             else
@@ -3784,7 +3824,7 @@ int lua_Slider_setMax(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setMax(param1);
-                
+
                 return 0;
             }
             else
@@ -3822,7 +3862,7 @@ int lua_Slider_setMin(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setMin(param1);
-                
+
                 return 0;
             }
             else
@@ -3860,7 +3900,7 @@ int lua_Slider_setOpacity(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setOpacity(param1);
-                
+
                 return 0;
             }
             else
@@ -3884,7 +3924,7 @@ int lua_Slider_setOpacity(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setOpacity(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -3934,7 +3974,7 @@ int lua_Slider_setPadding(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setPadding(param1, param2, param3, param4);
-                
+
                 return 0;
             }
             else
@@ -3976,7 +4016,7 @@ int lua_Slider_setPosition(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setPosition(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4018,7 +4058,7 @@ int lua_Slider_setSize(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setSize(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4056,7 +4096,7 @@ int lua_Slider_setSkinColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setSkinColor(*param1);
-                
+
                 return 0;
             }
             else
@@ -4080,7 +4120,7 @@ int lua_Slider_setSkinColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setSkinColor(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4118,7 +4158,7 @@ int lua_Slider_setSkinRegion(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
-                
+
                 return 0;
             }
             else
@@ -4142,7 +4182,7 @@ int lua_Slider_setSkinRegion(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setSkinRegion(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4180,7 +4220,7 @@ int lua_Slider_setState(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setState(param1);
-                
+
                 return 0;
             }
             else
@@ -4218,7 +4258,7 @@ int lua_Slider_setStep(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setStep(param1);
-                
+
                 return 0;
             }
             else
@@ -4256,7 +4296,7 @@ int lua_Slider_setStyle(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setStyle(param1);
-                
+
                 return 0;
             }
             else
@@ -4294,7 +4334,7 @@ int lua_Slider_setText(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setText(param1);
-                
+
                 return 0;
             }
             else
@@ -4332,7 +4372,7 @@ int lua_Slider_setTextAlignment(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setTextAlignment(param1);
-                
+
                 return 0;
             }
             else
@@ -4356,7 +4396,7 @@ int lua_Slider_setTextAlignment(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setTextAlignment(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4394,7 +4434,7 @@ int lua_Slider_setTextColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setTextColor(*param1);
-                
+
                 return 0;
             }
             else
@@ -4418,7 +4458,7 @@ int lua_Slider_setTextColor(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setTextColor(*param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4456,7 +4496,7 @@ int lua_Slider_setTextRightToLeft(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setTextRightToLeft(param1);
-                
+
                 return 0;
             }
             else
@@ -4480,7 +4520,7 @@ int lua_Slider_setTextRightToLeft(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setTextRightToLeft(param1, param2);
-                
+
                 return 0;
             }
             else
@@ -4518,12 +4558,50 @@ int lua_Slider_setValue(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setValue(param1);
-                
+
                 return 0;
             }
             else
             {
                 lua_pushstring(state, "lua_Slider_setValue - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_setWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Slider* instance = getInstance(state);
+                instance->setWidth(param1);
+
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Slider_setWidth - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -4556,7 +4634,7 @@ int lua_Slider_setZIndex(lua_State* state)
 
                 Slider* instance = getInstance(state);
                 instance->setZIndex(param1);
-                
+
                 return 0;
             }
             else
