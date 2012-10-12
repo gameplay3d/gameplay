@@ -243,7 +243,16 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Creates a texture from the given image.  
+<p>Creates a texture from the given image.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>The image containing the texture data. </td></tr>
+    <tr><td class="paramname">generateMipmaps</td><td>True to generate a full mipmap chain, false otherwise.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The new texture, or NULL if the image is not of a supported texture format.  </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a0c79e32bab9ddfcba065d2e3c898d5bc"></a>
@@ -288,7 +297,20 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Creates a texture from the given texture data.  
+<p>Creates a texture from the given texture data.</p>
+<p>The data in the texture is expected to be tightly packed (no padding at the end of rows).</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>Format of the texture data. </td></tr>
+    <tr><td class="paramname">width</td><td>Width of the texture data. </td></tr>
+    <tr><td class="paramname">height</td><td>Height of the texture data. </td></tr>
+    <tr><td class="paramname">data</td><td>Raw texture data (expected to be tightly packed). </td></tr>
+    <tr><td class="paramname">generateMipmaps</td><td>True to generate a full mipmap chain, false otherwise.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns:</dt><dd>The new texture.  </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a502cf79334ec038207332c1047fff0cf"></a>
@@ -489,7 +511,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:15 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:45 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

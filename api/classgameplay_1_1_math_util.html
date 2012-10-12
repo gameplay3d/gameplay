@@ -74,6 +74,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::MathUtil Class Reference</div>  </div>
 </div><!--header-->
@@ -82,13 +84,125 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><code>#include &lt;MathUtil.h&gt;</code></p>
 
 <p><a href="classgameplay_1_1_math_util-members.html">List of all members.</a></p>
+<table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a7aedbe2c9e723c4663c36bbadd07be82"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_math_util.html#a7aedbe2c9e723c4663c36bbadd07be82">smooth</a> (float *x, float target, float elapsedTime, float responseTime)</td></tr>
+<tr class="memitem:aab96b700f4ddc422bec5d94a2f8c12bd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_math_util.html#aab96b700f4ddc422bec5d94a2f8c12bd">smooth</a> (float *x, float target, float elapsedTime, float riseTime, float fallTime)</td></tr>
+</table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Math utility class. Used for internal math optimizations. </p>
-</div></div><!-- contents -->
+</div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a7aedbe2c9e723c4663c36bbadd07be82"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_math_util.html#a7aedbe2c9e723c4663c36bbadd07be82">gameplay::MathUtil::smooth</a> </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>responseTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Updates the given scalar towards the given target using a smoothing function. The given response time determines the amount of smoothing (lag). A longer response time yields a smoother result and more lag. To force the scalar to follow the target closely, provide a response time that is very small relative to the given elapsed time.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>the scalar to update. </td></tr>
+    <tr><td class="paramname">target</td><td>target value. </td></tr>
+    <tr><td class="paramname">elapsedTime</td><td>elapsed time between calls. </td></tr>
+    <tr><td class="paramname">responseTime</td><td>response time (in the same units as elapsedTime). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aab96b700f4ddc422bec5d94a2f8c12bd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classgameplay_1_1_math_util.html#a7aedbe2c9e723c4663c36bbadd07be82">gameplay::MathUtil::smooth</a> </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>elapsedTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>riseTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>fallTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Updates the given scalar towards the given target using a smoothing function. The given rise and fall times determine the amount of smoothing (lag). Longer rise and fall times yield a smoother result and more lag. To force the scalar to follow the target closely, provide rise and fall times that are very small relative to the given elapsed time.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>the scalar to update. </td></tr>
+    <tr><td class="paramname">target</td><td>target value. </td></tr>
+    <tr><td class="paramname">elapsedTime</td><td>elapsed time between calls. </td></tr>
+    <tr><td class="paramname">riseTime</td><td>response time for rising slope (in the same units as elapsedTime). </td></tr>
+    <tr><td class="paramname">fallTime</td><td>response time for falling slope (in the same units as elapsedTime). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

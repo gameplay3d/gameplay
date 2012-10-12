@@ -105,6 +105,7 @@ Classes</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abff6e8bf395f24fe1c278422a75d1c4a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#abff6e8bf395f24fe1c278422a75d1c4a">getName</a> () const </td></tr>
+<tr class="memitem:a3a7a6b3a0c7d4ec466cdc9ba1da07f1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_texture_1_1_sampler.html">Texture::Sampler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a3a7a6b3a0c7d4ec466cdc9ba1da07f1c">getSampler</a> () const </td></tr>
 <tr class="memitem:a0625e5d8eefe6739f4654548f5938406"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a0625e5d8eefe6739f4654548f5938406">setValue</a> (float value)</td></tr>
 <tr class="memitem:aa1a76885839119cc08338f5005ce9575"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#aa1a76885839119cc08338f5005ce9575">setValue</a> (int value)</td></tr>
 <tr class="memitem:a67eed5c737a47e6fa7d0a4a7ad2a3a20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_material_parameter.html#a67eed5c737a47e6fa7d0a4a7ad2a3a20">setValue</a> (const float *values, unsigned int count=1)</td></tr>
@@ -342,6 +343,24 @@ template&lt;class ClassType , class ParameterType &gt; </div>
 </div>
 <div class="memdoc">
 <p>Returns the name of this material parameter. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3a7a6b3a0c7d4ec466cdc9ba1da07f1c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_texture_1_1_sampler.html">Texture::Sampler</a>* <a class="el" href="classgameplay_1_1_material_parameter.html#a3a7a6b3a0c7d4ec466cdc9ba1da07f1c">gameplay::MaterialParameter::getSampler</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the texture sampler or NULL if this <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> is not a sampler type.</p>
+<dl class="section return"><dt>Returns:</dt><dd>The texture sampler or NULL if this <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> is not a sampler type. </dd></dl>
 
 </div>
 </div>
@@ -808,7 +827,7 @@ template&lt;class ClassType , class ParameterType &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 23 2012 23:41:13 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 10 2012 23:54:43 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
