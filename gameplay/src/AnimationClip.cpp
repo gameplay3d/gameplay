@@ -249,7 +249,7 @@ void AnimationClip::crossFade(AnimationClip* clip, unsigned long duration)
     _crossFadeToClip->setClipStateBit(CLIP_IS_FADING_IN_BIT);
     _crossFadeToClip->_blendWeight = 0.0f;
     
-    // Set and intiliaze this clip to fade out
+    // Set and initialize this clip to fade out
     setClipStateBit(CLIP_IS_FADING_OUT_STARTED_BIT);
     setClipStateBit(CLIP_IS_FADING_OUT_BIT);
     _crossFadeOutElapsed = 0.0f;

@@ -3,7 +3,7 @@ gameplay Bundle File Format (.gpb)
 
 File Description
 ================
-A simple binary bundle file format supporting definition of primitve and builtin objects.
+A simple binary bundle file format supporting definition of primitive and built-in objects.
 
 File Extension and Mime Type
 ============================
@@ -42,7 +42,7 @@ Xrefs
 Xrefs are string with a specific format used for referencing objects internal and external to
 a package. An xref with the format "#id" references an object within the current package with
 the given ID. Xrefs can also have the format "file#id", where "file" is the name of package file
-(relative to the locaiton of the current package) and "id" is the unique identifier of an object
+(relative to the location of the current package) and "id" is the unique identifier of an object
 in that bundle.
 
 Primitives
