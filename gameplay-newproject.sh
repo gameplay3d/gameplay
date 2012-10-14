@@ -250,15 +250,6 @@ cp "gameplay-template/icon.png" "$projPath/android/res/drawable/icon.png"
 cp "gameplay-template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
 aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/android/res/values/strings.xml"
 
-#############################################
-# Copy CMake files
-#############################################
-mkdir -p "$projPath/build"
-cp "gameplay-template/gameplay-template-CMakeLists.txt" "$projPath/CMakeLists.txt"
-aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/CMakeLists.txt"
-aliassedinplace "s*TemplateGame*$className*g" "$projPath/CMakeLists.txt"
-aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/CMakeLists.txt"
-
 
 #############################################
 # Copy source files
