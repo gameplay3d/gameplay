@@ -566,8 +566,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
     navigator_request_events(0);
     navigator_rotation_lock(true);
-    orientation_direction_t direction;
-    orientation_get(&direction, &__orientationAngle);
+    __orientationAngle = atoi(getenv("ORIENTATION"));
 
     int rc = 0;
     int screenFormat = SCREEN_FORMAT_RGBA8888;
@@ -658,8 +657,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     }
     else
     {
-        int angle = atoi(getenv("ORIENTATION"));
-
         screen_display_t screen_display;
         rc = screen_get_window_property_pv(__screenWindow, SCREEN_PROPERTY_DISPLAY, (void **)&screen_display);
         if (rc)
@@ -687,7 +684,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         __screenWindowSize[0] = size[0];
         __screenWindowSize[1] = size[1];
 
-        if ((angle == 0) || (angle == 180))
+        if ((__orientationAngle == 0) || (__orientationAngle == 180))
         {
             if (((screen_mode.width > screen_mode.height) && (size[0] < size[1])) ||
                 ((screen_mode.width < screen_mode.height) && (size[0] > size[1])))
@@ -696,7 +693,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 __screenWindowSize[0] = size[1];
             }
         }
-        else if ((angle == 90) || (angle == 270))
+        else if ((__orientationAngle == 90) || (__orientationAngle == 270))
         {
             if (((screen_mode.width > screen_mode.height) && (size[0] > size[1])) ||
                 ((screen_mode.width < screen_mode.height) && (size[0] < size[1])))
@@ -712,7 +709,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         }
 
 
-        rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &angle);
+        rc = screen_set_window_property_iv(__screenWindow, SCREEN_PROPERTY_ROTATION, &__orientationAngle);
         if (rc)
         {
             perror("screen_set_window_property_iv(SCREEN_PROPERTY_ROTATION)");
