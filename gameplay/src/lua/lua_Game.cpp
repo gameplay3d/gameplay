@@ -23,6 +23,7 @@ void luaRegister_Game()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"canExit", lua_Game_canExit},
         {"clear", lua_Game_clear},
         {"displayKeyboard", lua_Game_displayKeyboard},
         {"exit", lua_Game_exit},
@@ -118,6 +119,43 @@ int lua_Game__gc(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_Game__gc - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_canExit(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                bool result = instance->canExit();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Game_canExit - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
