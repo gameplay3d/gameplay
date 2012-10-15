@@ -31,11 +31,11 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
     message(STATUS "Library Found: ${libName} Path: ${FOUND_LIB_${libName}}")
 endmacro (append_gameplay_ext_lib)
 
-macro(copy_files GLOBPAT SOURCE DESTINATION)
+macro(copy_files TARGET_NAME GLOBPAT SOURCE DESTINATION)
   file(GLOB COPY_FILES
     RELATIVE ${SOURCE}
     "${SOURCE}/${GLOBPAT}")
-  add_custom_target(copy ALL
+  add_custom_target(${TARGET_NAME} ALL
     COMMENT "Copying files: ${SOURCE}/${GLOBPAT}")
 
   foreach(FILENAME ${COPY_FILES})
@@ -43,7 +43,7 @@ macro(copy_files GLOBPAT SOURCE DESTINATION)
     set(DST "${DESTINATION}/${FILENAME}")
 
     add_custom_command(
-      TARGET copy
+      TARGET ${TARGET_NAME}
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SRC} ${DST}
       )
   endforeach(FILENAME)
@@ -103,4 +103,5 @@ set_target_properties(${GAME_NAME} PROPERTIES
 #TODO: Copy res files to the bin dir, it is done that way so we can make post
 #processing to the the res files in the future like zipping or preparation to
 #per platfom format.
-copy_files(* "${CMAKE_SOURCE_DIR}/res" "${GAME_OUTPUT_DIR}/res")
+copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "${GAME_OUTPUT_DIR}/res")
+copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "${GAME_OUTPUT_DIR}")
