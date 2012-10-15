@@ -146,6 +146,13 @@ public:
      */
     static bool isAbsolutePath(const char* filePath);
 
+    /**
+     * Creates a file on the file system from the specified asset (Android-specific).
+     * 
+     * @param path The path to the file.
+     */
+    static void createFileFromAsset(const char* path);
+
 private:
 
     /**
