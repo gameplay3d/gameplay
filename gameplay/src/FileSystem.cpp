@@ -25,9 +25,6 @@ extern AAssetManager* __assetManager;
 namespace gameplay
 {
 
-// Creates a file on the file system from the specified asset (Android-specific).
-static void createFileFromAsset(const char* path);
-
 #ifdef __ANDROID__
 #include <unistd.h>
 
@@ -334,7 +331,7 @@ bool FileSystem::isAbsolutePath(const char* filePath)
 #endif
 }
 
-void createFileFromAsset(const char* path)
+void FileSystem::createFileFromAsset(const char* path)
 {
 #ifdef __ANDROID__
     static std::set<std::string> upToDateAssets;
