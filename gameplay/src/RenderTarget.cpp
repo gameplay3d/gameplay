@@ -33,8 +33,17 @@ RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned 
         return NULL;
     }
 
+    RenderTarget* rt = create(id, texture);
+    texture->release();
+
+    return rt;
+}
+
+RenderTarget* RenderTarget::create(const char* id, Texture* texture)
+{
     RenderTarget* renderTarget = new RenderTarget(id);
     renderTarget->_texture = texture;
+    renderTarget->_texture->addRef();
 
     __renderTargets.push_back(renderTarget);
 
@@ -64,10 +73,20 @@ const char* RenderTarget::getId() const
 {
     return _id.c_str();
 }
-     
+
 Texture* RenderTarget::getTexture() const
 {
     return _texture;
+}
+
+unsigned int RenderTarget::getWidth() const
+{
+    return _texture->getWidth();
+}
+
+unsigned int RenderTarget::getHeight() const
+{
+    return _texture->getHeight();
 }
 
 }
