@@ -8,11 +8,7 @@ namespace gameplay
 {
 
 /**
- * Defines a contain for depth and stencil targets in a frame buffer object.
- *
- * This class assumes that the target hardware supports depth textures, since
- * creation of a DepthStencilTarget always attempts to create an underlying
- * depth texture.
+ * Defines a container for depth and stencil targets in a frame buffer object.
  */
 class DepthStencilTarget : public Ref
 {
@@ -72,12 +68,26 @@ public:
      */
     Format getFormat() const;
 
+    /**
+     * Returns the width of the DepthStencilTarget.
+     *
+     * @return The width.
+     */
+    unsigned int getWidth() const;
+
+    /**
+     * Returns the height of the DepthStencilTarget.
+     *
+     * @return The height.
+     */
+    unsigned int getHeight() const;
+
 private:
 
     /**
      * Constructor.
      */
-    DepthStencilTarget(const char* id, Format format);
+    DepthStencilTarget(const char* id, Format format, unsigned int width, unsigned int height);
 
     /**
      * Destructor.
@@ -92,6 +102,8 @@ private:
     std::string _id;
     Format _format;
     RenderBufferHandle _renderBuffer;
+    unsigned int _width;
+    unsigned int _height;
 };
 
 }

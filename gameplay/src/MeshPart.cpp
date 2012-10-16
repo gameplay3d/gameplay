@@ -23,19 +23,7 @@ MeshPart* MeshPart::create(Mesh* mesh, unsigned int meshIndex, Mesh::PrimitiveTy
     // Create a VBO for our index buffer.
     GLuint vbo;
     GL_ASSERT( glGenBuffers(1, &vbo) );
-    if (GL_LAST_ERROR())
-    {
-        GP_ERROR("Failed to create VBO for index buffer with OpenGL error %d.", GL_LAST_ERROR());
-        return NULL;
-    }
-
     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo) );
-    if (GL_LAST_ERROR())
-    {
-        GP_ERROR("Failed to bind VBO for index buffer with OpenGL error %d.", GL_LAST_ERROR());
-        glDeleteBuffers(1, &vbo);
-        return NULL;
-    }
 
     unsigned int indexSize = 0;
     switch (indexFormat)
@@ -54,13 +42,8 @@ MeshPart* MeshPart::create(Mesh* mesh, unsigned int meshIndex, Mesh::PrimitiveTy
         glDeleteBuffers(1, &vbo);
         return NULL;
     }
-    GL_CHECK( glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * indexCount, NULL, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
-    if (GL_LAST_ERROR())
-    {
-        GP_ERROR("Failed to load VBO with index data with OpenGL error %d.", GL_LAST_ERROR());
-        glDeleteBuffers(1, &vbo);
-        return NULL;
-    }
+
+    GL_ASSERT( glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * indexCount, NULL, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW) );
 
     MeshPart* part = new MeshPart();
     part->_mesh = mesh;
