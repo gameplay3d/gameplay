@@ -28,7 +28,7 @@ namespace gameplay
          text        = <string>
          checked     = <bool>
          iconSize    = <width, height>   // The size to draw the checkbox icon, if different from its size in the texture.
-         consumeEvents = <bool>  // Whether the checkbox propogates input events to the Game's input event handler. Default is true.
+         consumeEvents = <bool>  // Whether the checkbox propagates input events to the Game's input event handler. Default is true.
     }
  @endverbatim
  */

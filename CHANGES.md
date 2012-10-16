@@ -5,22 +5,22 @@
 - CodeBlocks 10 IDE support for Linux.
 - Gamepad controllers support for desktops.
 - Touch gesture support for tap, swipe and pinch.
-- Vehicle phyics support via new PhysicsVehicle and PhysicsVehicleWheel classes.
+- Vehicle physics support via new PhysicsVehicle and PhysicsVehicleWheel classes.
 - Adds new racer sample (sample06-racer).
 - Adds gameplay-tests project as a test app for various basic engine features with some initial tests.
 - Adds support for Scene files for wildcard identifiers.
 - Adds Visual Studio Plug-in support for BlackBerry PlayBook and BlackBerry 10.
 - Adds configurable multi-sampling anti-aliasing support. 
 - Adds updates to latest FBX SDK 2013.3.
-- Adds file formats documenation for game.config .scene, .material, .animation, .physics, .particle
+- Adds file formats documentation for game.config .scene, .material, .animation, .physics, .particle
 - Adds Game/Platform::canExit for testing device capabilities to quit. (only ios)
 - Web community forums at http://www.gameplay3d.org/forums.
 - Changed keyTimes from unsigned long[]  to unsigned int[]. (breaks compat. in AnimationTarget and Animation::Channel)
 - Fixed inconsistencies from Bundle::getObjectID() to Bundle::getObjectId() (breaks compat. in Bundle)
 - Fixes the texture coordinates of Mesh::createQuad(float x, float y, float width, float height).
-- Fixes line-wise distortion when loading RGB png's into texture that are non-power of two.
-- Fixes inconsitencies in createXXXX methods.  (breaks compat. in Scene)
-- Fixes Rectanngle::contains.
+- Fixes line-wise distortion when loading RGB png's into textures that are non-power of two.
+- Fixes inconsistencies in createXXXX methods.  (breaks compat. in Scene)
+- Fixes Rectangle::contains.
 - Fixes Lua print logging.
 - Fixes Lua errors to be treated as runtime warnings.
 - Fixes setVertexData to pointers instead of constant data.
@@ -31,7 +31,7 @@
 
 - Lua script bindings for all gameplay interfaces.
 - Lua script binding generator tool (gameplay-luagen) for generating gameplay Lua bindings from doxygen xml output.
-- AIController, AIAgent, AIStateMachine, AIState and AIMessage clases for scripted AI support.
+- AIController, AIAgent, AIStateMachine, AIState and AIMessage classes for scripted AI support.
 - Sample for sample05-lua to demonstrate basic Lua with AI scripting.
 - Gamepad class with virtual gamepad support.
 - Pre-built versions gameplay-encoder added to bin folder with TTF, DAE and FBX support built-in.
@@ -76,10 +76,10 @@
 - BlackBerry 10 support.
 - iOS 5.1 support.
 - Android 2.3+ support.
-- User interface system with declaritive forms and themes.
+- User interface system with declarative forms and themes.
 - Bluetooth keyboard/mouse support on BlackBerry platform.
 - Developer guide.
-- Sample/turorial for sample03-character.
+- Sample/tutorial for sample03-character.
 - Sample for sample04-particles to demonstrate particle emitters.
 - Fixes for loading properties from URL.
 - Fixes on Win32/MacOSX for when mouse pointer leaves the window and returns.
@@ -91,8 +91,8 @@
 
 - FBX support in gameplay-encoder.
 - MacOSX platform support using XCode.
-- Offscreen rendering functionality using FrameBuffer.
-- Loading 3D scences using declaritive .scene files.
+- Off-screen rendering functionality using FrameBuffer.
+- Loading 3D scenes using declarative  .scene files.
 - Loading audio from .ogg files using vorbis.
 - Loading AudioSources from .audio files.
 - Loading Animations from .animation files.
@@ -103,7 +103,7 @@
 - Font improvements for justify, clip, wrap and scaling.
 - Fixes for Font::drawText to use point size and not float scalar.
 - Fixes for memory leaks in and fixes to AnimationTarget.
-- Fixes for bumped and paralax shaders.
+- Fixes for bumped and parallax shaders.
 - Fixes to simplify folders for resources in samples.
 - Fixes to the material/shader system.
 - Fixes to the ParticleEmitter.
