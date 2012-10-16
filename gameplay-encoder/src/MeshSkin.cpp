@@ -36,12 +36,12 @@ void MeshSkin::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
     write(_bindShape, 16, file);
-    write(_joints.size(), file);
+    write((unsigned int)_joints.size(), file);
     for (std::vector<Node*>::const_iterator i = _joints.begin(); i != _joints.end(); ++i)
     {
         (*i)->writeBinaryXref(file);
     }
-    write(_bindPoses.size() * 16, file);
+    write((unsigned int)_bindPoses.size() * 16, file);
     for (std::vector<Matrix>::const_iterator i = _bindPoses.begin(); i != _bindPoses.end(); ++i)
     {
         write(i->m, 16, file);

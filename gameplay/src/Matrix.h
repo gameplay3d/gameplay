@@ -129,7 +129,7 @@ public:
      * Creates a view matrix based on the specified input parameters.
      *
      * @param eyePosition The eye position.
-     * @param targetPosition The target's cener position.
+     * @param targetPosition The target's center position.
      * @param up The up vector.
      * @param dst A matrix to store the result in.
      */

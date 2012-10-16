@@ -19,6 +19,7 @@ void luaRegister_Platform()
     };
     const luaL_Reg lua_statics[] = 
     {
+        {"canExit", lua_Platform_static_canExit},
         {"displayKeyboard", lua_Platform_static_displayKeyboard},
         {"getAbsoluteTime", lua_Platform_static_getAbsoluteTime},
         {"getAccelerometerValues", lua_Platform_static_getAccelerometerValues},
@@ -140,6 +141,34 @@ int lua_Platform_enterMessagePump(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_canExit(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            bool result = Platform::canExit();
+
+            // Push the return value onto the stack.
+            lua_pushboolean(state, result);
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

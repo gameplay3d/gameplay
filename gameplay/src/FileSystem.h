@@ -39,7 +39,7 @@ public:
      * Loads a properties file containing a list of filesystem aliases.
      *
      * The specified aliases file is a valid properties file that contains one
-     * or more namespaces with a list of fielsystem aliases that will be used
+     * or more namespaces with a list of filesystem aliases that will be used
      * to establish soft links to files when reading files through this class.
      *
      * This can be helpful for managing loading of resources that may change
@@ -145,6 +145,13 @@ public:
      * @return True if the path is an absolute path or false otherwise.
      */
     static bool isAbsolutePath(const char* filePath);
+
+    /**
+     * Creates a file on the file system from the specified asset (Android-specific).
+     * 
+     * @param path The path to the file.
+     */
+    static void createFileFromAsset(const char* path);
 
 private:
 
