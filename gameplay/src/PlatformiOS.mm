@@ -572,7 +572,7 @@ int getKey(unichar keyCode);
     if((evt & Gesture::GESTURE_TAP) == Gesture::GESTURE_TAP && _tapRecognizer == NULL)
     {
         _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        [self addGestureRecognizer:_swipeRecognizer];
+        [self addGestureRecognizer:_tapRecognizer];
     }
 }
 
@@ -598,20 +598,20 @@ int getKey(unichar keyCode);
     }
 }
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)sender
+- (void)handleTapGesture:(UITapGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:self];
     game->gestureTapEvent(location.x, location.y);
 }
 
-- (void)handlePinchGesture:(UIPinchGestureRecognizer *)sender
+- (void)handlePinchGesture:(UIPinchGestureRecognizer*)sender
 {
     CGFloat factor = [sender scale];
     CGPoint location = [sender locationInView:self];
     game->gesturePinchEvent(location.x, location.y, factor);
 }
 
-- (void)handleSwipeGesture:(UISwipeGestureRecognizer *)sender
+- (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
 {
     UISwipeGestureRecognizerDirection direction = [sender direction];
     CGPoint location = [sender locationInView:self];
