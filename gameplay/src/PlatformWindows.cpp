@@ -1062,7 +1062,7 @@ int Platform::enterMessagePump()
             if (msg.message == WM_QUIT)
             {
                 _game->exit();
-                break;
+                return msg.wParam;
             }
         }
         else
@@ -1075,7 +1075,7 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
     }
-    return msg.wParam;
+    return 0;
 }
 
 void Platform::signalShutdown() 
