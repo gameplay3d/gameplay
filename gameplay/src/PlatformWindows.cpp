@@ -1109,7 +1109,7 @@ double Platform::getAbsoluteTime()
     GP_ASSERT(__timeTicksPerMillis);
     __timeAbsolute = queryTime.QuadPart / __timeTicksPerMillis;
 
-    return __timeAbsolute;
+    return __timeAbsolute - __timeStart;
 }
 
 void Platform::setAbsoluteTime(double time)
