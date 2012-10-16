@@ -32,7 +32,7 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
 endmacro (append_gameplay_ext_lib)
 
 macro(copy_files TARGET_NAME GLOBPAT SOURCE DESTINATION)
-  file(GLOB COPY_FILES
+  file(GLOB_RECURSE COPY_FILES
     RELATIVE ${SOURCE}
     "${SOURCE}/${GLOBPAT}")
   add_custom_target(${TARGET_NAME} ALL
