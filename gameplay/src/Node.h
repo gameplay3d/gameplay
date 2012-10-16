@@ -539,7 +539,7 @@ public:
     /**
      * Sets the physics collision object for this node from the given properties object.
      * 
-     * @param properties The properties object defining the collision ojbect.
+     * @param properties The properties object defining the collision object.
      */
     PhysicsCollisionObject* setCollisionObject(Properties* properties);
 

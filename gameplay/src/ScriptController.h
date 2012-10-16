@@ -81,7 +81,7 @@ public:
     operator T* () const;
 
     /**
-     * Overloades [] operator to get/set item value at index.
+     * Overloads [] operator to get/set item value at index.
      */
     T& operator[] (int index);
 

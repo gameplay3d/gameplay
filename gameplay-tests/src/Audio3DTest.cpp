@@ -229,7 +229,7 @@ void Audio3DTest::keyEvent(Keyboard::KeyEvent evt, int key)
 
         case Keyboard::KEY_ONE:
         case Keyboard::KEY_SPACE:
-            addSound("Footsteps.wav");
+            addSound("footsteps.wav");
             break;
         }
     }

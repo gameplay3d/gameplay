@@ -13,7 +13,7 @@ class RacerGame: public Game, Control::Listener
 public:
 
     /**
-     * Constructror.
+     * Constructor.
      */
     RacerGame();
 

@@ -326,7 +326,7 @@ private:
 
     /**
      * Traverse up the visual scene graph. Upon finding the first ancestor node with an
-     * advertised descendant of collsion type VEHICLE, add this wheel onto the vehicle.
+     * advertised descendant of collision type VEHICLE, add this wheel onto the vehicle.
      */
     // Note: Currently this method is silent on failure to find a host.
     void findAncestorAndBind();
