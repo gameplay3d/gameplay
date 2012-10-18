@@ -74,11 +74,25 @@ public:
         Vector3 anisotropicFriction;
 
         /**
+         * Linear factor for the rigid body. x, y, z coordinates correspond to world 
+         * space motion along these axes. Use 1.0 to allow or 0.0 to disallow motion 
+         * along certain axis.
+         */
+        Vector3 linearFactor;
+
+        /**
+         * Angular factor for the rigid body. x, y, z coordinates correspond to world 
+         * space rotation along these axes. Use 1.0 to allow or 0.0 to disallow rotation
+         * along certain axis.
+         */
+        Vector3 angularFactor;
+
+        /**
          * Constructor.
          */
         Parameters() : mass(0.0f), friction(0.5f), restitution(0.0f),
             linearDamping(0.0f), angularDamping(0.0f),
-            kinematic(false), anisotropicFriction(Vector3::one())
+            kinematic(false), anisotropicFriction(Vector3::one()), linearFactor(Vector3::one()), angularFactor(Vector3::one())
         {
         }
 
@@ -87,9 +101,10 @@ public:
          */
         Parameters(float mass, float friction = 0.5f, float resititution = 0.0f,
             float linearDamping = 0.0f, float angularDamping = 0.0f, bool kinematic = false,
-            const Vector3& anisotropicFriction = Vector3::one())
+            const Vector3& anisotropicFriction = Vector3::one(), const Vector3& linearFactor = Vector3::one(), 
+            const Vector3& angularFactor = Vector3::one())
             : mass(mass), friction(friction), restitution(restitution), linearDamping(linearDamping), angularDamping(angularDamping),
-              kinematic(kinematic), anisotropicFriction(anisotropicFriction)
+              kinematic(kinematic), anisotropicFriction(anisotropicFriction), linearFactor(linearFactor), angularFactor(angularFactor)
         {
         }
     };
@@ -248,6 +263,60 @@ public:
      * @param z The z coordinate of the gravity vector.
      */
     inline void setGravity(float x, float y, float z);
+
+    /**
+     * Gets the rigid body's angular factor.
+     * 
+     * @return The angular factor.
+     */
+    inline Vector3 getAngularFactor() const;
+
+    /**
+     * Sets the rigid body's angular factor.  x, y, z coordinates correspond to world 
+     * space rotation along these axes. Use 1.0 to allow or 0.0 to disallow rotation 
+     * along certain axis.
+     * 
+     * @param angularFactor angular factor vector
+     */
+    inline void setAngularFactor(const Vector3& angularFactor);
+
+    /**
+     * Sets the rigid body's angular factor.  x, y, z coordinates correspond to world 
+     * space rotation along these axes. Use 1.0 to allow or 0.0 to disallow rotation 
+     * along certain axis.
+     * 
+     * @param x The x coordinate of the angular factor vector.
+     * @param y The y coordinate of the angular factor vector.
+     * @param z The z coordinate of the angular factor vector.
+     */
+    inline void setAngularFactor(float x, float y, float z);
+
+    /**
+     * Gets the rigid body's linear factor.
+     * 
+     * @return The linear factor.
+     */
+    inline Vector3 getLinearFactor() const;
+
+    /**
+     * Sets the rigid body's linear factor.  x, y, z coordinates correspond to world 
+     * space motion along these axes. Use 1.0 to allow or 0.0 to disallow motion 
+     * along certain axis.
+     * 
+     * @param linearFactor linear factor vector
+     */
+    inline void setLinearFactor(const Vector3& linearFactor);
+
+    /**
+     * Sets the rigid body's linear factor.  x, y, z coordinates correspond to world 
+     * space motion along these axes. Use 1.0 to allow or 0.0 to disallow motion 
+     * along certain axis.
+     * 
+     * @param x The x coordinate of the linear factor vector.
+     * @param y The y coordinate of the linear factor vector.
+     * @param z The z coordinate of the linear factor vector.
+     */
+    inline void setLinearFactor(float x, float y, float z);
 
     /**
      * Sets whether the rigid body is a kinematic rigid body or not.
