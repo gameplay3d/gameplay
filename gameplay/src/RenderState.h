@@ -88,6 +88,27 @@ public:
     };
 
     /**
+     * Callback function prototype for resolving material parameter auto bindings.
+     *
+     * Functions matching this callback signature can be registered via the 
+     * RenderState::registerAutoBindingResolver method to extend or override the set
+     * of built-in material paramter auto bindings.
+     *
+     * @param autoBinding Name of the auto binding to resolve.
+     * @param node Node that is bound to the material of the specified parameter.
+     * @param parameter Material parameter to set the binding on.
+     *
+     * @return True ONLY if the implementations explicitly handles the auto binding, false otherwise.
+     *      Returning true here will prevent any further code (including built-in resolving code) from
+     *      handling the auto binding.
+     *
+     * @see RenderState::registerAutoBindingResolver(const char*, RenderState::AutoBindingResolver)
+     *
+     * @script{ignore}
+     */
+    typedef bool (*ResolveAutoBindingCallback) (const char* autoBinding, Node* node, MaterialParameter* parameter);
+
+    /**
      * Defines blend constants supported by the blend function.
      */
     enum Blend
@@ -286,6 +307,35 @@ public:
      */
     StateBlock* getStateBlock() const;
 
+    /**
+     * Registers a custom auto binding resolver.
+     *
+     * Implementing a custom auto binding reolver allows the set of built-in parameter auto
+     * bindings to be extended or overridden. Any parameter auto binding that is set on a
+     * material will be forwarded to any custom auto binding resolvers, in the order in which
+     * they are registered. If a registered resolver returns true (specifying that it handles
+     * the specified autoBinding), no further code will be exeucted for that autoBinding.
+     * This allows auto binding resolvers to not only implement new/custom binding strings,
+     * but it also lets them override existing/built-in ones. For this reason, you should
+     * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
+     * false otherwise.
+     *
+     * Note that the custom resolver is called only once for a RenderState object when its
+     * node binding is initially set. This occurs when a material is initially bound to a
+     * Model that belongs to a Node. The resolver is NOT called each frame or each time
+     * the RenderState is bound. Therefore, when implementing custom auto bindings for values
+     * that change over time, the you should bind a method pointer onto the passed in
+     * MaterialParaemter using the MaterialParameter::bindValue mehtod. This way, the bound 
+     * method will be called each frame to set an updated value into the MaterialParameter.
+     *
+     * If no registered resolvers explicitly handle an auto binding, the binding will attempt
+     * to be resolved using the internal/built-in resolver, which is able to handle any
+     * auto bindings found in the RenderState::AutoBinding enumeration.
+     *
+     * @param callback Callback function for resolving parameter auto bindings.
+     */
+    static void registerAutoBindingResolver(ResolveAutoBindingCallback callback);
+
 protected:
 
     /**
@@ -320,9 +370,12 @@ protected:
     void setNodeBinding(Node* node);
 
     /**
-     * Applies the specified auto-binding.
+     * Applies the specified custom auto-binding.
+     *
+     * @param uniformName Name of the shader uniform.
+     * @param autoBinding Name of the auto binding.s
      */
-    void applyAutoBinding(const char* uniformName, AutoBinding binding);
+    void applyAutoBinding(const char* uniformName, const char* autoBinding);
 
     /**
      * Binds the render state for this RenderState and any of its parents, top-down, 
@@ -358,14 +411,14 @@ private:
 protected:
 
     /**
-     * Collection of MaterialParameter's to be applied to the gamplay::Effect.
+     * Collection of MaterialParameter's to be applied to the gameplay::Effect.
      */
     mutable std::vector<MaterialParameter*> _parameters;
-    
+
     /**
-     * Map of IDs to AutoBindings.
+     * Map of parameter names to auto binding strings.
      */
-    std::map<std::string, AutoBinding> _autoBindings;
+    std::map<std::string, std::string> _autoBindings;
 
     /**
      * The Node bound to the RenderState.
@@ -381,6 +434,11 @@ protected:
      * The RenderState's parent.
      */
     RenderState* _parent;
+
+    /**
+     * Map of custom auto binding resolverss.
+     */
+    static std::vector<ResolveAutoBindingCallback> _customAutoBindingResolvers;
 };
 
 }
