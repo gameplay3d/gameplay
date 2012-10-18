@@ -43,6 +43,8 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
     // Set other initially defined properties.
     setKinematic(parameters.kinematic);
     setAnisotropicFriction(parameters.anisotropicFriction);
+    setAngularFactor(parameters.angularFactor);
+    setLinearFactor(parameters.linearFactor);
 
     // Add ourself to the physics world.
     Game::getInstance()->getPhysicsController()->addCollisionObject(this);
@@ -222,6 +224,14 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties, c
         {
             gravity = new Vector3();
             properties->getVector3(NULL, gravity);
+        }
+        else if (strcmp(name, "angularFactor") == 0)
+        {
+            properties->getVector3(NULL, &parameters.angularFactor);
+        }
+        else if (strcmp(name, "linearFactor") == 0)
+        {
+            properties->getVector3(NULL, &parameters.linearFactor);
         }
         else
         {
