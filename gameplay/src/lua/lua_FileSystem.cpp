@@ -16,6 +16,7 @@ void luaRegister_FileSystem()
     };
     const luaL_Reg lua_statics[] = 
     {
+        {"createFileFromAsset", lua_FileSystem_static_createFileFromAsset},
         {"fileExists", lua_FileSystem_static_fileExists},
         {"getResourcePath", lua_FileSystem_static_getResourcePath},
         {"isAbsolutePath", lua_FileSystem_static_isAbsolutePath},
@@ -63,6 +64,42 @@ int lua_FileSystem__gc(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_FileSystem__gc - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_FileSystem_static_createFileFromAsset(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+
+                FileSystem::createFileFromAsset(param1);
+                
+                return 0;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_FileSystem_static_createFileFromAsset - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;

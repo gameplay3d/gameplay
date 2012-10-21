@@ -16,6 +16,7 @@ namespace gameplay
 {
 
 RenderState::StateBlock* RenderState::StateBlock::_defaultState = NULL;
+std::vector<RenderState::ResolveAutoBindingCallback> RenderState::_customAutoBindingResolvers;
 
 RenderState::RenderState()
     : _nodeBinding(NULL), _state(NULL), _parent(NULL)
@@ -46,6 +47,11 @@ void RenderState::finalize()
     SAFE_RELEASE(StateBlock::_defaultState);
 }
 
+void RenderState::registerAutoBindingResolver(ResolveAutoBindingCallback callback)
+{
+    _customAutoBindingResolvers.push_back(callback);
+}
+
 MaterialParameter* RenderState::getParameter(const char* name) const
 {
     GP_ASSERT(name);
@@ -69,91 +75,73 @@ MaterialParameter* RenderState::getParameter(const char* name) const
     return param;
 }
 
+const char* autoBindingToString(RenderState::AutoBinding autoBinding)
+{
+    // NOTE: As new AutoBinding values are added, this switch statement must be updatd.
+    switch (autoBinding)
+    {
+    case RenderState::NONE:
+        return NULL;
+
+    case RenderState::VIEW_MATRIX:
+        return "VIEW_MATRIX";
+
+    case RenderState::PROJECTION_MATRIX:
+        return "PROJECTION_MATRIX";
+
+    case RenderState::WORLD_VIEW_MATRIX:
+        return "WORLD_VIEW_MATRIX";
+
+    case RenderState::VIEW_PROJECTION_MATRIX:
+        return "VIEW_PROJECTION_MATRIX";
+
+    case RenderState::WORLD_VIEW_PROJECTION_MATRIX:
+        return "WORLD_VIEW_PROJECTION_MATRIX";
+
+    case RenderState::INVERSE_TRANSPOSE_WORLD_MATRIX:
+        return "INVERSE_TRANSPOSE_WORLD_MATRIX";
+
+    case RenderState::INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX:
+        return "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX";
+
+    case RenderState::CAMERA_WORLD_POSITION:
+        return "CAMERA_WORLD_POSITION";
+
+    case RenderState::CAMERA_VIEW_POSITION:
+        return "CAMERA_VIEW_POSITION";
+
+    case RenderState::MATRIX_PALETTE:
+        return "MATRIX_PALETTE";
+    }
+}
+
 void RenderState::setParameterAutoBinding(const char* name, AutoBinding autoBinding)
 {
-    GP_ASSERT(name);
-
-    // Store the auto-binding.
-    if (autoBinding == NONE)
-    {
-        // Clear current auto binding.
-        std::map<std::string, AutoBinding>::iterator itr = _autoBindings.find(name);
-        if (itr != _autoBindings.end())
-        {
-            _autoBindings.erase(itr);
-        }
-    }
-    else
-    {
-        // Set new auto binding.
-        _autoBindings[name] = autoBinding;
-    }
-
-    // If we have a currently set node binding, apply the auto binding immediately.
-    if (_nodeBinding)
-    {
-        applyAutoBinding(name, autoBinding);
-    }
+    setParameterAutoBinding(name, autoBindingToString(autoBinding));
 }
 
 void RenderState::setParameterAutoBinding(const char* name, const char* autoBinding)
 {
+    GP_ASSERT(name);
     GP_ASSERT(autoBinding);
-    AutoBinding value = NONE;
 
-    // Parse the passed in autoBinding string.
-    if (strcmp(autoBinding, "WORLD_MATRIX") == 0)
+    if (autoBinding == NULL)
     {
-        value = WORLD_MATRIX;
-    }
-    else if (strcmp(autoBinding, "VIEW_MATRIX") == 0)
-    {
-        value = VIEW_MATRIX;
-    }
-    else if (strcmp(autoBinding, "PROJECTION_MATRIX") == 0)
-    {
-        value = PROJECTION_MATRIX;
-    }
-    else if (strcmp(autoBinding, "WORLD_VIEW_MATRIX") == 0)
-    {
-        value = WORLD_VIEW_MATRIX;
-    }
-    else if (strcmp(autoBinding, "VIEW_PROJECTION_MATRIX") == 0)
-    {
-        value = VIEW_PROJECTION_MATRIX;
-    }
-    else if (strcmp(autoBinding, "WORLD_VIEW_PROJECTION_MATRIX") == 0)
-    {
-        value = WORLD_VIEW_PROJECTION_MATRIX;
-    }
-    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_MATRIX") == 0)
-    {
-        value = INVERSE_TRANSPOSE_WORLD_MATRIX;
-    }
-    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX") == 0)
-    {
-        value = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX;
-    }
-    else if (strcmp(autoBinding, "CAMERA_WORLD_POSITION") == 0)
-    {
-        value = CAMERA_WORLD_POSITION;
-    }
-    else if (strcmp(autoBinding, "CAMERA_VIEW_POSITION") == 0)
-    {
-        value = CAMERA_VIEW_POSITION;
-    }
-    else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
-    {
-        value = MATRIX_PALETTE;
+        // Remove an existing auto-binding
+        std::map<std::string, std::string>::iterator itr = _autoBindings.find(name);
+        if (itr != _autoBindings.end())
+            _autoBindings.erase(itr);
     }
     else
     {
-        // Ignore all other cases (the value was previously set to the default of NONE).
+        // Add/update an auto-binding
+        _autoBindings[name] = autoBinding;
     }
 
-    if (value != NONE)
+    // If we already have a node binding set, pass it to our handler now
+    if (_nodeBinding)
     {
-        setParameterAutoBinding(name, value);
+        applyAutoBinding(name, autoBinding);
     }
 }
 
@@ -184,90 +172,92 @@ RenderState::StateBlock* RenderState::getStateBlock() const
 
 void RenderState::setNodeBinding(Node* node)
 {
-    _nodeBinding = node;
-
-    if (_nodeBinding)
+    if (_nodeBinding != node)
     {
-        // Apply all existing auto-bindings using this node.
-        std::map<std::string, AutoBinding>::const_iterator itr = _autoBindings.begin();
-        while (itr != _autoBindings.end())
+        _nodeBinding = node;
+
+        if (_nodeBinding)
         {
-            applyAutoBinding(itr->first.c_str(), itr->second);
-            ++itr;
+            // Apply all existing auto-bindings using this node.
+            std::map<std::string, std::string>::const_iterator itr = _autoBindings.begin();
+            while (itr != _autoBindings.end())
+            {
+                applyAutoBinding(itr->first.c_str(), itr->second.c_str());
+                ++itr;
+            }
         }
     }
 }
 
-void RenderState::applyAutoBinding(const char* uniformName, AutoBinding autoBinding)
+void RenderState::applyAutoBinding(const char* uniformName, const char* autoBinding)
 {
     MaterialParameter* param = getParameter(uniformName);
-    switch (autoBinding)
+    GP_ASSERT(param);
+
+    // First attempt to resolve the binding using custom registered resolvers.
+    if (_customAutoBindingResolvers.size() > 0)
     {
-    case WORLD_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getWorldMatrix);
-        break;
-
-    case VIEW_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getViewMatrix);
-        break;
-
-    case PROJECTION_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getProjectionMatrix);
-        break;
-
-    case WORLD_VIEW_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getWorldViewMatrix);
-        break;
-
-    case VIEW_PROJECTION_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getViewProjectionMatrix);
-        break;
-
-    case WORLD_VIEW_PROJECTION_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
-        break;
-
-    case INVERSE_TRANSPOSE_WORLD_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
-        break;
-
-    case INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
-        break;
-
-    case CAMERA_WORLD_POSITION:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
-        break;
-
-    case CAMERA_VIEW_POSITION:
-        GP_ASSERT(param);
-        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
-        break;
-
-    case MATRIX_PALETTE:
+        for (size_t i = 0, count = _customAutoBindingResolvers.size(); i < count; ++i)
         {
-            Model* model = _nodeBinding->getModel();
-            MeshSkin* skin = model ? model->getSkin() : NULL;
-            if (skin)
-            {
-                GP_ASSERT(param);
-                param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
-            }
+            if (_customAutoBindingResolvers[i](autoBinding, _nodeBinding, param))
+                return; // handled by custom resolver
         }
-        break;
+    }
 
-    default:
-        GP_ERROR("Unsupported auto binding type (%d).", autoBinding);
-        break;
+    // Perform built-in resolution
+    if (strcmp(autoBinding, "WORLD_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getWorldMatrix);
+    }
+    else if (strcmp(autoBinding, "VIEW_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getViewMatrix);
+    }
+    else if (strcmp(autoBinding, "PROJECTION_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getProjectionMatrix);
+    }
+    else if (strcmp(autoBinding, "WORLD_VIEW_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getWorldViewMatrix);
+    }
+    else if (strcmp(autoBinding, "VIEW_PROJECTION_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getViewProjectionMatrix);
+    }
+    else if (strcmp(autoBinding, "WORLD_VIEW_PROJECTION_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
+    }
+    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
+    }
+    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
+    }
+    else if (strcmp(autoBinding, "CAMERA_WORLD_POSITION") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
+    }
+    else if (strcmp(autoBinding, "CAMERA_VIEW_POSITION") == 0)
+    {
+        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
+    }
+    else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
+    {
+        Model* model = _nodeBinding->getModel();
+        MeshSkin* skin = model ? model->getSkin() : NULL;
+        if (skin)
+        {
+            GP_ASSERT(param);
+            param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
+        }
+    }
+    else
+    {
+        GP_WARN("Unsupported auto binding type (%d).", autoBinding);
     }
 }
 
@@ -326,7 +316,7 @@ RenderState* RenderState::getTopmost(RenderState* below)
         }
         rs = rs->_parent;
     }
-
+    
     return NULL;
 }
 
@@ -334,9 +324,9 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 {
     GP_ASSERT(renderState);
 
-    for (std::map<std::string, AutoBinding>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
+    for (std::map<std::string, std::string>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
     {
-        renderState->setParameterAutoBinding(it->first.c_str(), it->second);
+        renderState->setParameterAutoBinding(it->first.c_str(), it->second.c_str());
     }
     for (std::vector<MaterialParameter*>::const_iterator it = _parameters.begin(); it != _parameters.end(); ++it)
     {
@@ -485,7 +475,7 @@ void RenderState::StateBlock::enableDepthWrite()
     GP_ASSERT(_defaultState);
 
     // Internal method used by Game::clear() to restore depth writing before a
-    // clear operation. This is neccessary if the last code to draw before the
+    // clear operation. This is necessary if the last code to draw before the
     // next frame leaves depth writing disabled.
     if (!_defaultState->_depthWriteEnabled)
     {

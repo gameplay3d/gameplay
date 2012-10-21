@@ -22,6 +22,7 @@ public:
      */
     enum Format
     {
+        UNKNOWN = 0,
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
         ALPHA   = GL_ALPHA
@@ -176,6 +177,26 @@ public:
      * @script{create}
      */
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
+
+    /**
+     * Creates a texture object to wrap the specified pre-created native texture handle.
+     *
+     * The specified TextureHandle must represent a valid texture that has been created
+     * on the underlying renderer and it should not be referenced by any other Texture
+     * object. When the returned Texture object is destroyed, the passed in TextureHandle
+     * will also be destroyed.
+     *
+     * @param handle Native texture handle.
+     * @param width The width of the texture represented by 'handle'.
+     * @param height The height of the texture represented by 'handle'.
+     * @param format Optionally, the format of the texture represented by 'handle'.
+     *      If the format cannot be represented by any of the Texture::Format values,
+     *      use a value of UNKNOWN.
+     *
+     * @return The new texture.
+     * @script{create}
+     */
+    static Texture* create(TextureHandle handle, int width, int height, Format format = UNKNOWN);
 
     /**
      * Gets the format of the texture.

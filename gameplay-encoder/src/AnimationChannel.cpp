@@ -28,10 +28,10 @@ void AnimationChannel::writeBinary(FILE* file)
     Object::writeBinary(file);
     write(_targetId, file);
     write(_targetAttrib, file);
-    write(_keytimes.size(), file);
+    write((unsigned int)_keytimes.size(), file);
     for (std::vector<float>::const_iterator i = _keytimes.begin(); i != _keytimes.end(); ++i)
     {
-        write((unsigned long)*i, file);
+        write((unsigned int)*i, file);
     }
     write(_keyValues, file);
     write(_tangentsIn, file);

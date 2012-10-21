@@ -109,7 +109,7 @@ public:
     static void writeBinaryObjects(std::list<T> list, FILE* file)
     {
         // First write the size of the list
-        write(list.size(), file);
+        write((unsigned int)list.size(), file);
         // Then write each element
         typename std::list<T>::const_iterator i;
         for (i = list.begin(); i != list.end(); ++i)
@@ -125,7 +125,7 @@ public:
     static void writeBinaryObjects(std::vector<T> vector, FILE* file)
     {
         // First write the size of the vector
-        write(vector.size(), file);
+        write((unsigned int)vector.size(), file);
         // Then write each element
         typename std::vector<T>::const_iterator i;
         for (i = vector.begin(); i != vector.end(); ++i)

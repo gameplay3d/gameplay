@@ -2,13 +2,20 @@ cmake_minimum_required(VERSION 2.6)
 
 project(GamePlay)
 
-set(GAMEPLAY_VERSION 1.5.0)
+set(GAMEPLAY_VERSION 1.6.0)
 set(CMAKE_C_COMPILER_INIT g++)
 
 # debug
 message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
-if( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
+if ( "${CMAKE_BUILD_TYPE}" STREQUAL "DEBUG" )
     add_definitions(-D_DEBUG)
+endif()
+
+# architecture
+if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+set(ARCH_DIR "x64")
+else()
+set(ARCH_DIR "x86")
 endif()
 
 # gameplay library

@@ -220,7 +220,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     GLint length;
     GLint success;
 
-    // Replace all comma seperated definitions with #define prefix and \n suffix
+    // Replace all comma separated definitions with #define prefix and \n suffix
     std::string definesStr = "";
     replaceDefines(defines, definesStr);
     
@@ -355,7 +355,7 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
     // preferred attribute locations, we're going to query the locations that were
     // automatically bound by the GPU. While it can sometimes be convenient to use
     // glBindAttribLocation, some vendors actually reserve certain attribute indices
-    // and thereore using this function can create compatibility issues between
+    // and therefore using this function can create compatibility issues between
     // different hardware vendors.
     GLint activeAttributes;
     GL_ASSERT( glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &activeAttributes) );
@@ -563,8 +563,8 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
 
 void Effect::bind()
 {
-   glUseProgram(_program) ;
-   GLenum test = glGetError();
+   GL_ASSERT( glUseProgram(_program) );
+
     __currentEffect = this;
 }
 

@@ -24,11 +24,30 @@ class FrameBuffer : public Ref
 public:
 
     /**
+     * Creates a new, empty FrameBuffer object.
+     *
+     * The new FrameBuffer does not have any render targets or a depth/stencil target and these
+     * must be added before it can be used. The FrameBuffer is added to the list of available
+     * FrameBuffers.
+     *
+     * @param id The ID of the new FrameBuffer. Uniqueness is recommended but not enforced.
+     *
+     * @return A newly created FrameBuffer.
+     * @script{create}
+     */
+    static FrameBuffer* create(const char* id);
+
+    /**
      * Creates a new FrameBuffer with a single RenderTarget of the specified width and height,
      * and adds the FrameBuffer to the list of available FrameBuffers.
+     *
+     * If width and height are non-zero a default RenderTarget of type RGBA will be created
+     * and added to the FrameBuffer, with the same ID. The ID of the render target can be
+     * changed later via RenderTarget::setId(const char*).
+     *
      * You can additionally add a DepthStencilTarget using FrameBuffer::setDepthStencilTarget.
      *
-     * @param id The ID of the new FrameBuffer.  Uniqueness is recommended but not enforced.
+     * @param id The ID of the new FrameBuffer. Uniqueness is recommended but not enforced.
      * @param width The width of the RenderTarget to be created and attached.
      * @param height The height of the RenderTarget to be created and attached.
      *

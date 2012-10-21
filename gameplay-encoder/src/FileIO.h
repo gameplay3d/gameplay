@@ -64,7 +64,6 @@ void write(unsigned char value, FILE* file);
 void write(char value, FILE* file);
 void write(const char* str, FILE* file);
 void write(unsigned int value, FILE* file);
-void write(unsigned long value, FILE* file);
 void write(unsigned short value, FILE* file);
 void write(bool value, FILE* file);
 void write(float value, FILE* file);
@@ -87,7 +86,7 @@ template <class T>
 void write(std::list<T> list, FILE* file)
 {
     // First write the size of the list
-    write(list.size(), file);
+    write((unsigned int)list.size(), file);
     // Then write each element
     typename std::list<T>::const_iterator i;
     for (i = list.begin(); i != list.end(); ++i)
@@ -106,7 +105,7 @@ template <class T>
 void write(std::vector<T> vector, FILE* file)
 {
     // First write the size of the vector
-    write(vector.size(), file);
+    write((unsigned int)vector.size(), file);
     // Then write each element
     typename std::vector<T>::const_iterator i;
     for (i = vector.begin(); i != vector.end(); ++i)
