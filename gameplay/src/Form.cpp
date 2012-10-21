@@ -538,7 +538,7 @@ void Form::draw()
     // to texture a quad.  The quad will be given the same dimensions as the form and
     // must be transformed appropriately by the user, unless they call setQuad() themselves.
     // On the other hand, if this form has not been set on a node, SpriteBatch will be used
-    // to render the contents of the frambuffer directly to the display.
+    // to render the contents of the framebuffer directly to the display.
 
     // Check whether this form has changed since the last call to draw() and if so, render into the framebuffer.
     if (isDirty())

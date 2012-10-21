@@ -29,7 +29,7 @@ void Logger::log(Level level, const char* message, ...)
     va_start(args, message);
 
     // Declare a moderately sized buffer on the stack that should be
-    // large enough to accomodate most log requests.
+    // large enough to accommodate most log requests.
     int size = 1024;
     char stackBuffer[1024];
     std::vector<char> dynamicBuffer;

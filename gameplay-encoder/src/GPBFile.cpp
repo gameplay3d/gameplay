@@ -67,7 +67,7 @@ bool GPBFile::saveBinary(const std::string& filepath)
     size_t n = 0;
 
     // identifier
-    char identifier[] = { '�', 'G', 'P', 'B', '�', '\r', '\n', '\x1A', '\n' };
+    char identifier[] = { '\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n' };
     n = fwrite(identifier, 1, sizeof(identifier), _file);
     if (n != sizeof(identifier))
     {
@@ -89,14 +89,14 @@ bool GPBFile::saveBinary(const std::string& filepath)
     _refTable.writeBinary(_file);
 
     // meshes
-    write(_geometry.size(), _file);
+    write((unsigned int)_geometry.size(), _file);
     for (std::list<Mesh*>::const_iterator i = _geometry.begin(); i != _geometry.end(); ++i)
     {
         (*i)->writeBinary(_file);
     }
 
     // Objects
-    write(_objects.size(), _file);
+    write((unsigned int)_objects.size(), _file);
     for (std::list<Object*>::const_iterator i = _objects.begin(); i != _objects.end(); ++i)
     {
         (*i)->writeBinary(_file);

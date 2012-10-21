@@ -30,7 +30,7 @@ Object* ReferenceTable::get(const std::string& xref)
 
 void ReferenceTable::writeBinary(FILE* file)
 {
-    write(_table.size(), file);
+    write((unsigned int)_table.size(), file);
     for ( std::map<std::string, Reference>::iterator i=_table.begin() ; i != _table.end(); ++i)
     {
         i->second.writeBinary(file);
