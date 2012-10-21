@@ -3,6 +3,12 @@ PROJECT(TEMPLATE_PROJECT)
 
 set(GAME_NAME TEMPLATE_PROJECT)
 
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    set(ARCH_DIR "x64" )
+else( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    set(ARCH_DIR "x86" )
+endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+
 set(GAMEPLAY_SRC_PATH "GAMEPLAY_PATH") 
 set(GAMEPLAY_EXT_LIBS_PATH "${GAMEPLAY_SRC_PATH}/external-deps")
 
@@ -23,7 +29,7 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
         find_library(FOUND_LIB_${libName} ${libName})
     ELSE("${libDirName}" STREQUAL "")
         set(pathToSearch
-            "${GAMEPLAY_EXT_LIBS_PATH}/${libDirName}/lib/${TARGET_OS_DIR}")
+            "${GAMEPLAY_EXT_LIBS_PATH}/${libDirName}/lib/${TARGET_OS_DIR}/${ARCH_DIR}")
         find_library(FOUND_LIB_${libName} ${libName} HINTS ${pathToSearch})
     ENDIF("${libDirName}" STREQUAL "")
 
@@ -32,7 +38,7 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
 endmacro (append_gameplay_ext_lib)
 
 macro(copy_files TARGET_NAME GLOBPAT SOURCE DESTINATION)
-  file(GLOB COPY_FILES
+  file(GLOB_RECURSE COPY_FILES
     RELATIVE ${SOURCE}
     "${SOURCE}/${GLOBPAT}")
   add_custom_target(${TARGET_NAME} ALL
