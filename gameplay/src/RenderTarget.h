@@ -39,6 +39,7 @@ public:
      * and restrictions on what texture formats are supported as render targets.
      *
      * @param id The ID of the new RenderTarget.
+     * @param texture The texture for the new RenderTarget.
      *
      * @return A newly created RenderTarget.
      * @script{create}

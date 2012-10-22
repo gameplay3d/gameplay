@@ -986,7 +986,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         __hwnd = (HWND)__attachToWindow;
         __hdc = GetDC(__hwnd);
 
-        SetWindowLongPtr(__hwnd, GWL_WNDPROC, (LONG)(WNDPROC)__WndProc);
+        SetWindowLongPtr(__hwnd, GWLP_WNDPROC, (LONG)(WNDPROC)__WndProc);
 
         if (!initializeGL(NULL))
             goto error;

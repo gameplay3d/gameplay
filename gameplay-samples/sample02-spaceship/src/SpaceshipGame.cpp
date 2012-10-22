@@ -163,7 +163,7 @@ void SpaceshipGame::initializeEnvironment()
 
     // Setup ground model
     _scene->findNodes("pGround", nodes, true, false);
-    for (unsigned int i = 0, count = nodes.size(); i < count; ++i)
+    for (size_t i = 0, count = nodes.size(); i < count; ++i)
     {
         Node* pGround = nodes[i];
         material = pGround->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR");
@@ -174,7 +174,7 @@ void SpaceshipGame::initializeEnvironment()
     // Setup roof model
     nodes.clear();
     _scene->findNodes("pRoof", nodes, true, false);
-    for (unsigned int i = 0, count = nodes.size(); i < count; ++i)
+    for (size_t i = 0, count = nodes.size(); i < count; ++i)
     {
         Node* pRoof = nodes[i];
         material = pRoof->getModel()->setMaterial("res/shaders/colored.vert", "res/shaders/colored.frag", "SPECULAR");

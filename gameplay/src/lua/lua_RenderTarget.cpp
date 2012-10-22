@@ -14,9 +14,11 @@ void luaRegister_RenderTarget()
     const luaL_Reg lua_members[] = 
     {
         {"addRef", lua_RenderTarget_addRef},
+        {"getHeight", lua_RenderTarget_getHeight},
         {"getId", lua_RenderTarget_getId},
         {"getRefCount", lua_RenderTarget_getRefCount},
         {"getTexture", lua_RenderTarget_getTexture},
+        {"getWidth", lua_RenderTarget_getWidth},
         {"release", lua_RenderTarget_release},
         {NULL, NULL}
     };
@@ -98,6 +100,43 @@ int lua_RenderTarget_addRef(lua_State* state)
             else
             {
                 lua_pushstring(state, "lua_RenderTarget_addRef - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderTarget_getHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RenderTarget* instance = getInstance(state);
+                unsigned int result = instance->getHeight();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RenderTarget_getHeight - Failed to match the given parameters to a valid function signature.");
                 lua_error(state);
             }
             break;
@@ -232,6 +271,43 @@ int lua_RenderTarget_getTexture(lua_State* state)
     return 0;
 }
 
+int lua_RenderTarget_getWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RenderTarget* instance = getInstance(state);
+                unsigned int result = instance->getWidth();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RenderTarget_getWidth - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RenderTarget_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -274,6 +350,40 @@ int lua_RenderTarget_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+
+                // Get parameter 2 off the stack.
+                ScriptUtil::LuaArray<Texture> param2 = ScriptUtil::getObjectPointer<Texture>(2, "Texture", false);
+
+                void* returnPtr = (void*)RenderTarget::create(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "RenderTarget");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -314,7 +424,7 @@ int lua_RenderTarget_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }

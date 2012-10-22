@@ -38,7 +38,7 @@ namespace gameplay
 
 void luaRegister_Form()
 {
-    const luaL_Reg lua_members[] =
+    const luaL_Reg lua_members[] = 
     {
         {"addControl", lua_Form_addControl},
         {"addListener", lua_Form_addListener},
@@ -136,7 +136,7 @@ void luaRegister_Form()
         {"update", lua_Form_update},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] =
+    const luaL_Reg lua_statics[] = 
     {
         {"ANIMATE_OPACITY", lua_Form_static_ANIMATE_OPACITY},
         {"ANIMATE_POSITION", lua_Form_static_ANIMATE_POSITION},
@@ -182,7 +182,7 @@ int lua_Form__gc(lua_State* state)
                     Form* instance = (Form*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-
+                
                 return 0;
             }
             else
@@ -265,7 +265,7 @@ int lua_Form_addListener(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->addListener(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -299,7 +299,7 @@ int lua_Form_addRef(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->addRef();
-
+                
                 return 0;
             }
             else
@@ -341,7 +341,7 @@ int lua_Form_addScriptCallback(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -708,7 +708,7 @@ int lua_Form_destroyAnimation(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->destroyAnimation();
-
+                
                 return 0;
             }
             else
@@ -728,7 +728,7 @@ int lua_Form_destroyAnimation(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-
+                
                 return 0;
             }
             else
@@ -762,7 +762,7 @@ int lua_Form_disable(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->disable();
-
+                
                 return 0;
             }
             else
@@ -796,7 +796,7 @@ int lua_Form_draw(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->draw();
-
+                
                 return 0;
             }
             else
@@ -830,7 +830,7 @@ int lua_Form_enable(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->enable();
-
+                
                 return 0;
             }
             else
@@ -1028,7 +1028,7 @@ int lua_Form_getAnimationPropertyValue(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -2971,7 +2971,7 @@ int lua_Form_insertControl(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->insertControl(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3153,7 +3153,7 @@ int lua_Form_release(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->release();
-
+                
                 return 0;
             }
             else
@@ -3191,7 +3191,7 @@ int lua_Form_removeControl(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->removeControl(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -3202,7 +3202,7 @@ int lua_Form_removeControl(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->removeControl(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -3213,7 +3213,7 @@ int lua_Form_removeControl(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->removeControl(param1);
-
+                
                 return 0;
             }
             else
@@ -3255,7 +3255,7 @@ int lua_Form_removeScriptCallback(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3293,7 +3293,7 @@ int lua_Form_setAlignment(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAlignment(param1);
-
+                
                 return 0;
             }
             else
@@ -3335,7 +3335,7 @@ int lua_Form_setAnimationPropertyValue(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3363,7 +3363,7 @@ int lua_Form_setAnimationPropertyValue(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -3401,7 +3401,7 @@ int lua_Form_setAutoHeight(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAutoHeight(param1);
-
+                
                 return 0;
             }
             else
@@ -3439,7 +3439,7 @@ int lua_Form_setAutoWidth(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAutoWidth(param1);
-
+                
                 return 0;
             }
             else
@@ -3489,7 +3489,7 @@ int lua_Form_setBorder(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -3525,7 +3525,7 @@ int lua_Form_setBorder(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4, param5);
-
+                
                 return 0;
             }
             else
@@ -3563,7 +3563,7 @@ int lua_Form_setBounds(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setBounds(*param1);
-
+                
                 return 0;
             }
             else
@@ -3601,7 +3601,7 @@ int lua_Form_setConsumeInputEvents(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setConsumeInputEvents(param1);
-
+                
                 return 0;
             }
             else
@@ -3643,7 +3643,7 @@ int lua_Form_setCursorColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setCursorColor(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3685,7 +3685,7 @@ int lua_Form_setCursorRegion(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setCursorRegion(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3723,7 +3723,7 @@ int lua_Form_setFocusIndex(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFocusIndex(param1);
-
+                
                 return 0;
             }
             else
@@ -3761,7 +3761,7 @@ int lua_Form_setFont(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFont(param1);
-
+                
                 return 0;
             }
             else
@@ -3785,7 +3785,7 @@ int lua_Form_setFont(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFont(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3823,7 +3823,7 @@ int lua_Form_setFontSize(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFontSize(param1);
-
+                
                 return 0;
             }
             else
@@ -3847,7 +3847,7 @@ int lua_Form_setFontSize(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFontSize(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3885,7 +3885,7 @@ int lua_Form_setHeight(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setHeight(param1);
-
+                
                 return 0;
             }
             else
@@ -3927,7 +3927,7 @@ int lua_Form_setImageColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
-
+                
                 return 0;
             }
             else
@@ -3955,7 +3955,7 @@ int lua_Form_setImageColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setImageColor(param1, *param2, param3);
-
+                
                 return 0;
             }
             else
@@ -3997,7 +3997,7 @@ int lua_Form_setImageRegion(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
-
+                
                 return 0;
             }
             else
@@ -4025,7 +4025,7 @@ int lua_Form_setImageRegion(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2, param3);
-
+                
                 return 0;
             }
             else
@@ -4075,7 +4075,7 @@ int lua_Form_setMargin(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setMargin(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -4113,7 +4113,7 @@ int lua_Form_setNode(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setNode(param1);
-
+                
                 return 0;
             }
             else
@@ -4151,7 +4151,7 @@ int lua_Form_setOpacity(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setOpacity(param1);
-
+                
                 return 0;
             }
             else
@@ -4175,7 +4175,7 @@ int lua_Form_setOpacity(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setOpacity(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4225,7 +4225,7 @@ int lua_Form_setPadding(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setPadding(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -4267,7 +4267,7 @@ int lua_Form_setPosition(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setPosition(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4305,7 +4305,7 @@ int lua_Form_setScroll(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setScroll(param1);
-
+                
                 return 0;
             }
             else
@@ -4343,7 +4343,7 @@ int lua_Form_setScrollBarsAutoHide(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setScrollBarsAutoHide(param1);
-
+                
                 return 0;
             }
             else
@@ -4385,7 +4385,7 @@ int lua_Form_setSize(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setSize(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4423,7 +4423,7 @@ int lua_Form_setSkinColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setSkinColor(*param1);
-
+                
                 return 0;
             }
             else
@@ -4447,7 +4447,7 @@ int lua_Form_setSkinColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setSkinColor(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4485,7 +4485,7 @@ int lua_Form_setSkinRegion(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
-
+                
                 return 0;
             }
             else
@@ -4509,7 +4509,7 @@ int lua_Form_setSkinRegion(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setSkinRegion(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4547,7 +4547,7 @@ int lua_Form_setState(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setState(param1);
-
+                
                 return 0;
             }
             else
@@ -4585,7 +4585,7 @@ int lua_Form_setStyle(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setStyle(param1);
-
+                
                 return 0;
             }
             else
@@ -4623,7 +4623,7 @@ int lua_Form_setTextAlignment(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextAlignment(param1);
-
+                
                 return 0;
             }
             else
@@ -4647,7 +4647,7 @@ int lua_Form_setTextAlignment(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextAlignment(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4685,7 +4685,7 @@ int lua_Form_setTextColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextColor(*param1);
-
+                
                 return 0;
             }
             else
@@ -4709,7 +4709,7 @@ int lua_Form_setTextColor(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextColor(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4747,7 +4747,7 @@ int lua_Form_setTextRightToLeft(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextRightToLeft(param1);
-
+                
                 return 0;
             }
             else
@@ -4771,7 +4771,7 @@ int lua_Form_setTextRightToLeft(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextRightToLeft(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4809,7 +4809,7 @@ int lua_Form_setWidth(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setWidth(param1);
-
+                
                 return 0;
             }
             else
@@ -4847,7 +4847,7 @@ int lua_Form_setZIndex(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setZIndex(param1);
-
+                
                 return 0;
             }
             else
@@ -5189,7 +5189,7 @@ int lua_Form_update(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->update(param1);
-
+                
                 return 0;
             }
             else

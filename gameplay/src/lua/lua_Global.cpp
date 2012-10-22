@@ -741,6 +741,7 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Texture");
+        ScriptUtil::registerConstantString("UNKNOWN", "UNKNOWN", scopePath);
         ScriptUtil::registerConstantString("RGB", "RGB", scopePath);
         ScriptUtil::registerConstantString("RGBA", "RGBA", scopePath);
         ScriptUtil::registerConstantString("ALPHA", "ALPHA", scopePath);

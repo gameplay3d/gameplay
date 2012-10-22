@@ -66,7 +66,7 @@ void MeshBatchTest::render(float elapsedTime)
 
     // Draw all of the triangles as one mesh batch.
     _meshBatch->start();
-    _meshBatch->add(&_vertices[0], _vertices.size());
+    _meshBatch->add(&_vertices[0], (unsigned int)_vertices.size());
     _meshBatch->finish();
     _meshBatch->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(_worldViewProjectionMatrix);
     _meshBatch->draw();
