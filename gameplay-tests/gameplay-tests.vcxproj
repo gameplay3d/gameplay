@@ -51,6 +51,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <ProjectGuid>{0F27C8C4-58B2-E367-8D1F-01B714FDBF1B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>gameplay-tests</RootNamespace>
   </PropertyGroup>
