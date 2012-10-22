@@ -28,7 +28,7 @@ namespace gameplay
 
 void luaRegister_Joint()
 {
-    const luaL_Reg lua_members[] =
+    const luaL_Reg lua_members[] = 
     {
         {"addAdvertisedDescendant", lua_Joint_addAdvertisedDescendant},
         {"addChild", lua_Joint_addChild},
@@ -149,7 +149,7 @@ void luaRegister_Joint()
         {"translateZ", lua_Joint_translateZ},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] =
+    const luaL_Reg lua_statics[] = 
     {
         {"ANIMATE_ROTATE", lua_Joint_static_ANIMATE_ROTATE},
         {"ANIMATE_ROTATE_TRANSLATE", lua_Joint_static_ANIMATE_ROTATE_TRANSLATE},
@@ -202,7 +202,7 @@ int lua_Joint__gc(lua_State* state)
                     Joint* instance = (Joint*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-
+                
                 return 0;
             }
             else
@@ -240,7 +240,7 @@ int lua_Joint_addAdvertisedDescendant(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->addAdvertisedDescendant(param1);
-
+                
                 return 0;
             }
             else
@@ -278,7 +278,7 @@ int lua_Joint_addChild(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->addChild(param1);
-
+                
                 return 0;
             }
             else
@@ -316,7 +316,7 @@ int lua_Joint_addListener(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->addListener(param1);
-
+                
                 return 0;
             }
             else
@@ -340,7 +340,7 @@ int lua_Joint_addListener(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->addListener(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -374,7 +374,7 @@ int lua_Joint_addRef(lua_State* state)
             {
                 Joint* instance = getInstance(state);
                 instance->addRef();
-
+                
                 return 0;
             }
             else
@@ -416,7 +416,7 @@ int lua_Joint_addScriptCallback(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -829,7 +829,7 @@ int lua_Joint_destroyAnimation(lua_State* state)
             {
                 Joint* instance = getInstance(state);
                 instance->destroyAnimation();
-
+                
                 return 0;
             }
             else
@@ -849,7 +849,7 @@ int lua_Joint_destroyAnimation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-
+                
                 return 0;
             }
             else
@@ -1324,7 +1324,7 @@ int lua_Joint_getAnimationPropertyValue(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -1436,7 +1436,7 @@ int lua_Joint_getBackVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getBackVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1677,7 +1677,7 @@ int lua_Joint_getDownVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getDownVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1835,7 +1835,7 @@ int lua_Joint_getForwardVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getForwardVector(param1);
-
+                
                 return 0;
             }
             else
@@ -2260,7 +2260,7 @@ int lua_Joint_getLeftVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getLeftVector(param1);
-
+                
                 return 0;
             }
             else
@@ -2768,7 +2768,7 @@ int lua_Joint_getRightVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getRightVector(param1);
-
+                
                 return 0;
             }
             else
@@ -2926,7 +2926,7 @@ int lua_Joint_getRotation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getRotation(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2937,7 +2937,7 @@ int lua_Joint_getRotation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getRotation(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -3017,7 +3017,7 @@ int lua_Joint_getScale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getScale(param1);
-
+                
                 return 0;
             }
             else
@@ -3281,7 +3281,7 @@ int lua_Joint_getTranslation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getTranslation(param1);
-
+                
                 return 0;
             }
             else
@@ -3587,7 +3587,7 @@ int lua_Joint_getUpVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->getUpVector(param1);
-
+                
                 return 0;
             }
             else
@@ -3938,7 +3938,7 @@ int lua_Joint_release(lua_State* state)
             {
                 Joint* instance = getInstance(state);
                 instance->release();
-
+                
                 return 0;
             }
             else
@@ -3972,7 +3972,7 @@ int lua_Joint_removeAllChildren(lua_State* state)
             {
                 Joint* instance = getInstance(state);
                 instance->removeAllChildren();
-
+                
                 return 0;
             }
             else
@@ -4010,7 +4010,7 @@ int lua_Joint_removeChild(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->removeChild(param1);
-
+                
                 return 0;
             }
             else
@@ -4048,7 +4048,7 @@ int lua_Joint_removeListener(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->removeListener(param1);
-
+                
                 return 0;
             }
             else
@@ -4090,7 +4090,7 @@ int lua_Joint_removeScriptCallback(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4128,7 +4128,7 @@ int lua_Joint_rotate(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotate(*param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -4139,7 +4139,7 @@ int lua_Joint_rotate(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotate(*param1);
-
+                
                 return 0;
             }
             else
@@ -4163,7 +4163,7 @@ int lua_Joint_rotate(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotate(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4195,7 +4195,7 @@ int lua_Joint_rotate(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotate(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -4233,7 +4233,7 @@ int lua_Joint_rotateX(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotateX(param1);
-
+                
                 return 0;
             }
             else
@@ -4271,7 +4271,7 @@ int lua_Joint_rotateY(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotateY(param1);
-
+                
                 return 0;
             }
             else
@@ -4309,7 +4309,7 @@ int lua_Joint_rotateZ(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->rotateZ(param1);
-
+                
                 return 0;
             }
             else
@@ -4347,7 +4347,7 @@ int lua_Joint_scale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->scale(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -4358,7 +4358,7 @@ int lua_Joint_scale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->scale(*param1);
-
+                
                 return 0;
             }
             else
@@ -4386,7 +4386,7 @@ int lua_Joint_scale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->scale(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -4424,7 +4424,7 @@ int lua_Joint_scaleX(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->scaleX(param1);
-
+                
                 return 0;
             }
             else
@@ -4462,7 +4462,7 @@ int lua_Joint_scaleY(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->scaleY(param1);
-
+                
                 return 0;
             }
             else
@@ -4500,7 +4500,7 @@ int lua_Joint_scaleZ(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->scaleZ(param1);
-
+                
                 return 0;
             }
             else
@@ -4538,7 +4538,7 @@ int lua_Joint_set(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1);
-
+                
                 return 0;
             }
             else
@@ -4566,7 +4566,7 @@ int lua_Joint_set(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -4585,7 +4585,7 @@ int lua_Joint_set(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
-
+                
                 return 0;
             }
             else
@@ -4617,7 +4617,7 @@ int lua_Joint_set(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->set(*param1, *param2, param3, *param4);
-
+                
                 return 0;
             }
             else
@@ -4655,7 +4655,7 @@ int lua_Joint_setAgent(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setAgent(param1);
-
+                
                 return 0;
             }
             else
@@ -4697,7 +4697,7 @@ int lua_Joint_setAnimationPropertyValue(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4725,7 +4725,7 @@ int lua_Joint_setAnimationPropertyValue(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -4763,7 +4763,7 @@ int lua_Joint_setAudioSource(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setAudioSource(param1);
-
+                
                 return 0;
             }
             else
@@ -4801,7 +4801,7 @@ int lua_Joint_setCamera(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setCamera(param1);
-
+                
                 return 0;
             }
             else
@@ -5011,7 +5011,7 @@ int lua_Joint_setForm(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setForm(param1);
-
+                
                 return 0;
             }
             else
@@ -5049,7 +5049,7 @@ int lua_Joint_setId(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setId(param1);
-
+                
                 return 0;
             }
             else
@@ -5083,7 +5083,7 @@ int lua_Joint_setIdentity(lua_State* state)
             {
                 Joint* instance = getInstance(state);
                 instance->setIdentity();
-
+                
                 return 0;
             }
             else
@@ -5121,7 +5121,7 @@ int lua_Joint_setLight(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setLight(param1);
-
+                
                 return 0;
             }
             else
@@ -5159,7 +5159,7 @@ int lua_Joint_setModel(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setModel(param1);
-
+                
                 return 0;
             }
             else
@@ -5197,7 +5197,7 @@ int lua_Joint_setParticleEmitter(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setParticleEmitter(param1);
-
+                
                 return 0;
             }
             else
@@ -5235,7 +5235,7 @@ int lua_Joint_setRotation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setRotation(*param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -5246,7 +5246,7 @@ int lua_Joint_setRotation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setRotation(*param1);
-
+                
                 return 0;
             }
             else
@@ -5270,7 +5270,7 @@ int lua_Joint_setRotation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setRotation(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -5302,7 +5302,7 @@ int lua_Joint_setRotation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setRotation(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -5340,7 +5340,7 @@ int lua_Joint_setScale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setScale(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -5351,7 +5351,7 @@ int lua_Joint_setScale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setScale(*param1);
-
+                
                 return 0;
             }
             else
@@ -5379,7 +5379,7 @@ int lua_Joint_setScale(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setScale(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -5417,7 +5417,7 @@ int lua_Joint_setScaleX(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setScaleX(param1);
-
+                
                 return 0;
             }
             else
@@ -5455,7 +5455,7 @@ int lua_Joint_setScaleY(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setScaleY(param1);
-
+                
                 return 0;
             }
             else
@@ -5493,7 +5493,7 @@ int lua_Joint_setScaleZ(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setScaleZ(param1);
-
+                
                 return 0;
             }
             else
@@ -5531,7 +5531,7 @@ int lua_Joint_setTag(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTag(param1);
-
+                
                 return 0;
             }
             else
@@ -5555,7 +5555,7 @@ int lua_Joint_setTag(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTag(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -5593,7 +5593,7 @@ int lua_Joint_setTranslation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTranslation(*param1);
-
+                
                 return 0;
             }
             else
@@ -5621,7 +5621,7 @@ int lua_Joint_setTranslation(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTranslation(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -5659,7 +5659,7 @@ int lua_Joint_setTranslationX(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTranslationX(param1);
-
+                
                 return 0;
             }
             else
@@ -5697,7 +5697,7 @@ int lua_Joint_setTranslationY(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTranslationY(param1);
-
+                
                 return 0;
             }
             else
@@ -5735,7 +5735,7 @@ int lua_Joint_setTranslationZ(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->setTranslationZ(param1);
-
+                
                 return 0;
             }
             else
@@ -6032,7 +6032,7 @@ int lua_Joint_static_resumeTransformChanged(lua_State* state)
         case 0:
         {
             Joint::resumeTransformChanged();
-
+            
             return 0;
             break;
         }
@@ -6057,7 +6057,7 @@ int lua_Joint_static_suspendTransformChanged(lua_State* state)
         case 0:
         {
             Joint::suspendTransformChanged();
-
+            
             return 0;
             break;
         }
@@ -6089,7 +6089,7 @@ int lua_Joint_transformPoint(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->transformPoint(param1);
-
+                
                 return 0;
             }
             else
@@ -6113,7 +6113,7 @@ int lua_Joint_transformPoint(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -6151,7 +6151,7 @@ int lua_Joint_transformVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->transformVector(param1);
-
+                
                 return 0;
             }
             else
@@ -6175,7 +6175,7 @@ int lua_Joint_transformVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -6211,7 +6211,7 @@ int lua_Joint_transformVector(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
-
+                
                 return 0;
             }
             else
@@ -6249,7 +6249,7 @@ int lua_Joint_translate(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translate(*param1);
-
+                
                 return 0;
             }
             else
@@ -6277,7 +6277,7 @@ int lua_Joint_translate(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translate(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -6315,7 +6315,7 @@ int lua_Joint_translateForward(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateForward(param1);
-
+                
                 return 0;
             }
             else
@@ -6353,7 +6353,7 @@ int lua_Joint_translateLeft(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateLeft(param1);
-
+                
                 return 0;
             }
             else
@@ -6399,7 +6399,7 @@ int lua_Joint_translateSmooth(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateSmooth(*param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -6437,7 +6437,7 @@ int lua_Joint_translateUp(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateUp(param1);
-
+                
                 return 0;
             }
             else
@@ -6475,7 +6475,7 @@ int lua_Joint_translateX(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateX(param1);
-
+                
                 return 0;
             }
             else
@@ -6513,7 +6513,7 @@ int lua_Joint_translateY(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateY(param1);
-
+                
                 return 0;
             }
             else
@@ -6551,7 +6551,7 @@ int lua_Joint_translateZ(lua_State* state)
 
                 Joint* instance = getInstance(state);
                 instance->translateZ(param1);
-
+                
                 return 0;
             }
             else

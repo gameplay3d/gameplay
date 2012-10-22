@@ -33,7 +33,7 @@ const VertexFormat::Element& VertexFormat::getElement(unsigned int index) const
 
 unsigned int VertexFormat::getElementCount() const
 {
-    return _elements.size();
+    return (unsigned int)_elements.size();
 }
 
 unsigned int VertexFormat::getVertexSize() const
@@ -46,7 +46,7 @@ bool VertexFormat::operator == (const VertexFormat& f) const
     if (_elements.size() != f._elements.size())
         return false;
 
-    for (unsigned int i = 0, count = _elements.size(); i < count; ++i)
+    for (size_t i = 0, count = _elements.size(); i < count; ++i)
     {
         if (_elements[i] != f._elements[i])
             return false;

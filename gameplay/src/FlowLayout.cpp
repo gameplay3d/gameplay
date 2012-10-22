@@ -52,8 +52,7 @@ void FlowLayout::update(const Container* container, const Vector2& offset)
     float tallestHeight = 0;
 
     std::vector<Control*> controls = container->getControls();
-    unsigned int controlsCount = controls.size();
-    for (unsigned int i = 0; i < controlsCount; i++)
+    for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
     {
         Control* control = controls.at(i);
         GP_ASSERT(control);

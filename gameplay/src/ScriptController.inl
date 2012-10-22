@@ -136,7 +136,7 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
 
                     // Check if it matches any of the derived types' metatables.
                     const std::vector<std::string>& types = sc->_hierarchy[type];
-                    for (unsigned int k = 0, count = types.size(); k < count; k++)
+                    for (size_t k = 0, count = types.size(); k < count; k++)
                     {
                         luaL_getmetatable(sc->_lua, types[k].c_str());
                         if (lua_rawequal(sc->_lua, -1, -2))
@@ -178,7 +178,7 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
 
                 // Check if it matches any of the derived types' metatables.
                 const std::vector<std::string>& types = sc->_hierarchy[type];
-                for (unsigned int i = 0, count = types.size(); i < count; i++)
+                for (size_t i = 0, count = types.size(); i < count; i++)
                 {
                     luaL_getmetatable(sc->_lua, types[i].c_str());
                     if (lua_rawequal(sc->_lua, -1, -2))
