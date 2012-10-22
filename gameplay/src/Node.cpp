@@ -1139,7 +1139,7 @@ PhysicsCollisionObject* Node::setCollisionObject(Properties* properties)
 
 unsigned int Node::getNumAdvertisedDescendants() const
 {
-    return _advertisedDescendants.size();
+    return (unsigned int)_advertisedDescendants.size();
 }
 
 Node* Node::getAdvertisedDescendant(unsigned int i) const

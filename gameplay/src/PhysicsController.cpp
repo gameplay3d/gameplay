@@ -567,14 +567,14 @@ void PhysicsController::update(float elapsedTime)
 
     // Update all the collision status cache entries.
     iter = _collisionStatus.begin();
-    for (; iter != _collisionStatus.end(); iter++)
+    for ( ; iter != _collisionStatus.end(); iter++)
     {
         if ((iter->second._status & DIRTY) != 0)
         {
             if ((iter->second._status & COLLISION) != 0 && iter->first.objectB)
             {
-                unsigned int size = iter->second._listeners.size();
-                for (unsigned int i = 0; i < size; i++)
+                size_t size = iter->second._listeners.size();
+                for (size_t i = 0; i < size; i++)
                 {
                     iter->second._listeners[i]->collisionEvent(PhysicsCollisionObject::CollisionListener::NOT_COLLIDING, iter->first);
                 }
@@ -1193,13 +1193,13 @@ PhysicsCollisionShape* PhysicsController::createMesh(Mesh* mesh, const Vector3& 
 
     btTriangleIndexVertexArray* meshInterface = bullet_new<btTriangleIndexVertexArray>();
 
-    unsigned int partCount = data->parts.size();
+    size_t partCount = data->parts.size();
     if (partCount > 0)
     {
         PHY_ScalarType indexType = PHY_UCHAR;
         int indexStride = 0;
         Bundle::MeshPartData* meshPart = NULL;
-        for (unsigned int i = 0; i < partCount; i++)
+        for (size_t i = 0; i < partCount; i++)
         {
             meshPart = data->parts[i];
             GP_ASSERT(meshPart);

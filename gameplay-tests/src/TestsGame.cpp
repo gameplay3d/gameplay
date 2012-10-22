@@ -242,8 +242,8 @@ void TestsGame::addTest(const char* category, const char* title, void* func, uns
     string titleString(title);
     
     int index = -1;
-    const size_t size = _categories->size();
-    for (size_t i = 0; i < size; ++i)
+    const int size = (int)_categories->size();
+    for (int i = 0; i < size; ++i)
     {
         if ((*_categories)[i].compare(categoryString) == 0)
         {
@@ -253,7 +253,7 @@ void TestsGame::addTest(const char* category, const char* title, void* func, uns
     if (index < 0)
     {
         _categories->push_back(categoryString);
-        index = _categories->size() - 1;
+        index = (int)_categories->size() - 1;
     }
 
     if (index <= (int)_tests->size())

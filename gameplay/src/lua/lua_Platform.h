@@ -7,6 +7,7 @@ namespace gameplay
 // Lua bindings for Platform.
 int lua_Platform__gc(lua_State* state);
 int lua_Platform_enterMessagePump(lua_State* state);
+int lua_Platform_static_canExit(lua_State* state);
 int lua_Platform_static_displayKeyboard(lua_State* state);
 int lua_Platform_static_getAbsoluteTime(lua_State* state);
 int lua_Platform_static_getAccelerometerValues(lua_State* state);

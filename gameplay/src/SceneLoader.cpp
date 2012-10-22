@@ -73,12 +73,12 @@ Scene* SceneLoader::loadInternal(const char* url)
     applyNodeProperties(scene, sceneProperties, SceneNodeProperty::COLLISION_OBJECT);
 
     // Apply node tags
-    for (unsigned int i = 0, sncount = _sceneNodes.size(); i < sncount; ++i)
+    for (size_t i = 0, sncount = _sceneNodes.size(); i < sncount; ++i)
     {
         SceneNode& sceneNode = _sceneNodes[i];
         for (std::map<std::string, std::string>::const_iterator itr = sceneNode._tags.begin(); itr != sceneNode._tags.end(); ++itr)
         {
-            for (unsigned int n = 0, ncount = sceneNode._nodes.size(); n < ncount; ++n)
+            for (size_t n = 0, ncount = sceneNode._nodes.size(); n < ncount; ++n)
                 sceneNode._nodes[n]->setTag(itr->first.c_str(), itr->second.c_str());
         }
     }
@@ -156,16 +156,16 @@ void SceneLoader::addSceneNodeProperty(SceneNode& sceneNode, SceneNodeProperty::
 
 void SceneLoader::applyNodeProperties(const Scene* scene, const Properties* sceneProperties, unsigned int typeFlags)
 {
-    for (unsigned int i = 0, sncount = _sceneNodes.size(); i < sncount; ++i)
+    for (size_t i = 0, sncount = _sceneNodes.size(); i < sncount; ++i)
     {
         SceneNode& sceneNode = _sceneNodes[i];
 
-        for (unsigned int p = 0, pcount = sceneNode._properties.size(); p < pcount; ++p)
+        for (size_t p = 0, pcount = sceneNode._properties.size(); p < pcount; ++p)
         {
             SceneNodeProperty& snp = sceneNode._properties[p];
             if (typeFlags & snp._type)
             {
-                for (unsigned int n = 0, ncount = sceneNode._nodes.size(); n < ncount; ++n)
+                for (size_t n = 0, ncount = sceneNode._nodes.size(); n < ncount; ++n)
                     applyNodeProperty(sceneNode, sceneNode._nodes[n], sceneProperties, snp, scene);
             }
         }
@@ -327,14 +327,14 @@ void SceneLoader::applyNodeUrls(Scene* scene)
 
     // Apply all URL node properties so that when we go to apply
     // the other node properties, the node is in the scene.
-    for (unsigned int i = 0, ncount = _sceneNodes.size(); i < ncount; ++i)
+    for (size_t i = 0, ncount = _sceneNodes.size(); i < ncount; ++i)
     {
         SceneNode& sceneNode = _sceneNodes[i];
 
         // Iterate backwards over the properties list so we can remove properties as we go
         // without danger of indexing out of bounds.
         bool hasURL = false;
-        for (int j = sceneNode._properties.size() - 1; j >= 0; --j)
+        for (int j = (int)sceneNode._properties.size() - 1; j >= 0; --j)
         {
             SceneNodeProperty& snp = sceneNode._properties[j];
             if (snp._type != SceneNodeProperty::URL)
@@ -647,7 +647,7 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
 void SceneLoader::createAnimations(const Scene* scene)
 {
     // Create the scene animations.
-    for (unsigned int i = 0, count = _animations.size(); i < count; i++)
+    for (size_t i = 0, count = _animations.size(); i < count; i++)
     {
         // If the target node doesn't exist in the scene, then we
         // can't do anything so we skip to the next animation.

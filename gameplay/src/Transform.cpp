@@ -59,8 +59,8 @@ void Transform::resumeTransformChanged()
     if (_suspendTransformChanged == 1)
     {
         // Call transformChanged() on all transforms in the list
-        unsigned int transformCount = _transformsChanged.size();
-        for (unsigned int i = 0; i < transformCount; i++)
+        size_t transformCount = _transformsChanged.size();
+        for (size_t i = 0; i < transformCount; i++)
         {
             Transform* t = _transformsChanged.at(i);
             GP_ASSERT(t);
@@ -70,7 +70,7 @@ void Transform::resumeTransformChanged()
         // Go through list and reset DIRTY_NOTIFY bit. The list could potentially be larger here if the 
         // transforms we were delaying calls to transformChanged() have any child nodes.
         transformCount = _transformsChanged.size();
-        for (unsigned int i = 0; i < transformCount; i++)
+        for (size_t i = 0; i < transformCount; i++)
         {
             Transform* t = _transformsChanged.at(i);
             GP_ASSERT(t);

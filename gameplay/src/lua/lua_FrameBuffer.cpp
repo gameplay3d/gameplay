@@ -593,6 +593,36 @@ int lua_FrameBuffer_static_create(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)FrameBuffer::create(param1);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_FrameBuffer_static_create - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         case 3:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -633,7 +663,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 3).");
             lua_error(state);
             break;
         }

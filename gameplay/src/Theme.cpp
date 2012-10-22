@@ -14,25 +14,25 @@ Theme::Theme()
 Theme::~Theme()
 {
     // Destroy all the cursors, styles and , fonts.
-    for (unsigned int i = 0, count = _styles.size(); i < count; ++i)
+    for (size_t i = 0, count = _styles.size(); i < count; ++i)
     {
         Style* style = _styles[i];
         SAFE_DELETE(style);
     }
 
-    for (unsigned int i = 0, count = _images.size(); i < count; ++i)
+    for (size_t i = 0, count = _images.size(); i < count; ++i)
     {
         ThemeImage* image = _images[i];
         SAFE_RELEASE(image);
     }
 
-    for (unsigned int i = 0, count = _imageLists.size(); i < count; ++i)
+    for (size_t i = 0, count = _imageLists.size(); i < count; ++i)
     {
         ImageList* imageList = _imageLists[i];
         SAFE_RELEASE(imageList);
     }
 
-    for (unsigned int i = 0, count = _skins.size(); i < count; ++i)
+    for (size_t i = 0, count = _skins.size(); i < count; ++i)
     {
         Skin* skin = _skins[i];
         SAFE_RELEASE(skin);
@@ -54,7 +54,7 @@ Theme* Theme::create(const char* url)
     GP_ASSERT(url);
 
     // Search theme cache first.
-    for (unsigned int i = 0, count = __themeCache.size(); i < count; ++i)
+    for (size_t i = 0, count = __themeCache.size(); i < count; ++i)
     {
         Theme* t = __themeCache[i];
         if (t->_url == url)
@@ -435,7 +435,7 @@ Theme::Style* Theme::getStyle(const char* name) const
 {
     GP_ASSERT(name);
 
-    for (unsigned int i = 0, count = _styles.size(); i < count; ++i)
+    for (size_t i = 0, count = _styles.size(); i < count; ++i)
     {
         GP_ASSERT(_styles[i]);
         if (strcmp(name, _styles[i]->getId()) == 0)
