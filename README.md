@@ -16,7 +16,7 @@ An open-source, cross-platform 3D native C++ game framework making it easy to le
 - Terrain and Water
 - Asset Pipeline improvements
 
-## Licence
+## License
 The project is open sourced under the Apache 2.0 license.
 
 ## Bug Reporting and Feature Requests

@@ -31,12 +31,6 @@ void write(unsigned int value, FILE* file)
     assert(r == 1);
 }
 
-void write(unsigned long value, FILE* file)
-{
-    size_t r = fwrite(&value, sizeof(unsigned long), 1, file);
-    assert(r == 1);
-}
-
 void write(unsigned short value, FILE* file)
 {
     size_t r = fwrite(&value, sizeof(unsigned short), 1, file);
@@ -63,7 +57,7 @@ void write(const float* values, int length, FILE* file)
 void write(const std::string& str, FILE* file)
 {
     // Write the length of the string
-    write(str.size(), file);
+    write((unsigned int)str.size(), file);
     
     if (str.size() > 0)
     {

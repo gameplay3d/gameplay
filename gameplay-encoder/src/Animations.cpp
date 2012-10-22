@@ -27,7 +27,7 @@ const char* Animations::getElementName(void) const
 void Animations::writeBinary(FILE* file)
 {
     Object::writeBinary(file);
-    write(_animations.size(), file);
+    write((unsigned int)_animations.size(), file);
     for (std::vector<Animation*>::iterator i = _animations.begin(); i != _animations.end(); ++i)
     {
         (*i)->writeBinary(file);
