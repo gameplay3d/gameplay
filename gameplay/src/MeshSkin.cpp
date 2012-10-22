@@ -32,7 +32,7 @@ void MeshSkin::setBindShape(const float* matrix)
 
 unsigned int MeshSkin::getJointCount() const
 {
-    return _joints.size();
+    return (unsigned int)_joints.size();
 }
 
 Joint* MeshSkin::getJoint(unsigned int index) const
@@ -45,7 +45,7 @@ Joint* MeshSkin::getJoint(const char* id) const
 {
     GP_ASSERT(id);
 
-    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
+    for (size_t i = 0, count = _joints.size(); i < count; ++i)
     {
         Joint* j = _joints[i];
         if (j && j->getId() != NULL && strcmp(j->getId(), id) == 0)
@@ -158,8 +158,7 @@ Vector4* MeshSkin::getMatrixPalette() const
 {
     GP_ASSERT(_matrixPalette);
 
-    unsigned int count = _joints.size();
-    for (unsigned int i = 0; i < count; i++)
+    for (size_t i = 0, count = _joints.size(); i < count; i++)
     {
         GP_ASSERT(_joints[i]);
         _joints[i]->updateJointMatrix(getBindShape(), &_matrixPalette[i * PALETTE_ROWS]);
@@ -169,7 +168,7 @@ Vector4* MeshSkin::getMatrixPalette() const
 
 unsigned int MeshSkin::getMatrixPaletteSize() const
 {
-    return _joints.size() * PALETTE_ROWS;
+    return (unsigned int)_joints.size() * PALETTE_ROWS;
 }
 
 Model* MeshSkin::getModel() const
@@ -237,7 +236,7 @@ void MeshSkin::transformChanged(Transform* transform, long cookie)
 
 int MeshSkin::getJointIndex(Joint* joint) const
 {
-    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
+    for (size_t i = 0, count = _joints.size(); i < count; ++i)
     {
         if (_joints[i] == joint)
         {
@@ -265,7 +264,7 @@ void MeshSkin::clearJoints()
 {
     setRootJoint(NULL);
 
-    for (unsigned int i = 0, count = _joints.size(); i < count; ++i)
+    for (size_t i = 0, count = _joints.size(); i < count; ++i)
     {
         SAFE_RELEASE(_joints[i]);
     }

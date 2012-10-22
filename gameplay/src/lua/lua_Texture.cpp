@@ -661,6 +661,44 @@ int lua_Texture_static_create(lua_State* state)
             }
             break;
         }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<GLuint> param1 = ScriptUtil::getObjectPointer<GLuint>(1, "GLuint", true);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 3 off the stack.
+                int param3 = (int)luaL_checkint(state, 3);
+
+                void* returnPtr = (void*)Texture::create(*param1, param2, param3);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Texture");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_Texture_static_create - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         case 4:
         {
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
@@ -681,6 +719,39 @@ int lua_Texture_static_create(lua_State* state)
                 ScriptUtil::LuaArray<unsigned char> param4 = ScriptUtil::getUnsignedCharPointer(4);
 
                 void* returnPtr = (void*)Texture::create(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Texture");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<GLuint> param1 = ScriptUtil::getObjectPointer<GLuint>(1, "GLuint", true);
+
+                // Get parameter 2 off the stack.
+                int param2 = (int)luaL_checkint(state, 2);
+
+                // Get parameter 3 off the stack.
+                int param3 = (int)luaL_checkint(state, 3);
+
+                // Get parameter 4 off the stack.
+                Texture::Format param4 = (Texture::Format)lua_enumFromString_TextureFormat(luaL_checkstring(state, 4));
+
+                void* returnPtr = (void*)Texture::create(*param1, param2, param3, param4);
                 if (returnPtr)
                 {
                     ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
@@ -751,7 +822,7 @@ int lua_Texture_static_create(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1, 2, 4 or 5).");
+            lua_pushstring(state, "Invalid number of parameters (expected 1, 2, 3, 4 or 5).");
             lua_error(state);
             break;
         }
