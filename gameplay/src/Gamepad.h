@@ -111,7 +111,7 @@ public:
      *
      * Note: What if the user decides to add gamepad controls (joysticks, buttons) to the gamepad form? How do we handle new/deleted controls?
      *
-     * @return the Form used to represent this gamepad. NULL if the gamepad is not reprented with a Form.
+     * @return the Form used to represent this gamepad. NULL if the gamepad is not represented with a Form.
      */
     Form* getForm() const;
 

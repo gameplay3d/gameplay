@@ -37,7 +37,7 @@ Container::Container()
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
       _scroll(SCROLL_NONE), _scrollBarBounds(Rectangle::empty()), _scrollPosition(Vector2::zero()),
       _scrollBarsAutoHide(false), _scrollBarOpacity(1.0f), _scrolling(false),
-       _scrollingFirstX(0), _scrollingFirstY(0), _scrollingLastX(0), _scrollingLastY(0),
+      _scrollingVeryFirstX(0), _scrollingVeryFirstY(0), _scrollingFirstX(0), _scrollingFirstY(0), _scrollingLastX(0), _scrollingLastY(0),
       _scrollingStartTimeX(0), _scrollingStartTimeY(0), _scrollingLastTime(0),
       _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
       _scrollingRight(false), _scrollingDown(false),
@@ -369,8 +369,8 @@ bool Container::isScrolling() const
         return true;
 
     return (_scrolling &&
-            (abs(_scrollingLastX - _scrollingFirstX) > SCROLL_THRESHOLD ||
-             abs(_scrollingLastY - _scrollingFirstY) > SCROLL_THRESHOLD));
+            (abs(_scrollingLastX - _scrollingVeryFirstX) > SCROLL_THRESHOLD ||
+             abs(_scrollingLastY - _scrollingVeryFirstY) > SCROLL_THRESHOLD));
 }
 
 Animation* Container::getAnimation(const char* id) const
@@ -803,8 +803,8 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         {
             _contactIndex = (int) contactIndex;
             _contactIndices++;
-            _scrollingLastX = _scrollingFirstX = x;
-            _scrollingLastY = _scrollingFirstY = y;
+            _scrollingLastX = _scrollingFirstX = _scrollingVeryFirstX = x;
+            _scrollingLastY = _scrollingFirstY = _scrollingVeryFirstY = y;
             _scrollingVelocity.set(0, 0);
             _scrolling = true;
             _scrollingStartTimeX = _scrollingStartTimeY = 0;
@@ -956,7 +956,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
                 if (x + _viewportBounds.x >= vBounds.x &&
                     x + _viewportBounds.x <= vBounds.x + vBounds.width)
                 {
-                    // Then we're within the horizontal bounds of the verticle scrollbar.
+                    // Then we're within the horizontal bounds of the vertical scrollbar.
                     // We want to either jump up or down, or drag the scrollbar itself.
                     if (y < vBounds.y)
                     {
@@ -1107,13 +1107,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
         break;
     case Touch::TOUCH_RELEASE:
-        {
-            if (eventConsumed)
-            {
-                if (_contactIndices > 0)
-                    _contactIndices--;
-            }
-        }
+		if (eventConsumed)
+		{
+			if (_contactIndices > 0)
+				_contactIndices--;
+		}
         break;
     }
 
@@ -1127,7 +1125,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     }
 
     release();
-    return (_consumeInputEvents | eventConsumed);
+    if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+		y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+    	return (_consumeInputEvents | eventConsumed);
+    else
+    	return eventConsumed;
 }
 
 Container::Scroll Container::getScroll(const char* scroll)

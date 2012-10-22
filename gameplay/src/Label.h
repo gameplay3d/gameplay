@@ -24,7 +24,7 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          text        = <string>
-         consumeEvents = <bool>  // Whether the label propogates input events to the Game's input event handler. Default is true.
+         consumeEvents = <bool>  // Whether the label propagates input events to the Game's input event handler. Default is true.
     }
  @endverbatim
  */

@@ -1027,7 +1027,7 @@ PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* i
         for (unsigned int y = 0, h = image->getHeight(); y < h; ++y)
         {
             //
-            // Orignially in GamePlay this was normalizedHeightGrayscale which generally yielded
+            // Originally in GamePlay this was normalizedHeightGrayscale which generally yielded
             // only 8-bit precision. This has been replaced by normalizedHeightPacked (with a
             // corresponding change in gameplay-encoder).
             //

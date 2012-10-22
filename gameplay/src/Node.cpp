@@ -839,7 +839,7 @@ const BoundingSphere& Node::getBoundingSphere() const
                 // world matrix. This computes a final world matrix used for transforming this
                 // node's bounding volume. This allows us to store a much smaller bounding
                 // volume approximation than would otherwise be possible for skinned meshes,
-                // since joint parent nodes that are not in the matrix pallette do not need to
+                // since joint parent nodes that are not in the matrix palette do not need to
                 // be considered as directly transforming vertices on the GPU (they can instead
                 // be applied directly to the bounding volume transformation below).
                 GP_ASSERT(_model->getSkin()->getRootJoint());
