@@ -27,7 +27,7 @@ namespace gameplay
 
 void luaRegister_Node()
 {
-    const luaL_Reg lua_members[] =
+    const luaL_Reg lua_members[] = 
     {
         {"addAdvertisedDescendant", lua_Node_addAdvertisedDescendant},
         {"addChild", lua_Node_addChild},
@@ -147,7 +147,7 @@ void luaRegister_Node()
         {"translateZ", lua_Node_translateZ},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] =
+    const luaL_Reg lua_statics[] = 
     {
         {"ANIMATE_ROTATE", lua_Node_static_ANIMATE_ROTATE},
         {"ANIMATE_ROTATE_TRANSLATE", lua_Node_static_ANIMATE_ROTATE_TRANSLATE},
@@ -201,7 +201,7 @@ int lua_Node__gc(lua_State* state)
                     Node* instance = (Node*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-
+                
                 return 0;
             }
             else
@@ -239,7 +239,7 @@ int lua_Node_addAdvertisedDescendant(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->addAdvertisedDescendant(param1);
-
+                
                 return 0;
             }
             else
@@ -277,7 +277,7 @@ int lua_Node_addChild(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->addChild(param1);
-
+                
                 return 0;
             }
             else
@@ -315,7 +315,7 @@ int lua_Node_addListener(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->addListener(param1);
-
+                
                 return 0;
             }
             else
@@ -339,7 +339,7 @@ int lua_Node_addListener(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->addListener(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -373,7 +373,7 @@ int lua_Node_addRef(lua_State* state)
             {
                 Node* instance = getInstance(state);
                 instance->addRef();
-
+                
                 return 0;
             }
             else
@@ -415,7 +415,7 @@ int lua_Node_addScriptCallback(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -828,7 +828,7 @@ int lua_Node_destroyAnimation(lua_State* state)
             {
                 Node* instance = getInstance(state);
                 instance->destroyAnimation();
-
+                
                 return 0;
             }
             else
@@ -848,7 +848,7 @@ int lua_Node_destroyAnimation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-
+                
                 return 0;
             }
             else
@@ -1323,7 +1323,7 @@ int lua_Node_getAnimationPropertyValue(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -1435,7 +1435,7 @@ int lua_Node_getBackVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getBackVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1676,7 +1676,7 @@ int lua_Node_getDownVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getDownVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1834,7 +1834,7 @@ int lua_Node_getForwardVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getForwardVector(param1);
-
+                
                 return 0;
             }
             else
@@ -2213,7 +2213,7 @@ int lua_Node_getLeftVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getLeftVector(param1);
-
+                
                 return 0;
             }
             else
@@ -2721,7 +2721,7 @@ int lua_Node_getRightVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getRightVector(param1);
-
+                
                 return 0;
             }
             else
@@ -2879,7 +2879,7 @@ int lua_Node_getRotation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getRotation(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2890,7 +2890,7 @@ int lua_Node_getRotation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getRotation(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2970,7 +2970,7 @@ int lua_Node_getScale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getScale(param1);
-
+                
                 return 0;
             }
             else
@@ -3234,7 +3234,7 @@ int lua_Node_getTranslation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getTranslation(param1);
-
+                
                 return 0;
             }
             else
@@ -3540,7 +3540,7 @@ int lua_Node_getUpVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->getUpVector(param1);
-
+                
                 return 0;
             }
             else
@@ -3891,7 +3891,7 @@ int lua_Node_release(lua_State* state)
             {
                 Node* instance = getInstance(state);
                 instance->release();
-
+                
                 return 0;
             }
             else
@@ -3925,7 +3925,7 @@ int lua_Node_removeAllChildren(lua_State* state)
             {
                 Node* instance = getInstance(state);
                 instance->removeAllChildren();
-
+                
                 return 0;
             }
             else
@@ -3963,7 +3963,7 @@ int lua_Node_removeChild(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->removeChild(param1);
-
+                
                 return 0;
             }
             else
@@ -4001,7 +4001,7 @@ int lua_Node_removeListener(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->removeListener(param1);
-
+                
                 return 0;
             }
             else
@@ -4043,7 +4043,7 @@ int lua_Node_removeScriptCallback(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4081,7 +4081,7 @@ int lua_Node_rotate(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotate(*param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -4092,7 +4092,7 @@ int lua_Node_rotate(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotate(*param1);
-
+                
                 return 0;
             }
             else
@@ -4116,7 +4116,7 @@ int lua_Node_rotate(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotate(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4148,7 +4148,7 @@ int lua_Node_rotate(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotate(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -4186,7 +4186,7 @@ int lua_Node_rotateX(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotateX(param1);
-
+                
                 return 0;
             }
             else
@@ -4224,7 +4224,7 @@ int lua_Node_rotateY(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotateY(param1);
-
+                
                 return 0;
             }
             else
@@ -4262,7 +4262,7 @@ int lua_Node_rotateZ(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->rotateZ(param1);
-
+                
                 return 0;
             }
             else
@@ -4300,7 +4300,7 @@ int lua_Node_scale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->scale(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -4311,7 +4311,7 @@ int lua_Node_scale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->scale(*param1);
-
+                
                 return 0;
             }
             else
@@ -4339,7 +4339,7 @@ int lua_Node_scale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->scale(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -4377,7 +4377,7 @@ int lua_Node_scaleX(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->scaleX(param1);
-
+                
                 return 0;
             }
             else
@@ -4415,7 +4415,7 @@ int lua_Node_scaleY(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->scaleY(param1);
-
+                
                 return 0;
             }
             else
@@ -4453,7 +4453,7 @@ int lua_Node_scaleZ(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->scaleZ(param1);
-
+                
                 return 0;
             }
             else
@@ -4491,7 +4491,7 @@ int lua_Node_set(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->set(*param1);
-
+                
                 return 0;
             }
             else
@@ -4519,7 +4519,7 @@ int lua_Node_set(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -4538,7 +4538,7 @@ int lua_Node_set(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
-
+                
                 return 0;
             }
             else
@@ -4570,7 +4570,7 @@ int lua_Node_set(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->set(*param1, *param2, param3, *param4);
-
+                
                 return 0;
             }
             else
@@ -4608,7 +4608,7 @@ int lua_Node_setAgent(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setAgent(param1);
-
+                
                 return 0;
             }
             else
@@ -4650,7 +4650,7 @@ int lua_Node_setAnimationPropertyValue(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -4678,7 +4678,7 @@ int lua_Node_setAnimationPropertyValue(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -4716,7 +4716,7 @@ int lua_Node_setAudioSource(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setAudioSource(param1);
-
+                
                 return 0;
             }
             else
@@ -4754,7 +4754,7 @@ int lua_Node_setCamera(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setCamera(param1);
-
+                
                 return 0;
             }
             else
@@ -4964,7 +4964,7 @@ int lua_Node_setForm(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setForm(param1);
-
+                
                 return 0;
             }
             else
@@ -5002,7 +5002,7 @@ int lua_Node_setId(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setId(param1);
-
+                
                 return 0;
             }
             else
@@ -5036,7 +5036,7 @@ int lua_Node_setIdentity(lua_State* state)
             {
                 Node* instance = getInstance(state);
                 instance->setIdentity();
-
+                
                 return 0;
             }
             else
@@ -5074,7 +5074,7 @@ int lua_Node_setLight(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setLight(param1);
-
+                
                 return 0;
             }
             else
@@ -5112,7 +5112,7 @@ int lua_Node_setModel(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setModel(param1);
-
+                
                 return 0;
             }
             else
@@ -5150,7 +5150,7 @@ int lua_Node_setParticleEmitter(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setParticleEmitter(param1);
-
+                
                 return 0;
             }
             else
@@ -5188,7 +5188,7 @@ int lua_Node_setRotation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setRotation(*param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -5199,7 +5199,7 @@ int lua_Node_setRotation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setRotation(*param1);
-
+                
                 return 0;
             }
             else
@@ -5223,7 +5223,7 @@ int lua_Node_setRotation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setRotation(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -5255,7 +5255,7 @@ int lua_Node_setRotation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setRotation(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -5293,7 +5293,7 @@ int lua_Node_setScale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setScale(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -5304,7 +5304,7 @@ int lua_Node_setScale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setScale(*param1);
-
+                
                 return 0;
             }
             else
@@ -5332,7 +5332,7 @@ int lua_Node_setScale(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setScale(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -5370,7 +5370,7 @@ int lua_Node_setScaleX(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setScaleX(param1);
-
+                
                 return 0;
             }
             else
@@ -5408,7 +5408,7 @@ int lua_Node_setScaleY(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setScaleY(param1);
-
+                
                 return 0;
             }
             else
@@ -5446,7 +5446,7 @@ int lua_Node_setScaleZ(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setScaleZ(param1);
-
+                
                 return 0;
             }
             else
@@ -5484,7 +5484,7 @@ int lua_Node_setTag(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTag(param1);
-
+                
                 return 0;
             }
             else
@@ -5508,7 +5508,7 @@ int lua_Node_setTag(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTag(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -5546,7 +5546,7 @@ int lua_Node_setTranslation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTranslation(*param1);
-
+                
                 return 0;
             }
             else
@@ -5574,7 +5574,7 @@ int lua_Node_setTranslation(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTranslation(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -5612,7 +5612,7 @@ int lua_Node_setTranslationX(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTranslationX(param1);
-
+                
                 return 0;
             }
             else
@@ -5650,7 +5650,7 @@ int lua_Node_setTranslationY(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTranslationY(param1);
-
+                
                 return 0;
             }
             else
@@ -5688,7 +5688,7 @@ int lua_Node_setTranslationZ(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->setTranslationZ(param1);
-
+                
                 return 0;
             }
             else
@@ -6052,7 +6052,7 @@ int lua_Node_static_resumeTransformChanged(lua_State* state)
         case 0:
         {
             Node::resumeTransformChanged();
-
+            
             return 0;
             break;
         }
@@ -6077,7 +6077,7 @@ int lua_Node_static_suspendTransformChanged(lua_State* state)
         case 0:
         {
             Node::suspendTransformChanged();
-
+            
             return 0;
             break;
         }
@@ -6109,7 +6109,7 @@ int lua_Node_transformPoint(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->transformPoint(param1);
-
+                
                 return 0;
             }
             else
@@ -6133,7 +6133,7 @@ int lua_Node_transformPoint(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -6171,7 +6171,7 @@ int lua_Node_transformVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->transformVector(param1);
-
+                
                 return 0;
             }
             else
@@ -6195,7 +6195,7 @@ int lua_Node_transformVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -6231,7 +6231,7 @@ int lua_Node_transformVector(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
-
+                
                 return 0;
             }
             else
@@ -6269,7 +6269,7 @@ int lua_Node_translate(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translate(*param1);
-
+                
                 return 0;
             }
             else
@@ -6297,7 +6297,7 @@ int lua_Node_translate(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translate(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -6335,7 +6335,7 @@ int lua_Node_translateForward(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateForward(param1);
-
+                
                 return 0;
             }
             else
@@ -6373,7 +6373,7 @@ int lua_Node_translateLeft(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateLeft(param1);
-
+                
                 return 0;
             }
             else
@@ -6419,7 +6419,7 @@ int lua_Node_translateSmooth(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateSmooth(*param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -6457,7 +6457,7 @@ int lua_Node_translateUp(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateUp(param1);
-
+                
                 return 0;
             }
             else
@@ -6495,7 +6495,7 @@ int lua_Node_translateX(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateX(param1);
-
+                
                 return 0;
             }
             else
@@ -6533,7 +6533,7 @@ int lua_Node_translateY(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateY(param1);
-
+                
                 return 0;
             }
             else
@@ -6571,7 +6571,7 @@ int lua_Node_translateZ(lua_State* state)
 
                 Node* instance = getInstance(state);
                 instance->translateZ(param1);
-
+                
                 return 0;
             }
             else

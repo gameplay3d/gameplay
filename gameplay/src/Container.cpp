@@ -218,7 +218,7 @@ unsigned int Container::addControl(Control* control)
         _controls.push_back(control);
         control->addRef();
         control->_parent = this;
-        return _controls.size() - 1;
+        return (unsigned int)(_controls.size() - 1);
     }
     else
     {
@@ -230,7 +230,7 @@ unsigned int Container::addControl(Control* control)
             Control* c = _controls[i];
             if (c == control)
             {
-                return i;
+                return (unsigned int)i;
             }
         }
 
@@ -696,8 +696,7 @@ void Container::updateScroll()
 
     // Calculate total width and height.
     std::vector<Control*> controls = getControls();
-    unsigned int controlsCount = controls.size();
-    for (unsigned int i = 0; i < controlsCount; i++)
+    for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
     {
         Control* control = controls.at(i);
 

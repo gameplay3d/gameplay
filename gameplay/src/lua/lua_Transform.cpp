@@ -16,7 +16,7 @@ namespace gameplay
 
 void luaRegister_Transform()
 {
-    const luaL_Reg lua_members[] =
+    const luaL_Reg lua_members[] = 
     {
         {"addListener", lua_Transform_addListener},
         {"addScriptCallback", lua_Transform_addScriptCallback},
@@ -77,7 +77,7 @@ void luaRegister_Transform()
         {"translateZ", lua_Transform_translateZ},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] =
+    const luaL_Reg lua_statics[] = 
     {
         {"ANIMATE_ROTATE", lua_Transform_static_ANIMATE_ROTATE},
         {"ANIMATE_ROTATE_TRANSLATE", lua_Transform_static_ANIMATE_ROTATE_TRANSLATE},
@@ -130,7 +130,7 @@ int lua_Transform__gc(lua_State* state)
                     Transform* instance = (Transform*)object->instance;
                     SAFE_DELETE(instance);
                 }
-
+                
                 return 0;
             }
             else
@@ -302,7 +302,7 @@ int lua_Transform_addListener(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->addListener(param1);
-
+                
                 return 0;
             }
             else
@@ -326,7 +326,7 @@ int lua_Transform_addListener(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->addListener(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -368,7 +368,7 @@ int lua_Transform_addScriptCallback(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -735,7 +735,7 @@ int lua_Transform_destroyAnimation(lua_State* state)
             {
                 Transform* instance = getInstance(state);
                 instance->destroyAnimation();
-
+                
                 return 0;
             }
             else
@@ -755,7 +755,7 @@ int lua_Transform_destroyAnimation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-
+                
                 return 0;
             }
             else
@@ -916,7 +916,7 @@ int lua_Transform_getAnimationPropertyValue(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -982,7 +982,7 @@ int lua_Transform_getBackVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getBackVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1048,7 +1048,7 @@ int lua_Transform_getDownVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getDownVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1114,7 +1114,7 @@ int lua_Transform_getForwardVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getForwardVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1180,7 +1180,7 @@ int lua_Transform_getLeftVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getLeftVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1292,7 +1292,7 @@ int lua_Transform_getRightVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getRightVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1358,7 +1358,7 @@ int lua_Transform_getRotation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getRotation(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1369,7 +1369,7 @@ int lua_Transform_getRotation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getRotation(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1449,7 +1449,7 @@ int lua_Transform_getScale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getScale(param1);
-
+                
                 return 0;
             }
             else
@@ -1626,7 +1626,7 @@ int lua_Transform_getTranslation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getTranslation(param1);
-
+                
                 return 0;
             }
             else
@@ -1803,7 +1803,7 @@ int lua_Transform_getUpVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->getUpVector(param1);
-
+                
                 return 0;
             }
             else
@@ -1841,7 +1841,7 @@ int lua_Transform_removeListener(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->removeListener(param1);
-
+                
                 return 0;
             }
             else
@@ -1883,7 +1883,7 @@ int lua_Transform_removeScriptCallback(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -1921,7 +1921,7 @@ int lua_Transform_rotate(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotate(*param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -1932,7 +1932,7 @@ int lua_Transform_rotate(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotate(*param1);
-
+                
                 return 0;
             }
             else
@@ -1956,7 +1956,7 @@ int lua_Transform_rotate(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotate(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -1988,7 +1988,7 @@ int lua_Transform_rotate(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotate(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -2026,7 +2026,7 @@ int lua_Transform_rotateX(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotateX(param1);
-
+                
                 return 0;
             }
             else
@@ -2064,7 +2064,7 @@ int lua_Transform_rotateY(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotateY(param1);
-
+                
                 return 0;
             }
             else
@@ -2102,7 +2102,7 @@ int lua_Transform_rotateZ(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->rotateZ(param1);
-
+                
                 return 0;
             }
             else
@@ -2140,7 +2140,7 @@ int lua_Transform_scale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->scale(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2151,7 +2151,7 @@ int lua_Transform_scale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->scale(*param1);
-
+                
                 return 0;
             }
             else
@@ -2179,7 +2179,7 @@ int lua_Transform_scale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->scale(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -2217,7 +2217,7 @@ int lua_Transform_scaleX(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->scaleX(param1);
-
+                
                 return 0;
             }
             else
@@ -2255,7 +2255,7 @@ int lua_Transform_scaleY(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->scaleY(param1);
-
+                
                 return 0;
             }
             else
@@ -2293,7 +2293,7 @@ int lua_Transform_scaleZ(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->scaleZ(param1);
-
+                
                 return 0;
             }
             else
@@ -2331,7 +2331,7 @@ int lua_Transform_set(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->set(*param1);
-
+                
                 return 0;
             }
             else
@@ -2359,7 +2359,7 @@ int lua_Transform_set(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2378,7 +2378,7 @@ int lua_Transform_set(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->set(*param1, *param2, *param3);
-
+                
                 return 0;
             }
             else
@@ -2410,7 +2410,7 @@ int lua_Transform_set(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->set(*param1, *param2, param3, *param4);
-
+                
                 return 0;
             }
             else
@@ -2452,7 +2452,7 @@ int lua_Transform_setAnimationPropertyValue(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
             else
@@ -2480,7 +2480,7 @@ int lua_Transform_setAnimationPropertyValue(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -2514,7 +2514,7 @@ int lua_Transform_setIdentity(lua_State* state)
             {
                 Transform* instance = getInstance(state);
                 instance->setIdentity();
-
+                
                 return 0;
             }
             else
@@ -2552,7 +2552,7 @@ int lua_Transform_setRotation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setRotation(*param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2563,7 +2563,7 @@ int lua_Transform_setRotation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setRotation(*param1);
-
+                
                 return 0;
             }
             else
@@ -2587,7 +2587,7 @@ int lua_Transform_setRotation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setRotation(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -2619,7 +2619,7 @@ int lua_Transform_setRotation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setRotation(param1, param2, param3, param4);
-
+                
                 return 0;
             }
             else
@@ -2657,7 +2657,7 @@ int lua_Transform_setScale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setScale(param1);
-
+                
                 return 0;
             }
             else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -2668,7 +2668,7 @@ int lua_Transform_setScale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setScale(*param1);
-
+                
                 return 0;
             }
             else
@@ -2696,7 +2696,7 @@ int lua_Transform_setScale(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setScale(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -2734,7 +2734,7 @@ int lua_Transform_setScaleX(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setScaleX(param1);
-
+                
                 return 0;
             }
             else
@@ -2772,7 +2772,7 @@ int lua_Transform_setScaleY(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setScaleY(param1);
-
+                
                 return 0;
             }
             else
@@ -2810,7 +2810,7 @@ int lua_Transform_setScaleZ(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setScaleZ(param1);
-
+                
                 return 0;
             }
             else
@@ -2848,7 +2848,7 @@ int lua_Transform_setTranslation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setTranslation(*param1);
-
+                
                 return 0;
             }
             else
@@ -2876,7 +2876,7 @@ int lua_Transform_setTranslation(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setTranslation(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -2914,7 +2914,7 @@ int lua_Transform_setTranslationX(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setTranslationX(param1);
-
+                
                 return 0;
             }
             else
@@ -2952,7 +2952,7 @@ int lua_Transform_setTranslationY(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setTranslationY(param1);
-
+                
                 return 0;
             }
             else
@@ -2990,7 +2990,7 @@ int lua_Transform_setTranslationZ(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->setTranslationZ(param1);
-
+                
                 return 0;
             }
             else
@@ -3287,7 +3287,7 @@ int lua_Transform_static_resumeTransformChanged(lua_State* state)
         case 0:
         {
             Transform::resumeTransformChanged();
-
+            
             return 0;
             break;
         }
@@ -3312,7 +3312,7 @@ int lua_Transform_static_suspendTransformChanged(lua_State* state)
         case 0:
         {
             Transform::suspendTransformChanged();
-
+            
             return 0;
             break;
         }
@@ -3344,7 +3344,7 @@ int lua_Transform_transformPoint(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->transformPoint(param1);
-
+                
                 return 0;
             }
             else
@@ -3368,7 +3368,7 @@ int lua_Transform_transformPoint(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->transformPoint(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3406,7 +3406,7 @@ int lua_Transform_transformVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->transformVector(param1);
-
+                
                 return 0;
             }
             else
@@ -3430,7 +3430,7 @@ int lua_Transform_transformVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->transformVector(*param1, param2);
-
+                
                 return 0;
             }
             else
@@ -3466,7 +3466,7 @@ int lua_Transform_transformVector(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->transformVector(param1, param2, param3, param4, param5);
-
+                
                 return 0;
             }
             else
@@ -3504,7 +3504,7 @@ int lua_Transform_translate(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translate(*param1);
-
+                
                 return 0;
             }
             else
@@ -3532,7 +3532,7 @@ int lua_Transform_translate(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translate(param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -3570,7 +3570,7 @@ int lua_Transform_translateForward(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateForward(param1);
-
+                
                 return 0;
             }
             else
@@ -3608,7 +3608,7 @@ int lua_Transform_translateLeft(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateLeft(param1);
-
+                
                 return 0;
             }
             else
@@ -3654,7 +3654,7 @@ int lua_Transform_translateSmooth(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateSmooth(*param1, param2, param3);
-
+                
                 return 0;
             }
             else
@@ -3692,7 +3692,7 @@ int lua_Transform_translateUp(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateUp(param1);
-
+                
                 return 0;
             }
             else
@@ -3730,7 +3730,7 @@ int lua_Transform_translateX(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateX(param1);
-
+                
                 return 0;
             }
             else
@@ -3768,7 +3768,7 @@ int lua_Transform_translateY(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateY(param1);
-
+                
                 return 0;
             }
             else
@@ -3806,7 +3806,7 @@ int lua_Transform_translateZ(lua_State* state)
 
                 Transform* instance = getInstance(state);
                 instance->translateZ(param1);
-
+                
                 return 0;
             }
             else

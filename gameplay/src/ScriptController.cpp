@@ -79,7 +79,7 @@ void ScriptUtil::registerConstantBool(const std::string& name, bool value, const
         lua_setfield(sc->_lua, -2, name.c_str());
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -112,7 +112,7 @@ void ScriptUtil::registerConstantNumber(const std::string& name, double value, c
         lua_setfield(sc->_lua, -2, name.c_str());
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -145,7 +145,7 @@ void ScriptUtil::registerConstantString(const std::string& name, const std::stri
         lua_setfield(sc->_lua, -2, name.c_str());
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -234,7 +234,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
         lua_settable(sc->_lua, -3);
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else

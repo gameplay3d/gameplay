@@ -100,7 +100,7 @@ Image* Image::create(const char* path)
         return NULL;
     }
 
-    unsigned int stride = png_get_rowbytes(png, info);
+    size_t stride = png_get_rowbytes(png, info);
 
     // Allocate image data.
     image->_data = new unsigned char[stride * image->_height];

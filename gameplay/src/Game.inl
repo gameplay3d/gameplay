@@ -123,7 +123,7 @@ inline void Game::displayKeyboard(bool display)
 
 inline unsigned int Game::getGamepadCount() const
 {
-    return _gamepads->size();
+    return (unsigned int)_gamepads->size();
 }
 
 inline unsigned int Game::getGamepadsConnected()

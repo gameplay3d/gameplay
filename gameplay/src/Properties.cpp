@@ -325,8 +325,7 @@ void Properties::readProperties(FILE* file)
 
 Properties::~Properties()
 {
-    unsigned int count = _namespaces.size();
-    for (unsigned int i = 0; i < count; ++i)
+    for (size_t i = 0, count = _namespaces.size(); i < count; ++i)
     {
         SAFE_DELETE(_namespaces[i]);
     }
@@ -412,8 +411,7 @@ void Properties::resolveInheritance(const char* id)
                 Properties* overrides = new Properties(*derived);
 
                 // Delete the child's data.
-                unsigned int count = derived->_namespaces.size();
-                for (unsigned int i = 0; i < count; i++)
+                for (size_t i = 0, count = derived->_namespaces.size(); i < count; i++)
                 {
                     SAFE_DELETE(derived->_namespaces[i]);
                 }
@@ -960,8 +958,7 @@ Properties* Properties::clone()
     p->_properties = _properties;
     p->_propertiesItr = p->_properties.end();
 
-    unsigned int count = _namespaces.size();
-    for (unsigned int i = 0; i < count; i++)
+    for (size_t i = 0, count = _namespaces.size(); i < count; i++)
     {
         GP_ASSERT(_namespaces[i]);
         p->_namespaces.push_back(_namespaces[i]->clone());
@@ -999,10 +996,10 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
     // return the specified namespace or notify the user if it cannot be found.
     if (namespacePath.size() > 0)
     {
-        unsigned int size = namespacePath.size();
+        size_t size = namespacePath.size();
         properties->rewind();
         Properties* iter = properties->getNextNamespace();
-        for (unsigned int i = 0; i < size;)
+        for (size_t i = 0; i < size; )
         {
             while (true)
             {

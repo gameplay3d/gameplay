@@ -76,6 +76,11 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
 {
     GP_ASSERT(bindings.size() > 0);
 
+    if (bindings[0].getFunctionName() == "lua_AudioListener_static_getInstance")
+    {
+        int i = 0;
+    }
+
     // Print the function signature.
     o << "int " << bindings[0].getFunctionName() << "(lua_State* state)\n";
     o << "{\n";

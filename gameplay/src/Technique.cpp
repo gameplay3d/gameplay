@@ -15,7 +15,7 @@ Technique::Technique(const char* id, Material* material)
 Technique::~Technique()
 {
     // Destroy all the passes.
-    for (unsigned int i = 0, count = _passes.size(); i < count; ++i)
+    for (size_t i = 0, count = _passes.size(); i < count; ++i)
     {
         SAFE_RELEASE(_passes[i]);
     }
@@ -28,7 +28,7 @@ const char* Technique::getId() const
 
 unsigned int Technique::getPassCount() const
 {
-    return _passes.size();
+    return (unsigned int)_passes.size();
 }
 
 Pass* Technique::getPassByIndex(unsigned int index) const
@@ -41,7 +41,7 @@ Pass* Technique::getPass(const char* id) const
 {
     GP_ASSERT(id);
 
-    for (unsigned int i = 0, count = _passes.size(); i < count; ++i)
+    for (size_t i = 0, count = _passes.size(); i < count; ++i)
     {
         Pass* pass = _passes[i];
         GP_ASSERT(pass);
