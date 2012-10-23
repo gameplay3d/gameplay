@@ -63,11 +63,9 @@ int lua_RenderTarget__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -97,11 +95,9 @@ int lua_RenderTarget_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -134,11 +130,9 @@ int lua_RenderTarget_getHeight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_getHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_getHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -171,11 +165,9 @@ int lua_RenderTarget_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -208,11 +200,9 @@ int lua_RenderTarget_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -254,11 +244,9 @@ int lua_RenderTarget_getTexture(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_getTexture - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_getTexture - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -291,11 +279,9 @@ int lua_RenderTarget_getWidth(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_getWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_getWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -325,11 +311,9 @@ int lua_RenderTarget_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -352,74 +336,79 @@ int lua_RenderTarget_static_create(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Texture> param2 = ScriptUtil::getObjectPointer<Texture>(2, "Texture", false);
-
-                void* returnPtr = (void*)RenderTarget::create(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "RenderTarget");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Texture> param2 = ScriptUtil::getObjectPointer<Texture>(2, "Texture", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    void* returnPtr = (void*)RenderTarget::create(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "RenderTarget");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
-
-                // Get parameter 2 off the stack.
-                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
-
-                void* returnPtr = (void*)RenderTarget::create(param1, param2, param3);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "RenderTarget");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                    void* returnPtr = (void*)RenderTarget::create(param1, param2, param3);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "RenderTarget");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_RenderTarget_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -463,11 +452,9 @@ int lua_RenderTarget_static_getRenderTarget(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderTarget_static_getRenderTarget - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderTarget_static_getRenderTarget - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

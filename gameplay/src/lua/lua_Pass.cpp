@@ -70,11 +70,9 @@ int lua_Pass__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -104,11 +102,9 @@ int lua_Pass_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -138,11 +134,9 @@ int lua_Pass_bind(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_bind - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_bind - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -184,11 +178,9 @@ int lua_Pass_getEffect(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_getEffect - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_getEffect - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -221,11 +213,9 @@ int lua_Pass_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -271,11 +261,9 @@ int lua_Pass_getParameter(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_getParameter - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_getParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -308,11 +296,9 @@ int lua_Pass_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -354,11 +340,9 @@ int lua_Pass_getStateBlock(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_getStateBlock - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_getStateBlock - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -400,11 +384,9 @@ int lua_Pass_getVertexAttributeBinding(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_getVertexAttributeBinding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_getVertexAttributeBinding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -434,11 +416,9 @@ int lua_Pass_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -461,41 +441,46 @@ int lua_Pass_setParameterAutoBinding(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
+                    // Get parameter 2 off the stack.
+                    RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
 
-                Pass* instance = getInstance(state);
-                instance->setParameterAutoBinding(param1, param2);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                    Pass* instance = getInstance(state);
+                    instance->setParameterAutoBinding(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
+                    // Get parameter 2 off the stack.
+                    ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
 
-                Pass* instance = getInstance(state);
-                instance->setParameterAutoBinding(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_setParameterAutoBinding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Pass* instance = getInstance(state);
+                    instance->setParameterAutoBinding(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Pass_setParameterAutoBinding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -522,18 +507,22 @@ int lua_Pass_setStateBlock(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<RenderState::StateBlock> param1 = ScriptUtil::getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<RenderState::StateBlock> param1 = ScriptUtil::getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'RenderState::StateBlock'.");
+                    lua_error(state);
+                }
 
                 Pass* instance = getInstance(state);
                 instance->setStateBlock(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_setStateBlock - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_setStateBlock - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -560,18 +549,22 @@ int lua_Pass_setVertexAttributeBinding(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexAttributeBinding> param1 = ScriptUtil::getObjectPointer<VertexAttributeBinding>(2, "VertexAttributeBinding", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<VertexAttributeBinding> param1 = ScriptUtil::getObjectPointer<VertexAttributeBinding>(2, "VertexAttributeBinding", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'VertexAttributeBinding'.");
+                    lua_error(state);
+                }
 
                 Pass* instance = getInstance(state);
                 instance->setVertexAttributeBinding(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_setVertexAttributeBinding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_setVertexAttributeBinding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -601,11 +594,9 @@ int lua_Pass_unbind(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Pass_unbind - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Pass_unbind - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

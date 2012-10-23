@@ -62,11 +62,9 @@ int lua_PhysicsControllerHitResult__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsControllerHitResult__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsControllerHitResult__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -158,7 +156,13 @@ int lua_PhysicsControllerHitResult_normal(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+        bool param2Valid;
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+        if (!param2Valid)
+        {
+            lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+            lua_error(state);
+        }
 
         instance->normal = *param2;
         return 0;
@@ -196,7 +200,13 @@ int lua_PhysicsControllerHitResult_object(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        ScriptUtil::LuaArray<PhysicsCollisionObject> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+        bool param2Valid;
+        ScriptUtil::LuaArray<PhysicsCollisionObject> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param2Valid);
+        if (!param2Valid)
+        {
+            lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject'.");
+            lua_error(state);
+        }
 
         instance->object = param2;
         return 0;
@@ -234,7 +244,13 @@ int lua_PhysicsControllerHitResult_point(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
-        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+        bool param2Valid;
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+        if (!param2Valid)
+        {
+            lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+            lua_error(state);
+        }
 
         instance->point = *param2;
         return 0;
