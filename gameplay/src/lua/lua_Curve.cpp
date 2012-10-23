@@ -68,11 +68,9 @@ int lua_Curve__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -102,11 +100,9 @@ int lua_Curve_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -144,11 +140,9 @@ int lua_Curve_evaluate(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_evaluate - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_evaluate - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -181,11 +175,9 @@ int lua_Curve_getComponentCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_getComponentCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_getComponentCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -218,11 +210,9 @@ int lua_Curve_getEndTime(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_getEndTime - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_getEndTime - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -255,11 +245,9 @@ int lua_Curve_getPointCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_getPointCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_getPointCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -292,11 +280,9 @@ int lua_Curve_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -329,11 +315,9 @@ int lua_Curve_getStartTime(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_getStartTime - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_getStartTime - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -363,11 +347,9 @@ int lua_Curve_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -390,74 +372,76 @@ int lua_Curve_setPoint(lua_State* state)
     {
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 5) == LUA_TSTRING || lua_type(state, 5) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 5) == LUA_TSTRING || lua_type(state, 5) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
+                    // Get parameter 3 off the stack.
+                    ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
-                // Get parameter 4 off the stack.
-                Curve::InterpolationType param4 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 5));
+                    // Get parameter 4 off the stack.
+                    Curve::InterpolationType param4 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 5));
 
-                Curve* instance = getInstance(state);
-                instance->setPoint(param1, param2, param3, param4);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_setPoint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Curve* instance = getInstance(state);
+                    instance->setPoint(param1, param2, param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Curve_setPoint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 5) == LUA_TSTRING || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA))
+            do
             {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 5) == LUA_TSTRING || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA))
+                {
+                    // Get parameter 1 off the stack.
+                    unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
+                    // Get parameter 3 off the stack.
+                    ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
 
-                // Get parameter 4 off the stack.
-                Curve::InterpolationType param4 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 5));
+                    // Get parameter 4 off the stack.
+                    Curve::InterpolationType param4 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 5));
 
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
+                    // Get parameter 5 off the stack.
+                    ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
 
-                // Get parameter 6 off the stack.
-                ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
+                    // Get parameter 6 off the stack.
+                    ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
 
-                Curve* instance = getInstance(state);
-                instance->setPoint(param1, param2, param3, param4, param5, param6);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_setPoint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Curve* instance = getInstance(state);
+                    instance->setPoint(param1, param2, param3, param4, param5, param6);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Curve_setPoint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -503,11 +487,9 @@ int lua_Curve_setTangent(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_setTangent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_setTangent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -555,11 +537,9 @@ int lua_Curve_static_create(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -602,11 +582,9 @@ int lua_Curve_static_lerp(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Curve_static_lerp - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Curve_static_lerp - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

@@ -57,11 +57,9 @@ int lua_VertexFormat__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexFormat__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexFormat__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -88,7 +86,13 @@ int lua_VertexFormat__init(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat::Element> param1 = ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<VertexFormat::Element> param1 = ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'VertexFormat::Element'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -109,11 +113,9 @@ int lua_VertexFormat__init(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexFormat__init - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexFormat__init - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -159,11 +161,9 @@ int lua_VertexFormat_getElement(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexFormat_getElement - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexFormat_getElement - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -196,11 +196,9 @@ int lua_VertexFormat_getElementCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexFormat_getElementCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexFormat_getElementCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -233,11 +231,9 @@ int lua_VertexFormat_getVertexSize(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexFormat_getVertexSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexFormat_getVertexSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -272,11 +268,9 @@ int lua_VertexFormat_static_toString(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexFormat_static_toString - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexFormat_static_toString - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
