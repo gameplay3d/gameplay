@@ -45,45 +45,53 @@ int lua_AIStateMachine_addState(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                AIStateMachine* instance = getInstance(state);
-                void* returnPtr = (void*)instance->addState(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "AIState");
-                    lua_setmetatable(state, -2);
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+
+                    AIStateMachine* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->addState(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "AIState");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
                 }
-                else
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    lua_pushnil(state);
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    AIStateMachine* instance = getInstance(state);
+                    instance->addState(param1);
+                    
+                    return 0;
                 }
+            } while (0);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false);
-
-                AIStateMachine* instance = getInstance(state);
-                instance->addState(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateMachine_addState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+            lua_pushstring(state, "lua_AIStateMachine_addState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -125,11 +133,9 @@ int lua_AIStateMachine_getActiveState(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateMachine_getActiveState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateMachine_getActiveState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -171,11 +177,9 @@ int lua_AIStateMachine_getAgent(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateMachine_getAgent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateMachine_getAgent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -221,11 +225,9 @@ int lua_AIStateMachine_getState(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateMachine_getState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateMachine_getState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -252,18 +254,22 @@ int lua_AIStateMachine_removeState(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AIState'.");
+                    lua_error(state);
+                }
 
                 AIStateMachine* instance = getInstance(state);
                 instance->removeState(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateMachine_removeState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateMachine_removeState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -286,48 +292,56 @@ int lua_AIStateMachine_setState(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                AIStateMachine* instance = getInstance(state);
-                void* returnPtr = (void*)instance->setState(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "AIState");
-                    lua_setmetatable(state, -2);
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+
+                    AIStateMachine* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->setState(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "AIState");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
                 }
-                else
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    lua_pushnil(state);
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    AIStateMachine* instance = getInstance(state);
+                    bool result = instance->setState(param1);
+
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
+
+                    return 1;
                 }
+            } while (0);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false);
-
-                AIStateMachine* instance = getInstance(state);
-                bool result = instance->setState(param1);
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateMachine_setState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+            lua_pushstring(state, "lua_AIStateMachine_setState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

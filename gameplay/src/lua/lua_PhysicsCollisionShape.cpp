@@ -66,11 +66,9 @@ int lua_PhysicsCollisionShape__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -100,11 +98,9 @@ int lua_PhysicsCollisionShape_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -137,11 +133,9 @@ int lua_PhysicsCollisionShape_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -174,11 +168,9 @@ int lua_PhysicsCollisionShape_getType(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_getType - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_getType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -208,11 +200,9 @@ int lua_PhysicsCollisionShape_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -254,104 +244,122 @@ int lua_PhysicsCollisionShape_static_box(lua_State* state)
         }
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1));
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2));
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
-
-                // Get parameter 3 off the stack.
-                bool param3 = ScriptUtil::luaCheckBool(state, 3);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2, param3));
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TBOOLEAN)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3 = ScriptUtil::luaCheckBool(state, 3);
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::box(*param1, *param2, param3));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_box - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -393,116 +401,125 @@ int lua_PhysicsCollisionShape_static_capsule(lua_State* state)
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2));
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3));
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3, param4));
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::capsule(param1, param2, *param3, param4));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_capsule - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -528,7 +545,13 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Image'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::heightfield(param1));
                 if (returnPtr)
@@ -546,11 +569,9 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_heightfield - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_heightfield - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -576,7 +597,13 @@ int lua_PhysicsCollisionShape_static_mesh(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Mesh'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::mesh(param1));
                 if (returnPtr)
@@ -594,11 +621,9 @@ int lua_PhysicsCollisionShape_static_mesh(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_mesh - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_mesh - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -640,104 +665,113 @@ int lua_PhysicsCollisionShape_static_sphere(lua_State* state)
         }
         case 1:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1));
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2));
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
-
-                // Get parameter 3 off the stack.
-                bool param3 = ScriptUtil::luaCheckBool(state, 3);
-
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2, param3));
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TBOOLEAN)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3 = ScriptUtil::luaCheckBool(state, 3);
+
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::sphere(param1, *param2, param3));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsCollisionShape_static_sphere - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
