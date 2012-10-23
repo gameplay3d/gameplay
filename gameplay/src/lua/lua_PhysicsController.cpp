@@ -73,11 +73,9 @@ int lua_PhysicsController_addScriptCallback(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_addScriptCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -104,18 +102,22 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::Listener> param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsController::Listener> param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsController::Listener'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 instance->addStatusListener(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_addStatusListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_addStatusListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -142,7 +144,13 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createFixedConstraint(param1);
@@ -161,11 +169,9 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createFixedConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_createFixedConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -175,10 +181,22 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createFixedConstraint(param1, param2);
@@ -197,11 +215,9 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createFixedConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_createFixedConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -224,254 +240,323 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createGenericConstraint(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsGenericConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createGenericConstraint(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsGenericConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createGenericConstraint(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsGenericConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createGenericConstraint(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsGenericConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsGenericConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsGenericConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsGenericConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsGenericConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsGenericConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    // Get parameter 5 off the stack.
+                    bool param5Valid;
+                    ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                    if (!param5Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsGenericConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL) &&
-                (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
-
-                // Get parameter 6 off the stack.
-                ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5, *param6);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL) &&
+                    (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsGenericConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    // Get parameter 5 off the stack.
+                    bool param5Valid;
+                    ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                    if (!param5Valid)
+                        break;
+
+                    // Get parameter 6 off the stack.
+                    bool param6Valid;
+                    ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
+                    if (!param6Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5, *param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsGenericConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createGenericConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -500,13 +585,31 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3);
@@ -525,11 +628,9 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
@@ -541,16 +642,40 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4);
@@ -569,11 +694,9 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
@@ -586,19 +709,49 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
+                bool param5Valid;
+                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                if (!param5Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 5 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4, *param5);
@@ -617,11 +770,9 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
@@ -635,22 +786,58 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsRigidBody'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
+                bool param5Valid;
+                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                if (!param5Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 5 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 6 off the stack.
-                ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
+                bool param6Valid;
+                ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
+                if (!param6Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 6 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4, *param5, *param6);
@@ -669,11 +856,9 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_createHingeConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -696,181 +881,225 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSocketConstraint(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSocketConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSocketConstraint(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSocketConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSocketConstraint(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSocketConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSocketConstraint(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSocketConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSocketConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSocketConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSocketConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSocketConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3, *param4);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSocketConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3, *param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSocketConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createSocketConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -893,90 +1122,116 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSpringConstraint(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSpringConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createSpringConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSpringConstraint(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSpringConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createSpringConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL) &&
-                (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true);
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true);
-
-                // Get parameter 6 off the stack.
-                ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
-
-                PhysicsController* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createSpringConstraint(param1, *param2, *param3, param4, *param5, *param6);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TNIL) &&
+                    (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "PhysicsSpringConstraint");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_createSpringConstraint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    // Get parameter 5 off the stack.
+                    bool param5Valid;
+                    ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                    if (!param5Valid)
+                        break;
+
+                    // Get parameter 6 off the stack.
+                    bool param6Valid;
+                    ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
+                    if (!param6Valid)
+                        break;
+
+                    PhysicsController* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createSpringConstraint(param1, *param2, *param3, param4, *param5, *param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "PhysicsSpringConstraint");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_PhysicsController_createSpringConstraint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1003,18 +1258,22 @@ int lua_PhysicsController_drawDebug(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Matrix'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 instance->drawDebug(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_drawDebug - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_drawDebug - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1056,11 +1315,9 @@ int lua_PhysicsController_getGravity(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_getGravity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_getGravity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1088,7 +1345,13 @@ int lua_PhysicsController_rayTest(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Ray'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -1101,11 +1364,9 @@ int lua_PhysicsController_rayTest(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -1116,13 +1377,25 @@ int lua_PhysicsController_rayTest(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Ray'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                bool param3Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->rayTest(*param1, param2, param3);
@@ -1132,11 +1405,9 @@ int lua_PhysicsController_rayTest(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
@@ -1148,16 +1419,34 @@ int lua_PhysicsController_rayTest(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Ray'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                bool param3Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsController::HitFilter'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->rayTest(*param1, param2, param3, param4);
@@ -1167,11 +1456,9 @@ int lua_PhysicsController_rayTest(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_rayTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1209,11 +1496,9 @@ int lua_PhysicsController_removeScriptCallback(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1240,18 +1525,22 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::Listener> param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsController::Listener> param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsController::Listener'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 instance->removeStatusListener(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_removeStatusListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_removeStatusListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1278,18 +1567,22 @@ int lua_PhysicsController_setGravity(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 instance->setGravity(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_setGravity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_setGravity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1317,10 +1610,22 @@ int lua_PhysicsController_sweepTest(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->sweepTest(param1, *param2);
@@ -1330,11 +1635,9 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -1345,13 +1648,31 @@ int lua_PhysicsController_sweepTest(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                bool param3Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->sweepTest(param1, *param2, param3);
@@ -1361,11 +1682,9 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
@@ -1377,16 +1696,40 @@ int lua_PhysicsController_sweepTest(lua_State* state)
                 (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false);
+                bool param3Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsController::HitFilter'.");
+                    lua_error(state);
+                }
 
                 PhysicsController* instance = getInstance(state);
                 bool result = instance->sweepTest(param1, *param2, param3, param4);
@@ -1396,11 +1739,9 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsController_sweepTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

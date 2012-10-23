@@ -75,11 +75,9 @@ int lua_Light__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -109,11 +107,9 @@ int lua_Light_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -155,11 +151,9 @@ int lua_Light_getColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -192,11 +186,9 @@ int lua_Light_getInnerAngle(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getInnerAngle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getInnerAngle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -229,11 +221,9 @@ int lua_Light_getInnerAngleCos(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getInnerAngleCos - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getInnerAngleCos - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -266,11 +256,9 @@ int lua_Light_getLightType(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getLightType - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getLightType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -312,11 +300,9 @@ int lua_Light_getNode(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getNode - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -349,11 +335,9 @@ int lua_Light_getOuterAngle(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getOuterAngle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getOuterAngle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -386,11 +370,9 @@ int lua_Light_getOuterAngleCos(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getOuterAngleCos - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getOuterAngleCos - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -423,11 +405,9 @@ int lua_Light_getRange(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getRange - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getRange - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -460,11 +440,9 @@ int lua_Light_getRangeInverse(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getRangeInverse - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getRangeInverse - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -497,11 +475,9 @@ int lua_Light_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -531,11 +507,9 @@ int lua_Light_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -558,50 +532,55 @@ int lua_Light_setColor(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Light* instance = getInstance(state);
-                instance->setColor(*param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_setColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Light* instance = getInstance(state);
+                    instance->setColor(*param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_setColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 2);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 4);
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 4);
 
-                Light* instance = getInstance(state);
-                instance->setColor(param1, param2, param3);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_setColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Light* instance = getInstance(state);
+                    instance->setColor(param1, param2, param3);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_setColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -635,11 +614,9 @@ int lua_Light_setInnerAngle(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_setInnerAngle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_setInnerAngle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -673,11 +650,9 @@ int lua_Light_setOuterAngle(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_setOuterAngle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_setOuterAngle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -711,11 +686,9 @@ int lua_Light_setRange(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Light_setRange - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Light_setRange - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -738,70 +711,75 @@ int lua_Light_static_createDirectional(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
-
-                void* returnPtr = (void*)Light::createDirectional(*param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Light");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_static_createDirectional - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    void* returnPtr = (void*)Light::createDirectional(*param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Light");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_static_createDirectional - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
-
-                void* returnPtr = (void*)Light::createDirectional(param1, param2, param3);
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Light");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_static_createDirectional - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
+
+                    void* returnPtr = (void*)Light::createDirectional(param1, param2, param3);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Light");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_static_createDirectional - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -824,78 +802,83 @@ int lua_Light_static_createPoint(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                lua_type(state, 2) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                void* returnPtr = (void*)Light::createPoint(*param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Light");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_static_createPoint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    void* returnPtr = (void*)Light::createPoint(*param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Light");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_static_createPoint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 4);
-
-                void* returnPtr = (void*)Light::createPoint(param1, param2, param3, param4);
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Light");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_static_createPoint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 4);
+
+                    void* returnPtr = (void*)Light::createPoint(param1, param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Light");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_static_createPoint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -918,94 +901,99 @@ int lua_Light_static_createSpot(lua_State* state)
     {
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 4);
-
-                void* returnPtr = (void*)Light::createSpot(*param1, param2, param3, param4);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Light");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_static_createSpot - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 4);
+
+                    void* returnPtr = (void*)Light::createSpot(*param1, param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Light");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_static_createSpot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 4);
-
-                // Get parameter 5 off the stack.
-                float param5 = (float)luaL_checknumber(state, 5);
-
-                // Get parameter 6 off the stack.
-                float param6 = (float)luaL_checknumber(state, 6);
-
-                void* returnPtr = (void*)Light::createSpot(param1, param2, param3, param4, param5, param6);
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Light");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Light_static_createSpot - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 4);
+
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 5);
+
+                    // Get parameter 6 off the stack.
+                    float param6 = (float)luaL_checknumber(state, 6);
+
+                    void* returnPtr = (void*)Light::createSpot(param1, param2, param3, param4, param5, param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Light");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Light_static_createSpot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

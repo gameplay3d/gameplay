@@ -58,11 +58,9 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -93,18 +91,22 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject::CollisionPair'.");
+                    lua_error(state);
+                }
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -118,21 +120,31 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject::CollisionPair'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2, *param3);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
@@ -147,24 +159,40 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
                 PhysicsCollisionObject::CollisionListener::EventType param1 = (PhysicsCollisionObject::CollisionListener::EventType)lua_enumFromString_PhysicsCollisionObjectCollisionListenerEventType(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject::CollisionPair'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsCollisionObject::CollisionListener* instance = getInstance(state);
                 instance->collisionEvent(param1, *param2, *param3, *param4);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionObjectCollisionListener_collisionEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
