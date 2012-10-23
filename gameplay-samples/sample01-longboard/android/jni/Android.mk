@@ -16,7 +16,7 @@
 SAMPLE_PATH := $(call my-dir)/../../src
 LIBPNG_PATH := $(call my-dir)/../../../../external-deps/libpng/lib/android/arm
 ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
-LUA_PATH := ../../../../gameplay/external-deps/lua/lib/android/arm
+LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
 BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
 VORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
 OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
