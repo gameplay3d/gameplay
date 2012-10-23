@@ -58,11 +58,9 @@ int lua_AnimationClipListener__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClipListener__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClipListener__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -90,7 +88,13 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AnimationClip'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 AnimationClip::Listener::EventType param2 = (AnimationClip::Listener::EventType)lua_enumFromString_AnimationClipListenerEventType(luaL_checkstring(state, 3));
@@ -100,11 +104,9 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClipListener_animationEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClipListener_animationEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
