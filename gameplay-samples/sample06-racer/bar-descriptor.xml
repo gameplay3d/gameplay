@@ -87,10 +87,14 @@
     <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
         <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample06-racer" entry="true" type="Qnx/Elf">sample06-racer</asset>
+       <asset path="game.png.config">game.config</asset>
+       <asset path="res/png">res/png</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.400335078" name="Simulator-Profile">
        <platformArchitecture>x86</platformArchitecture> 
        <asset path="Simulator-Profile/sample06-racer" entry="true" type="Qnx/Elf">sample06-racer</asset>
+       <asset path="game.png.config">game.config</asset>
+       <asset path="res/png">res/png</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.48235134" name="Simulator-Coverage">
        <platformArchitecture>x86</platformArchitecture>
