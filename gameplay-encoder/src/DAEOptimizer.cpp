@@ -19,7 +19,7 @@ void DAEOptimizer::combineAnimations(const std::string& nodeId, const std::strin
 
     daeSIDResolver resolver(_dom, nodeId.c_str());
     daeElement* element = resolver.getElement();
-    if (element && element->typeID() == COLLADA_TYPE::NODE)
+    if (element && element->typeID() == domNode::ID())
     {
         domNodeRef node = daeSafeCast<domNode>(resolver.getElement());
         getAnimationChannels(node, channels);
