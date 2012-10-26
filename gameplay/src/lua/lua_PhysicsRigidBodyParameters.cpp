@@ -557,6 +557,126 @@ int lua_PhysicsRigidBodyParameters__init(lua_State* state)
             lua_error(state);
             break;
         }
+        case 8:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TBOOLEAN &&
+                (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL) &&
+                (lua_type(state, 8) == LUA_TUSERDATA || lua_type(state, 8) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                bool param6 = ScriptUtil::luaCheckBool(state, 6);
+
+                // Get parameter 7 off the stack.
+                ScriptUtil::LuaArray<Vector3> param7 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
+
+                // Get parameter 8 off the stack.
+                ScriptUtil::LuaArray<Vector3> param8 = ScriptUtil::getObjectPointer<Vector3>(8, "Vector3", true);
+
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6, *param7, *param8);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
+        case 9:
+        {
+            if (lua_type(state, 1) == LUA_TNUMBER &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER &&
+                lua_type(state, 5) == LUA_TNUMBER &&
+                lua_type(state, 6) == LUA_TBOOLEAN &&
+                (lua_type(state, 7) == LUA_TUSERDATA || lua_type(state, 7) == LUA_TNIL) &&
+                (lua_type(state, 8) == LUA_TUSERDATA || lua_type(state, 8) == LUA_TNIL) &&
+                (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 1);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 4 off the stack.
+                float param4 = (float)luaL_checknumber(state, 4);
+
+                // Get parameter 5 off the stack.
+                float param5 = (float)luaL_checknumber(state, 5);
+
+                // Get parameter 6 off the stack.
+                bool param6 = ScriptUtil::luaCheckBool(state, 6);
+
+                // Get parameter 7 off the stack.
+                ScriptUtil::LuaArray<Vector3> param7 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true);
+
+                // Get parameter 8 off the stack.
+                ScriptUtil::LuaArray<Vector3> param8 = ScriptUtil::getObjectPointer<Vector3>(8, "Vector3", true);
+                
+                // Get parameter 9 off the stack.
+                ScriptUtil::LuaArray<Vector3> param9 = ScriptUtil::getObjectPointer<Vector3>(9, "Vector3", true);
+
+                void* returnPtr = (void*)new PhysicsRigidBody::Parameters(param1, param2, param3, param4, param5, param6, *param7, *param8, *param9);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "PhysicsRigidBodyParameters");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+            else
+            {
+                lua_pushstring(state, "lua_PhysicsRigidBodyParameters__init - Failed to match the given parameters to a valid function signature.");
+                lua_error(state);
+            }
+            break;
+        }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9).");
@@ -609,6 +729,7 @@ int lua_PhysicsRigidBodyParameters_angularFactor(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
+<<<<<<< HEAD
         bool param2Valid;
         ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
         if (!param2Valid)
@@ -616,6 +737,9 @@ int lua_PhysicsRigidBodyParameters_angularFactor(lua_State* state)
             lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
             lua_error(state);
         }
+=======
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+>>>>>>> master
 
         instance->angularFactor = *param2;
         return 0;
@@ -784,6 +908,7 @@ int lua_PhysicsRigidBodyParameters_linearFactor(lua_State* state)
     if (lua_gettop(state) == 2)
     {
         // Get parameter 2 off the stack.
+<<<<<<< HEAD
         bool param2Valid;
         ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
         if (!param2Valid)
@@ -791,6 +916,9 @@ int lua_PhysicsRigidBodyParameters_linearFactor(lua_State* state)
             lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
             lua_error(state);
         }
+=======
+        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+>>>>>>> master
 
         instance->linearFactor = *param2;
         return 0;

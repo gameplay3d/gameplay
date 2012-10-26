@@ -54,7 +54,7 @@ void getAnimationChannels(const domNodeRef& node, std::list<domChannelRef>& chan
     for (size_t i = 0; i < childCount; ++i)
     {
         daeElementRef childElement = children[i];
-        if (childElement->typeID() == COLLADA_TYPE::NODE)
+        if (childElement->typeID() == domNode::ID())
         {
             domNodeRef childNode = daeSafeCast<domNode>(childElement);
             getAnimationChannels(childNode, channels);
@@ -115,7 +115,7 @@ void getJointNames(const domSkin* skin, std::vector<std::string>& list)
 domSource* getInputSource(const domChannelRef& channel)
 {
     daeElement* element = channel->getSource().getElement();
-    if (element && element->typeID() == COLLADA_TYPE::SAMPLER)
+    if (element && element->typeID() == domSampler::ID())
     {
         domSampler* sampler = daeSafeCast<domSampler>(element);
         const domInputLocal_Array& inputArray = sampler->getInput_array();
@@ -126,7 +126,7 @@ domSource* getInputSource(const domChannelRef& channel)
             if (strcmp(input->getSemantic(), "INPUT") == 0)
             {
                 daeElement* e = input->getSource().getElement();
-                if (e && e->typeID() == COLLADA_TYPE::SOURCE)
+                if (e && e->typeID() == domSource::ID())
                 {
                     domSource* source = daeSafeCast<domSource>(e);
                     assert(source);
@@ -142,7 +142,7 @@ const domSamplerRef getSampler(const domChannelRef& channel)
 {
     const domURIFragmentType& uri = channel->getSource();
     daeElementRef element = uri.getElement();
-    if (element && element->typeID() == COLLADA_TYPE::SAMPLER)
+    if (element && element->typeID() == domSampler::ID())
     {
         const domSamplerRef sampler = daeSafeCast<domSampler>(element);
         return sampler;
@@ -150,7 +150,7 @@ const domSamplerRef getSampler(const domChannelRef& channel)
     // resolve the source manually by searching for the sampler in the animation that the channel is a child of.
     const std::string& id = uri.id();
     const daeElementRef& parent = channel->getParent();
-    if (parent && parent->typeID() == COLLADA_TYPE::ANIMATION)
+    if (parent && parent->typeID() == domAnimation::ID())
     {
         const domAnimationRef animation = daeSafeCast<domAnimation>(parent);
         
@@ -172,7 +172,7 @@ const domSourceRef getSource(const domInputLocalRef& inputLocal, const domAnimat
 {
     const domURIFragmentType& uri = inputLocal->getSource();
     daeElementRef element = uri.getElement();
-    if (element && element->typeID() == COLLADA_TYPE::SAMPLER)
+    if (element && element->typeID() == domSampler::ID())
     {
         const domSourceRef source = daeSafeCast<domSource>(element);
         return source;
@@ -205,7 +205,7 @@ const domName_arrayRef getSourceNameArray(const domSourceRef& source)
     for (size_t i = 0; i < childCount; ++i)
     {
         const daeElementRef element = children.get(i);
-        if (element->typeID() == COLLADA_TYPE::NAME_ARRAY)
+        if (element->typeID() == domName_array::ID())
         {
             return daeSafeCast<domName_array>(element);
         }
@@ -229,7 +229,7 @@ const domInstance_controller::domSkeletonRef getSkeleton(const domInstance_contr
     // Find the skeleton element that points to the root most node.
     const domInstance_controller::domSkeletonRef& currentSkeleton = skeletonArray.get(0);
     const daeElementRef element = currentSkeleton->getValue().getElement();
-    if (element && element->typeID() == COLLADA_TYPE::NODE)
+    if (element && element->typeID() == domNode::ID())
     {
         domNode* node = daeSafeCast<domNode>(element);
         int index = 0;
@@ -237,7 +237,7 @@ const domInstance_controller::domSkeletonRef getSkeleton(const domInstance_contr
         do
         {
             daeElementRef parent = node->getParent();
-            if (parent && parent->typeID() == COLLADA_TYPE::NODE)
+            if (parent && parent->typeID() == domNode::ID())
             {
                 domNodeRef parentNode = daeSafeCast<domNode>(parent);
                 int result = getIndex(skeletonArray, parentNode);
@@ -266,7 +266,7 @@ domNode* getRootJointNode(const domSkin* skin)
     getJointNames(skin, names);
     daeSIDResolver resolver(const_cast<domSkin*>(skin)->getDocument()->getDomRoot(), names[0].c_str());
     daeElement* element = resolver.getElement();
-    if (element && element->typeID() == COLLADA_TYPE::NODE)
+    if (element && element->typeID() == domNode::ID())
     {
         domNode* node = daeSafeCast<domNode>(resolver.getElement());
         return node;
@@ -326,7 +326,7 @@ void moveChannelAndSouresToAnimation(domChannelRef& channel, domAnimationRef& an
             inputArray = sampler->getInput_array();
             const domInputLocalRef& input = inputArray.get(i);
             daeElementRef element = input->getSource().getElement();
-            if (element && element->typeID() == COLLADA_TYPE::SOURCE)
+            if (element && element->typeID() == domSource::ID())
             {
                 domSourceRef source = daeSafeCast<domSource>(element);
                 assert(source);
@@ -355,7 +355,7 @@ int getIndex(const domInstance_controller::domSkeleton_Array& skeletonArray, con
     {
         const domInstance_controller::domSkeletonRef& skeleton = skeletonArray.get(i);
         daeElementRef element = skeleton->getValue().getElement();
-        if (element->typeID() == COLLADA_TYPE::NODE)
+        if (element->typeID() == domNode::ID())
         {
             domNodeRef targetNode = daeSafeCast<domNode>(element);
             if (nodeId.compare(targetNode->getId()) == 0)
@@ -395,7 +395,7 @@ void getAnimationChannels(const domAnimationRef& animationRef, const std::string
 domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene)
 {
     daeElement* scene = domScene->getInstance_visual_scene()->getUrl().getElement();
-    if (scene->typeID() == COLLADA_TYPE::VISUAL_SCENE)
+    if (scene->typeID() == domVisual_scene::ID())
     {
         return static_cast<domVisual_scene*>(scene);
     }
@@ -425,7 +425,7 @@ domVisual_scene* getVisualScene(const domCOLLADA::domSceneRef& domScene)
 domNode* getParent(domNodeRef node)
 {
     daeElement* parent = node->getParent();
-    if (parent && parent->typeID() == COLLADA_TYPE::NODE)
+    if (parent && parent->typeID() == domNode::ID())
     {
         domNodeRef parentNode = daeSafeCast<domNode>(parent);
         return parentNode.cast();
@@ -436,7 +436,7 @@ domNode* getParent(domNodeRef node)
 domAnimation* getAnimation(domChannelRef channel)
 {
     daeElement* parent = channel->getParent();
-    if (parent && parent->typeID() == COLLADA_TYPE::ANIMATION)
+    if (parent && parent->typeID() == domAnimation::ID())
     {
         domAnimationRef parentNode = daeSafeCast<domAnimation>(parent);
         return parentNode.cast();
@@ -542,7 +542,7 @@ void findChannelsTargetingJoints(const domSourceRef& source, std::list<domChanne
     {
         daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
         daeElement* element = resolver.getElement();
-        if (element && element->typeID() == COLLADA_TYPE::NODE)
+        if (element && element->typeID() == domNode::ID())
         {
             domNodeRef node = daeSafeCast<domNode>(element);
             nodes.push_back(node);
