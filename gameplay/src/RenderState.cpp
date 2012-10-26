@@ -345,14 +345,12 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
         renderState->_parameters.push_back(paramCopy);
     }
     renderState->_parent = _parent;
-    if (Node* node = context.findClonedNode(_nodeBinding))
-    {
-        renderState->setNodeBinding(node);
-    }
     if (_state)
     {
         renderState->setStateBlock(_state);
     }
+
+    // Note that _nodeBinding is not set here, it should be set by the caller.
 }
 
 RenderState::StateBlock::StateBlock()
