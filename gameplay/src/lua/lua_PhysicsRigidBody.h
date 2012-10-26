@@ -25,6 +25,8 @@ int lua_PhysicsRigidBody_getLinearVelocity(lua_State* state);
 int lua_PhysicsRigidBody_getMass(lua_State* state);
 int lua_PhysicsRigidBody_getNode(lua_State* state);
 int lua_PhysicsRigidBody_getRestitution(lua_State* state);
+int lua_PhysicsRigidBody_getLinearFactor(lua_State* state);
+int lua_PhysicsRigidBody_getAngularFactor(lua_State* state);
 int lua_PhysicsRigidBody_getShapeType(lua_State* state);
 int lua_PhysicsRigidBody_getType(lua_State* state);
 int lua_PhysicsRigidBody_isDynamic(lua_State* state);
@@ -43,6 +45,8 @@ int lua_PhysicsRigidBody_setKinematic(lua_State* state);
 int lua_PhysicsRigidBody_setLinearFactor(lua_State* state);
 int lua_PhysicsRigidBody_setLinearVelocity(lua_State* state);
 int lua_PhysicsRigidBody_setRestitution(lua_State* state);
+int lua_PhysicsRigidBody_setLinearFactor(lua_State* state);
+int lua_PhysicsRigidBody_setAngularFactor(lua_State* state);
 
 void luaRegister_PhysicsRigidBody();
 

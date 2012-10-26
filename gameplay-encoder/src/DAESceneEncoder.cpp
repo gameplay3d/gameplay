@@ -889,59 +889,54 @@ void DAESceneEncoder::calcTransform(domNode* domNode, Matrix& dstTransform)
     for (size_t i = 0; i < childCount; ++i)
     {
         daeElementRef childElement = children[i];
-        switch (childElement->typeID())
+        daeInt typeID = childElement->typeID();
+        if (typeID == domTranslate::ID())
         {
-            case COLLADA_TYPE::TRANSLATE:
+            domTranslateRef translateNode = daeSafeCast<domTranslate>(childElement);
+            float x = (float)translateNode->getValue().get(0);
+            float y = (float)translateNode->getValue().get(1);
+            float z = (float)translateNode->getValue().get(2);
+            dstTransform.translate(x, y, z);
+        }
+        if (typeID == domRotate::ID())
+        {
+            domRotateRef rotateNode = daeSafeCast<domRotate>(childElement);
+            float x = (float)rotateNode->getValue().get(0);
+            float y = (float)rotateNode->getValue().get(1);
+            float z = (float)rotateNode->getValue().get(2);
+            float angle = MATH_DEG_TO_RAD((float)rotateNode->getValue().get(3)); // COLLADA uses degrees, gameplay uses radians
+            if (x == 1.0f && y == 0.0f && z == 0.0f)
             {
-                domTranslateRef translateNode = daeSafeCast<domTranslate>(childElement);
-                float x = (float)translateNode->getValue().get(0);
-                float y = (float)translateNode->getValue().get(1);
-                float z = (float)translateNode->getValue().get(2);
-                dstTransform.translate(x, y, z);
-                break;
+                dstTransform.rotateX(angle);
             }
-            case COLLADA_TYPE::ROTATE:
+            else if (x == 0.0f && y == 1.0f && z == 0.0f)
             {
-                domRotateRef rotateNode = daeSafeCast<domRotate>(childElement);
-                float x = (float)rotateNode->getValue().get(0);
-                float y = (float)rotateNode->getValue().get(1);
-                float z = (float)rotateNode->getValue().get(2);
-                float angle = MATH_DEG_TO_RAD((float)rotateNode->getValue().get(3)); // COLLADA uses degrees, gameplay uses radians
-                if (x == 1.0f && y == 0.0f && z == 0.0f)
-                {
-                    dstTransform.rotateX(angle);
-                }
-                else if (x == 0.0f && y == 1.0f && z == 0.0f)
-                {
-                    dstTransform.rotateY(angle);
-                }
-                else if (x == 0.0f && y == 0.0f && z == 1.0f)
-                {
-                    dstTransform.rotateZ(angle);
-                }
-                else
-                {
-                    dstTransform.rotate(x, y, z, angle);
-                }
-                break;
+                dstTransform.rotateY(angle);
             }
-            case COLLADA_TYPE::SCALE:
+            else if (x == 0.0f && y == 0.0f && z == 1.0f)
             {
-                domScaleRef scaleNode = daeSafeCast<domScale>(childElement);
-                float x = (float)scaleNode->getValue().get(0);
-                float y = (float)scaleNode->getValue().get(1);
-                float z = (float)scaleNode->getValue().get(2);
-                dstTransform.scale(x, y, z);
-                break;
+                dstTransform.rotateZ(angle);
             }
-            case COLLADA_TYPE::SKEW:
-                LOG(1, "Warning: Skew transform found but not supported.\n");
-                break;
-            case COLLADA_TYPE::LOOKAT:
-                LOG(1, "Warning: Lookat transform found but not supported.\n");
-                break;
-            default:
-                break;
+            else
+            {
+                dstTransform.rotate(x, y, z, angle);
+            }
+        }
+        if (typeID == domScale::ID())
+        {
+            domScaleRef scaleNode = daeSafeCast<domScale>(childElement);
+            float x = (float)scaleNode->getValue().get(0);
+            float y = (float)scaleNode->getValue().get(1);
+            float z = (float)scaleNode->getValue().get(2);
+            dstTransform.scale(x, y, z);
+        }
+        if (typeID == domSkew::ID())
+        {
+            LOG(1, "Warning: Skew transform found but not supported.\n");
+        }
+        if (typeID == domLookat::ID())
+        {
+            LOG(1, "Warning: Lookat transform found but not supported.\n");
         }
     }
 }
@@ -1286,7 +1281,7 @@ void DAESceneEncoder::loadSkeleton(domNode* rootNode, MeshSkin* skin)
         domNode* topLevelParent = rootNode;
         while (
             topLevelParent->getParent() &&
-            topLevelParent->getParent()->typeID() == COLLADA_TYPE::NODE &&
+            topLevelParent->getParent()->typeID() == domNode::ID() &&
             _gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID()) == NULL)
         {
             topLevelParent = (domNode*)topLevelParent->getParent();
@@ -1295,7 +1290,7 @@ void DAESceneEncoder::loadSkeleton(domNode* rootNode, MeshSkin* skin)
         // Is the parent of this node loaded yet?
         Node* parentNode = NULL;
         if (topLevelParent->getParent() &&
-            topLevelParent->getParent()->typeID() == COLLADA_TYPE::NODE &&
+            topLevelParent->getParent()->typeID() == domNode::ID() &&
             _gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID()) != NULL)
         {
             parentNode = (Node*)_gamePlayFile.getFromRefTable(topLevelParent->getParent()->getID());
@@ -1372,7 +1367,7 @@ Model* DAESceneEncoder::loadSkin(const domSkin* skinElement)
             {
                 daeSIDResolver resolver(source->getDocument()->getDomRoot(), i->c_str());
                 daeElement* element = resolver.getElement();
-                if (element && element->typeID() == COLLADA_TYPE::NODE)
+                if (element && element->typeID() == domNode::ID())
                 {
                     domNodeRef node = daeSafeCast<domNode>(element);
                     const char* nodeId = node->getId();
