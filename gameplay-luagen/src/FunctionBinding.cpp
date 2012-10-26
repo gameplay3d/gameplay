@@ -7,9 +7,9 @@ static inline void outputLuaTypeCheckInstance(ostream& o);
 static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBinding::Param& p = 
     FunctionBinding::Param(FunctionBinding::Param::TYPE_OBJECT, FunctionBinding::Param::KIND_POINTER));
 static inline void indent(ostream& o, int indentLevel);
-static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel);
-static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex = false);
-static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel);
+static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings);
+static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex, int numBindings);
+static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings);
 static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int indentLevel);
 static inline std::string getTypeName(const FunctionBinding::Param& param);
 
@@ -76,6 +76,11 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
 {
     GP_ASSERT(bindings.size() > 0);
 
+    if (bindings[0].getFunctionName() == "lua_AudioListener_static_getInstance")
+    {
+        int i = 0;
+    }
+
     // Print the function signature.
     o << "int " << bindings[0].getFunctionName() << "(lua_State* state)\n";
     o << "{\n";
@@ -94,7 +99,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         o << "    " << bindings[0].classname << "* instance = getInstance(state);\n";
         o << "    if (lua_gettop(state) == 2)\n";
         o << "    {\n";
-        outputGetParam(o, bindings[0].returnParam, 1, 2);
+        outputGetParam(o, bindings[0].returnParam, 1, 2, false, 1);
 
         if (bindings[0].returnParam.kind == FunctionBinding::Param::KIND_POINTER &&
             bindings[0].returnParam.type != FunctionBinding::Param::TYPE_OBJECT &&
@@ -161,7 +166,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         // Get or set the static variable depending on the number of parameters.
         o << "    if (lua_gettop(state) == 1)\n";
         o << "    {\n";
-        outputGetParam(o, bindings[0].returnParam, 0, 2);
+        outputGetParam(o, bindings[0].returnParam, 0, 2, false, 1);
 
         if (bindings[0].returnParam.kind == FunctionBinding::Param::KIND_POINTER &&
             bindings[0].returnParam.type != FunctionBinding::Param::TYPE_OBJECT &&
@@ -359,27 +364,17 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
                 if (iter->first > 0)
                     indent(o, 3);
 
-                if (i > 0)
-                {                    
-                    o << "else ";
-                }
-                outputMatchedBinding(o, *(iter->second[i]), iter->first, 3);
+                outputMatchedBinding(o, *(iter->second[i]), iter->first, 3, bindings.size());
             }
 
             // Only print an else clause with error report if there are parameters.
             if (iter->first > 0)
             {
                 indent(o, 3);
-                o << "else\n";
-                indent(o, 3);
-                o << "{\n";
-                indent(o, 4);
                 o << "lua_pushstring(state, \"" << bindings[0].getFunctionName();
                 o << " - Failed to match the given parameters to a valid function signature.\");\n";
-                indent(o, 4);
-                o << "lua_error(state);\n";
                 indent(o, 3);
-                o << "}\n";
+                o << "lua_error(state);\n";
             }
             
             o << "            break;\n";
@@ -575,14 +570,14 @@ static inline void indent(ostream& o, int indentLevel)
         o << "    ";
 }
 
-static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel)
+static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings)
 {
-    bool isNormalMember = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
+    bool isNonStatic = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
 
     // Get the passed in parameters.
-    for (unsigned int i = 0, count = paramCount - (isNormalMember ? 1 : 0); i < count; i++)
+    for (unsigned int i = 0, count = paramCount - (isNonStatic ? 1 : 0); i < count; i++)
     {
-        outputGetParam(o, b.paramTypes[i], i, indentLevel, isNormalMember);
+        outputGetParam(o, b.paramTypes[i], i, indentLevel, isNonStatic, numBindings);
     }
 
     // Get the instance for member functions.
@@ -680,7 +675,7 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
         }
 
         // Pass the arguments.
-        for (unsigned int i = 0, count = paramCount - ((isNormalMember) ? 1 : 0); i < count; i++)
+        for (unsigned int i = 0, count = paramCount - ((isNonStatic) ? 1 : 0); i < count; i++)
         {
             if (b.paramTypes[i].type == FunctionBinding::Param::TYPE_OBJECT && b.paramTypes[i].kind != FunctionBinding::Param::KIND_POINTER)
                 o << "*";
@@ -700,7 +695,7 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
     outputReturnValue(o, b, indentLevel);
 }
 
-static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex)
+static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex, int numBindings)
 {
     indent(o, indentLevel);
     o << "// Get parameter " << i + 1 << " off the stack.\n";
@@ -812,13 +807,35 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         o << "(" << p.info << ")luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
-        indent(o, indentLevel);
-        o << "ScriptUtil::LuaArray<" << getTypeName(p) << ">";
-        o << " param" << i + 1 << " = ";
-        o << "ScriptUtil::getObjectPointer<";
-        o << Generator::getInstance()->getIdentifier(p.info) << ">(" << paramIndex;
-        o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
-        o << ((p.kind != FunctionBinding::Param::KIND_POINTER) ? "true" : "false") << ");\n";
+        {
+            indent(o, indentLevel);
+            o << "bool param" << i + 1 << "Valid;\n";
+            indent(o, indentLevel);
+            o << "ScriptUtil::LuaArray<" << getTypeName(p) << ">";
+            o << " param" << i + 1 << " = ";
+            o << "ScriptUtil::getObjectPointer<";
+            o << Generator::getInstance()->getIdentifier(p.info) << ">(" << paramIndex;
+            o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
+            o << ((p.kind != FunctionBinding::Param::KIND_POINTER) ? "true" : "false") << ", &param" << i + 1 << "Valid);\n";
+            indent(o, indentLevel);
+            o << "if (!param" << i + 1 << "Valid)\n";
+            if (numBindings > 1)
+            {
+                indent(o, indentLevel + 1);
+                o << "break;\n";
+            }
+            else
+            {
+                indent(o, indentLevel);
+                o << "{\n";
+                indent(o, indentLevel + 1);
+                o << "lua_pushstring(state, \"Failed to convert parameter " << i + 1 << " to type '" << getTypeName(p) << "'.\");\n";
+                indent(o, indentLevel + 1);
+                o << "lua_error(state);\n";
+                indent(o, indentLevel);
+                o << "}\n";
+            }
+        }
         break;
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
@@ -831,14 +848,14 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
     o << "\n";
 }
 
-static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel)
+static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings)
 {
-    bool isNormalMember = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
+    bool isNonStatic = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
 
     // If the current invocation of the function takes zero parameters, then invoke the binding.
     if (paramCount == 0)
     {
-        outputBindingInvocation(o, b, paramCount, indentLevel);
+        outputBindingInvocation(o, b, paramCount, indentLevel, numBindings);
     }
     else
     {
@@ -848,13 +865,27 @@ static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, un
         // when the user in fact wanted to call the version with more precision.
         // (this will only happen for overloaded functions).
 
+        if (numBindings > 1)
+        {
+            o << "do\n";
+            indent(o, indentLevel);
+            o << "{\n";
+            indent(o, ++indentLevel);
+        }
+
         o << "if (";
         for (unsigned int i = 0, count = paramCount; i < count; i++)
         {
-            if (isNormalMember && i == 0)
+            if (isNonStatic && i == 0)
+            {
+                // This is always the "this / self" pointer for a member function
                 outputLuaTypeCheckInstance(o);
+            }
             else
-                outputLuaTypeCheck(o, i + 1, b.paramTypes[(isNormalMember ? i - 1 : i)]);
+            {
+                // Function parameter
+                outputLuaTypeCheck(o, i + 1, b.paramTypes[(isNonStatic ? i - 1 : i)]);
+            }
 
             if (i == count - 1)
                 o << ")\n";
@@ -867,10 +898,18 @@ static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, un
         indent(o, indentLevel);
         o << "{\n";
             
-        outputBindingInvocation(o, b, paramCount, indentLevel + 1);
+        outputBindingInvocation(o, b, paramCount, indentLevel + 1, numBindings);
 
         indent(o, indentLevel);
         o << "}\n";
+
+        if (numBindings > 1)
+        {
+            indent(o, --indentLevel);
+            o << "} while (0);\n";
+        }
+
+        o << "\n";
     }
 }
 

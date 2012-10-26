@@ -58,11 +58,9 @@ int lua_AIStateListener__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateListener__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateListener__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -127,21 +125,31 @@ int lua_AIStateListener_stateEnter(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AIState'.");
+                    lua_error(state);
+                }
 
                 AIState::Listener* instance = getInstance(state);
                 instance->stateEnter(param1, param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateListener_stateEnter - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateListener_stateEnter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -169,21 +177,31 @@ int lua_AIStateListener_stateExit(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AIState'.");
+                    lua_error(state);
+                }
 
                 AIState::Listener* instance = getInstance(state);
                 instance->stateExit(param1, param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateListener_stateExit - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateListener_stateExit - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -212,10 +230,22 @@ int lua_AIStateListener_stateUpdate(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AIState'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
@@ -225,11 +255,9 @@ int lua_AIStateListener_stateUpdate(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIStateListener_stateUpdate - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIStateListener_stateUpdate - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

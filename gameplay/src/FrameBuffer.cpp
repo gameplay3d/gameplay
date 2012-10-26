@@ -11,6 +11,7 @@ namespace gameplay
 static unsigned int __maxRenderTargets = 0;
 static std::vector<FrameBuffer*> __frameBuffers;
 static FrameBufferHandle __defaultHandle = 0;
+static FrameBufferHandle __currentHandle = 0;
 
 FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height) :
     _id(id ? id : ""), _width(width), _height(height), _handle(0), 
@@ -52,29 +53,50 @@ FrameBuffer::~FrameBuffer()
 
 void FrameBuffer::initialize()
 {
+    // Query the current/initial FBO handle and store is as out 'default' frame buffer.
+    // On many platforms this will simply be the zero (0) handle, but this is not always the case.
     GLint fbo;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo);
     __defaultHandle = (FrameBufferHandle)fbo;
+    __currentHandle = __defaultHandle;
+
+    // Query the max supported color attachments. This glGet operation is not supported
+    // on GL ES 2.x, so if the define does not exist, assume a value of 1.
+#ifdef GL_MAX_COLOR_ATTACHMENTS
+        GLint val;
+        GL_ASSERT( glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &val) );
+        __maxRenderTargets = (unsigned int)std::max(1, val);
+#else
+        __maxRenderTargets = 1;
+#endif
+}
+
+FrameBuffer* FrameBuffer::create(const char* id)
+{
+    return create(id, 0, 0);
 }
 
 FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned int height)
 {
-    if (!isPowerOfTwo(width) | !isPowerOfTwo(height))
-    {
-        GP_ERROR("Failed to create render target for frame buffer. Width and Height must be a power of 2.");
-        return NULL;
-    }
-
     // Call getMaxRenderTargets() to force __maxRenderTargets to be set
     getMaxRenderTargets();
 
-    // Create RenderTarget with same ID.
     RenderTarget* renderTarget = NULL;
-    renderTarget = RenderTarget::create(id, width, height);
-    if (renderTarget == NULL)
+    if (width > 0 && height > 0)
     {
-        GP_ERROR("Failed to create render target for frame buffer.");
-        return NULL;
+        if (!isPowerOfTwo(width) | !isPowerOfTwo(height))
+        {
+            GP_ERROR("Failed to create render target for frame buffer. Width and Height must be a power of 2.");
+            return NULL;
+        }
+
+        // Create a default RenderTarget with same ID.
+        renderTarget = RenderTarget::create(id, width, height);
+        if (renderTarget == NULL)
+        {
+            GP_ERROR("Failed to create render target for frame buffer.");
+            return NULL;
+        }
     }
 
     // Create the frame buffer
@@ -84,12 +106,14 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
     frameBuffer->_handle = handle;
     
     // Create the render target array for the new frame buffer
-    RenderTarget** renderTargets = new RenderTarget*[__maxRenderTargets];
-    memset(renderTargets, 0, sizeof(RenderTarget*) * __maxRenderTargets);
-    frameBuffer->_renderTargets = renderTargets;
+    frameBuffer->_renderTargets = new RenderTarget*[__maxRenderTargets];
+    memset(frameBuffer->_renderTargets, 0, sizeof(RenderTarget*) * __maxRenderTargets);
 
-    frameBuffer->setRenderTarget(renderTarget, 0);
-    SAFE_RELEASE(renderTarget);
+    if (renderTarget)
+    {
+        frameBuffer->setRenderTarget(renderTarget, 0);
+        SAFE_RELEASE(renderTarget);
+    }
 
     __frameBuffers.push_back(frameBuffer);
 
@@ -131,16 +155,6 @@ unsigned int FrameBuffer::getHeight() const
 
 unsigned int FrameBuffer::getMaxRenderTargets()
 {
-    if (__maxRenderTargets == 0)
-    {
-#ifdef GL_MAX_COLOR_ATTACHMENTS
-        GLint val;
-        GL_ASSERT( glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &val) );
-        __maxRenderTargets = (unsigned int) val;
-#else
-        __maxRenderTargets = 1;
-#endif
-    }
     return __maxRenderTargets;
 }
 
@@ -162,31 +176,23 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 
     if (target)
     {
+        GP_ASSERT( _renderTargets[index]->getTexture() );
+
         // This FrameBuffer now references the RenderTarget.
         target->addRef();
 
-        // Store the current FBO binding so we can restore it
-        GLint currentFbo;
-        GL_ASSERT( glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFbo) );
-
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
-        GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _renderTargets[index]->getTexture()->getHandle()) );
-        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST) );
-        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST) );
-        GL_ASSERT( glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
-        GL_ASSERT( glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
-        GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL) );
         GLenum attachment = GL_COLOR_ATTACHMENT0 + index;
-        GP_ASSERT( _renderTargets[index]->getTexture() );
         GL_ASSERT( glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, _renderTargets[index]->getTexture()->getHandle(), 0) );
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
-            GP_ERROR("Framebuffer status incompleted: 0x%x", fboStatus);
+            GP_ERROR("Framebuffer status incomplete: 0x%x", fboStatus);
         }
+
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, currentFbo) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentHandle) );
     }
 }
 
@@ -216,36 +222,25 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         // The FrameBuffer now owns this DepthStencilTarget.
         target->addRef();
 
-        // Store the current FBO binding so we can restore it.
-        GLint currentFbo;
-        GL_ASSERT( glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFbo) );
-
         // Now set this target as the color attachment corresponding to index.
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
-        
-        // Create a render buffer 
-        RenderBufferHandle renderBuffer = 0;
-        GL_ASSERT( glGenRenderbuffers(1, &renderBuffer) );
-        GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer) );
-        GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height) );
-        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer) );
-        // Attach the 
+
+        // Attach the render buffer to the framebuffer
+        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_renderBuffer) );
         if (target->getFormat() == DepthStencilTarget::DEPTH_STENCIL)
         {
-            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_renderBuffer) );
         }
 
         // Check the framebuffer is good to go.
         GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
         {
-            GP_ERROR("Framebuffer status incompleted: 0x%x", fboStatus);
+            GP_ERROR("Framebuffer status incomplete: 0x%x", fboStatus);
         }
-        _depthStencilTarget->_renderBuffer = renderBuffer;
-
 
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, currentFbo) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentHandle) );
     }
 }
 
@@ -258,11 +253,17 @@ void FrameBuffer::bind()
 {
     // Bind this FrameBuffer for rendering.
     GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
+
+    // Update the current FBO handle
+    __currentHandle = _handle;
 }
 
 void FrameBuffer::bindDefault()
 {
     GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __defaultHandle) );
+
+    // Update the current FBO handle
+    __currentHandle = __defaultHandle;
 }
 
 bool FrameBuffer::isPowerOfTwo(unsigned int value)

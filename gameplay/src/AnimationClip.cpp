@@ -17,9 +17,8 @@ AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long
 {
     GP_ASSERT(_animation);
     GP_ASSERT(0 <= startTime && startTime <= _animation->_duration && 0 <= endTime && endTime <= _animation->_duration);
-    
-    unsigned int channelCount = _animation->_channels.size();
-    for (unsigned int i = 0; i < channelCount; i++)
+
+    for (size_t i = 0, count = _animation->_channels.size(); i < count; i++)
     {
         GP_ASSERT(_animation->_channels[i]);
         GP_ASSERT(_animation->_channels[i]->getCurve());

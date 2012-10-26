@@ -13,6 +13,8 @@ namespace gameplay
  */
 class RenderTarget : public Ref
 {
+    friend class FrameBuffer;
+
 public:
  
     /**
@@ -28,6 +30,21 @@ public:
      * @script{create}
      */
     static RenderTarget* create(const char* id, unsigned int width, unsigned int height);
+
+    /**
+     * Create a RenderTarget from the given Texture and add it to the list of
+     * available RenderTargets.
+     *
+     * Note that different hardware and OpenGL versions have different capabilities
+     * and restrictions on what texture formats are supported as render targets.
+     *
+     * @param id The ID of the new RenderTarget.
+     * @param texture The texture for the new RenderTarget.
+     *
+     * @return A newly created RenderTarget.
+     * @script{create}
+     */
+    static RenderTarget* create(const char* id, Texture* texture);
 
     /**
      * Get a named RenderTarget from its ID.
@@ -51,6 +68,20 @@ public:
      * @return The backing texture of this RenderTarget.
      */
     Texture* getTexture() const;
+
+    /**
+     * Returns the width of the RenderTarget.
+     *
+     * @return The width.
+     */
+    unsigned int getWidth() const;
+
+    /**
+     * Returns the height of the RenderTarget.
+     *
+     * @return The height.
+     */
+    unsigned int getHeight() const;
  
 private:
 

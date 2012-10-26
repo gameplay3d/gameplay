@@ -82,11 +82,9 @@ int lua_Vector4__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -128,129 +126,145 @@ int lua_Vector4__init(lua_State* state)
         }
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
-
-                void* returnPtr = (void*)new Vector4(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Vector4");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+                    void* returnPtr = (void*)new Vector4(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Vector4");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
-
-                void* returnPtr = (void*)new Vector4(*param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Vector4");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4__init - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    void* returnPtr = (void*)new Vector4(*param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Vector4");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4__init - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
-
-                void* returnPtr = (void*)new Vector4(*param1, *param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Vector4");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4__init - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    void* returnPtr = (void*)new Vector4(*param1, *param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Vector4");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4__init - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if (lua_type(state, 1) == LUA_TNUMBER &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 1);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 4);
-
-                void* returnPtr = (void*)new Vector4(param1, param2, param3, param4);
-                if (returnPtr)
+                if (lua_type(state, 1) == LUA_TNUMBER &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Vector4");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 1);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4__init - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
+
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
+
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 4);
+
+                    void* returnPtr = (void*)new Vector4(param1, param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Vector4");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4__init - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -277,18 +291,22 @@ int lua_Vector4_add(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4* instance = getInstance(state);
                 instance->add(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_add - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_add - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -316,21 +334,31 @@ int lua_Vector4_clamp(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4* instance = getInstance(state);
                 instance->clamp(*param1, *param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_clamp - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_clamp - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -357,7 +385,13 @@ int lua_Vector4_distance(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4* instance = getInstance(state);
                 float result = instance->distance(*param1);
@@ -367,11 +401,9 @@ int lua_Vector4_distance(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_distance - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_distance - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -398,7 +430,13 @@ int lua_Vector4_distanceSquared(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4* instance = getInstance(state);
                 float result = instance->distanceSquared(*param1);
@@ -408,11 +446,9 @@ int lua_Vector4_distanceSquared(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_distanceSquared - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_distanceSquared - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -439,7 +475,13 @@ int lua_Vector4_dot(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4* instance = getInstance(state);
                 float result = instance->dot(*param1);
@@ -449,11 +491,9 @@ int lua_Vector4_dot(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_dot - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_dot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -486,11 +526,9 @@ int lua_Vector4_isOne(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_isOne - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_isOne - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -523,11 +561,9 @@ int lua_Vector4_isZero(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_isZero - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_isZero - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -560,11 +596,9 @@ int lua_Vector4_length(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_length - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_length - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -597,11 +631,9 @@ int lua_Vector4_lengthSquared(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_lengthSquared - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_lengthSquared - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -631,11 +663,9 @@ int lua_Vector4_negate(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_negate - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_negate - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -658,50 +688,55 @@ int lua_Vector4_normalize(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            do
             {
-                Vector4* instance = getInstance(state);
-                void* returnPtr = (void*)&(instance->normalize());
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Vector4");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    Vector4* instance = getInstance(state);
+                    void* returnPtr = (void*)&(instance->normalize());
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Vector4");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_normalize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4_normalize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Vector4* instance = getInstance(state);
-                instance->normalize(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_normalize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Vector4* instance = getInstance(state);
+                    instance->normalize(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4_normalize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -735,11 +770,9 @@ int lua_Vector4_scale(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_scale - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_scale - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -762,89 +795,105 @@ int lua_Vector4_set(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
+                {
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
 
-                Vector4* instance = getInstance(state);
-                instance->set(param1);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                    Vector4* instance = getInstance(state);
+                    instance->set(param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
-                Vector4* instance = getInstance(state);
-                instance->set(*param1);
-                
-                return 0;
-            }
-            else
+            do
             {
-                lua_pushstring(state, "lua_Vector4_set - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    Vector4* instance = getInstance(state);
+                    instance->set(*param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4_set - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                Vector4* instance = getInstance(state);
-                instance->set(*param1, *param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_set - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Vector4* instance = getInstance(state);
+                    instance->set(*param1, *param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4_set - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 2);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 4);
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 4);
 
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 5);
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 5);
 
-                Vector4* instance = getInstance(state);
-                instance->set(param1, param2, param3, param4);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_set - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Vector4* instance = getInstance(state);
+                    instance->set(param1, param2, param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Vector4_set - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -872,23 +921,39 @@ int lua_Vector4_static_add(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4::add(*param1, *param2, param3);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_static_add - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_static_add - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -915,10 +980,22 @@ int lua_Vector4_static_angle(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 float result = Vector4::angle(*param1, *param2);
 
@@ -927,11 +1004,9 @@ int lua_Vector4_static_angle(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_static_angle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_static_angle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -960,26 +1035,48 @@ int lua_Vector4_static_clamp(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4::clamp(*param1, *param2, *param3, param4);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_static_clamp - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_static_clamp - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1006,10 +1103,22 @@ int lua_Vector4_static_dot(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 float result = Vector4::dot(*param1, *param2);
 
@@ -1018,11 +1127,9 @@ int lua_Vector4_static_dot(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_static_dot - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_static_dot - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1066,11 +1173,9 @@ int lua_Vector4_static_fromColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_static_fromColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_static_fromColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1135,23 +1240,39 @@ int lua_Vector4_static_subtract(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(1, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4::subtract(*param1, *param2, param3);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_static_subtract - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_static_subtract - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1363,18 +1484,22 @@ int lua_Vector4_subtract(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Vector4* instance = getInstance(state);
                 instance->subtract(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Vector4_subtract - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Vector4_subtract - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
