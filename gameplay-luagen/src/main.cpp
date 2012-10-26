@@ -37,6 +37,9 @@ int main(int argc, char** argv)
     Generator::releaseInstance();
     SAFE_DELETE(bindingNS);
 
+#ifdef WIN32
     system("pause");
+#endif
+    
     return 0;
 }
