@@ -273,12 +273,14 @@ LuaArray<double> getDoublePointer(int index);
  * @param index The stack index.
  * @param nonNull Whether the pointer must be non-null (e.g. if the parameter we 
  *      are retrieving is actually a reference or by-value parameter).
+ * @param success An out parameter that is set to true if the Lua parameter was successfully
+ *      converted to a valid object, or false if it was unable to perform a valid conversion.
  * @return The object pointer or <code>NULL</code> if the data at the stack index
  *      is not an object or if the object is not derived from the given type.
  * @script{ignore}
  */
 template <typename T>
-LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull);
+LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull, bool* success);
 
 /**
  * Gets a string for the given stack index.
@@ -812,7 +814,7 @@ private:
     friend ScriptUtil::LuaArray<unsigned long> ScriptUtil::getUnsignedLongPointer(int index);
     friend ScriptUtil::LuaArray<float> ScriptUtil::getFloatPointer(int index);
     friend ScriptUtil::LuaArray<double> ScriptUtil::getDoublePointer(int index);
-    template<typename T> friend ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull);
+    template<typename T> friend ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type, bool nonNull, bool* success);
     friend const char* ScriptUtil::getString(int index, bool isStdString);
 
     lua_State* _lua;

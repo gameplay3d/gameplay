@@ -54,11 +54,9 @@ int lua_AnimationValue_getFloat(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationValue_getFloat - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationValue_getFloat - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -100,11 +98,9 @@ int lua_AnimationValue_getFloats(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationValue_getFloats - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationValue_getFloats - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -142,11 +138,9 @@ int lua_AnimationValue_setFloat(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationValue_setFloat - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationValue_setFloat - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -188,11 +182,9 @@ int lua_AnimationValue_setFloats(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationValue_setFloats - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationValue_setFloats - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
