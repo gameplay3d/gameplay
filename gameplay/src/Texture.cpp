@@ -43,8 +43,9 @@ namespace gameplay
 {
 
 static std::vector<Texture*> __textureCache;
+static TextureHandle __currentTextureId;
 
-Texture::Texture() : _handle(0), _format(RGBA), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false)
+Texture::Texture() : _handle(0), _format(UNKNOWN), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false)
 {
 }
 
@@ -72,7 +73,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
     GP_ASSERT(path);
 
     // Search texture cache first.
-    for (unsigned int i = 0, count = __textureCache.size(); i < count; ++i)
+    for (size_t i = 0, count = __textureCache.size(); i < count; ++i)
     {
         Texture* t = __textureCache[i];
         GP_ASSERT(t);
@@ -162,7 +163,6 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
     GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
 
-
     // Set initial minification filter based on whether or not mipmaping was enabled.
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMipmaps ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );
 
@@ -174,8 +174,23 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     if (generateMipmaps)
     {
         texture->generateMipmaps();
-        texture->_mipmapped = true;
     }
+
+    // Restore the texture id
+    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, __currentTextureId) );
+
+    return texture;
+}
+
+Texture* Texture::create(TextureHandle handle, int width, int height, Format format)
+{
+    GP_ASSERT(handle);
+
+    Texture* texture = new Texture();
+    texture->_handle = handle;
+    texture->_format = format;
+    texture->_width = width;
+    texture->_height = height;
 
     return texture;
 }
@@ -213,7 +228,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     }
 
     // Read first 4 bytes to determine PVRTC format.
-    unsigned int read;
+    size_t read;
     unsigned int version;
     read = fread(&version, sizeof(unsigned int), 1, file);
     if (read != 1)
@@ -332,7 +347,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
         unsigned int metaDataSize;
     };
 
-    unsigned int read;
+    size_t read;
 
     // Read header data.
     pvrtc_file_header header;
@@ -389,7 +404,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     // Compute total size of data to be read.
     int w = *width;
     int h = *height;
-    unsigned int dataSize = 0;
+    size_t dataSize = 0;
     for (unsigned int level = 0; level < header.mipMapCount; ++level)
     {
         dataSize += computePVRTCDataSize(w, h, bpp);
@@ -760,33 +775,24 @@ TextureHandle Texture::getHandle() const
 
 void Texture::setWrapMode(Wrap wrapS, Wrap wrapT)
 {
-    GLint currentTextureId;
-    GL_ASSERT( glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)wrapS) );
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)wrapT) );
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, (GLuint)currentTextureId) );
 }
 
 void Texture::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
 {
-    GLint currentTextureId;
-    GL_ASSERT( glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)minificationFilter) );
     GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)magnificationFilter) );
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, (GLuint)currentTextureId) );
 }
 
 void Texture::generateMipmaps()
 {
     if (!_mipmapped)
     {
-        GLint currentTextureId;
-        GL_ASSERT( glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId) );
         GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
         GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
-        GL_ASSERT( glBindTexture(GL_TEXTURE_2D, (GLuint)currentTextureId) );
 
         _mipmapped = true;
     }

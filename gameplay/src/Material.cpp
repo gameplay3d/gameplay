@@ -18,7 +18,7 @@ Material::Material() :
 Material::~Material()
 {
     // Destroy all the techniques.
-    for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
+    for (size_t i = 0, count = _techniques.size(); i < count; ++i)
     {
         Technique* technique = _techniques[i];
         SAFE_RELEASE(technique);
@@ -126,7 +126,7 @@ Material* Material::create(const char* vshPath, const char* fshPath, const char*
 
 unsigned int Material::getTechniqueCount() const
 {
-    return _techniques.size();
+    return (unsigned int)_techniques.size();
 }
 
 Technique* Material::getTechniqueByIndex(unsigned int index) const
@@ -138,7 +138,7 @@ Technique* Material::getTechniqueByIndex(unsigned int index) const
 Technique* Material::getTechnique(const char* id) const
 {
     GP_ASSERT(id);
-    for (unsigned int i = 0, count = _techniques.size(); i < count; ++i)
+    for (size_t i = 0, count = _techniques.size(); i < count; ++i)
     {
         Technique* t = _techniques[i];
         GP_ASSERT(t);

@@ -16,8 +16,10 @@ void luaRegister_DepthStencilTarget()
     {
         {"addRef", lua_DepthStencilTarget_addRef},
         {"getFormat", lua_DepthStencilTarget_getFormat},
+        {"getHeight", lua_DepthStencilTarget_getHeight},
         {"getId", lua_DepthStencilTarget_getId},
         {"getRefCount", lua_DepthStencilTarget_getRefCount},
+        {"getWidth", lua_DepthStencilTarget_getWidth},
         {"release", lua_DepthStencilTarget_release},
         {NULL, NULL}
     };
@@ -62,11 +64,9 @@ int lua_DepthStencilTarget__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_DepthStencilTarget__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_DepthStencilTarget__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -96,11 +96,9 @@ int lua_DepthStencilTarget_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_DepthStencilTarget_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -133,11 +131,44 @@ int lua_DepthStencilTarget_getFormat(lua_State* state)
 
                 return 1;
             }
-            else
+
+            lua_pushstring(state, "lua_DepthStencilTarget_getFormat - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_DepthStencilTarget_getHeight(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
-                lua_pushstring(state, "lua_DepthStencilTarget_getFormat - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
+                DepthStencilTarget* instance = getInstance(state);
+                unsigned int result = instance->getHeight();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_getHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -170,11 +201,9 @@ int lua_DepthStencilTarget_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_DepthStencilTarget_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -207,11 +236,44 @@ int lua_DepthStencilTarget_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
+
+            lua_pushstring(state, "lua_DepthStencilTarget_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_DepthStencilTarget_getWidth(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
-                lua_pushstring(state, "lua_DepthStencilTarget_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
+                DepthStencilTarget* instance = getInstance(state);
+                unsigned int result = instance->getWidth();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_getWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -241,11 +303,9 @@ int lua_DepthStencilTarget_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_DepthStencilTarget_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -301,11 +361,9 @@ int lua_DepthStencilTarget_static_create(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_DepthStencilTarget_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -349,11 +407,9 @@ int lua_DepthStencilTarget_static_getDepthStencilTarget(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_DepthStencilTarget_static_getDepthStencilTarget - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_DepthStencilTarget_static_getDepthStencilTarget - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

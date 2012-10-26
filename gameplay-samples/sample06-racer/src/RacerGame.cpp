@@ -354,7 +354,7 @@ void RacerGame::drawScene()
     {
         std::vector<Node*>& queue = _renderQueues[i];
 
-        for (unsigned int j = 0, ncount = queue.size(); j < ncount; ++j)
+        for (size_t j = 0, ncount = queue.size(); j < ncount; ++j)
         {
             queue[j]->getModel()->draw();
         }

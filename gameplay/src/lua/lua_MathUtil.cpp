@@ -53,11 +53,9 @@ int lua_MathUtil__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MathUtil__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MathUtil__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -80,66 +78,68 @@ int lua_MathUtil_static_smooth(lua_State* state)
     {
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
+                if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
 
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 4);
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 4);
 
-                MathUtil::smooth(param1, param2, param3, param4);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_MathUtil_static_smooth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    MathUtil::smooth(param1, param2, param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_MathUtil_static_smooth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
+                if ((lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TLIGHTUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 2);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 2);
 
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 4);
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 4);
 
-                // Get parameter 5 off the stack.
-                float param5 = (float)luaL_checknumber(state, 5);
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 5);
 
-                MathUtil::smooth(param1, param2, param3, param4, param5);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_MathUtil_static_smooth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    MathUtil::smooth(param1, param2, param3, param4, param5);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_MathUtil_static_smooth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

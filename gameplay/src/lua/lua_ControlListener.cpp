@@ -63,11 +63,9 @@ int lua_ControlListener__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_ControlListener__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_ControlListener__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -95,7 +93,13 @@ int lua_ControlListener_controlEvent(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 Control::Listener::EventType param2 = (Control::Listener::EventType)lua_enumFromString_ControlListenerEventType(luaL_checkstring(state, 3));
@@ -105,11 +109,9 @@ int lua_ControlListener_controlEvent(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_ControlListener_controlEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_ControlListener_controlEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

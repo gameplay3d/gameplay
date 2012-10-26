@@ -171,7 +171,7 @@ AnimationClip* Animation::getClip(unsigned int index) const
 
 unsigned int Animation::getClipCount() const
 {
-    return _clips ? _clips->size() : 0;
+    return _clips ? (unsigned int)_clips->size() : 0;
 }
 
 void Animation::play(const char* clipId)
