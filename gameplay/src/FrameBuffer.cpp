@@ -84,12 +84,6 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
     RenderTarget* renderTarget = NULL;
     if (width > 0 && height > 0)
     {
-        if (!isPowerOfTwo(width) | !isPowerOfTwo(height))
-        {
-            GP_ERROR("Failed to create render target for frame buffer. Width and Height must be a power of 2.");
-            return NULL;
-        }
-
         // Create a default RenderTarget with same ID.
         renderTarget = RenderTarget::create(id, width, height);
         if (renderTarget == NULL)
@@ -266,9 +260,5 @@ void FrameBuffer::bindDefault()
     __currentHandle = __defaultHandle;
 }
 
-bool FrameBuffer::isPowerOfTwo(unsigned int value)
-{
-    return (value != 0) && ((value & (value - 1)) == 0);
-}
 
 }
