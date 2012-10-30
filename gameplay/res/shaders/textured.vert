@@ -11,7 +11,7 @@ attribute vec4 a_blendIndices;								// Vertex blend index int u_matrixPalette	
 
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space
-uniform mat4 u_inverseTransposeWorldViewMatrix;				// Matrix to transform a normal to view space
+uniform mat4 u_inverseTransposeWorldMatrix;				    // Matrix to transform a normal to view space
 #if defined(SKINNING)
 uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices
 #endif
@@ -70,7 +70,7 @@ void main()
     gl_Position = u_worldViewProjectionMatrix * position;
 
     // Transform normal to view space.
-    mat3 normalMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz, u_inverseTransposeWorldViewMatrix[1].xyz, u_inverseTransposeWorldViewMatrix[2].xyz);
+    mat3 normalMatrix = mat3(u_inverseTransposeWorldMatrix[0].xyz, u_inverseTransposeWorldMatrix[1].xyz, u_inverseTransposeWorldMatrix[2].xyz);
     v_normalVector = normalMatrix * normal;
 
     // Apply light.
