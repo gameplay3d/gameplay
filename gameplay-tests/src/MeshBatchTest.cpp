@@ -97,7 +97,7 @@ void MeshBatchTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     case Touch::TOUCH_RELEASE:
         break;
     case Touch::TOUCH_MOVE:
-        if (Game::getInstance()->getAbsoluteTime() - _lastTriangleAdded > 100)
+        if (Game::getInstance()->getAbsoluteTime() - _lastTriangleAdded > 50)
         {
             addTriangle( x - (getWidth() >>1), (getHeight() >> 1) - y);
         }
