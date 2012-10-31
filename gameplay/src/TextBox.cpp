@@ -372,7 +372,7 @@ void TextBox::setCaretLocation(int x, int y)
         if (_caretLocation.x > textBounds.x + textBounds.width &&
             _caretLocation.y > textBounds.y + textBounds.height)
         {
-            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, _text.length(),
+            font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, (unsigned int)_text.length(),
                 textAlignment, true, rightToLeft);
             return;
         }

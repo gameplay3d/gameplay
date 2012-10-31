@@ -14,12 +14,12 @@ include_directories(
 add_definitions(-D__linux__)
 
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/bullet/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux
+    ${CMAKE_SOURCE_DIR}/external-deps/lua/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/bullet/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux/${ARCH_DIR}
 )
 
 

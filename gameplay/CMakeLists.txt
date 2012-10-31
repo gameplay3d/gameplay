@@ -77,7 +77,7 @@ set(GAMEPLAY_SRC
     src/gameplay-main-blackberry.cpp
     src/gameplay-main-linux.cpp
     src/gameplay-main-windows.cpp
-	src/Gesture.h
+    src/Gesture.h
     src/Image.cpp
     src/Image.h
     src/Image.inl
@@ -146,10 +146,10 @@ set(GAMEPLAY_SRC
     src/PhysicsSocketConstraint.h
     src/PhysicsSpringConstraint.cpp
     src/PhysicsSpringConstraint.h
-	src/PhysicsVehicle.cpp
-	src/PhysicsVehicle.h
-	src/PhysicsVehicleWheel.cpp
-	src/PhysicsVehicle.h
+    src/PhysicsVehicle.cpp
+    src/PhysicsVehicle.h
+    src/PhysicsVehicleWheel.cpp
+    src/PhysicsVehicle.h
     src/Plane.cpp
     src/Plane.h
     src/Plane.inl
@@ -333,10 +333,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_GamepadGamepadEvent.h
     src/lua/lua_GameState.cpp
     src/lua/lua_GameState.h
-	src/lua/lua_Gesture.cpp
-	src/lua/lua_Gesture.h
-	src/lua/lua_GestureGestureEvent.cpp
-	src/lua/lua_GestureGestureEvent.h
+    src/lua/lua_Gesture.cpp
+    src/lua/lua_Gesture.h
+    src/lua/lua_GestureGestureEvent.cpp
+    src/lua/lua_GestureGestureEvent.h
     src/lua/lua_Global.cpp
     src/lua/lua_Global.h
     src/lua/lua_Image.cpp
@@ -451,10 +451,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_PhysicsSocketConstraint.h
     src/lua/lua_PhysicsSpringConstraint.cpp
     src/lua/lua_PhysicsSpringConstraint.h
-	src/lua/lua_PhysicsVehicle.cpp
-	src/lua/lua_PhysicsVehicle.h
-	src/lua/lua_PhysicsVehicleWheel.cpp
-	src/lua/lua_PhysicsVehicleWheel.h
+    src/lua/lua_PhysicsVehicle.cpp
+    src/lua/lua_PhysicsVehicle.h
+    src/lua/lua_PhysicsVehicleWheel.cpp
+    src/lua/lua_PhysicsVehicleWheel.h
     src/lua/lua_Plane.cpp
     src/lua/lua_Plane.h
     src/lua/lua_Platform.cpp

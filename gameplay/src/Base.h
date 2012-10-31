@@ -295,34 +295,9 @@ typedef GLuint RenderBufferHandle;
     } while(0)
 #endif
 
-/**
- * Executes the specified GL code and checks the GL error afterwards
- * to ensure it succeeded.
- *
- * This macro should be used instead of GL_ASSERT for code that must
- * be checked in both debug and release builds. The GL_LAST_ERROR
- * macro can be used afterwards to check whether a GL error was
- * encountered executing the specified code.
- */
-#define GL_CHECK( gl_code ) do \
-    { \
-        while (glGetError() != GL_NO_ERROR) ; \
-        gl_code; \
-        __gl_error_code = glGetError(); \
-        if (__gl_error_code != GL_NO_ERROR) \
-        { \
-            GP_ERROR(#gl_code ": %d", (int)__gl_error_code); \
-        } \
-    } while(0)
-
 /** Global variable to hold GL errors
  * @script{ignore} */
 extern GLenum __gl_error_code;
-
-/**
- * Accesses the most recently set global GL error.
- */
-#define GL_LAST_ERROR() __gl_error_code
 
 /**
  * Executes the specified AL code and checks the AL error afterwards
