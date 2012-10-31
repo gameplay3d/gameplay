@@ -444,8 +444,10 @@ bool AnimationClip::update(float elapsedTime)
 
     // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
     GP_ASSERT(_animation);
-    GP_ASSERT(_animation->_duration > 0);
-    float percentComplete = ((float)_startTime + currentTime) / (float)_animation->_duration;
+
+    // If the animation duration is zero (start time == end time, such as when there is only a single keyframe),
+    // then prevent a divide by zero and set percentComplete = 1.
+    float percentComplete = _animation->_duration == 0 ? 1 : ((float)_startTime + currentTime) / (float)_animation->_duration;
     
     if (isClipStateBitSet(CLIP_IS_FADING_OUT_BIT))
     {
@@ -483,7 +485,8 @@ bool AnimationClip::update(float elapsedTime)
             }
         }
         else
-        {   // Fade is done.
+        {
+            // Fade is done.
             _crossFadeToClip->_blendWeight = 1.0f;
             _blendWeight = 0.0f;
             resetClipStateBit(CLIP_IS_STARTED_BIT);            
