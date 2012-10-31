@@ -986,7 +986,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         __hwnd = (HWND)__attachToWindow;
         __hdc = GetDC(__hwnd);
 
-        SetWindowLongPtr(__hwnd, GWL_WNDPROC, (LONG)(WNDPROC)__WndProc);
+        SetWindowLongPtr(__hwnd, GWLP_WNDPROC, (LONG)(WNDPROC)__WndProc);
 
         if (!initializeGL(NULL))
             goto error;
@@ -1062,7 +1062,7 @@ int Platform::enterMessagePump()
             if (msg.message == WM_QUIT)
             {
                 _game->exit();
-                break;
+                return msg.wParam;
             }
         }
         else
@@ -1075,7 +1075,7 @@ int Platform::enterMessagePump()
         if (_game->getState() == Game::UNINITIALIZED)
             break;
     }
-    return msg.wParam;
+    return 0;
 }
 
 void Platform::signalShutdown() 
@@ -1109,7 +1109,7 @@ double Platform::getAbsoluteTime()
     GP_ASSERT(__timeTicksPerMillis);
     __timeAbsolute = queryTime.QuadPart / __timeTicksPerMillis;
 
-    return __timeAbsolute;
+    return __timeAbsolute - __timeStart;
 }
 
 void Platform::setAbsoluteTime(double time)

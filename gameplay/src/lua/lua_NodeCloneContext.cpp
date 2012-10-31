@@ -71,11 +71,9 @@ int lua_NodeCloneContext__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_NodeCloneContext__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_NodeCloneContext__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -139,7 +137,13 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Animation'.");
+                    lua_error(state);
+                }
 
                 NodeCloneContext* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findClonedAnimation(param1);
@@ -158,11 +162,9 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_NodeCloneContext_findClonedAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_NodeCloneContext_findClonedAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -189,7 +191,13 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 NodeCloneContext* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findClonedNode(param1);
@@ -208,11 +216,9 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_NodeCloneContext_findClonedNode - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_NodeCloneContext_findClonedNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -240,21 +246,31 @@ int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Animation'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Animation> param2 = ScriptUtil::getObjectPointer<Animation>(3, "Animation", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Animation> param2 = ScriptUtil::getObjectPointer<Animation>(3, "Animation", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Animation'.");
+                    lua_error(state);
+                }
 
                 NodeCloneContext* instance = getInstance(state);
                 instance->registerClonedAnimation(param1, param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_NodeCloneContext_registerClonedAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_NodeCloneContext_registerClonedAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -282,21 +298,31 @@ int lua_NodeCloneContext_registerClonedNode(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(3, "Node", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(3, "Node", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 NodeCloneContext* instance = getInstance(state);
                 instance->registerClonedNode(param1, param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_NodeCloneContext_registerClonedNode - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_NodeCloneContext_registerClonedNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

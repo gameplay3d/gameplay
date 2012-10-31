@@ -230,6 +230,11 @@ mkdir "%projPath%\android\res\values"
 copy gameplay-template\android\res\values\template.strings.xml "%projPath%\android\res\values\strings.xml"
 call:replace "%projPath%\android\res\values\strings.xml" TEMPLATE_TITLE "%title%"
 
+mkdir "%projPath%\build"
+copy "gameplay-template\gameplay-template-CMakeLists.txt" "%projPath%\CMakeLists.txt"
+call:replace "%projPath%\CMakeLists.txt" TEMPLATE_PROJECT %projName%
+call:replace "%projPath%\CMakeLists.txt" TemplateGame %className%
+call:replace "%projPath%\CMakeLists.txt" GAMEPLAY_PATH %gpPath%
 
 REM Copy source files
 copy gameplay-template\src\TemplateGame.h "%projPath%\src\%className%.h"

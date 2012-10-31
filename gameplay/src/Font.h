@@ -312,7 +312,7 @@ private:
     int getIndexOrLocation(const char* text, const Rectangle& clip, unsigned int size, const Vector2& inLocation, Vector2* outLocation,
                            const int destIndex = -1, Justify justify = ALIGN_TOP_LEFT, bool wrap = true, bool rightToLeft = false);
 
-    unsigned int getTokenWidth(const char* token, unsigned int length, unsigned int size, float scale);
+    unsigned int getTokenWidth(const char* token, unsigned length, unsigned int size, float scale);
 
     unsigned int getReversedTokenLength(const char* token, const char* bufStart);
 
