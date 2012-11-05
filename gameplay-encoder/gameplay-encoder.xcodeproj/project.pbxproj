@@ -61,6 +61,7 @@
 		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
 		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
 		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
+		5FA636B41647BF8A002AAEA5 /* DAEMaterialEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FA636B21647BF8A002AAEA5 /* DAEMaterialEncoder.cpp */; };
 		F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCD0315D554B800DB35DB /* Heightmap.cpp */; };
 /* End PBXBuildFile section */
 
@@ -179,6 +180,8 @@
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
 		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		5FA636B21647BF8A002AAEA5 /* DAEMaterialEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEMaterialEncoder.cpp; path = src/DAEMaterialEncoder.cpp; sourceTree = SOURCE_ROOT; };
+		5FA636B31647BF8A002AAEA5 /* DAEMaterialEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAEMaterialEncoder.h; path = src/DAEMaterialEncoder.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0315D554B800DB35DB /* Heightmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heightmap.cpp; path = src/Heightmap.cpp; sourceTree = SOURCE_ROOT; };
 		F18DCD0415D554B800DB35DB /* Heightmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightmap.h; path = src/Heightmap.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0515D554B800DB35DB /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = src/Thread.h; sourceTree = SOURCE_ROOT; };
@@ -260,6 +263,8 @@
 				42C8EDC614724CD700E43619 /* DAEOptimizer.h */,
 				42C8EDC714724CD700E43619 /* DAESceneEncoder.cpp */,
 				42C8EDC814724CD700E43619 /* DAESceneEncoder.h */,
+				5FA636B21647BF8A002AAEA5 /* DAEMaterialEncoder.cpp */,
+				5FA636B31647BF8A002AAEA5 /* DAEMaterialEncoder.h */,
 				42C8EDC914724CD700E43619 /* DAEUtil.cpp */,
 				42C8EDCA14724CD700E43619 /* DAEUtil.h */,
 				42C8EDCB14724CD700E43619 /* Effect.cpp */,
@@ -444,6 +449,7 @@
 				42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */,
 				4251B12C152D044B002F6199 /* Curve.cpp in Sources */,
 				F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */,
+				5FA636B41647BF8A002AAEA5 /* DAEMaterialEncoder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

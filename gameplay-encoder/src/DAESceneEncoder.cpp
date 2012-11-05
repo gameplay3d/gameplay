@@ -5,7 +5,7 @@
 
 #include "DAESceneEncoder.h"
 #include "DAEOptimizer.h"
-
+#include "DAEMaterialEncoder.h"
 //#define ENCODER_PRINT_TIME 1
 
 namespace gameplay
@@ -367,6 +367,15 @@ void DAESceneEncoder::write(const std::string& filepath, const EncoderArguments&
         end("save binary");
     }
     
+    // create material
+    if(arguments.materialOutputEnabled())
+    {
+        begin();
+        DAEMaterialEncoder *m = new DAEMaterialEncoder();
+        m->processMaterial(arguments, _dom);
+        end("create material");
+    }
+
     // Cleanup
     if (file)
     {
