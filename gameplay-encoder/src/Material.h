@@ -26,10 +26,13 @@ public:
     virtual const char* getElementName(void) const;
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
-
+    Effect& getEffect() const;
+    void setMaterialId(std::string materialId);
+    std::string getMaterialId();
 private:
     std::list<MaterialParameter> _parameters;
     Effect* _effect;
+    std::string materialId;
 };
 
 }

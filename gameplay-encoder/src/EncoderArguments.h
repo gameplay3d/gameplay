@@ -61,6 +61,10 @@ public:
      * Returns the path to where the DAE output should be written to.
      */
     const std::string& getDAEOutputPath() const;
+    /**
+     * Returns the path to where the Material output should be written to.
+     */
+    const std::string& getMaterialOutputPath() const;
 
     /**
      * Returns the output path/folder.
@@ -82,6 +86,10 @@ public:
 
     const std::vector<HeightmapOption>& getHeightmapOptions() const;
 
+    /**
+     *  Returns true if a material-file should be created
+     */
+    bool materialOutputEnabled() const;
     /**
      * Returns true if an error occurred while parsing the command line arguments.
      */
@@ -140,6 +148,7 @@ private:
     std::string _fileOutputPath;
     std::string _nodeId;
     std::string _daeOutputPath;
+    std::string _materialOutputPath;
 
     unsigned int _fontSize;
 
@@ -149,6 +158,7 @@ private:
     bool _daeOutput;
     bool _optimizeAnimations;
 
+    bool _materialOutput;
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
     std::vector<HeightmapOption> _heightmaps;

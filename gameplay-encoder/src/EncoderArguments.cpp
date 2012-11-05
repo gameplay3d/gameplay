@@ -21,7 +21,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontPreview(false),
     _textOutput(false),
     _daeOutput(false),
-    _optimizeAnimations(false)
+    _optimizeAnimations(false),
+    _materialOutput(false)
 {
     __instance = this;
 
@@ -119,6 +120,10 @@ const std::string& EncoderArguments::getDAEOutputPath() const
 {
     return _daeOutputPath;
 }
+const std::string& EncoderArguments::getMaterialOutputPath() const
+{
+    return _materialOutputPath;
+}
 
 const std::vector<std::string>& EncoderArguments::getGroupAnimationNodeId() const
 {
@@ -152,6 +157,10 @@ const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeigh
     return _heightmaps;
 }
 
+bool EncoderArguments::materialOutputEnabled() const
+{
+    return _materialOutput;
+}
 bool EncoderArguments::parseErrorOccured() const
 {
     return _parseError;
@@ -434,6 +443,22 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             else if (__logVerbosity > 4)
                 __logVerbosity = 4;
         }
+        break;
+    case 'm':
+        if (str.compare("-m") == 0 || str.compare("-material") == 0)
+        {
+//            // read one string, make sure not to go out of bounds
+//            if ((*index + 1) >= options.size())
+//            {
+//                fprintf(stderr, "Error: -m requires 1 argument.\n");
+//                _parseError = true;
+//                return;
+//            }
+//            (*index)++;
+//            _materialOutputPath = options[*index];
+            _materialOutput = true;
+        }
+        break;
     default:
         break;
     }
