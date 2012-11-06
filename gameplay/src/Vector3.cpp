@@ -173,7 +173,7 @@ void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
     GP_ASSERT(dst);
 
-    MathUtil::crossVector3((const float*)&v1, (const float*)&v2, (float*)dst);
+    MathUtil::crossVector3((const float*)&v1.x, (const float*)&v2.x, (float*)dst);
 }
 
 float Vector3::distance(const Vector3& v) const
