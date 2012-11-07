@@ -401,7 +401,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             int y = config->getInt("y");
             if (y != 0) __y = y;
-	    printf("custom x = %d, y = %d\n", x, y);
+            
             int width = config->getInt("width");
             if (width != 0) __width = width;
 
