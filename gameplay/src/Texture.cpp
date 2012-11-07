@@ -73,7 +73,7 @@ Texture* Texture::create(const char* path, bool generateMipmaps)
     GP_ASSERT(path);
 
     // Search texture cache first.
-    for (unsigned int i = 0, count = __textureCache.size(); i < count; ++i)
+    for (size_t i = 0, count = __textureCache.size(); i < count; ++i)
     {
         Texture* t = __textureCache[i];
         GP_ASSERT(t);
@@ -228,7 +228,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     }
 
     // Read first 4 bytes to determine PVRTC format.
-    unsigned int read;
+    size_t read;
     unsigned int version;
     read = fread(&version, sizeof(unsigned int), 1, file);
     if (read != 1)
@@ -347,7 +347,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
         unsigned int metaDataSize;
     };
 
-    unsigned int read;
+    size_t read;
 
     // Read header data.
     pvrtc_file_header header;
@@ -404,7 +404,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     // Compute total size of data to be read.
     int w = *width;
     int h = *height;
-    unsigned int dataSize = 0;
+    size_t dataSize = 0;
     for (unsigned int level = 0; level < header.mipMapCount; ++level)
     {
         dataSize += computePVRTCDataSize(w, h, bpp);

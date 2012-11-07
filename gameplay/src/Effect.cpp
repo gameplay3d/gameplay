@@ -466,7 +466,7 @@ Uniform* Effect::getUniform(unsigned int index) const
 
 unsigned int Effect::getUniformCount() const
 {
-    return _uniforms.size();
+    return (unsigned int)_uniforms.size();
 }
 
 void Effect::setValue(Uniform* uniform, float value)

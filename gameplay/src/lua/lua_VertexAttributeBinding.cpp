@@ -62,11 +62,9 @@ int lua_VertexAttributeBinding__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -96,11 +94,9 @@ int lua_VertexAttributeBinding_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -130,11 +126,9 @@ int lua_VertexAttributeBinding_bind(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding_bind - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding_bind - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -167,11 +161,9 @@ int lua_VertexAttributeBinding_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -201,11 +193,9 @@ int lua_VertexAttributeBinding_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -232,10 +222,22 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Mesh'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Effect'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)VertexAttributeBinding::create(param1, param2);
                 if (returnPtr)
@@ -253,11 +255,9 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -287,11 +287,9 @@ int lua_VertexAttributeBinding_unbind(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VertexAttributeBinding_unbind - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VertexAttributeBinding_unbind - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

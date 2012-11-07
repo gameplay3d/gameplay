@@ -85,11 +85,9 @@ int lua_PhysicsSpringConstraint_getBreakingImpulse(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_getBreakingImpulse - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_getBreakingImpulse - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -131,11 +129,9 @@ int lua_PhysicsSpringConstraint_getRotationOffsetA(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_getRotationOffsetA - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_getRotationOffsetA - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -177,11 +173,9 @@ int lua_PhysicsSpringConstraint_getRotationOffsetB(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_getRotationOffsetB - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_getRotationOffsetB - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -223,11 +217,9 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetA(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_getTranslationOffsetA - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_getTranslationOffsetA - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -269,11 +261,9 @@ int lua_PhysicsSpringConstraint_getTranslationOffsetB(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_getTranslationOffsetB - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_getTranslationOffsetB - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -306,11 +296,9 @@ int lua_PhysicsSpringConstraint_isEnabled(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_isEnabled - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -344,11 +332,9 @@ int lua_PhysicsSpringConstraint_setAngularDampingX(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -382,11 +368,9 @@ int lua_PhysicsSpringConstraint_setAngularDampingY(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -420,11 +404,9 @@ int lua_PhysicsSpringConstraint_setAngularDampingZ(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingZ - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularDampingZ - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -451,18 +433,22 @@ int lua_PhysicsSpringConstraint_setAngularLowerLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setAngularLowerLimit(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularLowerLimit - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularLowerLimit - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -496,11 +482,9 @@ int lua_PhysicsSpringConstraint_setAngularStrengthX(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -534,11 +518,9 @@ int lua_PhysicsSpringConstraint_setAngularStrengthY(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -572,11 +554,9 @@ int lua_PhysicsSpringConstraint_setAngularStrengthZ(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthZ - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularStrengthZ - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -603,18 +583,22 @@ int lua_PhysicsSpringConstraint_setAngularUpperLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setAngularUpperLimit(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularUpperLimit - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setAngularUpperLimit - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -648,11 +632,9 @@ int lua_PhysicsSpringConstraint_setBreakingImpulse(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setBreakingImpulse - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setBreakingImpulse - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -686,11 +668,9 @@ int lua_PhysicsSpringConstraint_setEnabled(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setEnabled - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -724,11 +704,9 @@ int lua_PhysicsSpringConstraint_setLinearDampingX(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -762,11 +740,9 @@ int lua_PhysicsSpringConstraint_setLinearDampingY(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -800,11 +776,9 @@ int lua_PhysicsSpringConstraint_setLinearDampingZ(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingZ - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearDampingZ - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -831,18 +805,22 @@ int lua_PhysicsSpringConstraint_setLinearLowerLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setLinearLowerLimit(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearLowerLimit - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearLowerLimit - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -876,11 +854,9 @@ int lua_PhysicsSpringConstraint_setLinearStrengthX(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -914,11 +890,9 @@ int lua_PhysicsSpringConstraint_setLinearStrengthY(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -952,11 +926,9 @@ int lua_PhysicsSpringConstraint_setLinearStrengthZ(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthZ - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearStrengthZ - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -983,18 +955,22 @@ int lua_PhysicsSpringConstraint_setLinearUpperLimit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setLinearUpperLimit(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearUpperLimit - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setLinearUpperLimit - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1021,18 +997,22 @@ int lua_PhysicsSpringConstraint_setRotationOffsetA(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setRotationOffsetA(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setRotationOffsetA - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setRotationOffsetA - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1059,18 +1039,22 @@ int lua_PhysicsSpringConstraint_setRotationOffsetB(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Quaternion> param1 = ScriptUtil::getObjectPointer<Quaternion>(2, "Quaternion", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Quaternion'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setRotationOffsetB(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setRotationOffsetB - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setRotationOffsetB - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1097,18 +1081,22 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetA(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setTranslationOffsetA(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setTranslationOffsetA - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setTranslationOffsetA - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1135,18 +1123,22 @@ int lua_PhysicsSpringConstraint_setTranslationOffsetB(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 PhysicsSpringConstraint* instance = getInstance(state);
                 instance->setTranslationOffsetB(*param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_setTranslationOffsetB - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_setTranslationOffsetB - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1173,10 +1165,22 @@ int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)new Vector3(PhysicsSpringConstraint::centerOfMassMidpoint(param1, param2));
                 if (returnPtr)
@@ -1194,11 +1198,9 @@ int lua_PhysicsSpringConstraint_static_centerOfMassMidpoint(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_static_centerOfMassMidpoint - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_static_centerOfMassMidpoint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1225,10 +1227,22 @@ int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)new Quaternion(PhysicsSpringConstraint::getRotationOffset(param1, *param2));
                 if (returnPtr)
@@ -1246,11 +1260,9 @@ int lua_PhysicsSpringConstraint_static_getRotationOffset(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_static_getRotationOffset - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_static_getRotationOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1277,10 +1289,22 @@ int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(1, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)new Vector3(PhysicsSpringConstraint::getTranslationOffset(param1, *param2));
                 if (returnPtr)
@@ -1298,11 +1322,9 @@ int lua_PhysicsSpringConstraint_static_getTranslationOffset(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsSpringConstraint_static_getTranslationOffset - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsSpringConstraint_static_getTranslationOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

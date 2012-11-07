@@ -601,7 +601,7 @@ unsigned int Game::createGamepad(const char* id, unsigned int handle, unsigned i
     Gamepad* gamepad = new Gamepad(id, handle, buttonCount, joystickCount, triggerCount);
     GP_ASSERT(gamepad);
     _gamepads->push_back(gamepad);
-    return _gamepads->size() - 1;
+    return (unsigned int)(_gamepads->size() - 1);
 }
 
 void Game::triggerGamepadEvents()

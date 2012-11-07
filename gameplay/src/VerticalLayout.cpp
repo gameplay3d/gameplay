@@ -44,17 +44,17 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
 
     std::vector<Control*> controls = container->getControls();
 
-    unsigned int i, end, iter;
+    int i, end, iter;
     if (_bottomToTop)
     {
-        i = controls.size() - 1;
+        i = (int)controls.size() - 1;
         end = -1;
         iter = -1;
     }
     else
     {
         i = 0;
-        end = controls.size();
+        end = (int)controls.size();
         iter = 1;
     }
 

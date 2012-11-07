@@ -56,11 +56,9 @@ int lua_ThemeStyle_getTheme(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_ThemeStyle_getTheme - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_ThemeStyle_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

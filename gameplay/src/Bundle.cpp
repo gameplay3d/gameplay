@@ -160,7 +160,7 @@ Bundle* Bundle::create(const char* path)
     GP_ASSERT(path);
 
     // Search the cache for this bundle.
-    for (unsigned int i = 0, count = __bundleCache.size(); i < count; ++i)
+    for (size_t i = 0, count = __bundleCache.size(); i < count; ++i)
     {
         Bundle* p = __bundleCache[i];
         GP_ASSERT(p);
@@ -272,7 +272,7 @@ Bundle::Reference* Bundle::find(const char* id) const
 
 void Bundle::clearLoadSession()
 {
-    for (unsigned int i = 0, count = _meshSkins.size(); i < count; ++i)
+    for (size_t i = 0, count = _meshSkins.size(); i < count; ++i)
     {
         SAFE_DELETE(_meshSkins[i]);
     }
@@ -1074,16 +1074,15 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
 {
     GP_ASSERT(_file);
 
-    const unsigned int skinCount = _meshSkins.size();
-    for (unsigned int i = 0; i < skinCount; ++i)
+    for (size_t i = 0, skinCount = _meshSkins.size(); i < skinCount; ++i)
     {
         MeshSkinData* skinData = _meshSkins[i];
         GP_ASSERT(skinData);
         GP_ASSERT(skinData->skin);
 
         // Resolve all joints in skin joint list.
-        const unsigned int jointCount = skinData->joints.size();
-        for (unsigned int j = 0; j < jointCount; ++j)
+        size_t jointCount = skinData->joints.size();
+        for (size_t j = 0; j < jointCount; ++j)
         {
             // TODO: Handle full xrefs (not just local # xrefs).
             std::string jointId = skinData->joints[j];
@@ -1096,7 +1095,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                 {
                     Joint* joint = static_cast<Joint*>(n);
                     joint->setInverseBindPose(skinData->inverseBindPoseMatrices[j]);
-                    skinData->skin->setJoint(joint, j);
+                    skinData->skin->setJoint(joint, (unsigned int)j);
                     SAFE_RELEASE(joint);
                 }
             }
@@ -1556,7 +1555,7 @@ Bundle::MeshData* Bundle::readMeshData(const char* url)
 {
     GP_ASSERT(url);
 
-    unsigned int len = strlen(url);
+    size_t len = strlen(url);
     if (len == 0)
     {
         GP_ERROR("Mesh data URL must be non-empty.");
@@ -1565,7 +1564,7 @@ Bundle::MeshData* Bundle::readMeshData(const char* url)
 
     // Parse URL (formatted as 'bundle#id').
     std::string urlstring(url);
-    unsigned int pos = urlstring.find('#');
+    size_t pos = urlstring.find('#');
     if (pos == std::string::npos)
     {
         GP_ERROR("Invalid mesh data URL '%s' (must be of the form 'bundle#id').", url);

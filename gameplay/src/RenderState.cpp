@@ -28,7 +28,7 @@ RenderState::~RenderState()
     SAFE_RELEASE(_state);
 
     // Destroy all the material parameters
-    for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
+    for (size_t i = 0, count = _parameters.size(); i < count; ++i)
     {
         SAFE_RELEASE(_parameters[i]);
     }
@@ -58,7 +58,7 @@ MaterialParameter* RenderState::getParameter(const char* name) const
 
     // Search for an existing parameter with this name.
     MaterialParameter* param;
-    for (unsigned int i = 0, count = _parameters.size(); i < count; ++i)
+    for (size_t i = 0, count = _parameters.size(); i < count; ++i)
     {
         param = _parameters[i];
         GP_ASSERT(param);
@@ -75,6 +75,9 @@ MaterialParameter* RenderState::getParameter(const char* name) const
     return param;
 }
 
+/**
+ * @script{ignore}
+ */
 const char* autoBindingToString(RenderState::AutoBinding autoBinding)
 {
     // NOTE: As new AutoBinding values are added, this switch statement must be updatd.
@@ -112,6 +115,9 @@ const char* autoBindingToString(RenderState::AutoBinding autoBinding)
 
     case RenderState::MATRIX_PALETTE:
         return "MATRIX_PALETTE";
+
+    default:
+        return "";
     }
 }
 
@@ -285,7 +291,7 @@ void RenderState::bind(Pass* pass)
     Effect* effect = pass->getEffect();
     while ((rs = getTopmost(rs)))
     {
-        for (unsigned int i = 0, count = rs->_parameters.size(); i < count; ++i)
+        for (size_t i = 0, count = rs->_parameters.size(); i < count; ++i)
         {
             GP_ASSERT(rs->_parameters[i]);
             rs->_parameters[i]->bind(effect);
@@ -339,14 +345,12 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
         renderState->_parameters.push_back(paramCopy);
     }
     renderState->_parent = _parent;
-    if (Node* node = context.findClonedNode(_nodeBinding))
-    {
-        renderState->setNodeBinding(node);
-    }
     if (_state)
     {
         renderState->setStateBlock(_state);
     }
+
+    // Note that _nodeBinding is not set here, it should be set by the caller.
 }
 
 RenderState::StateBlock::StateBlock()

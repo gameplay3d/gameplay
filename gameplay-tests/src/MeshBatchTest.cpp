@@ -66,7 +66,7 @@ void MeshBatchTest::render(float elapsedTime)
 
     // Draw all of the triangles as one mesh batch.
     _meshBatch->start();
-    _meshBatch->add(&_vertices[0], _vertices.size());
+    _meshBatch->add(&_vertices[0], (unsigned int)_vertices.size());
     _meshBatch->finish();
     _meshBatch->getMaterial()->getParameter("u_worldViewProjectionMatrix")->setValue(_worldViewProjectionMatrix);
     _meshBatch->draw();
@@ -97,7 +97,7 @@ void MeshBatchTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     case Touch::TOUCH_RELEASE:
         break;
     case Touch::TOUCH_MOVE:
-        if (Game::getInstance()->getAbsoluteTime() - _lastTriangleAdded > 100)
+        if (Game::getInstance()->getAbsoluteTime() - _lastTriangleAdded > 50)
         {
             addTriangle( x - (getWidth() >>1), (getHeight() >> 1) - y);
         }

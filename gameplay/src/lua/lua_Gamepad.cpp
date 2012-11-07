@@ -57,11 +57,9 @@ int lua_Gamepad_draw(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_draw - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_draw - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -94,11 +92,9 @@ int lua_Gamepad_getButtonCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getButtonCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getButtonCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -135,11 +131,9 @@ int lua_Gamepad_getButtonState(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getButtonState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getButtonState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -181,11 +175,9 @@ int lua_Gamepad_getForm(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getForm - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getForm - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -218,11 +210,9 @@ int lua_Gamepad_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -253,18 +243,22 @@ int lua_Gamepad_getJoystickAxisValues(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector2> param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector2> param2 = ScriptUtil::getObjectPointer<Vector2>(3, "Vector2", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 Gamepad* instance = getInstance(state);
                 instance->getJoystickAxisValues(param1, param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getJoystickAxisValues - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getJoystickAxisValues - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -301,11 +295,9 @@ int lua_Gamepad_getJoystickAxisX(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getJoystickAxisX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getJoystickAxisX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -342,11 +334,9 @@ int lua_Gamepad_getJoystickAxisY(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getJoystickAxisY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getJoystickAxisY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -379,11 +369,9 @@ int lua_Gamepad_getJoystickCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_getJoystickCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_getJoystickCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -420,11 +408,9 @@ int lua_Gamepad_isJoystickActive(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_isJoystickActive - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_isJoystickActive - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -457,11 +443,9 @@ int lua_Gamepad_isVirtual(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_isVirtual - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_isVirtual - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -495,11 +479,9 @@ int lua_Gamepad_update(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Gamepad_update - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Gamepad_update - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
