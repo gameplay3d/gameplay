@@ -386,7 +386,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     // Default values
     const char *title = NULL;
     int __x = 0, __y = 0, __width = 1280, __height = 800;
-
+    bool fullscreen = false;
     if (game->getConfig())
     {
         Properties* config = game->getConfig()->getNamespace("window", true);
@@ -407,6 +407,10 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             int height = config->getInt("height");
             if (height != 0) __height = height;
+
+            fullscreen = config->getBool("fullscreen");
+
+
         }
     }
 
@@ -482,8 +486,29 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __window = XCreateWindow(__display, DefaultRootWindow(__display), __x, __y, __width, __height, 0, 
                             visualInfo->depth, InputOutput, visualInfo->visual, winMask,
                             &winAttribs); 
-    
+
     XMapWindow(__display, __window);
+
+    // Send fullscreen atom message to the window; most window managers respect WM_STATE messages
+    // Note: fullscreen mode will use native desktop resolution and won't care about width/height specified
+    if (fullscreen)
+    {
+        XEvent xev;
+        Atom atomWm_state = XInternAtom(__display, "_NET_WM_STATE", false);
+        Atom atomFullscreen = XInternAtom(__display, "_NET_WM_STATE_FULLSCREEN", false);
+
+        memset(&xev, 0, sizeof(xev));
+        xev.type = ClientMessage;
+        xev.xclient.window = __window;
+        xev.xclient.message_type = atomWm_state;
+        xev.xclient.format = 32;
+        xev.xclient.data.l[0] = 1;
+        xev.xclient.data.l[1] = atomFullscreen;
+        xev.xclient.data.l[2] = 0;
+
+        XSendEvent(__display, DefaultRootWindow(__display), false, SubstructureNotifyMask | SubstructureRedirectMask, &xev);
+    }
+    
     XStoreName(__display, __window, title ? title : "");
 
     __context = glXCreateContext(__display, visualInfo, NULL, True);
