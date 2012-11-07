@@ -103,7 +103,6 @@ public:
      *      handling the auto binding.
      *
      * @see RenderState::registerAutoBindingResolver(const char*, RenderState::AutoBindingResolver)
-     *
      * @script{ignore}
      */
     typedef bool (*ResolveAutoBindingCallback) (const char* autoBinding, Node* node, MaterialParameter* parameter);
@@ -333,6 +332,7 @@ public:
      * auto bindings found in the RenderState::AutoBinding enumeration.
      *
      * @param callback Callback function for resolving parameter auto bindings.
+     * @script{ignore}
      */
     static void registerAutoBindingResolver(ResolveAutoBindingCallback callback);
 

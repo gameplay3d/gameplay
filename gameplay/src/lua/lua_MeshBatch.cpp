@@ -60,11 +60,9 @@ int lua_MeshBatch__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -94,11 +92,9 @@ int lua_MeshBatch_draw(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_draw - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch_draw - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -128,11 +124,9 @@ int lua_MeshBatch_finish(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_finish - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch_finish - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -165,11 +159,9 @@ int lua_MeshBatch_getCapacity(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_getCapacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch_getCapacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -211,11 +203,9 @@ int lua_MeshBatch_getMaterial(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_getMaterial - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch_getMaterial - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -249,11 +239,9 @@ int lua_MeshBatch_setCapacity(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_setCapacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch_setCapacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -283,11 +271,9 @@ int lua_MeshBatch_start(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_start - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_MeshBatch_start - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -310,251 +296,293 @@ int lua_MeshBatch_static_create(lua_State* state)
     {
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
-
-                // Get parameter 2 off the stack.
-                Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "MeshBatch");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN)
+                    // Get parameter 2 off the stack.
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+
+                    // Get parameter 3 off the stack.
+                    ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "MeshBatch");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
-
-                // Get parameter 2 off the stack.
-                Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "MeshBatch");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "MeshBatch");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN &&
-                lua_type(state, 5) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
-
-                // Get parameter 2 off the stack.
-                Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                // Get parameter 5 off the stack.
-                unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
-
-                void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN &&
+                    lua_type(state, 5) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "MeshBatch");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN &&
-                lua_type(state, 5) == LUA_TNUMBER)
+                    // Get parameter 2 off the stack.
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+
+                    // Get parameter 3 off the stack.
+                    ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    // Get parameter 5 off the stack.
+                    unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
+
+                    void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "MeshBatch");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
-
-                // Get parameter 2 off the stack.
-                Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                // Get parameter 5 off the stack.
-                unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
-
-                void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN &&
+                    lua_type(state, 5) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "MeshBatch");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    // Get parameter 5 off the stack.
+                    unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
+
+                    void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "MeshBatch");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
-
-                // Get parameter 2 off the stack.
-                Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                // Get parameter 5 off the stack.
-                unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
-
-                // Get parameter 6 off the stack.
-                unsigned int param6 = (unsigned int)luaL_checkunsigned(state, 6);
-
-                void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "MeshBatch");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TBOOLEAN &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TNUMBER)
+                    // Get parameter 2 off the stack.
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+
+                    // Get parameter 3 off the stack.
+                    ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    // Get parameter 5 off the stack.
+                    unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
+
+                    // Get parameter 6 off the stack.
+                    unsigned int param6 = (unsigned int)luaL_checkunsigned(state, 6);
+
+                    void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "MeshBatch");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true);
-
-                // Get parameter 2 off the stack.
-                Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
-
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false);
-
-                // Get parameter 4 off the stack.
-                bool param4 = ScriptUtil::luaCheckBool(state, 4);
-
-                // Get parameter 5 off the stack.
-                unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
-
-                // Get parameter 6 off the stack.
-                unsigned int param6 = (unsigned int)luaL_checkunsigned(state, 6);
-
-                void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TBOOLEAN &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "MeshBatch");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+
+                    // Get parameter 5 off the stack.
+                    unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
+
+                    // Get parameter 6 off the stack.
+                    unsigned int param6 = (unsigned int)luaL_checkunsigned(state, 6);
+
+                    void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "MeshBatch");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_MeshBatch_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

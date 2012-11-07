@@ -40,7 +40,7 @@ VertexAttributeBinding* VertexAttributeBinding::create(Mesh* mesh, Effect* effec
 
     // Search for an existing vertex attribute binding that can be used.
     VertexAttributeBinding* b;
-    for (unsigned int i = 0, count = __vertexAttributeBindingCache.size(); i < count; ++i)
+    for (size_t i = 0, count = __vertexAttributeBindingCache.size(); i < count; ++i)
     {
         b = __vertexAttributeBindingCache[i];
         GP_ASSERT(b);

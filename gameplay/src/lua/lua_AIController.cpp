@@ -62,11 +62,9 @@ int lua_AIController_findAgent(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIController_findAgent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIController_findAgent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -93,18 +91,22 @@ int lua_AIController_sendMessage(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AIMessage'.");
+                    lua_error(state);
+                }
 
                 AIController* instance = getInstance(state);
                 instance->sendMessage(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIController_sendMessage - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIController_sendMessage - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -114,7 +116,13 @@ int lua_AIController_sendMessage(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(2, "AIMessage", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AIMessage'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 3);
@@ -124,11 +132,9 @@ int lua_AIController_sendMessage(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AIController_sendMessage - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AIController_sendMessage - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
