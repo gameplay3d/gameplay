@@ -604,10 +604,9 @@ int Platform::enterMessagePump()
     // Message loop.
     while (true)
     {
-        int ret = poll( xpolls, 1, 16 );
-
+        poll( xpolls, 1, 16 );
         // handle all pending events in one block 
-        while (ret && XPending(__display))
+        while (XPending(__display))    
         {
            XNextEvent(__display, &evt);
         
