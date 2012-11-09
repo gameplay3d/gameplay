@@ -623,8 +623,6 @@ int Platform::enterMessagePump()
                     if (evt.xclient.data.l[0] == __atomWmDeleteWindow)
                     {
                         _game->exit();
-                        cleanupX11();
-                        exit(0);
                     }
                     break;
                 }
