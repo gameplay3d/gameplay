@@ -624,8 +624,8 @@ int Platform::enterMessagePump()
                     {
                         _game->exit();
                     }
-                    break;
                 }
+                break;
             case DestroyNotify :
                 {
                     cleanupX11();
