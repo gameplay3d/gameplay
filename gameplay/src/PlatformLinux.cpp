@@ -30,6 +30,7 @@ static Window   __window;
 static int __windowSize[2];
 static GLXContext __context;
 static Window __attachToWindow;
+static Atom __atomWmDeleteWindow;
 
 namespace gameplay
 {
@@ -487,6 +488,10 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                             visualInfo->depth, InputOutput, visualInfo->visual, winMask,
                             &winAttribs); 
 
+    // Tell the window manager that it should send the delete window notification through ClientMessage
+    __atomWmDeleteWindow = XInternAtom(__display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(__display, __window, &__atomWmDeleteWindow, 1);
+
     XMapWindow(__display, __window);
 
     // Send fullscreen atom message to the window; most window managers respect WM_STATE messages
@@ -494,8 +499,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     if (fullscreen)
     {
         XEvent xev;
-        Atom atomWm_state = XInternAtom(__display, "_NET_WM_STATE", false);
-        Atom atomFullscreen = XInternAtom(__display, "_NET_WM_STATE_FULLSCREEN", false);
+        Atom atomWm_state = XInternAtom(__display, "_NET_WM_STATE", False);
+        Atom atomFullscreen = XInternAtom(__display, "_NET_WM_STATE_FULLSCREEN", False);
 
         memset(&xev, 0, sizeof(xev));
         xev.type = ClientMessage;
@@ -612,6 +617,15 @@ int Platform::enterMessagePump()
         
             switch (evt.type) 
             {
+            case ClientMessage:
+                {
+                    // Handle destroy window message correctly
+                    if (evt.xclient.data.l[0] == __atomWmDeleteWindow)
+                    {
+                        _game->exit();
+                    }
+                }
+                break;
             case DestroyNotify :
                 {
                     cleanupX11();
@@ -741,7 +755,13 @@ int Platform::enterMessagePump()
         }
 
         if (_game)
+        {
+            // Game state will be uninitialized if game was closed through Game::exit()
+            if (_game->getState() == Game::UNINITIALIZED)
+                break;            
+            
             _game->frame();
+        }
 
         glXSwapBuffers(__display, __window);
     }
