@@ -105,6 +105,49 @@ static EGLenum checkErrorEGL(const char* msg)
     return error;
 }
 
+static int getRotation()
+{
+	jint rotation;
+
+	// Get the android application's activity.
+	ANativeActivity* activity = __state->activity;
+	JavaVM* jvm = __state->activity->vm;
+	JNIEnv* env = NULL;
+	jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+	jint res = jvm->AttachCurrentThread(&env, NULL);
+	if (res == JNI_ERR)
+	{
+		GP_ERROR("Failed to retrieve JVM environment when entering message pump.");
+		return -1; 
+	}
+	GP_ASSERT(env);
+
+	jclass clsContext = env->FindClass("android/content/Context");
+	GP_ASSERT(clsContext != NULL);
+	jmethodID getSystemService = env->GetMethodID(clsContext, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+	GP_ASSERT(getSystemService != NULL);
+	jfieldID WINDOW_SERVICE_ID = env->GetStaticFieldID(clsContext, "WINDOW_SERVICE", "Ljava/lang/String;");
+	GP_ASSERT(WINDOW_SERVICE_ID != NULL);
+	jstring WINDOW_SERVICE = (jstring) env->GetStaticObjectField(clsContext, WINDOW_SERVICE_ID);
+	GP_ASSERT(WINDOW_SERVICE != NULL);
+	jobject windowManager = env->CallObjectMethod(activity->clazz, getSystemService, WINDOW_SERVICE);
+	GP_ASSERT(windowManager != NULL);
+	jclass clsWindowManager = env->FindClass("android/view/WindowManager");
+	GP_ASSERT(clsWindowManager != NULL);
+	jmethodID getDefaultDisplay = env->GetMethodID(clsWindowManager, "getDefaultDisplay", "()Landroid/view/Display;");
+	GP_ASSERT(getDefaultDisplay != NULL);
+	jobject defaultDisplay = env->CallObjectMethod(windowManager, getDefaultDisplay);
+	GP_ASSERT(defaultDisplay != NULL);
+	jclass clsDisplay = env->FindClass("android/view/Display");
+	GP_ASSERT(clsDisplay != NULL);
+	jmethodID getRotation = env->GetMethodID(clsDisplay, "getRotation", "()I");
+	GP_ASSERT(getRotation != NULL)
+	rotation =  env->CallIntMethod(defaultDisplay, getRotation);
+
+	return rotation;
+}
+
+
 // Initialized EGL resources.
 static bool initEGL()
 {
@@ -241,8 +284,7 @@ static bool initEGL()
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
 
-    if (__width < __height)
-        __orientationAngle = 0;
+    __orientationAngle = getRotation() * 90;
     
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
@@ -1107,15 +1149,24 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     
     // By default, android accelerometer values are oriented to the portrait mode.
     // flipping the x and y to get the desired landscape mode values.
-    if (__orientationAngle == 90)
+    switch (__orientationAngle)
     {
+	case 90:
         tx = -__sensorEvent.acceleration.y;
         ty = __sensorEvent.acceleration.x;
-    }
-    else
-    {
-        tx = __sensorEvent.acceleration.x;
+		break;
+	case 180:
+		tx = -__sensorEvent.acceleration.x;
+        ty = -__sensorEvent.acceleration.y;
+		break;
+	case 270:
+		tx = __sensorEvent.acceleration.y;
+        ty = -__sensorEvent.acceleration.x;
+		break;
+	default:
+		tx = __sensorEvent.acceleration.x;
         ty = __sensorEvent.acceleration.y;
+		break;
     }
     tz = __sensorEvent.acceleration.z;
 
