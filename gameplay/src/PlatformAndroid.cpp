@@ -1307,6 +1307,88 @@ float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int 
     return 0.0f;
 }
 
+bool Platform::launchUrl(const char *url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    bool result = true;
+
+    android_app* state = __state;
+    GP_ASSERT(state && state->activity && state->activity->vm);
+    JavaVM* jvm = state->activity->vm;
+    JNIEnv* env = NULL;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jint r = jvm->AttachCurrentThread(&env, NULL);
+    if (r == JNI_ERR)
+    {
+        GP_ERROR("Failed to retrieve JVM environment to display keyboard.");
+        return false;
+    }
+    GP_ASSERT(env);
+
+    jclass classActivity = env->FindClass("android/app/NativeActivity");
+    jclass classIntent = env->FindClass("android/content/Intent");
+    jclass classUri = env->FindClass("android/net/Uri");
+
+    GP_ASSERT(classActivity && classIntent && classUri);
+
+    // Get static field ID Intent.ACTION_VIEW
+    jfieldID fieldActionView = env->GetStaticFieldID(classIntent, "ACTION_VIEW", "Ljava/lang/String;");
+    GP_ASSERT(fieldActionView);
+
+    // Get string value of Intent.ACTION_VIEW, we'll need that to pass to Intent's constructor later on
+    jstring paramActionView = (jstring)env->GetStaticObjectField(classIntent, fieldActionView);
+    GP_ASSERT(paramActionView);
+
+    // Get method ID Uri.parse, will be needed to parse the url given into Uri object
+    jmethodID methodUriParse = env->GetStaticMethodID(classUri, "parse","(Ljava/lang/String;)Landroid/net/Uri;");
+    GP_ASSERT(methodUriParse);
+
+    // Get method ID Activity.startActivity, so we can start the appropriate activity for the View action of our Uri
+    jmethodID methodActivityStartActivity = env->GetMethodID(classActivity, "startActivity","(Landroid/content/Intent;)V");
+    GP_ASSERT(methodActivityStartActivity);
+
+    // Get method ID Intent constructor, the one that takes action and uri (String;Uri)
+    jmethodID methodIntentInit = env->GetMethodID(classIntent, "<init>","(Ljava/lang/String;Landroid/net/Uri;)V");
+    GP_ASSERT(methodIntentInit);
+
+    // Convert our url to Java's string and parse it to Uri
+    jstring paramUrlString = env->NewStringUTF(url);
+    jobject paramUri = env->CallStaticObjectMethod(classUri, methodUriParse, paramUrlString);
+    GP_ASSERT(paramUri);
+
+    // Create Intent with Intent.ACTION_VIEW and parsed Uri arguments
+    jobject paramIntent = env->NewObject(classIntent, methodIntentInit, paramActionView, paramUri);
+    GP_ASSERT(paramIntent);
+
+    // Launch NativeActivity.startActivity with our intent to view the url! state->activity->clazz holds
+    // our NativeActivity object
+    env->CallVoidMethod(state->activity->clazz, methodActivityStartActivity, paramIntent);
+
+    /* startActivity may throw a ActivitNotFoundException if, well, activity is not found.
+       Example: http://<url> is passed to the intent but there is no browser installed in the system
+       we need to handle it. */
+    jobject exception = env->ExceptionOccurred();
+
+    // We're not lucky here
+    if (exception)
+    {
+        // Print out the exception data to logcat
+        env->ExceptionDescribe();
+
+        // Exception needs to be cleared
+        env->ExceptionClear();
+
+        // Launching the url failed
+        result = false;
+    }
+
+    // See you Space Cowboy
+    jvm->DetachCurrentThread();
+    return result;
+}
+
 }
 
 #endif

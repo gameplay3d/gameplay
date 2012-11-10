@@ -517,6 +517,15 @@ public:
      */
     void schedule(float timeOffset, const char* function);
 
+    /**
+     * Opens an URL in an external browser, if available.
+     *
+     * @param url URL to be opened.
+     *
+     * @return True if URL was opened successfully, false otherwise.
+     */
+    bool launchUrl(const char *url) const;
+
 protected:
 
     /**
