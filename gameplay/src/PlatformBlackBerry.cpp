@@ -1419,6 +1419,14 @@ float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int 
     return 0.0f;
 }
 
+bool Platform::launchURL(const char* url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    return navigator_invoke(url, NULL) == BPS_SUCCESS;
+}
+
 }
 
 #endif

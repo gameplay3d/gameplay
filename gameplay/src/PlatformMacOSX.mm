@@ -1881,4 +1881,21 @@ static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult, 
         CFRelease(valueRef); // Don't forget to release our HID value reference
     } while (1);
 }
+
+bool Platform::launchUrl(const char *url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    CFURLRef cfUrl = CFURLCreateWithString(0, CFSTR(url), 0);
+    if (cfUrl == 0)
+        return false;
+
+    const OSStatus err = LSOpenCFURLRef(cfUrl, 0);
+
+    return (err == noErr);
+}
+
+}
+
 #endif
