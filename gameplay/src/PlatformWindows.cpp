@@ -1455,7 +1455,7 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-bool Platform::launchUrl(const char* url)
+bool Platform::launchURL(const char* url)
 {
     if (url == NULL || *url == '\0')
         return false;
