@@ -1002,6 +1002,21 @@ float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int 
     return 0.0f;
 }
 
+bool Platform::launchUrl(const char* url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    int len = strlen(url);
+    
+    char* cmd = new char[11 + len];
+    sprintf(cmd, "xdg-open %s", url);
+    int r = system(cmd);
+    SAFE_DELETE_ARRAY(cmd);
+    
+    return (r == 0);
+}
+
 }
 
 #endif

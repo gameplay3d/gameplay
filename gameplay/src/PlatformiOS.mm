@@ -1319,6 +1319,14 @@ float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int 
 {
     return 0.0f;
 }
+
+bool Platform::launchUrl(const char *url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithUTF8String: url]]];
+}
     
 }
 
