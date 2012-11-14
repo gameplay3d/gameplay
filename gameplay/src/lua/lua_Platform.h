@@ -33,6 +33,7 @@ int lua_Platform_static_isMouseCaptured(lua_State* state);
 int lua_Platform_static_isMultiTouch(lua_State* state);
 int lua_Platform_static_isVsync(lua_State* state);
 int lua_Platform_static_keyEventInternal(lua_State* state);
+int lua_Platform_static_launchURL(lua_State* state);
 int lua_Platform_static_mouseEventInternal(lua_State* state);
 int lua_Platform_static_registerGesture(lua_State* state);
 int lua_Platform_static_setAbsoluteTime(lua_State* state);
