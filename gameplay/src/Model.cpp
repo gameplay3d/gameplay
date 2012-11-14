@@ -253,7 +253,7 @@ void Model::setNode(Node* node)
     }
 }
 
-bool drawWireframe(Mesh* mesh)
+static bool drawWireframe(Mesh* mesh)
 {
     switch (mesh->getPrimitiveType())
     {
@@ -283,7 +283,7 @@ bool drawWireframe(Mesh* mesh)
     }
 }
 
-bool drawWireframe(MeshPart* part)
+static bool drawWireframe(MeshPart* part)
 {
     unsigned int indexCount = part->getIndexCount();
     unsigned int indexSize = 0;
