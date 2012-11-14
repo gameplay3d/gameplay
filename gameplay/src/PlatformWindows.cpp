@@ -9,6 +9,7 @@
 #include "ScriptController.h"
 #include <GL/wglew.h>
 #include <windowsx.h>
+#include <shellapi.h>
 #ifdef USE_XINPUT
 #include <XInput.h>
 #endif
@@ -1454,7 +1455,7 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-bool Platform::launchURL(const char* url)
+bool Platform::launchUrl(const char* url)
 {
     if (url == NULL || *url == '\0')
         return false;

@@ -369,7 +369,7 @@ public:
      *
      * @return True if URL was opened successfully, false otherwise.
      */
-    static bool launchUrl(const char *url);
+    static bool launchUrl(const char* url);
     
 private:
 
