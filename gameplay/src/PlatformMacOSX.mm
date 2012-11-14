@@ -1882,7 +1882,7 @@ static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult, 
     } while (1);
 }
 
-bool Platform::launchUrl(const char *url)
+bool Platform::launchURL(const char *url)
 {
     if (url == NULL || *url == '\0')
         return false;

@@ -141,9 +141,9 @@ inline Gamepad* Game::getGamepad(unsigned int index) const
         return NULL;
 }
 
-inline bool Game::launchUrl(const char* url) const
+inline bool Game::launchURL(const char* url) const
 {
-    return Platform::launchUrl(url);
+    return Platform::launchURL(url);
 }
 
 }
