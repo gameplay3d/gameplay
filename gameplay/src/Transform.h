@@ -757,6 +757,8 @@ public:
 
     /**
      * Removes a transform listener.
+     * 
+     * @param listener The listener to remove.
      */
     void removeListener(Transform::Listener* listener);
     

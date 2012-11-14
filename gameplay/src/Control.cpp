@@ -694,6 +694,29 @@ void Control::addListener(Control::Listener* listener, int eventFlags)
     }
 }
 
+void Control::removeListener(Control::Listener* listener)
+{
+    if (_listeners == NULL || listener == NULL)
+        return;
+
+    for (std::map<Listener::EventType, std::list<Listener*>*>::iterator itr = _listeners->begin(); itr != _listeners->end();)
+    {
+        itr->second->remove(listener);
+
+        if(itr->second->empty())
+        {
+            std::list<Listener*>* list = itr->second;
+            _listeners->erase(itr++);
+            SAFE_DELETE(list);
+        }
+        else
+            ++itr;
+    }
+
+    if (_listeners->empty())
+        SAFE_DELETE(_listeners);
+}
+
 void Control::addSpecificListener(Control::Listener* listener, Listener::EventType eventType)
 {
     GP_ASSERT(listener);
