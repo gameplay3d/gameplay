@@ -33,8 +33,8 @@ public:
      */
     enum ButtonState
     {
-        BUTTON_PRESSED = gameplay::Button::Listener::PRESS, 
-        BUTTON_RELEASED = gameplay::Button::Listener::RELEASE
+        BUTTON_PRESSED = gameplay::Control::Listener::PRESS, 
+        BUTTON_RELEASED = gameplay::Control::Listener::RELEASE
     };
 
     /**
