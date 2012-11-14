@@ -524,7 +524,7 @@ public:
      *
      * @return True if URL was opened successfully, false otherwise.
      */
-    bool launchUrl(const char *url) const;
+    bool launchURL(const char *url) const;
 
 protected:
 

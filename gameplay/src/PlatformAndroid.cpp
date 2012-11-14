@@ -1358,7 +1358,7 @@ float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int 
     return 0.0f;
 }
 
-bool Platform::launchUrl(const char *url)
+bool Platform::launchURL(const char *url)
 {
     if (url == NULL || *url == '\0')
         return false;
