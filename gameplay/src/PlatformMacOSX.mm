@@ -1899,6 +1899,4 @@ bool Platform::launchUrl(const char *url)
     return (err == noErr);
 }
 
-}
-
 #endif
