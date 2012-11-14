@@ -52,7 +52,7 @@ template<typename T> T* bullet_new()
 #endif
 }
 
-template<typename T, typename T1> T* bullet_new(T1 t1)
+template<typename T, typename T1> T* bullet_new(const T1& t1)
 {
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION 
 #undef new 
@@ -64,7 +64,7 @@ template<typename T, typename T1> T* bullet_new(T1 t1)
 #endif
 }
 
-template<typename T, typename T1, typename T2> T* bullet_new(T1 t1, T2 t2)
+template<typename T, typename T1, typename T2> T* bullet_new(const T1& t1, const T2& t2)
 {
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 #undef new
@@ -77,7 +77,7 @@ template<typename T, typename T1, typename T2> T* bullet_new(T1 t1, T2 t2)
 }
 
 template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9> 
-T* bullet_new(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9)
+T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& t5, const T6& t6, const T7& t7, const T8& t8, const T9& t9)
 {
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 #undef new
