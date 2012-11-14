@@ -60,6 +60,7 @@ int lua_RadioButton_isContainer(lua_State* state);
 int lua_RadioButton_isEnabled(lua_State* state);
 int lua_RadioButton_isSelected(lua_State* state);
 int lua_RadioButton_release(lua_State* state);
+int lua_RadioButton_removeListener(lua_State* state);
 int lua_RadioButton_removeScriptCallback(lua_State* state);
 int lua_RadioButton_setAlignment(lua_State* state);
 int lua_RadioButton_setAnimationPropertyValue(lua_State* state);

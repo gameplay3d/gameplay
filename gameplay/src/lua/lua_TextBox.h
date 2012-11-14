@@ -58,6 +58,7 @@ int lua_TextBox_getZIndex(lua_State* state);
 int lua_TextBox_isContainer(lua_State* state);
 int lua_TextBox_isEnabled(lua_State* state);
 int lua_TextBox_release(lua_State* state);
+int lua_TextBox_removeListener(lua_State* state);
 int lua_TextBox_removeScriptCallback(lua_State* state);
 int lua_TextBox_setAlignment(lua_State* state);
 int lua_TextBox_setAnimationPropertyValue(lua_State* state);

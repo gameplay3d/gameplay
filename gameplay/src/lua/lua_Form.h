@@ -66,6 +66,7 @@ int lua_Form_isScrollBarsAutoHide(lua_State* state);
 int lua_Form_isScrolling(lua_State* state);
 int lua_Form_release(lua_State* state);
 int lua_Form_removeControl(lua_State* state);
+int lua_Form_removeListener(lua_State* state);
 int lua_Form_removeScriptCallback(lua_State* state);
 int lua_Form_setAlignment(lua_State* state);
 int lua_Form_setAnimationPropertyValue(lua_State* state);
