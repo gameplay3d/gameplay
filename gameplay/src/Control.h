@@ -725,7 +725,7 @@ public:
     virtual const char* getType() const;
 
     /**
-     * Add a listener to be notified of specific events affecting
+     * Adds a listener to be notified of specific events affecting
      * this control.  Event types can be OR'ed together.
      * E.g. To listen to touch-press and touch-release events,
      * pass <code>Control::Listener::TOUCH | Control::Listener::RELEASE</code>
@@ -735,6 +735,13 @@ public:
      * @param eventFlags The events to listen for.
      */
     virtual void addListener(Control::Listener* listener, int eventFlags);
+
+    /**
+     * Removes a listener from this control.
+     * 
+     * @param listener The listener to remove.
+     */
+    virtual void removeListener(Control::Listener* listener);
 
     /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
