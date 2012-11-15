@@ -347,14 +347,14 @@ bool PhysicsController::sweepTest(PhysicsCollisionObject* object, const Vector3&
     return false;
 }
 
-btScalar PhysicsController::CollisionCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, 
-    const btCollisionObject* b, int partIdB, int indexB)
+btScalar PhysicsController::CollisionCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* a, int partIdA, int indexA, 
+    const btCollisionObjectWrapper* b, int partIdB, int indexB)
 {
     GP_ASSERT(_pc);
 
     // Get pointers to the PhysicsCollisionObject objects.
-    PhysicsCollisionObject* objectA = _pc->getCollisionObject(a);
-    PhysicsCollisionObject* objectB = _pc->getCollisionObject(b);
+    PhysicsCollisionObject* objectA = _pc->getCollisionObject(a->m_collisionObject);
+    PhysicsCollisionObject* objectB = _pc->getCollisionObject(b->m_collisionObject);
 
     // If the given collision object pair has collided in the past, then
     // we notify the listeners only if the pair was not colliding

@@ -192,7 +192,7 @@ public:
 	virtual eGIMPACT_SHAPE_TYPE getGImpactShapeType() const = 0 ;
 
 	//! gets boxset
-	SIMD_FORCE_INLINE btGImpactBoxSet * getBoxSet()
+	SIMD_FORCE_INLINE const btGImpactBoxSet * getBoxSet() const
 	{
 		return &m_box_set;
 	}
@@ -639,7 +639,7 @@ public:
 		{
 			if(indicestype == PHY_SHORT)
 			{
-				short * s_indices = (short *)(indexbase + face_index*indexstride);
+				unsigned short * s_indices = (unsigned short *)(indexbase + face_index*indexstride);
 				i0 = s_indices[0];
 				i1 = s_indices[1];
 				i2 = s_indices[2];
