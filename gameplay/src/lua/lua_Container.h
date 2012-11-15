@@ -64,6 +64,7 @@ int lua_Container_isScrollBarsAutoHide(lua_State* state);
 int lua_Container_isScrolling(lua_State* state);
 int lua_Container_release(lua_State* state);
 int lua_Container_removeControl(lua_State* state);
+int lua_Container_removeListener(lua_State* state);
 int lua_Container_removeScriptCallback(lua_State* state);
 int lua_Container_setAlignment(lua_State* state);
 int lua_Container_setAnimationPropertyValue(lua_State* state);

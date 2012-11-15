@@ -56,6 +56,7 @@ int lua_Button_getZIndex(lua_State* state);
 int lua_Button_isContainer(lua_State* state);
 int lua_Button_isEnabled(lua_State* state);
 int lua_Button_release(lua_State* state);
+int lua_Button_removeListener(lua_State* state);
 int lua_Button_removeScriptCallback(lua_State* state);
 int lua_Button_setAlignment(lua_State* state);
 int lua_Button_setAnimationPropertyValue(lua_State* state);

@@ -45,6 +45,7 @@ void luaRegister_Platform()
         {"isMultiTouch", lua_Platform_static_isMultiTouch},
         {"isVsync", lua_Platform_static_isVsync},
         {"keyEventInternal", lua_Platform_static_keyEventInternal},
+        {"launchURL", lua_Platform_static_launchURL},
         {"mouseEventInternal", lua_Platform_static_mouseEventInternal},
         {"registerGesture", lua_Platform_static_registerGesture},
         {"setAbsoluteTime", lua_Platform_static_setAbsoluteTime},
@@ -1039,6 +1040,43 @@ int lua_Platform_static_keyEventInternal(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_launchURL(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+
+                bool result = Platform::launchURL(param1);
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Platform_static_launchURL - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

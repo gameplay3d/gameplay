@@ -56,6 +56,7 @@ int lua_Control_getZIndex(lua_State* state);
 int lua_Control_isContainer(lua_State* state);
 int lua_Control_isEnabled(lua_State* state);
 int lua_Control_release(lua_State* state);
+int lua_Control_removeListener(lua_State* state);
 int lua_Control_removeScriptCallback(lua_State* state);
 int lua_Control_setAlignment(lua_State* state);
 int lua_Control_setAnimationPropertyValue(lua_State* state);
