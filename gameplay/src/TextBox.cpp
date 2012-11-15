@@ -329,10 +329,9 @@ void TextBox::update(const Control* container, const Vector2& offset)
 
 void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
-    if (_state == ACTIVE || _state == FOCUS)
+    if (_caretImage && (_state == ACTIVE || _state == FOCUS))
     {
         // Draw the cursor at its current location.
-        GP_ASSERT(_caretImage);
         const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {

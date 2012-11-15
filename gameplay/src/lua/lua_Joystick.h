@@ -60,6 +60,7 @@ int lua_Joystick_isContainer(lua_State* state);
 int lua_Joystick_isEnabled(lua_State* state);
 int lua_Joystick_isRelative(lua_State* state);
 int lua_Joystick_release(lua_State* state);
+int lua_Joystick_removeListener(lua_State* state);
 int lua_Joystick_removeScriptCallback(lua_State* state);
 int lua_Joystick_setAlignment(lua_State* state);
 int lua_Joystick_setAnimationPropertyValue(lua_State* state);
