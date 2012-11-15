@@ -61,6 +61,7 @@ int lua_Slider_getZIndex(lua_State* state);
 int lua_Slider_isContainer(lua_State* state);
 int lua_Slider_isEnabled(lua_State* state);
 int lua_Slider_release(lua_State* state);
+int lua_Slider_removeListener(lua_State* state);
 int lua_Slider_removeScriptCallback(lua_State* state);
 int lua_Slider_setAlignment(lua_State* state);
 int lua_Slider_setAnimationPropertyValue(lua_State* state);

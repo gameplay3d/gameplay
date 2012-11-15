@@ -57,6 +57,7 @@ int lua_Label_getZIndex(lua_State* state);
 int lua_Label_isContainer(lua_State* state);
 int lua_Label_isEnabled(lua_State* state);
 int lua_Label_release(lua_State* state);
+int lua_Label_removeListener(lua_State* state);
 int lua_Label_removeScriptCallback(lua_State* state);
 int lua_Label_setAlignment(lua_State* state);
 int lua_Label_setAnimationPropertyValue(lua_State* state);

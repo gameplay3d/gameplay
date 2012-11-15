@@ -59,6 +59,7 @@ int lua_CheckBox_isChecked(lua_State* state);
 int lua_CheckBox_isContainer(lua_State* state);
 int lua_CheckBox_isEnabled(lua_State* state);
 int lua_CheckBox_release(lua_State* state);
+int lua_CheckBox_removeListener(lua_State* state);
 int lua_CheckBox_removeScriptCallback(lua_State* state);
 int lua_CheckBox_setAlignment(lua_State* state);
 int lua_CheckBox_setAnimationPropertyValue(lua_State* state);
