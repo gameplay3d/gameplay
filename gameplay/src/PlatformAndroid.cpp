@@ -935,19 +935,38 @@ int Platform::enterMessagePump()
     // Get the package name for this app from Java.
     jclass clazz = env->GetObjectClass(activity->clazz);
     jmethodID methodID = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
-    jobject result = env->CallObjectMethod(activity->clazz, methodID);
-    
+    jstring stringPackageName = static_cast<jstring>(env->CallObjectMethod(activity->clazz, methodID));
+
     const char* packageName;
     jboolean isCopy;
-    packageName = env->GetStringUTFChars((jstring)result, &isCopy);
-    jvm->DetachCurrentThread();
-    
+    packageName = env->GetStringUTFChars(stringPackageName, &isCopy);
+
+    jmethodID methodGetExternalStorage = env->GetMethodID(clazz, "getExternalFilesDir", "(Ljava/lang/String;)Ljava/io/File;");
+    jclass clazzFile = env->FindClass("java/io/File");
+    jmethoID methodGetPath = env->getMethodID(clazzFile, "getPath", "()Ljava/lang/String;");
+
+    // Now has java.io.File object pointing to directory
+    jobject objectFile  = env->CallobjectMethod(activity->clazz, methodGetExternalStorage);
+
+    // Now has String object containing path to directory
+    jstring stringExternalPath = static_cast<jstring>(env->CallObjectMethod(objectFile, methodGetPath));
+
+    const char* externalPath = env->GetStringUTFChars(externalPath, &isCopy);
+
     // Set the default path to store the resources.
-    std::string assetsPath = "/mnt/sdcard/android/data/";
+    std::string assetsPath = externalPath;
+    if (externalPath[strlen(externalPath)-1] != '/')
+        assetsPath += "/";
+
     assetsPath += packageName;
     assetsPath += "/";
     FileSystem::setResourcePath(assetsPath.c_str());    
-        
+
+    // Release string data
+    env->ReleaseStringUTFChars(stringExternalPath, externalPath);
+    env->ReleaseStringUTFChars(stringPackageName, packageName);
+    jvm->DetachCurrentThread();
+    
     // Get the asset manager to get the resources from the .apk file.
     __assetManager = activity->assetManager; 
     
