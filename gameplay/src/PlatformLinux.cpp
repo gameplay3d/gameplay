@@ -759,14 +759,16 @@ int Platform::enterMessagePump()
 
             case KeyPress:
                 {
-					KeySym sym = XLookupKeysym(&evt.xkey, 0);
+               KeySym sym = XLookupKeysym(&evt.xkey, (evt.xkey.state & shiftDown) ? 1 : 0);
 
-					KeySym temp;
-					if((shiftDown && !capsOn) || (capsOn && !shiftDown))
-					   XConvertCase(sym,  &temp, &sym);
 
-                    Keyboard::Key key = getKey(sym);
-                    gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
+               //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
+               KeySym tempSym;
+               if(capsOn && !shiftDown)
+                  XConvertCase(sym,  &tempSym, &sym);
+
+               Keyboard::Key key = getKey(sym);
+               gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
 
 					if(key == Keyboard::KEY_CAPS_LOCK)
 					   capsOn = !capsOn;
