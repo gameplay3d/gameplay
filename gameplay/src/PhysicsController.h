@@ -345,7 +345,7 @@ private:
         /**
             * Internal function used for Bullet integration (do not use or override).
             */
-        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* a, int partIdA, int indexA, const btCollisionObjectWrapper* b, int partIdB, int indexB);    
 
     private:
         PhysicsController* _pc;
