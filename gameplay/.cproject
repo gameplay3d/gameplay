@@ -23,6 +23,7 @@
 								<option id="com.qnx.qcc.option.compiler.security.311918799" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1481323494" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
+									<listOptionValue builtIn="false" value="BT_USE_NEON"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2133604142" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/lua/include&quot;"/>
@@ -80,10 +81,11 @@
 							<targetPlatform archList="all" binaryParser="com.qnx.tools.ide.qde.core.QDEBynaryParser" id="com.qnx.qcc.targetPlatform.1117051584" osList="all" superClass="com.qnx.qcc.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/gameplay/Device-Release}" id="cdt.managedbuild.target.gnu.builder.base.1199322737" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1345567866" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
-								<option id="com.qnx.qcc.option.compiler.optlevel.1056793982" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.2" valueType="enumerated"/>
+								<option id="com.qnx.qcc.option.compiler.optlevel.1056793982" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.1" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.security.324540233" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.398688299" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
+									<listOptionValue builtIn="false" value="BT_USE_NEON"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1670164593" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
@@ -95,7 +97,7 @@
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1122311163" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.1770609643" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1770609643" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1380846613" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -144,6 +146,7 @@
 								<option id="com.qnx.qcc.option.compiler.security.1649809766" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.276653249" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
+									<listOptionValue builtIn="false" value="BY_USE_NEON"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1503059677" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
@@ -155,7 +158,7 @@
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1956270067" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.1366354884" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1366354884" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.81809638" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -207,6 +210,7 @@
 								<option id="com.qnx.qcc.option.compiler.security.1227516972" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.374283024" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
+									<listOptionValue builtIn="false" value="BT_USE_NEON"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.1769677874" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../../external-deps/bullet/include&quot;"/>
@@ -218,7 +222,7 @@
 								<option id="com.qnx.qcc.option.compiler.ccoptions.47607907" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-mfpu=neon"/>
 								</option>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.146547607" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+								<option id="com.qnx.qcc.option.compiler.qccoptions.146547607" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.2007171407" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -277,7 +281,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.1432778691" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.245518255" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+								<option id="com.qnx.qcc.option.compiler.qccoptions.245518255" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1038720310" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -336,7 +340,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.663337616" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.288926109" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+								<option id="com.qnx.qcc.option.compiler.qccoptions.288926109" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1961855927" superClass="com.qnx.qcc.inputType.compiler"/>
@@ -396,7 +400,7 @@
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.ccoptions.346770186" name="Compiler Options (-Wc,)" superClass="com.qnx.qcc.option.compiler.ccoptions"/>
-								<option id="com.qnx.qcc.option.compiler.qccoptions.1085566269" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+								<option id="com.qnx.qcc.option.compiler.qccoptions.1085566269" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-Wno-psabi"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1658185881" superClass="com.qnx.qcc.inputType.compiler"/>
