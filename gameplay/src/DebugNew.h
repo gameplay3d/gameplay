@@ -76,6 +76,109 @@ template<typename T, typename T1, typename T2> T* bullet_new(const T1& t1, const
 #endif
 }
 
+template<typename T, typename T1, typename T2> T* bullet_new(T1& t1, const T2& t2)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3> 
+T* bullet_new(const T1& t1, const T2& t2, const T3& t3)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3> 
+T* bullet_new(T1& t1, const T2& t2, const T3& t3)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3, typename T4> 
+T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3, t4);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3, t4);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3, typename T4> 
+T* bullet_new(T1& t1, const T2& t2, const T3& t3, const T4& t4)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3, t4);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3, t4);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3, typename T4> 
+T* bullet_new(T1& t1, T2& t2, const T3& t3, const T4& t4)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3, t4);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3, t4);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5> 
+T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& t5)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3, t4, t5);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3, t4, t5);
+#endif
+}
+
+template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5> 
+T* bullet_new(T1& t1, T2& t2, const T3& t3, const T4& t4, const T5& t5)
+{
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+    T* t = new T(t1, t2, t3, t4, t5);
+#define new DEBUG_NEW
+    return t;
+#else
+    return new T(t1, t2, t3, t4, t5);
+#endif
+}
+
 template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9> 
 T* bullet_new(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& t5, const T6& t6, const T7& t7, const T8& t8, const T9& t9)
 {
