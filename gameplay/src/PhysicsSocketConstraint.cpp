@@ -16,11 +16,11 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, PhysicsRig
         btTransform frameInA = getTransformOffset(a->getNode(), origin);
         btTransform frameInB = getTransformOffset(b->getNode(), origin);
 
-        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, frameInA.getOrigin(), frameInB.getOrigin());
+        _constraint = bullet_new<btPoint2PointConstraint>(*a->_body, *b->_body, frameInA.getOrigin(), frameInB.getOrigin());
     }
     else
     {
-        _constraint = new btPoint2PointConstraint(*a->_body, btVector3(0.0f, 0.0f, 0.0f));
+        _constraint = bullet_new<btPoint2PointConstraint>(*a->_body, btVector3(0.0f, 0.0f, 0.0f));
     }
 }
 
@@ -44,11 +44,11 @@ PhysicsSocketConstraint::PhysicsSocketConstraint(PhysicsRigidBody* a, const Vect
         b->getNode()->getWorldMatrix().getScale(&sB);
         Vector3 tB(translationOffsetB.x * sB.x, translationOffsetB.y * sB.y, translationOffsetB.z * sB.z);
 
-        _constraint = new btPoint2PointConstraint(*a->_body, *b->_body, BV(tA), BV(tB));
+        _constraint = bullet_new<btPoint2PointConstraint>(*a->_body, *b->_body, BV(tA), BV(tB));
     }
     else
     {
-        _constraint = new btPoint2PointConstraint(*a->_body, BV(tA));
+        _constraint = bullet_new<btPoint2PointConstraint>(*a->_body, BV(tA));
     }
 }
 
