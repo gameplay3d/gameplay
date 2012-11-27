@@ -29,7 +29,7 @@ namespace gameplay
 #ifdef __ANDROID__
 #include <unistd.h>
 
-void makepath(std::string path, int mode)
+static void makepath(std::string path, int mode)
 {
     std::vector<std::string> dirs;
     while (path.length() > 0)
@@ -64,6 +64,22 @@ void makepath(std::string path, int mode)
     
     return;
 }
+
+/**
+ * Returns true if the file exists in the android read-only asset directory.
+ */
+static bool androidFileExists(const char* filePath)
+{
+    AAsset* asset = AAssetManager_open(__assetManager, filePath, AASSET_MODE_RANDOM);
+    if (asset)
+    {
+        int lenght = AAsset_getLength(asset);
+        AAsset_close(asset);
+        return length > 0;
+    }
+    return false;
+}
+
 #endif
 
 /** @script{ignore} */
@@ -274,10 +290,15 @@ bool FileSystem::fileExists(const char* filePath)
 {
     GP_ASSERT(filePath);
 
+#ifdef __ANDROID__
+    if (androidFileExists(filePath))
+    {
+        return true;
+    }
+#endif
+
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(filePath);
-
-    createFileFromAsset(filePath);
 
     gp_stat_struct s;
 
@@ -309,7 +330,18 @@ Stream* FileSystem::open(const char* path, size_t mode)
     if ((mode & WRITE) != 0)
         modeStr[0] = 'w';
 #ifdef __ANDROID__
-    return FileStreamAndroid::create(resolvePath(path), modeStr);
+    if ((mode & WRITE) != 0)
+    {
+        // Open a file on the SD card
+        std::string fullPath(__resourcePath);
+        fullPath += resolvePath(path);
+        return FileStreamAndroid::create(fullPath.c_str(), modeStr);
+    }
+    else
+    {
+        // Open a file in the read-only asset directory
+        return FileStreamAndroid::create(resolvePath(path), modeStr);
+    }
 #else
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(path);

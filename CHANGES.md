@@ -1,3 +1,7 @@
+## v1.6.0
+- Adds Stream interface for reading/writing files instead of using fread/fwrite. 
+- Android no longer needs to copy files to the SD card before reading them. None of the Android samples require an SD card.
+
 ## v1.5.0
 
 - Linux support. (tested on Ubuntu 12)
