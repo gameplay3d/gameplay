@@ -200,10 +200,11 @@ static void writeShaderToErrorFile(const char* filePath, const char* source)
 {
     std::string path = filePath;
     path += ".err";
-    FILE* file = FileSystem::openFile(path.c_str(), "wb");
-    int err = ferror(file);
-    fwrite(source, 1, strlen(source), file);
-    fclose(file);
+    std::auto_ptr<Stream> stream(FileSystem::open(path.c_str(), FileSystem::WRITE));
+    if (stream.get() != NULL && stream->canWrite())
+    {
+        stream->write(source, 1, strlen(source));
+    }
 }
 
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
