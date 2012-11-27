@@ -6,7 +6,13 @@
 #include "MeshPart.h"
 #include "Bundle.h"
 
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#undef new
+#endif
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
+#ifdef GAMEPLAY_MEM_LEAK_DETECTION
+#define new DEBUG_NEW
+#endif
 
 // The initial capacity of the Bullet debug drawer's vertex batch.
 #define INITIAL_CAPACITY 280
@@ -422,13 +428,13 @@ btScalar PhysicsController::CollisionCallback::addSingleResult(btManifoldPoint& 
 
 void PhysicsController::initialize()
 {
-    _collisionConfiguration = new btDefaultCollisionConfiguration();
-    _dispatcher = new btCollisionDispatcher(_collisionConfiguration);
-    _overlappingPairCache = new btDbvtBroadphase();
-    _solver = new btSequentialImpulseConstraintSolver();
+    _collisionConfiguration = bullet_new<btDefaultCollisionConfiguration>();
+    _dispatcher = bullet_new<btCollisionDispatcher>(_collisionConfiguration);
+    _overlappingPairCache = bullet_new<btDbvtBroadphase>();
+    _solver = bullet_new<btSequentialImpulseConstraintSolver>();
 
     // Create the world.
-    _world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
+    _world = bullet_new<btDiscreteDynamicsWorld>(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
     _world->setGravity(BV(_gravity));
 
     // Register ghost pair callback so bullet detects collisions with ghost objects (used for character collisions).
