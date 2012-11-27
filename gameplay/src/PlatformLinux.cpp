@@ -759,24 +759,24 @@ int Platform::enterMessagePump()
 
             case KeyPress:
                 {
-               KeySym sym = XLookupKeysym(&evt.xkey, (evt.xkey.state & shiftDown) ? 1 : 0);
+                    KeySym sym = XLookupKeysym(&evt.xkey, (evt.xkey.state & shiftDown) ? 1 : 0);
 
 
-               //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
-               KeySym tempSym;
-               if(capsOn && !shiftDown)
-                  XConvertCase(sym,  &tempSym, &sym);
+                    //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
+                    KeySym tempSym;
+                    if(capsOn && !shiftDown)
+                        XConvertCase(sym,  &tempSym, &sym);
 
-               Keyboard::Key key = getKey(sym);
-               gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
+                    Keyboard::Key key = getKey(sym);
+                    gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
 
-					if(key == Keyboard::KEY_CAPS_LOCK)
-					   capsOn = !capsOn;
-					if(key == Keyboard::KEY_SHIFT)
-					   shiftDown = true;
+                    if(key == Keyboard::KEY_CAPS_LOCK)
+                        capsOn = !capsOn;
+                    if(key == Keyboard::KEY_SHIFT)
+                        shiftDown = true;
 
-					if(int character = getUnicode(key))
-					   gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, character);
+                    if(int character = getUnicode(key))
+                        gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, character);
 
                 }
                 break;
