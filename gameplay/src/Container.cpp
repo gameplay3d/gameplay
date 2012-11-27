@@ -1107,11 +1107,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
         break;
     case Touch::TOUCH_RELEASE:
-		if (eventConsumed)
-		{
-			if (_contactIndices > 0)
-				_contactIndices--;
-		}
+        if (eventConsumed)
+        {
+            if (_contactIndices > 0)
+                _contactIndices--;
+        }
         break;
     }
 
@@ -1126,10 +1126,10 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     release();
     if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-		y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-    	return (_consumeInputEvents | eventConsumed);
+        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        return (_consumeInputEvents | eventConsumed);
     else
-    	return eventConsumed;
+        return eventConsumed;
 }
 
 Container::Scroll Container::getScroll(const char* scroll)
