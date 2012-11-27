@@ -1622,6 +1622,9 @@
     <ClInclude Include="src\lua\lua_LoggerLevel.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\Stream.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Game.inl">
