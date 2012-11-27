@@ -444,13 +444,13 @@ protected:
      */
     bool _scrolling;
     /** 
-	 * First scrolling touch x position
-	 */
-	int _scrollingVeryFirstX;
-	/**
-	 * First scrolling touch y position
-	 */
-	int _scrollingVeryFirstY;
+     * First scrolling touch x position
+     */
+    int _scrollingVeryFirstX;
+    /**
+     * First scrolling touch y position
+     */
+    int _scrollingVeryFirstY;
     /**
      * First scrolling touch x position since last change in direction.
      */ 
