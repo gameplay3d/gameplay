@@ -529,7 +529,8 @@ bool FileStream::canSeek()
 
 void FileStream::close()
 {
-    fclose(_file);
+    if (_file)
+        fclose(_file);
     _file = NULL;
 }
 
@@ -643,7 +644,8 @@ bool FileStreamAndroid::canSeek()
 
 void FileStreamAndroid::close()
 {
-    AAsset_close(_asset);
+    if (_asset)
+        AAsset_close(_asset);
     _asset = NULL;
 }
 
