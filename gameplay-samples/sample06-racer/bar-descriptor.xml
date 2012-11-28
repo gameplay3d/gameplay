@@ -62,7 +62,6 @@
     <asset path="../../gameplay/res/shaders/textured-unlit.vert">res/shaders/textured-unlit.vert</asset>
     <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
     <asset path="res/common">res/common</asset>
-    <asset path="res/shaders">res/shaders</asset>
 
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>

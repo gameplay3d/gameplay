@@ -71,7 +71,7 @@ material textured-alphatest : texturedUnlit
     {
         pass 0
         {
-            fragmentShader = res/shaders/textured-alphatest.frag
+            defines = TEXTURE_DISCARD_ALPHA
         }
     }
 }
