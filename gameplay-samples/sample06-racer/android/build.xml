@@ -80,10 +80,6 @@
             <fileset dir="../../../gameplay/res/shaders/lib"/>
         </copy>
 		
-        <copy todir="assets/res/shaders">
-            <fileset dir="../res/shaders"/>
-        </copy>
-		
 		<copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
