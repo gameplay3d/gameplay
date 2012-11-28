@@ -120,7 +120,7 @@ FrameBuffer* FrameBuffer::getFrameBuffer(const char* id)
 
     // Search the vector for a matching ID.
     std::vector<FrameBuffer*>::const_iterator it;
-    for (it = __frameBuffers.begin(); it < __frameBuffers.end(); it++)
+    for (it = __frameBuffers.begin(); it < __frameBuffers.end(); ++it)
     {
         FrameBuffer* fb = *it;
         GP_ASSERT(fb);

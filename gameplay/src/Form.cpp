@@ -209,7 +209,7 @@ Form* Form::create(const char* url)
 Form* Form::getForm(const char* id)
 {
     std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    for (it = __forms.begin(); it < __forms.end(); ++it)
     {
         Form* f = *it;
         GP_ASSERT(f);

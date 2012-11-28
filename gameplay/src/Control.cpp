@@ -17,7 +17,7 @@ Control::~Control()
 {
     if (_listeners)
     {
-        for (std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); itr++)
+        for (std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
         {
             std::list<Listener*>* list = itr->second;
             SAFE_DELETE(list);
@@ -832,7 +832,7 @@ void Control::notifyListeners(Listener::EventType eventType)
         if (itr != _listeners->end())
         {
             std::list<Listener*>* listenerList = itr->second;
-            for (std::list<Listener*>::iterator listenerItr = listenerList->begin(); listenerItr != listenerList->end(); listenerItr++)
+            for (std::list<Listener*>::iterator listenerItr = listenerList->begin(); listenerItr != listenerList->end(); ++listenerItr)
             {
                 GP_ASSERT(*listenerItr);
                 (*listenerItr)->controlEvent(this, eventType);

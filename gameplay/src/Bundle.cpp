@@ -936,12 +936,10 @@ Light* Bundle::readLight()
 
 Model* Bundle::readModel(const char* nodeId)
 {
-    // Read mesh.
-    Mesh* mesh = NULL;
     std::string xref = readString(_stream);
     if (xref.length() > 1 && xref[0] == '#') // TODO: Handle full xrefs
     {
-        mesh = loadMesh(xref.c_str() + 1, nodeId);
+        Mesh* mesh = loadMesh(xref.c_str() + 1, nodeId);
         if (mesh)
         {
             Model* model = Model::create(mesh);
