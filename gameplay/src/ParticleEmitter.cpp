@@ -48,8 +48,7 @@ ParticleEmitter::~ParticleEmitter()
 
 ParticleEmitter* ParticleEmitter::create(const char* textureFile, TextureBlending textureBlending, unsigned int particleCountMax)
 {
-    Texture* texture = NULL;
-    texture = Texture::create(textureFile, false);
+    Texture* texture = Texture::create(textureFile, false);
 
     if (!texture)
     {

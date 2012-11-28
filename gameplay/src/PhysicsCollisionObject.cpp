@@ -252,8 +252,8 @@ void PhysicsCollisionObject::PhysicsMotionState::updateTransformFromNode() const
 }
 
 PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)
+    : url(url)
 {
-    this->url = url;
     function = Game::getInstance()->getScriptController()->loadUrl(url);
 }
 

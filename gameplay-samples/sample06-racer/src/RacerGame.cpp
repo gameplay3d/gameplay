@@ -158,8 +158,8 @@ void RacerGame::update(float elapsedTime)
     
     _gamepad->update(elapsedTime);
 
-	_menu->update(Game::getAbsoluteTime());
-	_overlay->update(Game::getAbsoluteTime());
+    _menu->update(Game::getAbsoluteTime());
+    _overlay->update(Game::getAbsoluteTime());
 
     Node* cameraNode;
     if (_scene->getActiveCamera() && (cameraNode = _scene->getActiveCamera()->getNode()))
@@ -193,10 +193,10 @@ void RacerGame::update(float elapsedTime)
                 }
                 else if (__useAccelerometer)
                 {
-            	    float pitch, roll;
-            	    Game::getAccelerometerValues(&pitch, &roll);
+                    float pitch, roll;
+                    Game::getAccelerometerValues(&pitch, &roll);
 
-            	    _steering = -0.16 * roll;
+                    _steering = -0.16 * roll;
                 }
                 else
                 {
@@ -419,8 +419,8 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             __drawDebug = !__drawDebug;
             break;
         case Keyboard::KEY_J:
-        	__useAccelerometer = !__useAccelerometer;
-        	break;
+            __useAccelerometer = !__useAccelerometer;
+            break;
         }
     }
     else if (evt == Keyboard::KEY_RELEASE)
@@ -523,18 +523,18 @@ void RacerGame::menuEvent()
 {
     __showMenu = !__showMenu;
 
-	if (__showMenu)
-	{
+    if (__showMenu)
+    {
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
-		pause();
+        pause();
         _menu->enable();
-	}
-	else
-	{
+    }
+    else
+    {
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Menu");
-		resume();
+        resume();
         _menu->disable();
-	}
+    }
 }
 
 void RacerGame::resetToStart()
@@ -581,8 +581,8 @@ void RacerGame::controlEvent(Control* control, EventType evt)
     if (strcmp(control->getId(), "newGameButton") == 0)
     {
         resetToStart();
-		// Close the menu and resume the game.
-		menuEvent();
+        // Close the menu and resume the game.
+        menuEvent();
     }
     else if (strcmp(control->getId(), "quitGameButton") == 0)
     {
