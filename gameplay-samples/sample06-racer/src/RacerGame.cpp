@@ -35,8 +35,8 @@ RacerGame game;
 #define BUTTON_Y (13)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL),
-    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _upsetTimer(0)
+    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _upsetTimer(0),
+      _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
 }
 
