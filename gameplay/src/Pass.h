@@ -36,12 +36,6 @@ public:
     Effect* getEffect() const;
 
     /**
-     * Get a list of properties to be auto-bound.
-     * @script{ignore}
-     */
-    const std::vector<std::string>* getAutoBindProperties() const;
-
-    /**
      * Sets a vertex attribute binding for this pass.
      *
      * When a mesh binding is set, the VertexAttributeBinding will be automatically
