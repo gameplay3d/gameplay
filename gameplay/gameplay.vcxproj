@@ -335,6 +335,7 @@
     <ClInclude Include="src\AudioController.h" />
     <ClInclude Include="src\AudioListener.h" />
     <ClInclude Include="src\AudioSource.h" />
+    <ClInclude Include="src\auto_ref.h" />
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingBox.h" />
     <ClInclude Include="src\BoundingSphere.h" />
