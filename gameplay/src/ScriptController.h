@@ -427,94 +427,6 @@ public:
     template<typename T> T executeFunction(const char* func, const char* args, va_list* list);
 
     /**
-     * Returns true if the global variable is nil.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return True if the global variable is nil, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isNil(const char* name);
-
-    /**
-     * Returns true if the global variable is a boolean.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return True if the global variable is a boolean, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isBool(const char* name);
-
-    /**
-     * Returns true if the global variable is a number.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return Returns true if the global variable is a number, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isNumber(const char* name);
-
-    /**
-     * Returns true if the global variable is a string.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return Returns true if the global variable is a string, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isString(const char* name);
-
-    /**
-     * Returns true if the global variable is a table.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return Returns true if the global variable is a table, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isTable(const char* name);
-
-    /**
-     * Returns true if the global variable is a thread.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return Returns true if the global variable is a thread, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isThread(const char* name);
-
-    /**
-     * Returns true if the global variable is a userdata.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return Returns true if the global variable is a userdata, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isUserData(const char* name);
-
-    /**
-     * Returns true if the global variable is a function.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @return Returns true if the global variable is a function, false otherwise.
-     * 
-     * @script{ignore}
-     */
-    bool isFunction(const char* name);
-
-    /**
      * Gets the global boolean script variable with the given name.
      * 
      * @param name The name of the variable.
@@ -668,15 +580,6 @@ public:
      * @script{ignore}
      */
     template<typename T>T* getObjectPointer(const char* type, const char* name);
-
-    /**
-     * Sets the global variable to nil.
-     * 
-     * @param name The name of the global variable.
-     * 
-     * @script{ignore}
-     */
-    void setNil(const char* name);
 
     /**
      * Sets the global boolean script variable with the given name to the given value.

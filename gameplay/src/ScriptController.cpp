@@ -372,70 +372,6 @@ std::string ScriptController::loadUrl(const char* url)
     return id;
 }
 
-bool ScriptController::isNil(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isnil(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isBool(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isboolean(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isNumber(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isnumber(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isString(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isstring(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isTable(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_istable(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isThread(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isthread(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isUserData(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isuserdata(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
-bool ScriptController::isFunction(const char* name)
-{
-    lua_getglobal(_lua, name);
-    bool b = lua_isfunction(_lua, -1) != 0;
-    lua_pop(_lua, 1);
-    return b;
-}
-
 bool ScriptController::getBool(const char* name, bool defaultValue)
 {
     lua_getglobal(_lua, name);
@@ -530,12 +466,6 @@ const char* ScriptController::getString(const char* name)
     const char* s = lua_isstring(_lua, -1) ? luaL_checkstring(_lua, -1) : NULL;
     lua_pop(_lua, 1);
     return s;
-}
-
-void ScriptController::setNil(const char* name)
-{
-    lua_pushnil(_lua);
-    lua_setglobal(_lua, name);
 }
 
 void ScriptController::setBool(const char* name, bool v)
