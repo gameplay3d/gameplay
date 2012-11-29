@@ -71,16 +71,6 @@ void BillboardTest::finalize()
     _billboards.clear();
 }
 
-static bool sortBillboards(Node* n1, Node* n2)
-{
-	Scene* scene = n1->getScene();
-	Camera* camera = scene->getActiveCamera();
-	Vector3 cameraPosition = camera->getNode()->getTranslationWorld();
-	if (cameraPosition.distanceSquared(n1->getTranslationWorld()) > cameraPosition.distanceSquared(n2->getTranslationWorld()))
-		return true;
-	return false;
-}
-
 void BillboardTest::update(float elapsedTime)
 {
     float time = (float)elapsedTime / 1000.0f;
@@ -140,9 +130,6 @@ void BillboardTest::update(float elapsedTime)
         _camera.moveForward(move.y);
         _camera.moveLeft(move.x);
     }
-
-    // Sort the transparent billboards back to front
-    std::sort(_billboards.begin(), _billboards.end(), &sortBillboards);
 }
 
 void BillboardTest::render(float elapsedTime)
@@ -155,6 +142,7 @@ void BillboardTest::render(float elapsedTime)
 
 	// Get the scene camera
 	Camera* camera = _scene->getActiveCamera();
+
 
 	for (unsigned int i = 0; i < BILLBOARD_COUNT; i++)
 	{
@@ -180,7 +168,6 @@ void BillboardTest::render(float elapsedTime)
     // draw the frame rate
     drawFrameRate(_font, Vector4::one(), 5, 1, getFrameRate());
 }
-
 
 void BillboardTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
@@ -297,14 +284,13 @@ void BillboardTest::loadGround()
 	node->setModel(_ground);
     _scene->addNode(node);
 	node->rotateX(MATH_DEG_TO_RAD(90));
-	Effect* effect = Effect::createFromFile("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT;TEXTURE_OFFSET;FOG");    
+	Effect* effect = Effect::createFromFile("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT");    
 	Material* material = Material::create(effect); 
-	material->getStateBlock()->setDepthTest(false);
+	material->getStateBlock()->setDepthTest(true);
 	material->getStateBlock()->setBlend(false);
 	Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/dirt.png", true);
 	sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
 	material->getParameter("u_textureRepeat")->setValue(Vector2(GROUND_REPEAT_TEXTURE, GROUND_REPEAT_TEXTURE));
-	material->getParameter("u_textureOffset")->setValue(Vector2::zero());
 	material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
 	_ground->setMaterial(material);
 	SAFE_RELEASE(material);
@@ -327,7 +313,7 @@ void BillboardTest::loadBillboards()
 		_scene->addNode(node);
  
 		Material* material = Material::create(effect); 
-		material->getStateBlock()->setDepthTest(false);
+		material->getStateBlock()->setDepthTest(true);
 		material->getStateBlock()->setBlend(false);
 		material->getParameter("u_diffuseTexture")->setValue("res/png/grass.png" , true);
 		material->setParameterAutoBinding("u_worldViewProjectionMatrix", RenderState::WORLD_VIEW_PROJECTION_MATRIX);
@@ -338,7 +324,7 @@ void BillboardTest::loadBillboards()
 		// Randomly postiion within the domain
         float tx = MATH_RANDOM_0_1() * GROUND_WIDTH - (GROUND_WIDTH / 2.0f);
 		float tz = MATH_RANDOM_0_1() * GROUND_HEIGHT - (GROUND_HEIGHT / 2.0f);
-        node->translate(tx, 0.0f, tz);
+        node->translate(tx, (BILLBOARD_HEIGHT / 2.0f), tz);
 
         _billboards.push_back(node);
 
