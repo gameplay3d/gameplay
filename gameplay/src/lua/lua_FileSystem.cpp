@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "Properties.h"
+#include "Stream.h"
 
 namespace gameplay
 {
