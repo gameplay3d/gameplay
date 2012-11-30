@@ -15,6 +15,10 @@ class FileSystem
 {
 public:
 
+    /**
+     * Mode flags for opening a stream.
+     * @script{ignore}
+     */
     enum StreamMode
     {
         READ = 1,
