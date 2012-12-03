@@ -21,6 +21,7 @@
 #include <set>
 #include <stack>
 #include <map>
+#include <queue>
 #include <algorithm>
 #include <limits>
 #include <functional>

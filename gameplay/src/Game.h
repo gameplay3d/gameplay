@@ -1,8 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <queue>
-
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Touch.h"
@@ -16,7 +14,6 @@
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
-
 
 namespace gameplay
 {

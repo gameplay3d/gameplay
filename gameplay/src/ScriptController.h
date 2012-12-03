@@ -1,5 +1,5 @@
-#ifndef SCRIPTCONTROLLER_H
-#define SCRIPTCONTROLLER_H
+#ifndef SCRIPTCONTROLLER_H_
+#define SCRIPTCONTROLLER_H_
 
 #include "Base.h"
 #include "Game.h"
