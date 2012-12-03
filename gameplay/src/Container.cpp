@@ -278,6 +278,7 @@ void Container::removeControl(const char* id)
         Control* c = *it;
         if (strcmp(id, c->getId()) == 0)
         {
+            c->_parent = NULL;
             SAFE_RELEASE(c);
             _controls.erase(it);
             return;
@@ -293,6 +294,7 @@ void Container::removeControl(Control* control)
     {
         if (*it == control)
         {
+            control->_parent = NULL;
             SAFE_RELEASE(control);
             _controls.erase(it);
             return;
