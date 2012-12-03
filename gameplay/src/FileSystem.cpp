@@ -348,7 +348,7 @@ Stream* FileSystem::open(const char* path, size_t mode)
     
 #ifdef WIN32
     gp_stat_struct s;
-    if (stat(fullPath.c_str(), &s) != 0)
+    if (stat(fullPath.c_str(), &s) != 0 && (mode & WRITE) == 0)
     {
         fullPath = __resourcePath;
         fullPath += "../../gameplay/";
