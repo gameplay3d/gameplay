@@ -208,6 +208,7 @@ float Control::getHeight() const
 void Control::setAlignment(Alignment alignment)
 {
     _alignment = alignment;
+    _dirty = true;
 }
 
 Control::Alignment Control::getAlignment() const
