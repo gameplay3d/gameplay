@@ -1,6 +1,6 @@
 theme mainMenu
 {
-    texture = res/common/theme.png
+    texture = res/common/default-theme.png
 
     imageList normalImages
     {
