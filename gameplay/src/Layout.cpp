@@ -54,6 +54,10 @@ void Layout::align(Control* control, const Container* container)
         {
             controlBounds.y = clipHeight * 0.5f - controlBounds.height * 0.5f;
         }
+        else if ((control->_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
+        {
+            controlBounds.y = 0;
+        }
 
         // Horizontal alignment
         if ((control->_alignment & Control::ALIGN_RIGHT) == Control::ALIGN_RIGHT)
@@ -63,6 +67,10 @@ void Layout::align(Control* control, const Container* container)
         else if ((control->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
         {
             controlBounds.x = clipWidth * 0.5f - controlBounds.width * 0.5f;
+        }
+        else if ((control->_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
+        {
+            controlBounds.x = 0;
         }
 
         control->setBounds(controlBounds);
