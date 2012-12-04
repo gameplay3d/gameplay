@@ -61,7 +61,7 @@ void TextTest::initialize()
                                 "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 
     // Create and listen to form.
-    _form = Form::create("res/common/textTest.form");
+    _form = Form::create("res/common/text.form");
     static_cast<Button*>(_form->getControl("fontButton"))->addListener(this, Control::Listener::CLICK);
     static_cast<Button*>(_form->getControl("wrapButton"))->addListener(this, Control::Listener::CLICK);
     static_cast<Button*>(_form->getControl("clipRectButton"))->addListener(this, Control::Listener::CLICK);

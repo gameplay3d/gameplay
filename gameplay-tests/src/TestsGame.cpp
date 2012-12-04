@@ -24,7 +24,7 @@ void TestsGame::initialize()
     }
 
     // Construct a form for selecting which test to run.
-    Theme* theme = Theme::create("res/common/mainMenu.theme");
+    Theme* theme = Theme::create("res/common/default.theme");
     Theme::Style* formStyle = theme->getStyle("basic");
     Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
     Theme::Style* titleStyle = theme->getStyle("title");
