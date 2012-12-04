@@ -1,6 +1,6 @@
 form textTest
 {
-    theme = res/common/mainMenu.theme
+    theme = res/common/default.theme
     style = basic
     autoHeight = true
     width = 240
