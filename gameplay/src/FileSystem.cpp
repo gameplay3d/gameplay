@@ -335,7 +335,16 @@ Stream* FileSystem::open(const char* path, size_t mode)
         // Open a file on the SD card
         std::string fullPath(__resourcePath);
         fullPath += resolvePath(path);
-        return FileStreamAndroid::create(fullPath.c_str(), modeStr);
+
+        size_t index = fullPath.rfind('/');
+        if (index != std::string::npos)
+        {
+            std::string directoryPath = fullPath.substr(0, index);
+            struct stat s;
+            if (stat(directoryPath.c_str(), &s) != 0)
+                makepath(directoryPath, 0777);
+        }
+        return FileStream::create(fullPath.c_str(), modeStr);
     }
     else
     {
