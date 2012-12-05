@@ -23,16 +23,28 @@ void InputTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
     assert(_font);
 
+    // Create a pause button to display the menu
+    _keyboardState = false;
+    _keyboardSwitch = Form::create("res/common/keyboard.form");
+    static_cast<Button*>(_keyboardSwitch->getControl("showKeyboardButton"))->addListener(this, Listener::CLICK);
+
     _mousePoint.set(-100, -100);
 }
 
 void InputTest::finalize()
 {
+    if (_keyboardState)
+    {
+        displayKeyboard(false);
+    }
+
+    SAFE_RELEASE(_keyboardSwitch);
     SAFE_RELEASE(_font);
 }
 
 void InputTest::update(float elapsedTime)
 {
+    _keyboardSwitch->update(Test::getAbsoluteTime());
 }
 
 void InputTest::render(float elapsedTime)
@@ -95,6 +107,8 @@ void InputTest::render(float elapsedTime)
             _font->drawText(displayKeys.c_str(), x, y, fontColor, _font->getSize());
         }
     }
+    // Keyboard button
+    _keyboardSwitch->draw();
     // Draw the accelerometer values in the bottom right corner.
     static float pitch, roll;
     static float accelerometerDrawRate = 1000.0f;
@@ -212,6 +226,16 @@ void InputTest::keyEvent(Keyboard::KeyEvent evt, int key)
         }
         break;
     };
+}
+
+void InputTest::controlEvent(Control* control, EventType evt)
+{
+    if (strcmp(control->getId(), "showKeyboardButton") == 0)
+    {
+        _keyboardState = !_keyboardState;
+        displayKeyboard(_keyboardState);
+        static_cast<Button*>(_keyboardSwitch->getControl("showKeyboardButton"))->setText(_keyboardState ? "Hide virtual keyboard" : "Show virtual keyboard");
+    }
 }
 
 const char* keyString(int key)
