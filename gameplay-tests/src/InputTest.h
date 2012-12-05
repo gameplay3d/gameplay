@@ -9,7 +9,7 @@ using namespace gameplay;
 /**
  * Tests basic input for keyboard, mouse, touch and accelerometer.
  */
-class InputTest : public Test
+class InputTest : public Test, Control::Listener
 {
 public:
 
@@ -20,6 +20,8 @@ public:
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    
+    void controlEvent(Control* control, EventType evt);
 
 protected:
 
@@ -45,7 +47,9 @@ private:
     std::string _symbolsString;
     std::string _mouseString;
     Font* _font;
+    Form* _keyboardSwitch;
     int _mouseWheel;
+    bool _keyboardState;
 };
 
 #endif
