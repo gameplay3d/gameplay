@@ -72,6 +72,10 @@
 		B616B282161119EF00CB514C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
 		B6871F3D161121F900900743 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6871F391611206000900743 /* libgameplay.a */; };
 		B6871F3E1611220C00900743 /* libgameplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6871F391611206000900743 /* libgameplay.a */; };
+		F10DEAB716726157006FFFDC /* BillboardTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F10DEAB516726157006FFFDC /* BillboardTest.cpp */; };
+		F10DEAB816726157006FFFDC /* BillboardTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F10DEAB516726157006FFFDC /* BillboardTest.cpp */; };
+		F1E4B3FA1671372E007516A7 /* FormsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E4B3F81671372E007516A7 /* FormsTest.cpp */; };
+		F1E4B3FB1671372E007516A7 /* FormsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E4B3F81671372E007516A7 /* FormsTest.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +137,10 @@
 		9F4C6CFE162735020076E137 /* GestureTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureTest.cpp; sourceTree = "<group>"; };
 		9F4C6CFF162735020076E137 /* GestureTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureTest.h; sourceTree = "<group>"; };
 		B6871F391611206000900743 /* libgameplay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameplay.a; path = "../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug/libgameplay.a"; sourceTree = "<group>"; };
+		F10DEAB516726157006FFFDC /* BillboardTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BillboardTest.cpp; sourceTree = "<group>"; };
+		F10DEAB616726157006FFFDC /* BillboardTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillboardTest.h; sourceTree = "<group>"; };
+		F1E4B3F81671372E007516A7 /* FormsTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormsTest.cpp; sourceTree = "<group>"; };
+		F1E4B3F91671372E007516A7 /* FormsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormsTest.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,10 +242,14 @@
 				420D547715FE433900AD0B91 /* common */,
 				420D543A15FE430D00AD0B91 /* Audio3DTest.cpp */,
 				420D543B15FE430D00AD0B91 /* Audio3DTest.h */,
+				F10DEAB516726157006FFFDC /* BillboardTest.cpp */,
+				F10DEAB616726157006FFFDC /* BillboardTest.h */,
 				420D543C15FE430D00AD0B91 /* CreateSceneTest.cpp */,
 				420D543D15FE430D00AD0B91 /* CreateSceneTest.h */,
 				9F4C6CFE162735020076E137 /* GestureTest.cpp */,
 				9F4C6CFF162735020076E137 /* GestureTest.h */,
+				F1E4B3F81671372E007516A7 /* FormsTest.cpp */,
+				F1E4B3F91671372E007516A7 /* FormsTest.h */,
 				420D544215FE430D00AD0B91 /* InputTest.cpp */,
 				420D544315FE430D00AD0B91 /* InputTest.h */,
 				420D544415FE430D00AD0B91 /* LoadSceneTest.cpp */,
@@ -438,6 +450,8 @@
 				420D547215FE430D00AD0B91 /* TextureTest.cpp in Sources */,
 				420D547415FE430D00AD0B91 /* TriangleTest.cpp in Sources */,
 				9F4C6D00162735020076E137 /* GestureTest.cpp in Sources */,
+				F1E4B3FA1671372E007516A7 /* FormsTest.cpp in Sources */,
+				F10DEAB716726157006FFFDC /* BillboardTest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +475,8 @@
 				420D547315FE430D00AD0B91 /* TextureTest.cpp in Sources */,
 				420D547515FE430D00AD0B91 /* TriangleTest.cpp in Sources */,
 				9F4C6D01162735020076E137 /* GestureTest.cpp in Sources */,
+				F1E4B3FB1671372E007516A7 /* FormsTest.cpp in Sources */,
+				F10DEAB816726157006FFFDC /* BillboardTest.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

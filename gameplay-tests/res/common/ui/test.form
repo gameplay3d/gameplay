@@ -1,0 +1,92 @@
+form test
+{
+    theme = res/common/default.theme
+    layout = LAYOUT_ABSOLUTE
+    style = basic
+
+    size = 600, 600
+    scroll = SCROLL_BOTH
+    
+    label title
+    {
+        style = underlined
+        position = 120, 0
+        size = 200, 50
+        text = This is a label.
+    }
+
+    button testButton
+    {
+        style = buttonStyle
+        position = 0, 80
+        size = 200, 100
+        text = This is a button.
+    }
+
+    checkbox testCheckbox
+    {
+        style = noBorder
+        position = 0, 220
+        size = 200, 40
+        text = This is a checkbox.
+    }
+
+    slider testSlider
+    {
+        style = noBorder
+        position = 5, 270
+        size = 190, 100
+        orientation = HORIZONTAL
+        min = -100
+        max = 100
+        value = 0
+        text = This is a slider.
+    }
+
+    textBox testTextBox
+    {
+        margin
+        {
+            top = 0
+            bottom = 0
+            left = 0
+            right = 0
+        }
+
+        style = basic
+        position = 0, 380
+        size = 200, 100
+        text = This is a text box.  Tap to edit.
+    }
+
+    radioButton choice1
+    {
+        style = noBorder
+        text = Radio button 1.
+        group = testRadio
+        position = 280, 80
+        size = 160, 40
+        selected = true
+    }
+
+    radioButton choice2 : choice1
+    {
+        text = Radio button 2.
+        position = 280, 130
+        selected = false
+    }
+
+    radioButton choice3 : choice2
+    {
+        text = Radio button 3.
+        position = 280, 180
+    }
+
+    label content
+    {
+        style = bottomRightAligned
+        position = 277, 250
+        size = 160, 230
+        text = The style of this label shows bottom-right alignment.
+    }
+}
