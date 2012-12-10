@@ -886,6 +886,8 @@ int Platform::enterMessagePump()
 
     _game->run();
 
+    Platform::swapBuffers();
+
     // Message loop.
     while (true)
     {
