@@ -34,6 +34,7 @@ static screen_context_t __screenContext;
 static screen_window_t __screenWindow;
 static screen_event_t __screenEvent;
 static int __screenWindowSize[2];
+static bool __screenFullscreen = false;
 static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
 static EGLContext __eglContext = EGL_NO_CONTEXT;
 static EGLSurface __eglSurface = EGL_NO_SURFACE;
@@ -886,8 +887,6 @@ int Platform::enterMessagePump()
 
     _game->run();
 
-    Platform::swapBuffers();
-
     // Message loop.
     while (true)
     {
@@ -1071,14 +1070,18 @@ int Platform::enterMessagePump()
                     switch (state)
                     {
                     case NAVIGATOR_WINDOW_FULLSCREEN:
+                        if (!__screenFullscreen)
+                            __screenFullscreen = true;
                         _game->resume();
                         suspended = false;
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
                     case NAVIGATOR_WINDOW_INVISIBLE:
-                        if (!suspended)
+                        if (__screenFullscreen && !suspended)
+                        {
                             _game->pause();
-                        suspended = true;
+                            suspended = true;
+                        }
                         break;
                     }
                     break;
