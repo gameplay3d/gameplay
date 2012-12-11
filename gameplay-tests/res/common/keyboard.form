@@ -1,4 +1,4 @@
-form menu
+form keyboardControl
 {
     theme = res/common/default.theme
     width = 200

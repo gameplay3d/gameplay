@@ -711,12 +711,12 @@ bool Form::projectPoint(int x, int y, Vector3* point)
 {
     Scene* scene = _node->getScene();
     GP_ASSERT(scene);
-    Camera* camera = scene->getActiveCamera();
+    Camera* camera;
 
-    if (camera)
+    if (scene && (camera = scene->getActiveCamera()))
     {
         // Get info about the form's position.
-        Matrix m = _node->getMatrix();
+        Matrix m = _node->getWorldMatrix();
         Vector3 min(0, 0, 0);
         m.transformPoint(&min);
 
@@ -731,7 +731,7 @@ bool Form::projectPoint(int x, int y, Vector3* point)
         // by the quad's forward vector and one of its points to the plane defined by the same vector and the origin.
         const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
         const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-        const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+        const float distance = fabs(d) /  sqrt(a*a + b*b + c*c);
         Plane plane(normal, -distance);
 
         // Check for collision with plane.

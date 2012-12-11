@@ -632,6 +632,7 @@
     <ClCompile Include="src\Audio3DTest.cpp" />
     <ClCompile Include="src\BillboardTest.cpp" />
     <ClCompile Include="src\CreateSceneTest.cpp" />
+    <ClCompile Include="src\FormsTest.cpp" />
     <ClCompile Include="src\GestureTest.cpp" />
     <ClCompile Include="src\TriangleTest.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
@@ -651,6 +652,7 @@
     <ClInclude Include="src\Audio3DTest.h" />
     <ClInclude Include="src\BillboardTest.h" />
     <ClInclude Include="src\CreateSceneTest.h" />
+    <ClInclude Include="src\FormsTest.h" />
     <ClInclude Include="src\GestureTest.h" />
     <ClInclude Include="src\TriangleTest.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />
