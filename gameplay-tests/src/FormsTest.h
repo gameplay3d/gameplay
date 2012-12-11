@@ -26,9 +26,12 @@ protected:
 private:
     Scene* _scene;
     Node* _formNode;
+    Node* _formNodeParent;
     Form* _formSelect;
     Form* _activeForm;
     std::vector<Form*> _forms;
+    Gamepad* _gamepad;
+    unsigned int _keyFlags;
     bool _touched;
     int _touchX;
     unsigned int _formIndex;

@@ -4,10 +4,17 @@
     ADD_TEST("Graphics", "Forms", FormsTest, 101);
 #endif
 
+// Input bit-flags (powers of 2)
+#define KEY_A_MASK (1 << 0)
+#define KEY_B_MASK (1 << 1)
+
+#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
+#define BUTTON_B (_gamepad->isVirtual() ? 1 : 11)
+
 const static unsigned int __formsCount = 5;
 
 FormsTest::FormsTest()
-    : _scene(NULL), _formNode(NULL), _formSelect(NULL), _activeForm(NULL)
+    : _scene(NULL), _formNode(NULL), _formNodeParent(NULL), _formSelect(NULL), _activeForm(NULL), _gamepad(NULL), _keyFlags(0)
 {
     const char* formFiles[] = 
     {
@@ -75,6 +82,7 @@ void printProperties(Properties* properties, unsigned int tabCount)
 
 void FormsTest::initialize()
 {
+    setMultiTouch(true);
     setVsync(false);
 
     _formSelect = Form::create("res/common/ui/formSelect.form");
@@ -118,9 +126,15 @@ void FormsTest::initialize()
     cameraNode->setCamera(camera);
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
-    _formNode = _scene->addNode("Form");
+    _formNodeParent = _scene->addNode("FormParent");
+    _formNode = Node::create("Form");
+    _formNodeParent->addChild(_formNode);
     
     formChanged();
+
+    _gamepad = getGamepad(0);
+    GP_ASSERT(_gamepad);
+    _gamepad->getForm()->setConsumeInputEvents(false);
 }
 
 void FormsTest::formChanged()
@@ -143,7 +157,8 @@ void FormsTest::formChanged()
     }
 
     _formNode->setScale(scale, scale, 1.0f);
-    _formNode->setTranslation(-0.5f, -0.5f, -1.5f);
+    _formNodeParent->setTranslation(0, 0, -1.5f);
+    _formNode->setTranslation(-0.5f, -0.5f, 0);
     _formNode->setForm(_activeForm);
 }
 
@@ -172,6 +187,39 @@ void FormsTest::createTestForm(Theme::Style* style)
 
 void FormsTest::update(float elapsedTime)
 {
+    // Check if we have any physical gamepad connections.
+    getGamepadsConnected();
+
+    _gamepad->update(elapsedTime);
+
+    float speedFactor = 0.001f * elapsedTime;
+    bool aDown = (_keyFlags & KEY_A_MASK) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
+    bool bDown = (_keyFlags & KEY_B_MASK) || (_gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED);
+    Vector2 joyCommand;
+    if (_gamepad->isJoystickActive(0))
+    {
+        _gamepad->getJoystickAxisValues(0, &joyCommand);
+    }
+
+    if (bDown)
+    {
+        _formNodeParent->setRotation(0, 0, 0, 1);
+    }
+    else if (aDown)
+    {
+        // Yaw in world frame, pitch in body frame
+        Matrix m;
+        _formNodeParent->getWorldMatrix().transpose(&m);
+        Vector3 yaw;
+        m.getUpVector(&yaw);
+        _formNodeParent->rotate(yaw, speedFactor * joyCommand.x);
+        _formNodeParent->rotateX(-speedFactor * joyCommand.y);
+    }
+    else
+    {
+        _formNodeParent->translate(0.5f * speedFactor * joyCommand.x, 0.5f * speedFactor * joyCommand.y, 0);
+    }
+
     if (_formSelect)
     {
         _formSelect->update(elapsedTime);
@@ -198,6 +246,8 @@ void FormsTest::render(float elapsedTime)
     {
         _activeForm->draw();
     }
+
+    _gamepad->draw();
 }
 
 void FormsTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -222,7 +272,12 @@ void FormsTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
             {
                 int deltaX = x - _touchX;
                 _touchX = x;
-                _formNode->rotateY(MATH_DEG_TO_RAD(deltaX * 0.5f));
+                // Yaw in world frame
+                Matrix m;
+                _formNodeParent->getWorldMatrix().transpose(&m);
+                Vector3 yaw;
+                m.getUpVector(&yaw);
+                _formNodeParent->rotate(yaw, MATH_DEG_TO_RAD(deltaX * 0.5f));
             }
             break;
         default:
@@ -241,22 +296,43 @@ void FormsTest::keyEvent(Keyboard::KeyEvent keyEvent, int key)
             switch (key)
             {
             case Keyboard::KEY_LEFT_ARROW:
-                _formNode->translateX(-0.1f);
+                _formNodeParent->translateX(-0.1f);
                 break;
             case Keyboard::KEY_RIGHT_ARROW:
-                _formNode->translateX(0.1f);
+                _formNodeParent->translateX(0.1f);
                 break;
             case Keyboard::KEY_UP_ARROW:
-                _formNode->translateY(0.1f);
+                _formNodeParent->translateY(0.1f);
                 break;
             case Keyboard::KEY_DOWN_ARROW:
-                _formNode->translateY(-0.1f);
+                _formNodeParent->translateY(-0.1f);
                 break;
             case Keyboard::KEY_PLUS:
-                _formNode->translateZ(0.1f);
+                _formNodeParent->translateZ(0.1f);
                 break;
             case Keyboard::KEY_MINUS:
-                _formNode->translateZ(-0.1f);
+                _formNodeParent->translateZ(-0.1f);
+                break;
+            case Keyboard::KEY_A:
+            case Keyboard::KEY_CAPITAL_A:
+                _keyFlags |= KEY_A_MASK;
+                break;
+            case Keyboard::KEY_B:
+            case Keyboard::KEY_CAPITAL_B:
+                _keyFlags |= KEY_B_MASK;
+                break;
+            }
+            break;
+        case Keyboard::KEY_RELEASE:
+            switch (key)
+            {
+            case Keyboard::KEY_A:
+            case Keyboard::KEY_CAPITAL_A:
+                _keyFlags &= ~KEY_A_MASK;
+                break;
+            case Keyboard::KEY_B:
+            case Keyboard::KEY_CAPITAL_B:
+                _keyFlags &= ~KEY_B_MASK;
                 break;
             }
             break;

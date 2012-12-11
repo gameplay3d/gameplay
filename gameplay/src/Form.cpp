@@ -711,12 +711,12 @@ bool Form::projectPoint(int x, int y, Vector3* point)
 {
     Scene* scene = _node->getScene();
     GP_ASSERT(scene);
-    Camera* camera = scene->getActiveCamera();
+    Camera* camera;
 
-    if (camera)
+    if (scene && (camera = scene->getActiveCamera()))
     {
         // Get info about the form's position.
-        Matrix m = _node->getMatrix();
+        Matrix m = _node->getWorldMatrix();
         Vector3 min(0, 0, 0);
         m.transformPoint(&min);
 
