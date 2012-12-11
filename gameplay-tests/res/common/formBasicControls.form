@@ -1,9 +1,8 @@
-form test
+form basicControls
 {
     theme = res/common/default.theme
     layout = LAYOUT_ABSOLUTE
     style = basic
-
     size = 600, 600
     scroll = SCROLL_BOTH
     

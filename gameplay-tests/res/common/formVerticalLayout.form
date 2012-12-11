@@ -1,10 +1,8 @@
-form verticalTest
+form verticalLayout
 {
     theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
     style = basic
-    
-    position = 0, 0
     size = 600, 600
     scroll = SCROLL_BOTH
 

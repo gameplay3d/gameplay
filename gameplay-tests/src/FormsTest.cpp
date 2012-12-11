@@ -18,11 +18,11 @@ FormsTest::FormsTest()
 {
     const char* formFiles[] = 
     {
-        "res/common/ui/test.form",
-        "res/common/ui/Scrolling.form",
-        "res/common/ui/FlowLayout.form",
-        "res/common/ui/VerticalLayout.form",
-        "res/common/ui/ZOrder.form",
+        "res/common/formBasicControls.form",
+        "res/common/formScrolling.form",
+        "res/common/formFlowLayout.form",
+        "res/common/formVerticalLayout.form",
+        "res/common/formZOrder.form",
     };
 
     _formFiles.assign(formFiles, formFiles + __formsCount);
@@ -85,7 +85,7 @@ void FormsTest::initialize()
     setMultiTouch(true);
     setVsync(false);
 
-    _formSelect = Form::create("res/common/ui/formSelect.form");
+    _formSelect = Form::create("res/common/formSelect.form");
     
     RadioButton* form0Button = static_cast<RadioButton*>(_formSelect->getControl("form0"));
     form0Button->addListener(this, Control::Listener::CLICK);

@@ -1,10 +1,8 @@
-form flowTest
+form flowLayout
 {
     theme = res/common/default.theme
     layout = LAYOUT_FLOW
     style = basic
-    
-    position = 0, 0
     size = 600, 600
     scroll = SCROLL_BOTH
 

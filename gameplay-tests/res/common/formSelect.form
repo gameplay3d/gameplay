@@ -7,11 +7,6 @@ form formSelect
     width = 240
     autoHeight = true
 
-    //position = 0, 359
-    //size = 1280, 360
-
-    //scroll = SCROLL_VERTICAL
-
     radioButton form0
     {
         style = basic
