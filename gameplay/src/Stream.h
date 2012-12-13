@@ -21,7 +21,7 @@ public:
     virtual ~Stream() {};
 
     /**
-     * Returns true if this stream can preform read operations.
+     * Returns true if this stream can perform read operations.
      * 
      * @return True if the stream can read, false otherwise.
      */
@@ -91,7 +91,7 @@ public:
      *     print("Error writing to file");
      * \endcode
      * 
-     * @param ptr   The poiner to the array of elements to be written.
+     * @param ptr   The pointer to the array of elements to be written.
      * @param size  The size of each element to be written, in bytes.
      * @param count The number of elements to write.
      * 
@@ -133,7 +133,7 @@ public:
      * 
      * @param offset The number of bytes to offset from origin.
      * @param origin The position used as a reference for offset.
-     *               The supported vaules are the same as fseek().
+     *               The supported values are the same as fseek().
      *                - <code>SEEK_SET</code> relative to the beginning of the file.
      *                - <code>SEEK_CUR</code> relative to the current position of the file pointer.
      *                - <code>SEEK_END</code> relative to the end of file.

@@ -334,7 +334,7 @@ public:
     /**
      * Returns the forward vector of the Node in view space.
      *
-     * @return The forwward vector in view space.
+     * @return The forward vector in view space.
      */
     Vector3 getForwardVectorView() const;
 
@@ -505,11 +505,11 @@ public:
      * entities in a game that still require collision events, such as volumetric triggers, 
      * power-ups, etc.
      *
-     * Characters are an extention of ghost objects which provide a number of additional features
+     * Characters are an extension of ghost objects which provide a number of additional features
      * for animating and moving characters within a game. Characters are represented as ghost
      * objects instead of rigid bodies to allow more direct control over character movement,
      * since attempting to model a physics character with a simulated rigid body usually results
-     * in unresponse and unpredictable character movement. Unlike normal ghost objects,
+     * in unresponsive and unpredictable character movement. Unlike normal ghost objects,
      * characters to react to other characters and rigid bodies in the world. Characters react
      * to gravity and collide (and respond) with rigid bodies to allow them to walk on the ground,
      * slide along walls and walk up/down slopes and stairs.
@@ -517,12 +517,12 @@ public:
      * @param type The type of the collision object to set; to disable the physics
      *        collision object, pass PhysicsCollisionObject::NONE.
      * @param shape Definition of a physics collision shape to be used for this collision object.
-     *        Use the static shape methods on the PhysicsCollisionShape class to specificy a shape
+     *        Use the static shape methods on the PhysicsCollisionShape class to specify a shape
      *        definition, such as PhysicsCollisionShape::box().
      * @param rigidBodyParameters If type is PhysicsCollisionObject::RIGID_BODY or
      *        PhysicsCollisionObject::VEHICLE, this must point to a valid rigid body
      *        parameters object containing information about the rigid body;
-     *        otherwise, this parmater may be NULL.
+     *        otherwise, this parameter may be NULL.
      */
     PhysicsCollisionObject* setCollisionObject(PhysicsCollisionObject::Type type, const PhysicsCollisionShape::Definition& shape = PhysicsCollisionShape::box(), 
                                                PhysicsRigidBody::Parameters* rigidBodyParameters = NULL);
