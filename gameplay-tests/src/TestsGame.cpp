@@ -191,7 +191,7 @@ void TestsGame::controlEvent(Control* control, EventType evt)
             TestRecord testRecord = list[j];
             if (testRecord.title.compare(control->getId()) == 0)
             {
-                _testSelectForm->disable();
+                _testSelectForm->setEnabled(false);
                 runTest(testRecord.funcPtr);
                 return;
             }
@@ -217,7 +217,7 @@ void TestsGame::exitActiveTest()
         _activeTest->finalize();
         SAFE_DELETE(_activeTest);
 
-        _testSelectForm->enable();
+        _testSelectForm->setEnabled(true);
     }
     // Reset some game options
     setMultiTouch(false);
