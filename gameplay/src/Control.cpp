@@ -244,6 +244,27 @@ bool Control::getAutoHeight() const
     return _autoHeight;
 }
 
+void Control::setVisible(bool visible)
+{
+    if (visible && !_visible)
+    {
+        setEnabled(true);
+        _visible = true;
+        _dirty = true;
+    }
+    else if (!visible && _visible)
+    {
+        setEnabled(false);
+        _visible = false;
+        _dirty = true;
+    }
+}
+
+bool Control::isVisible() const
+{
+    return _visible;
+}
+
 void Control::setOpacity(float opacity, unsigned char states)
 {
     overrideStyle();
@@ -597,19 +618,21 @@ Control::State Control::getState() const
     return _state;
 }
 
-void Control::disable()
+void Control::setEnabled(bool enabled)
 {
-    _state = DISABLED;
-    _dirty = true;
+	if (enabled && _state == Control::DISABLED)
+	{
+		_state = Control::NORMAL;
+		_dirty = true;
+	}
+	else if (!enabled && _state != Control::DISABLED)
+	{
+		_state = Control::DISABLED;
+		_dirty = true;
+	}
 }
 
-void Control::enable()
-{
-    _state = NORMAL;
-    _dirty = true;
-}
-
-bool Control::isEnabled()
+bool Control::isEnabled() const
 {
     return _state != DISABLED;
 }
@@ -1019,6 +1042,9 @@ void Control::drawText(const Rectangle& position)
 
 void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
 {
+    if (!_visible)
+        return;
+
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
