@@ -78,7 +78,7 @@ public:
      * Returns the specified joystick's value as a Vector2.
      *
      * @param joystickId The index of the joystick to get the value for.
-     * @param outValues The current x-axis and y-asix value displacement of the joystick.
+     * @param outValues The current x-axis and y-axis value displacement of the joystick.
      */
     void getJoystickAxisValues(unsigned int joystickId, Vector2* outValues) const;
 
