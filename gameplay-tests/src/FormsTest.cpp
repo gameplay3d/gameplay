@@ -108,7 +108,7 @@ void FormsTest::initialize()
     for (unsigned int i = 0; i < _formFiles.size(); i++)
     {
         Form* form = Form::create(_formFiles[i]);
-        form->disable();
+        form->setEnabled(false);
         _forms.push_back(form);
     }
     _formIndex = 0;
@@ -140,9 +140,9 @@ void FormsTest::initialize()
 void FormsTest::formChanged()
 {
     if (_activeForm)
-        _activeForm->disable();
+        _activeForm->setEnabled(false);
     _activeForm = _forms[_formIndex];
-    _activeForm->enable();
+    _activeForm->setEnabled(true);
 
     // Add the form to a node to allow it to be placed in 3D space.
     const Rectangle& bounds = _activeForm->getBounds();
@@ -181,7 +181,7 @@ void FormsTest::createTestForm(Theme::Style* style)
     form->addControl(button);
     button->release();
 
-    form->disable();
+    form->setEnabled(false);
     _forms.push_back(form);
 }
 
