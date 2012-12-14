@@ -463,7 +463,7 @@ public:
     inline Gamepad* getGamepad(unsigned int index) const;
 
     /**
-     * Sets muli-touch is to be enabled/disabled. Default is disabled.
+     * Sets multi-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
      */

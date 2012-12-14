@@ -182,7 +182,7 @@ public:
     bool isDynamic() const;
 
     /**
-     * Check if th collision object is enabled.
+     * Check if the collision object is enabled.
      *
      * @return true if the collision object is enabled.
      */

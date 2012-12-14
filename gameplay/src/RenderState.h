@@ -92,7 +92,7 @@ public:
      *
      * Functions matching this callback signature can be registered via the 
      * RenderState::registerAutoBindingResolver method to extend or override the set
-     * of built-in material paramter auto bindings.
+     * of built-in material parameter auto bindings.
      *
      * @param autoBinding Name of the auto binding to resolve.
      * @param node Node that is bound to the material of the specified parameter.
@@ -309,11 +309,11 @@ public:
     /**
      * Registers a custom auto binding resolver.
      *
-     * Implementing a custom auto binding reolver allows the set of built-in parameter auto
+     * Implementing a custom auto binding resolver allows the set of built-in parameter auto
      * bindings to be extended or overridden. Any parameter auto binding that is set on a
      * material will be forwarded to any custom auto binding resolvers, in the order in which
      * they are registered. If a registered resolver returns true (specifying that it handles
-     * the specified autoBinding), no further code will be exeucted for that autoBinding.
+     * the specified autoBinding), no further code will be executed for that autoBinding.
      * This allows auto binding resolvers to not only implement new/custom binding strings,
      * but it also lets them override existing/built-in ones. For this reason, you should
      * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
@@ -324,7 +324,7 @@ public:
      * Model that belongs to a Node. The resolver is NOT called each frame or each time
      * the RenderState is bound. Therefore, when implementing custom auto bindings for values
      * that change over time, the you should bind a method pointer onto the passed in
-     * MaterialParaemter using the MaterialParameter::bindValue mehtod. This way, the bound 
+     * MaterialParaemter using the MaterialParameter::bindValue method. This way, the bound
      * method will be called each frame to set an updated value into the MaterialParameter.
      *
      * If no registered resolvers explicitly handle an auto binding, the binding will attempt
@@ -436,7 +436,7 @@ protected:
     RenderState* _parent;
 
     /**
-     * Map of custom auto binding resolverss.
+     * Map of custom auto binding resolvers.
      */
     static std::vector<ResolveAutoBindingCallback> _customAutoBindingResolvers;
 };
