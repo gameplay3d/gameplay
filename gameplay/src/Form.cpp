@@ -710,7 +710,6 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
 bool Form::projectPoint(int x, int y, Vector3* point)
 {
     Scene* scene = _node->getScene();
-    GP_ASSERT(scene);
     Camera* camera;
 
     if (scene && (camera = scene->getActiveCamera()))
