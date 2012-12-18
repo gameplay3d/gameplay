@@ -9,7 +9,7 @@ form basicControls
     label title
     {
         style = underlined
-        position = 120, 0
+        position = 185, 0
         size = 200, 50
         text = This is a label.
     }
@@ -17,24 +17,24 @@ form basicControls
     button testButton
     {
         style = buttonStyle
-        position = 0, 80
+        position = 50, 80
         size = 200, 100
         text = This is a button.
     }
 
     checkbox testCheckbox
     {
-        style = noBorder
-        position = 0, 220
+        style = iconNoBorder
+        position = 50, 220
         size = 200, 40
         text = This is a checkbox.
     }
 
     slider testSlider
     {
-        style = noBorder
-        position = 5, 270
-        size = 190, 100
+        style = topLeftNoBorder
+        position = 55, 315
+        size = 190, 80
         orientation = HORIZONTAL
         min = -100
         max = 100
@@ -42,50 +42,42 @@ form basicControls
         text = This is a slider.
     }
 
+    label textBoxLabel
+    {
+        style = iconNoBorder
+        position = 55, 400
+        size = 200, 60
+        text = Label:
+    }
+
     textBox testTextBox
     {
-        margin
-        {
-            top = 0
-            bottom = 0
-            left = 0
-            right = 0
-        }
-
-        style = basic
-        position = 0, 380
-        size = 200, 100
-        text = This is a text box.  Tap to edit.
+        style = topLeftAlignedEntry
+        position = 50, 450
+        size = 480, 80
+        text = This is a text box.
     }
 
     radioButton choice1
     {
-        style = noBorder
+        style = iconNoBorder
         text = Radio button 1.
         group = testRadio
-        position = 280, 80
-        size = 160, 40
+        position = 350, 80
+        size = 180, 40
         selected = true
     }
 
     radioButton choice2 : choice1
     {
         text = Radio button 2.
-        position = 280, 130
+        position = 350, 130
         selected = false
     }
 
     radioButton choice3 : choice2
     {
         text = Radio button 3.
-        position = 280, 180
-    }
-
-    label content
-    {
-        style = bottomRightAligned
-        position = 277, 250
-        size = 160, 230
-        text = The style of this label shows bottom-right alignment.
+        position = 350, 180
     }
 }

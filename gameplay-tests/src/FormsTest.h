@@ -38,7 +38,7 @@ private:
     std::vector<const char*> _formFiles;
 
     void formChanged();
-    void createTestForm(Theme::Style* style);
+    void createTestForm(Theme* theme);
 
     std::string _testString;
 };
