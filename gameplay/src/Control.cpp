@@ -1164,6 +1164,8 @@ void Control::getAnimationPropertyValue(int propertyId, AnimationValue* value)
         value->setFloat(0, _bounds.height);
         break;
     case ANIMATE_OPACITY:
+        value->setFloat(0, _opacity);
+        break;
     default:
         break;
     }
@@ -1202,6 +1204,7 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
         _dirty = true;
         break;
     case ANIMATE_OPACITY:
+        setOpacity(Curve::lerp(blendWeight, _opacity, value->getFloat(0)));
         _dirty = true;
         break;
     }
