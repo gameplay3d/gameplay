@@ -40,6 +40,7 @@ FormsTest* FormsTest::create()
 void FormsTest::finalize()
 {
     SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_formNode);
     SAFE_RELEASE(_formSelect);
     for (unsigned int i = 0; i < _forms.size(); i++)
     {
@@ -104,7 +105,6 @@ void FormsTest::initialize()
     
     RadioButton* form5Button = static_cast<RadioButton*>(_formSelect->getControl("form5"));
     form5Button->addListener(this, Control::Listener::CLICK);
-    
     for (unsigned int i = 0; i < _formFiles.size(); i++)
     {
         Form* form = Form::create(_formFiles[i]);
@@ -174,10 +174,11 @@ void FormsTest::createTestForm(Theme::Style* style)
     form->addControl(label);
     label->release();
 
-    Button* button = Button::create("testButton", style);
+    Button* button = Button::create("opacityButton", style);
     button->setPosition(0, 210);
     button->setSize(200, 200);
-    button->setText("This is a button.");
+    button->setText("This is a button.  Click to change its opacity.");
+    button->addListener(this, Control::Listener::CLICK);
     form->addControl(button);
     button->release();
 
@@ -371,5 +372,11 @@ void FormsTest::controlEvent(Control* control, EventType evt)
     {
         _formIndex = 5;
         formChanged();
+    }
+    else if (strcmp("opacityButton", control->getId()) == 0)
+    {
+        float from[] = { 1.0f };
+        float to[] = { 0.5f };
+        control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
     }
 }
