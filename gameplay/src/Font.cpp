@@ -30,7 +30,7 @@
     "void main()\n" \
     "{\n" \
         "gl_FragColor = v_color;\n" \
-        "gl_FragColor.a = texture2D(u_texture, v_texCoord).a;\n" \
+        "gl_FragColor.a = texture2D(u_texture, v_texCoord).a * v_color.a;\n" \
     "}"
 
 namespace gameplay
