@@ -28,12 +28,12 @@ theme mainMenu
 
         image minCap
         {
-            region = 3, 99, 8, 43
+            region = 3, 115, 8, 11
         }
 
         image maxCap
         {
-            region = 3, 99, 8, 43
+            region = 3, 115, 8, 11
         }
 
         image marker
@@ -126,6 +126,12 @@ theme mainMenu
     {
         color = #C3D9BFff
     }
+    
+    skin formEntry : mainNormal
+    {
+        region = 78, 1, 46, 46
+        color = #25434Cff
+    }
 
     skin underliner
     {
@@ -187,11 +193,12 @@ theme mainMenu
         }
     }
 
-    style bottomRightAligned : basic
+    style topLeftAlignedEntry : basic
     {
         stateNormal
         {
-            textAlignment = ALIGN_BOTTOM_RIGHT
+            skin = formEntry
+            textAlignment = ALIGN_TOP_LEFT
         }
     }
 
@@ -247,6 +254,19 @@ theme mainMenu
             font = res/common/arial18.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
+        }
+    }
+
+    style topLeftNoBorder : iconNoBorder
+    {
+        stateNormal
+        {
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateActive
+        {
+            textAlignment = ALIGN_TOP_LEFT
         }
     }
 

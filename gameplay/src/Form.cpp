@@ -99,6 +99,8 @@ Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
 
+    form->updateBounds();
+
     __forms.push_back(form);
 
     return form;
@@ -200,6 +202,8 @@ Form* Form::create(const char* url)
     form->addControls(theme, formProperties);
 
     SAFE_DELETE(properties);
+    
+    form->updateBounds();
 
     __forms.push_back(form);
 
@@ -403,6 +407,11 @@ void Form::setNode(Node* node)
 }
 
 void Form::update(float elapsedTime)
+{
+    updateBounds();
+}
+
+void Form::updateBounds()
 {
     if (isDirty())
     {
