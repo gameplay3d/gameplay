@@ -114,7 +114,7 @@ void FormsTest::initialize()
     _formIndex = 0;
 
     // Create a form programmatically.
-    createTestForm(_forms[0]->getTheme()->getStyle("buttonStyle"));
+    createTestForm(_forms[0]->getTheme());
 
     Button* button = static_cast<Button*>(_forms[0]->getControl("testButton"));
     button->addListener(this, Control::Listener::CLICK);
@@ -162,21 +162,21 @@ void FormsTest::formChanged()
     _formNode->setForm(_activeForm);
 }
 
-void FormsTest::createTestForm(Theme::Style* style)
+void FormsTest::createTestForm(Theme* theme)
 {
-    Form* form = Form::create("testForm", style);
+    Form* form = Form::create("testForm", theme->getStyle("buttonStyle"));
     form->setSize(600, 600);
 
-    Label* label = Label::create("testLabel", style);
-    label->setPosition(0, 10);
-    label->setSize(200, 200);
-    label->setText("This is a label.");
+    Label* label = Label::create("testLabel", theme->getStyle("iconNoBorder"));
+    label->setPosition(50, 50);
+    label->setSize(200, 50);
+    label->setText("Label:");
     form->addControl(label);
     label->release();
 
-    Button* button = Button::create("opacityButton", style);
-    button->setPosition(0, 210);
-    button->setSize(200, 200);
+    Button* button = Button::create("opacityButton", theme->getStyle("buttonStyle"));
+    button->setPosition(45, 100);
+    button->setSize(200, 100);
     button->setText("This is a button.  Click to change its opacity.");
     button->addListener(this, Control::Listener::CLICK);
     form->addControl(button);
