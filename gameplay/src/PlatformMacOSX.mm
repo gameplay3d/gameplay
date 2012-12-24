@@ -582,7 +582,7 @@ double getMachTimeInMilliseconds()
 - (void)hidValueAvailable:(IOHIDValueRef)value
 {
     IOHIDElementRef element = IOHIDValueGetElement(value);
-	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
+    IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
     if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
     CFIndex integerValue = IOHIDValueGetIntegerValue(value);
@@ -1461,6 +1461,12 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            if (__fullscreen && width == 0 && height == 0)
+            {
+                CGRect mainMonitor = CGDisplayBounds(CGMainDisplayID());
+                __width = CGRectGetWidth(mainMonitor);
+                __height = CGRectGetHeight(mainMonitor);
+            }
         }
     }
 
@@ -1942,25 +1948,25 @@ CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, U
 
 CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return NULL;
-	}
+        return NULL;
+    }
     return (CFStringRef)typeRef;
 }
 
 int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return 0;
-	}
+        return 0;
+    }
     
     int value;
-	CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
-	return value;
+    CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
+    return value;
 }
 
 static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 
