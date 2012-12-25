@@ -185,7 +185,7 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
     float u2 = u1 + _textureWidthRatio * src.width;
     float v2 = v1 - _textureHeightRatio * src.height;
 
-    draw(dst.x, dst.y, dst.z, scale.x, scale.y, u2, v2, u1, v1, color);
+    draw(dst.x, dst.y, dst.z, scale.x, scale.y, u1, v1, u2, v2, color);
 }
 
 void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Vector4& color,
