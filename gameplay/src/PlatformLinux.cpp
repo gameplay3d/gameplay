@@ -499,10 +499,16 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __attachToWindow = (Window)attachToWindow;
     FileSystem::setResourcePath("./");
     Platform* platform = new Platform(game);
-
-    // Get window configuration
-
-    // Default values
+    
+    // Get the display and initialize
+    __display = XOpenDisplay(NULL);
+    if (__display == NULL)
+    {
+        perror("XOpenDisplay");
+        return NULL;
+    }
+     
+    // Get the window configuration values
     const char *title = NULL;
     int __x = 0, __y = 0, __width = 1280, __height = 800;
     bool fullscreen = false;
@@ -516,29 +522,23 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             // Read window rect.
             int x = config->getInt("x");
-            if (x != 0) __x = x;
-
             int y = config->getInt("y");
-            if (y != 0) __y = y;
-            
             int width = config->getInt("width");
-            if (width != 0) __width = width;
-
             int height = config->getInt("height");
-            if (height != 0) __height = height;
-
             fullscreen = config->getBool("fullscreen");
 
-
+            if (fullscreen && width == 0 && height == 0)
+            {
+                // Use the screen resolution if fullscreen is true but width and height were not set in the config
+                int screen_num = DefaultScreen(__display);
+                width = DisplayWidth(__display, screen_num);
+                height = DisplayHeight(__display, screen_num);
+            }
+            if (x != 0) __x = x;
+            if (y != 0) __y = y;
+            if (width != 0) __width = width;
+            if (height != 0) __height = height;
         }
-    }
-
-    // Get the display and initialize.
-    __display = XOpenDisplay(NULL);
-    if (__display == NULL)
-    {
-        perror("XOpenDisplay");
-        return NULL;
     }
 
     // GLX version
