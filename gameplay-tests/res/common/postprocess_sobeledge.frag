@@ -4,13 +4,13 @@ precision mediump float;
 
 // Uniforms
 uniform sampler2D u_texture;
-uniform float     u_width;
-uniform float     u_height;
+uniform float u_width;
+uniform float u_height;
 
 // Inputs
 varying vec2 v_texCoord;
 
-void main(void) 
+void main() 
 {
       float w = 1.0 / u_width;
       float h = 1.0 / u_height;
@@ -26,7 +26,7 @@ void main(void)
       n[7] = texture2D(u_texture, v_texCoord + vec2(0.0, h));
       n[8] = texture2D(u_texture, v_texCoord + vec2(  w, h));
       
-      //Sobel Edge
+      // Sobel Edge
       vec4 sobel_horizEdge = n[2] + (2.0*n[5]) + n[8] - (n[0] + (2.0*n[3]) + n[6]);
       vec4 sobel_vertEdge  = n[0] + (2.0*n[1]) + n[2] - (n[6] + (2.0*n[7]) + n[8]);
       vec3 sobel = sqrt((sobel_horizEdge.rgb * sobel_horizEdge.rgb) + (sobel_vertEdge.rgb * sobel_vertEdge.rgb));
