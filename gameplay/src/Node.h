@@ -9,7 +9,6 @@
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
 #include "PhysicsCollisionObject.h"
-#include "PhysicsCollisionShape.h"
 #include "BoundingBox.h"
 #include "AIAgent.h"
 
@@ -20,6 +19,7 @@ class AudioSource;
 class Bundle;
 class Scene;
 class Form;
+class Terrain;
 
 /**
  * Defines a basic hierarchical structure of transformation spaces.
@@ -38,7 +38,7 @@ public:
     enum Type
     {
         NODE = 1,
-        JOINT = 2
+        JOINT
     };
 
     /**
@@ -426,6 +426,23 @@ public:
     void setModel(Model* model);
 
     /**
+     * Returns the pointer to this node's terrain.
+     *
+     * @return The pointer to this node's terrain.
+     */
+    Terrain* getTerrain() const;
+
+    /**
+     * Assigns a terrain to this node.
+     *
+     * This will increase the reference count of the new terrain and decrease
+     * the reference count of the old terrain.
+     *
+     * @param terrain The new terrain. May be NULL.
+     */
+    void setTerrain(Terrain* terrain);
+
+    /**
      * Returns the pointer to this node's form.
      * 
      * @return The pointer to this node's form or NULL.
@@ -768,7 +785,12 @@ protected:
      * Pointer to the Model attached to the Node.
      */
     Model* _model;
-    
+
+    /**
+     * Pointer to the Terrain attached to the Node.
+     */
+    Terrain* _terrain;
+
     /**
      * Pointer to the Form attached to the Node.
      */

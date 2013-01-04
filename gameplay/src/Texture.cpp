@@ -758,6 +758,11 @@ Texture::Format Texture::getFormat() const
     return _format;
 }
 
+const char* Texture::getPath() const
+{
+    return _path.c_str();
+}
+
 unsigned int Texture::getWidth() const
 {
     return _width;
@@ -837,12 +842,14 @@ void Texture::Sampler::setWrapMode(Wrap wrapS, Wrap wrapT)
 {
     _wrapS = wrapS;
     _wrapT = wrapT;
+    _texture->setWrapMode(wrapS, wrapT);
 }
 
 void Texture::Sampler::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
 {
     _minFilter = minificationFilter;
     _magFilter = magnificationFilter;
+    _texture->setFilterMode(minificationFilter, magnificationFilter);
 }
 
 Texture* Texture::Sampler::getTexture() const
@@ -855,10 +862,6 @@ void Texture::Sampler::bind()
     GP_ASSERT(_texture);
 
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _texture->_handle) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)_wrapS) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)_wrapT) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)_minFilter) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)_magFilter) );
 }
 
 }

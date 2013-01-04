@@ -128,6 +128,27 @@ public:
     };
 
     /**
+     * Defines the supported depth compare functions.
+     *
+     * Depth compare functions specify the comparison that takes place between the
+     * incoming pixel's depth value and the depth value already in the depth buffer.
+     * If the compare function passes, the new pixel will be drawn.
+     *
+     * The intial depth compare function is DEPTH_LESS.
+     */
+    enum DepthFunction
+    {
+        DEPTH_NEVER = GL_NEVER,
+        DEPTH_LESS = GL_LESS,
+        DEPTH_EQUAL = GL_EQUAL,
+        DEPTH_LEQUAL = GL_LEQUAL,
+        DEPTH_GREATER = GL_GREATER,
+        DEPTH_NOTEQUAL = GL_NOTEQUAL,
+        DEPTH_GEQUAL = GL_GEQUAL,
+        DEPTH_ALWAYS = GL_ALWAYS
+    };
+
+    /**
      * Defines a block of fixed-function render states that can be applied to a
      * RenderState object.
      */
@@ -187,6 +208,8 @@ public:
         /**
          * Toggles depth testing.
          *
+         * By default, depth testing is disabled.
+         *
          * @param enabled true to enable, false to disable.
          */
         void setDepthTest(bool enabled);
@@ -197,6 +220,16 @@ public:
          * @param enabled true to enable, false to disable.
          */
         void setDepthWrite(bool enabled);
+
+        /**
+         * Sets the depth function to use when depth testing is enabled.
+         *
+         * When not explicitly set and when depth testing is enabled, the default
+         * depth function is DEPTH_LESS.
+         *
+         * @param func The depth function.
+         */
+        void setDepthFunction(DepthFunction func);
 
         /**
          * Sets a render state from the given name and value strings.
@@ -237,6 +270,7 @@ public:
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
         bool _depthWriteEnabled;
+        DepthFunction _depthFunction;
         bool _blendEnabled;
         Blend _blendSrc;
         Blend _blendDst;

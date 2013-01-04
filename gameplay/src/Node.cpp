@@ -1,6 +1,6 @@
 #include "Base.h"
-#include "AudioSource.h"
 #include "Node.h"
+#include "AudioSource.h"
 #include "Scene.h"
 #include "Joint.h"
 #include "PhysicsRigidBody.h"
@@ -9,6 +9,7 @@
 #include "PhysicsGhostObject.h"
 #include "PhysicsCharacter.h"
 #include "Game.h"
+#include "Terrain.h"
 
 // Node dirty flags
 #define NODE_DIRTY_WORLD 1
@@ -20,7 +21,7 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
-    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
@@ -45,6 +46,7 @@ Node::~Node()
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
+    SAFE_RELEASE(_terrain);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
     SAFE_RELEASE(_form);
@@ -755,6 +757,11 @@ void Node::setLight(Light* light)
     }
 }
 
+Model* Node::getModel() const
+{
+    return _model;
+}
+
 void Node::setModel(Model* model)
 {
     if (_model != model)
@@ -775,9 +782,34 @@ void Node::setModel(Model* model)
     }
 }
 
-Model* Node::getModel() const
+Terrain* Node::getTerrain() const
 {
-    return _model;
+    return _terrain;
+}
+
+void Node::setTerrain(Terrain* terrain)
+{
+    if (_terrain != terrain)
+    {
+        if (_terrain)
+        {
+            _terrain->setNode(NULL);
+            SAFE_RELEASE(_terrain);
+        }
+
+        _terrain = terrain;
+
+        if (_terrain)
+        {
+            _terrain->addRef();
+            _terrain->setNode(this);
+        }
+    }
+}
+
+Form* Node::getForm() const
+{
+    return _form;
 }
 
 void Node::setForm(Form* form)
@@ -800,10 +832,6 @@ void Node::setForm(Form* form)
     }
 }
 
-Form* Node::getForm() const
-{
-    return _form;
-}
 
 const BoundingSphere& Node::getBoundingSphere() const
 {

@@ -1,7 +1,10 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "ScriptController.h"
+
+#ifndef NO_LUA_BINDINGS
 #include "lua/lua_all_bindings.h"
+#endif
 
 #define GENERATE_LUA_GET_POINTER(type, checkFunc) \
     ScriptController* sc = Game::getInstance()->getScriptController(); \
@@ -576,7 +579,10 @@ void ScriptController::initialize()
     if (!_lua)
         GP_ERROR("Failed to initialize Lua scripting engine.");
     luaL_openlibs(_lua);
+
+#ifndef NO_LUA_BINDINGS
     lua_RegisterAllBindings();
+#endif
 
     // Create our own print() function that uses gameplay::print.
     if (luaL_dostring(_lua, lua_print_function))
