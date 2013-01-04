@@ -1,5 +1,5 @@
-#ifndef Audio3DTest_H_
-#define Audio3DTest_H_
+#ifndef AUDIO3DTEST_H_
+#define AUDIO3DTEST_H_
 
 #include "gameplay.h"
 #include "Test.h"

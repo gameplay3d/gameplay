@@ -11,7 +11,7 @@
 static const char* keyString(int key);
 
 InputTest::InputTest()
-    : _font(NULL), _mouseWheel(0), _mouseString("No Mouse")
+    :  _mouseString("No Mouse"), _font(NULL), _keyboardSwitch(NULL), _mouseWheel(0)
 {
 }
 
@@ -558,4 +558,5 @@ const char* keyString(int key)
     default:
         return "";
     };
+    return "";
 }
