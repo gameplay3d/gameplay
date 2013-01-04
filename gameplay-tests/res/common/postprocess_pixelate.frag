@@ -19,11 +19,11 @@ vec2 discretize(vec2 v, float d)
     return vec2(discretize(v.x, d), discretize(v.y, d));
 }
 
- void main()
- {
+void main()
+{
     vec2 texCoord = discretize(v_texCoord, 128.0);
     gl_FragColor = texture2D(u_texture, texCoord);
- }
+}
 
  
  
