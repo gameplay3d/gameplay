@@ -64,6 +64,7 @@ void TestsGame::initialize()
             testButton->release();
         }
     }
+	_testSelectForm->setState(Control::FOCUS);
 }
 
 void TestsGame::finalize()

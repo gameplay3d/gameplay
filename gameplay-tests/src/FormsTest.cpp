@@ -1,7 +1,7 @@
 #include "FormsTest.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Forms", FormsTest, 101);
+    ADD_TEST("Graphics", "Forms", FormsTest, 10);
 #endif
 
 // Input bit-flags (powers of 2)

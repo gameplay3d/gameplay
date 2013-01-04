@@ -7,8 +7,8 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _autoWidth(false), _autoHeight(false), _listeners(NULL),
-    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(0), _parent(NULL), _styleOverridden(false), _skin(NULL), _visible(true)
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
+    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(0), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
