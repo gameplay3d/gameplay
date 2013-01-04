@@ -155,7 +155,7 @@ void PostProcessTest::render(float elapsedTime)
     Rectangle defaultViewport = Game::getInstance()->getViewport();
     
     // Draw into the framebuffer
-    Game::getInstance()->setViewport(Rectangle(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));s
+    Game::getInstance()->setViewport(Rectangle(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));
     _frameBuffer->bind();
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
     _scene->visit(this, &PostProcessTest::drawScene);
