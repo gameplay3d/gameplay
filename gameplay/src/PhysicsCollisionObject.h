@@ -270,16 +270,17 @@ protected:
     class PhysicsMotionState : public btMotionState
     {
         friend class PhysicsConstraint;
-
+        
     public:
 
         /**
          * Creates a physics motion state for a rigid body.
          * 
-         * @param node The node that owns the rigid body that the motion state is being created for.
+         * @param node The node that contains the transformation to be associated with the motion state.
+         * @param collisionObject The collision object that owns the motion state.
          * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
          */
-        PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset = NULL);
+        PhysicsMotionState(Node* node, PhysicsCollisionObject* collisionObject, const Vector3* centerOfMassOffset = NULL);
 
         /**
          * Destructor.
@@ -301,9 +302,15 @@ protected:
          */
         void updateTransformFromNode() const;
 
+        /**
+         * Sets the center of mass offset for the associated collision shape.
+         */
+        void setCenterOfMassOffset(const Vector3& centerOfMassOffset);
+
     private:
 
         Node* _node;
+        PhysicsCollisionObject* _collisionObject;
         btTransform _centerOfMassOffset;
         mutable btTransform _worldTransform;
     };

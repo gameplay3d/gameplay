@@ -11,6 +11,7 @@
 #define RS_CULL_FACE 4
 #define RS_DEPTH_TEST 8
 #define RS_DEPTH_WRITE 16
+#define RS_DEPTH_FUNC 32
 
 namespace gameplay
 {
@@ -354,7 +355,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 }
 
 RenderState::StateBlock::StateBlock()
-    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false),
+    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false), _depthFunction(RenderState::DEPTH_LESS),
       _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
       _bits(0L)
 {
@@ -426,6 +427,11 @@ void RenderState::StateBlock::bindNoRestore()
         GL_ASSERT( glDepthMask(_depthWriteEnabled ? GL_TRUE : GL_FALSE) );
         _defaultState->_depthWriteEnabled = _depthWriteEnabled;
     }
+    if ((_bits & RS_DEPTH_FUNC) && (_depthFunction != _defaultState->_depthFunction))
+    {
+        GL_ASSERT( glDepthFunc((GLenum)_depthFunction) );
+        _defaultState->_depthFunction = _depthFunction;
+    }
 
     _defaultState->_bits |= _bits;
 }
@@ -471,6 +477,12 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         GL_ASSERT( glDepthMask(GL_TRUE) );
         _defaultState->_bits &= ~RS_DEPTH_WRITE;
         _defaultState->_depthWriteEnabled = true;
+    }
+    if (!(stateOverrideBits & RS_DEPTH_FUNC) && (_defaultState->_bits & RS_DEPTH_FUNC))
+    {
+        GL_ASSERT( glDepthFunc((GLenum)GL_LESS) );
+        _defaultState->_bits &= ~RS_DEPTH_FUNC;
+        _defaultState->_depthFunction = RenderState::DEPTH_LESS;
     }
 }
 
@@ -648,6 +660,20 @@ void RenderState::StateBlock::setDepthWrite(bool enabled)
     else
     {
         _bits |= RS_DEPTH_WRITE;
+    }
+}
+
+void RenderState::StateBlock::setDepthFunction(DepthFunction func)
+{
+    _depthFunction = func;
+    if (_depthFunction == DEPTH_LESS)
+    {
+        // Default depth function
+        _bits &= ~RS_DEPTH_FUNC;
+    }
+    else
+    {
+        _bits |= RS_DEPTH_FUNC;
     }
 }
 

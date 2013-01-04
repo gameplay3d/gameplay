@@ -99,8 +99,8 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     }
 
     // Load the physics collision shape definition.
-    PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
-    if (shape == NULL)
+    PhysicsCollisionShape::Definition shape = PhysicsCollisionShape::Definition::create(node, properties);
+    if (shape.isEmpty())
     {
         GP_ERROR("Failed to create collision shape during physics character creation.");
         return NULL;
@@ -133,10 +133,9 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     }
 
     // Create the physics character.
-    PhysicsCharacter* character = new PhysicsCharacter(node, *shape, mass);
+    PhysicsCharacter* character = new PhysicsCharacter(node, shape, mass);
     character->setMaxStepHeight(maxStepHeight);
     character->setMaxSlopeAngle(maxSlopeAngle);
-    SAFE_DELETE(shape);
 
     return character;
 }

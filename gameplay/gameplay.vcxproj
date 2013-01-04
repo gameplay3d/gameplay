@@ -307,6 +307,8 @@
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
+    <ClCompile Include="src\Terrain.cpp" />
+    <ClCompile Include="src\TerrainPatch.cpp" />
     <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Theme.cpp" />
@@ -574,6 +576,8 @@
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Technique.h" />
+    <ClInclude Include="src\Terrain.h" />
+    <ClInclude Include="src\TerrainPatch.h" />
     <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />

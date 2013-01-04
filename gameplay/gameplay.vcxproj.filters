@@ -819,6 +819,12 @@
     <ClCompile Include="src\lua\lua_Logger.cpp">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\Terrain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainPatch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1621,6 +1627,12 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_LoggerLevel.h">
       <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainPatch.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
