@@ -272,7 +272,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         }
 
         bool draw = true;
-        if (yPos < area.y)
+        if (yPos < static_cast<int>(area.y))
         {
             // Skip drawing until line break or wrap.
             draw = false;
@@ -629,7 +629,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
 
         bool draw = true;
-        if (yPos < area.y - size)
+        if (yPos < static_cast<int>(area.y - size))
         {
             // Skip drawing until line break or wrap.
             draw = false;
