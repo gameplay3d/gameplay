@@ -111,12 +111,12 @@ void PostProcessTest::initialize()
 
     compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Sobel Edge");
     _compositors.push_back(compositor);
-    compositor->getMaterial()->getParameter("u_width")->setValue(FRAMEBUFFER_WIDTH);
-    compositor->getMaterial()->getParameter("u_height")->setValue(FRAMEBUFFER_HEIGHT);
+    compositor->getMaterial()->getParameter("u_width")->setValue((float)FRAMEBUFFER_WIDTH / 2.0f);
+    compositor->getMaterial()->getParameter("u_height")->setValue((float)FRAMEBUFFER_HEIGHT / 2.0f);
 
     compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Gaussian Blur");
     _compositors.push_back(compositor);
-    compositor->getMaterial()->getParameter("u_length")->setValue(1.0f / 512.0f);
+    compositor->getMaterial()->getParameter("u_length")->setValue(1.0f / ((float)FRAMEBUFFER_WIDTH / 2.0f));
 
     compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Old Film");
     _compositors.push_back(compositor);
@@ -155,8 +155,7 @@ void PostProcessTest::render(float elapsedTime)
     Rectangle defaultViewport = Game::getInstance()->getViewport();
     
     // Draw into the framebuffer
-    Game::getInstance()->setViewport(Rectangle(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));
-    
+    Game::getInstance()->setViewport(Rectangle(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));s
     _frameBuffer->bind();
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
     _scene->visit(this, &PostProcessTest::drawScene);
