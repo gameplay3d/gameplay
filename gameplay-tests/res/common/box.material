@@ -20,7 +20,7 @@ material box
             // samplers
             sampler u_diffuseTexture
             {
-                path = res/common/box-diffuse.png
+                path = res/png/box-diffuse.png
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP
