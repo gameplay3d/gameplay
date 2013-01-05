@@ -2,6 +2,7 @@
 #define TEXTURE_H_
 
 #include "Ref.h"
+#include "Stream.h"
 
 namespace gameplay
 {
@@ -292,9 +293,9 @@ private:
 
     static Texture* createCompressedDDS(const char* path);
 
-    static GLubyte* readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTC(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
 
-    static GLubyte* readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
 
     std::string _path;
     TextureHandle _handle;

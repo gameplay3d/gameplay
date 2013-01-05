@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "Properties.h"
+#include "Stream.h"
 
 namespace gameplay
 {
@@ -89,7 +90,7 @@ int lua_FileSystem_static_createFileFromAsset(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 FileSystem::createFileFromAsset(param1);
                 
@@ -123,7 +124,7 @@ int lua_FileSystem_static_fileExists(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 bool result = FileSystem::fileExists(param1);
 
@@ -188,7 +189,7 @@ int lua_FileSystem_static_isAbsolutePath(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 bool result = FileSystem::isAbsolutePath(param1);
 
@@ -227,7 +228,7 @@ int lua_FileSystem_static_loadResourceAliases(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = ScriptUtil::getString(1, false);
 
                     FileSystem::loadResourceAliases(param1);
                     
@@ -278,7 +279,7 @@ int lua_FileSystem_static_readAll(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 const char* result = FileSystem::readAll(param1);
 
@@ -298,7 +299,7 @@ int lua_FileSystem_static_readAll(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 ScriptUtil::LuaArray<int> param2 = ScriptUtil::getIntPointer(2);
@@ -338,7 +339,7 @@ int lua_FileSystem_static_resolvePath(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 const char* result = FileSystem::resolvePath(param1);
 
@@ -375,7 +376,7 @@ int lua_FileSystem_static_setResourcePath(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 FileSystem::setResourcePath(param1);
                 

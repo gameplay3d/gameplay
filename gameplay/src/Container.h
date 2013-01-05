@@ -319,7 +319,7 @@ protected:
     void addControls(Theme* theme, Properties* properties);
 
     /**
-     * Draws a sprite batch for the specified clipping rect .
+     * Draws a sprite batch for the specified clipping rect.
      *
      * @param spriteBatch The sprite batch to use.
      * @param clip The clipping rectangle.
@@ -444,13 +444,13 @@ protected:
      */
     bool _scrolling;
     /** 
-	 * First scrolling touch x position
-	 */
-	int _scrollingVeryFirstX;
-	/**
-	 * First scrolling touch y position
-	 */
-	int _scrollingVeryFirstY;
+     * First scrolling touch x position
+     */
+    int _scrollingVeryFirstX;
+    /**
+     * First scrolling touch y position
+     */
+    int _scrollingVeryFirstY;
     /**
      * First scrolling touch x position since last change in direction.
      */ 

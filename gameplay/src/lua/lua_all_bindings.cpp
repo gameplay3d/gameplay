@@ -107,6 +107,8 @@ void lua_RegisterAllBindings()
     luaRegister_Slider();
     luaRegister_SpriteBatch();
     luaRegister_Technique();
+    luaRegister_Terrain();
+    luaRegister_TerrainHeightField();
     luaRegister_TextBox();
     luaRegister_Texture();
     luaRegister_TextureSampler();

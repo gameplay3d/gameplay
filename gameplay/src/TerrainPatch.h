@@ -2,6 +2,7 @@
 #define TERRAINPATCH_H_
 
 #include "Model.h"
+#include "Camera.h"
 
 namespace gameplay
 {
@@ -12,6 +13,8 @@ class Terrain;
  * Represents a single patch for a Terrain.
  *
  * This is an internal class used exclusively by Terrain.
+ *
+ * @script{ignore}
  */
 class TerrainPatch
 {
@@ -109,6 +112,16 @@ private:
     bool isVisible() const;
 
     /**
+     * Returns the triangle count of the base LOD level of this terrain patch.
+     */
+    unsigned int getTriangleCount() const;
+
+    /**
+     * Returns the currently visible triangle count, taking the current LOD into account.
+     */
+    unsigned int getVisibleTriangleCount() const;
+
+    /**
      * Draws the terrain patch.
      */
     void draw(bool wireframe);
@@ -118,9 +131,18 @@ private:
      */
     bool updateMaterial();
 
+    /**
+     * Computes the current LOD for this patch, from the viewpoint of the specified camera.
+     */
+    size_t computeLOD(Camera* camera, const BoundingBox& worldBounds) const;
+
+    /**
+     * Returns the local bounding box for this patch, at the base LOD level.
+     */
+    BoundingBox getBoundingBox(bool worldSpace) const;
+
     Terrain* _terrain;
     std::vector<Level*> _levels;
-    unsigned int _lod;
     unsigned int _row;
     unsigned int _column;
     std::set<Layer*, LayerCompare> _layers;
@@ -130,6 +152,7 @@ private:
     std::vector<int> _blendIndex;
     std::vector<int> _blendChannel;
     bool _materialDirty;
+    BoundingBox _boundingBox;
 
 };
 

@@ -8,8 +8,14 @@
 namespace gameplay
 {
 
-// Forward declarations
+/**
+ * @script{ignore}
+ */
 float calculateHeight(float* heights, unsigned int width, unsigned int height, unsigned int x, unsigned int z);
+
+/**
+ * @script{ignore}
+ */
 template <class T> T clamp(T value, T min, T max) { return value < min ? min : (value > max ? max : value); }
 
 TerrainPatch::TerrainPatch() :
@@ -50,6 +56,18 @@ TerrainPatch* TerrainPatch::create(Terrain* terrain,
     for (unsigned int step = 1; step <= maxStep; step *= 2)
     {
         patch->addLOD(heights, width, height, x1, z1, x2, z2, xOffset, zOffset, step, verticalSkirtSize);
+    }
+
+    // Set our bounding box using the base LOD mesh
+    BoundingBox& bounds = patch->_boundingBox;
+    bounds.set(patch->_levels[0]->model->getMesh()->getBoundingBox());
+
+    // Apply the terrain's local scale to our bounds
+    const Vector3& localScale = terrain->_localScale;
+    if (!localScale.isOne())
+    {
+        bounds.min.set(bounds.min.x * localScale.x, bounds.min.y * localScale.y, bounds.min.z * localScale.z);
+        bounds.max.set(bounds.max.x * localScale.x, bounds.max.y * localScale.y, bounds.max.z * localScale.z);
     }
 
     return patch;
@@ -324,21 +342,6 @@ void TerrainPatch::deleteLayer(Layer* layer)
     SAFE_DELETE(layer);
 }
 
-bool TerrainPatch::isVisible() const
-{
-    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
-    Camera* camera = scene ? scene->getActiveCamera() : NULL;
-    if (!camera)
-        return false;
-
-    // Get the world-space bounding box for the base patch
-    BoundingBox box = _levels[0]->model->getMesh()->getBoundingBox();
-    box.transform(_terrain->getWorldMatrix());
-
-    // If the box does not intersect the view frustum, cull it
-    return camera->getFrustum().intersects(box);
-}
-
 int TerrainPatch::addSampler(const char* path)
 {
     // TODO: Support shared samplers stored in Terrain class for layers that span all patches
@@ -508,59 +511,105 @@ void TerrainPatch::draw(bool wireframe)
     if (!camera)
         return;
 
-    // Get the local bounding box for the patch (at the base LOD) and
-    // transform it by the terrain's world matrix.
-    BoundingBox box = _levels[0]->model->getMesh()->getBoundingBox();
-    box.transform(_terrain->getWorldMatrix());
+    // Get our world-space bounding box
+    BoundingBox bounds = getBoundingBox(true);
 
     // If the box does not intersect the view frustum, cull it
-    if (_terrain->isFlagSet(Terrain::ENABLE_FRUSTUM_CULLING) && !camera->getFrustum().intersects(box))
+    if (_terrain->isFlagSet(Terrain::ENABLE_FRUSTUM_CULLING) && !camera->getFrustum().intersects(bounds))
         return;
 
     if (!updateMaterial())
         return;
 
-    size_t lod = 0;
-    if (_terrain->isFlagSet(Terrain::ENABLE_LEVEL_OF_DETAIL) && _levels.size() > 1)
+    // Compute the LOD level from the camera's perspective
+    size_t lod = computeLOD(camera, bounds);
+
+    // Draw the model for the current LOD
+    _levels[lod]->model->draw(wireframe);
+}
+
+bool TerrainPatch::isVisible() const
+{
+    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+    Camera* camera = scene ? scene->getActiveCamera() : NULL;
+    if (!camera)
+        return false;
+
+    // Does the current camera view frustum intersect our world bounds?
+    return camera->getFrustum().intersects(getBoundingBox(true));
+}
+
+unsigned int TerrainPatch::getTriangleCount() const
+{
+    // Patches are made up of a single mesh part using triangle strips
+    return _levels[0]->model->getMesh()->getPart(0)->getIndexCount() - 2;
+}
+
+unsigned int TerrainPatch::getVisibleTriangleCount() const
+{
+    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+    Camera* camera = scene ? scene->getActiveCamera() : NULL;
+    if (!camera)
+        return 0;
+
+    // Does the current camera intersect this patch at all?
+    BoundingBox bounds = getBoundingBox(true);
+    if (!camera->getFrustum().intersects(bounds))
+        return 0;
+
+    // Return the triangle count of the LOD level depending on the camera
+    size_t lod = computeLOD(camera, bounds);
+    return _levels[0]->model->getMesh()->getPart(0)->getIndexCount() - 2;
+}
+
+BoundingBox TerrainPatch::getBoundingBox(bool worldSpace) const
+{
+    if (!worldSpace)
+        return _boundingBox;
+
+    // Apply a world-space transformation to our bounding box
+    BoundingBox bounds(_boundingBox);
+    bounds.transform(_terrain->getWorldMatrix());
+    return bounds;
+}
+
+size_t TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) const
+{
+    if (!_terrain->isFlagSet(Terrain::ENABLE_LEVEL_OF_DETAIL) || _levels.size() == 0)
+        return 0; // base level
+
+    // Compute LOD to use based on very simple distance metric.
+    // TODO: Optimize this.
+    Game* game = Game::getInstance();
+    Rectangle vp(0, 0, game->getWidth(), game->getHeight());
+    Vector3 corners[8];
+    Vector2 min(FLT_MAX, FLT_MAX);
+    Vector2 max(-FLT_MAX, -FLT_MAX);
+    worldBounds.getCorners(corners);
+    for (unsigned int i = 0; i < 8; ++i)
     {
-        // Compute LOD to use based on very simple distance metric
-        Game* game = Game::getInstance();
-        Rectangle vp(0, 0, game->getWidth(), game->getHeight());
-        Vector3 corners[8];
-        Vector2 min(FLT_MAX, FLT_MAX);
-        Vector2 max(-FLT_MAX, -FLT_MAX);
-        box.getCorners(corners);
-        for (unsigned int i = 0; i < 8; ++i)
-        {
-            const Vector3& corner = corners[i];
-            float x, y;
-            camera->project(vp, corners[i], &x, &y);
-            if (x < min.x)
-                min.x = x;
-            if (y < min.y)
-                min.y = y;
-            if (x > max.x)
-                max.x = x;
-            if (y > max.y)
-                max.y = y;
-        }
-        float area = (max.x - min.x) * (max.y - min.y);
-        float screenArea = game->getWidth() * game->getHeight() / 10.0f;
-        float error = screenArea / area;
-
-        // Level LOD based on distance from camera
-        size_t maxLod = _levels.size()-1;
-        lod = (size_t)error;
-        lod = std::max(lod, (size_t)0);
-        lod = std::min(lod, maxLod);
+        const Vector3& corner = corners[i];
+        float x, y;
+        camera->project(vp, corners[i], &x, &y);
+        if (x < min.x)
+            min.x = x;
+        if (y < min.y)
+            min.y = y;
+        if (x > max.x)
+            max.x = x;
+        if (y > max.y)
+            max.y = y;
     }
+    float area = (max.x - min.x) * (max.y - min.y);
+    float screenArea = game->getWidth() * game->getHeight() / 10.0f;
+    float error = screenArea / area;
 
-    // Get the LOD to be drawn
-    Level* level = _levels[lod];
-    Model* model = level->model;
-
-    // Draw patch geometry
-    model->draw(wireframe);
+    // Level LOD based on distance from camera
+    size_t maxLod = _levels.size()-1;
+    size_t lod = (size_t)error;
+    lod = std::max(lod, (size_t)0);
+    lod = std::min(lod, maxLod);
+    return lod;
 }
 
 float calculateHeight(float* heights, unsigned int width, unsigned int height, unsigned int x, unsigned int z)

@@ -23,6 +23,7 @@ void luaRegister_Texture()
         {"getFormat", lua_Texture_getFormat},
         {"getHandle", lua_Texture_getHandle},
         {"getHeight", lua_Texture_getHeight},
+        {"getPath", lua_Texture_getPath},
         {"getRefCount", lua_Texture_getRefCount},
         {"getWidth", lua_Texture_getWidth},
         {"isCompressed", lua_Texture_isCompressed},
@@ -252,6 +253,41 @@ int lua_Texture_getHeight(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Texture_getHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Texture_getPath(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Texture* instance = getInstance(state);
+                const char* result = instance->getPath();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Texture_getPath - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -532,7 +568,7 @@ int lua_Texture_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)Texture::create(param1);
                     if (returnPtr)
@@ -592,7 +628,7 @@ int lua_Texture_static_create(lua_State* state)
                     lua_type(state, 2) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
                     bool param2 = ScriptUtil::luaCheckBool(state, 2);

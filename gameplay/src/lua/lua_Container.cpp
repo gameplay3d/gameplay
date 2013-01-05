@@ -45,8 +45,6 @@ void luaRegister_Container()
         {"createAnimationFromBy", lua_Container_createAnimationFromBy},
         {"createAnimationFromTo", lua_Container_createAnimationFromTo},
         {"destroyAnimation", lua_Container_destroyAnimation},
-        {"disable", lua_Container_disable},
-        {"enable", lua_Container_enable},
         {"getAlignment", lua_Container_getAlignment},
         {"getAnimation", lua_Container_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Container_getAnimationPropertyComponentCount},
@@ -93,8 +91,10 @@ void luaRegister_Container()
         {"isEnabled", lua_Container_isEnabled},
         {"isScrollBarsAutoHide", lua_Container_isScrollBarsAutoHide},
         {"isScrolling", lua_Container_isScrolling},
+        {"isVisible", lua_Container_isVisible},
         {"release", lua_Container_release},
         {"removeControl", lua_Container_removeControl},
+        {"removeListener", lua_Container_removeListener},
         {"removeScriptCallback", lua_Container_removeScriptCallback},
         {"setAlignment", lua_Container_setAlignment},
         {"setAnimationPropertyValue", lua_Container_setAnimationPropertyValue},
@@ -105,6 +105,7 @@ void luaRegister_Container()
         {"setConsumeInputEvents", lua_Container_setConsumeInputEvents},
         {"setCursorColor", lua_Container_setCursorColor},
         {"setCursorRegion", lua_Container_setCursorRegion},
+        {"setEnabled", lua_Container_setEnabled},
         {"setFocusIndex", lua_Container_setFocusIndex},
         {"setFont", lua_Container_setFont},
         {"setFontSize", lua_Container_setFontSize},
@@ -125,6 +126,7 @@ void luaRegister_Container()
         {"setTextAlignment", lua_Container_setTextAlignment},
         {"setTextColor", lua_Container_setTextColor},
         {"setTextRightToLeft", lua_Container_setTextRightToLeft},
+        {"setVisible", lua_Container_setVisible},
         {"setWidth", lua_Container_setWidth},
         {"setZIndex", lua_Container_setZIndex},
         {NULL, NULL}
@@ -372,10 +374,10 @@ int lua_Container_createAnimation(lua_State* state)
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
+                    const char* param2 = ScriptUtil::getString(3, false);
 
                     Container* instance = getInstance(state);
                     void* returnPtr = (void*)instance->createAnimation(param1, param2);
@@ -403,7 +405,7 @@ int lua_Container_createAnimation(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -447,7 +449,7 @@ int lua_Container_createAnimation(lua_State* state)
                     (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -502,7 +504,7 @@ int lua_Container_createAnimation(lua_State* state)
                     (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -577,7 +579,7 @@ int lua_Container_createAnimationFromBy(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -645,7 +647,7 @@ int lua_Container_createAnimationFromTo(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -722,7 +724,7 @@ int lua_Container_destroyAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Container* instance = getInstance(state);
                 instance->destroyAnimation(param1);
@@ -737,70 +739,6 @@ int lua_Container_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Container_disable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Container* instance = getInstance(state);
-                instance->disable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Container_disable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Container_enable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Container* instance = getInstance(state);
-                instance->enable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Container_enable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -883,7 +821,7 @@ int lua_Container_getAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Container* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation(param1);
@@ -1356,7 +1294,7 @@ int lua_Container_getControl(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     Container* instance = getInstance(state);
                     void* returnPtr = (void*)instance->getControl(param1);
@@ -1785,7 +1723,7 @@ int lua_Container_getImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1837,7 +1775,7 @@ int lua_Container_getImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1889,7 +1827,7 @@ int lua_Container_getImageUVs(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -2958,6 +2896,41 @@ int lua_Container_isScrolling(lua_State* state)
     return 0;
 }
 
+int lua_Container_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -3021,7 +2994,7 @@ int lua_Container_removeControl(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     Container* instance = getInstance(state);
                     instance->removeControl(param1);
@@ -3049,6 +3022,48 @@ int lua_Container_removeControl(lua_State* state)
             } while (0);
 
             lua_pushstring(state, "lua_Container_removeControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
+
+                Container* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_removeListener - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -3540,6 +3555,42 @@ int lua_Container_setCursorRegion(lua_State* state)
     return 0;
 }
 
+int lua_Container_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_setFocusIndex(lua_State* state)
 {
     // Get the number of parameters.
@@ -3755,7 +3806,7 @@ int lua_Container_setImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -3784,7 +3835,7 @@ int lua_Container_setImageColor(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -3833,7 +3884,7 @@ int lua_Container_setImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -3862,7 +3913,7 @@ int lua_Container_setImageRegion(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -4606,6 +4657,42 @@ int lua_Container_setTextRightToLeft(lua_State* state)
     return 0;
 }
 
+int lua_Container_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_setWidth(lua_State* state)
 {
     // Get the number of parameters.
@@ -4828,7 +4915,7 @@ int lua_Container_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -4867,7 +4954,7 @@ int lua_Container_static_create(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;

@@ -289,7 +289,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         // Always check that the text still fits within the clip region.
                         Rectangle textBounds;
                         font->measureText(_text.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
-                        if (textBounds.x <= _textBounds.x || textBounds.y <= _textBounds.y ||
+                        if (textBounds.x < _textBounds.x || textBounds.y < _textBounds.y ||
                             textBounds.width >= _textBounds.width || textBounds.height >= _textBounds.height)
                         {
                             // If not, undo the character insertion.
@@ -329,10 +329,9 @@ void TextBox::update(const Control* container, const Vector2& offset)
 
 void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
-    if (_state == ACTIVE || _state == FOCUS)
+    if (_caretImage && (_state == ACTIVE || _state == FOCUS))
     {
         // Draw the cursor at its current location.
-        GP_ASSERT(_caretImage);
         const Rectangle& region = _caretImage->getRegion();
         if (!region.isEmpty())
         {

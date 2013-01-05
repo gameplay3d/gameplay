@@ -74,7 +74,7 @@ public:
      * @param id The ID of the node to find.
      * @param nodes Vector of nodes to be populated with matches.
      * @param recursive true if a recursive search should be performed, false otherwise.
-     * @param exactMatch true if only nodes whos ID exactly matches the specified ID are returned,
+     * @param exactMatch true if only nodes who's ID exactly matches the specified ID are returned,
      *      or false if nodes that start with the given ID are returned.
      * 
      * @return The number of matches found.
@@ -212,7 +212,7 @@ public:
     /**
      * Draws debugging information (bounding volumes, etc.) for the scene.
      *
-     * @param debugFlags Bitwise combination of debug flags from mthe DebugFlags 
+     * @param debugFlags Bitwise combination of debug flags from the DebugFlags
      *        enumeration, specifying which debugging information to draw.
      */
     void drawDebug(unsigned int debugFlags);

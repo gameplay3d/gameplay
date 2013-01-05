@@ -102,6 +102,8 @@
 #include "lua_Slider.h"
 #include "lua_SpriteBatch.h"
 #include "lua_Technique.h"
+#include "lua_Terrain.h"
+#include "lua_TerrainHeightField.h"
 #include "lua_TextBox.h"
 #include "lua_Texture.h"
 #include "lua_TextureSampler.h"

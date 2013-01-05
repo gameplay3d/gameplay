@@ -34,6 +34,7 @@ static screen_context_t __screenContext;
 static screen_window_t __screenWindow;
 static screen_event_t __screenEvent;
 static int __screenWindowSize[2];
+static bool __screenFullscreen = false;
 static EGLDisplay __eglDisplay = EGL_NO_DISPLAY;
 static EGLContext __eglContext = EGL_NO_CONTEXT;
 static EGLSurface __eglSurface = EGL_NO_SURFACE;
@@ -775,26 +776,26 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) != EGL_TRUE || eglConfigCount == 0)
     {
-    	bool success = false;
-    	while (samples)
-    	{
-    		// Try lowering the MSAA sample count until we find a supported config
-    		GP_WARN("Failed to find a valid EGL configuration with EGL samples=%d. Trying samples=%d instead.", samples, samples/2);
-    		samples /= 2;
-    		eglConfigAttrs[1] = samples > 0 ? 1 : 0;
-    		eglConfigAttrs[3] = samples;
-    		if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
-    		{
-    			success = true;
-    			break;
-    		}
-    	}
+        bool success = false;
+        while (samples)
+        {
+            // Try lowering the MSAA sample count until we find a supported config
+            GP_WARN("Failed to find a valid EGL configuration with EGL samples=%d. Trying samples=%d instead.", samples, samples/2);
+            samples /= 2;
+            eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+            eglConfigAttrs[3] = samples;
+            if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+            {
+                success = true;
+                break;
+            }
+        }
 
-    	if (!success)
-    	{
-			checkErrorEGL("eglChooseConfig");
-			goto error;
-    	}
+        if (!success)
+        {
+            checkErrorEGL("eglChooseConfig");
+            goto error;
+        }
     }
 
     __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
@@ -1069,14 +1070,18 @@ int Platform::enterMessagePump()
                     switch (state)
                     {
                     case NAVIGATOR_WINDOW_FULLSCREEN:
+                        if (!__screenFullscreen)
+                            __screenFullscreen = true;
                         _game->resume();
                         suspended = false;
                         break;
                     case NAVIGATOR_WINDOW_THUMBNAIL:
                     case NAVIGATOR_WINDOW_INVISIBLE:
-                        if (!suspended)
+                        if (__screenFullscreen && !suspended)
+                        {
                             _game->pause();
-                        suspended = true;
+                            suspended = true;
+                        }
                         break;
                     }
                     break;
@@ -1417,6 +1422,14 @@ unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
 float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
 {
     return 0.0f;
+}
+
+bool Platform::launchURL(const char* url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    return navigator_invoke(url, NULL) == BPS_SUCCESS;
 }
 
 }

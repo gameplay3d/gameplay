@@ -246,18 +246,18 @@ void Game::resume()
         --_pausedCount;
 
         if (_pausedCount == 0)
-		{
-			GP_ASSERT(_animationController);
-			GP_ASSERT(_audioController);
-			GP_ASSERT(_physicsController);
-			GP_ASSERT(_aiController);
-			_state = RUNNING;
-			_pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
-			_animationController->resume();
-			_audioController->resume();
-			_physicsController->resume();
-			_aiController->resume();
-		}
+        {
+            GP_ASSERT(_animationController);
+            GP_ASSERT(_audioController);
+            GP_ASSERT(_physicsController);
+            GP_ASSERT(_aiController);
+            _state = RUNNING;
+            _pausedTimeTotal += Platform::getAbsoluteTime() - _pausedTimeLast;
+            _animationController->resume();
+            _audioController->resume();
+            _physicsController->resume();
+            _aiController->resume();
+        }
     }
 }
 
