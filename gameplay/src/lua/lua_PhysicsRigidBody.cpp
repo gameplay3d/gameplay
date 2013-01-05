@@ -113,7 +113,7 @@ int lua_PhysicsRigidBody_addCollisionListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     PhysicsRigidBody* instance = getInstance(state);
                     instance->addCollisionListener(param1);
@@ -160,7 +160,7 @@ int lua_PhysicsRigidBody_addCollisionListener(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -793,44 +793,9 @@ int lua_PhysicsRigidBody_getHeight(lua_State* state)
             lua_error(state);
             break;
         }
-        case 4:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
-
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
-
-                // Get parameter 3 off the stack.
-                bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", false, &param3Valid);
-                if (!param3Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
-                    lua_error(state);
-                }
-
-                PhysicsRigidBody* instance = getInstance(state);
-                float result = instance->getHeight(param1, param2, param3);
-
-                // Push the return value onto the stack.
-                lua_pushnumber(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_PhysicsRigidBody_getHeight - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
@@ -1319,7 +1284,7 @@ int lua_PhysicsRigidBody_removeCollisionListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     PhysicsRigidBody* instance = getInstance(state);
                     instance->removeCollisionListener(param1);
@@ -1366,7 +1331,7 @@ int lua_PhysicsRigidBody_removeCollisionListener(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;

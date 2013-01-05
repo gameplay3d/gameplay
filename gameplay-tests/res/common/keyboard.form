@@ -1,0 +1,17 @@
+form keyboardControl
+{
+    theme = res/common/default.theme
+    width = 200
+    height = 200
+    alignment = ALIGN_TOP_RIGHT
+    consumeInputEvents = false
+
+    // Show/hide keyboard
+    button showKeyboardButton
+    {
+        style = buttonStyle
+        position = 10, 60
+        size = 160, 100
+        text = Show virtual keyboard
+    }
+}

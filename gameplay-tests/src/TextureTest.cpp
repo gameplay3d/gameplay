@@ -65,7 +65,7 @@ void TextureTest::initialize()
     // Textured quad mesh
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, 10, 10);
-        setTextureUnlitMaterial(node->getModel(), "res/common/color-wheel.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setTranslation(-36, 10, 0);
         _text.push_back(_font->createText("Textured Quad", Rectangle(15, 190, 175, _font->getSize()), Vector4::one(), _font->getSize(), Font::ALIGN_TOP_HCENTER, false));
     }
@@ -73,14 +73,14 @@ void TextureTest::initialize()
         Mesh* mesh = Mesh::createQuad(Vector3(0, 10, 0), Vector3(0, 0, 0), Vector3(10, 10, 0), Vector3(10, 0, 0));
         Node* node = addQuadModelAndNode(_scene, mesh);
         SAFE_RELEASE(mesh);
-        setTextureUnlitMaterial(node->getModel(), "res/common/color-wheel.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setTranslation(-25, 10, 0);
         _text.push_back(_font->createText("createQuad points", Rectangle(205, 190, 175, _font->getSize()), Vector4::one(), _font->getSize(), Font::ALIGN_TOP_HCENTER, false));
     }
     // Texture wrap clamp test
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, 10, 10, -1, -1, 2, 2);
-        setTextureUnlitMaterial(node->getModel(), "res/common/color-wheel.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setId("clamp");
         node->setTranslation(-14, 10, 0);
         _text.push_back(_font->createText("Wrap: Clamp", Rectangle(396, 190, 175, _font->getSize()), Vector4::one(), _font->getSize(), Font::ALIGN_TOP_HCENTER, false));
@@ -88,7 +88,7 @@ void TextureTest::initialize()
     // Texture wrap repeat test
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, 10, 10, -1, -1, 2, 2);
-        setTextureUnlitMaterial(node->getModel(), "res/common/color-wheel.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setId("repeat");
         Texture::Sampler* sampler = node->getModel()->getMaterial()->getParameter("u_diffuseTexture")->getSampler();
         if (sampler)
@@ -101,13 +101,13 @@ void TextureTest::initialize()
     // mipmap test
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, 10, 10);
-        setTextureUnlitMaterial(node->getModel(), "res/common/box-diffuse.png", false);
+        setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png", false);
         node->setId("mipmap off");
         node->setTranslation(-10.5f, -1.5f, 0);
     }
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, 10, 10);
-        setTextureUnlitMaterial(node->getModel(), "res/common/box-diffuse.png");
+        setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png");
         node->setId("mipmap on");
         node->setTranslation(0.5f, -1.5f, 0);
     }

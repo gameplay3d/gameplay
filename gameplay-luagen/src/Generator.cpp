@@ -9,7 +9,7 @@ static bool __printOperatorWarning = false;
 
 // Utility functions (local to this file).
 static string trim(const string& str);
-static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind);
+static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind, int& levelsOfIndirection);
 static inline bool isWantedFileNormal(const string& s);
 static inline bool isNamespaceFile(const string& s);
 static inline bool isGeneratedBindingFile(const string& s);
@@ -970,6 +970,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
         // Get the type string without const or reference qualifiers (and trim whitespace).
         string refId = "";
         string typeStr = "";
+        int levelsOfIndirection = 0;
         FunctionBinding::Param::Kind kind;
         {
             // Attempt to process the type as reference (i.e. class, struct, enum, typedef, etc.) type.
@@ -989,7 +990,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
                 node = node->NextSibling();
             }
 
-            typeStr = stripTypeQualifiers(typeStr, kind);
+            typeStr = stripTypeQualifiers(typeStr, kind, levelsOfIndirection);
         }
 
         if (typeStr == "void")
@@ -1062,6 +1063,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
         {
             p = FunctionBinding::Param(FunctionBinding::Param::TYPE_UNRECOGNIZED, kind, (refId.size() > 0) ? refId : typeStr);
         }
+        p.levelsOfIndirection = levelsOfIndirection;
 
         // Check if the type is a pointer declared with square brackets (i.e. float x[4]).
         XMLElement* arrayElement = NULL;
@@ -1075,6 +1077,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
             if (i != arrayString.npos && k != arrayString.npos)
             {
                 p.kind = FunctionBinding::Param::KIND_POINTER;
+                p.levelsOfIndirection = 1;
                 if (i != k - 1)
                     p.info = arrayString.substr(i + 1, k - (i + 1));
             }
@@ -1805,8 +1808,10 @@ static string trim(const string& str)
     return s;
 }
 
-static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind)
+static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind, int& levelsOfIndirection)
 {
+    levelsOfIndirection = 0;
+
     string type = typeStr;
     kind = FunctionBinding::Param::KIND_VALUE;
 
@@ -1819,11 +1824,12 @@ static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param:
     }
 
     // Check if the type is a pointer.
-    i = type.find("*");
-    if (i != type.npos)
+    while ((i = type.find("*")) != std::string::npos)
     {
         kind = FunctionBinding::Param::KIND_POINTER;
         type.erase(type.begin() + i);
+        ++levelsOfIndirection;
+        int j = 0;
     }
 
     // Ignore const qualifiers.

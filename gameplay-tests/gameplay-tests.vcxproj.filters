@@ -61,6 +61,15 @@
     <ClInclude Include="src\GestureTest.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\BillboardTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FormsTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PostProcessTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveTest.cpp">
@@ -109,6 +118,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\GestureTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BillboardTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FormsTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PostProcessTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

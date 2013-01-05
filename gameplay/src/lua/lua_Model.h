@@ -17,6 +17,7 @@ int lua_Model_getSkin(lua_State* state);
 int lua_Model_hasMaterial(lua_State* state);
 int lua_Model_release(lua_State* state);
 int lua_Model_setMaterial(lua_State* state);
+int lua_Model_setNode(lua_State* state);
 int lua_Model_static_create(lua_State* state);
 
 void luaRegister_Model();

@@ -220,8 +220,8 @@ static unsigned int computePVRTCDataSize(int width, int height, int bpp)
 
 Texture* Texture::createCompressedPVRTC(const char* path)
 {
-    FILE* file = FileSystem::openFile(path, "rb");
-    if (file == NULL)
+    std::auto_ptr<Stream> stream(FileSystem::open(path));
+    if (stream.get() == NULL || !stream->canRead())
     {
         GP_ERROR("Failed to load file '%s'.", path);
         return NULL;
@@ -230,27 +230,17 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     // Read first 4 bytes to determine PVRTC format.
     size_t read;
     unsigned int version;
-    read = fread(&version, sizeof(unsigned int), 1, file);
+    read = stream->read(&version, sizeof(unsigned int), 1);
     if (read != 1)
     {
         GP_ERROR("Failed to read PVR version.");
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close PVR file '%s'.", path);
-            return NULL;
-        }
         return NULL;
     }
 
     // Rewind to start of header.
-    if (fseek(file, 0, SEEK_SET) != 0)
+    if (stream->seek(0, SEEK_SET) == false)
     {
         GP_ERROR("Failed to seek backwards to beginning of file after reading PVR version.");
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close PVR file '%s'.", path);
-            return NULL;
-        }
         return NULL;
     }
 
@@ -263,29 +253,19 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     if (version == 0x03525650)
     {
         // Modern PVR file format.
-        data = readCompressedPVRTC(path, file, &width, &height, &format, &mipMapCount);
+        data = readCompressedPVRTC(path, stream.get(), &width, &height, &format, &mipMapCount);
     }
     else
     {
         // Legacy PVR file format.
-        data = readCompressedPVRTCLegacy(path, file, &width, &height, &format, &mipMapCount);
+        data = readCompressedPVRTCLegacy(path, stream.get(), &width, &height, &format, &mipMapCount);
     }
     if (data == NULL)
     {
         GP_ERROR("Failed to read texture data from PVR file '%s'.", path);
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close PVR file '%s'.", path);
-            return NULL;
-        }
         return NULL;
     }
-
-    if (fclose(file) != 0)
-    {
-        GP_ERROR("Failed to close PVR file '%s'.", path);
-        return NULL;
-    }
+    stream->close();
 
     int bpp = (format == GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG || format == GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG) ? 2 : 4;
 
@@ -322,9 +302,9 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     return texture;
 }
 
-GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
+GLubyte* Texture::readCompressedPVRTC(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
 {
-    GP_ASSERT(file);
+    GP_ASSERT(stream);
     GP_ASSERT(path);
     GP_ASSERT(width);
     GP_ASSERT(height);
@@ -351,7 +331,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
 
     // Read header data.
     pvrtc_file_header header;
-    read = fread(&header, sizeof(pvrtc_file_header), 1, file);
+    read = stream->read(&header, sizeof(pvrtc_file_header), 1);
     if (read != 1)
     {
         GP_ERROR("Failed to read PVR header data for file '%s'.", path);
@@ -395,7 +375,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     *mipMapCount = header.mipMapCount;
 
     // Skip meta-data.
-    if (fseek(file, header.metaDataSize, SEEK_CUR) != 0)
+    if (stream->seek(header.metaDataSize, SEEK_CUR) == false)
     {
         GP_ERROR("Failed to seek past header meta data in PVR file '%s'.", path);
         return NULL;
@@ -414,7 +394,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
 
     // Read data.
     GLubyte* data = new GLubyte[dataSize];
-    read = fread(data, 1, dataSize, file);
+    read = stream->read(data, 1, dataSize);
     if (read != dataSize)
     {
         SAFE_DELETE_ARRAY(data);
@@ -425,7 +405,7 @@ GLubyte* Texture::readCompressedPVRTC(const char* path, FILE* file, GLsizei* wid
     return data;
 }
 
-GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
+GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount)
 {
     char PVRTCIdentifier[] = "PVR!";
 
@@ -449,14 +429,10 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
     // Read the file header.
     unsigned int size = sizeof(pvrtc_file_header_legacy);
     pvrtc_file_header_legacy header;
-    unsigned int read = (int)fread(&header, 1, size, file);
+    unsigned int read = (int)stream->read(&header, 1, size);
     if (read != size)
     {
         GP_ERROR("Failed to read file header for pvrtc file '%s'.", path);
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
@@ -467,10 +443,6 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
         PVRTCIdentifier[3] != (char)((header.pvrtcTag >> 24) & 0xff))
      {
         GP_ERROR("Failed to load pvrtc file '%s': invalid header.", path);
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
@@ -486,10 +458,6 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
     else
     {
         GP_ERROR("Failed to load pvrtc file '%s': invalid pvrtc compressed texture format flags.", path);
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
@@ -498,14 +466,10 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, FILE* file, GLsize
     *mipMapCount = header.mipmapCount + 1; // +1 because mipmapCount does not include the base level
 
     GLubyte* data = new GLubyte[header.dataSize];
-    read = (int)fread(data, 1, header.dataSize, file);
+    read = (int)stream->read(data, 1, header.dataSize);
     if (read != header.dataSize)
     {
         GP_ERROR("Failed to load texture data for pvrtc file '%s'.", path);
-        if (fclose(file) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         SAFE_DELETE_ARRAY(data);
         return NULL;
     }
@@ -559,8 +523,8 @@ Texture* Texture::createCompressedDDS(const char* path)
     Texture* texture = NULL;
 
     // Read DDS file.
-    FILE* fp = FileSystem::openFile(path, "rb");
-    if (fp == NULL)
+    std::auto_ptr<Stream> stream(FileSystem::open(path));
+    if (stream.get() == NULL || !stream->canRead())
     {
         GP_ERROR("Failed to open file '%s'.", path);
         return NULL;
@@ -568,25 +532,17 @@ Texture* Texture::createCompressedDDS(const char* path)
 
     // Validate DDS magic number.
     char code[4];
-    if (fread(code, 1, 4, fp) != 4 || strncmp(code, "DDS ", 4) != 0)
+    if (stream->read(code, 1, 4) != 4 || strncmp(code, "DDS ", 4) != 0)
     {
         GP_ERROR("Failed to read DDS file '%s': invalid DDS magic number.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
     // Read DDS header.
     dds_header header;
-    if (fread(&header, sizeof(dds_header), 1, fp) != 1)
+    if (stream->read(&header, sizeof(dds_header), 1) != 1)
     {
         GP_ERROR("Failed to read header for DDS file '%s'.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
@@ -639,10 +595,6 @@ Texture* Texture::createCompressedDDS(const char* path)
             break;
         default:
             GP_ERROR("Unsupported compressed texture format (%d) for DDS file '%s'.", header.ddspf.dwFourCC, path);
-            if (fclose(fp) != 0)
-            {
-                GP_ERROR("Failed to close file '%s'.", path);
-            }
             SAFE_DELETE_ARRAY(mipLevels);
             return NULL;
         }
@@ -654,7 +606,7 @@ Texture* Texture::createCompressedDDS(const char* path)
             mipLevels[i].size =  std::max(1, (width+3) >> 2) * std::max(1, (height+3) >> 2) * bytesPerBlock;
             mipLevels[i].data = new GLubyte[mipLevels[i].size];
 
-            if (fread(mipLevels[i].data, 1, mipLevels[i].size, fp) != (unsigned int)mipLevels[i].size)
+            if (stream->read(mipLevels[i].data, 1, mipLevels[i].size) != (unsigned int)mipLevels[i].size)
             {
                 GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
                 
@@ -662,11 +614,6 @@ Texture* Texture::createCompressedDDS(const char* path)
                 for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
                     SAFE_DELETE_ARRAY(mipLevels[i].data);
                 SAFE_DELETE_ARRAY(mipLevels);
-
-                if (fclose(fp) != 0)
-                {
-                    GP_ERROR("Failed to close file '%s'.", path);
-                }
                 return texture;
             }
 
@@ -679,10 +626,6 @@ Texture* Texture::createCompressedDDS(const char* path)
         // RGB (uncompressed)
         // Note: Use GL_BGR as internal format to flip bytes.
         GP_ERROR("Failed to create texture from DDS file '%s': uncompressed RGB format is not supported.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
@@ -691,10 +634,6 @@ Texture* Texture::createCompressedDDS(const char* path)
         // RGBA (uncompressed)
         // Note: Use GL_BGRA as internal format to flip bytes.
         GP_ERROR("Failed to create texture from DDS file '%s': uncompressed RGBA format is not supported.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
@@ -702,19 +641,12 @@ Texture* Texture::createCompressedDDS(const char* path)
     {
         // Unsupported.
         GP_ERROR("Failed to create texture from DDS file '%s': unsupported flags (%d).", path, header.ddspf.dwFlags);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
     
     // Close file.
-    if (fclose(fp) != 0)
-    {
-        GP_ERROR("Failed to close file '%s'.", path);
-    }
+    stream->close();
 
     // Generate GL texture.
     GLuint textureId;

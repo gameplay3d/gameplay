@@ -825,6 +825,18 @@
     <ClCompile Include="src\TerrainPatch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_TerrainFlags.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_TerrainHeightField.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_Terrain.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1628,11 +1640,26 @@
     <ClInclude Include="src\lua\lua_LoggerLevel.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\Stream.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\Terrain.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\TerrainPatch.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TerrainFlags.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TerrainHeightField.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_Terrain.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h">
+      <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

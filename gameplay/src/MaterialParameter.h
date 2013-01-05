@@ -127,8 +127,10 @@ public:
 
     /**
      * Sets the value of this parameter to the specified texture sampler array.
+     *
+     * @script{ignore}
      */
-    void setValue(const Texture::Sampler** samplers, unsigned int count = 1);
+    void setValue(const Texture::Sampler** samplers, unsigned int count);
 
     /**
      * Loads a texture sampler from the specified path and sets it as the value of this parameter.

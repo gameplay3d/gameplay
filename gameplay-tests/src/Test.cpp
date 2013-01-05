@@ -83,6 +83,11 @@ const Rectangle& Test::getViewport() const
     return Game::getInstance()->getViewport();
 }
 
+void Test::setViewport(const Rectangle& viewport)
+{
+	Game::getInstance()->setViewport(viewport);
+}
+
 unsigned int Test::getWidth() const
 {
     return Game::getInstance()->getWidth();

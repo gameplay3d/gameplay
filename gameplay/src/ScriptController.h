@@ -1,5 +1,5 @@
-#ifndef SCRIPTCONTROLLER_H
-#define SCRIPTCONTROLLER_H
+#ifndef SCRIPTCONTROLLER_H_
+#define SCRIPTCONTROLLER_H_
 
 #include "Base.h"
 #include "Game.h"
@@ -19,6 +19,7 @@ namespace ScriptUtil
 
 /**
  * Represents a C++ object from within Lua.
+ * 
  * @script{ignore}
  */
 struct LuaObject
@@ -32,6 +33,7 @@ struct LuaObject
 /**
  * Stores a Lua parameter of an array/pointer type that is passed from Lua to C.
  * Handles automatic cleanup of any temporary memory associated with the array.
+ * 
  * @script{ignore}
  */
 template <typename T>
@@ -55,7 +57,7 @@ public:
     LuaArray(int count);
 
     /**
-     * Copy construcotr.
+     * Copy constructor.
      */
     LuaArray(const LuaArray<T>& copy);
 
@@ -102,6 +104,7 @@ private:
  * 
  * @param name The name of the library from within Lua.
  * @param functions The library function mapping (Lua function names to C++ functions).
+ * 
  * @script{ignore}
  */
 void registerLibrary(const char* name, const luaL_Reg* functions);
@@ -112,6 +115,7 @@ void registerLibrary(const char* name, const luaL_Reg* functions);
  * @param name The name of the constant (what the user would use from Lua).
  * @param value The constant's value.
  * @param scopePath The list of containing classes, going inward from the most outer class.
+ * 
  * @script{ignore}
  */
 void registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
@@ -122,6 +126,7 @@ void registerConstantBool(const std::string& name, bool value, const std::vector
  * @param name The name of the constant (what the user would use from Lua).
  * @param value The constant's value.
  * @param scopePath The list of containing classes, going inward from the most outer class.
+ * 
  * @script{ignore}
  */
 void registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath);
@@ -132,6 +137,7 @@ void registerConstantNumber(const std::string& name, double value, const std::ve
  * @param name The name of the constant (what the user would use from Lua).
  * @param value The constant's value.
  * @param scopePath The list of containing classes, going inward from the most outer class.
+ * 
  * @script{ignore}
  */
 void registerConstantString(const std::string& name, const std::string& value, const std::vector<std::string>& scopePath);
@@ -145,6 +151,7 @@ void registerConstantString(const std::string& name, const std::string& value, c
  * @param deleteFunction The function to call that destroys an instance of the class.
  * @param statics The library function mapping for all the static functions (Lua function names to C++ functions).
  * @param scopePath For an inner class, this is a list of its containing classes, going inward from the most outer class.
+ * 
  * @script{ignore}
  */
 void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newFunction, lua_CFunction deleteFunction, const luaL_Reg* statics,
@@ -155,6 +162,7 @@ void registerClass(const char* name, const luaL_Reg* members, lua_CFunction newF
  * 
  * @param luaFunction The name of the function from within Lua.
  * @param cppFunction The C++ function pointer.
+ * 
  * @script{ignore}
  */
 void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
@@ -164,6 +172,7 @@ void registerFunction(const char* luaFunction, lua_CFunction cppFunction);
  * 
  * @param base The base class of the inheritance pair.
  * @param derived The derived class of the inheritance pair.
+ * 
  * @script{ignore}
  */
 void setGlobalHierarchyPair(const std::string& base, const std::string& derived);
@@ -172,6 +181,7 @@ void setGlobalHierarchyPair(const std::string& base, const std::string& derived)
  * Adds the given function as a string-from-enumerated value conversion function.
  * 
  * @param stringFromEnum The pointer to the string-from-enum conversion function.
+ * 
  * @script{ignore}
  */
 void addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringFromEnum);
@@ -180,7 +190,9 @@ void addStringFromEnumConversionFunction(luaStringEnumConversionFunction stringF
  * Gets a pointer to a bool (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<bool> getBoolPointer(int index);
@@ -189,7 +201,9 @@ LuaArray<bool> getBoolPointer(int index);
  * Gets a pointer to a short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<short> getShortPointer(int index);
@@ -198,7 +212,9 @@ LuaArray<short> getShortPointer(int index);
  * Gets a pointer to an int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<int> getIntPointer(int index);
@@ -207,7 +223,9 @@ LuaArray<int> getIntPointer(int index);
  * Gets a pointer to a long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<long> getLongPointer(int index);
@@ -216,7 +234,9 @@ LuaArray<long> getLongPointer(int index);
  * Gets a pointer to an unsigned char (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<unsigned char> getUnsignedCharPointer(int index);
@@ -225,7 +245,9 @@ LuaArray<unsigned char> getUnsignedCharPointer(int index);
  * Gets a pointer to an unsigned short (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<unsigned short> getUnsignedShortPointer(int index);
@@ -234,7 +256,9 @@ LuaArray<unsigned short> getUnsignedShortPointer(int index);
  * Gets a pointer to an unsigned int (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<unsigned int> getUnsignedIntPointer(int index);
@@ -243,7 +267,9 @@ LuaArray<unsigned int> getUnsignedIntPointer(int index);
  * Gets a pointer to an unsigned long (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<unsigned long> getUnsignedLongPointer(int index);
@@ -252,7 +278,9 @@ LuaArray<unsigned long> getUnsignedLongPointer(int index);
  * Gets a pointer to a float (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<float> getFloatPointer(int index);
@@ -261,7 +289,9 @@ LuaArray<float> getFloatPointer(int index);
  * Gets a pointer to a double (as an array-use SAFE_DELETE_ARRAY to clean up) for the given stack index.
  * 
  * @param index The stack index.
+ * 
  * @return The pointer.
+ * 
  * @script{ignore}
  */
 LuaArray<double> getDoublePointer(int index);
@@ -275,8 +305,10 @@ LuaArray<double> getDoublePointer(int index);
  *      are retrieving is actually a reference or by-value parameter).
  * @param success An out parameter that is set to true if the Lua parameter was successfully
  *      converted to a valid object, or false if it was unable to perform a valid conversion.
+ * 
  * @return The object pointer or <code>NULL</code> if the data at the stack index
  *      is not an object or if the object is not derived from the given type.
+ * 
  * @script{ignore}
  */
 template <typename T>
@@ -287,7 +319,9 @@ LuaArray<T> getObjectPointer(int index, const char* type, bool nonNull, bool* su
  * 
  * @param index The stack index.
  * @param isStdString Whether the string being retrieved is a std::string object or not.
+ * 
  * @return The string or <code>NULL</code>.
+ * 
  * @script{ignore}
  */
 const char* getString(int index, bool isStdString);
@@ -297,13 +331,14 @@ const char* getString(int index, bool isStdString);
  * 
  * @param state The Lua state.
  * @param n The stack index.
+ * 
  * @return The boolean (if successful; otherwise it logs an error).
+ * 
  * @script{ignore}
  */
 bool luaCheckBool(lua_State* state, int n);
 
 }
-
 
 /**
  * Controls and manages all scripts.
@@ -326,6 +361,7 @@ public:
      * Given a URL, loads the referenced file and returns the referenced function name.
      * 
      * @param url The url to load.
+     * 
      * @return The function that the URL references.
      */
     std::string loadUrl(const char* url);
@@ -334,6 +370,7 @@ public:
      * Calls the specified no-parameter Lua function.
      * 
      * @param func The name of the function to call.
+     * 
      * @return The return value of the executed Lua function.
      */
     template<typename T> T executeFunction(const char* func);
@@ -358,6 +395,7 @@ public:
      *      - 'p' - pointer
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
+     * 
      * @return The return value of the executed Lua function.
      */
     template<typename T> T executeFunction(const char* func, const char* args, ...);
@@ -383,6 +421,7 @@ public:
      *      - '<object-type>' - a <b>pointer</b> to an object of the given type (where the qualified type name is enclosed by angle brackets).
      *      - '[enum-type]' - an enumerated value of the given type (where the qualified type name is enclosed by square brackets).
      * @param list The variable argument list containing the function's parameters.
+     * 
      * @return The return value of the executed Lua function.
      */
     template<typename T> T executeFunction(const char* func, const char* args, va_list* list);
@@ -391,106 +430,141 @@ public:
      * Gets the global boolean script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a bool.
+     * 
      * @return The global boolean script variable.
+     * 
      * @script{ignore}
      */
-    bool getBool(const char* name);
+    bool getBool(const char* name, bool defaultValue = false);
 
     /**
      * Gets the global char script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global char script variable.
+     * 
      * @script{ignore}
      */
-    char getChar(const char* name);
+    char getChar(const char* name, char defaultValue = 0);
 
     /**
      * Gets the global short script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global short script variable.
+     * 
      * @script{ignore}
      */
-    short getShort(const char* name);
+    short getShort(const char* name, short defaultValue = 0);
 
     /**
      * Gets the global int script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global int script variable.
+     * 
      * @script{ignore}
      */
-    int getInt(const char* name);
+    int getInt(const char* name, int defaultValue = 0);
 
     /**
      * Gets the global long script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global long script variable.
+     * 
      * @script{ignore}
      */
-    long getLong(const char* name);
+    long getLong(const char* name, long defaultValue = 0);
 
     /**
      * Gets the global unsigned char script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global unsigned char script variable.
+     * 
      * @script{ignore}
      */
-    unsigned char getUnsignedChar(const char* name);
+    unsigned char getUnsignedChar(const char* name, unsigned char defaultValue = 0);
 
     /**
      * Gets the global unsigned short script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global unsigned short script variable.
+     * 
      * @script{ignore}
      */
-    unsigned short getUnsignedShort(const char* name);
+    unsigned short getUnsignedShort(const char* name, unsigned short defaultValue = 0);
 
     /**
      * Gets the global unsigned int script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global unsigned int script variable.
+     * 
      * @script{ignore}
      */
-    unsigned int getUnsignedInt(const char* name);
+    unsigned int getUnsignedInt(const char* name, unsigned int defaultValue = 0);
 
     /**
      * Gets the global unsigned long script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global unsigned long script variable.
+     * 
      * @script{ignore}
      */
-    unsigned long getUnsignedLong(const char* name);
+    unsigned long getUnsignedLong(const char* name, unsigned long defaultValue = 0);
 
     /**
      * Gets the global float script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global float script variable.
+     * 
      * @script{ignore}
      */
-    float getFloat(const char* name);
+    float getFloat(const char* name, float defaultValue = 0);
 
     /**
      * Gets the global double script variable with the given name.
      * 
      * @param name The name of the variable.
+     * @param defaultValue The default value to return if the variable is not a number.
+     * 
      * @return The global double script variable.
+     * 
      * @script{ignore}
      */
-    double getDouble(const char* name);
+    double getDouble(const char* name, double defaultValue = 0);
 
     /**
-     * Gets the global string script variable with the given name.
+     * Gets the global string variable with the given name.
      * 
      * @param name The name of the variable.
-     * @return The global string script variable.
+     * 
+     * @return The string variable or NULL if the variable is not a string.
+     * 
      * @script{ignore}
      */
     const char* getString(const char* name);
@@ -500,7 +574,9 @@ public:
      * 
      * @param type The type of the variable in Lua.
      * @param name The name of the variable.
+     * 
      * @return The global pointer script variable.
+     * 
      * @script{ignore}
      */
     template<typename T>T* getObjectPointer(const char* type, const char* name);
@@ -510,6 +586,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The boolean value.
+     * 
      * @script{ignore}
      */
     void setBool(const char* name, bool v);
@@ -519,6 +596,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The char value.
+     * 
      * @script{ignore}
      */
     void setChar(const char* name, char v);
@@ -528,6 +606,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The short value.
+     * 
      * @script{ignore}
      */
     void setShort(const char* name, short v);
@@ -537,6 +616,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The int value.
+     * 
      * @script{ignore}
      */
     void setInt(const char* name, int v);
@@ -546,6 +626,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The long value.
+     * 
      * @script{ignore}
      */
     void setLong(const char* name, long v);
@@ -555,6 +636,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned char value.
+     * 
      * @script{ignore}
      */
     void setUnsignedChar(const char* name, unsigned char v);
@@ -564,6 +646,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned short value.
+     * 
      * @script{ignore}
      */
     void setUnsignedShort(const char* name, unsigned short v);
@@ -573,6 +656,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned int value.
+     * 
      * @script{ignore}
      */
     void setUnsignedInt(const char* name, unsigned int v);
@@ -582,6 +666,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The unsigned long value.
+     * 
      * @script{ignore}
      */
     void setUnsignedLong(const char* name, unsigned long v);
@@ -591,6 +676,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The float value.
+     * 
      * @script{ignore}
      */
     void setFloat(const char* name, float v);
@@ -600,6 +686,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The double value.
+     * 
      * @script{ignore}
      */
     void setDouble(const char* name, double v);
@@ -609,6 +696,7 @@ public:
      * 
      * @param name The name of the script variable.
      * @param v The string value.
+     * 
      * @script{ignore}
      */
     void setString(const char* name, const char* v);
@@ -619,6 +707,7 @@ public:
      * @param type The type of the script variable.
      * @param name The name of the variable.
      * @param v The pointer value.
+     * 
      * @script{ignore}
      */
     template<typename T>void setObjectPointer(const char* type, const char* name, T* v);
@@ -790,6 +879,7 @@ private:
      * or to ScriptController::INVALID_CALLBACK if there is no valid conversion.
      * 
      * @param name The name of the callback.
+     * 
      * @return The corresponding callback enumeration value.
      */
     static ScriptController::ScriptCallback toCallback(const char* name);

@@ -2,6 +2,7 @@
 #define AUDIOBUFFER_H_
 
 #include "Ref.h"
+#include "Stream.h"
 
 namespace gameplay
 {
@@ -43,9 +44,9 @@ private:
      */
     static AudioBuffer* create(const char* path);
     
-    static bool loadWav(FILE* file, ALuint buffer);
+    static bool loadWav(Stream* stream, ALuint buffer);
     
-    static bool loadOgg(FILE*& file, ALuint buffer);
+    static bool loadOgg(Stream* stream, ALuint buffer);
 
     std::string _filePath;
     ALuint _alBuffer;

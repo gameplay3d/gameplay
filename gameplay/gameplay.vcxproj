@@ -225,6 +225,7 @@
     <ClCompile Include="src\lua\lua_RenderState.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateAutoBinding.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateBlend.cpp" />
+    <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStateBlock.cpp" />
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
     <ClCompile Include="src\lua\lua_Scene.cpp" />
@@ -235,6 +236,9 @@
     <ClCompile Include="src\lua\lua_Slider.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
+    <ClCompile Include="src\lua\lua_Terrain.cpp" />
+    <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
+    <ClCompile Include="src\lua\lua_TerrainHeightField.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
@@ -496,6 +500,7 @@
     <ClInclude Include="src\lua\lua_RenderState.h" />
     <ClInclude Include="src\lua\lua_RenderStateAutoBinding.h" />
     <ClInclude Include="src\lua\lua_RenderStateBlend.h" />
+    <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h" />
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h" />
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
     <ClInclude Include="src\lua\lua_Scene.h" />
@@ -506,6 +511,9 @@
     <ClInclude Include="src\lua\lua_Slider.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
+    <ClInclude Include="src\lua\lua_Terrain.h" />
+    <ClInclude Include="src\lua\lua_TerrainFlags.h" />
+    <ClInclude Include="src\lua\lua_TerrainHeightField.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />
@@ -575,6 +583,7 @@
     <ClInclude Include="src\ScriptTarget.h" />
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\SpriteBatch.h" />
+    <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Terrain.h" />
     <ClInclude Include="src\TerrainPatch.h" />

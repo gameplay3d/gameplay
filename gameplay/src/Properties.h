@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "Matrix.h"
 #include "Vector2.h"
+#include "Stream.h"
 
 namespace gameplay
 {
@@ -383,17 +384,17 @@ private:
      * Constructors.
      */
     Properties();
-    Properties(FILE* file);
+    Properties(Stream* stream);
     Properties(const Properties& copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified
      */
-    Properties(FILE* file, const char* name, const char* id = NULL, const char* parentID = NULL);
+    Properties(Stream* stream, const char* name, const char* id = NULL, const char* parentID = NULL);
 
-    void readProperties(FILE* file);
+    void readProperties(Stream* stream);
 
-    void skipWhiteSpace(FILE* file);
+    void skipWhiteSpace(Stream* stream);
 
     char* trimWhiteSpace(char* str);
 

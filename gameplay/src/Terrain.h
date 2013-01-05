@@ -337,7 +337,7 @@ public:
     unsigned int getVisibleTriangleCount() const;
 
     /**
-     * Gets the local bounding box for this terrain.
+     * Returns the local bounding box for this terrain.
      *
      * @return The local bounding box for the terrain.
      */
@@ -397,6 +397,7 @@ private:
     unsigned int _flags;
     mutable Matrix _worldMatrix;
     mutable bool _worldMatrixDirty;
+    BoundingBox _boundingBox;
 
 };
 

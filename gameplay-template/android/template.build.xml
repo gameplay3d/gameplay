@@ -62,10 +62,9 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-        <copy file="../res/box.gpb" tofile="assets/res/box.gpb"/>
-        <copy file="../res/box.material" tofile="assets/res/box.material"/>
-        <copy file="../res/colored.vert" tofile="assets/res/colored.vert"/>
-        <copy file="../res/colored.frag" tofile="assets/res/colored.frag"/>
+        <copy todir="assets/res">
+            <fileset dir="../res" />
+        </copy>
     </target>
 
     <!-- Import the actual build file.

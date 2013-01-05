@@ -1,8 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <queue>
-
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Touch.h"
@@ -16,7 +14,6 @@
 #include "Rectangle.h"
 #include "Vector4.h"
 #include "TimeListener.h"
-
 
 namespace gameplay
 {
@@ -466,7 +463,7 @@ public:
     inline Gamepad* getGamepad(unsigned int index) const;
 
     /**
-     * Sets muli-touch is to be enabled/disabled. Default is disabled.
+     * Sets multi-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
      */
@@ -516,6 +513,15 @@ public:
      * @param function The Lua script function that will receive the event.
      */
     void schedule(float timeOffset, const char* function);
+
+    /**
+     * Opens an URL in an external browser, if available.
+     *
+     * @param url URL to be opened.
+     *
+     * @return True if URL was opened successfully, false otherwise.
+     */
+    bool launchURL(const char *url) const;
 
 protected:
 

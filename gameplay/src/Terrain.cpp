@@ -20,8 +20,14 @@ namespace gameplay
 //
 #define DEFAULT_TERRAIN_HEIGHT_RATIO 0.3f
 
-// Forward declaration of helper functions
+/**
+ * @script{ignore}
+ */
 std::string getExtension(const char* filename);
+
+/**
+ * @script{ignore}
+ */
 float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
@@ -225,6 +231,8 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     terrain->_heightfield = heightfield;
     terrain->_localScale = scale;
 
+    BoundingBox& bounds = terrain->_boundingBox;
+
     if (normalMapPath)
         terrain->_normalMap = Texture::Sampler::create(normalMapPath, true);
 
@@ -245,7 +253,12 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
             x1 = x;
             x2 = std::min(x1 + patchSize, width-1);
 
-            terrain->_patches.push_back(TerrainPatch::create(terrain, row, column, heightfield->getArray(), width, height, x1, z1, x2, z2, -halfWidth, -halfHeight, maxStep, skirtScale));
+            // Create this patch
+            TerrainPatch* patch = TerrainPatch::create(terrain, row, column, heightfield->getArray(), width, height, x1, z1, x2, z2, -halfWidth, -halfHeight, maxStep, skirtScale);
+            terrain->_patches.push_back(patch);
+
+            // Append the new patch's local bounds to the terrain local bounds
+            bounds.merge(patch->getBoundingBox(false));
         }
     }
 
@@ -408,6 +421,31 @@ unsigned int Terrain::getVisiblePatchCount() const
     return visibleCount;
 }
 
+unsigned int Terrain::getTriangleCount() const
+{
+    unsigned int triangleCount = 0;
+    for (size_t i = 0, count = _patches.size(); i < count; ++i)
+    {
+        triangleCount += _patches[i]->getTriangleCount();
+    }
+    return triangleCount;
+}
+
+unsigned int Terrain::getVisibleTriangleCount() const
+{
+    unsigned int triangleCount = 0;
+    for (size_t i = 0, count = _patches.size(); i < count; ++i)
+    {
+        triangleCount += _patches[i]->getVisibleTriangleCount();
+    }
+    return triangleCount;
+}
+
+const BoundingBox& Terrain::getBoundingBox() const
+{
+    return _boundingBox;
+}
+
 void Terrain::draw(bool wireframe)
 {
     for (size_t i = 0, count = _patches.size(); i < count; ++i)
@@ -493,8 +531,16 @@ Terrain::HeightField* Terrain::HeightField::create(unsigned int columns, unsigne
     return new HeightField(columns, rows);
 }
 
+/**
+ * @script{ignore}
+ */
 float normalizedHeightPacked(float r, float g, float b)
 {
+    // This formula is intended for 24-bit packed heightmap images (that are generated
+    // with gameplay-encoder. However, it is also compatible with normal grayscale 
+    // heightmap images, with an error of approximately 0.4%. This can be seen by
+    // setting r=g=b=x and comparing the grayscale height expression to the packed
+    // height expression: the error is 2^-8 + 2^-16 which is just under 0.4%.
     return (256.0f*r + g + 0.00390625f*b) / 65536.0f;
 }
 
@@ -548,16 +594,6 @@ Terrain::HeightField* Terrain::HeightField::create(const char* imagePath, unsign
         {
             for (unsigned int x = 0, w = image->getWidth(); x < w; ++x)
             {
-                // Originally in GamePlay this was normalizedHeightGrayscale which yielded
-                // only 8-bit precision. This has been replaced by normalizedHeightPacked (with a
-                // corresponding change in gameplay-encoder).
-                //
-                // BACKWARD COMPATIBILITY
-                // In grayscale images where r=g=b this will maintain some degree of compatibility,
-                // to within 0.4%. This can be seen by setting r=g=b=x and comparing the grayscale
-                // height expression to the packed height expression: the error is 2^-8 + 2^-16
-                // which is just under 0.4%.
-                //
                 idx = (y*w + x) * pixelSize;
                 heights[i++] = minHeight + normalizedHeightPacked(data[idx], data[idx + 1], data[idx + 2]) * heightScale;
             }

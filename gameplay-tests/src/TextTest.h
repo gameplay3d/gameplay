@@ -27,23 +27,22 @@ private:
     void renderToTexture();
     void buildQuad(Texture* texture);
 
-    // Render state
+    Form* _form;
     RenderState::StateBlock* _stateBlock;
-    
-    Font* _font;
-    unsigned int _fontIndex;
-    std::vector<Font*> _fonts;
-    std::string _testString;
-    gameplay::Rectangle _viewport;
-    gameplay::Font::Justify _alignment;
     float _scale;
     bool _wrap;
     bool _ignoreClip;
     bool _useViewport;
     bool _rightToLeft;
     bool _simple;
+    Font::Justify _alignment;
+    std::vector<Font*> _fonts;
     unsigned int _fontsCount;
-    Form* _form;
+    unsigned int _fontIndex;
+    Font* _font;
+    Rectangle _viewport;
+    std::string _testString;
+
 };
 
 #endif

@@ -24,7 +24,7 @@ void TestsGame::initialize()
     }
 
     // Construct a form for selecting which test to run.
-    Theme* theme = Theme::create("res/common/mainMenu.theme");
+    Theme* theme = Theme::create("res/common/default.theme");
     Theme::Style* formStyle = theme->getStyle("basic");
     Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
     Theme::Style* titleStyle = theme->getStyle("title");
@@ -64,6 +64,7 @@ void TestsGame::initialize()
             testButton->release();
         }
     }
+	_testSelectForm->setState(Control::FOCUS);
 }
 
 void TestsGame::finalize()
@@ -191,7 +192,7 @@ void TestsGame::controlEvent(Control* control, EventType evt)
             TestRecord testRecord = list[j];
             if (testRecord.title.compare(control->getId()) == 0)
             {
-                _testSelectForm->disable();
+                _testSelectForm->setEnabled(false);
                 runTest(testRecord.funcPtr);
                 return;
             }
@@ -217,7 +218,7 @@ void TestsGame::exitActiveTest()
         _activeTest->finalize();
         SAFE_DELETE(_activeTest);
 
-        _testSelectForm->enable();
+        _testSelectForm->setEnabled(true);
     }
     // Reset some game options
     setMultiTouch(false);
