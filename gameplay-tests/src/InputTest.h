@@ -36,6 +36,8 @@ protected:
 private:
 
     bool drawScene(Node* node);
+    
+    void setCaptured(bool captured);
 
 private:
 
@@ -47,9 +49,14 @@ private:
     std::string _symbolsString;
     std::string _mouseString;
     Font* _font;
-    Form* _keyboardSwitch;
+    Form* _inputTestControls;
     int _mouseWheel;
     bool _keyboardState;
+    SpriteBatch* _crosshair;
+    Rectangle _crosshairDstRect;
+    Rectangle _crosshairSrcRect;
+    Vector2 _crosshairLowerLimit;
+    Vector2 _crosshairUpperLimit;
 };
 
 #endif
