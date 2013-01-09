@@ -146,6 +146,21 @@ bool Test::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
+bool Test::hasMouse()
+{
+    return Game::getInstance()->hasMouse();
+}
+
+bool Test::isMouseCaptured()
+{
+    return Game::getInstance()->isMouseCaptured();
+}
+
+void Test::setMouseCaptured(bool captured)
+{
+    Game::getInstance()->setMouseCaptured(captured);
+}
+
 void Test::setMultiTouch(bool enabled)
 {
     Game::getInstance()->setMultiTouch(enabled);
