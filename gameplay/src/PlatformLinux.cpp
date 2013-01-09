@@ -24,6 +24,9 @@ static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __pitch;
 static float __roll;
+static bool __mouseCaptured = false;
+static float __mouseCapturePointX = 0;
+static float __mouseCapturePointY = 0;
 static bool __cursorVisible = true;
 static Display* __display;
 static Window   __window;
@@ -862,25 +865,45 @@ int Platform::enterMessagePump()
         
             case MotionNotify:
                 {
-                    if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, evt.xmotion.x, evt.xmotion.y, 0))
+                    int x = evt.xmotion.x;
+                    int y = evt.xmotion.y;
+
+                    if (__mouseCaptured)
+                    {
+                        if (x == __mouseCapturePointX && y == __mouseCapturePointY)
+                        {
+                            // Discard the first MotionNotify following capture
+                            // since it contains bogus x,y data.
+                            break;
+                        }
+
+                        // Convert to deltas
+                        x -= __mouseCapturePointX;
+                        y -= __mouseCapturePointY;
+
+                        // Warp mouse back to center of screen.
+                        XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+                    }
+
+                    if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
                     {
                         if (evt.xmotion.state & Button1Mask)
                         {
-                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, evt.xmotion.x, evt.xmotion.y, 0);
+                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
                         }
                         else if (evt.xmotion.state & Button3Mask)
                         {
                             // Update the pitch and roll by adding the scaled deltas.
-                            __roll += (float)(evt.xbutton.x - lx) * ACCELEROMETER_X_FACTOR;
-                            __pitch += -(float)(evt.xbutton.y - ly) * ACCELEROMETER_Y_FACTOR;
+                            __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+                            __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
                             // Clamp the values to the valid range.
                             __roll = max(min(__roll, 90.0f), -90.0f);
                             __pitch = max(min(__pitch, 90.0f), -90.0f);
 
                             // Update the last X/Y values.
-                            lx = evt.xbutton.x;
-                            ly = evt.xbutton.y;
+                            lx = x;
+                            ly = y;
                         }
                     }
                 }
@@ -992,13 +1015,31 @@ bool Platform::hasMouse()
 
 void Platform::setMouseCaptured(bool captured)
 {
-    // TODO
+    if (captured != __mouseCaptured)
+    {
+        if (captured)
+        {
+            // Hide the cursor and warp it to the center of the screen
+            __mouseCapturePointX = getDisplayWidth() / 2;
+            __mouseCapturePointY = getDisplayHeight() / 2;
+
+            setCursorVisible(false);
+            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+        }
+        else
+        {
+            // Restore cursor
+            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+            setCursorVisible(true);
+        }
+
+        __mouseCaptured = captured;
+    }
 }
 
 bool Platform::isMouseCaptured()
 {
-    // TODO
-    return false;
+    return __mouseCaptured;
 }
 
 void Platform::setCursorVisible(bool visible)
@@ -1007,7 +1048,17 @@ void Platform::setCursorVisible(bool visible)
     {
         if (visible)
         {
-            XDefineCursor(__display, __window, None);
+            Cursor invisibleCursor;
+            Pixmap bitmapNoData;
+            XColor black;
+            static char noData[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            black.red = black.green = black.blue = 0;
+            bitmapNoData = XCreateBitmapFromData(__display, __window, noData, 8, 8);
+            invisibleCursor = XCreatePixmapCursor(__display, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
+
+            XDefineCursor(__display, __window, invisibleCursor);
+            XFreeCursor(__display, invisibleCursor);
+            XFreePixmap(__display, bitmapNoData);
         }
         else
         {
