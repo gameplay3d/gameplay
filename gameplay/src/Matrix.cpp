@@ -19,7 +19,8 @@ Matrix::Matrix()
     *this = Matrix::identity();
 }
 
-Matrix::Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
+Matrix::Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+               float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
 {
     set(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
 }
@@ -60,7 +61,8 @@ const Matrix& Matrix::zero()
 
 void Matrix::createLookAt(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& up, Matrix* dst)
 {
-    createLookAt(eyePosition.x, eyePosition.y, eyePosition.z, targetPosition.x, targetPosition.y, targetPosition.z, up.x, up.y, up.z, dst);
+    createLookAt(eyePosition.x, eyePosition.y, eyePosition.z, targetPosition.x, targetPosition.y, targetPosition.z,
+                 up.x, up.y, up.z, dst);
 }
 
 void Matrix::createLookAt(float eyePositionX, float eyePositionY, float eyePositionZ,
@@ -763,7 +765,8 @@ void Matrix::scale(const Vector3& s, Matrix* dst) const
     scale(s.x, s.y, s.z, dst);
 }
 
-void Matrix::set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
+void Matrix::set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+                 float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
 {
     m[0]  = m11;
     m[1]  = m21;

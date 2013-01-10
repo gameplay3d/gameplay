@@ -77,8 +77,8 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31,
-           float m32, float m33, float m34, float m41, float m42, float m43, float m44);
+    Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+           float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44);
 
     /**
      * Creates a matrix initialized to the specified column-major array.
@@ -149,8 +149,9 @@ public:
      * @param upZ The up vector z-coordinate value.
      * @param dst A matrix to store the result in.
      */
-    static void createLookAt(float eyePositionX, float eyePositionY, float eyePositionZ, float targetCenterX,
-                             float targetCenterY, float targetCenterZ, float upX, float upY, float upZ, Matrix* dst);
+    static void createLookAt(float eyePositionX, float eyePositionY, float eyePositionZ,
+                             float targetCenterX, float targetCenterY, float targetCenterZ,
+                             float upX, float upY, float upZ, Matrix* dst);
 
     /**
      * Builds a perspective projection matrix based on a field of view and returns by value.
@@ -207,8 +208,8 @@ public:
      * @param zFarPlane The maximum z-value of the view volume.
      * @param dst A matrix to store the result in.
      */
-    static void createOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane,
-                                            float zFarPlane, Matrix* dst);
+    static void createOrthographicOffCenter(float left, float right, float bottom, float top,
+                                            float zNearPlane, float zFarPlane, Matrix* dst);
 
 //    /*
 //     * Creates a spherical billboard that rotates around a specified object position.
@@ -223,7 +224,8 @@ public:
 //     * @param cameraUpVector The up vector of the camera.
 //     * @param dst A matrix to store the result in.
 //     */
-//    static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition, const Vector3& cameraUpVector, Matrix* dst);
+//    static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
+//                                const Vector3& cameraUpVector, Matrix* dst);
 //
 //    /*
 //     * Fills in an existing Matrix so that it reflects the coordinate system about a specified Plane.
@@ -664,8 +666,8 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    void set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31,
-             float m32, float m33, float m34, float m41, float m42, float m43, float m44);
+    void set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+             float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44);
 
     /**
      * Sets the values of this matrix to those in the specified column-major array.
