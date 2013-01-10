@@ -7,6 +7,8 @@
 namespace gameplay
 {
 
+class Plane;
+
 /**
  * Defines a 4 x 4 floating point matrix representing a 3D transformation.
  *
@@ -211,29 +213,51 @@ public:
     static void createOrthographicOffCenter(float left, float right, float bottom, float top,
                                             float zNearPlane, float zFarPlane, Matrix* dst);
 
-//    /*
-//     * Creates a spherical billboard that rotates around a specified object position.
-//     *
-//     * This method computes the facing direction of the billboard from the object position
-//     * and camera position. When the object and camera positions are too close, the matrix
-//     * will not be accurate. To avoid this problem, the method uses the optional camera
-//     * forward vector if the positions are too close.
-//     *
-//     * @param objectPosition The position of the object the billboard will rotate around.
-//     * @param cameraPosition The position of the camera.
-//     * @param cameraUpVector The up vector of the camera.
-//     * @param dst A matrix to store the result in.
-//     */
-//    static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
-//                                const Vector3& cameraUpVector, Matrix* dst);
-//
-//    /*
-//     * Fills in an existing Matrix so that it reflects the coordinate system about a specified Plane.
-//     *
-//     * @param plane The Plane about which to create a reflection.
-//     * @param dst A matrix to store the result in.
-//     */
-//    static void createReflection(const Plane& plane, Matrix* dst);
+    /*
+     * Creates a spherical billboard that rotates around a specified object position.
+     *
+     * This method computes the facing direction of the billboard from the object position
+     * and camera position. When the object and camera positions are too close, the matrix
+     * will not be accurate. To avoid this problem, this method defaults to the identity
+     * rotation if the positions are too close. (See the other overload of createBillboard
+     * for an alternative approach).
+     *
+     * @param objectPosition The position of the object the billboard will rotate around.
+     * @param cameraPosition The position of the camera.
+     * @param cameraUpVector The up vector of the camera.
+     * @param dst A matrix to store the result in.
+     */
+    static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
+                                const Vector3& cameraUpVector, Matrix* dst);
+
+    /*
+     * Creates a spherical billboard that rotates around a specified object position with
+     * provision for a safe default orientation.
+     *
+     * This method computes the facing direction of the billboard from the object position
+     * and camera position. When the object and camera positions are too close, the matrix
+     * will not be accurate. To avoid this problem, this method uses the specified camera
+     * forward vector if the positions are too close. (See the other overload of createBillboard
+     * for an alternative approach).
+     *
+     * @param objectPosition The position of the object the billboard will rotate around.
+     * @param cameraPosition The position of the camera.
+     * @param cameraUpVector The up vector of the camera.
+     * @param cameraForwardVector The forward vector of the camera, used if the positions
+     *                            are too close.
+     * @param dst A matrix to store the result in.
+     */
+    static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
+                                const Vector3& cameraUpVector, const Vector3& cameraForwardVector,
+                                Matrix* dst);
+
+    /*
+     * Fills in an existing Matrix so that it reflects the coordinate system about a specified Plane.
+     *
+     * @param plane The Plane about which to create a reflection.
+     * @param dst A matrix to store the result in.
+     */
+    static void createReflection(const Plane& plane, Matrix* dst);
 
     /**
      * Creates a scale matrix.
@@ -887,6 +911,12 @@ public:
      * @return This matrix, after the multiplication occurs.
      */
     inline Matrix& operator*=(const Matrix& m);
+    
+private:
+
+    static void createBillboardHelper(const Vector3& objectPosition, const Vector3& cameraPosition,
+                                      const Vector3& cameraUpVector, const Vector3* cameraForwardVector,
+                                      Matrix* dst);
 };
 
 /**
