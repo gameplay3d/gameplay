@@ -516,6 +516,20 @@ void FileSystem::createFileFromAsset(const char* path)
 #endif
 }
 
+std::string FileSystem::getExtension(const char* path)
+{
+    const char* str = strrchr(path, '.');
+    if (str == NULL)
+        return "";
+
+    std::string ext;
+    size_t len = strlen(str);
+    for (size_t i = 0; i < len; ++i)
+        ext += std::toupper(str[i]);
+
+    return ext;
+}
+
 //////////////////
 
 FileStream::FileStream(FILE* file)

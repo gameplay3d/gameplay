@@ -4,6 +4,7 @@
 #include "Pass.h"
 #include "Technique.h"
 #include "Node.h"
+#include "Scene.h"
 
 // Render state override bits
 #define RS_BLEND 1
@@ -116,6 +117,15 @@ const char* autoBindingToString(RenderState::AutoBinding autoBinding)
 
     case RenderState::MATRIX_PALETTE:
         return "MATRIX_PALETTE";
+
+    case RenderState::SCENE_AMBIENT_COLOR:
+        return "SCENE_AMBIENT_COLOR";
+
+    case RenderState::SCENE_LIGHT_COLOR:
+        return "SCENE_LIGHT_COLOR";
+
+    case RenderState::SCENE_LIGHT_DIRECTION:
+        return "SCENE_LIGHT_DIRECTION";
 
     default:
         return "";
@@ -261,6 +271,24 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
             GP_ASSERT(param);
             param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
         }
+    }
+    else if (strcmp(autoBinding, "SCENE_AMBIENT_COLOR") == 0)
+    {
+        Scene* scene = _nodeBinding->getScene();
+        if (scene)
+            param->bindValue(scene, &Scene::getAmbientColor);
+    }
+    else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
+    {
+        Scene* scene = _nodeBinding->getScene();
+        if (scene)
+            param->bindValue(scene, &Scene::getLightColor);
+    }
+    else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
+    {
+        Scene* scene = _nodeBinding->getScene();
+        if (scene)
+            param->bindValue(scene, &Scene::getLightDirection);
     }
     else
     {
@@ -549,6 +577,36 @@ static RenderState::Blend parseBlend(const char* value)
     }
 }
 
+static RenderState::DepthFunction parseDepthFunc(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "NEVER")
+        return RenderState::DEPTH_NEVER;
+    else if (upper == "LESS")
+        return RenderState::DEPTH_LESS;
+    else if (upper == "EQUAL")
+        return RenderState::DEPTH_EQUAL;
+    else if (upper == "LEQUAL")
+        return RenderState::DEPTH_LEQUAL;
+    else if (upper == "GREATER")
+        return RenderState::DEPTH_GREATER;
+    else if (upper == "NOTEQUAL")
+        return RenderState::DEPTH_NOTEQUAL;
+    else if (upper == "GEQUAL")
+        return RenderState::DEPTH_GEQUAL;
+    else if (upper == "ALWAYS")
+        return RenderState::DEPTH_ALWAYS;
+    else
+    {
+        GP_ERROR("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)", value);
+        return RenderState::DEPTH_LESS;
+    }
+}
+
 void RenderState::StateBlock::setState(const char* name, const char* value)
 {
     GP_ASSERT(name);
@@ -576,6 +634,10 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     else if (strcmp(name, "depthWrite") == 0)
     {
         setDepthWrite(parseBoolean(value));
+    }
+    else if (strcmp(name, "depthFunc") == 0)
+    {
+        setDepthFunction(parseDepthFunc(value));
     }
     else
     {

@@ -141,6 +141,12 @@ private:
      */
     BoundingBox getBoundingBox(bool worldSpace) const;
 
+    const Vector3& getAmbientColor() const;
+
+    const Vector3& getLightColor() const;
+
+    const Vector3& getLightDirection() const;
+
     Terrain* _terrain;
     std::vector<Level*> _levels;
     unsigned int _row;

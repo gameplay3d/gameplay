@@ -3,6 +3,8 @@
 
 #include "TerrainPatch.h"
 #include "Transform.h"
+#include "Properties.h"
+#include "HeightField.h"
 
 namespace gameplay
 {
@@ -81,92 +83,6 @@ class Terrain : public Ref, public Transform::Listener
 public:
 
     /**
-     * Defines a reference counted class that holds heightfeild data.
-     *
-     * Heightfields can be used to construct both Terrain objects as well as PhysicsCollisionShape
-     * heightfield defintions, which are used in heightfield rigid body creation. Heightfields can
-     * be populated manually, or loaded from images and RAW files.
-     */
-    class HeightField : public Ref
-    {
-    public:
-
-        /**
-         * Creates a new HeightField of the given dimensions, with uninitialized height data.
-         *
-         * @param rows Number of rows in the height field.
-         * @param columns Number of columns in the height field.
-         *
-         * @return The new HeightField.
-         */
-        static HeightField* create(unsigned int rows, unsigned int columns);
-
-        /**
-         * Creates a HeightField from the specified heightfield image.
-         *
-         * The specified image path must refer to a valid heightfield image. Supported
-         * formats include PNG, RAW8 and RAW16. The latter two formats are simply raw,
-         * headerless height data in either 8-bit format or 16-bit format. RAW16 images
-         * must have little endian (PC) byte ordering. For images that have header structures
-         * (such as PNG), the width and hegiht parameters are ignored and are instead
-         * read from the image header.
-         *
-         * The minHeight and maxHeight parameters provides a mapping from heightfield pixel
-         * intensity to height values. The minHeight parameter is mapped to zero intensity
-         * pixel, while maxHeight maxHeight is mapped to full intensity pixels.
-         *
-         * @param imagePath Path to a heightfield image.
-         * @param width Width of the image (required for headerless/RAW files, can be zero for other image formats).
-         * @param height Height of the image (required for headerless/RAW files, can be zero for other image formats).
-         * @param minHeight Minimum height value for a zero intensity pixel.
-         * @param maxHeight Maximum height value for a full intensity heightfield pixel.
-         * 
-         * @return The new HeightField.
-         */
-        static HeightField* create(const char* imagePath, unsigned int width = 0, unsigned int height = 0, float minHeight = 0, float maxHeight = 1);
-
-        /**
-         * Returns a pointer to the underying height array.
-         *
-         * The array is packed in row major order, meaning that the data is aligned in rows,
-         * from top left to bottom right.
-         *
-         * @return The underlying height array.
-         */
-        float* getArray() const;
-
-        /**
-         * Returns the number of rows in the heightfield.
-         *
-         * @return The number of rows.
-         */
-        unsigned int getRowCount() const;
-
-        /**
-         * Returns the number of columns in the heightfield.
-         * 
-         * @return The column count.
-         */
-        unsigned int getColumnCount() const;
-
-    private:
-
-        /**
-         * Hidden constructor.
-         */
-        HeightField(unsigned int columns, unsigned int rows);
-
-        /**
-         * Hidden destructor (use Ref::release()).
-         */
-        ~HeightField();
-
-        float* _array;
-        unsigned int _rows;
-        unsigned int _cols;
-    };
-
-    /**
      * Terrain flags.
      */
     enum Flags
@@ -194,41 +110,39 @@ public:
          ENABLE_LEVEL_OF_DETAIL = 8
     };
 
-    /** 
-     * Loads a Terran from the given file.
+    /**
+     * Loads a Terrain from the given properties file.
      *
-     * The specified file can be either a simple heightmap image, or it can be a terrain properties
-     * file containing the definition of a terrain.
-     *
-     * Only supported image types that have valid headers (i.e. not RAW) are supported if specifying
-     * an image directly. In this case, the dimensions of the unscaled terrain along each world axis
-     * will be as follows:
-     *
-     *  X = image.width
-     *  Y = (image.width + image.height) / 2 * 0.3f
-     *  Z = image.height
-     *
-     * When specifying an image directly, there terrain will be rendered using a default white material,
-     * until layer textures are specified via the setLayer method. Only a single level of detail will
-     * be generated and terrain patches will use a default size of 32x32.
-     *
-     * If specifying a terrain properties file, the properties file can contain a full terrain definition,
-     * including an image or RAW16/RAW32 heightmap, level of detail information, patch size, layer texture
+     * The specified properties file can contain a full terrain definition, including a 
+     * heightmap (PNG, RAW8, RAW16), level of detail information, patch size, layer texture
      * details and vertical skirt size.
      *
-     * @param terrainFile Properties file describing the terrain.
+     * @param path Path to a properties file describing the terrain.
      *
      * @return A new Terrain.
      */
-    static Terrain* create(const char* terrainFile);
+    static Terrain* create(const char* path);
 
     /**
-     * Creates a terrain from the given height array.
+     * Creates a new terrain definition from the configuration in the specified Properties object.
+     *
+     * @param properties Properties object containing the terrain definition.
+     *
+     * @return A new Terrain.
+     *
+     * @see create(const char*)
+     */
+    static Terrain* create(Properties* properties);
+
+    /**
+     * Creates a terrain from the given heightfield.
      *
      * Terrain geometry is loaded from the given height array, using the specified parameters for
      * size, patch size, detail levels and skirt scale.
      *
-     * @param heights Height array containing terrain height values.
+     * The newly created terrain increases the reference count of the HeightField.
+     *
+     * @param heightfield The heightfield object containing height data for the terrain.
      * @param scale A scale to apply to the terrain along the X, Y and Z axes. The terrain and any associated
      *      physics hegihtfield is scaled by this amount. Pass Vector3::one() to use the exact dimensions and heights
      *      in the supplied height array.
@@ -281,11 +195,20 @@ public:
      *
      * @return True if the layer was successfully set, false otherwise. The most common reason for failure is an
      *      invalid texture path.
+     *
+     * @script{ignore}
      */
     bool setLayer(int index,
         const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
         const char* blendPath = NULL, int blendChannel = 0,
         int row = -1, int column = -1);
+
+    /**
+     * Returns the node that this terrain is bound to.
+     *
+     * @return The node this terrain is bound to, or NULL if the terrain is not bound to a node.
+     */
+    Node* getNode() const;
 
     /**
      * Determines if the specified terrain flag is currently set.
@@ -344,6 +267,20 @@ public:
     const BoundingBox& getBoundingBox() const;
 
     /**
+     * Returns the world-space height of the terrain at the specified position on the X,Z plane.
+     *
+     * The specified X and Z coordinates should be in world units and may fall between height values.
+     * In this case, an interpolated value will be returned between neighboring heightfield heights.
+     * If the specified point lies outside of the terrain, it is clamped to the terrain boundaries.
+     *
+     * @param x The X coordinate, in world space.
+     * @param z The Z coordinate, in world space.
+     *
+     * @return The height at the specified point, clamped to the boundaries of the terrain.
+     */
+    float getHeight(float x, float z) const;
+
+    /**
      * Draws the terrain.
      *
      * @param wireframe True to draw the terrain as wireframe, false to draw it solid (default).
@@ -381,12 +318,29 @@ private:
      */
     ~Terrain();
 
+    /**
+     * Internal method for creating terrain.
+     */
     static Terrain* create(HeightField* heightfield, const Vector3& scale, unsigned int patchSize, unsigned int detailLevels, float skirtScale, const char* normalMapPath, Properties* properties);
 
+    /**
+     * Internal method for creating terrain.
+     */
+    static Terrain* create(const char* path, Properties* properties);
+
+    /**
+     * Sets the node that the terrain is attached to.
+     */
     void setNode(Node* node);
 
+    /**
+     * Returns the world matrix of the terrain, factoring in terrain local scaling.
+     */
     const Matrix& getWorldMatrix() const;
 
+    /**
+     * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
+     */
     const Matrix& getWorldViewProjectionMatrix() const;
 
     HeightField* _heightfield;

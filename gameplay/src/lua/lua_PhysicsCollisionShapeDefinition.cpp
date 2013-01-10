@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "HeightField.h"
 #include "Image.h"
 #include "Node.h"
 #include "PhysicsCollisionShape.h"

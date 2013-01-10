@@ -336,10 +336,10 @@ public:
      * Gets the height at the given point (only for rigid bodies of type HEIGHTFIELD).
      * 
      * @param x The x position, in world space.
-     * @param y The y position, in world space.
+     * @param z The z position, in world space.
      * @return The height at the given point, or zero if this is not a heightfield rigid body.
      */
-    float getHeight(float x, float y) const;
+    float getHeight(float x, float z) const;
 
     /**
      * Gets whether the rigid body is a static rigid body or not.

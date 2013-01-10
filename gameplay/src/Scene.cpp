@@ -8,8 +8,14 @@
 namespace gameplay
 {
 
-Scene::Scene() : _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), _bindAudioListenerToCamera(true), _debugBatch(NULL)
+// Global list of active scenes
+static std::vector<Scene*> __sceneList;
+
+Scene::Scene(const char* id)
+    : _id(id ? id : ""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), 
+    _lightColor(1,1,1), _lightDirection(0,-1,0), _bindAudioListenerToCamera(true), _debugBatch(NULL)
 {
+    __sceneList.push_back(this);
 }
 
 Scene::~Scene()
@@ -29,16 +35,35 @@ Scene::~Scene()
     // Remove all nodes from the scene
     removeAllNodes();
     SAFE_DELETE(_debugBatch);
+
+    // Remove the scene from global list
+    std::vector<Scene*>::iterator itr = std::find(__sceneList.begin(), __sceneList.end(), this);
+    if (itr != __sceneList.end())
+        __sceneList.erase(itr);
 }
 
-Scene* Scene::create()
+Scene* Scene::create(const char* id)
 {
-    return new Scene();
+    return new Scene(id);
 }
 
 Scene* Scene::load(const char* filePath)
 {
     return SceneLoader::load(filePath);
+}
+
+Scene* Scene::getScene(const char* id)
+{
+    if (id == NULL)
+        return __sceneList.size() ? __sceneList[0] : NULL;
+
+    for (size_t i = 0, count = __sceneList.size(); i < count; ++i)
+    {
+        if (__sceneList[i]->_id == id)
+            return __sceneList[i];
+    }
+
+    return NULL;
 }
 
 const char* Scene::getId() const
@@ -48,10 +73,7 @@ const char* Scene::getId() const
 
 void Scene::setId(const char* id)
 {
-    if (id)
-    {
-        _id = id;
-    }
+    _id = id ? id : "";
 }
 
 Node* Scene::findNode(const char* id, bool recursive, bool exactMatch) const
@@ -276,6 +298,26 @@ const Vector3& Scene::getAmbientColor() const
 void Scene::setAmbientColor(float red, float green, float blue)
 {
     _ambientColor.set(red, green, blue);
+}
+
+const Vector3& Scene::getLightColor() const
+{
+    return _lightColor;
+}
+
+void Scene::setLightColor(float red, float green, float blue)
+{
+    _lightColor.set(red, green, blue);
+}
+
+const Vector3& Scene::getLightDirection() const
+{
+    return _lightDirection;
+}
+
+void Scene::setLightDirection(const Vector3& direction)
+{
+    _lightDirection = direction;
 }
 
 static Material* createDebugMaterial()

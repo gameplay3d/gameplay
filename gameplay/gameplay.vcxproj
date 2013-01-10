@@ -89,6 +89,7 @@
     <ClCompile Include="src\gameplay-main-blackberry.cpp" />
     <ClCompile Include="src\gameplay-main-linux.cpp" />
     <ClCompile Include="src\gameplay-main-windows.cpp" />
+    <ClCompile Include="src\HeightField.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="src\lua\lua_Gesture.cpp" />
     <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp" />
     <ClCompile Include="src\lua\lua_Global.cpp" />
+    <ClCompile Include="src\lua\lua_HeightField.cpp" />
     <ClCompile Include="src\lua\lua_Image.cpp" />
     <ClCompile Include="src\lua\lua_ImageFormat.cpp" />
     <ClCompile Include="src\lua\lua_Joint.cpp" />
@@ -238,7 +240,6 @@
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
     <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
-    <ClCompile Include="src\lua\lua_TerrainHeightField.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
@@ -363,6 +364,7 @@
     <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Gesture.h" />
+    <ClInclude Include="src\HeightField.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Joystick.h" />
@@ -430,6 +432,7 @@
     <ClInclude Include="src\lua\lua_Gesture.h" />
     <ClInclude Include="src\lua\lua_GestureGestureEvent.h" />
     <ClInclude Include="src\lua\lua_Global.h" />
+    <ClInclude Include="src\lua\lua_HeightField.h" />
     <ClInclude Include="src\lua\lua_Image.h" />
     <ClInclude Include="src\lua\lua_ImageFormat.h" />
     <ClInclude Include="src\lua\lua_Joint.h" />
@@ -513,7 +516,6 @@
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
-    <ClInclude Include="src\lua\lua_TerrainHeightField.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />

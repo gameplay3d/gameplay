@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "Frustum.h"
 #include "Rectangle.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -37,6 +38,8 @@ public:
      * @param aspectRatio The aspect ratio of the camera (normally the width of the viewport divided by the height of the viewport).
      * @param nearPlane The near plane distance.
      * @param farPlane The far plane distance.
+     *
+     * @return The new Camera.
      */
     static Camera* createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
 
@@ -48,8 +51,23 @@ public:
      * @param aspectRatio The aspect ratio of the orthographic projection.
      * @param nearPlane The near plane distance.
      * @param farPlane The far plane distance.
+     *
+     * @return The new Camera.
      */
     static Camera* createOrthographic(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane);
+
+    /**
+     * Creates a camera from a properties definition.
+     *
+     * The properties object must contain a "type" parameter, specifying either PERSPECTIVE or ORTHOGRAPHIC,
+     * as well as values for all required parameters in the Camera::createPerspective and Camera::createOrthographic
+     * methods.
+     *
+     * @param properties The properties definition of the Camera.
+     *
+     * @return The new Camera.
+     */
+    static Camera* create(Properties* properties);
 
     /**
      * Gets the type of camera.

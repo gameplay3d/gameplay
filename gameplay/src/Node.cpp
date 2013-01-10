@@ -856,6 +856,9 @@ const BoundingSphere& Node::getBoundingSphere() const
         // Start with our local bounding sphere
         // TODO: Incorporate bounds from entities other than mesh (i.e. emitters, audiosource, etc)
         bool empty = true;
+        if (_terrain)
+        {
+        }
         if (_model && _model->getMesh())
         {
             _bounds.set(_model->getMesh()->getBoundingSphere());

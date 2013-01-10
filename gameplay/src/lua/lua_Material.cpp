@@ -11,6 +11,7 @@
 #include "Properties.h"
 #include "Ref.h"
 #include "RenderState.h"
+#include "Scene.h"
 #include "Technique.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"

@@ -3,6 +3,9 @@
 
 //TRACK_MEMORY();
 
+// Generated file list (extern from Base.h)
+std::vector<string> generatedFiles;
+
 void printError(const char* format, ...)
 {
     va_list argptr;
@@ -21,6 +24,40 @@ void printError(const char* format, ...)
     vfprintf(stderr, format, argptr);
 #endif
     va_end(argptr);
+}
+
+void writeFile(const std::string& path, const std::string& text)
+{
+    generatedFiles.push_back(path);
+
+    // Read in content of path to compare before writing
+    bool changed = true;
+    ifstream in(path);
+    if (in.is_open())
+    {
+        changed = false;
+        istringstream textStream(text, istringstream::in);
+        string line1, line2;
+        while (in.good() && textStream.good())
+        {
+            getline(in, line1);
+            getline(textStream, line2);
+            if (line1 != line2 || in.good() != textStream.good())
+            {
+                // Files differ
+                changed = true;
+                break;
+            }
+        }
+        in.close();
+    }
+
+    if (changed)
+    {
+        ofstream o(path);
+        o << text;
+        o.close();
+    }
 }
 
 int main(int argc, char** argv)

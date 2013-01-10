@@ -74,6 +74,7 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Ref", "Font");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Form");
     ScriptUtil::setGlobalHierarchyPair("Ref", "FrameBuffer");
+    ScriptUtil::setGlobalHierarchyPair("Ref", "HeightField");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
@@ -96,7 +97,6 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Ref", "Slider");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Technique");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Terrain");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "Terrain::HeightField");
     ScriptUtil::setGlobalHierarchyPair("Ref", "TextBox");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Texture");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Texture::Sampler");
@@ -700,6 +700,9 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("CAMERA_WORLD_POSITION", "CAMERA_WORLD_POSITION", scopePath);
         ScriptUtil::registerConstantString("CAMERA_VIEW_POSITION", "CAMERA_VIEW_POSITION", scopePath);
         ScriptUtil::registerConstantString("MATRIX_PALETTE", "MATRIX_PALETTE", scopePath);
+        ScriptUtil::registerConstantString("SCENE_AMBIENT_COLOR", "SCENE_AMBIENT_COLOR", scopePath);
+        ScriptUtil::registerConstantString("SCENE_LIGHT_COLOR", "SCENE_LIGHT_COLOR", scopePath);
+        ScriptUtil::registerConstantString("SCENE_LIGHT_DIRECTION", "SCENE_LIGHT_DIRECTION", scopePath);
     }
 
     // Register enumeration RenderState::Blend.
