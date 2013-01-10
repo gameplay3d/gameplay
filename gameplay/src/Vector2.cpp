@@ -171,7 +171,7 @@ Vector2& Vector2::normalize()
     return *this;
 }
 
-void Vector2::normalize(Vector2* dst)
+void Vector2::normalize(Vector2* dst) const
 {
     GP_ASSERT(dst);
 
