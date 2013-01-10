@@ -25,8 +25,8 @@ class ScriptController;
  */
 class Game
 {
-
     friend class Platform;
+	friend class ShutdownListener;
 
 public:
     
@@ -605,6 +605,11 @@ private:
         /** Holds the name of the Lua script function to call back. */
         std::string function;
     };
+
+	struct ShutdownListener : public TimeListener
+	{
+		void timeEvent(long timeDiff, void* cookie);
+	};
 
     /**
      * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().

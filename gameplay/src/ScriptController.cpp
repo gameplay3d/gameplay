@@ -632,17 +632,34 @@ void ScriptController::initializeGame()
 void ScriptController::finalize()
 {
     if (_lua)
+	{
         lua_close(_lua);
+		_lua = NULL;
+	}
 }
 
 void ScriptController::finalizeGame()
 {
-    if (_callbacks[FINALIZE])
+	std::string finalizeCallback;
+	if (_callbacks[FINALIZE])
+		finalizeCallback = _callbacks[FINALIZE]->c_str();
+
+	// Remove any registered callbacks so they don't get called after shutdown
+	for (unsigned int i = 0; i < CALLBACK_COUNT; i++)
     {
-        executeFunction<void>(_callbacks[FINALIZE]->c_str());
+        SAFE_DELETE(_callbacks[i]);
+    }
+
+	// Fire script finalize callback
+    if (!finalizeCallback.empty())
+	{
+        executeFunction<void>(finalizeCallback.c_str());
     }
 
     // Perform a full garbage collection cycle.
+	// Note that this does NOT free any global variables declared in scripts, since 
+	// they are stored in the global state and are still referenced. Only after 
+	// closing the state (lua_close) will those variables be released.
     lua_gc(_lua, LUA_GCCOLLECT, 0);
 }
 
@@ -697,6 +714,9 @@ void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 
 void ScriptController::executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list)
 {
+	if (!_lua)
+		return; // handles calling this method after script is finalized
+
     if (func == NULL)
     {
         GP_ERROR("Lua function name must be non-null.");
