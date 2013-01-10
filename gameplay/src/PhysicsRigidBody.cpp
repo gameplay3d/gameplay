@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "MeshPart.h"
 #include "Node.h"
+#include "Terrain.h"
 
 namespace gameplay
 {
@@ -278,9 +279,10 @@ void PhysicsRigidBody::setEnabled(bool enable)
         _body->setMotionState(_motionState);
 }
 
-float PhysicsRigidBody::getHeight(float x, float y) const
+float PhysicsRigidBody::getHeight(float x, float z) const
 {
     GP_ASSERT(_collisionShape);
+    GP_ASSERT(_node);
 
     // This function is only supported for heightfield rigid bodies.
     if (_collisionShape->getType() != PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
@@ -290,33 +292,44 @@ float PhysicsRigidBody::getHeight(float x, float y) const
     }
 
     GP_ASSERT(_collisionShape->_shapeData.heightfieldData);
-    GP_ASSERT(_node);
 
-    // Calculate the correct x, y position relative to the heightfield data.
+    // Ensure inverse matrix is updated so we can transform from world back into local heightfield coordinates for indexing
     if (_collisionShape->_shapeData.heightfieldData->inverseIsDirty)
     {
-        _node->getWorldMatrix().invert(&_collisionShape->_shapeData.heightfieldData->inverse);
+        Matrix& inverse = _collisionShape->_shapeData.heightfieldData->inverse;
+        inverse.set(_node->getWorldMatrix());
+
+        // Apply heightfield local scaling
+        const btVector3& localScale = _collisionShape->getShape()->getLocalScaling();
+        if (localScale.x() != 1.0f || localScale.y() != 1.0f || localScale.z() != 1.0f)
+            inverse.scale(localScale.x(), localScale.y(), localScale.z());
+
+        inverse.invert();
         _collisionShape->_shapeData.heightfieldData->inverseIsDirty = false;
     }
 
-    float w = _collisionShape->_shapeData.heightfieldData->heightfield->getColumnCount();
-    float h = _collisionShape->_shapeData.heightfieldData->heightfield->getRowCount();
+    // Calculate the correct x, z position relative to the heightfield data.
+    float cols = _collisionShape->_shapeData.heightfieldData->heightfield->getColumnCount();
+    float rows = _collisionShape->_shapeData.heightfieldData->heightfield->getRowCount();
 
-    GP_ASSERT(w - 1);
-    GP_ASSERT(h - 1);
+    GP_ASSERT(cols > 0);
+    GP_ASSERT(rows > 0);
 
-    Vector3 v = _collisionShape->_shapeData.heightfieldData->inverse * Vector3(x, 0.0f, y);
-    x = (v.x + (0.5f * (w - 1))) * w / (w - 1);
-    y = (v.z + (0.5f * (h - 1))) * h / (h - 1);
+    Vector3 v = _collisionShape->_shapeData.heightfieldData->inverse * Vector3(x, 0.0f, z);
+    //x = (v.x + (0.5f * (cols - 1))) * cols / (cols - 1);
+    //z = (v.z + (0.5f * (rows - 1))) * rows / (rows - 1);
+    x = v.x + (cols - 1) * 0.5f;
+    z = v.z + (rows - 1) * 0.5f;
 
-    // Check that the x, y position is within the bounds.
-    if (x < 0.0f || x > w || y < 0.0f || y > h)
-    {
-        GP_ERROR("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, w, h);
-        return 0.0f;
-    }
+    // Get the un-scaled height value from the HeightField
+    float height = _collisionShape->_shapeData.heightfieldData->heightfield->getHeight(x, z);
 
-    return PhysicsController::calculateHeight(_collisionShape->_shapeData.heightfieldData->heightfield->getArray(), w, h, x, y) * _collisionShape->getShape()->getLocalScaling().y();
+    // Apply scaling (both world and local)
+    Vector3 worldScale;
+    _node->getWorldMatrix().getScale(&worldScale);
+    height *= worldScale.y * _collisionShape->getShape()->getLocalScaling().y();
+
+    return height;
 }
 
 void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)

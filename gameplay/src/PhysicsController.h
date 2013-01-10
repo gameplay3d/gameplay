@@ -9,7 +9,7 @@
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsCollisionObject.h"
 #include "MeshBatch.h"
-#include "Terrain.h"
+#include "HeightField.h"
 #include "ScriptTarget.h"
 
 namespace gameplay
@@ -431,16 +431,13 @@ private:
     PhysicsCollisionShape* createCapsule(float radius, float height, const Vector3& scale);
 
     // Creates a heightfield collision shape.
-    PhysicsCollisionShape* createHeightfield(Node* node, Terrain::HeightField* heightfield, Vector3* centerOfMassOffset);
+    PhysicsCollisionShape* createHeightfield(Node* node, HeightField* heightfield, Vector3* centerOfMassOffset);
 
     // Creates a triangle mesh collision shape.
     PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
 
     // Destroys a collision shape created through PhysicsController
     void destroyShape(PhysicsCollisionShape* shape);
-
-    // Helper function for calculating heights from heightmap (image) or heightfield data.
-    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y);
 
     // Legacy method for grayscale heightmaps: r + g + b, normalized.
     static float normalizedHeightGrayscale(float r, float g, float b);

@@ -473,8 +473,9 @@ bool TerrainPatch::updateMaterial()
 
         // Set material parameter bindings
         material->getParameter("u_worldViewProjectionMatrix")->bindValue(_terrain, &Terrain::getWorldViewProjectionMatrix);
-        material->getParameter("u_lightDirection")->setValue(Vector3(-1,-1,-1));
-        material->getParameter("u_lightColor")->setValue(Vector3(1,1,1));
+        material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
+        material->getParameter("u_lightColor")->bindValue(this, &TerrainPatch::getLightColor);
+        material->getParameter("u_lightDirection")->bindValue(this, &TerrainPatch::getLightDirection);
         if (_layers.size() > 0)
         {
             material->getParameter("u_samplers")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
@@ -530,6 +531,10 @@ void TerrainPatch::draw(bool wireframe)
 
 bool TerrainPatch::isVisible() const
 {
+    // If frustum culling is disabled, assume the patch is always visible
+    if ((_terrain->_flags & Terrain::ENABLE_FRUSTUM_CULLING) == 0)
+        return true;
+
     Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
     Camera* camera = scene ? scene->getActiveCamera() : NULL;
     if (!camera)
@@ -559,7 +564,7 @@ unsigned int TerrainPatch::getVisibleTriangleCount() const
 
     // Return the triangle count of the LOD level depending on the camera
     size_t lod = computeLOD(camera, bounds);
-    return _levels[0]->model->getMesh()->getPart(0)->getIndexCount() - 2;
+    return _levels[lod]->model->getMesh()->getPart(0)->getIndexCount() - 2;
 }
 
 BoundingBox TerrainPatch::getBoundingBox(bool worldSpace) const
@@ -569,8 +574,39 @@ BoundingBox TerrainPatch::getBoundingBox(bool worldSpace) const
 
     // Apply a world-space transformation to our bounding box
     BoundingBox bounds(_boundingBox);
-    bounds.transform(_terrain->getWorldMatrix());
+
+    // Transform the bounding box by the terrain node's world transform.
+    // We don't use Terrain::getWorldMatrix because that returns a matrix
+    // that has terrain->_localScale factored in - and our patche's bounding
+    // box already has local scale factored in.
+    if (_terrain->_node)
+        bounds.transform(_terrain->_node->getWorldMatrix());
+
     return bounds;
+}
+
+const Vector3& TerrainPatch::getAmbientColor() const
+{
+    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+    return scene ? scene->getAmbientColor() : Vector3::zero();
+}
+
+const Vector3& TerrainPatch::getLightColor() const
+{
+    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+    return scene ? scene->getLightColor() : Vector3::one();
+}
+
+const Vector3& TerrainPatch::getLightDirection() const
+{
+    Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
+    if (!scene)
+    {
+        static Vector3 down(0, -1, 0);
+        return down;
+    }
+
+    return scene->getLightDirection();
 }
 
 size_t TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) const

@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "Properties.h"
 #include "FileSystem.h"
+#include "HeightField.h"
 
 namespace gameplay
 {
@@ -327,7 +328,13 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::Definition::create(Node
             }
             else
             {
-                Terrain::HeightField* heightfield = Terrain::HeightField::create(imagePath, (unsigned int)width, (unsigned int)height, minHeight, maxHeight);
+                std::string ext = FileSystem::getExtension(imagePath);
+                HeightField* heightfield = NULL;
+                if (ext == ".PNG")
+                    heightfield = HeightField::createFromImage(imagePath, minHeight, maxHeight);
+                else if (ext == ".RAW")
+                    heightfield = HeightField::createFromRAW(imagePath, (unsigned int)width, (unsigned int)height, minHeight, maxHeight);
+
                 if (heightfield)
                 {
                     shape = PhysicsCollisionShape::heightfield(heightfield);
@@ -415,7 +422,7 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield()
     return d;
 }
 
-PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(Terrain::HeightField* heightfield)
+PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(HeightField* heightfield)
 {
     GP_ASSERT(heightfield);
 

@@ -31,6 +31,7 @@ int lua_Camera_setFieldOfView(lua_State* state);
 int lua_Camera_setNearPlane(lua_State* state);
 int lua_Camera_setZoomX(lua_State* state);
 int lua_Camera_setZoomY(lua_State* state);
+int lua_Camera_static_create(lua_State* state);
 int lua_Camera_static_createOrthographic(lua_State* state);
 int lua_Camera_static_createPerspective(lua_State* state);
 int lua_Camera_unproject(lua_State* state);

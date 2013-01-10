@@ -84,7 +84,26 @@ public:
         /**
          * Binds the matrix palette of MeshSkin attached to a node's model.
          */
-        MATRIX_PALETTE
+        MATRIX_PALETTE,
+
+        /**
+         * Binds the current scene's ambient color (Vector3).
+         */
+        SCENE_AMBIENT_COLOR,
+
+        /**
+         * Binds the current scene's light color (Vector3).
+         *
+         * This is typically used for the main directional light in a scene, such as the Sun.
+         */
+        SCENE_LIGHT_COLOR,
+
+        /**
+         * Binds the current scene's light direction (Vector3).
+         *
+         * This is typically used for the main directional light in a scene, such as the Sun.
+         */
+        SCENE_LIGHT_DIRECTION
     };
 
     /**

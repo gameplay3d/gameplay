@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"
+#include "Terrain.h"
 
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 #undef new
@@ -995,7 +996,7 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
     return shape;
 }
 
-PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Terrain::HeightField* heightfield, Vector3* centerOfMassOffset)
+PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, HeightField* heightfield, Vector3* centerOfMassOffset)
 {
     GP_ASSERT(node);
     GP_ASSERT(heightfield);
@@ -1223,43 +1224,6 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
 
         // Release the shape.
         shape->release();
-    }
-}
-
-float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y)
-{
-    GP_ASSERT(data);
-
-    unsigned int x1 = x;
-    unsigned int y1 = y;
-    unsigned int x2 = x1 + 1;
-    unsigned int y2 = y1 + 1;
-    float tmp;
-    float xFactor = modf(x, &tmp);
-    float yFactor = modf(y, &tmp);
-    float xFactorI = 1.0f - xFactor;
-    float yFactorI = 1.0f - yFactor;
-
-    if (x2 >= width && y2 >= height)
-    {
-        return data[x1 + y1 * width];
-    }
-    else if (x2 >= width)
-    {
-        return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
-    }
-    else if (y2 >= height)
-    {
-        return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
-    }
-    else
-    {
-        float a = xFactorI * yFactorI;
-        float b = xFactorI * yFactor;
-        float c = xFactor * yFactor;
-        float d = xFactor * yFactorI;
-        return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b +
-            data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
     }
 }
 

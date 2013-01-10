@@ -6,6 +6,11 @@ namespace gameplay
 
 // Lua bindings for PhysicsCharacter.
 int lua_PhysicsCharacter_addCollisionListener(lua_State* state);
+int lua_PhysicsCharacter_asCharacter(lua_State* state);
+int lua_PhysicsCharacter_asGhostObject(lua_State* state);
+int lua_PhysicsCharacter_asRigidBody(lua_State* state);
+int lua_PhysicsCharacter_asVehicle(lua_State* state);
+int lua_PhysicsCharacter_asVehicleWheel(lua_State* state);
 int lua_PhysicsCharacter_collidesWith(lua_State* state);
 int lua_PhysicsCharacter_getCollisionShape(lua_State* state);
 int lua_PhysicsCharacter_getCurrentVelocity(lua_State* state);

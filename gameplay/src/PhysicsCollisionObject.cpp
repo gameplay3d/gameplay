@@ -4,6 +4,11 @@
 #include "Game.h"
 #include "Node.h"
 #include "ScriptController.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsCharacter.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 
 namespace gameplay
 {
@@ -163,6 +168,31 @@ bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
     callback.result = false;
     Game::getInstance()->getPhysicsController()->_world->contactPairTest(getCollisionObject(), object->getCollisionObject(), callback);
     return callback.result;
+}
+
+PhysicsRigidBody* PhysicsCollisionObject::asRigidBody()
+{
+    return getType() == RIGID_BODY ? static_cast<PhysicsRigidBody*>(this) : NULL;
+}
+
+PhysicsCharacter* PhysicsCollisionObject::asCharacter()
+{
+    return getType() == CHARACTER ? static_cast<PhysicsCharacter*>(this) : NULL;
+}
+
+PhysicsGhostObject* PhysicsCollisionObject::asGhostObject()
+{
+    return getType() == GHOST_OBJECT ? static_cast<PhysicsGhostObject*>(this) : NULL;
+}
+
+PhysicsVehicle* PhysicsCollisionObject::asVehicle()
+{
+    return getType() == VEHICLE ? static_cast<PhysicsVehicle*>(this) : NULL;
+}
+
+PhysicsVehicleWheel* PhysicsCollisionObject::asVehicleWheel()
+{
+    return getType() == VEHICLE_WHEEL ? static_cast<PhysicsVehicleWheel*>(this) : NULL;
 }
 
 PhysicsCollisionObject::CollisionPair::CollisionPair(PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)

@@ -1,7 +1,6 @@
 #include "Base.h"
 #include "Terrain.h"
 #include "Node.h"
-#include "Image.h"
 #include "FileSystem.h"
 
 namespace gameplay
@@ -23,11 +22,6 @@ namespace gameplay
 /**
  * @script{ignore}
  */
-std::string getExtension(const char* filename);
-
-/**
- * @script{ignore}
- */
 float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
@@ -44,36 +38,42 @@ Terrain::~Terrain()
     SAFE_RELEASE(_heightfield);
 }
 
-Terrain* Terrain::create(const char* terrainFile)
+Terrain* Terrain::create(const char* path)
+{
+    return create(path, NULL);
+}
+
+Terrain* Terrain::create(Properties* properties)
+{
+    return create(properties->getNamespace(), properties);
+}
+
+Terrain* Terrain::create(const char* path, Properties* properties)
 {
     // Terrain properties
+    Properties* p = properties;
+    Properties* pTerrain = NULL;
+    bool externalProperties = (p != NULL);
     HeightField* heightfield = NULL;
     Vector3 terrainSize;
     int patchSize = 0;
     int detailLevels = 1;
     float skirtScale = 0;
-    Properties* p = NULL;
-    Properties* pTerrain = NULL;
     const char* normalMap = NULL;
 
-    std::string ext = getExtension(terrainFile);
-    if (ext == "PNG")
+    if (!p && path)
     {
-        // Load terrain directly from a heightmap image
-        heightfield = HeightField::create(terrainFile, 0, 0, 0, 1);
+        p = Properties::create(path);
     }
-    else
-    {
-        // Read terrain from properties file
-        p = Properties::create(terrainFile);
-        if (p == NULL)
-            return NULL;
 
+    if (p)
+    {
         pTerrain = strlen(p->getNamespace()) > 0 ? p : p->getNextNamespace();
         if (pTerrain == NULL)
         {
-            GP_WARN("Invalid terrain definition file.");
-            SAFE_DELETE(p);
+            GP_WARN("Invalid terrain definition.");
+            if (!externalProperties)
+                SAFE_DELETE(p);
             return NULL;
         }
 
@@ -85,36 +85,39 @@ Terrain* Terrain::create(const char* terrainFile)
             const char* heightmap = pHeightmap->getString("path");
             if (strlen(heightmap) == 0)
             {
-                GP_WARN("No 'path' property supplied in heightmap section of terrain definition file: %s", terrainFile);
-                SAFE_DELETE(p);
+                GP_WARN("No 'path' property supplied in heightmap section of terrain definition: %s", path);
+                if (!externalProperties)
+                    SAFE_DELETE(p);
                 return NULL;
             }
 
-            ext = getExtension(heightmap);
-            if (ext == "PNG")
+            std::string ext = FileSystem::getExtension(heightmap);
+            if (ext == ".PNG")
             {
                 // Read normalized height values from heightmap image
-                heightfield = HeightField::create(heightmap, 0, 0, 0, 1);
+                heightfield = HeightField::createFromImage(heightmap, 0, 1);
             }
-            else if (ext == "RAW")
+            else if (ext == ".RAW")
             {
                 // Require additional properties to be specified for RAW files
                 Vector2 imageSize;
                 if (!pHeightmap->getVector2("size", &imageSize))
                 {
-                    GP_WARN("Invalid or missing 'size' attribute in heightmap defintion of terrain file: %s", terrainFile);
-                    SAFE_DELETE(p);
+                    GP_WARN("Invalid or missing 'size' attribute in heightmap defintion of terrain definition: %s", path);
+                    if (!externalProperties)
+                        SAFE_DELETE(p);
                     return NULL;
                 }
 
                 // Read normalized height values from RAW file
-                heightfield = HeightField::create(heightmap, (unsigned int)imageSize.x, (unsigned int)imageSize.y, 0, 1);
+                heightfield = HeightField::createFromRAW(heightmap, (unsigned int)imageSize.x, (unsigned int)imageSize.y, 0, 1);
             }
             else
             {
                 // Unsupported heightmap format
-                GP_WARN("Unsupported heightmap format ('%s') in terrain definition file: %s", heightmap, terrainFile);
-                SAFE_DELETE(p);
+                GP_WARN("Unsupported heightmap format ('%s') in terrain definition: %s", heightmap, path);
+                if (!externalProperties)
+                    SAFE_DELETE(p);
                 return NULL;
             }
         }
@@ -124,27 +127,30 @@ Terrain* Terrain::create(const char* terrainFile)
             const char* heightmap = pTerrain->getString("heightmap");
             if (heightmap == NULL || strlen(heightmap) == 0)
             {
-                GP_WARN("No 'heightmap' property supplied in terrain definition file: %s", terrainFile);
-                SAFE_DELETE(p);
+                GP_WARN("No 'heightmap' property supplied in terrain definition: %s", path);
+                if (!externalProperties)
+                    SAFE_DELETE(p);
                 return NULL;
             }
 
-            ext = getExtension(heightmap);
-            if (ext == "PNG")
+            std::string ext = FileSystem::getExtension(heightmap);
+            if (ext == ".PNG")
             {
                 // Read normalized height values from heightmap image
-                heightfield = HeightField::create(heightmap, 0, 0, 0, 1);
+                heightfield = HeightField::createFromImage(heightmap, 0, 1);
             }
-            else if (ext == "RAW")
+            else if (ext == ".RAW")
             {
                 GP_WARN("RAW heightmaps must be specified inside a heightmap block with width and height properties.");
-                SAFE_DELETE(p);
+                if (!externalProperties)
+                    SAFE_DELETE(p);
                 return NULL;
             }
             else
             {
-                GP_WARN("Unsupported 'heightmap' format ('%s') in terrain definition file: %s.", heightmap, terrainFile);
-                SAFE_DELETE(p);
+                GP_WARN("Unsupported 'heightmap' format ('%s') in terrain definition: %s.", heightmap, path);
+                if (!externalProperties)
+                    SAFE_DELETE(p);
                 return NULL;
             }
         }
@@ -154,7 +160,7 @@ Terrain* Terrain::create(const char* terrainFile)
         {
             if (!pTerrain->getVector3("size", &terrainSize))
             {
-                GP_WARN("Invalid 'size' value ('%s') in terrain definition file: %s", pTerrain->getString("size"), terrainFile);
+                GP_WARN("Invalid 'size' value ('%s') in terrain definition: %s", pTerrain->getString("size"), path);
             }
         }
 
@@ -182,8 +188,9 @@ Terrain* Terrain::create(const char* terrainFile)
 
     if (heightfield == NULL)
     {
-        GP_WARN("Failed to read heightfield heights for terrain: %s", terrainFile);
-        SAFE_DELETE(p);
+        GP_WARN("Failed to read heightfield heights for terrain definition: %s", path);
+        if (!externalProperties)
+            SAFE_DELETE(p);
         return NULL;
     }
 
@@ -209,7 +216,8 @@ Terrain* Terrain::create(const char* terrainFile)
     // Create terrain
     Terrain* terrain = create(heightfield, scale, (unsigned int)patchSize, (unsigned int)detailLevels, skirtScale, normalMap, pTerrain);
 
-    SAFE_DELETE(p);
+    if (!externalProperties)
+        SAFE_DELETE(p);
 
     return terrain;
 }
@@ -371,6 +379,11 @@ bool Terrain::setLayer(int index, const char* texturePath, const Vector2& textur
     return result;
 }
 
+Node* Terrain::getNode() const
+{
+    return _node;
+}
+
 bool Terrain::isFlagSet(Flags flag) const
 {
     return (_flags & flag) == flag;
@@ -446,6 +459,15 @@ const BoundingBox& Terrain::getBoundingBox() const
     return _boundingBox;
 }
 
+float Terrain::getHeight(float x, float z) const
+{
+    // The specified point is in world-space, so we need to transform it
+    // back into local space to index into our HeightField object.
+    // TODO
+
+    return _heightfield->getHeight(x, z);
+}
+
 void Terrain::draw(bool wireframe)
 {
     for (size_t i = 0, count = _patches.size(); i < count; ++i)
@@ -494,193 +516,10 @@ const Matrix& Terrain::getWorldViewProjectionMatrix() const
     return worldViewProj;
 }
 
-// Returns the uppercase extension of a file
-std::string getExtension(const char* filename)
-{
-    const char* str = strrchr(filename, '.');
-    if (str == NULL)
-        return NULL;
-
-    std::string ext;
-    size_t len = strlen(str);
-    for (size_t i = 1; i < len; ++i)
-        ext += std::toupper(str[i]);
-
-    return ext;
-}
-
 float getDefaultHeight(unsigned int width, unsigned int height)
 {
     // When terrain height is not specified, we'll use a default height of ~ 0.3 of the image dimensions
     return ((width + height) * 0.5f) * DEFAULT_TERRAIN_HEIGHT_RATIO;
-}
-
-Terrain::HeightField::HeightField(unsigned int columns, unsigned int rows)
-    : _array(NULL), _cols(columns), _rows(rows)
-{
-    _array = new float[columns * rows];
-}
-
-Terrain::HeightField::~HeightField()
-{
-    SAFE_DELETE_ARRAY(_array);
-}
-
-Terrain::HeightField* Terrain::HeightField::create(unsigned int columns, unsigned int rows)
-{
-    return new HeightField(columns, rows);
-}
-
-/**
- * @script{ignore}
- */
-float normalizedHeightPacked(float r, float g, float b)
-{
-    // This formula is intended for 24-bit packed heightmap images (that are generated
-    // with gameplay-encoder. However, it is also compatible with normal grayscale 
-    // heightmap images, with an error of approximately 0.4%. This can be seen by
-    // setting r=g=b=x and comparing the grayscale height expression to the packed
-    // height expression: the error is 2^-8 + 2^-16 which is just under 0.4%.
-    return (256.0f*r + g + 0.00390625f*b) / 65536.0f;
-}
-
-Terrain::HeightField* Terrain::HeightField::create(const char* imagePath, unsigned int width, unsigned int height, float minHeight, float maxHeight)
-{
-    GP_ASSERT(imagePath);
-    GP_ASSERT(maxHeight >= minHeight);
-
-    // Validate input parameters
-    size_t pathLength = strlen(imagePath);
-    if (pathLength <= 4)
-    {
-        GP_WARN("Unrecognized file extension for heightfield image: %s.", imagePath);
-        return NULL;
-    }
-
-    float heightScale = maxHeight - minHeight;
-
-    HeightField* heightfield = NULL;
-
-    // Load height data from image
-    const char* ext = imagePath + (pathLength - 4);
-    if (ext[0] == '.' && toupper(ext[1]) == 'P' && toupper(ext[2]) == 'N' && toupper(ext[3]) == 'G')
-    {
-        // Normal image
-        Image* image = Image::create(imagePath);
-        if (!image)
-            return NULL;
-
-        unsigned int pixelSize = 0;
-        switch (image->getFormat())
-        {
-            case Image::RGB:
-                pixelSize = 3;
-                break;
-            case Image::RGBA:
-                pixelSize = 4;
-                break;
-            default:
-                SAFE_RELEASE(image);
-                GP_WARN("Unsupported pixel format for heightfield image: %s.", imagePath);
-                return NULL;
-        }
-
-        // Calculate the heights for each pixel.
-        heightfield = HeightField::create(image->getWidth(), image->getHeight());
-        float* heights = heightfield->getArray();
-        unsigned char* data = image->getData();
-        int idx;
-        for (int y = image->getHeight()-1, i = 0; y >= 0; --y)
-        {
-            for (unsigned int x = 0, w = image->getWidth(); x < w; ++x)
-            {
-                idx = (y*w + x) * pixelSize;
-                heights[i++] = minHeight + normalizedHeightPacked(data[idx], data[idx + 1], data[idx + 2]) * heightScale;
-            }
-        }
-
-        SAFE_RELEASE(image);
-    }
-    else if (ext[0] == '.' && toupper(ext[1]) == 'R' && toupper(ext[2]) == 'A' && toupper(ext[3]) == 'W')
-    {
-        // RAW image (headerless)
-        if (width < 2 || height < 2 || maxHeight < 0)
-        {
-            GP_WARN("Invalid 'width', 'height' or 'maxHeight' parameter for RAW heightfield image: %s.", imagePath);
-            return NULL;
-        }
-
-        // Load raw bytes
-        int fileSize = 0;
-        unsigned char* bytes = (unsigned char*)FileSystem::readAll(imagePath, &fileSize);
-        if (bytes == NULL)
-        {
-            GP_WARN("Falied to read bytes from RAW heightfield image: %s.", imagePath);
-            return NULL;
-        }
-
-        // Determine if the RAW file is 8-bit or 16-bit based on file size.
-        int bits = (fileSize / (width * height)) * 8;
-        if (bits != 8 && bits != 16)
-        {
-            GP_WARN("Invalid RAW file - must be 8-bit or 16-bit, but found neither: %s.", imagePath);
-            SAFE_DELETE_ARRAY(bytes);
-            return NULL;
-        }
-
-        heightfield = HeightField::create(width, height);
-        float* heights = heightfield->getArray();
-
-        // RAW files have an origin of bottom left, whereas our height array needs an origin of
-        // top left, so we need to flip the Y as we write height values out.
-        if (bits == 16)
-        {
-            // 16-bit (0-65535)
-            int idx;
-            for (int y = height-1, i = 0; y >= 0; --y)
-            {
-                for (unsigned int x = 0; x < width; ++x, ++i)
-                {
-                    idx = (y * width + x) << 1;
-                    heights[i] = minHeight + ((bytes[idx] | (int)bytes[idx+1] << 8) / 65535.0f) * heightScale;
-                }
-            }
-        }
-        else
-        {
-            // 8-bit (0-255)
-            for (int y = height-1, i = 0; y >= 0; --y)
-            {
-                for (unsigned int x = 0; x < width; ++x, ++i)
-                {
-                    heights[i] = minHeight + (bytes[y * width + x] / 255.0f) * heightScale;
-                }
-            }
-        }
-
-        SAFE_DELETE_ARRAY(bytes);
-    }
-    else
-    {
-        GP_WARN("Unsupported heightfield image format: %s.", imagePath);
-    }
-
-    return heightfield;
-}
-
-float* Terrain::HeightField::getArray() const
-{
-    return _array;
-}
-
-unsigned int Terrain::HeightField::getColumnCount() const
-{
-    return _cols;
-}
-
-unsigned int Terrain::HeightField::getRowCount() const
-{
-    return _rows;
 }
 
 }

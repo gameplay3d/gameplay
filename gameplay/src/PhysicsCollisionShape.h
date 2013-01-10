@@ -3,7 +3,7 @@
 
 #include "Vector3.h"
 #include "Mesh.h"
-#include "Terrain.h"
+#include "HeightField.h"
 
 namespace gameplay
 {
@@ -107,7 +107,7 @@ public:
             /** @script{ignore} */
             CapsuleData capsule;
             /** @script{ignore} */
-            Terrain::HeightField* heightfield;
+            HeightField* heightfield;
             /** @script{ignore} */
             Mesh* mesh;
         } data;
@@ -226,7 +226,7 @@ public:
      *
      * @return Definition of a heightfield shape.
      */
-    static PhysicsCollisionShape::Definition heightfield(Terrain::HeightField* heightfield);
+    static PhysicsCollisionShape::Definition heightfield(HeightField* heightfield);
 
     /**
      * Defines a mesh shape using the specified mesh.
@@ -245,7 +245,7 @@ private:
 
     struct HeightfieldData
     {
-        Terrain::HeightField* heightfield;
+        HeightField* heightfield;
         bool inverseIsDirty;
         Matrix inverse;
         float minHeight;

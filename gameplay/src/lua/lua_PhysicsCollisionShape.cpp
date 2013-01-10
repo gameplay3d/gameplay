@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "Game.h"
+#include "HeightField.h"
 #include "Image.h"
 #include "Node.h"
 #include "PhysicsCollisionShape.h"
@@ -569,7 +570,7 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Terrain::HeightField> param1 = ScriptUtil::getObjectPointer<Terrain::HeightField>(1, "TerrainHeightField", false, &param1Valid);
+                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
