@@ -985,6 +985,11 @@ protected:
      * The Control's Alignment
      */
     Alignment _alignment;
+
+    /**
+     * Whether the Control's alignment has been set programmatically.
+     */
+    bool _isAlignmentSet;
     
     /**
      * Whether the Control's width is auto-sized.
