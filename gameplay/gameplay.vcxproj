@@ -621,6 +621,8 @@
     <None Include="res\shaders\lib\lighting-spot.frag" />
     <None Include="res\shaders\lib\lighting-spot.vert" />
     <None Include="res\shaders\lib\lighting.frag" />
+    <None Include="res\shaders\terrain.frag" />
+    <None Include="res\shaders\terrain.vert" />
     <None Include="res\shaders\textured-bumped.frag" />
     <None Include="res\shaders\textured-bumped.vert" />
     <None Include="res\shaders\textured-unlit.frag" />

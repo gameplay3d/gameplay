@@ -19,13 +19,19 @@ namespace gameplay
 //
 #define DEFAULT_TERRAIN_HEIGHT_RATIO 0.3f
 
+// Terrain dirty flag bits
+#define TERRAIN_DIRTY_WORLD_MATRIX 1
+#define TERRAIN_DIRTY_INV_WORLD_MATRIX 2
+#define TERRAIN_DIRTY_NORMAL_MATRIX 4
+
 /**
  * @script{ignore}
  */
 float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
-    _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(ENABLE_FRUSTUM_CULLING | ENABLE_LEVEL_OF_DETAIL), _worldMatrixDirty(true)
+    _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(ENABLE_FRUSTUM_CULLING | ENABLE_LEVEL_OF_DETAIL),
+    _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX)
 {
 }
 
@@ -239,6 +245,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
     terrain->_heightfield = heightfield;
     terrain->_localScale = scale;
 
+    // Store reference to bounding box (it is calculated and updated from TerrainPatch)
     BoundingBox& bounds = terrain->_boundingBox;
 
     if (normalMapPath)
@@ -354,7 +361,7 @@ void Terrain::setNode(Node* node)
         if (_node)
             _node->addListener(this);
 
-        _worldMatrixDirty = true;
+        _dirtyFlags |= TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX;
     }
 }
 
@@ -461,11 +468,29 @@ const BoundingBox& Terrain::getBoundingBox() const
 
 float Terrain::getHeight(float x, float z) const
 {
-    // The specified point is in world-space, so we need to transform it
-    // back into local space to index into our HeightField object.
-    // TODO
+    // Calculate the correct x, z position relative to the heightfield data.
+    float cols = _heightfield->getColumnCount();
+    float rows = _heightfield->getRowCount();
 
-    return _heightfield->getHeight(x, z);
+    GP_ASSERT(cols > 0);
+    GP_ASSERT(rows > 0);
+
+    // Since the specified coordinates are in world space, we need to use the 
+    // inverse of our world matrix to transform the world x,z coords back into
+    // local heightfield coordinates for indexing into the height array.
+    Vector3 v = getInverseWorldMatrix() * Vector3(x, 0.0f, z);
+    x = v.x + (cols - 1) * 0.5f;
+    z = v.z + (rows - 1) * 0.5f;
+
+    // Get the unscaled height value from the HeightField
+    float height = _heightfield->getHeight(x, z);
+
+    // Now apply world scale (this includes local terrain scale) to the heightfield value
+    Vector3 worldScale;
+    getWorldMatrix().getScale(&worldScale);
+    height *= worldScale.y;
+
+    return height;
 }
 
 void Terrain::draw(bool wireframe)
@@ -478,14 +503,14 @@ void Terrain::draw(bool wireframe)
 
 void Terrain::transformChanged(Transform* transform, long cookie)
 {
-    _worldMatrixDirty = true;
+    _dirtyFlags |= TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX;
 }
 
 const Matrix& Terrain::getWorldMatrix() const
 {
-    if (_worldMatrixDirty)
+    if (_dirtyFlags & TERRAIN_DIRTY_WORLD_MATRIX)
     {
-        _worldMatrixDirty = false;
+        _dirtyFlags &= ~TERRAIN_DIRTY_WORLD_MATRIX;
 
         // Apply our attached node's world matrix
         if (_node)
@@ -502,6 +527,30 @@ const Matrix& Terrain::getWorldMatrix() const
     }
 
     return _worldMatrix;
+}
+
+const Matrix& Terrain::getInverseWorldMatrix() const
+{
+    if (_dirtyFlags & TERRAIN_DIRTY_INV_WORLD_MATRIX)
+    {
+        _dirtyFlags &= ~TERRAIN_DIRTY_INV_WORLD_MATRIX;
+
+        getWorldMatrix().invert(&_inverseWorldMatrix);
+    }
+
+    return _inverseWorldMatrix;
+}
+
+const Matrix& Terrain::getNormalMatrix() const
+{
+    if (_dirtyFlags & TERRAIN_DIRTY_NORMAL_MATRIX)
+    {
+        _dirtyFlags &= ~TERRAIN_DIRTY_NORMAL_MATRIX;
+
+        getInverseWorldMatrix().transpose(&_normalMatrix);
+    }
+
+    return _normalMatrix;
 }
 
 const Matrix& Terrain::getWorldViewProjectionMatrix() const

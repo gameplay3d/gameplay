@@ -858,11 +858,20 @@ const BoundingSphere& Node::getBoundingSphere() const
         bool empty = true;
         if (_terrain)
         {
+            _bounds.set(_terrain->getBoundingBox());
+            empty = false;
         }
         if (_model && _model->getMesh())
         {
-            _bounds.set(_model->getMesh()->getBoundingSphere());
-            empty = false;
+            if (empty)
+            {
+                _bounds.set(_model->getMesh()->getBoundingSphere());
+                empty = false;
+            }
+            else
+            {
+                _bounds.merge(_model->getMesh()->getBoundingSphere());
+            }
         }
         else
         {

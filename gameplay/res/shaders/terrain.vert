@@ -16,6 +16,9 @@ attribute vec2 a_texCoord3;
 
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;					// World view projection matrix
+#ifndef NORMAL_MAP
+uniform mat4 u_normalMatrix;					            // Matrix used for normal vector transformation
+#endif
 uniform vec3 u_lightDirection;								// Direction of light
 
 // Outputs
@@ -33,7 +36,6 @@ varying vec2 v_texCoord2;
 varying vec2 v_texCoord3;
 #endif
 
-// Vertex program
 void main()
 {
     // Transform position to clip space.
@@ -41,7 +43,7 @@ void main()
 
 #ifndef NORMAL_MAP
     // Pass normal to fragment shader
-    v_normalVector = a_normal;
+    v_normalVector = (u_normalMatrix * vec4(a_normal.x, a_normal.y, a_normal.z, 0)).xyz;
 #endif
 
     v_texCoord0 = a_texCoord0;
@@ -54,5 +56,5 @@ void main()
 #endif
 #if LAYER_COUNT > 3
     v_texCoord3 = a_texCoord3;
-#endif*/
+#endif
 }
