@@ -48,6 +48,7 @@ static char* __title = NULL;
 static bool __fullscreen = false;
 static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
+static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
 static bool __cursorVisible = true;
 static View* __view = NULL;
@@ -582,7 +583,7 @@ double getMachTimeInMilliseconds()
 - (void)hidValueAvailable:(IOHIDValueRef)value
 {
     IOHIDElementRef element = IOHIDValueGetElement(value);
-	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
+    IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
     if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
     CFIndex integerValue = IOHIDValueGetIntegerValue(value);
@@ -848,8 +849,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    float y;
     if (__mouseCaptured)
     {
+        if (__mouseCapturedFirstPass)
+        {
+            // Discard the first mouseMoved event following transition into capture
+            // since it contains bogus x,y data.
+            __mouseCapturedFirstPass = false;
+            return;
+        }
+
         point.x = [event deltaX];
         point.y = [event deltaY];
 
@@ -859,9 +869,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         centerPoint.x = rect.origin.x + (rect.size.width / 2);
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
+        y = point.y;
+    }
+    else
+    {
+        y = __height - point.y;
     }
     
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -961,6 +976,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 int getKey(unsigned short keyCode, unsigned int modifierFlags)
 {
     __shiftDown = (modifierFlags & NSShiftKeyMask);
+    unsigned int caps = (__shiftDown ? 1 : 0) ^ ((modifierFlags & NSAlphaShiftKeyMask) ? 1 : 0);
     switch(keyCode)
     {
         case 0x69:
@@ -1098,60 +1114,178 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
             return __shiftDown ? Keyboard::KEY_QUOTE : Keyboard::KEY_APOSTROPHE;
             
         case 0x00:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_A : Keyboard::KEY_A;
+            return caps ? Keyboard::KEY_CAPITAL_A : Keyboard::KEY_A;
         case 0x0B:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_B : Keyboard::KEY_B;
+            return caps ? Keyboard::KEY_CAPITAL_B : Keyboard::KEY_B;
         case 0x08:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_C : Keyboard::KEY_C;
+            return caps ? Keyboard::KEY_CAPITAL_C : Keyboard::KEY_C;
         case 0x02:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_D : Keyboard::KEY_D;
+            return caps ? Keyboard::KEY_CAPITAL_D : Keyboard::KEY_D;
         case 0x0E:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_E : Keyboard::KEY_E;
+            return caps ? Keyboard::KEY_CAPITAL_E : Keyboard::KEY_E;
         case 0x03:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_F : Keyboard::KEY_F;
+            return caps ? Keyboard::KEY_CAPITAL_F : Keyboard::KEY_F;
         case 0x05:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_G : Keyboard::KEY_G;
+            return caps ? Keyboard::KEY_CAPITAL_G : Keyboard::KEY_G;
         case 0x04:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_H : Keyboard::KEY_H;
+            return caps ? Keyboard::KEY_CAPITAL_H : Keyboard::KEY_H;
         case 0x22:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_I : Keyboard::KEY_I;
+            return caps ? Keyboard::KEY_CAPITAL_I : Keyboard::KEY_I;
         case 0x26:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_J : Keyboard::KEY_J;
+            return caps ? Keyboard::KEY_CAPITAL_J : Keyboard::KEY_J;
         case 0x28:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_K : Keyboard::KEY_K;
+            return caps ? Keyboard::KEY_CAPITAL_K : Keyboard::KEY_K;
         case 0x25:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_L : Keyboard::KEY_L;
+            return caps ? Keyboard::KEY_CAPITAL_L : Keyboard::KEY_L;
         case 0x2E:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_M : Keyboard::KEY_M;
+            return caps ? Keyboard::KEY_CAPITAL_M : Keyboard::KEY_M;
         case 0x2D:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_N : Keyboard::KEY_N;
+            return caps ? Keyboard::KEY_CAPITAL_N : Keyboard::KEY_N;
         case 0x1F:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_O : Keyboard::KEY_O;
+            return caps ? Keyboard::KEY_CAPITAL_O : Keyboard::KEY_O;
         case 0x23:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_P : Keyboard::KEY_P;
+            return caps ? Keyboard::KEY_CAPITAL_P : Keyboard::KEY_P;
         case 0x0C:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_Q : Keyboard::KEY_Q;
+            return caps ? Keyboard::KEY_CAPITAL_Q : Keyboard::KEY_Q;
         case 0x0F:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_R : Keyboard::KEY_R;
+            return caps ? Keyboard::KEY_CAPITAL_R : Keyboard::KEY_R;
         case 0x01:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_S : Keyboard::KEY_S;
+            return caps ? Keyboard::KEY_CAPITAL_S : Keyboard::KEY_S;
         case 0x11:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_T : Keyboard::KEY_T;
+            return caps ? Keyboard::KEY_CAPITAL_T : Keyboard::KEY_T;
         case 0x20:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_U : Keyboard::KEY_U;
+            return caps ? Keyboard::KEY_CAPITAL_U : Keyboard::KEY_U;
         case 0x09:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_V : Keyboard::KEY_V;
+            return caps ? Keyboard::KEY_CAPITAL_V : Keyboard::KEY_V;
         case 0x0D:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_W : Keyboard::KEY_W;
+            return caps ? Keyboard::KEY_CAPITAL_W : Keyboard::KEY_W;
         case 0x07:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_X : Keyboard::KEY_X;
+            return caps ? Keyboard::KEY_CAPITAL_X : Keyboard::KEY_X;
         case 0x10:
-            return __shiftDown ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
+            return caps ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
         case 0x06:
-            return __shiftDown ? Keyboard::KEY_CAPITAL_Z : Keyboard::KEY_Z;
+            return caps ? Keyboard::KEY_CAPITAL_Z : Keyboard::KEY_Z;
 
         default:
             return Keyboard::KEY_NONE;
+    }
+}
+
+/**
+ * Returns the unicode value for the given keycode or zero if the key is not a valid printable character.
+ */
+int getUnicode(int key)
+{
+    
+    switch (key)
+    {
+        case Keyboard::KEY_BACKSPACE:
+            return 0x0008;
+        case Keyboard::KEY_TAB:
+            return 0x0009;
+        case Keyboard::KEY_RETURN:
+        case Keyboard::KEY_KP_ENTER:
+            return 0x000A;
+        case Keyboard::KEY_ESCAPE:
+            return 0x001B;
+        case Keyboard::KEY_SPACE:
+        case Keyboard::KEY_EXCLAM:
+        case Keyboard::KEY_QUOTE:
+        case Keyboard::KEY_NUMBER:
+        case Keyboard::KEY_DOLLAR:
+        case Keyboard::KEY_PERCENT:
+        case Keyboard::KEY_CIRCUMFLEX:
+        case Keyboard::KEY_AMPERSAND:
+        case Keyboard::KEY_APOSTROPHE:
+        case Keyboard::KEY_LEFT_PARENTHESIS:
+        case Keyboard::KEY_RIGHT_PARENTHESIS:
+        case Keyboard::KEY_ASTERISK:
+        case Keyboard::KEY_PLUS:
+        case Keyboard::KEY_COMMA:
+        case Keyboard::KEY_MINUS:
+        case Keyboard::KEY_PERIOD:
+        case Keyboard::KEY_SLASH:
+        case Keyboard::KEY_ZERO:
+        case Keyboard::KEY_ONE:
+        case Keyboard::KEY_TWO:
+        case Keyboard::KEY_THREE:
+        case Keyboard::KEY_FOUR:
+        case Keyboard::KEY_FIVE:
+        case Keyboard::KEY_SIX:
+        case Keyboard::KEY_SEVEN:
+        case Keyboard::KEY_EIGHT:
+        case Keyboard::KEY_NINE:
+        case Keyboard::KEY_COLON:
+        case Keyboard::KEY_SEMICOLON:
+        case Keyboard::KEY_LESS_THAN:
+        case Keyboard::KEY_EQUAL:
+        case Keyboard::KEY_GREATER_THAN:
+        case Keyboard::KEY_QUESTION:
+        case Keyboard::KEY_AT:
+        case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_CAPITAL_B:
+        case Keyboard::KEY_CAPITAL_C:
+        case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_CAPITAL_E:
+        case Keyboard::KEY_CAPITAL_F:
+        case Keyboard::KEY_CAPITAL_G:
+        case Keyboard::KEY_CAPITAL_H:
+        case Keyboard::KEY_CAPITAL_I:
+        case Keyboard::KEY_CAPITAL_J:
+        case Keyboard::KEY_CAPITAL_K:
+        case Keyboard::KEY_CAPITAL_L:
+        case Keyboard::KEY_CAPITAL_M:
+        case Keyboard::KEY_CAPITAL_N:
+        case Keyboard::KEY_CAPITAL_O:
+        case Keyboard::KEY_CAPITAL_P:
+        case Keyboard::KEY_CAPITAL_Q:
+        case Keyboard::KEY_CAPITAL_R:
+        case Keyboard::KEY_CAPITAL_S:
+        case Keyboard::KEY_CAPITAL_T:
+        case Keyboard::KEY_CAPITAL_U:
+        case Keyboard::KEY_CAPITAL_V:
+        case Keyboard::KEY_CAPITAL_W:
+        case Keyboard::KEY_CAPITAL_X:
+        case Keyboard::KEY_CAPITAL_Y:
+        case Keyboard::KEY_CAPITAL_Z:
+        case Keyboard::KEY_LEFT_BRACKET:
+        case Keyboard::KEY_BACK_SLASH:
+        case Keyboard::KEY_RIGHT_BRACKET:
+        case Keyboard::KEY_UNDERSCORE:
+        case Keyboard::KEY_GRAVE:
+        case Keyboard::KEY_A:
+        case Keyboard::KEY_B:
+        case Keyboard::KEY_C:
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_E:
+        case Keyboard::KEY_F:
+        case Keyboard::KEY_G:
+        case Keyboard::KEY_H:
+        case Keyboard::KEY_I:
+        case Keyboard::KEY_J:
+        case Keyboard::KEY_K:
+        case Keyboard::KEY_L:
+        case Keyboard::KEY_M:
+        case Keyboard::KEY_N:
+        case Keyboard::KEY_O:
+        case Keyboard::KEY_P:
+        case Keyboard::KEY_Q:
+        case Keyboard::KEY_R:
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_T:
+        case Keyboard::KEY_U:
+        case Keyboard::KEY_V:
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_X:
+        case Keyboard::KEY_Y:
+        case Keyboard::KEY_Z:
+        case Keyboard::KEY_LEFT_BRACE:
+        case Keyboard::KEY_BAR:
+        case Keyboard::KEY_RIGHT_BRACE:
+        case Keyboard::KEY_TILDE:
+            return key;
+        default:
+            return 0;
     }
 }
 
@@ -1195,7 +1329,14 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 {
     if ([event isARepeat] == NO)
     {
-        gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+        int key = getKey([event keyCode], [event modifierFlags]);
+        gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, key);
+        
+        int character = getUnicode(key);
+        if (character)
+        {
+            gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
+        }
     }
 }
 
@@ -1335,6 +1476,12 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            if (__fullscreen && width == 0 && height == 0)
+            {
+                CGRect mainMonitor = CGDisplayBounds(CGMainDisplayID());
+                __width = CGRectGetWidth(mainMonitor);
+                __height = CGRectGetHeight(mainMonitor);
+            }
         }
     }
 
@@ -1477,6 +1624,7 @@ void Platform::setMouseCaptured(bool captured)
         if (captured)
         {
             [NSCursor hide];
+            __mouseCapturedFirstPass = true;
         }
         else
         {   
@@ -1816,25 +1964,25 @@ CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, U
 
 CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return NULL;
-	}
+        return NULL;
+    }
     return (CFStringRef)typeRef;
 }
 
 int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return 0;
-	}
+        return 0;
+    }
     
     int value;
-	CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
-	return value;
+    CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
+    return value;
 }
 
 static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 
@@ -1881,4 +2029,22 @@ static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult, 
         CFRelease(valueRef); // Don't forget to release our HID value reference
     } while (1);
 }
+
+bool Platform::launchURL(const char *url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    CFURLRef urlRef = CFURLCreateWithBytes(
+        NULL,
+        (UInt8*)url,
+        strlen(url),
+        kCFStringEncodingASCII,
+        NULL
+    );
+    const OSStatus err = LSOpenCFURLRef(urlRef, 0);
+    CFRelease(urlRef);
+    return (err == noErr);
+}
+
 #endif

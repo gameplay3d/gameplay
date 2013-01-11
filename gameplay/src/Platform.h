@@ -361,6 +361,15 @@ public:
      * @see Mouse::MouseEvent
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Opens an URL in an external browser, if available.
+     *
+     * @param url URL to be opened.
+     *
+     * @return True if URL was opened successfully, false otherwise.
+     */
+    static bool launchURL(const char* url);
     
 private:
 

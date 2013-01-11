@@ -682,7 +682,7 @@ public:
     void translateUp(float amount);
 
     /**
-     * Translates the camera foward by the specified amount in the z-axis.
+     * Translates the camera forward by the specified amount in the z-axis.
      *
      * @param amount The amount to translate.
      */
@@ -757,6 +757,8 @@ public:
 
     /**
      * Removes a transform listener.
+     * 
+     * @param listener The listener to remove.
      */
     void removeListener(Transform::Listener* listener);
     

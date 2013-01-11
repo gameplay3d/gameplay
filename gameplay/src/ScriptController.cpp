@@ -372,76 +372,100 @@ std::string ScriptController::loadUrl(const char* url)
     return id;
 }
 
-bool ScriptController::getBool(const char* name)
+bool ScriptController::getBool(const char* name, bool defaultValue)
 {
     lua_getglobal(_lua, name);
-    return ScriptUtil::luaCheckBool(_lua, -1);
+    bool b = lua_isboolean(_lua, -1) ? ScriptUtil::luaCheckBool(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return b;
 }
 
-char ScriptController::getChar(const char* name)
+char ScriptController::getChar(const char* name, char defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (char)luaL_checkint(_lua, -1);
+    char c = lua_isnumber(_lua, -1) ?  (char)luaL_checkint(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return c;
 }
 
-short ScriptController::getShort(const char* name)
+short ScriptController::getShort(const char* name, short defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (short)luaL_checkint(_lua, -1);
+    short n = lua_isnumber(_lua, -1) ? (short)luaL_checkint(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-int ScriptController::getInt(const char* name)
+int ScriptController::getInt(const char* name, int defaultValue)
 {
     lua_getglobal(_lua, name);
-    return luaL_checkint(_lua, -1);
+    int n = lua_isnumber(_lua, -1) ? luaL_checkint(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-long ScriptController::getLong(const char* name)
+long ScriptController::getLong(const char* name, long defaultValue)
 {
     lua_getglobal(_lua, name);
-    return luaL_checklong(_lua, -1);
+    long n = lua_isnumber(_lua, -1) ? luaL_checklong(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-unsigned char ScriptController::getUnsignedChar(const char* name)
+unsigned char ScriptController::getUnsignedChar(const char* name, unsigned char defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned char)luaL_checkunsigned(_lua, -1);
+    unsigned char c = lua_isnumber(_lua, -1) ? (unsigned char)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return c;
 }
 
-unsigned short ScriptController::getUnsignedShort(const char* name)
+unsigned short ScriptController::getUnsignedShort(const char* name, unsigned short defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned short)luaL_checkunsigned(_lua, -1);
+    unsigned short n = lua_isnumber(_lua, -1) ? (unsigned short)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-unsigned int ScriptController::getUnsignedInt(const char* name)
+unsigned int ScriptController::getUnsignedInt(const char* name, unsigned int defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned int)luaL_checkunsigned(_lua, -1);
+    unsigned int n = lua_isnumber(_lua, -1) ? (unsigned int)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-unsigned long ScriptController::getUnsignedLong(const char* name)
+unsigned long ScriptController::getUnsignedLong(const char* name, unsigned long defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned long)luaL_checkunsigned(_lua, -1);
+    unsigned long n = lua_isnumber(_lua, -1) ? (unsigned long)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-float ScriptController::getFloat(const char* name)
+float ScriptController::getFloat(const char* name, float defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (float)luaL_checknumber(_lua, -1);
+    float f = lua_isnumber(_lua, -1) ? (float)luaL_checknumber(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return f;
 }
 
-double ScriptController::getDouble(const char* name)
+double ScriptController::getDouble(const char* name, double defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (double)luaL_checknumber(_lua, -1);
+    double n = lua_isnumber(_lua, -1) ? (double)luaL_checknumber(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
 const char* ScriptController::getString(const char* name)
 {
     lua_getglobal(_lua, name);
-    return luaL_checkstring(_lua, -1);
+    const char* s = lua_isstring(_lua, -1) ? luaL_checkstring(_lua, -1) : NULL;
+    lua_pop(_lua, 1);
+    return s;
 }
 
 void ScriptController::setBool(const char* name, bool v)

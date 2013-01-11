@@ -33,8 +33,6 @@ void luaRegister_RadioButton()
         {"createAnimationFromBy", lua_RadioButton_createAnimationFromBy},
         {"createAnimationFromTo", lua_RadioButton_createAnimationFromTo},
         {"destroyAnimation", lua_RadioButton_destroyAnimation},
-        {"disable", lua_RadioButton_disable},
-        {"enable", lua_RadioButton_enable},
         {"getAlignment", lua_RadioButton_getAlignment},
         {"getAnimation", lua_RadioButton_getAnimation},
         {"getAnimationPropertyComponentCount", lua_RadioButton_getAnimationPropertyComponentCount},
@@ -79,7 +77,9 @@ void luaRegister_RadioButton()
         {"isContainer", lua_RadioButton_isContainer},
         {"isEnabled", lua_RadioButton_isEnabled},
         {"isSelected", lua_RadioButton_isSelected},
+        {"isVisible", lua_RadioButton_isVisible},
         {"release", lua_RadioButton_release},
+        {"removeListener", lua_RadioButton_removeListener},
         {"removeScriptCallback", lua_RadioButton_removeScriptCallback},
         {"setAlignment", lua_RadioButton_setAlignment},
         {"setAnimationPropertyValue", lua_RadioButton_setAnimationPropertyValue},
@@ -90,6 +90,7 @@ void luaRegister_RadioButton()
         {"setConsumeInputEvents", lua_RadioButton_setConsumeInputEvents},
         {"setCursorColor", lua_RadioButton_setCursorColor},
         {"setCursorRegion", lua_RadioButton_setCursorRegion},
+        {"setEnabled", lua_RadioButton_setEnabled},
         {"setFocusIndex", lua_RadioButton_setFocusIndex},
         {"setFont", lua_RadioButton_setFont},
         {"setFontSize", lua_RadioButton_setFontSize},
@@ -112,6 +113,7 @@ void luaRegister_RadioButton()
         {"setTextAlignment", lua_RadioButton_setTextAlignment},
         {"setTextColor", lua_RadioButton_setTextColor},
         {"setTextRightToLeft", lua_RadioButton_setTextRightToLeft},
+        {"setVisible", lua_RadioButton_setVisible},
         {"setWidth", lua_RadioButton_setWidth},
         {"setZIndex", lua_RadioButton_setZIndex},
         {NULL, NULL}
@@ -678,70 +680,6 @@ int lua_RadioButton_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_disable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                RadioButton* instance = getInstance(state);
-                instance->disable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_disable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_enable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                RadioButton* instance = getInstance(state);
-                instance->enable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_enable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -2775,6 +2713,41 @@ int lua_RadioButton_isSelected(lua_State* state)
     return 0;
 }
 
+int lua_RadioButton_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                RadioButton* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_RadioButton_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -2800,6 +2773,48 @@ int lua_RadioButton_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
+
+                RadioButton* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3278,6 +3293,42 @@ int lua_RadioButton_setCursorRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                RadioButton* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4420,6 +4471,42 @@ int lua_RadioButton_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RadioButton_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                RadioButton* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RadioButton_setVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

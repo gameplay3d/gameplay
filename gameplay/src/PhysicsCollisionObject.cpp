@@ -17,7 +17,7 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
     /**
      * Called with each contact. Needed to implement collidesWith(PhysicsCollisionObject*).
      */
-    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB)
+    btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* a, int partIdA, int indexA, const btCollisionObjectWrapper* b, int partIdB, int indexB)
     {
         result = true;
         return 0.0f;
@@ -252,8 +252,8 @@ void PhysicsCollisionObject::PhysicsMotionState::updateTransformFromNode() const
 }
 
 PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)
+    : url(url)
 {
-    this->url = url;
     function = Game::getInstance()->getScriptController()->loadUrl(url);
 }
 
