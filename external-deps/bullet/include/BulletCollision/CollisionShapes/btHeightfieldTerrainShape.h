@@ -68,7 +68,7 @@ subject to the following restrictions:
 
   For usage and testing see the TerrainDemo.
  */
-class btHeightfieldTerrainShape : public btConcaveShape
+ATTRIBUTE_ALIGNED16(class) btHeightfieldTerrainShape : public btConcaveShape
 {
 protected:
 	btVector3	m_localAabbMin;
@@ -85,15 +85,16 @@ protected:
 	btScalar m_heightScale;
 	union
 	{
-		unsigned char*	m_heightfieldDataUnsignedChar;
-		short*		m_heightfieldDataShort;
-		btScalar*			m_heightfieldDataFloat;
-		void*			m_heightfieldDataUnknown;
+		const unsigned char*	m_heightfieldDataUnsignedChar;
+		const short*		m_heightfieldDataShort;
+		const btScalar*			m_heightfieldDataFloat;
+		const void*	m_heightfieldDataUnknown;
 	};
 
 	PHY_ScalarType	m_heightDataType;	
 	bool	m_flipQuadEdges;
-  bool  m_useDiamondSubdivision;
+  	bool  m_useDiamondSubdivision;
+	bool m_useZigzagSubdivision;
 
 	int	m_upAxis;
 	
@@ -111,11 +112,14 @@ protected:
 	  backwards-compatible without a lot of copy/paste.
 	 */
 	void initialize(int heightStickWidth, int heightStickLength,
-	                void* heightfieldData, btScalar heightScale,
+	                const void* heightfieldData, btScalar heightScale,
 	                btScalar minHeight, btScalar maxHeight, int upAxis,
 	                PHY_ScalarType heightDataType, bool flipQuadEdges);
 
 public:
+	
+	BT_DECLARE_ALIGNED_ALLOCATOR();
+	
 	/// preferred constructor
 	/**
 	  This constructor supports a range of heightfield
@@ -123,7 +127,7 @@ public:
 	  heightScale is needed for any integer-based heightfield data types.
 	 */
 	btHeightfieldTerrainShape(int heightStickWidth,int heightStickLength,
-	                          void* heightfieldData, btScalar heightScale,
+	                          const void* heightfieldData, btScalar heightScale,
 	                          btScalar minHeight, btScalar maxHeight,
 	                          int upAxis, PHY_ScalarType heightDataType,
 	                          bool flipQuadEdges);
@@ -135,13 +139,15 @@ public:
 	  compatibility reasons, heightScale is calculated as maxHeight / 65535 
 	  (and is only used when useFloatData = false).
  	 */
-	btHeightfieldTerrainShape(int heightStickWidth,int heightStickLength,void* heightfieldData, btScalar maxHeight,int upAxis,bool useFloatData,bool flipQuadEdges);
+	btHeightfieldTerrainShape(int heightStickWidth,int heightStickLength,const void* heightfieldData, btScalar maxHeight,int upAxis,bool useFloatData,bool flipQuadEdges);
 
 	virtual ~btHeightfieldTerrainShape();
 
 
 	void setUseDiamondSubdivision(bool useDiamondSubdivision=true) { m_useDiamondSubdivision = useDiamondSubdivision;}
 
+	///could help compatibility with Ogre heightfields. See https://code.google.com/p/bullet/issues/detail?id=625	
+	void setUseZigzagSubdivision(bool useZigzagSubdivision=true) { m_useZigzagSubdivision = useZigzagSubdivision;}
 
 	virtual void getAabb(const btTransform& t,btVector3& aabbMin,btVector3& aabbMax) const;
 

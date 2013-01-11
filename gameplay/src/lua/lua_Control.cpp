@@ -30,8 +30,6 @@ void luaRegister_Control()
         {"createAnimationFromBy", lua_Control_createAnimationFromBy},
         {"createAnimationFromTo", lua_Control_createAnimationFromTo},
         {"destroyAnimation", lua_Control_destroyAnimation},
-        {"disable", lua_Control_disable},
-        {"enable", lua_Control_enable},
         {"getAlignment", lua_Control_getAlignment},
         {"getAnimation", lua_Control_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Control_getAnimationPropertyComponentCount},
@@ -72,7 +70,9 @@ void luaRegister_Control()
         {"getZIndex", lua_Control_getZIndex},
         {"isContainer", lua_Control_isContainer},
         {"isEnabled", lua_Control_isEnabled},
+        {"isVisible", lua_Control_isVisible},
         {"release", lua_Control_release},
+        {"removeListener", lua_Control_removeListener},
         {"removeScriptCallback", lua_Control_removeScriptCallback},
         {"setAlignment", lua_Control_setAlignment},
         {"setAnimationPropertyValue", lua_Control_setAnimationPropertyValue},
@@ -83,6 +83,7 @@ void luaRegister_Control()
         {"setConsumeInputEvents", lua_Control_setConsumeInputEvents},
         {"setCursorColor", lua_Control_setCursorColor},
         {"setCursorRegion", lua_Control_setCursorRegion},
+        {"setEnabled", lua_Control_setEnabled},
         {"setFocusIndex", lua_Control_setFocusIndex},
         {"setFont", lua_Control_setFont},
         {"setFontSize", lua_Control_setFontSize},
@@ -101,6 +102,7 @@ void luaRegister_Control()
         {"setTextAlignment", lua_Control_setTextAlignment},
         {"setTextColor", lua_Control_setTextColor},
         {"setTextRightToLeft", lua_Control_setTextRightToLeft},
+        {"setVisible", lua_Control_setVisible},
         {"setWidth", lua_Control_setWidth},
         {"setZIndex", lua_Control_setZIndex},
         {NULL, NULL}
@@ -666,70 +668,6 @@ int lua_Control_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Control_disable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Control* instance = getInstance(state);
-                instance->disable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Control_disable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Control_enable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Control* instance = getInstance(state);
-                instance->enable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Control_enable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -2614,6 +2552,41 @@ int lua_Control_isEnabled(lua_State* state)
     return 0;
 }
 
+int lua_Control_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Control* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Control_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Control_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -2639,6 +2612,48 @@ int lua_Control_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Control_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
+
+                Control* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Control_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3117,6 +3132,42 @@ int lua_Control_setCursorRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Control_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Control* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Control_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4111,6 +4162,42 @@ int lua_Control_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Control_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Control* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Control_setVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

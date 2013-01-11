@@ -105,25 +105,68 @@ static EGLenum checkErrorEGL(const char* msg)
     return error;
 }
 
+static int getRotation()
+{
+    jint rotation;
+
+    // Get the android application's activity.
+    ANativeActivity* activity = __state->activity;
+    JavaVM* jvm = __state->activity->vm;
+    JNIEnv* env = NULL;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jint res = jvm->AttachCurrentThread(&env, NULL);
+    if (res == JNI_ERR)
+    {
+        GP_ERROR("Failed to retrieve JVM environment when entering message pump.");
+        return -1; 
+    }
+    GP_ASSERT(env);
+
+    jclass clsContext = env->FindClass("android/content/Context");
+    GP_ASSERT(clsContext != NULL);
+    jmethodID getSystemService = env->GetMethodID(clsContext, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+    GP_ASSERT(getSystemService != NULL);
+    jfieldID WINDOW_SERVICE_ID = env->GetStaticFieldID(clsContext, "WINDOW_SERVICE", "Ljava/lang/String;");
+    GP_ASSERT(WINDOW_SERVICE_ID != NULL);
+    jstring WINDOW_SERVICE = (jstring) env->GetStaticObjectField(clsContext, WINDOW_SERVICE_ID);
+    GP_ASSERT(WINDOW_SERVICE != NULL);
+    jobject windowManager = env->CallObjectMethod(activity->clazz, getSystemService, WINDOW_SERVICE);
+    GP_ASSERT(windowManager != NULL);
+    jclass clsWindowManager = env->FindClass("android/view/WindowManager");
+    GP_ASSERT(clsWindowManager != NULL);
+    jmethodID getDefaultDisplay = env->GetMethodID(clsWindowManager, "getDefaultDisplay", "()Landroid/view/Display;");
+    GP_ASSERT(getDefaultDisplay != NULL);
+    jobject defaultDisplay = env->CallObjectMethod(windowManager, getDefaultDisplay);
+    GP_ASSERT(defaultDisplay != NULL);
+    jclass clsDisplay = env->FindClass("android/view/Display");
+    GP_ASSERT(clsDisplay != NULL);
+    jmethodID getRotation = env->GetMethodID(clsDisplay, "getRotation", "()I");
+    GP_ASSERT(getRotation != NULL)
+    rotation =  env->CallIntMethod(defaultDisplay, getRotation);
+
+    return rotation;
+}
+
+
 // Initialized EGL resources.
 static bool initEGL()
 {
-	int samples = 0;
-	Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
-	if (config)
-	{
-		samples = std::max(config->getInt("samples"), 0);
-	}
+    int samples = 0;
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+    if (config)
+    {
+        samples = std::max(config->getInt("samples"), 0);
+    }
 
     // Hard-coded to 32-bit/OpenGL ES 2.0.
     // NOTE: EGL_SAMPLE_BUFFERS, EGL_SAMPLES and EGL_DEPTH_SIZE MUST remain at the beginning of the attribute list
     // since they are expected to be at indices 0-5 in config fallback code later.
-	// EGL_DEPTH_SIZE is also expected to
+    // EGL_DEPTH_SIZE is also expected to
     EGLint eglConfigAttrs[] =
     {
-		EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
-		EGL_SAMPLES,            samples,
-		EGL_DEPTH_SIZE,         24,
+        EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+        EGL_SAMPLES,            samples,
+        EGL_DEPTH_SIZE,         24,
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
         EGL_BLUE_SIZE,          8,
@@ -163,51 +206,51 @@ static bool initEGL()
             goto error;
         }
 
-		// Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
-		bool validConfig = false;
-		EGLint depthSizes[] = { 24, 16 };
-		for (unsigned int i = 0; i < 2; ++i)
-		{
-			eglConfigAttrs[1] = samples > 0 ? 1 : 0;
-			eglConfigAttrs[3] = samples;
-			eglConfigAttrs[5] = depthSizes[i];
+        // Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
+        bool validConfig = false;
+        EGLint depthSizes[] = { 24, 16 };
+        for (unsigned int i = 0; i < 2; ++i)
+        {
+            eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+            eglConfigAttrs[3] = samples;
+            eglConfigAttrs[5] = depthSizes[i];
 
-			if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
-			{
-				validConfig = true;
-				break;
-			}
+            if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+            {
+                validConfig = true;
+                break;
+            }
 
-			if (samples)
-			{
-				// Try lowering the MSAA sample size until we find a supported config
-				int sampleCount = samples;
-				while (sampleCount)
-				{
-					GP_WARN("No EGL config found for depth_size=%d and samples=%d. Trying samples=%d instead.", depthSizes[i], sampleCount, sampleCount / 2);
-					sampleCount /= 2;
-					eglConfigAttrs[1] = sampleCount > 0 ? 1 : 0;
-					eglConfigAttrs[3] = sampleCount;
-					if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
-					{
-						validConfig = true;
-						break;
-					}
-				}
-				if (validConfig)
-					break;
-			}
-			else
-			{
-				GP_WARN("No EGL config found for depth_size=%d.", depthSizes[i]);
-			}
-		}
+            if (samples)
+            {
+                // Try lowering the MSAA sample size until we find a supported config
+                int sampleCount = samples;
+                while (sampleCount)
+                {
+                    GP_WARN("No EGL config found for depth_size=%d and samples=%d. Trying samples=%d instead.", depthSizes[i], sampleCount, sampleCount / 2);
+                    sampleCount /= 2;
+                    eglConfigAttrs[1] = sampleCount > 0 ? 1 : 0;
+                    eglConfigAttrs[3] = sampleCount;
+                    if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+                    {
+                        validConfig = true;
+                        break;
+                    }
+                }
+                if (validConfig)
+                    break;
+            }
+            else
+            {
+                GP_WARN("No EGL config found for depth_size=%d.", depthSizes[i]);
+            }
+        }
 
-		if (!validConfig)
-		{
-			checkErrorEGL("eglChooseConfig");
-			goto error;
-		}
+        if (!validConfig)
+        {
+            checkErrorEGL("eglChooseConfig");
+            goto error;
+        }
 
         __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
         if (__eglContext == EGL_NO_CONTEXT)
@@ -241,8 +284,7 @@ static bool initEGL()
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_WIDTH, &__width);
     eglQuerySurface(__eglDisplay, __eglSurface, EGL_HEIGHT, &__height);
 
-    if (__width < __height)
-        __orientationAngle = 0;
+    __orientationAngle = getRotation() * 90;
     
     // Set vsync.
     eglSwapInterval(__eglDisplay, WINDOW_VSYNC ? 1 : 0);
@@ -1107,15 +1149,24 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     
     // By default, android accelerometer values are oriented to the portrait mode.
     // flipping the x and y to get the desired landscape mode values.
-    if (__orientationAngle == 90)
+    switch (__orientationAngle)
     {
+    case 90:
         tx = -__sensorEvent.acceleration.y;
         ty = __sensorEvent.acceleration.x;
-    }
-    else
-    {
+        break;
+    case 180:
+        tx = -__sensorEvent.acceleration.x;
+        ty = -__sensorEvent.acceleration.y;
+        break;
+    case 270:
+        tx = __sensorEvent.acceleration.y;
+        ty = -__sensorEvent.acceleration.x;
+        break;
+    default:
         tx = __sensorEvent.acceleration.x;
         ty = __sensorEvent.acceleration.y;
+        break;
     }
     tz = __sensorEvent.acceleration.z;
 
@@ -1305,6 +1356,88 @@ unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
 float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
 {
     return 0.0f;
+}
+
+bool Platform::launchURL(const char *url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    bool result = true;
+
+    android_app* state = __state;
+    GP_ASSERT(state && state->activity && state->activity->vm);
+    JavaVM* jvm = state->activity->vm;
+    JNIEnv* env = NULL;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jint r = jvm->AttachCurrentThread(&env, NULL);
+    if (r == JNI_ERR)
+    {
+        GP_ERROR("Failed to retrieve JVM environment to display keyboard.");
+        return false;
+    }
+    GP_ASSERT(env);
+
+    jclass classActivity = env->FindClass("android/app/NativeActivity");
+    jclass classIntent = env->FindClass("android/content/Intent");
+    jclass classUri = env->FindClass("android/net/Uri");
+
+    GP_ASSERT(classActivity && classIntent && classUri);
+
+    // Get static field ID Intent.ACTION_VIEW
+    jfieldID fieldActionView = env->GetStaticFieldID(classIntent, "ACTION_VIEW", "Ljava/lang/String;");
+    GP_ASSERT(fieldActionView);
+
+    // Get string value of Intent.ACTION_VIEW, we'll need that to pass to Intent's constructor later on
+    jstring paramActionView = (jstring)env->GetStaticObjectField(classIntent, fieldActionView);
+    GP_ASSERT(paramActionView);
+
+    // Get method ID Uri.parse, will be needed to parse the url given into Uri object
+    jmethodID methodUriParse = env->GetStaticMethodID(classUri, "parse","(Ljava/lang/String;)Landroid/net/Uri;");
+    GP_ASSERT(methodUriParse);
+
+    // Get method ID Activity.startActivity, so we can start the appropriate activity for the View action of our Uri
+    jmethodID methodActivityStartActivity = env->GetMethodID(classActivity, "startActivity","(Landroid/content/Intent;)V");
+    GP_ASSERT(methodActivityStartActivity);
+
+    // Get method ID Intent constructor, the one that takes action and uri (String;Uri)
+    jmethodID methodIntentInit = env->GetMethodID(classIntent, "<init>","(Ljava/lang/String;Landroid/net/Uri;)V");
+    GP_ASSERT(methodIntentInit);
+
+    // Convert our url to Java's string and parse it to Uri
+    jstring paramUrlString = env->NewStringUTF(url);
+    jobject paramUri = env->CallStaticObjectMethod(classUri, methodUriParse, paramUrlString);
+    GP_ASSERT(paramUri);
+
+    // Create Intent with Intent.ACTION_VIEW and parsed Uri arguments
+    jobject paramIntent = env->NewObject(classIntent, methodIntentInit, paramActionView, paramUri);
+    GP_ASSERT(paramIntent);
+
+    // Launch NativeActivity.startActivity with our intent to view the url! state->activity->clazz holds
+    // our NativeActivity object
+    env->CallVoidMethod(state->activity->clazz, methodActivityStartActivity, paramIntent);
+
+    /* startActivity may throw a ActivitNotFoundException if, well, activity is not found.
+       Example: http://<url> is passed to the intent but there is no browser installed in the system
+       we need to handle it. */
+    jobject exception = env->ExceptionOccurred();
+
+    // We're not lucky here
+    if (exception)
+    {
+        // Print out the exception data to logcat
+        env->ExceptionDescribe();
+
+        // Exception needs to be cleared
+        env->ExceptionClear();
+
+        // Launching the url failed
+        result = false;
+    }
+
+    // See you Space Cowboy
+    jvm->DetachCurrentThread();
+    return result;
 }
 
 }

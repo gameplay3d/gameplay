@@ -21,7 +21,7 @@ Effect::~Effect()
     __effectCache.erase(_id);
 
     // Free uniforms.
-    for (std::map<std::string, Uniform*>::iterator itr = _uniforms.begin(); itr != _uniforms.end(); itr++)
+    for (std::map<std::string, Uniform*>::iterator itr = _uniforms.begin(); itr != _uniforms.end(); ++itr)
     {
         SAFE_DELETE(itr->second);
     }
@@ -126,9 +126,8 @@ static void replaceIncludes(const char* filepath, const char* source, std::strin
     std::string str = source;
     size_t lastPos = 0;
     size_t headPos = 0;
-    size_t tailPos = 0;
     size_t fileLen = str.length();
-    tailPos = fileLen;
+    size_t tailPos = fileLen;
     while (headPos < fileLen)
     {
         lastPos = headPos;
@@ -200,10 +199,11 @@ static void writeShaderToErrorFile(const char* filePath, const char* source)
 {
     std::string path = filePath;
     path += ".err";
-    FILE* file = FileSystem::openFile(path.c_str(), "wb");
-    int err = ferror(file);
-    fwrite(source, 1, strlen(source), file);
-    fclose(file);
+    std::auto_ptr<Stream> stream(FileSystem::open(path.c_str(), FileSystem::WRITE));
+    if (stream.get() != NULL && stream->canWrite())
+    {
+        stream->write(source, 1, strlen(source));
+    }
 }
 
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
@@ -454,7 +454,7 @@ Uniform* Effect::getUniform(const char* name) const
 Uniform* Effect::getUniform(unsigned int index) const
 {
     unsigned int i = 0;
-    for (std::map<std::string, Uniform*>::const_iterator itr = _uniforms.begin(); itr != _uniforms.end(); itr++, i++)
+    for (std::map<std::string, Uniform*>::const_iterator itr = _uniforms.begin(); itr != _uniforms.end(); ++itr, ++i)
     {
         if (i == index)
         {

@@ -2,6 +2,9 @@
 <projectDescription>
 	<name>sample05-lua</name>
 	<comment></comment>
+	<projects>
+		<project>gameplay</project>
+	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>

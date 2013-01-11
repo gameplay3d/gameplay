@@ -70,16 +70,20 @@ public:
         ~Text();
 
         /**
-         * Hidden copy assignment operator.
-         */
-        Text& operator=(const Text&);
-
-        /**
          * Get the string that will be drawn from this Text object.
          */
         const char* getText();
 
     private:
+        /**
+         * Hidden copy constructor.
+         */
+        Text(const Text&); 
+        /**
+         * Hidden copy assignment operator.
+         */
+        Text& operator=(const Text&);
+        
         std::string _text;
         unsigned int _vertexCount;
         SpriteBatch::SpriteVertex* _vertices;

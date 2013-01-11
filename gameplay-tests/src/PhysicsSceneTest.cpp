@@ -29,7 +29,7 @@ void PhysicsSceneTest::initialize()
     _lightNode = _scene->findNode("directionalLight");
     _scene->visit(this, &PhysicsSceneTest::bindLights);
 
-    _form = Form::create("res/common/physicsScene.form");
+    _form = Form::create("res/common/physics.form");
     static_cast<Button*>(_form->getControl("wireframeButton"))->addListener(this, Control::Listener::CLICK);
     static_cast<Button*>(_form->getControl("drawDebugButton"))->addListener(this, Control::Listener::CLICK);
     static_cast<Button*>(_form->getControl("throwButton"))->addListener(this, Control::Listener::CLICK);

@@ -140,4 +140,10 @@ inline Gamepad* Game::getGamepad(unsigned int index) const
     else
         return NULL;
 }
+
+inline bool Game::launchURL(const char* url) const
+{
+    return Platform::launchURL(url);
+}
+
 }

@@ -9,6 +9,7 @@
 #include "ScriptController.h"
 #include <GL/wglew.h>
 #include <windowsx.h>
+#include <shellapi.h>
 #ifdef USE_XINPUT
 #include <XInput.h>
 #endif
@@ -404,7 +405,7 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
     }
 }
 
-void UpdateCapture(LPARAM lParam)
+static void UpdateCapture(LPARAM lParam)
 {
     if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
         SetCapture(__hwnd);
@@ -412,11 +413,25 @@ void UpdateCapture(LPARAM lParam)
         ReleaseCapture();
 }
 
-void WarpMouse(int clientX, int clientY)
+static void WarpMouse(int clientX, int clientY)
 {
     POINT p = { clientX, clientY };
     ClientToScreen(__hwnd, &p);
     SetCursorPos(p.x, p.y);
+}
+
+
+/**
+ * Gets the width and height of the screen in pixels.
+ */
+static void getDesktopResolution(int& width, int& height)
+{
+   RECT desktop;
+   const HWND hDesktop = GetDesktopWindow();
+   // Get the size of screen to the variable desktop
+   GetWindowRect(hDesktop, &desktop);
+   width = desktop.right;
+   height = desktop.bottom;
 }
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -871,6 +886,11 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 SAFE_DELETE_ARRAY(wtitle);
             }
 
+            // Read fullscreen state.
+            params.fullscreen = config->getBool("fullscreen");
+            // Read multisampling state.
+            params.samples = config->getInt("samples");
+
             // Read window rect.
             int x = config->getInt("x");
             if (x != 0)
@@ -879,17 +899,15 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             if (y != 0)
                 params.rect.top = y;
             int width = config->getInt("width");
+            int height = config->getInt("height");
+
+            if (width == 0 && height == 0 && params.fullscreen)
+                getDesktopResolution(width, height);
+
             if (width != 0)
                 params.rect.right = params.rect.left + width;
-            int height = config->getInt("height");
             if (height != 0)
                 params.rect.bottom = params.rect.top + height;
-
-            // Read fullscreen state.
-            params.fullscreen = config->getBool("fullscreen");
-
-            // Read multisampling state.
-            params.samples = config->getInt("samples");
         }
     }
 
@@ -960,9 +978,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             DEVMODE dm;
             memset(&dm, 0, sizeof(dm));
             dm.dmSize= sizeof(dm);
-            dm.dmPelsWidth	= width;
-            dm.dmPelsHeight	= height;
-            dm.dmBitsPerPel	= DEFAULT_COLOR_BUFFER_SIZE;
+            dm.dmPelsWidth  = width;
+            dm.dmPelsHeight = height;
+            dm.dmBitsPerPel = DEFAULT_COLOR_BUFFER_SIZE;
             dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
             // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
@@ -1452,6 +1470,20 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     {
         return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
     }
+}
+
+bool Platform::launchURL(const char* url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+ 
+    // Success when result code > 32
+    int len = MultiByteToWideChar(CP_ACP, 0, url, -1, NULL, 0);
+    wchar_t* wurl = new wchar_t[len];
+    MultiByteToWideChar(CP_ACP, 0, url, -1, wurl, len);
+    int r = (int)ShellExecute(NULL, NULL, wurl, NULL, NULL, SW_SHOWNORMAL);
+    SAFE_DELETE_ARRAY(wurl);
+    return (r > 32);
 }
 
 }

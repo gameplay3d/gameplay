@@ -34,14 +34,11 @@ void applyLight(vec4 position)
     // Compute the light direction.
     vec3 lightDirection = u_pointLightPosition - positionWorldViewSpace.xyz;
    
-    vec4 vertexToPointLightDirection;
-    vertexToPointLightDirection.xyz = lightDirection;
-   
     // Attenuation
     v_pointLightAttenuation = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
 
     // Output light direction.
-    v_vertexToPointLightDirection =  vertexToPointLightDirection;
+    v_vertexToPointLightDirection =  lightDirection;
    
     #if defined (SPECULAR)
    

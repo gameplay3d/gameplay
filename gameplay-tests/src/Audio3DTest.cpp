@@ -83,8 +83,6 @@ void Audio3DTest::update(float elapsedTime)
 {
     float time = (float)elapsedTime / 1000.0f;
 
-    _gamepad->update(elapsedTime);
-
     Vector2 move;
 
     if (_moveFlags != 0)
@@ -137,6 +135,8 @@ void Audio3DTest::update(float elapsedTime)
         addSound("footsteps.wav");
     }
     _buttonPressed = _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED;
+
+    _gamepad->update(elapsedTime);
 }
 
 void Audio3DTest::render(float elapsedTime)

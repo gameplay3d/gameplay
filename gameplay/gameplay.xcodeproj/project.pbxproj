@@ -1701,6 +1701,8 @@
 		5BD52674150F8258004C9099 /* PhysicsCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */; };
 		5BD52675150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
 		5BD52676150F8258004C9099 /* PhysicsCollisionObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */; };
+		9FC6EE731665304F00F39955 /* Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FC6EE721665304F00F39955 /* Stream.h */; };
+		9FC6EE741665304F00F39955 /* Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FC6EE721665304F00F39955 /* Stream.h */; };
 		B67EC8EB161DFC8E000B4D12 /* lua_Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */; };
 		B67EC8EC161DFC8E000B4D12 /* lua_Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */; };
 		B67EC8ED161DFC8E000B4D12 /* lua_Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8E8161DFC8E000B4D12 /* lua_Logger.h */; };
@@ -1715,7 +1717,7 @@
 		B67EC8F9161DFCA8000B4D12 /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = B67EC8F5161DFCA8000B4D12 /* Logger.h */; };
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
 		F1616ABD1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
-		F18024A51627000D001BFF87 /* gameplay-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* gameplay-main-ios.mm */; };
+		F18024A51627000D001BFF87 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* gameplay-main-ios.mm */; };
 		F18024A61627000D001BFF87 /* gameplay-main-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A31627000D001BFF87 /* gameplay-main-ios.mm */; };
 		F18024A71627000D001BFF87 /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */; };
 		F18024A81627000D001BFF87 /* gameplay-main-macosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = F18024A41627000D001BFF87 /* gameplay-main-macosx.mm */; };
@@ -2610,6 +2612,7 @@
 		5BD5266C150F8257004C9099 /* PhysicsCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCharacter.h; path = src/PhysicsCharacter.h; sourceTree = SOURCE_ROOT; };
 		5BD5266D150F8257004C9099 /* PhysicsCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsCollisionObject.cpp; path = src/PhysicsCollisionObject.cpp; sourceTree = SOURCE_ROOT; };
 		5BD5266E150F8258004C9099 /* PhysicsCollisionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsCollisionObject.h; path = src/PhysicsCollisionObject.h; sourceTree = SOURCE_ROOT; };
+		9FC6EE721665304F00F39955 /* Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Stream.h; path = src/Stream.h; sourceTree = SOURCE_ROOT; };
 		B67EC8E7161DFC8E000B4D12 /* lua_Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Logger.cpp; sourceTree = "<group>"; };
 		B67EC8E8161DFC8E000B4D12 /* lua_Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Logger.h; sourceTree = "<group>"; };
 		B67EC8E9161DFC8E000B4D12 /* lua_LoggerLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_LoggerLevel.cpp; sourceTree = "<group>"; };
@@ -2889,6 +2892,7 @@
 				42CD0E2F147D8FF50000361E /* SpriteBatch.cpp */,
 				42CD0E30147D8FF50000361E /* SpriteBatch.h */,
 				42CD0E31147D8FF50000361E /* Technique.cpp */,
+				9FC6EE721665304F00F39955 /* Stream.h */,
 				42CD0E32147D8FF50000361E /* Technique.h */,
 				42CD0E33147D8FF50000361E /* Texture.cpp */,
 				42CD0E34147D8FF50000361E /* Texture.h */,
@@ -4083,6 +4087,7 @@
 				B67EC8ED161DFC8E000B4D12 /* lua_Logger.h in Headers */,
 				B67EC8F1161DFC8E000B4D12 /* lua_LoggerLevel.h in Headers */,
 				B67EC8F8161DFCA8000B4D12 /* Logger.h in Headers */,
+				9FC6EE731665304F00F39955 /* Stream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4513,6 +4518,7 @@
 				B67EC8EE161DFC8E000B4D12 /* lua_Logger.h in Headers */,
 				B67EC8F2161DFC8E000B4D12 /* lua_LoggerLevel.h in Headers */,
 				B67EC8F9161DFCA8000B4D12 /* Logger.h in Headers */,
+				9FC6EE741665304F00F39955 /* Stream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

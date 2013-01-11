@@ -35,8 +35,8 @@ RacerGame game;
 #define BUTTON_Y (13)
 
 RacerGame::RacerGame()
-    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL),
-    _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL), _upsetTimer(0)
+    : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _upsetTimer(0),
+      _backgroundSound(NULL), _engineSound(NULL), _brakingSound(NULL)
 {
 }
 
@@ -53,7 +53,7 @@ void RacerGame::initialize()
 
     // Create the menu and start listening to its controls.
     _menu = Form::create("res/common/menu.form");
-    _menu->disable();
+    _menu->setEnabled(false);
     static_cast<Button*>(_menu->getControl("newGameButton"))->addListener(this, Listener::CLICK);
     static_cast<Button*>(_menu->getControl("quitGameButton"))->addListener(this, Listener::CLICK);
     static_cast<RadioButton*>(_menu->getControl("useGamepad"))->addListener(this, Listener::VALUE_CHANGED);
@@ -158,8 +158,8 @@ void RacerGame::update(float elapsedTime)
     
     _gamepad->update(elapsedTime);
 
-	_menu->update(Game::getAbsoluteTime());
-	_overlay->update(Game::getAbsoluteTime());
+    _menu->update(Game::getAbsoluteTime());
+    _overlay->update(Game::getAbsoluteTime());
 
     Node* cameraNode;
     if (_scene->getActiveCamera() && (cameraNode = _scene->getActiveCamera()->getNode()))
@@ -193,10 +193,10 @@ void RacerGame::update(float elapsedTime)
                 }
                 else if (__useAccelerometer)
                 {
-            	    float pitch, roll;
-            	    Game::getAccelerometerValues(&pitch, &roll);
+                    float pitch, roll;
+                    Game::getAccelerometerValues(&pitch, &roll);
 
-            	    _steering = -0.16 * roll;
+                    _steering = -0.16 * roll;
                 }
                 else
                 {
@@ -419,8 +419,8 @@ void RacerGame::keyEvent(Keyboard::KeyEvent evt, int key)
             __drawDebug = !__drawDebug;
             break;
         case Keyboard::KEY_J:
-        	__useAccelerometer = !__useAccelerometer;
-        	break;
+            __useAccelerometer = !__useAccelerometer;
+            break;
         }
     }
     else if (evt == Keyboard::KEY_RELEASE)
@@ -523,18 +523,18 @@ void RacerGame::menuEvent()
 {
     __showMenu = !__showMenu;
 
-	if (__showMenu)
-	{
+    if (__showMenu)
+    {
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
-		pause();
-        _menu->enable();
-	}
-	else
-	{
+        pause();
+        _menu->setEnabled(true);
+    }
+    else
+    {
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Menu");
-		resume();
-        _menu->disable();
-	}
+        resume();
+        _menu->setEnabled(false);
+    }
 }
 
 void RacerGame::resetToStart()
@@ -581,8 +581,8 @@ void RacerGame::controlEvent(Control* control, EventType evt)
     if (strcmp(control->getId(), "newGameButton") == 0)
     {
         resetToStart();
-		// Close the menu and resume the game.
-		menuEvent();
+        // Close the menu and resume the game.
+        menuEvent();
     }
     else if (strcmp(control->getId(), "quitGameButton") == 0)
     {

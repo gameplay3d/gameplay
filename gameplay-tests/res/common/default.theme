@@ -1,6 +1,6 @@
 theme mainMenu
 {
-    texture = res/common/theme.png
+    texture = res/png/default-theme.png
 
     imageList normalImages
     {
@@ -28,12 +28,12 @@ theme mainMenu
 
         image minCap
         {
-            region = 3, 99, 8, 24
+            region = 3, 115, 8, 11
         }
 
         image maxCap
         {
-            region = 3, 99, 8, 24
+            region = 3, 115, 8, 11
         }
 
         image marker
@@ -43,7 +43,7 @@ theme mainMenu
 
         image track
         {
-            region = 39, 119, 32, 6
+            region = 42, 119, 26, 6
         }
 
         image textCaret
@@ -65,6 +65,21 @@ theme mainMenu
         image scrollBarBottomCap
         {
             region = 0, 138, 12, 5
+        }
+
+        image scrollBarLeftCap
+        {
+            region = 35, 115, 5, 12
+        }
+
+        image horizontalScrollBar
+        {
+            region = 43, 115, 19, 12
+        }
+
+        image scrollBarRightCap
+        {
+            region = 65, 115, 5, 12
         }
     }
 
@@ -111,6 +126,53 @@ theme mainMenu
     {
         color = #C3D9BFff
     }
+    
+    skin formEntry : mainNormal
+    {
+        region = 78, 1, 46, 46
+        color = #25434Cff
+    }
+
+    skin underliner
+    {
+        border
+        {
+            bottom = 10
+        }
+        
+        region = 4, 82, 68, 5
+        color = #ffffffff
+    }
+
+    style underlined
+    {
+        padding
+        {
+            top = 5
+        }
+    
+        stateNormal
+        {
+            skin = underliner
+            textColor = #ffffffff
+            font = res/common/arial18.gpb
+            fontSize = 25
+            textAlignment = ALIGN_BOTTOM_HCENTER
+        }
+
+        stateFocus
+        {
+            textColor = #00ff00ff
+        }
+    }
+
+    style leftAlignedUnderlined : underlined
+    {
+        stateNormal
+        {
+            textAlignment = ALIGN_TOP_LEFT
+        }
+    }
 
     style basic
     {
@@ -128,6 +190,15 @@ theme mainMenu
         stateActive
         {
             imageList = activeImages
+        }
+    }
+
+    style topLeftAlignedEntry : basic
+    {
+        stateNormal
+        {
+            skin = formEntry
+            textAlignment = ALIGN_TOP_LEFT
         }
     }
 
@@ -183,6 +254,19 @@ theme mainMenu
             font = res/common/arial18.gpb
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
+        }
+    }
+
+    style topLeftNoBorder : iconNoBorder
+    {
+        stateNormal
+        {
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateActive
+        {
+            textAlignment = ALIGN_TOP_LEFT
         }
     }
 

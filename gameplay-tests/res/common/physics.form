@@ -1,6 +1,6 @@
 form physicsScene
 {
-    theme = res/common/mainMenu.theme
+    theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
     style = noBorder
     width = 200

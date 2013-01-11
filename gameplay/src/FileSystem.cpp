@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "Properties.h"
+#include "Stream.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -28,7 +29,7 @@ namespace gameplay
 #ifdef __ANDROID__
 #include <unistd.h>
 
-void makepath(std::string path, int mode)
+static void makepath(std::string path, int mode)
 {
     std::vector<std::string> dirs;
     while (path.length() > 0)
@@ -63,11 +64,99 @@ void makepath(std::string path, int mode)
     
     return;
 }
+
+/**
+ * Returns true if the file exists in the android read-only asset directory.
+ */
+static bool androidFileExists(const char* filePath)
+{
+    AAsset* asset = AAssetManager_open(__assetManager, filePath, AASSET_MODE_RANDOM);
+    if (asset)
+    {
+        int lenght = AAsset_getLength(asset);
+        AAsset_close(asset);
+        return length > 0;
+    }
+    return false;
+}
+
 #endif
 
 /** @script{ignore} */
 static std::string __resourcePath("./");
 static std::map<std::string, std::string> __aliases;
+
+/**
+ * 
+ * @script{ignore}
+ */
+class FileStream : public Stream
+{
+public:
+    friend class FileSystem;
+    
+    ~FileStream();
+    virtual bool canRead();
+    virtual bool canWrite();
+    virtual bool canSeek();
+    virtual void close();
+    virtual size_t read(void* ptr, size_t size, size_t count);
+    virtual char* readLine(char* str, int num);
+    virtual size_t write(const void* ptr, size_t size, size_t count);
+    virtual bool eof();
+    virtual size_t length();
+    virtual long int position();
+    virtual bool seek(long int offset, int origin);
+    virtual bool rewind();
+
+    static FileStream* create(const char* filePath, const char* mode);
+
+private:
+    FileStream(FILE* file);
+
+private:
+    FILE* _file;
+    bool _canRead;
+    bool _canWrite;
+};
+
+#ifdef __ANDROID__
+
+/**
+ * 
+ * @script{ignore}
+ */
+class FileStreamAndroid : public Stream
+{
+public:
+    friend class FileSystem;
+    
+    ~FileStreamAndroid();
+    virtual bool canRead();
+    virtual bool canWrite();
+    virtual bool canSeek();
+    virtual void close();
+    virtual size_t read(void* ptr, size_t size, size_t count);
+    virtual char* readLine(char* str, int num);
+    virtual size_t write(const void* ptr, size_t size, size_t count);
+    virtual bool eof();
+    virtual size_t length();
+    virtual long int position();
+    virtual bool seek(long int offset, int origin);
+    virtual bool rewind();
+
+    static FileStreamAndroid* create(const char* filePath, const char* mode);
+
+private:
+    FileStreamAndroid(AAsset* asset);
+
+private:
+    AAsset* _asset;
+};
+
+#endif
+
+/////////////////////////////
 
 FileSystem::FileSystem()
 {
@@ -201,10 +290,15 @@ bool FileSystem::fileExists(const char* filePath)
 {
     GP_ASSERT(filePath);
 
+#ifdef __ANDROID__
+    if (androidFileExists(filePath))
+    {
+        return true;
+    }
+#endif
+
     std::string fullPath(__resourcePath);
     fullPath += resolvePath(filePath);
-
-    createFileFromAsset(filePath);
 
     gp_stat_struct s;
 
@@ -230,15 +324,72 @@ bool FileSystem::fileExists(const char* filePath)
 #endif
 }
 
-FILE* FileSystem::openFile(const char* path, const char* mode)
+Stream* FileSystem::open(const char* path, size_t mode)
 {
-    GP_ASSERT(path);
+    char modeStr[] = "rb";
+    if ((mode & WRITE) != 0)
+        modeStr[0] = 'w';
+#ifdef __ANDROID__
+    if ((mode & WRITE) != 0)
+    {
+        // Open a file on the SD card
+        std::string fullPath(__resourcePath);
+        fullPath += resolvePath(path);
+
+        size_t index = fullPath.rfind('/');
+        if (index != std::string::npos)
+        {
+            std::string directoryPath = fullPath.substr(0, index);
+            struct stat s;
+            if (stat(directoryPath.c_str(), &s) != 0)
+                makepath(directoryPath, 0777);
+        }
+        return FileStream::create(fullPath.c_str(), modeStr);
+    }
+    else
+    {
+        // Open a file in the read-only asset directory
+        return FileStreamAndroid::create(resolvePath(path), modeStr);
+    }
+#else
+    std::string fullPath(__resourcePath);
+    fullPath += resolvePath(path);
+    
+#ifdef WIN32
+    gp_stat_struct s;
+    if (stat(fullPath.c_str(), &s) != 0 && (mode & WRITE) == 0)
+    {
+        fullPath = __resourcePath;
+        fullPath += "../../gameplay/";
+        fullPath += path;
+        
+        int result = stat(fullPath.c_str(), &s);
+        if (result != 0)
+        {
+            fullPath = __resourcePath;
+            fullPath += "../gameplay/";
+            fullPath += path;
+            if (stat(fullPath.c_str(), &s) != 0)
+            {
+                return NULL;
+            }
+        }
+    }
+#endif
+    FileStream* stream = FileStream::create(fullPath.c_str(), modeStr);
+    return stream;
+#endif
+}
+
+FILE* FileSystem::openFile(const char* filePath, const char* mode)
+{
+    GP_ASSERT(filePath);
     GP_ASSERT(mode);
 
     std::string fullPath(__resourcePath);
-    fullPath += resolvePath(path);
+    fullPath += resolvePath(filePath);
 
-    createFileFromAsset(path);
+    createFileFromAsset(filePath);
     
     FILE* fp = fopen(fullPath.c_str(), mode);
     
@@ -247,14 +398,14 @@ FILE* FileSystem::openFile(const char* path, const char* mode)
     {
         fullPath = __resourcePath;
         fullPath += "../../gameplay/";
-        fullPath += path;
+        fullPath += filePath;
         
         fp = fopen(fullPath.c_str(), mode);
         if (!fp)
         {
             fullPath = __resourcePath;
             fullPath += "../gameplay/";
-            fullPath += path;
+            fullPath += filePath;
             fp = fopen(fullPath.c_str(), mode);
         }
     }
@@ -268,32 +419,20 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     GP_ASSERT(filePath);
 
     // Open file for reading.
-    FILE* file = openFile(filePath, "rb");
-    if (file == NULL)
+    std::auto_ptr<Stream> stream(open(filePath));
+    if (stream.get() == NULL)
     {
         GP_ERROR("Failed to load file: %s", filePath);
         return NULL;
     }
-
-    // Obtain file length.
-    if (fseek(file, 0, SEEK_END) != 0)
-    {
-        GP_ERROR("Failed to seek to the end of the file '%s' to obtain the file length.", filePath);
-        return NULL;
-    }
-    int size = (int)ftell(file);
-    if (fseek(file, 0, SEEK_SET) != 0)
-    {
-        GP_ERROR("Failed to seek to beginning of the file '%s' to begin reading in the entire file.", filePath);
-        return NULL;
-    }
+    size_t size = stream->length();
 
     // Read entire file contents.
     char* buffer = new char[size + 1];
-    int read = (int)fread(buffer, 1, size, file);
+    size_t read = stream->read(buffer, 1, size);
     if (read != size)
     {
-        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %d < %d).", filePath, (int)read, (int)size);
+        GP_ERROR("Failed to read complete contents of file '%s' (amount read vs. file size: %u < %u).", filePath, read, size);
         SAFE_DELETE_ARRAY(buffer);
         return NULL;
     }
@@ -301,15 +440,9 @@ char* FileSystem::readAll(const char* filePath, int* fileSize)
     // Force the character buffer to be NULL-terminated.
     buffer[size] = '\0';
 
-    // Close file and return.
-    if (fclose(file) != 0)
-    {
-        GP_ERROR("Failed to close file '%s'.", filePath);
-    }
-
     if (fileSize)
     {
-        *fileSize = size; 
+        *fileSize = (int)size; 
     }
     return buffer;
 }
@@ -382,5 +515,280 @@ void FileSystem::createFileFromAsset(const char* path)
     }
 #endif
 }
+
+//////////////////
+
+FileStream::FileStream(FILE* file)
+    : _file(file), _canRead(false), _canWrite(false)
+{
+    
+}
+
+FileStream::~FileStream()
+{
+    if (_file)
+    {
+        close();
+    }
+}
+
+FileStream* FileStream::create(const char* filePath, const char* mode)
+{
+    FILE* file = fopen(filePath, mode);
+    if (file)
+    {
+        FileStream* stream = new FileStream(file);
+        const char* s = mode;
+        while (s != NULL && *s != '\0')
+        {
+            if (*s == 'r')
+                stream->_canRead = true;
+            else if (*s == 'w')
+                stream->_canWrite = true;
+            ++s;
+        }
+
+        return stream;
+    }
+    return NULL;
+}
+
+bool FileStream::canRead()
+{
+    return _file && _canRead;
+}
+
+bool FileStream::canWrite()
+{
+    return _file && _canWrite;
+}
+
+bool FileStream::canSeek()
+{
+    return _file != NULL;
+}
+
+void FileStream::close()
+{
+    if (_file)
+        fclose(_file);
+    _file = NULL;
+}
+
+size_t FileStream::read(void* ptr, size_t size, size_t count)
+{
+    if (!_file)
+        return 0;
+    return fread(ptr, size, count, _file);
+}
+
+char* FileStream::readLine(char* str, int num)
+{
+    if (!_file)
+        return 0;
+    return fgets(str, num, _file);
+}
+
+size_t FileStream::write(const void* ptr, size_t size, size_t count)
+{
+    if (!_file)
+        return 0;
+    return fwrite(ptr, size, count, _file);
+}
+
+bool FileStream::eof()
+{
+    if (!_file || feof(_file))
+        return true;
+    return ((size_t)position()) >= length();
+}
+
+size_t FileStream::length()
+{
+    size_t len = 0;
+    if (canSeek())
+    {
+        long int pos = position();
+        if (seek(0, SEEK_END))
+        {
+            len = position();
+        }
+        seek(pos, SEEK_SET);
+    }
+    return len;
+}
+
+long int FileStream::position()
+{
+    if (!_file)
+        return -1;
+    return ftell(_file);
+}
+
+bool FileStream::seek(long int offset, int origin)
+{
+    if (!_file)
+        return false;
+    return fseek(_file, offset, origin) == 0;
+}
+
+bool FileStream::rewind()
+{
+    if (canSeek())
+    {
+        ::rewind(_file);
+        return true;
+    }
+    return false;
+}
+
+////////////////////////////////
+
+#ifdef __ANDROID__
+
+FileStreamAndroid::FileStreamAndroid(AAsset* asset)
+    : _asset(asset)
+{
+}
+
+FileStreamAndroid::~FileStreamAndroid()
+{
+    if (_asset)
+        close();
+}
+
+FileStreamAndroid* FileStreamAndroid::create(const char* filePath, const char* mode)
+{
+    AAsset* asset = AAssetManager_open(__assetManager, filePath, AASSET_MODE_RANDOM);
+    if (asset)
+    {
+        FileStreamAndroid* stream = new FileStreamAndroid(asset);
+        return stream;
+    }
+    return NULL;
+}
+
+bool FileStreamAndroid::canRead()
+{
+    return true;
+}
+
+bool FileStreamAndroid::canWrite()
+{
+    return false;
+}
+
+bool FileStreamAndroid::canSeek()
+{
+    return true;
+}
+
+void FileStreamAndroid::close()
+{
+    if (_asset)
+        AAsset_close(_asset);
+    _asset = NULL;
+}
+
+size_t FileStreamAndroid::read(void* ptr, size_t size, size_t count)
+{
+    int result = AAsset_read(_asset, ptr, size * count);
+    return result > 0 ? ((size_t)result) / size : 0;
+}
+
+char* FileStreamAndroid::readLine(char* str, int num)
+{
+    if (num <= 0)
+        return NULL;
+    char c = 0;
+    size_t maxCharsToRead = num - 1;
+    for (size_t i = 0; i < maxCharsToRead; ++i)
+    {
+        size_t result = read(&c, 1, 1);
+        if (result != 1)
+        {
+            str[i] = '\0';
+            break;
+        }
+        if (c == '\n')
+        {
+            str[i] = c;
+            str[i + 1] = '\0';
+            break;
+        }
+        else if(c == '\r')
+        {
+            str[i] = c;
+            // next may be '\n'
+            size_t pos = position();
+
+            char nextChar = 0;
+            if (read(&nextChar, 1, 1) != 1)
+            {
+                // no more characters
+                str[i + 1] = '\0';
+                break;
+            }
+            if (nextChar == '\n')
+            {
+                if (i == maxCharsToRead - 1)
+                {
+                    str[i + 1] = '\0';
+                    break;
+                }
+                else
+                {
+                    str[i + 1] = nextChar;
+                    str[i + 2] = '\0';
+                    break;
+                }
+            }
+            else
+            {
+                seek(pos, SEEK_SET);
+                str[i + 1] = '\0';
+                break;
+            }
+        }
+        str[i] = c;
+    }
+    return str; // what if first read failed?
+}
+
+size_t FileStreamAndroid::write(const void* ptr, size_t size, size_t count)
+{
+    return 0;
+}
+
+bool FileStreamAndroid::eof()
+{
+    return position() >= length();
+}
+
+size_t FileStreamAndroid::length()
+{
+    return (size_t)AAsset_getLength(_asset);
+}
+
+long int FileStreamAndroid::position()
+{
+    return AAsset_getLength(_asset) - AAsset_getRemainingLength(_asset);
+}
+
+bool FileStreamAndroid::seek(long int offset, int origin)
+{
+    return AAsset_seek(_asset, offset, origin) != -1;
+}
+
+bool FileStreamAndroid::rewind()
+{
+    if (canSeek())
+    {
+        return AAsset_seek(_asset, 0, SEEK_SET) != -1;
+    }
+    return false;
+}
+
+#endif
 
 }

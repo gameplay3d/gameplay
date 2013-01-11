@@ -37,6 +37,8 @@ vec4 getPosition()
     return _skinnedPosition;    
 }
 
+#if defined(LIGHTING)
+
 void skinTangentSpaceVector(vec3 vector, float blendWeight, int matrixIndex)
 {
     vec3 tmp;
@@ -69,8 +71,6 @@ vec3 getTangentSpaceVector(vec3 vector)
 
     return _skinnedNormal;
 }
-
-#if defined(LIGHTING)
 
 vec3 getNormal()
 {

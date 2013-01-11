@@ -40,6 +40,7 @@ int lua_Game_isInitialized(lua_State* state);
 int lua_Game_isMouseCaptured(lua_State* state);
 int lua_Game_isMultiTouch(lua_State* state);
 int lua_Game_keyEvent(lua_State* state);
+int lua_Game_launchURL(lua_State* state);
 int lua_Game_menuEvent(lua_State* state);
 int lua_Game_mouseEvent(lua_State* state);
 int lua_Game_pause(lua_State* state);

@@ -32,7 +32,7 @@ namespace gameplay
 static std::vector<Bundle*> __bundleCache;
 
 Bundle::Bundle(const char* path) :
-    _path(path), _referenceCount(0), _references(NULL), _file(NULL), _trackedNodes(NULL)
+    _path(path), _referenceCount(0), _references(NULL), _stream(NULL), _trackedNodes(NULL)
 {
 }
 
@@ -49,10 +49,9 @@ Bundle::~Bundle()
 
     SAFE_DELETE_ARRAY(_references);
 
-    if (_file)
+    if (_stream)
     {
-        fclose(_file);
-        _file = NULL;
+        SAFE_DELETE(_stream);
     }
 }
 
@@ -61,7 +60,7 @@ bool Bundle::readArray(unsigned int* length, T** ptr)
 {
     GP_ASSERT(length);
     GP_ASSERT(ptr);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     if (!read(length))
     {
@@ -71,7 +70,7 @@ bool Bundle::readArray(unsigned int* length, T** ptr)
     if (*length > 0)
     {
         *ptr = new T[*length];
-        if (fread(*ptr, sizeof(T), *length, _file) != *length)
+        if (_stream->read(*ptr, sizeof(T), *length) != *length)
         {
             GP_ERROR("Failed to read an array of data from bundle (into an array).");
             SAFE_DELETE_ARRAY(*ptr);
@@ -85,7 +84,7 @@ template <class T>
 bool Bundle::readArray(unsigned int* length, std::vector<T>* values)
 {
     GP_ASSERT(length);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     if (!read(length))
     {
@@ -95,7 +94,7 @@ bool Bundle::readArray(unsigned int* length, std::vector<T>* values)
     if (*length > 0 && values)
     {
         values->resize(*length);
-        if (fread(&(*values)[0], sizeof(T), *length, _file) != *length)
+        if (_stream->read(&(*values)[0], sizeof(T), *length) != *length)
         {
             GP_ERROR("Failed to read an array of data from bundle (into a std::vector).");
             return false;
@@ -108,7 +107,7 @@ template <class T>
 bool Bundle::readArray(unsigned int* length, std::vector<T>* values, unsigned int readSize)
 {
     GP_ASSERT(length);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
     GP_ASSERT(sizeof(T) >= readSize);
 
     if (!read(length))
@@ -119,7 +118,7 @@ bool Bundle::readArray(unsigned int* length, std::vector<T>* values, unsigned in
     if (*length > 0 && values)
     {
         values->resize(*length);
-        if (fread(&(*values)[0], readSize, *length, _file) != *length)
+        if (_stream->read(&(*values)[0], readSize, *length) != *length)
         {
             GP_ERROR("Failed to read an array of data from bundle (into a std::vector with a specified single element read size).");
             return false;
@@ -128,12 +127,12 @@ bool Bundle::readArray(unsigned int* length, std::vector<T>* values, unsigned in
     return true;
 }
 
-static std::string readString(FILE* fp)
+static std::string readString(Stream* stream)
 {
-    GP_ASSERT(fp);
+    GP_ASSERT(stream);
 
     unsigned int length;
-    if (fread(&length, 4, 1, fp) != 1)
+    if (stream->read(&length, 4, 1) != 1)
     {
         GP_ERROR("Failed to read the length of a string from a bundle.");
         return std::string();
@@ -146,7 +145,7 @@ static std::string readString(FILE* fp)
     if (length > 0)
     {
         str.resize(length);
-        if (fread(&str[0], 1, length, fp) != length)
+        if (stream->read(&str[0], 1, length) != length)
         {
             GP_ERROR("Failed to read string from bundle.");
             return std::string();
@@ -173,8 +172,8 @@ Bundle* Bundle::create(const char* path)
     }
 
     // Open the bundle.
-    FILE* fp = FileSystem::openFile(path, "rb");
-    if (!fp)
+    Stream* stream = FileSystem::open(path);
+    if (!stream)
     {
         GP_ERROR("Failed to open file '%s'.", path);
         return NULL;
@@ -182,46 +181,34 @@ Bundle* Bundle::create(const char* path)
 
     // Read the GPB header info.
     char sig[9];
-    if (fread(sig, 1, 9, fp) != 9 || memcmp(sig, "\xABGPB\xBB\r\n\x1A\n", 9) != 0)
+    if (stream->read(sig, 1, 9) != 9 || memcmp(sig, "\xABGPB\xBB\r\n\x1A\n", 9) != 0)
     {
+        SAFE_DELETE(stream);
         GP_ERROR("Invalid GPB header for bundle '%s'.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
     // Read version.
     unsigned char ver[2];
-    if (fread(ver, 1, 2, fp) != 2)
+    if (stream->read(ver, 1, 2) != 2)
     {
+        SAFE_DELETE(stream);
         GP_ERROR("Failed to read GPB version for bundle '%s'.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
     if (ver[0] != BUNDLE_VERSION_MAJOR || ver[1] != BUNDLE_VERSION_MINOR)
     {
+        SAFE_DELETE(stream);
         GP_ERROR("Unsupported version (%d.%d) for bundle '%s' (expected %d.%d).", (int)ver[0], (int)ver[1], path, BUNDLE_VERSION_MAJOR, BUNDLE_VERSION_MINOR);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
     // Read ref table.
     unsigned int refCount;
-    if (fread(&refCount, 4, 1, fp) != 1)
+    if (stream->read(&refCount, 4, 1) != 1)
     {
+        SAFE_DELETE(stream);
         GP_ERROR("Failed to read ref table for bundle '%s'.", path);
-        if (fclose(fp) != 0)
-        {
-            GP_ERROR("Failed to close file '%s'.", path);
-        }
         return NULL;
     }
 
@@ -229,15 +216,12 @@ Bundle* Bundle::create(const char* path)
     Reference* refs = new Reference[refCount];
     for (unsigned int i = 0; i < refCount; ++i)
     {
-        if ((refs[i].id = readString(fp)).empty() ||
-            fread(&refs[i].type, 4, 1, fp) != 1 ||
-            fread(&refs[i].offset, 4, 1, fp) != 1)
+        if ((refs[i].id = readString(stream)).empty() ||
+            stream->read(&refs[i].type, 4, 1) != 1 ||
+            stream->read(&refs[i].offset, 4, 1) != 1)
         {
+            SAFE_DELETE(stream);
             GP_ERROR("Failed to read ref number %d for bundle '%s'.", i, path);
-            if (fclose(fp) != 0)
-            {
-                GP_ERROR("Failed to close file '%s'.", path);
-            }
             SAFE_DELETE_ARRAY(refs);
             return NULL;
         }
@@ -247,7 +231,7 @@ Bundle* Bundle::create(const char* path)
     Bundle* bundle = new Bundle(path);
     bundle->_referenceCount = refCount;
     bundle->_references = refs;
-    bundle->_file = fp;
+    bundle->_stream = stream;
 
     return bundle;
 }
@@ -281,8 +265,8 @@ void Bundle::clearLoadSession()
 
 const char* Bundle::getIdFromOffset() const
 {
-    GP_ASSERT(_file);
-    return getIdFromOffset((unsigned int) ftell(_file));
+    GP_ASSERT(_stream);
+    return getIdFromOffset((unsigned int) _stream->position());
 }
 
 const char* Bundle::getIdFromOffset(unsigned int offset) const
@@ -318,8 +302,8 @@ Bundle::Reference* Bundle::seekTo(const char* id, unsigned int type)
     }
 
     // Seek to the offset of this object.
-    GP_ASSERT(_file);
-    if (fseek(_file, ref->offset, SEEK_SET) != 0)
+    GP_ASSERT(_stream);
+    if (_stream->seek(ref->offset, SEEK_SET) == false)
     {
         GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", id, _path.c_str());
         return NULL;
@@ -331,7 +315,7 @@ Bundle::Reference* Bundle::seekTo(const char* id, unsigned int type)
 Bundle::Reference* Bundle::seekToFirstType(unsigned int type)
 {
     GP_ASSERT(_references);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
@@ -339,7 +323,7 @@ Bundle::Reference* Bundle::seekToFirstType(unsigned int type)
         if (ref->type == type)
         {
             // Found a match.
-            if (fseek(_file, ref->offset, SEEK_SET) != 0)
+            if (_stream->seek(ref->offset, SEEK_SET) == false)
             {
                 GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
@@ -352,22 +336,22 @@ Bundle::Reference* Bundle::seekToFirstType(unsigned int type)
 
 bool Bundle::read(unsigned int* ptr)
 {
-    return fread(ptr, sizeof(unsigned int), 1, _file) == 1;
+    return _stream->read(ptr, sizeof(unsigned int), 1) == 1;
 }
 
 bool Bundle::read(unsigned char* ptr)
 {
-    return fread(ptr, sizeof(unsigned char), 1, _file) == 1;
+    return _stream->read(ptr, sizeof(unsigned char), 1) == 1;
 }
 
 bool Bundle::read(float* ptr)
 {
-    return fread(ptr, sizeof(float), 1, _file) == 1;
+    return _stream->read(ptr, sizeof(float), 1) == 1;
 }
 
 bool Bundle::readMatrix(float* m)
 {
-    return fread(m, sizeof(float), 16, _file) == 16;
+    return _stream->read(m, sizeof(float), 16) == 16;
 }
 
 Scene* Bundle::loadScene(const char* id)
@@ -419,7 +403,7 @@ Scene* Bundle::loadScene(const char* id)
         }
     }
     // Read active camera.
-    std::string xref = readString(_file);
+    std::string xref = readString(_stream);
     if (xref.length() > 1 && xref[0] == '#') // TODO: Handle full xrefs
     {
         Node* node = scene->findNode(xref.c_str() + 1, true);
@@ -453,14 +437,14 @@ Scene* Bundle::loadScene(const char* id)
 
     // Parse animations.
     GP_ASSERT(_references);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
         Reference* ref = &_references[i];
         if (ref->type == BUNDLE_TYPE_ANIMATIONS)
         {
             // Found a match.
-            if (fseek(_file, ref->offset, SEEK_SET) != 0)
+            if (_stream->seek(ref->offset, SEEK_SET) == false)
             {
                 GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 return NULL;
@@ -483,7 +467,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
 {
     GP_ASSERT(id);
     GP_ASSERT(_references);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     clearLoadSession();
 
@@ -499,7 +483,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
         Reference* ref = &_references[i];
         if (ref->type == BUNDLE_TYPE_ANIMATIONS)
         {
-            if (fseek(_file, ref->offset, SEEK_SET) != 0)
+            if (_stream->seek(ref->offset, SEEK_SET) == false)
             {
                 GP_ERROR("Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
                 SAFE_DELETE(_trackedNodes);
@@ -517,7 +501,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
 
             for (unsigned int j = 0; j < animationCount; j++)
             {
-                const std::string id = readString(_file);
+                const std::string id = readString(_stream);
 
                 // Read the number of animation channels in this animation.
                 unsigned int animationChannelCount;
@@ -532,7 +516,7 @@ Node* Bundle::loadNode(const char* id, Scene* sceneContext)
                 for (unsigned int k = 0; k < animationChannelCount; k++)
                 {
                     // Read target id.
-                    std::string targetId = readString(_file);
+                    std::string targetId = readString(_stream);
                     if (targetId.empty())
                     {
                         GP_ERROR("Failed to read target id for animation '%s'.", id.c_str());
@@ -627,7 +611,7 @@ bool Bundle::skipNode()
 {
     const char* id = getIdFromOffset();
     GP_ASSERT(id);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     // Skip the node's type.
     unsigned int nodeType;
@@ -638,12 +622,12 @@ bool Bundle::skipNode()
     }
 
     // Skip over the node's transform and parent ID.
-    if (fseek(_file, sizeof(float) * 16, SEEK_CUR) != 0)
+    if (_stream->seek(sizeof(float) * 16, SEEK_CUR) == false)
     {
         GP_ERROR("Failed to skip over node transform for node '%s'.", id);
         return false;
     }
-    readString(_file);
+    readString(_stream);
 
     // Skip over the node's children.
     unsigned int childrenCount;
@@ -673,7 +657,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
 {
     const char* id = getIdFromOffset();
     GP_ASSERT(id);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     // If we are tracking nodes and it's not in the set yet, add it.
     if (_trackedNodes)
@@ -725,7 +709,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
 
     // Read transform.
     float transform[16];
-    if (fread(transform, sizeof(float), 16, _file) != 16)
+    if (_stream->read(transform, sizeof(float), 16) != 16)
     {
         GP_ERROR("Failed to read transform for node '%s'.", id);
         SAFE_RELEASE(node);
@@ -734,7 +718,7 @@ Node* Bundle::readNode(Scene* sceneContext, Node* nodeContext)
     setTransform(transform, node);
 
     // Skip the parent ID.
-    readString(_file);
+    readString(_stream);
 
     // Read children.
     unsigned int childrenCount;
@@ -952,12 +936,10 @@ Light* Bundle::readLight()
 
 Model* Bundle::readModel(const char* nodeId)
 {
-    // Read mesh.
-    Mesh* mesh = NULL;
-    std::string xref = readString(_file);
+    std::string xref = readString(_stream);
     if (xref.length() > 1 && xref[0] == '#') // TODO: Handle full xrefs
     {
-        mesh = loadMesh(xref.c_str() + 1, nodeId);
+        Mesh* mesh = loadMesh(xref.c_str() + 1, nodeId);
         if (mesh)
         {
             Model* model = Model::create(mesh);
@@ -1035,7 +1017,7 @@ MeshSkin* Bundle::readMeshSkin()
     // Read joint xref strings for all joints in the list.
     for (unsigned int i = 0; i < jointCount; i++)
     {
-        skinData->joints.push_back(readString(_file));
+        skinData->joints.push_back(readString(_stream));
     }
 
     // Read bind poses.
@@ -1072,7 +1054,7 @@ MeshSkin* Bundle::readMeshSkin()
 
 void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
 {
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     for (size_t i = 0, skinCount = _meshSkins.size(); i < skinCount; ++i)
     {
@@ -1144,12 +1126,12 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
                         seekTo(nodeId.c_str(), ref->type);
 
                         // Skip over the node type (1 unsigned int) and transform (16 floats) and read the parent id.
-                        if (fseek(_file, sizeof(unsigned int) + sizeof(float)*16, SEEK_CUR) != 0)
+                        if (_stream->seek(sizeof(unsigned int) + sizeof(float)*16, SEEK_CUR) == false)
                         {
                             GP_ERROR("Failed to skip over node type and transform for node '%s' in bundle '%s'.", nodeId.c_str(), _path.c_str());
                             return;
                         }
-                        std::string parentID = readString(_file);
+                        std::string parentID = readString(_stream);
 
                         if (!parentID.empty())
                             nodeId = parentID;
@@ -1185,7 +1167,7 @@ void Bundle::resolveJointReferences(Scene* sceneContext, Node* nodeContext)
 
 void Bundle::readAnimation(Scene* scene)
 {
-    const std::string animationId = readString(_file);
+    const std::string animationId = readString(_stream);
 
     // Read the number of animation channels in this animation.
     unsigned int animationChannelCount;
@@ -1223,7 +1205,7 @@ Animation* Bundle::readAnimationChannel(Scene* scene, Animation* animation, cons
     GP_ASSERT(animationId);
 
     // Read target id.
-    std::string targetId = readString(_file);
+    std::string targetId = readString(_stream);
     if (targetId.empty())
     {
         GP_ERROR("Failed to read target id for animation '%s'.", animationId);
@@ -1331,11 +1313,11 @@ Mesh* Bundle::loadMesh(const char* id)
 
 Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
 {
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
     GP_ASSERT(id);
 
     // Save the file position.
-    long position = ftell(_file);
+    long position = _stream->position();
     if (position == -1L)
     {
         GP_ERROR("Failed to save the current file position before loading mesh '%s'.", id);
@@ -1395,7 +1377,7 @@ Mesh* Bundle::loadMesh(const char* id, const char* nodeId)
     SAFE_DELETE(meshData);
 
     // Restore file pointer.
-    if (fseek(_file, position, SEEK_SET) != 0)
+    if (_stream->seek(position, SEEK_SET) == false)
     {
         GP_ERROR("Failed to restore file pointer after loading mesh '%s'.", id);
         return NULL;
@@ -1408,7 +1390,7 @@ Bundle::MeshData* Bundle::readMeshData()
 {
     // Read vertex format/elements.
     unsigned int vertexElementCount;
-    if (fread(&vertexElementCount, 4, 1, _file) != 1)
+    if (_stream->read(&vertexElementCount, 4, 1) != 1)
     {
         GP_ERROR("Failed to load vertex element count.");
         return NULL;
@@ -1423,13 +1405,13 @@ Bundle::MeshData* Bundle::readMeshData()
     for (unsigned int i = 0; i < vertexElementCount; ++i)
     {
         unsigned int vUsage, vSize;
-        if (fread(&vUsage, 4, 1, _file) != 1)
+        if (_stream->read(&vUsage, 4, 1) != 1)
         {
             GP_ERROR("Failed to load vertex usage.");
             SAFE_DELETE_ARRAY(vertexElements);
             return NULL;
         }
-        if (fread(&vSize, 4, 1, _file) != 1)
+        if (_stream->read(&vSize, 4, 1) != 1)
         {
             GP_ERROR("Failed to load vertex size.");
             SAFE_DELETE_ARRAY(vertexElements);
@@ -1445,7 +1427,7 @@ Bundle::MeshData* Bundle::readMeshData()
 
     // Read vertex data.
     unsigned int vertexByteCount;
-    if (fread(&vertexByteCount, 4, 1, _file) != 1)
+    if (_stream->read(&vertexByteCount, 4, 1) != 1)
     {
         GP_ERROR("Failed to load vertex byte count.");
         SAFE_DELETE(meshData);
@@ -1461,7 +1443,7 @@ Bundle::MeshData* Bundle::readMeshData()
     GP_ASSERT(meshData->vertexFormat.getVertexSize());
     meshData->vertexCount = vertexByteCount / meshData->vertexFormat.getVertexSize();
     meshData->vertexData = new unsigned char[vertexByteCount];
-    if (fread(meshData->vertexData, 1, vertexByteCount, _file) != vertexByteCount)
+    if (_stream->read(meshData->vertexData, 1, vertexByteCount) != vertexByteCount)
     {
         GP_ERROR("Failed to load vertex data.");
         SAFE_DELETE(meshData);
@@ -1469,13 +1451,13 @@ Bundle::MeshData* Bundle::readMeshData()
     }
 
     // Read mesh bounds (bounding box and bounding sphere).
-    if (fread(&meshData->boundingBox.min.x, 4, 3, _file) != 3 || fread(&meshData->boundingBox.max.x, 4, 3, _file) != 3)
+    if (_stream->read(&meshData->boundingBox.min.x, 4, 3) != 3 || _stream->read(&meshData->boundingBox.max.x, 4, 3) != 3)
     {
         GP_ERROR("Failed to load mesh bounding box.");
         SAFE_DELETE(meshData);
         return NULL;
     }
-    if (fread(&meshData->boundingSphere.center.x, 4, 3, _file) != 3 || fread(&meshData->boundingSphere.radius, 4, 1, _file) != 1)
+    if (_stream->read(&meshData->boundingSphere.center.x, 4, 3) != 3 || _stream->read(&meshData->boundingSphere.radius, 4, 1) != 1)
     {
         GP_ERROR("Failed to load mesh bounding sphere.");
         SAFE_DELETE(meshData);
@@ -1484,7 +1466,7 @@ Bundle::MeshData* Bundle::readMeshData()
 
     // Read mesh parts.
     unsigned int meshPartCount;
-    if (fread(&meshPartCount, 4, 1, _file) != 1)
+    if (_stream->read(&meshPartCount, 4, 1) != 1)
     {
         GP_ERROR("Failed to load mesh part count.");
         SAFE_DELETE(meshData);
@@ -1494,19 +1476,19 @@ Bundle::MeshData* Bundle::readMeshData()
     {
         // Read primitive type, index format and index count.
         unsigned int pType, iFormat, iByteCount;
-        if (fread(&pType, 4, 1, _file) != 1)
+        if (_stream->read(&pType, 4, 1) != 1)
         {
             GP_ERROR("Failed to load primitive type for mesh part with index %d.", i);
             SAFE_DELETE(meshData);
             return NULL;
         }
-        if (fread(&iFormat, 4, 1, _file) != 1)
+        if (_stream->read(&iFormat, 4, 1) != 1)
         {
             GP_ERROR("Failed to load index format for mesh part with index %d.", i);
             SAFE_DELETE(meshData);
             return NULL;
         }
-        if (fread(&iByteCount, 4, 1, _file) != 1)
+        if (_stream->read(&iByteCount, 4, 1) != 1)
         {
             GP_ERROR("Failed to load index byte count for mesh part with index %d.", i);
             SAFE_DELETE(meshData);
@@ -1540,7 +1522,7 @@ Bundle::MeshData* Bundle::readMeshData()
         partData->indexCount = iByteCount / indexSize;
 
         partData->indexData = new unsigned char[iByteCount];
-        if (fread(partData->indexData, 1, iByteCount, _file) != iByteCount)
+        if (_stream->read(partData->indexData, 1, iByteCount) != iByteCount)
         {
             GP_ERROR("Failed to read index data for mesh part with index %d.", i);
             SAFE_DELETE(meshData);
@@ -1601,7 +1583,7 @@ Bundle::MeshData* Bundle::readMeshData(const char* url)
 Font* Bundle::loadFont(const char* id)
 {
     GP_ASSERT(id);
-    GP_ASSERT(_file);
+    GP_ASSERT(_stream);
 
     // Seek to the specified font.
     Reference* ref = seekTo(id, BUNDLE_TYPE_FONT);
@@ -1612,7 +1594,7 @@ Font* Bundle::loadFont(const char* id)
     }
 
     // Read font family.
-    std::string family = readString(_file);
+    std::string family = readString(_stream);
     if (family.empty())
     {
         GP_ERROR("Failed to read font family for font '%s'.", id);
@@ -1621,23 +1603,23 @@ Font* Bundle::loadFont(const char* id)
 
     // Read font style and size.
     unsigned int style, size;
-    if (fread(&style, 4, 1, _file) != 1)
+    if (_stream->read(&style, 4, 1) != 1)
     {
         GP_ERROR("Failed to read style for font '%s'.", id);
         return NULL;
     }
-    if (fread(&size, 4, 1, _file) != 1)
+    if (_stream->read(&size, 4, 1) != 1)
     {
         GP_ERROR("Failed to read size for font '%s'.", id);
         return NULL;
     }
 
     // Read character set.
-    std::string charset = readString(_file);
+    std::string charset = readString(_stream);
 
     // Read font glyphs.
     unsigned int glyphCount;
-    if (fread(&glyphCount, 4, 1, _file) != 1)
+    if (_stream->read(&glyphCount, 4, 1) != 1)
     {
         GP_ERROR("Failed to read glyph count for font '%s'.", id);
         return NULL;
@@ -1649,7 +1631,7 @@ Font* Bundle::loadFont(const char* id)
     }
 
     Font::Glyph* glyphs = new Font::Glyph[glyphCount];
-    if (fread(glyphs, sizeof(Font::Glyph), glyphCount, _file) != glyphCount)
+    if (_stream->read(glyphs, sizeof(Font::Glyph), glyphCount) != glyphCount)
     {
         GP_ERROR("Failed to read glyphs for font '%s'.", id);
         SAFE_DELETE_ARRAY(glyphs);
@@ -1658,19 +1640,19 @@ Font* Bundle::loadFont(const char* id)
 
     // Read texture attributes.
     unsigned int width, height, textureByteCount;
-    if (fread(&width, 4, 1, _file) != 1)
+    if (_stream->read(&width, 4, 1) != 1)
     {
         GP_ERROR("Failed to read texture width for font '%s'.", id);
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
-    if (fread(&height, 4, 1, _file) != 1)
+    if (_stream->read(&height, 4, 1) != 1)
     {
         GP_ERROR("Failed to read texture height for font '%s'.", id);
         SAFE_DELETE_ARRAY(glyphs);
         return NULL;
     }
-    if (fread(&textureByteCount, 4, 1, _file) != 1)
+    if (_stream->read(&textureByteCount, 4, 1) != 1)
     {
         GP_ERROR("Failed to read texture byte count for font '%s'.", id);
         SAFE_DELETE_ARRAY(glyphs);
@@ -1685,7 +1667,7 @@ Font* Bundle::loadFont(const char* id)
 
     // Read texture data.
     unsigned char* textureData = new unsigned char[textureByteCount];
-    if (fread(textureData, 1, textureByteCount, _file) != textureByteCount)
+    if (_stream->read(textureData, 1, textureByteCount) != textureByteCount)
     {
         GP_ERROR("Failed to read texture data for font '%s'.", id);
         SAFE_DELETE_ARRAY(glyphs);

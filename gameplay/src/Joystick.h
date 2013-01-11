@@ -18,10 +18,8 @@ namespace gameplay
         size        = <width, height>           // Size of the Control, measured in pixels.
         radius      = <float>                   // The value of the left- / bottom-most point on the slider.
         consumeEvents = <bool>                  // Whether the slider propagates input events to the Game's input event handler. Default is true.
-        
     }
  @endverbatim
- *
  */
 class Joystick : public Control
 {
