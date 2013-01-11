@@ -53,7 +53,6 @@ void blendLayer(int index)
 }
 #endif
 
-// Fragment program
 void main()
 {
 #if (LAYER_COUNT > 0)
@@ -69,6 +68,10 @@ void main()
     blendLayer(1);
 #endif
 
+#if (LAYER_COUNT > 2)
+    blendLayer(2);
+#endif
+
 #if defined(DEBUG_PATCHES)
     // If patch debug drawing is enabled, tint patches alternate colors
     float tint = mod(u_row + mod(u_column, 2), 2);
@@ -79,6 +82,7 @@ void main()
 #if defined(NORMAL_MAP)
     v_normalVector = normalize(texture2D(u_normalMap, v_texCoord0).xyz * 2.0f - 1.0f);
 #endif
+
     gl_FragColor.a = _baseColor.a;
     gl_FragColor.rgb = getLitPixel();
 }

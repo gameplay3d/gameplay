@@ -120,6 +120,7 @@ public:
      * @param path Path to a properties file describing the terrain.
      *
      * @return A new Terrain.
+     * @script{create}
      */
     static Terrain* create(const char* path);
 
@@ -131,6 +132,7 @@ public:
      * @return A new Terrain.
      *
      * @see create(const char*)
+     * @script{create}
      */
     static Terrain* create(Properties* properties);
 
@@ -156,6 +158,7 @@ public:
      * @param normalMapPath Path to an object-space normal map to use for terrain lighting, instead of vertex normals.
      *
      * @return A new Terrain.
+     * @script{create}
      */
     static Terrain* create(HeightField* heightfield,
         const Vector3& scale = Vector3::one(), unsigned int patchSize = 32,
@@ -339,6 +342,16 @@ private:
     const Matrix& getWorldMatrix() const;
 
     /**
+     * Returns the terrain's inverse world matrix.
+     */
+    const Matrix& getInverseWorldMatrix() const;
+
+    /**
+     * Returns a matrix to be used for transforming normal vectors for the terrain.
+     */
+    const Matrix& getNormalMatrix() const;
+
+    /**
      * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
      */
     const Matrix& getWorldViewProjectionMatrix() const;
@@ -350,7 +363,9 @@ private:
     Texture::Sampler* _normalMap;
     unsigned int _flags;
     mutable Matrix _worldMatrix;
-    mutable bool _worldMatrixDirty;
+    mutable Matrix _inverseWorldMatrix;
+    mutable Matrix _normalMatrix;
+    mutable unsigned int _dirtyFlags;
     BoundingBox _boundingBox;
 
 };

@@ -146,12 +146,11 @@ void TerrainPatch::addLOD(float* heights, unsigned int width, unsigned int heigh
             // Compute normal
             if (!_terrain->_normalMap)
             {
-                float maxHeight = 100;
-                Vector3 p(x, calculateHeight(heights, width, height, x, z)*maxHeight, z);
-                Vector3 w(Vector3(x>=step ? x-step : x, calculateHeight(heights, width, height, x>=step ? x-step : x, z)*maxHeight, z), p);
-                Vector3 e(Vector3(x<width-step ? x+step : x, calculateHeight(heights, width, height, x<width-step ? x+step : x, z)*maxHeight, z), p);
-                Vector3 s(Vector3(x, calculateHeight(heights, width, height, x, z>=step ? z-step : z)*maxHeight, z>=step ? z-step : z), p);
-                Vector3 n(Vector3(x, calculateHeight(heights, width, height, x, z<height-step ? z+step : z)*maxHeight, z<height-step ? z+step : z), p);
+                Vector3 p(x, calculateHeight(heights, width, height, x, z), z);
+                Vector3 w(Vector3(x>=step ? x-step : x, calculateHeight(heights, width, height, x>=step ? x-step : x, z), z), p);
+                Vector3 e(Vector3(x<width-step ? x+step : x, calculateHeight(heights, width, height, x<width-step ? x+step : x, z), z), p);
+                Vector3 s(Vector3(x, calculateHeight(heights, width, height, x, z>=step ? z-step : z), z>=step ? z-step : z), p);
+                Vector3 n(Vector3(x, calculateHeight(heights, width, height, x, z<height-step ? z+step : z), z<height-step ? z+step : z), p);
                 Vector3 normals[4];
                 Vector3::cross(n, w, &normals[0]);
                 Vector3::cross(w, s, &normals[1]);
@@ -473,6 +472,7 @@ bool TerrainPatch::updateMaterial()
 
         // Set material parameter bindings
         material->getParameter("u_worldViewProjectionMatrix")->bindValue(_terrain, &Terrain::getWorldViewProjectionMatrix);
+        material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
         material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
         material->getParameter("u_lightColor")->bindValue(this, &TerrainPatch::getLightColor);
         material->getParameter("u_lightDirection")->bindValue(this, &TerrainPatch::getLightDirection);

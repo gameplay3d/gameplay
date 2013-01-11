@@ -1759,6 +1759,12 @@
     <None Include="res\shaders\lib\lighting-spot.vert">
       <Filter>res\shaders\lib</Filter>
     </None>
+    <None Include="res\shaders\terrain.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\terrain.frag">
+      <Filter>res\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\PhysicsFixedConstraint.inl">

@@ -284,6 +284,11 @@ float PhysicsRigidBody::getHeight(float x, float z) const
     GP_ASSERT(_collisionShape);
     GP_ASSERT(_node);
 
+    // If our node has a terrain, call getHeight() on it since we need to factor in local
+    // scaling on the terrain into the height calculation.
+    if (_node->getTerrain())
+        return _node->getTerrain()->getHeight(x, z);
+
     // This function is only supported for heightfield rigid bodies.
     if (_collisionShape->getType() != PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
@@ -296,16 +301,9 @@ float PhysicsRigidBody::getHeight(float x, float z) const
     // Ensure inverse matrix is updated so we can transform from world back into local heightfield coordinates for indexing
     if (_collisionShape->_shapeData.heightfieldData->inverseIsDirty)
     {
-        Matrix& inverse = _collisionShape->_shapeData.heightfieldData->inverse;
-        inverse.set(_node->getWorldMatrix());
-
-        // Apply heightfield local scaling
-        const btVector3& localScale = _collisionShape->getShape()->getLocalScaling();
-        if (localScale.x() != 1.0f || localScale.y() != 1.0f || localScale.z() != 1.0f)
-            inverse.scale(localScale.x(), localScale.y(), localScale.z());
-
-        inverse.invert();
         _collisionShape->_shapeData.heightfieldData->inverseIsDirty = false;
+
+        _node->getWorldMatrix().invert(&_collisionShape->_shapeData.heightfieldData->inverse);
     }
 
     // Calculate the correct x, z position relative to the heightfield data.
@@ -316,18 +314,16 @@ float PhysicsRigidBody::getHeight(float x, float z) const
     GP_ASSERT(rows > 0);
 
     Vector3 v = _collisionShape->_shapeData.heightfieldData->inverse * Vector3(x, 0.0f, z);
-    //x = (v.x + (0.5f * (cols - 1))) * cols / (cols - 1);
-    //z = (v.z + (0.5f * (rows - 1))) * rows / (rows - 1);
     x = v.x + (cols - 1) * 0.5f;
     z = v.z + (rows - 1) * 0.5f;
 
-    // Get the un-scaled height value from the HeightField
+    // Get the unscaled height value from the HeightField
     float height = _collisionShape->_shapeData.heightfieldData->heightfield->getHeight(x, z);
 
-    // Apply scaling (both world and local)
+    // Apply scale back to height
     Vector3 worldScale;
     _node->getWorldMatrix().getScale(&worldScale);
-    height *= worldScale.y * _collisionShape->getShape()->getLocalScaling().y();
+    height *= worldScale.y;
 
     return height;
 }
