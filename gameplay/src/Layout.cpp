@@ -12,6 +12,7 @@ void Layout::align(Control* control, const Container* container)
     GP_ASSERT(container);
 
     if (control->_alignment != Control::ALIGN_TOP_LEFT ||
+        control->_isAlignmentSet ||
         control->_autoWidth || control->_autoHeight)
     {
         Rectangle controlBounds = control->getBounds();
