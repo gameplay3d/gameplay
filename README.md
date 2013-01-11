@@ -1,5 +1,8 @@
 ## gameplay v1.6.0
+
 GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
+
+<img align="right" src="https://raw.github.com/wiki/blackberry/GamePlay/img/logo.png" alt="gameplay" />
 
 - [Website](http://www.gameplay3d.org/)
 - [Forums](http://www.gameplay3d.org/forums/)
