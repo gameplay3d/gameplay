@@ -149,11 +149,9 @@ void BillboardTest::render(float elapsedTime)
 		Node* node = _billboards[i];
 
 		// Rotate the node x/z to face the camera
-		Vector3 eye = node->getTranslationWorld();
-		Vector3 target = camera->getNode()->getTranslationWorld();
 		Matrix m;
-		Matrix::createLookAt(eye, target, camera->getNode()->getUpVectorWorld(), &m);
-		m.transpose();
+        Matrix::createBillboard(node->getTranslationWorld(), camera->getNode()->getTranslationWorld(),
+                                camera->getNode()->getUpVectorWorld(), &m);
 		Quaternion q;
 		m.getRotation(&q);
 		node->setRotation(q);
