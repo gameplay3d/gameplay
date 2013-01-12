@@ -83,6 +83,11 @@ const Rectangle& Test::getViewport() const
     return Game::getInstance()->getViewport();
 }
 
+void Test::setViewport(const Rectangle& viewport)
+{
+	Game::getInstance()->setViewport(viewport);
+}
+
 unsigned int Test::getWidth() const
 {
     return Game::getInstance()->getWidth();
@@ -139,6 +144,21 @@ void Test::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 bool Test::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
+}
+
+bool Test::hasMouse()
+{
+    return Game::getInstance()->hasMouse();
+}
+
+bool Test::isMouseCaptured()
+{
+    return Game::getInstance()->isMouseCaptured();
+}
+
+void Test::setMouseCaptured(bool captured)
+{
+    Game::getInstance()->setMouseCaptured(captured);
 }
 
 void Test::setMultiTouch(bool enabled)

@@ -272,7 +272,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         }
 
         bool draw = true;
-        if (yPos < area.y)
+        if (yPos < static_cast<int>(area.y))
         {
             // Skip drawing until line break or wrap.
             draw = false;
@@ -490,7 +490,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
         GP_ASSERT(_glyphs);
         GP_ASSERT(_batch);
-        for (size_t i = startIndex; i < length && i >= 0; i += (size_t)iteration)
+        for (size_t i = startIndex; i < length; i += (size_t)iteration)
         {
             char c = 0;
             if (rightToLeft)
@@ -629,7 +629,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
 
         bool draw = true;
-        if (yPos < area.y - size)
+        if (yPos < static_cast<int>(area.y - size))
         {
             // Skip drawing until line break or wrap.
             draw = false;

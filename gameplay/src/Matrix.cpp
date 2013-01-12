@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Matrix.h"
+#include "Plane.h"
 #include "Quaternion.h"
 #include "MathUtil.h"
 
@@ -19,7 +20,8 @@ Matrix::Matrix()
     *this = Matrix::identity();
 }
 
-Matrix::Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
+Matrix::Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+               float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
 {
     set(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
 }
@@ -60,7 +62,8 @@ const Matrix& Matrix::zero()
 
 void Matrix::createLookAt(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& up, Matrix* dst)
 {
-    createLookAt(eyePosition.x, eyePosition.y, eyePosition.z, targetPosition.x, targetPosition.y, targetPosition.z, up.x, up.y, up.z, dst);
+    createLookAt(eyePosition.x, eyePosition.y, eyePosition.z, targetPosition.x, targetPosition.y, targetPosition.z,
+                 up.x, up.y, up.z, dst);
 }
 
 void Matrix::createLookAt(float eyePositionX, float eyePositionY, float eyePositionZ,
@@ -161,6 +164,71 @@ void Matrix::createOrthographicOffCenter(float left, float right, float bottom, 
     dst->m[13] = (-(top + bottom)) * t_b;
     dst->m[14] = (-(zFarPlane + zNearPlane)) * f_n;
     dst->m[15] = 1.0f;
+}
+    
+void Matrix::createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
+                             const Vector3& cameraUpVector, Matrix* dst)
+{
+    createBillboardHelper(objectPosition, cameraPosition, cameraUpVector, NULL, dst);
+}
+
+void Matrix::createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
+                             const Vector3& cameraUpVector, const Vector3& cameraForwardVector,
+                             Matrix* dst)
+{
+    createBillboardHelper(objectPosition, cameraPosition, cameraUpVector, &cameraForwardVector, dst);
+}
+
+void Matrix::createBillboardHelper(const Vector3& objectPosition, const Vector3& cameraPosition,
+                                   const Vector3& cameraUpVector, const Vector3* cameraForwardVector,
+                                   Matrix* dst)
+{
+    Vector3 delta(objectPosition, cameraPosition);
+    bool isSufficientDelta = delta.lengthSquared() > MATH_EPSILON;
+
+    dst->setIdentity();
+    dst->m[3] = objectPosition.x;
+    dst->m[7] = objectPosition.y;
+    dst->m[11] = objectPosition.z;
+
+    // As per the contracts for the 2 variants of createBillboard, we need
+    // either a safe default or a sufficient distance between object and camera.
+    if (cameraForwardVector || isSufficientDelta)
+    {
+        Vector3 target = isSufficientDelta ? cameraPosition : (objectPosition - *cameraForwardVector);
+
+        // A billboard is the inverse of a lookAt rotation
+        Matrix lookAt;
+        createLookAt(objectPosition, target, cameraUpVector, &lookAt);
+        dst->m[0] = lookAt.m[0];
+        dst->m[1] = lookAt.m[4];
+        dst->m[2] = lookAt.m[8];
+        dst->m[4] = lookAt.m[1];
+        dst->m[5] = lookAt.m[5];
+        dst->m[6] = lookAt.m[9];
+        dst->m[8] = lookAt.m[2];
+        dst->m[9] = lookAt.m[6];
+        dst->m[10] = lookAt.m[10];
+    }
+}
+    
+void Matrix::createReflection(const Plane& plane, Matrix* dst)
+{
+    Vector3 normal(plane.getNormal());
+    float k = -2.0f * plane.getDistance();
+
+    dst->setIdentity();
+
+    dst->m[0] -= 2.0f * normal.x * normal.x;
+    dst->m[5] -= 2.0f * normal.y * normal.y;
+    dst->m[10] -= 2.0f * normal.z * normal.z;
+    dst->m[1] = dst->m[4] = -2.0f * normal.x * normal.y;
+    dst->m[2] = dst->m[8] = -2.0f * normal.x * normal.z;
+    dst->m[6] = dst->m[9] = -2.0f * normal.y * normal.z;
+    
+    dst->m[3] = k * normal.x;
+    dst->m[7] = k * normal.y;
+    dst->m[11] = k * normal.z;
 }
 
 void Matrix::createScale(const Vector3& scale, Matrix* dst)
@@ -763,7 +831,8 @@ void Matrix::scale(const Vector3& s, Matrix* dst) const
     scale(s.x, s.y, s.z, dst);
 }
 
-void Matrix::set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
+void Matrix::set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+                 float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
 {
     m[0]  = m11;
     m[1]  = m21;
