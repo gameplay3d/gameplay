@@ -53,6 +53,7 @@ void luaRegister_Joystick()
         {"getImageColor", lua_Joystick_getImageColor},
         {"getImageRegion", lua_Joystick_getImageRegion},
         {"getImageUVs", lua_Joystick_getImageUVs},
+        {"getIndex", lua_Joystick_getIndex},
         {"getInnerRegionSize", lua_Joystick_getInnerRegionSize},
         {"getMargin", lua_Joystick_getMargin},
         {"getOpacity", lua_Joystick_getOpacity},
@@ -1717,6 +1718,41 @@ int lua_Joystick_getImageUVs(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joystick_getIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joystick* instance = getInstance(state);
+                unsigned int result = instance->getIndex();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joystick_getIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

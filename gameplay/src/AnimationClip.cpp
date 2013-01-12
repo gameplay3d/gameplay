@@ -449,6 +449,8 @@ bool AnimationClip::update(float elapsedTime)
     // then prevent a divide by zero and set percentComplete = 1.
     float percentComplete = _animation->_duration == 0 ? 1 : ((float)_startTime + currentTime) / (float)_animation->_duration;
     
+    percentComplete = MATH_CLAMP(percentComplete, 0.0f, 1.0f);
+
     if (isClipStateBitSet(CLIP_IS_FADING_OUT_BIT))
     {
         GP_ASSERT(_crossFadeToClip);

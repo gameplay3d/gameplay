@@ -443,6 +443,11 @@ void Generator::getClass(XMLElement* classNode, const string& name)
             if (_classes.find(parentClassName) != _classes.end())
                 classBinding.include = _classes[parentClassName].include;
         }
+        else
+        {
+            // Attempt to guess the name of the header.
+            classBinding.include = classBinding.classname + ".h";
+        }
     }
 
     // Track whether the class has any pure virtual functions.
