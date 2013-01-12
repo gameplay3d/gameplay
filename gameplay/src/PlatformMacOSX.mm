@@ -48,6 +48,7 @@ static char* __title = NULL;
 static bool __fullscreen = false;
 static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
+static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
 static bool __cursorVisible = true;
 static View* __view = NULL;
@@ -582,7 +583,7 @@ double getMachTimeInMilliseconds()
 - (void)hidValueAvailable:(IOHIDValueRef)value
 {
     IOHIDElementRef element = IOHIDValueGetElement(value);
-	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
+    IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
     if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
     CFIndex integerValue = IOHIDValueGetIntegerValue(value);
@@ -848,8 +849,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    float y;
     if (__mouseCaptured)
     {
+        if (__mouseCapturedFirstPass)
+        {
+            // Discard the first mouseMoved event following transition into capture
+            // since it contains bogus x,y data.
+            __mouseCapturedFirstPass = false;
+            return;
+        }
+
         point.x = [event deltaX];
         point.y = [event deltaY];
 
@@ -859,9 +869,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         centerPoint.x = rect.origin.x + (rect.size.width / 2);
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
+        y = point.y;
+    }
+    else
+    {
+        y = __height - point.y;
     }
     
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -1461,6 +1476,12 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            if (__fullscreen && width == 0 && height == 0)
+            {
+                CGRect mainMonitor = CGDisplayBounds(CGMainDisplayID());
+                __width = CGRectGetWidth(mainMonitor);
+                __height = CGRectGetHeight(mainMonitor);
+            }
         }
     }
 
@@ -1603,6 +1624,7 @@ void Platform::setMouseCaptured(bool captured)
         if (captured)
         {
             [NSCursor hide];
+            __mouseCapturedFirstPass = true;
         }
         else
         {   
@@ -1811,25 +1833,25 @@ CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, U
 
 CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return NULL;
-	}
+        return NULL;
+    }
     return (CFStringRef)typeRef;
 }
 
 int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return 0;
-	}
+        return 0;
+    }
     
     int value;
-	CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
-	return value;
+    CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
+    return value;
 }
 
 static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 

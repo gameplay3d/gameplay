@@ -239,7 +239,7 @@ Vector4& Vector4::normalize()
     return *this;
 }
 
-void Vector4::normalize(Vector4* dst)
+void Vector4::normalize(Vector4* dst) const
 {
     GP_ASSERT(dst);
 
