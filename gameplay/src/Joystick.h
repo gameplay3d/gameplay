@@ -113,6 +113,8 @@ public:
      */
     const char* getType() const;
 
+    inline const unsigned int getIndex() const;
+
 protected:
     
     /**
@@ -176,6 +178,7 @@ private:
     Vector2 _displacement;
     Vector2* _innerSize;
     Vector2* _outerSize;
+    unsigned int _index;
 };
 
 }

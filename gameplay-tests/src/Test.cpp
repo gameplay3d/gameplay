@@ -201,20 +201,6 @@ void Test::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
     Game::getInstance()->gamepadEvent(evt, gamepad);
 }
 
-unsigned int Test::getGamepadCount() const
-{
-    return Game::getInstance()->getGamepadCount();
-}
-unsigned int Test::getGamepadsConnected()
-{
-    return Game::getInstance()->getGamepadsConnected();
-}
-
-Gamepad* Test::getGamepad(unsigned int index) const
-{
-    return Game::getInstance()->getGamepad(index);
-}
-
 void Test::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
 {
     char buffer[10];

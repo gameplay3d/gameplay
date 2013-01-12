@@ -8,13 +8,10 @@
 #define KEY_A_MASK (1 << 0)
 #define KEY_B_MASK (1 << 1)
 
-#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
-#define BUTTON_B (_gamepad->isVirtual() ? 1 : 11)
-
 const static unsigned int __formsCount = 5;
 
 FormsTest::FormsTest()
-    : _scene(NULL), _formNode(NULL), _formNodeParent(NULL), _formSelect(NULL), _activeForm(NULL), _gamepad(NULL), _keyFlags(0)
+    : _scene(NULL), _formNode(NULL), _formNodeParent(NULL), _formSelect(NULL), _activeForm(NULL), _gamepad(NULL), _virtualGamepad(NULL), _physicalGamepad(NULL), _keyFlags(0)
 {
     const char* formFiles[] = 
     {
@@ -132,9 +129,23 @@ void FormsTest::initialize()
     
     formChanged();
 
-    _gamepad = getGamepad(0);
-    GP_ASSERT(_gamepad);
-    _gamepad->getForm()->setConsumeInputEvents(false);
+    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
+    std::vector<Gamepad*>::iterator it;
+    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    {
+        Gamepad* gamepad = *it;
+        if (gamepad->isVirtual())
+            _virtualGamepad = gamepad;
+        else if (!_physicalGamepad)
+        {
+            _physicalGamepad = gamepad;
+        }
+    }
+
+    if (_physicalGamepad)
+        _gamepad = _physicalGamepad;
+    else
+        _gamepad = _virtualGamepad;
 }
 
 void FormsTest::formChanged()
@@ -160,6 +171,7 @@ void FormsTest::formChanged()
     _formNodeParent->setTranslation(0, 0, -1.5f);
     _formNode->setTranslation(-0.5f, -0.5f, 0);
     _formNode->setForm(_activeForm);
+
 }
 
 void FormsTest::createTestForm(Theme::Style* style)
@@ -188,18 +200,15 @@ void FormsTest::createTestForm(Theme::Style* style)
 
 void FormsTest::update(float elapsedTime)
 {
-    // Check if we have any physical gamepad connections.
-    getGamepadsConnected();
-
     _gamepad->update(elapsedTime);
 
     float speedFactor = 0.001f * elapsedTime;
-    bool aDown = (_keyFlags & KEY_A_MASK) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
-    bool bDown = (_keyFlags & KEY_B_MASK) || (_gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED);
+    bool aDown = (_keyFlags & KEY_A_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_A);
+    bool bDown = (_keyFlags & KEY_B_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_B);
     Vector2 joyCommand;
-    if (_gamepad->isJoystickActive(0))
+    if (_gamepad->getJoystickCount() > 0)
     {
-        _gamepad->getJoystickAxisValues(0, &joyCommand);
+        _gamepad->getJoystickValues(0, &joyCommand);
     }
 
     if (bDown)
@@ -375,8 +384,45 @@ void FormsTest::controlEvent(Control* control, EventType evt)
     }
     else if (strcmp("opacityButton", control->getId()) == 0)
     {
+        /*
         float from[] = { 1.0f };
         float to[] = { 0.5f };
         control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
+        */
+        control->setVisible(false);
+    }
+}
+
+void FormsTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setConsumeInputEvents(false);
+            _virtualGamepad = gamepad;
+        }
+        else
+        {
+            _physicalGamepad = gamepad;
+        }
+
+        if (_physicalGamepad)
+        {
+            _gamepad = _physicalGamepad;
+        }
+        else
+        {
+            _gamepad = _virtualGamepad;
+        }
+
+        break;
+    case Gamepad::DISCONNECTED_EVENT:
+        if (gamepad == _physicalGamepad)
+        {
+            _gamepad = _virtualGamepad;
+        }
+        break;
     }
 }

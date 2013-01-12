@@ -401,7 +401,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                 size_t tokenLength = strcspn(token, "\n");
 
                 if (tokenLength > 0)
-                {                
+                {
                     // Get first token of next line.
                     token += tokenLength;
                 }

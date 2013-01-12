@@ -47,9 +47,6 @@ void CharacterGame::initialize()
     // Initialize the physics character.
     initializeCharacter();
 
-    // Initialize the gamepad.
-    initializeGamepad();
-
     // Create a collision object for the ceiling.
     Node* ceiling = _scene->addNode("ceiling");
     ceiling->setTranslationY(14.5f);
@@ -120,11 +117,6 @@ void CharacterGame::initializeCharacter()
 
     // Start playing the idle animation when we load.
     play("idle", true);
-}
-
-void CharacterGame::initializeGamepad()
-{
-    _gamepad = getGamepad(0);
 }
 
 void CharacterGame::finalize()
@@ -218,7 +210,7 @@ void CharacterGame::update(float elapsedTime)
 
     _gamepad->update(elapsedTime);
 
-    if (_gamepad->getButtonState(BUTTON_1) == Gamepad::BUTTON_PRESSED)
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
     {
         if (_buttonPressed[BUTTON_1])
         {
@@ -232,7 +224,7 @@ void CharacterGame::update(float elapsedTime)
         _buttonPressed[BUTTON_1] = true;
     }
 
-    if (_gamepad->getButtonState(BUTTON_2) == Gamepad::BUTTON_PRESSED)
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
     {
         if (_buttonPressed[BUTTON_2])
         {
@@ -247,9 +239,9 @@ void CharacterGame::update(float elapsedTime)
 
     _currentDirection.set(Vector2::zero());
 
-    if (_gamepad->isJoystickActive(0))
+    if (_gamepad->getJoystickCount() > 0)
     {
-        _gamepad->getJoystickAxisValues(0, &_currentDirection);
+        _gamepad->getJoystickValues(0, &_currentDirection);
     }
     else
     {
@@ -631,4 +623,38 @@ void CharacterGame::releaseBall()
     
     PhysicsRigidBody* basketball = (PhysicsRigidBody*) _basketballNode->getCollisionObject();
     basketball->setEnabled(true);
+}
+
+void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setConsumeInputEvents(false);
+            _virtualGamepad = gamepad;
+        }
+        else
+        {
+            _physicalGamepad = gamepad;
+        }
+
+        if (_physicalGamepad)
+        {
+            _gamepad = _physicalGamepad;
+        }
+        else
+        {
+            _gamepad = _virtualGamepad;
+        }
+
+        break;
+    case Gamepad::DISCONNECTED_EVENT:
+        if (gamepad == _physicalGamepad)
+        {
+            _gamepad = _virtualGamepad;
+        }
+        break;
+    }
 }
