@@ -31,15 +31,17 @@ form VIRTUAL GAMEPAD
             alignment = ALIGN_VCENTER_HCENTER
             consumeEvents = false
             
-            button
+            gamepadButton AButton
             {
+                mapping = BUTTON_A
                 style = buttonAStyle
                 size = 128, 128
                 alignment = ALIGN_BOTTOM_LEFT
             }
 
-            button
+            gamepadButton BButton
             {
+                mapping = BUTTON_B
                 style = buttonBStyle
                 size = 128, 128
                 alignment = ALIGN_TOP_RIGHT

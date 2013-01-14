@@ -188,12 +188,6 @@ theme menuTheme
 
     style title
     {
-        padding
-        {
-            left = -5
-            right = -5
-        }
-
         stateNormal
         {
             textColor = #ffffffff

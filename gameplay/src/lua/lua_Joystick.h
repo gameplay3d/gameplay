@@ -35,6 +35,7 @@ int lua_Joystick_getId(lua_State* state);
 int lua_Joystick_getImageColor(lua_State* state);
 int lua_Joystick_getImageRegion(lua_State* state);
 int lua_Joystick_getImageUVs(lua_State* state);
+int lua_Joystick_getIndex(lua_State* state);
 int lua_Joystick_getInnerRegionSize(lua_State* state);
 int lua_Joystick_getMargin(lua_State* state);
 int lua_Joystick_getOpacity(lua_State* state);

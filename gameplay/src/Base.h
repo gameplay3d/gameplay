@@ -187,9 +187,10 @@ using std::va_list;
 
 // Graphics (OpenGL)
 #ifdef __QNX__
-#include <EGL/egl.h>
+    #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
+    #include <screen/screen.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
@@ -275,6 +276,15 @@ typedef GLuint TextureHandle;
 typedef GLuint FrameBufferHandle;
 /** Render buffer handle. */
 typedef GLuint RenderBufferHandle;
+
+/** Gamepad handle definitions vary by platform. */
+#ifdef __QNX__
+    typedef screen_device_t GamepadHandle;
+#elif USE_XINPUT
+    typedef unsigned long GamepadHandle;
+#else
+    typedef unsigned int GamepadHandle;
+#endif
 }
 
 /**
