@@ -494,24 +494,32 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
 #ifdef __BB10__
 
 static const int __VIDs[] = {
-    0x1038
+    0x1038,
+    0x057e,
+    0x25b6
 };
 
 static const int __PIDs[] = {
-    0x1412
+    0x1412,
+    0x0306,
+    0x0001
 };
 
 static const char* __vendorStrings[] =
 {
-    "SteelSeries"
+    "SteelSeries",
+    "Nintendo",
+    "Fructel"
 };
 
 static const char* __productStrings[] =
 {
-    "FREE"
+    "FREE",
+    "Wii Remote",
+    "Gametel"
 };
 
-static const unsigned int __knownGamepads = 1;
+static const unsigned int __knownGamepads = 3;
 
 void loadGamepad(GamepadHandle handle, int* buttonCount, int* joystickCount, int* productId, int* vendorId, char* id, char* productString, char* vendorString)
 {
@@ -563,8 +571,6 @@ void loadGamepad(GamepadHandle handle, int* buttonCount, int* joystickCount, int
             }
         }
     }
-
-    fprintf(stderr, "Vendor: %s, Product: %s", vendorString, productString);
 }
 
 void Platform::pollGamepadState(Gamepad* gamepad)
@@ -591,9 +597,15 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         // the SteelSeries FREE, and the iControlPad.
         // Both return values between -128 and +127, with the y axis starting from
         // the top at -128.
-        // 1 / 128 == 0.0078125
-        float x = (float)analog[0] * 0.0078125f;
-        float y = -(float)analog[1] * 0.0078125f;
+        // 1 / 128 == 0.0078125f
+        // 1 / 127 == 0.0078740157480315f
+        //float x = (float)analog[0] * 0.0078125f;
+        //float y = -(float)analog[1] * 0.0078125f;
+        float x = (float)analog[0];
+        float y = -(float)analog[1];
+        x *= (x < 0) ? 0.0078125f : 0.0078740157480315f;
+        y *= (y > 0) ? 0.0078125f : 0.0078740157480315f;
+
         gamepad->_joysticks[i].set(x, y);        
     }
 

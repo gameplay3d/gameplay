@@ -71,7 +71,7 @@ public:
     virtual void gestureTapEvent(int x, int y);
 
     // gamepad
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
 protected:
 
