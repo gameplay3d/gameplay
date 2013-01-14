@@ -26,13 +26,15 @@ unsigned int Gamepad::getIndexFromMapping(Gamepad::ButtonMapping mapping)
 }
 
 Gamepad::Gamepad(const char* formPath)
-    : _id(""), _handle(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL)
+    : _id(""), _handle(0), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
     _id = _form->getId();
+    _vendorString = "GamePlay";
+    _productString = "Virtual Gamepad";
     bindGamepadControls(_form);
 }
 
