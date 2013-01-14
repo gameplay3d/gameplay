@@ -22,6 +22,8 @@ public:
    
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
 protected:
 
     void initialize();
@@ -51,6 +53,8 @@ private:
     Scene* _scene;
     Node* _cubeNode;
     Gamepad* _gamepad;
+    Gamepad* _virtualGamepad;
+    Gamepad* _physicalGamepad;
     unsigned int _moveFlags;
     int _prevX;
     int _prevY;

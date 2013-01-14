@@ -71,10 +71,7 @@ public:
     virtual void gestureTapEvent(int x, int y);
 
     // gamepad
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
-    unsigned int getGamepadCount() const;
-    unsigned int getGamepadsConnected();
-    Gamepad* getGamepad(unsigned int index) const;
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
 protected:
 

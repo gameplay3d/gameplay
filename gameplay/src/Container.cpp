@@ -6,6 +6,7 @@
 #include "VerticalLayout.h"
 #include "Label.h"
 #include "Button.h"
+#include "GamepadButton.h"
 #include "CheckBox.h"
 #include "RadioButton.h"
 #include "Slider.h"
@@ -140,6 +141,10 @@ void Container::addControls(Theme* theme, Properties* properties)
         else if (controlName == "BUTTON")
         {
             control = Button::create(controlStyle, controlSpace);
+        }
+        else if (controlName == "GAMEPADBUTTON")
+        {
+            control = GamepadButton::create(controlStyle, controlSpace);
         }
         else if (controlName == "CHECKBOX")
         {

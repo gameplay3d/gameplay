@@ -15,7 +15,7 @@
 #include "lua_FontStyle.h"
 #include "lua_GameClearFlags.h"
 #include "lua_GameState.h"
-#include "lua_GamepadButtonState.h"
+#include "lua_GamepadButtonMapping.h"
 #include "lua_GamepadGamepadEvent.h"
 #include "lua_GestureGestureEvent.h"
 #include "lua_ImageFormat.h"
