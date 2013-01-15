@@ -45,7 +45,6 @@ void lua_RegisterAllBindings()
     luaRegister_Frustum();
     luaRegister_Game();
     luaRegister_Gamepad();
-    luaRegister_GamepadButton();
     luaRegister_Gesture();
     luaRegister_Image();
     luaRegister_Joint();

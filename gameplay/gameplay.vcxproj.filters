@@ -816,14 +816,8 @@
     <ClCompile Include="src\lua\lua_Logger.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_GamepadButton.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_GamepadButtonMapping.cpp">
       <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GamepadButton.cpp">
-      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1628,14 +1622,8 @@
     <ClInclude Include="src\Stream.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_GamepadButton.h">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_GamepadButtonMapping.h">
       <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GamepadButton.h">
-      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
