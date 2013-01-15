@@ -8,7 +8,7 @@ namespace gameplay
 {
 
 class Platform;
-class GamepadButton;
+class Button;
 
 /**
  * Defines an interface for handling gamepad input.
@@ -17,8 +17,8 @@ class Gamepad
 {
     friend class Platform;
     friend class Game;
-    friend class GamepadButton;
     friend class Control;
+    friend class Button;
 
 public:
 
@@ -36,26 +36,26 @@ public:
      */
     enum ButtonMapping
     {
-        BUTTON_A       = (1 << 0),
-        BUTTON_B       = (1 << 1),
-        BUTTON_C       = (1 << 2),
-        BUTTON_X       = (1 << 3),
-        BUTTON_Y       = (1 << 4),
-        BUTTON_Z       = (1 << 5),
-        BUTTON_MENU1   = (1 << 6),
-        BUTTON_MENU2   = (1 << 7),
-        BUTTON_MENU3   = (1 << 8),
-        BUTTON_MENU4   = (1 << 9),
-        BUTTON_L1      = (1 << 10),
-        BUTTON_L2      = (1 << 11),
-        BUTTON_L3      = (1 << 12),
-        BUTTON_R1      = (1 << 13),
-        BUTTON_R2      = (1 << 14),
-        BUTTON_R3      = (1 << 15),
-        BUTTON_UP      = (1 << 16),
-        BUTTON_DOWN    = (1 << 17),
-        BUTTON_LEFT    = (1 << 18),
-        BUTTON_RIGHT   = (1 << 19)
+        BUTTON_A,
+        BUTTON_B,
+        BUTTON_C,
+        BUTTON_X,
+        BUTTON_Y,
+        BUTTON_Z,
+        BUTTON_MENU1,
+        BUTTON_MENU2,
+        BUTTON_MENU3,
+        BUTTON_MENU4,
+        BUTTON_L1,
+        BUTTON_L2,
+        BUTTON_L3,
+        BUTTON_R1,
+        BUTTON_R2,
+        BUTTON_R3,
+        BUTTON_UP,
+        BUTTON_DOWN,
+        BUTTON_LEFT,
+        BUTTON_RIGHT
     };
 
     /**
@@ -249,7 +249,7 @@ private:
     // Data needed for virtual gamepads.
     Form* _form;
     Joystick* _uiJoysticks[2];
-    GamepadButton* _uiButtons[20];
+    Button* _uiButtons[20];
 
     // Current gamepad state.
     unsigned int _buttons;

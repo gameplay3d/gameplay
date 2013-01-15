@@ -72,7 +72,7 @@ void GamepadTest::update(float elapsedTime)
 
             for (int j = 0; j < 20; ++j)
             {
-                if (gamepad->isButtonDown((Gamepad::ButtonMapping) (1 << j)))
+                if (gamepad->isButtonDown((Gamepad::ButtonMapping)j))
                 {
                     sprintf(s, "%d ", j);
                     _status += s;

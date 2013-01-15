@@ -32,7 +32,7 @@ form gamepadForm
             alignment = ALIGN_VCENTER_HCENTER
             consumeEvents = false
             
-            gamepadButton jump
+            button jump
             {
                 mapping = BUTTON_A
                 style = buttonAStyle
@@ -40,7 +40,7 @@ form gamepadForm
                 alignment = ALIGN_BOTTOM_LEFT
             }
 
-            gamepadButton kick
+            button kick
             {
                 mapping = BUTTON_B
                 style = buttonBStyle
