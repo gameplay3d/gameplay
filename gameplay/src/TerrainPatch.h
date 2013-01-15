@@ -153,10 +153,6 @@ private:
     unsigned int _column;
     std::set<Layer*, LayerCompare> _layers;
     std::vector<Texture::Sampler*> _samplers;
-    std::vector<int> _textureIndex;
-    std::vector<Vector2> _textureRepeat;
-    std::vector<int> _blendIndex;
-    std::vector<int> _blendChannel;
     bool _materialDirty;
     BoundingBox _boundingBox;
 
