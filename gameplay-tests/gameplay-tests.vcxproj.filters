@@ -70,6 +70,9 @@
     <ClInclude Include="src\PostProcessTest.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\GamepadTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveTest.cpp">
@@ -127,6 +130,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PostProcessTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamepadTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

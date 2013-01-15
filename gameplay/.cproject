@@ -20,9 +20,10 @@
 							<builder buildPath="${workspace_loc:/gameplay/Device-Debug}" id="org.eclipse.cdt.build.core.internal.builder.159190287" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
 							<tool id="com.qnx.qcc.tool.compiler.96907942" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1765481355" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.compiler.security.311918799" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.311918799" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1481323494" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
+									<listOptionValue builtIn="false" value="__BB10__"/>
 									<listOptionValue builtIn="false" value="BT_USE_NEON"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.includePath.2133604142" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
@@ -42,6 +43,7 @@
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1988140188" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.debug.1929307156" name="Debug (-g)" superClass="com.qnx.qcc.option.assembler.debug" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.assembler.defines.1866459653" name="Defines (-D)" superClass="com.qnx.qcc.option.assembler.defines" valueType="definedSymbols"/>
 								<inputType id="com.qnx.qcc.inputType.assembler.1944074393" superClass="com.qnx.qcc.inputType.assembler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.linker.85592747" name="QCC Linker" superClass="com.qnx.qcc.tool.linker">
@@ -82,7 +84,7 @@
 							<builder buildPath="${workspace_loc:/gameplay/Device-Release}" id="cdt.managedbuild.target.gnu.builder.base.1199322737" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1345567866" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1056793982" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.1" valueType="enumerated"/>
-								<option id="com.qnx.qcc.option.compiler.security.324540233" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.324540233" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.398688299" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 									<listOptionValue builtIn="false" value="BT_USE_NEON"/>
@@ -143,7 +145,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.1281156842" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.626405189" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.1207899085" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.compiler.security.1649809766" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.1649809766" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.276653249" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 									<listOptionValue builtIn="false" value="BY_USE_NEON"/>
@@ -207,7 +209,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.306557636" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.168813234" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1032644527" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.compiler.security.1227516972" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.1227516972" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.374283024" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 									<listOptionValue builtIn="false" value="BT_USE_NEON"/>
@@ -269,7 +271,7 @@
 							<builder buildPath="${workspace_loc:/gameplay/Simulator}" id="cdt.managedbuild.target.gnu.builder.base.10075032" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 							<tool id="com.qnx.qcc.tool.compiler.1004416224" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1122485646" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.compiler.security.1671403331" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.1671403331" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1863269886" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
@@ -328,7 +330,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.417488704" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1290366598" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.216911941" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.compiler.security.1329750381" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.1329750381" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1679396285" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>
@@ -388,7 +390,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.563072865" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compile.debug.1789973550" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1289221781" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.compiler.security.1296061040" name="Enhanced Security (-fstack-protector-all)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
+								<option id="com.qnx.qcc.option.compiler.security.1296061040" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1925901823" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
 								</option>

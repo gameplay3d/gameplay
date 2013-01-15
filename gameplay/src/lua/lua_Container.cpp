@@ -11,6 +11,7 @@
 #include "Control.h"
 #include "FlowLayout.h"
 #include "Game.h"
+#include "GamepadButton.h"
 #include "Joystick.h"
 #include "Label.h"
 #include "Layout.h"

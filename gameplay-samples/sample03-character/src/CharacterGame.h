@@ -34,7 +34,7 @@ public:
     /**
      * @see Game::gamepadEvent
      */
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int index);
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
      * @see PhysicsCollisionObject::CollisionListener::collisionEvent
@@ -71,7 +71,6 @@ private:
     bool initializeScene(Node* node);
     void initializeMaterial(Scene* scene, Node* node, Material* material);
     void initializeCharacter();
-    void initializeGamepad();
     void drawSplash(void* param);
     bool drawScene(Node* node, bool transparent);
     void play(const char* id, bool repeat, float speed = 1.0f);
@@ -105,6 +104,8 @@ private:
     bool _applyKick;
     bool* _buttonPressed;
     Gamepad* _gamepad;
+    Gamepad* _physicalGamepad;
+    Gamepad* _virtualGamepad;
     Vector2 _currentDirection;
 
 };

@@ -242,7 +242,7 @@ void InputTest::keyEvent(Keyboard::KeyEvent evt, int key)
             _symbolsString.clear();
         }
 
-        if (key == Keyboard::KEY_SPACE)
+        if (key == Keyboard::KEY_SPACE && hasMouse())
         {
             setCaptured(false);
         }
@@ -275,7 +275,7 @@ void InputTest::controlEvent(Control* control, EventType evt)
         displayKeyboard(_keyboardState);
         static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->setText(_keyboardState ? "Hide virtual keyboard" : "Show virtual keyboard");
     }
-    else if (strcmp(control->getId(), "captureMouseButton") == 0)
+    else if (strcmp(control->getId(), "captureMouseButton") == 0 && hasMouse())
     {
         setCaptured(true);
     }

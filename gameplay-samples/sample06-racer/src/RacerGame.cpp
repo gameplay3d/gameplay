@@ -13,6 +13,7 @@ bool __flythruCamera = false;
 bool __drawDebug = false;
 bool __useAccelerometer = false;
 bool __showMenu = false;
+bool __menuFlag = false;
 
 // Declare our game instance
 RacerGame game;
@@ -28,11 +29,6 @@ RacerGame game;
 #define BRAKE_MOUSE (1 << 7)
 
 #define STEERING_RESPONSE (7.0f)
-
-#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
-#define BUTTON_B (_gamepad->isVirtual() ? 1 : 11)
-#define BUTTON_X (12)
-#define BUTTON_Y (13)
 
 RacerGame::RacerGame()
     : _scene(NULL), _keyFlags(0), _mouseFlags(0), _steering(0), _gamepad(NULL), _carVehicle(NULL), _upsetTimer(0),
@@ -77,20 +73,9 @@ void RacerGame::initialize()
     // Initialize scene
     _scene->visit(this, &RacerGame::initializeScene);
 
-    // Initialize the gamepad
-    _gamepad = getGamepad(0);
-
     // Load and initialize game script
     getScriptController()->loadScript("res/common/game.lua");
     getScriptController()->executeFunction<void>("setScene", "<Scene>", _scene);
-
-    _virtualGamepad = getGamepad(0);
-    Form* gamepadForm = _virtualGamepad->getForm();
-
-    float from = 0.0f;
-    float to = getHeight();
-    Animation* virtualGamepadAnimation = gamepadForm->createAnimationFromTo("gamepad_transition", Form::ANIMATE_POSITION_Y, &from, &to, Curve::LINEAR, 600L);
-    _virtualGamepadClip = virtualGamepadAnimation->getClip();
 
     Node* carNode = _scene->findNode("carbody");
     if (carNode && carNode->getCollisionObject()->getType() == PhysicsCollisionObject::VEHICLE)
@@ -152,14 +137,29 @@ void RacerGame::finalize()
 }
 
 void RacerGame::update(float elapsedTime)
-{
-    // Check if we have any physical gamepad connections.
-    getGamepadsConnected();
-    
+{   
     _gamepad->update(elapsedTime);
 
     _menu->update(Game::getAbsoluteTime());
     _overlay->update(Game::getAbsoluteTime());
+
+    // The "Start" button is mapped to MENU2.
+    if (!__showMenu && !__menuFlag && _gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+    {
+        __menuFlag = true;
+        menuEvent();
+    }
+
+    if (__menuFlag && !_gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+    {
+        __menuFlag = false;
+    }
+
+    if (__showMenu && !__menuFlag && _gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+    {
+        __menuFlag = true;
+        menuEvent();
+    }
 
     Node* cameraNode;
     if (_scene->getActiveCamera() && (cameraNode = _scene->getActiveCamera()->getNode()))
@@ -177,9 +177,18 @@ void RacerGame::update(float elapsedTime)
             {
                 // Vehicle Control (Normal Mode)
                 Vector2 direction;
-                if (_gamepad->isJoystickActive(0))
+                if (_gamepad->getJoystickCount())
                 {
-                    _gamepad->getJoystickAxisValues(0, &direction);
+                    _gamepad->getJoystickValues(0, &direction);
+                }
+                
+                if (_gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
+                {
+                    direction.set(-1.0f, 0.0f);
+                }
+                else if (_gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
+                {
+                    direction.set(1.0f, 0.0f);
                 }
 
                 // Allow keys to control steering
@@ -204,7 +213,13 @@ void RacerGame::update(float elapsedTime)
                 }
                 _steering = max(-1.0f, min(_steering, 1.0f));
 
-                if ( (_keyFlags & ACCELERATOR) || (_keyFlags & ACCELERATOR_MOUSE) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED) )
+                if (_gamepad->getTriggerCount() > 1)
+                {
+                    driving = _gamepad->getTriggerValue(1);
+                    _engineSound->setGain(0.8f + (driving * 0.2f));
+                }
+                
+                if (!driving && (_keyFlags & ACCELERATOR || _keyFlags & ACCELERATOR_MOUSE || _gamepad->isButtonDown(Gamepad::BUTTON_A)))
                 {
                     driving = 1;
                     _engineSound->setGain(1.0f);
@@ -218,14 +233,14 @@ void RacerGame::update(float elapsedTime)
 
                 // Reverse only below a reasonable speed
                 bool isReverseCommanded = (_keyFlags & REVERSE) ||
-                                          (!isVirt && _gamepad->getButtonState(BUTTON_X) == Gamepad::BUTTON_PRESSED) ||
-                                          (direction.y < -0.1 && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
+                                          (!isVirt && _gamepad->isButtonDown(Gamepad::BUTTON_X)) ||
+                                          (direction.y < -0.1 && _gamepad->isButtonDown(Gamepad::BUTTON_A));
                 if (isReverseCommanded && v < 30.0f)
                 {
                     driving = -0.6f;
                 }
 
-                if ( (_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED)
+                if ( (_keyFlags & BRAKE) || (_keyFlags & BRAKE_MOUSE) || _gamepad->isButtonDown(Gamepad::BUTTON_B))
                 {
                     braking = 1;
                     if (_brakingSound && (_brakingSound->getState() != AudioSource::PLAYING) && (v > 30.0f))
@@ -269,7 +284,7 @@ void RacerGame::update(float elapsedTime)
                 resetInPlace();
             }
             else if ( (_keyFlags & UPRIGHT) ||
-                 (!isVirt && _gamepad->getButtonState(BUTTON_Y) == Gamepad::BUTTON_PRESSED) ||
+                 (!isVirt && _gamepad->isButtonDown(Gamepad::BUTTON_Y)) ||
                  (_carVehicle->getNode()->getTranslationY() < -300.0f) )
             {
                 resetToStart();
@@ -304,7 +319,8 @@ void RacerGame::render(float elapsedTime)
     }
 
     // Draw the gamepad
-    _virtualGamepad->draw();
+    if (_gamepad && _gamepad->isVirtual())
+    	_gamepad->draw();
 
     // Draw the menu
     if (__showMenu)
@@ -496,25 +512,54 @@ bool RacerGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
 void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
+    // Prioritise physical gamepads over the virtual one.
     switch(evt)
     {
     case Gamepad::CONNECTED_EVENT:
         if (gamepad->isVirtual())
         {
-            _virtualGamepadClip->setSpeed(-1.0f);
+            float from = 0.0f;
+            float to = getHeight();
+            Animation* virtualGamepadAnimation = gamepad->getForm()->createAnimationFromTo("gamepad_transition", Form::ANIMATE_POSITION_Y, &from, &to, Curve::LINEAR, 2000L);
+            _virtualGamepadClip = virtualGamepadAnimation->getClip();
+
+            _virtualGamepad = gamepad;
         }
         else
         {
-            _virtualGamepadClip->setSpeed(1.0f);
+            if (!_physicalGamepad)
+                _physicalGamepad = gamepad;
         }
-        _virtualGamepadClip->play();
-        _gamepad = gamepad;
+
+        if (_physicalGamepad)
+        {
+        	if (_virtualGamepadClip && _gamepad == _virtualGamepad)
+            {
+        		_virtualGamepadClip->setSpeed(1.0f);
+                _virtualGamepadClip->play();
+            }
+            _gamepad = _physicalGamepad;
+        }
+        else if (_virtualGamepad)
+        {
+            if (_gamepad == _physicalGamepad)
+            {
+        	    _virtualGamepadClip->setSpeed(-1.0f);
+                _virtualGamepadClip->play();
+            }
+            _gamepad = _virtualGamepad;
+        }
 
         break;
     case Gamepad::DISCONNECTED_EVENT:
-        _virtualGamepadClip->setSpeed(-1.0f);
-        _virtualGamepadClip->play();
-        _gamepad = getGamepad(0);
+        if (gamepad == _physicalGamepad)
+        {
+            _gamepad = _virtualGamepad;
+            _physicalGamepad = NULL;
+
+            _virtualGamepadClip->setSpeed(-1.0f);
+            _virtualGamepadClip->play();
+        }
         break;
     }
 }

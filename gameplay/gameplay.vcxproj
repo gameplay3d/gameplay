@@ -85,6 +85,7 @@
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gamepad.cpp" />
+    <ClCompile Include="src\GamepadButton.cpp" />
     <ClCompile Include="src\gameplay-main-android.cpp" />
     <ClCompile Include="src\gameplay-main-blackberry.cpp" />
     <ClCompile Include="src\gameplay-main-linux.cpp" />
@@ -150,7 +151,8 @@
     <ClCompile Include="src\lua\lua_Game.cpp" />
     <ClCompile Include="src\lua\lua_GameClearFlags.cpp" />
     <ClCompile Include="src\lua\lua_Gamepad.cpp" />
-    <ClCompile Include="src\lua\lua_GamepadButtonState.cpp" />
+    <ClCompile Include="src\lua\lua_GamepadButton.cpp" />
+    <ClCompile Include="src\lua\lua_GamepadButtonMapping.cpp" />
     <ClCompile Include="src\lua\lua_GamepadGamepadEvent.cpp" />
     <ClCompile Include="src\lua\lua_GameState.cpp" />
     <ClCompile Include="src\lua\lua_Gesture.cpp" />
@@ -362,6 +364,7 @@
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Gamepad.h" />
+    <ClInclude Include="src\GamepadButton.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Gesture.h" />
     <ClInclude Include="src\HeightField.h" />
@@ -426,7 +429,8 @@
     <ClInclude Include="src\lua\lua_Game.h" />
     <ClInclude Include="src\lua\lua_GameClearFlags.h" />
     <ClInclude Include="src\lua\lua_Gamepad.h" />
-    <ClInclude Include="src\lua\lua_GamepadButtonState.h" />
+    <ClInclude Include="src\lua\lua_GamepadButton.h" />
+    <ClInclude Include="src\lua\lua_GamepadButtonMapping.h" />
     <ClInclude Include="src\lua\lua_GamepadGamepadEvent.h" />
     <ClInclude Include="src\lua\lua_GameState.h" />
     <ClInclude Include="src\lua\lua_Gesture.h" />
@@ -887,7 +891,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__BB10__;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
@@ -922,7 +926,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_XINPUT;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -934,6 +938,8 @@
     <Lib>
       <Verbose>
       </Verbose>
+      <AdditionalDependencies>XInput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
@@ -962,7 +968,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__BB10__;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
