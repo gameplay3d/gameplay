@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Light", LightTest, 10);
+    ADD_TEST("Graphics", "Light", LightTest, 13);
 #endif
 
 static const float GROUND_WIDTH = 16.0f;
@@ -107,7 +107,7 @@ void LightTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
 
 	// Load the scene
-	Bundle* bundle = Bundle::create("res/common/lightingBrickWall.gpb");
+	Bundle* bundle = Bundle::create("res/common/lightBrickWall.gpb");
 	_scene = bundle->loadScene();
 
 	// Create a directional light (white)
@@ -186,7 +186,7 @@ void LightTest::initialize()
 
 	_form->setConsumeInputEvents(false);
 	
-	_lighting = Material::create("res/common/lighting.material");
+	_lighting = Material::create("res/common/light.material");
 	_model->setMaterial(_lighting);
 
 	initDirectionalTechniqueCommonParams( "directional");
