@@ -11,7 +11,6 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Control");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Form");
-    ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "GamepadButton");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joint");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joystick");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Label");
@@ -22,14 +21,12 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "TextBox");
     ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
     ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("Button", "GamepadButton");
     ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
     ScriptUtil::setGlobalHierarchyPair("Container", "Form");
     ScriptUtil::setGlobalHierarchyPair("Control", "Button");
     ScriptUtil::setGlobalHierarchyPair("Control", "CheckBox");
     ScriptUtil::setGlobalHierarchyPair("Control", "Container");
     ScriptUtil::setGlobalHierarchyPair("Control", "Form");
-    ScriptUtil::setGlobalHierarchyPair("Control", "GamepadButton");
     ScriptUtil::setGlobalHierarchyPair("Control", "Joystick");
     ScriptUtil::setGlobalHierarchyPair("Control", "Label");
     ScriptUtil::setGlobalHierarchyPair("Control", "RadioButton");
@@ -37,7 +34,6 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Control", "TextBox");
     ScriptUtil::setGlobalHierarchyPair("Label", "Button");
     ScriptUtil::setGlobalHierarchyPair("Label", "CheckBox");
-    ScriptUtil::setGlobalHierarchyPair("Label", "GamepadButton");
     ScriptUtil::setGlobalHierarchyPair("Label", "RadioButton");
     ScriptUtil::setGlobalHierarchyPair("Label", "Slider");
     ScriptUtil::setGlobalHierarchyPair("Label", "TextBox");
@@ -78,7 +74,6 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Ref", "Font");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Form");
     ScriptUtil::setGlobalHierarchyPair("Ref", "FrameBuffer");
-    ScriptUtil::setGlobalHierarchyPair("Ref", "GamepadButton");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
@@ -117,7 +112,6 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Container");
     ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Control");
     ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Form");
-    ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "GamepadButton");
     ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joint");
     ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joystick");
     ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Label");
