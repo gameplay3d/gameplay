@@ -46,4 +46,9 @@ inline bool Joystick::isRelative() const
     return _relative;
 }
 
+inline const unsigned int Joystick::getIndex() const
+{
+    return _index;
+}
+
 }

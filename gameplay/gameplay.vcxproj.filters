@@ -660,9 +660,6 @@
     <ClCompile Include="src\lua\lua_GameClearFlags.cpp">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_GamepadButtonState.cpp">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_GamepadGamepadEvent.cpp">
       <Filter>lua</Filter>
     </ClCompile>
@@ -818,6 +815,15 @@
     </ClCompile>
     <ClCompile Include="src\lua\lua_Logger.cpp">
       <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_GamepadButton.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_GamepadButtonMapping.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamepadButton.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Terrain.cpp">
       <Filter>src</Filter>
@@ -1490,9 +1496,6 @@
     <ClInclude Include="src\lua\lua_GameClearFlags.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_GamepadButtonState.h">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_GamepadGamepadEvent.h">
       <Filter>lua</Filter>
     </ClInclude>
@@ -1644,6 +1647,15 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="src\Stream.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_GamepadButton.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_GamepadButtonMapping.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GamepadButton.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Terrain.h">
