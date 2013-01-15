@@ -283,7 +283,7 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
         // Parse terrain layers
         Properties* lp;
         int index = -1;
-        while (lp = properties->getNextNamespace())
+        while ((lp = properties->getNextNamespace()) != NULL)
         {
             if (strcmp(lp->getNamespace(), "layer") == 0)
             {
@@ -376,7 +376,7 @@ bool Terrain::setLayer(int index, const char* texturePath, const Vector2& textur
     {
         TerrainPatch* patch = _patches[i];
 
-        if ((row == -1 || patch->_row == row) && (column == -1 || patch->_column == column))
+        if ((row == -1 || (int)patch->_row == row) && (column == -1 || (int)patch->_column == column))
         {
             if (!patch->setLayer(index, texturePath, textureRepeat, blendPath, blendChannel))
                 result = false;

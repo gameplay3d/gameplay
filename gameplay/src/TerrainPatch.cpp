@@ -352,14 +352,14 @@ int TerrainPatch::addSampler(const char* path)
     if (!texture)
         return -1;
 
-    size_t firstAvailableIndex = -1;
+    int firstAvailableIndex = -1;
     for (size_t i = 0, count = _samplers.size(); i < count; ++i)
     {
         Texture::Sampler* sampler = _samplers[i];
 
         if (sampler == NULL && firstAvailableIndex == -1)
         {
-            firstAvailableIndex = i;
+            firstAvailableIndex = (int)i;
         }
         else if (sampler->getTexture() == texture)
         {
@@ -436,64 +436,64 @@ bool TerrainPatch::updateMaterial()
 
     for (size_t i = 0, count = _levels.size(); i < count; ++i)
     {
-        // Load material/shaders
-        char defines[1024];
-        sprintf(defines, "LAYER_COUNT %d;SAMPLER_COUNT %d%s%s",
-            (int)_layers.size(),
-            (int)_samplers.size(),
-            _terrain->isFlagSet(Terrain::DEBUG_PATCHES) ? ";DEBUG_PATCHES" : "",
-            _terrain->_normalMap ? ";NORMAL_MAP" : "");
-        Material* material = Material::create("res/shaders/terrain.vert", "res/shaders/terrain.frag", defines);
+        // Build preprocessor string to pass to shader.
+        // NOTE: I make heavy use of preprocessor definitions, rather than passing in arrays and doing
+        // non-constant array access in the shader. This is due to the fact that non-constant array access
+        // in GLES is very slow on some GLES 2.x hardware.
+        std::ostringstream defines;
+        defines << "LAYER_COUNT " << _layers.size();
+        defines << ";SAMPLER_COUNT " << _samplers.size();
+        if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
+            defines << ";DEBUG_PATCHES";
+        if (_terrain->_normalMap)
+            defines << ";NORMAL_MAP";
+
+        // Append texture and blend index constants to preprocessor definition.
+        // We need to do this since older versions of GLSL only allow sampler arrays
+        // to be indexed using constant expressions (otherwise we could simply pass an
+        // array of indices to use for sampler lookup).
+        //
+        // Rebuild layer lists while we're at it.
+        //
+        int layerIndex = 0;
+        for (std::set<Layer*, LayerCompare>::iterator itr = _layers.begin(); itr != _layers.end(); ++itr, ++layerIndex)
+        {
+            Layer* layer = *itr;
+
+            defines << ";TEXTURE_INDEX_" << layerIndex << " " << layer->textureIndex;
+            defines << ";TEXTURE_REPEAT_" << layerIndex << " vec2(" << layer->textureRepeat.x << "," << layer->textureRepeat.y << ")";
+
+            if (layerIndex > 0)
+            {
+                defines << ";BLEND_INDEX_" << layerIndex << " " << layer->blendIndex;
+                defines << ";BLEND_CHANNEL_" << layerIndex << " " << layer->blendChannel;
+            }
+        }
+
+        Material* material = Material::create("res/shaders/terrain.vert", "res/shaders/terrain.frag", defines.str().c_str());
         if (!material)
             return false;
         material->getStateBlock()->setCullFace(true);
         material->getStateBlock()->setDepthTest(true);
 
-        // Build layer lists
-        _textureIndex.clear();
-        _textureRepeat.clear();
-        _blendIndex.clear();
-        _blendChannel.clear();
-        for (std::set<Layer*, LayerCompare>::iterator itr = _layers.begin(); itr != _layers.end(); ++itr)
-        {
-            Layer* layer = *itr;
-
-            // Add texture parameters for every layer
-            _textureIndex.push_back(layer->textureIndex);
-            _textureRepeat.push_back(layer->textureRepeat);
-
-            // Add blend parameters for all but the first layer
-            if (itr != _layers.begin())
-            {
-                _blendIndex.push_back(layer->blendIndex);
-                _blendChannel.push_back(layer->blendChannel);
-            }
-        }
-
         // Set material parameter bindings
         material->getParameter("u_worldViewProjectionMatrix")->bindValue(_terrain, &Terrain::getWorldViewProjectionMatrix);
-        material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
+        if (!_terrain->_normalMap)
+            material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
         material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
         material->getParameter("u_lightColor")->bindValue(this, &TerrainPatch::getLightColor);
         material->getParameter("u_lightDirection")->bindValue(this, &TerrainPatch::getLightDirection);
         if (_layers.size() > 0)
         {
             material->getParameter("u_samplers")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
-            material->getParameter("u_textureIndex")->setValue(&_textureIndex[0], (unsigned int)_textureIndex.size());
-            material->getParameter("u_textureRepeat")->setValue(&_textureRepeat[0], (unsigned int)_textureRepeat.size());
             if (_terrain->_normalMap)
                 material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
-            if (_layers.size() > 1)
-            {
-                material->getParameter("u_blendIndex")->setValue(&_blendIndex[0], (unsigned int)_blendIndex.size());
-                material->getParameter("u_blendChannel")->setValue(&_blendChannel[0], (unsigned int)_blendChannel.size());
-            }
         }
 
         if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
         {
-            material->getParameter("u_row")->setValue((int)_row);
-            material->getParameter("u_column")->setValue((int)_column);
+            material->getParameter("u_row")->setValue((float)_row);
+            material->getParameter("u_column")->setValue((float)_column);
         }
 
         // Set material on this lod level

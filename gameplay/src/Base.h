@@ -14,6 +14,7 @@
 #include <cstdarg>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <cstring>
 #include <vector>

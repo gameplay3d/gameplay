@@ -133,8 +133,8 @@ namespace gameplay
         static HeightField* create(const char* path, unsigned int width, unsigned int height, float minHeight, float maxHeight);
 
         float* _array;
-        unsigned int _rows;
         unsigned int _cols;
+        unsigned int _rows;
     };
 
 }
