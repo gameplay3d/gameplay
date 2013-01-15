@@ -32,7 +32,7 @@ void writeFile(const std::string& path, const std::string& text)
 
     // Read in content of path to compare before writing
     bool changed = true;
-    ifstream in(path);
+    ifstream in(path.c_str());
     if (in.is_open())
     {
         changed = false;
@@ -54,7 +54,7 @@ void writeFile(const std::string& path, const std::string& text)
 
     if (changed)
     {
-        ofstream o(path);
+        ofstream o(path.c_str());
         o << text;
         o.close();
     }

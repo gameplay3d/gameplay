@@ -108,7 +108,7 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, int width, int
     __totalHeightmapScanlines = height;
 
     // Determine # of threads to spawn
-    int threadCount = min(THREAD_COUNT, height);
+    int threadCount = std::min(THREAD_COUNT, height);
 
     // Split the work into separate threads to make max use of available cpu cores and speed up computation.
     HeightmapThreadData* threadData = new HeightmapThreadData[threadCount];

@@ -203,6 +203,8 @@ void Image::save(const char* path)
     png_structp png_ptr = NULL;
     png_infop info_ptr = NULL;
     png_bytep row = NULL;
+    unsigned int stride;
+    int index;
 
     FILE* fp = fopen(path, "wb");
     if (fp == NULL)
@@ -232,10 +234,10 @@ void Image::save(const char* path)
     png_write_info(png_ptr, info_ptr);
 
     // Allocate memory for a single row of image data
-    unsigned int stride = _bpp * _width * sizeof(png_byte);
+    stride = _bpp * _width * sizeof(png_byte);
     row = (png_bytep)malloc(stride);
 
-    int index = 0;
+    index = 0;
     for (unsigned int y = 0; y < _height; ++y)
     {
         for (unsigned int x = 0; x < stride; ++x)
