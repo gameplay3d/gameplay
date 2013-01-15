@@ -1,29 +1,12 @@
 #include "Base.h"
 #include "Gamepad.h"
 #include "Game.h"
-#include "GamepadButton.h"
+#include "Button.h"
 
 namespace gameplay
 {
 
 static std::vector<Gamepad*> __gamepads;
-
-unsigned int Gamepad::getIndexFromMapping(Gamepad::ButtonMapping mapping)
-{
-    // Determine which bit is set in the mapping.
-    unsigned int index = 0;
-    bool done = false;
-    do
-    {
-        if (mapping == (1 << index))
-            done = true;
-        else
-            ++index;
-    } while (!done);
-    GP_ASSERT(index < 20);
-
-    return index;
-}
 
 Gamepad::Gamepad(const char* formPath)
     : _id(""), _handle(0), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL)
@@ -35,6 +18,17 @@ Gamepad::Gamepad(const char* formPath)
     _id = _form->getId();
     _vendorString = "GamePlay";
     _productString = "Virtual Gamepad";
+
+    for (int i = 0; i < 2; ++i)
+    {
+        _uiJoysticks[i] = NULL;
+    }
+
+    for (int i = 0; i < 20; ++i)
+    {
+        _uiButtons[i] = NULL;
+    }
+
     bindGamepadControls(_form);
 }
 
@@ -43,6 +37,14 @@ Gamepad::Gamepad(const char* id, GamepadHandle handle, unsigned int buttonCount,
     : _id(id), _handle(handle), _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
       _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _form(NULL)
 {
+}
+
+Gamepad::~Gamepad()
+{
+    if (_form)
+    {
+        SAFE_RELEASE(_form);
+    }
 }
 
 Gamepad* Gamepad::add(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
@@ -120,21 +122,12 @@ void Gamepad::bindGamepadControls(Container* container)
             _uiJoysticks[joystick->getIndex()] = joystick;
             _joystickCount++;
         }
-        else if (std::strcmp("gamepadButton", control->getType()) == 0)
+        else if (std::strcmp("button", control->getType()) == 0)
         {
-            GamepadButton* button = (GamepadButton*)control;
-            unsigned int index = getIndexFromMapping(button->getMapping());
-            _uiButtons[index] = button;
+            Button* button = (Button*)control;
+            _uiButtons[button->getDataBinding()] = button;
             _buttonCount++;
         }   
-    }
-}
-
-Gamepad::~Gamepad()
-{
-    if (_form)
-    {        
-        SAFE_RELEASE(_form);
     }
 }
 
@@ -259,21 +252,17 @@ bool Gamepad::isButtonDown(ButtonMapping mapping) const
 {
     if (_form)
     {
-        unsigned int index = getIndexFromMapping(mapping);
-        if (index < _buttonCount)
+        Button* button = _uiButtons[mapping];
+        if (button)
         {
-            GamepadButton* button = _uiButtons[index];
-            if (button)
-            {
-                return (button->getState() == Control::ACTIVE);
-            }
+            return (button->getState() == Control::ACTIVE);
         }
         else
         {
             return false;
         }
     }
-    else if (_buttons & mapping)
+    else if (_buttons & (1 << mapping))
     {
         return true;
     }

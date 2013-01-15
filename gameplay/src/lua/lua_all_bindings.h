@@ -40,7 +40,6 @@
 #include "lua_Frustum.h"
 #include "lua_Game.h"
 #include "lua_Gamepad.h"
-#include "lua_GamepadButton.h"
 #include "lua_Gesture.h"
 #include "lua_HeightField.h"
 #include "lua_Image.h"
