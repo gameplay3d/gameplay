@@ -384,12 +384,9 @@ void FormsTest::controlEvent(Control* control, EventType evt)
     }
     else if (strcmp("opacityButton", control->getId()) == 0)
     {
-        /*
         float from[] = { 1.0f };
         float to[] = { 0.5f };
         control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
-        */
-        control->setVisible(false);
     }
 }
 
