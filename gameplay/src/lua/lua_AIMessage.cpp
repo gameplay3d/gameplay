@@ -680,7 +680,7 @@ int lua_AIMessage_setString(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 AIMessage* instance = getInstance(state);
                 instance->setString(param1, param2);
@@ -721,10 +721,10 @@ int lua_AIMessage_static_create(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 1);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+                const char* param3 = ScriptUtil::getString(3, false);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 4);

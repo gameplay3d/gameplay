@@ -99,6 +99,8 @@ struct FunctionBinding
         string info;
         /** Whether the parameter has a default value. */
         bool hasDefaultValue;
+        /** For pointer types, the number of levels of indirection */
+        int levelsOfIndirection;
     };
 
     /**

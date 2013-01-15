@@ -4,12 +4,19 @@
 #include "SceneLoader.h"
 #include "MeshSkin.h"
 #include "Joint.h"
+#include "Terrain.h"
 
 namespace gameplay
 {
 
-Scene::Scene() : _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), _bindAudioListenerToCamera(true), _debugBatch(NULL)
+// Global list of active scenes
+static std::vector<Scene*> __sceneList;
+
+Scene::Scene(const char* id)
+    : _id(id ? id : ""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), 
+    _lightColor(1,1,1), _lightDirection(0,-1,0), _bindAudioListenerToCamera(true), _debugBatch(NULL)
 {
+    __sceneList.push_back(this);
 }
 
 Scene::~Scene()
@@ -29,16 +36,35 @@ Scene::~Scene()
     // Remove all nodes from the scene
     removeAllNodes();
     SAFE_DELETE(_debugBatch);
+
+    // Remove the scene from global list
+    std::vector<Scene*>::iterator itr = std::find(__sceneList.begin(), __sceneList.end(), this);
+    if (itr != __sceneList.end())
+        __sceneList.erase(itr);
 }
 
-Scene* Scene::create()
+Scene* Scene::create(const char* id)
 {
-    return new Scene();
+    return new Scene(id);
 }
 
 Scene* Scene::load(const char* filePath)
 {
     return SceneLoader::load(filePath);
+}
+
+Scene* Scene::getScene(const char* id)
+{
+    if (id == NULL)
+        return __sceneList.size() ? __sceneList[0] : NULL;
+
+    for (size_t i = 0, count = __sceneList.size(); i < count; ++i)
+    {
+        if (__sceneList[i]->_id == id)
+            return __sceneList[i];
+    }
+
+    return NULL;
 }
 
 const char* Scene::getId() const
@@ -48,10 +74,7 @@ const char* Scene::getId() const
 
 void Scene::setId(const char* id)
 {
-    if (id)
-    {
-        _id = id;
-    }
+    _id = id ? id : "";
 }
 
 Node* Scene::findNode(const char* id, bool recursive, bool exactMatch) const
@@ -278,6 +301,26 @@ void Scene::setAmbientColor(float red, float green, float blue)
     _ambientColor.set(red, green, blue);
 }
 
+const Vector3& Scene::getLightColor() const
+{
+    return _lightColor;
+}
+
+void Scene::setLightColor(float red, float green, float blue)
+{
+    _lightColor.set(red, green, blue);
+}
+
+const Vector3& Scene::getLightDirection() const
+{
+    return _lightDirection;
+}
+
+void Scene::setLightDirection(const Vector3& direction)
+{
+    _lightDirection = direction;
+}
+
 static Material* createDebugMaterial()
 {
     // Vertex shader for drawing colored lines.
@@ -387,6 +430,9 @@ static void drawDebugLine(MeshBatch* batch, const Vector3& point1, const Vector3
 
 static void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix& matrix)
 {
+    if (box.isEmpty())
+        return;
+
     // Transform box into world space (since we only store local boxes on mesh)
     BoundingBox worldSpaceBox(box);
     worldSpaceBox.transform(matrix);
@@ -412,6 +458,9 @@ static void drawDebugBox(MeshBatch* batch, const BoundingBox& box, const Matrix&
 
 static void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
 {
+    if (sphere.isEmpty())
+        return;
+
     // Draw three rings for the sphere (one for the x, y and z axes)
     Vector3 pos1, pos2;
     float step = MATH_PI * 0.2f;
@@ -457,37 +506,54 @@ static void drawDebugSphere(MeshBatch* batch, const BoundingSphere& sphere)
     }
 }
 
-static void drawDebugNode(MeshBatch* batch, Node* node, unsigned int debugFlags)
+static void drawDebugNode(Scene* scene, MeshBatch* batch, Node* node, unsigned int debugFlags)
 {
     GP_ASSERT(node);
-    Model* model = node->getModel();
 
-    if ((debugFlags & Scene::DEBUG_BOXES) && model)
+    // If the node isn't visible, don't draw its bounds
+    Camera* camera = scene->getActiveCamera();
+    if (camera)
     {
-        GP_ASSERT(model->getMesh());
+        const BoundingSphere& sphere = node->getBoundingSphere();
+        if (!sphere.isEmpty() && !camera->getFrustum().intersects(sphere))
+            return;
+    }
 
-        MeshSkin* skin = model->getSkin();
-        if (skin && skin->getRootJoint() && skin->getRootJoint()->getParent())
+    if (debugFlags & Scene::DEBUG_BOXES)
+    {
+        if (node->getModel())
         {
-            // For skinned meshes that have a parent node to the skin's root joint,
-            // we need to transform the bounding volume by that parent node's transform
-            // as well to get the full skinned bounding volume.
-            drawDebugBox(batch, model->getMesh()->getBoundingBox(), node->getWorldMatrix() * skin->getRootJoint()->getParent()->getWorldMatrix());
+            Model* model = node->getModel();
+            GP_ASSERT(model->getMesh());
+
+            MeshSkin* skin = model->getSkin();
+            if (skin && skin->getRootJoint() && skin->getRootJoint()->getParent())
+            {
+                // For skinned meshes that have a parent node to the skin's root joint,
+                // we need to transform the bounding volume by that parent node's transform
+                // as well to get the full skinned bounding volume.
+                drawDebugBox(batch, model->getMesh()->getBoundingBox(), node->getWorldMatrix() * skin->getRootJoint()->getParent()->getWorldMatrix());
+            }
+            else
+            {
+                drawDebugBox(batch, model->getMesh()->getBoundingBox(), node->getWorldMatrix());
+            }
         }
-        else
+
+        if (node->getTerrain())
         {
-            drawDebugBox(batch, model->getMesh()->getBoundingBox(), node->getWorldMatrix());
+            drawDebugBox(batch, node->getTerrain()->getBoundingBox(), node->getWorldMatrix());
         }
     }
 
-    if ((debugFlags & Scene::DEBUG_SPHERES) && model)
+    if (debugFlags & Scene::DEBUG_SPHERES)
     {
         drawDebugSphere(batch, node->getBoundingSphere());
     }
 
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        drawDebugNode(batch, child, debugFlags);
+        drawDebugNode(scene, batch, child, debugFlags);
     }
 }
 
@@ -512,7 +578,7 @@ void Scene::drawDebug(unsigned int debugFlags)
 
     for (Node* node = _firstNode; node != NULL; node = node->_nextSibling)
     {
-        drawDebugNode(_debugBatch, node, debugFlags);
+        drawDebugNode(this, _debugBatch, node, debugFlags);
     }
 
     _debugBatch->finish();

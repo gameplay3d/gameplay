@@ -31,6 +31,7 @@
     <ClCompile Include="src\GPBDecoder.cpp" />
     <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Heightmap.cpp" />
+    <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="src\MeshPart.cpp" />
     <ClCompile Include="src\MeshSkin.cpp" />
     <ClCompile Include="src\Node.cpp" />
+    <ClCompile Include="src\NormalMapGenerator.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\Reference.cpp" />
@@ -76,6 +78,7 @@
     <ClInclude Include="src\GPBDecoder.h" />
     <ClInclude Include="src\Animations.h" />
     <ClInclude Include="src\Heightmap.h" />
+    <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MaterialParameter.h" />
@@ -85,6 +88,7 @@
     <ClInclude Include="src\MeshPart.h" />
     <ClInclude Include="src\MeshSkin.h" />
     <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\NormalMapGenerator.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\Reference.h" />

@@ -18,11 +18,34 @@ MaterialParameter::~MaterialParameter()
 
 void MaterialParameter::clearValue()
 {
+    // Release parameters
+    switch (_type)
+    {
+    case MaterialParameter::SAMPLER:
+        if (_value.samplerValue)
+            const_cast<Texture::Sampler*>(_value.samplerValue)->release();
+        break;
+    case MaterialParameter::SAMPLER_ARRAY:
+        if (_value.samplerArrayValue)
+        {
+            for (unsigned int i = 0; i < _count; ++i)
+            {
+                const_cast<Texture::Sampler*>(_value.samplerArrayValue[i])->release();
+            }
+        }
+        break;
+    default:
+        // Ignore all other cases.
+        break;
+    }
+
+    // Free dynamic data
     if (_dynamic)
     {
         switch (_type)
         {
         case MaterialParameter::FLOAT:
+        case MaterialParameter::FLOAT_ARRAY:
         case MaterialParameter::VECTOR2:
         case MaterialParameter::VECTOR3:
         case MaterialParameter::VECTOR4:
@@ -30,10 +53,14 @@ void MaterialParameter::clearValue()
             SAFE_DELETE_ARRAY(_value.floatPtrValue);
             break;
         case MaterialParameter::INT:
+        case MaterialParameter::INT_ARRAY:
             SAFE_DELETE_ARRAY(_value.intPtrValue);
             break;
         case MaterialParameter::METHOD:
             SAFE_RELEASE(_value.method);
+            break;
+        case MaterialParameter::SAMPLER_ARRAY:
+            SAFE_DELETE_ARRAY(_value.samplerArrayValue);
             break;
         default:
             // Ignore all other cases.
@@ -42,21 +69,6 @@ void MaterialParameter::clearValue()
 
         _dynamic = false;
         _count = 1;
-    }
-    else
-    {
-        switch (_type)
-        {
-        case MaterialParameter::SAMPLER:
-            if (_value.samplerValue)
-            {
-                const_cast<Texture::Sampler*>(_value.samplerValue)->release();
-            }
-            break;
-        default:
-            // Ignore all other cases.
-            break;
-        }
     }
 
     memset(&_value, 0, sizeof(_value));
@@ -68,10 +80,12 @@ const char* MaterialParameter::getName() const
     return _name.c_str();
 }
 
-Texture::Sampler* MaterialParameter::getSampler() const
+Texture::Sampler* MaterialParameter::getSampler(unsigned int index) const
 {
     if (_type == MaterialParameter::SAMPLER)
         return const_cast<Texture::Sampler*>(_value.samplerValue);
+    if (_type == MaterialParameter::SAMPLER_ARRAY && index < _count)
+        return const_cast<Texture::Sampler*>(_value.samplerArrayValue[index]);
     return NULL;
 }
 
@@ -97,7 +111,7 @@ void MaterialParameter::setValue(const float* values, unsigned int count)
 
     _value.floatPtrValue = const_cast<float*> (values);
     _count = count;
-    _type = MaterialParameter::FLOAT;
+    _type = MaterialParameter::FLOAT_ARRAY;
 }
 
 void MaterialParameter::setValue(const int* values, unsigned int count)
@@ -106,7 +120,7 @@ void MaterialParameter::setValue(const int* values, unsigned int count)
 
     _value.intPtrValue = const_cast<int*> (values);
     _count = count;
-    _type = MaterialParameter::INT;
+    _type = MaterialParameter::INT_ARRAY;
 }
 
 void MaterialParameter::setValue(const Vector2& value)
@@ -221,6 +235,22 @@ void MaterialParameter::setValue(const Texture::Sampler* sampler)
     }
 }
 
+void MaterialParameter::setValue(const Texture::Sampler** samplers, unsigned int count)
+{
+    clearValue();
+
+    if (samplers)
+    {
+        for (unsigned int i = 0; i < count; ++i)
+        {
+            const_cast<Texture::Sampler*>(samplers[i])->addRef();
+        }
+        _value.samplerArrayValue = samplers;
+        _count = count;
+        _type = MaterialParameter::SAMPLER_ARRAY;
+    }
+}
+
 Texture::Sampler* MaterialParameter::setValue(const char* texturePath, bool generateMipmaps)
 {
     if (texturePath)
@@ -259,24 +289,16 @@ void MaterialParameter::bind(Effect* effect)
     switch (_type)
     {
     case MaterialParameter::FLOAT:
-        if (_count == 1)
-        {
-            effect->setValue(_uniform, _value.floatValue);
-        }
-        else
-        {
-            effect->setValue(_uniform, _value.floatPtrValue, _count);
-        }
+        effect->setValue(_uniform, _value.floatValue);
+        break;
+    case MaterialParameter::FLOAT_ARRAY:
+        effect->setValue(_uniform, _value.floatPtrValue, _count);
         break;
     case MaterialParameter::INT:
-        if (_count == 1)
-        {
-            effect->setValue(_uniform, _value.intValue);
-        }
-        else
-        {
-            effect->setValue(_uniform, _value.intPtrValue, _count);
-        }
+        effect->setValue(_uniform, _value.intValue);
+        break;
+    case MaterialParameter::INT_ARRAY:
+        effect->setValue(_uniform, _value.intPtrValue, _count);
         break;
     case MaterialParameter::VECTOR2:
         effect->setValue(_uniform, reinterpret_cast<Vector2*>(_value.floatPtrValue), _count);
@@ -292,6 +314,9 @@ void MaterialParameter::bind(Effect* effect)
         break;
     case MaterialParameter::SAMPLER:
         effect->setValue(_uniform, _value.samplerValue);
+        break;
+    case MaterialParameter::SAMPLER_ARRAY:
+        effect->setValue(_uniform, _value.samplerArrayValue, _count);
         break;
     case MaterialParameter::METHOD:
         GP_ASSERT(_value.method);
@@ -405,10 +430,13 @@ unsigned int MaterialParameter::getAnimationPropertyComponentCount(int propertyI
                 case NONE:
                 case MATRIX:
                 case SAMPLER:
+                case SAMPLER_ARRAY:
                 case METHOD:
                     return 0;
                 case FLOAT:
+                case FLOAT_ARRAY:
                 case INT:
+                case INT_ARRAY:
                     return _count;
                 case VECTOR2:
                     return 2 * _count;
@@ -437,31 +465,23 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
             switch (_type)
             {
                 case FLOAT:
-                    if (_count == 1)
+                    value->setFloat(0, _value.floatValue);
+                    break;
+                case FLOAT_ARRAY:
+                    GP_ASSERT(_value.floatPtrValue);
+                    for (unsigned int i = 0; i < _count; i++)
                     {
-                        value->setFloat(0, _value.floatValue);
-                    }
-                    else
-                    {
-                        GP_ASSERT(_value.floatPtrValue);
-                        for (unsigned int i = 0; i < _count; i++)
-                        {
-                            value->setFloat(i, _value.floatPtrValue[i]);
-                        }
+                        value->setFloat(i, _value.floatPtrValue[i]);
                     }
                     break;
                 case INT:
-                    if (_count == 1)
+                    value->setFloat(0, _value.intValue);
+                    break;
+                case INT_ARRAY:
+                    GP_ASSERT(_value.intPtrValue);
+                    for (unsigned int i = 0; i < _count; i++)
                     {
-                        value->setFloat(0, _value.intValue);
-                    }
-                    else
-                    {
-                        GP_ASSERT(_value.intPtrValue);
-                        for (unsigned int i = 0; i < _count; i++)
-                        {
-                            value->setFloat(i, _value.intPtrValue[i]);
-                        }
+                        value->setFloat(i, _value.intPtrValue[i]);
                     }
                     break;
                 case VECTOR2:
@@ -477,6 +497,7 @@ void MaterialParameter::getAnimationPropertyValue(int propertyId, AnimationValue
                 case MATRIX:
                 case METHOD:
                 case SAMPLER:
+                case SAMPLER_ARRAY:
                     // Unsupported material parameter types for animation.
                     break;
                 default:
@@ -500,46 +521,33 @@ void MaterialParameter::setAnimationPropertyValue(int propertyId, AnimationValue
             switch (_type)
             {
                 case FLOAT:
-                {
-                    if (_count == 1)
-                        _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
-                    else
-                        applyAnimationValue(value, blendWeight, 1);
+                    _value.floatValue = Curve::lerp(blendWeight, _value.floatValue, value->getFloat(0));
                     break;
-                }
+                case FLOAT_ARRAY:
+                    applyAnimationValue(value, blendWeight, 1);
+                    break;
                 case INT:
-                {
-                    if (_count == 1)
-                    {
-                        _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
-                    }
-                    else
-                    {
-                        GP_ASSERT(_value.intPtrValue);
-                        for (unsigned int i = 0; i < _count; i++)
-                            _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
-                    }
+                    _value.intValue = Curve::lerp(blendWeight, _value.intValue, value->getFloat(0));
                     break;
-                }
+                case INT_ARRAY:
+                    GP_ASSERT(_value.intPtrValue);
+                    for (unsigned int i = 0; i < _count; i++)
+                        _value.intPtrValue[i] = Curve::lerp(blendWeight, _value.intPtrValue[i], value->getFloat(i));
+                    break;
                 case VECTOR2:
-                {
                     applyAnimationValue(value, blendWeight, 2);
                     break;
-                }
                 case VECTOR3:
-                {
                     applyAnimationValue(value, blendWeight, 3);
                     break;
-                }
                 case VECTOR4:
-                {
                     applyAnimationValue(value, blendWeight, 4);
                     break;
-                }
                 case NONE:
                 case MATRIX:
                 case METHOD:
                 case SAMPLER:
+                case SAMPLER_ARRAY:
                     // Unsupported material parameter types for animation.
                     break;
                 default:
@@ -575,8 +583,14 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
     case FLOAT:
         materialParameter->setValue(_value.floatValue);
         break;
+    case FLOAT_ARRAY:
+        materialParameter->setValue(_value.floatPtrValue, _count);
+        break;
     case INT:
         materialParameter->setValue(_value.intValue);
+        break;
+    case INT_ARRAY:
+        materialParameter->setValue(_value.intPtrValue, _count);
         break;
     case VECTOR2:
     {
@@ -636,6 +650,9 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
     }
     case SAMPLER:
         materialParameter->setValue(_value.samplerValue);
+        break;
+    case SAMPLER_ARRAY:
+        materialParameter->setValue(_value.samplerArrayValue, _count);
         break;
     case METHOD:
         materialParameter->_value.method = _value.method;

@@ -6,6 +6,11 @@ namespace gameplay
 
 // Lua bindings for PhysicsVehicleWheel.
 int lua_PhysicsVehicleWheel_addCollisionListener(lua_State* state);
+int lua_PhysicsVehicleWheel_asCharacter(lua_State* state);
+int lua_PhysicsVehicleWheel_asGhostObject(lua_State* state);
+int lua_PhysicsVehicleWheel_asRigidBody(lua_State* state);
+int lua_PhysicsVehicleWheel_asVehicle(lua_State* state);
+int lua_PhysicsVehicleWheel_asVehicleWheel(lua_State* state);
 int lua_PhysicsVehicleWheel_collidesWith(lua_State* state);
 int lua_PhysicsVehicleWheel_getCollisionShape(lua_State* state);
 int lua_PhysicsVehicleWheel_getFrictionBreakout(lua_State* state);
