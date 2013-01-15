@@ -13,7 +13,7 @@ vec3 getLitPixel()
     vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
     
     // "-lightDirection" because light direction points in opposite direction to to spot direction.
-    float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
+    float spotCurrentAngleCos = dot(spotLightDirection, -vertexToSpotLightDirection);
     
     // Intensity of spot depends on the spot light attenuation and the part of the cone vertexToSpotLightDirection points to (inner or outer).
     float spotLightAttenuation = clamp(v_spotLightAttenuation, 0.0, 1.0);
@@ -40,8 +40,8 @@ vec3 getLitPixel()
     vec3 spotLightDirection = normalize(u_spotLightDirection); 
     vec3 vertexToSpotLightDirection = normalize(v_vertexToSpotLightDirection);
 
-    // "-lightDirection" is used because light direction points in opposite direction to to spot direction.
-    float spotCurrentAngleCos = max(0.0, dot(spotLightDirection, -vertexToSpotLightDirection));
+    // "-lightDirection" is used because light direction points in opposite direction to spot direction.
+    float spotCurrentAngleCos = dot(spotLightDirection, -vertexToSpotLightDirection);
     
     // Intensity of spot depends on the spot light attenuation and the 
     // part of the cone vertexToSpotLightDirection points to (inner or outer).

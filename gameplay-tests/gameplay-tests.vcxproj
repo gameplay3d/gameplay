@@ -634,6 +634,7 @@
     <ClCompile Include="src\CreateSceneTest.cpp" />
     <ClCompile Include="src\FormsTest.cpp" />
     <ClCompile Include="src\GestureTest.cpp" />
+    <ClCompile Include="src\LightTest.cpp" />
     <ClCompile Include="src\TriangleTest.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
     <ClCompile Include="src\Grid.cpp" />
@@ -654,6 +655,7 @@
     <ClInclude Include="src\CreateSceneTest.h" />
     <ClInclude Include="src\FormsTest.h" />
     <ClInclude Include="src\GestureTest.h" />
+    <ClInclude Include="src\LightTest.h" />
     <ClInclude Include="src\TriangleTest.h" />
     <ClInclude Include="src\FirstPersonCamera.h" />
     <ClInclude Include="src\Grid.h" />
