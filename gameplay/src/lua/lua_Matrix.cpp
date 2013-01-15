@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "MathUtil.h"
 #include "Matrix.h"
+#include "Plane.h"
 #include "Quaternion.h"
 
 namespace gameplay
@@ -48,10 +49,12 @@ void luaRegister_Matrix()
     const luaL_Reg lua_statics[] = 
     {
         {"add", lua_Matrix_static_add},
+        {"createBillboard", lua_Matrix_static_createBillboard},
         {"createLookAt", lua_Matrix_static_createLookAt},
         {"createOrthographic", lua_Matrix_static_createOrthographic},
         {"createOrthographicOffCenter", lua_Matrix_static_createOrthographicOffCenter},
         {"createPerspective", lua_Matrix_static_createPerspective},
+        {"createReflection", lua_Matrix_static_createReflection},
         {"createRotation", lua_Matrix_static_createRotation},
         {"createRotationX", lua_Matrix_static_createRotationX},
         {"createRotationY", lua_Matrix_static_createRotationY},
@@ -1907,6 +1910,117 @@ int lua_Matrix_static_add(lua_State* state)
     return 0;
 }
 
+int lua_Matrix_static_createBillboard(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Matrix> param4 = ScriptUtil::getObjectPointer<Matrix>(4, "Matrix", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    Matrix::createBillboard(*param1, *param2, *param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Matrix_static_createBillboard - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 5:
+        {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param4Valid);
+                    if (!param4Valid)
+                        break;
+
+                    // Get parameter 5 off the stack.
+                    bool param5Valid;
+                    ScriptUtil::LuaArray<Matrix> param5 = ScriptUtil::getObjectPointer<Matrix>(5, "Matrix", false, &param5Valid);
+                    if (!param5Valid)
+                        break;
+
+                    Matrix::createBillboard(*param1, *param2, *param3, *param4, param5);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Matrix_static_createBillboard - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4 or 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Matrix_static_createLookAt(lua_State* state)
 {
     // Get the number of parameters.
@@ -2195,6 +2309,56 @@ int lua_Matrix_static_createPerspective(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Matrix_static_createReflection(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(1, "Plane", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Plane'.");
+                    lua_error(state);
+                }
+
+                // Get parameter 2 off the stack.
+                bool param2Valid;
+                ScriptUtil::LuaArray<Matrix> param2 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Matrix'.");
+                    lua_error(state);
+                }
+
+                Matrix::createReflection(*param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Matrix_static_createReflection - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
