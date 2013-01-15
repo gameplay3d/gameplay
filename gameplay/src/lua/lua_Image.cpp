@@ -295,7 +295,7 @@ int lua_Image_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Image::create(param1);
                 if (returnPtr)

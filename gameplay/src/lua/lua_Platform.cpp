@@ -583,7 +583,7 @@ int lua_Platform_static_launchURL(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 bool result = Platform::launchURL(param1);
 
