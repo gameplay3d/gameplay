@@ -2,9 +2,9 @@
 #include "ScriptController.h"
 #include "lua_Gamepad.h"
 #include "Base.h"
+#include "Button.h"
 #include "Game.h"
 #include "Gamepad.h"
-#include "GamepadButton.h"
 #include "lua_GamepadButtonMapping.h"
 
 namespace gameplay

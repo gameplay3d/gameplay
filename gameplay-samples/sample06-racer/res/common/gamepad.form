@@ -32,7 +32,7 @@ form VIRTUAL GAMEPAD
             alignment = ALIGN_VCENTER_HCENTER
             consumeEvents = false
             
-            gamepadButton accelerate
+            button accelerate
             {
                 mapping = BUTTON_A
                 style = buttonAStyle
@@ -40,7 +40,7 @@ form VIRTUAL GAMEPAD
                 alignment = ALIGN_BOTTOM_LEFT
             }
 
-            gamepadButton brake
+            button brake
             {
                 mapping = BUTTON_B
                 style = buttonBStyle

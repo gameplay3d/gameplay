@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "Control.h"
 #include "Game.h"
+#include "Gamepad.h"
 #include "Label.h"
 #include "Node.h"
 #include "Ref.h"

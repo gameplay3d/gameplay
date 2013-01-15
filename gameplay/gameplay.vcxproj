@@ -85,7 +85,6 @@
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gamepad.cpp" />
-    <ClCompile Include="src\GamepadButton.cpp" />
     <ClCompile Include="src\gameplay-main-android.cpp" />
     <ClCompile Include="src\gameplay-main-blackberry.cpp" />
     <ClCompile Include="src\gameplay-main-linux.cpp" />
@@ -151,7 +150,6 @@
     <ClCompile Include="src\lua\lua_Game.cpp" />
     <ClCompile Include="src\lua\lua_GameClearFlags.cpp" />
     <ClCompile Include="src\lua\lua_Gamepad.cpp" />
-    <ClCompile Include="src\lua\lua_GamepadButton.cpp" />
     <ClCompile Include="src\lua\lua_GamepadButtonMapping.cpp" />
     <ClCompile Include="src\lua\lua_GamepadGamepadEvent.cpp" />
     <ClCompile Include="src\lua\lua_GameState.cpp" />
@@ -364,7 +362,6 @@
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Gamepad.h" />
-    <ClInclude Include="src\GamepadButton.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Gesture.h" />
     <ClInclude Include="src\HeightField.h" />
@@ -429,7 +426,6 @@
     <ClInclude Include="src\lua\lua_Game.h" />
     <ClInclude Include="src\lua\lua_GameClearFlags.h" />
     <ClInclude Include="src\lua\lua_Gamepad.h" />
-    <ClInclude Include="src\lua\lua_GamepadButton.h" />
     <ClInclude Include="src\lua\lua_GamepadButtonMapping.h" />
     <ClInclude Include="src\lua\lua_GamepadGamepadEvent.h" />
     <ClInclude Include="src\lua\lua_GameState.h" />
