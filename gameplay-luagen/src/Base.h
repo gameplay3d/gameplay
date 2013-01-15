@@ -2,6 +2,7 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <map>
 #include <set>
 #include <string>
@@ -41,6 +42,10 @@ using namespace std;
     }
 
 extern void printError(const char* format, ...);
+
+extern void writeFile(const string& path, const string& text);
+
+extern std::vector<string> generatedFiles;
 
 // Current function macro.
 #ifdef WIN32

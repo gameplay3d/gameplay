@@ -8,6 +8,11 @@ namespace gameplay
 {
 
 class Node;
+class PhysicsRigidBody;
+class PhysicsCharacter;
+class PhysicsGhostObject;
+class PhysicsVehicle;
+class PhysicsVehicleWheel;
 
 /**
  * Base class for all gameplay physics objects that support collision events.
@@ -238,6 +243,50 @@ public:
      */
     bool collidesWith(PhysicsCollisionObject* object) const;
 
+    /**
+     * Returns this collision object as a physics rigid body.
+     *
+     * If this collision object is not of type RIGID_BODY, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsRigidBody.
+     */
+    PhysicsRigidBody* asRigidBody();
+
+    /**
+     * Returns this collision object as a physics character.
+     *
+     * If this collision object is not of type CHARACTER, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsCharacter.
+     */
+    PhysicsCharacter* asCharacter();
+
+    /**
+     * Returns this collision object as a physics ghost object.
+     *
+     * If this collision object is not of type GHOST_OBJECT, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsGhostObject.
+     */
+    PhysicsGhostObject* asGhostObject();
+
+    /**
+     * Returns this collision object as a physics vehicle.
+     *
+     * If this collision object is not of type VEHICLE, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsVehicle.
+     */
+    PhysicsVehicle* asVehicle();
+
+    /**
+     * Returns this collision object as a physics vehicle wheel.
+     *
+     * If this collision object is not of type VEHICLE_WHEEL, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsVehicleWheel.
+     */
+    PhysicsVehicleWheel* asVehicleWheel();
 
 protected:
     /**
@@ -270,16 +319,17 @@ protected:
     class PhysicsMotionState : public btMotionState
     {
         friend class PhysicsConstraint;
-
+        
     public:
 
         /**
          * Creates a physics motion state for a rigid body.
          * 
-         * @param node The node that owns the rigid body that the motion state is being created for.
+         * @param node The node that contains the transformation to be associated with the motion state.
+         * @param collisionObject The collision object that owns the motion state.
          * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
          */
-        PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset = NULL);
+        PhysicsMotionState(Node* node, PhysicsCollisionObject* collisionObject, const Vector3* centerOfMassOffset = NULL);
 
         /**
          * Destructor.
@@ -301,9 +351,15 @@ protected:
          */
         void updateTransformFromNode() const;
 
+        /**
+         * Sets the center of mass offset for the associated collision shape.
+         */
+        void setCenterOfMassOffset(const Vector3& centerOfMassOffset);
+
     private:
 
         Node* _node;
+        PhysicsCollisionObject* _collisionObject;
         btTransform _centerOfMassOffset;
         mutable btTransform _worldTransform;
     };

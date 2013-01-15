@@ -46,6 +46,74 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float aspectRatio, 
     return new Camera(zoomX, zoomY, aspectRatio, nearPlane, farPlane);
 }
 
+Camera* Camera::create(Properties* properties)
+{
+    GP_ASSERT(properties);
+
+    // Read camera type
+    std::string typeStr;
+    if (properties->exists("type"))
+        typeStr = properties->getString("type");
+    Camera::Type type;
+    if (typeStr == "PERSPECTIVE")
+    {
+        type = Camera::PERSPECTIVE;
+    }
+    else if (typeStr == "ORTHOGRAPHIC")
+    {
+        type = Camera::ORTHOGRAPHIC;
+    }
+    else
+    {
+        GP_ERROR("Invalid 'type' parameter for camera definition.");
+        return NULL;
+    }
+
+    // Read common parameters
+    float aspectRatio, nearPlane, farPlane;
+    if (properties->exists("aspectRatio"))
+    {
+        aspectRatio = properties->getFloat("aspectRatio");
+    }
+    else
+    {
+        // Use default aspect ratio
+        aspectRatio = (float)Game::getInstance()->getWidth() / Game::getInstance()->getHeight();
+    }
+
+    if (properties->exists("nearPlane"))
+        nearPlane = properties->getFloat("nearPlane");
+    else
+        nearPlane = 0.2f; // use some reasonable default value
+
+    if (properties->exists("farPlane"))
+        farPlane = properties->getFloat("farPlane");
+    else
+        farPlane = 100; // use some reasonable default value
+
+    Camera* camera = NULL;
+
+    switch (type)
+    {
+    case Camera::PERSPECTIVE:
+        // If field of view is not specified, use a default of 60 degrees
+        camera = createPerspective(
+            properties->exists("fieldOfView") ? properties->getFloat("fieldOfView") : 60.0f,
+            aspectRatio, nearPlane, farPlane);
+        break;
+
+    case Camera::ORTHOGRAPHIC:
+        // If zoomX and zoomY are not specified, use screen width/height
+        camera = createOrthographic(
+            properties->exists("zoomX") ? properties->getFloat("zoomX") : Game::getInstance()->getWidth(),
+            properties->exists("zoomY") ? properties->getFloat("zoomY") : Game::getInstance()->getHeight(),
+            aspectRatio, nearPlane, farPlane);
+        break;
+    }
+
+    return camera;
+}
+
 Camera::Type Camera::getCameraType() const
 {
     return _type;

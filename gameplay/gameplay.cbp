@@ -121,11 +121,13 @@
 		<Unit filename="src/Gamepad.cpp" />
 		<Unit filename="src/Gamepad.h" />
 		<Unit filename="src/gameplay.h" />
-        <Unit filename="src/gameplay-main-android.cpp" />
+		<Unit filename="src/gameplay-main-android.cpp" />
 		<Unit filename="src/gameplay-main-blackberry.cpp" />
 		<Unit filename="src/gameplay-main-linux.cpp" />
 		<Unit filename="src/gameplay-main-windows.cpp" />
 		<Unit filename="src/Gesture.h" />
+		<Unit filename="src/HeightField.cpp" />
+		<Unit filename="src/HeightField.h" />
 		<Unit filename="src/Image.cpp" />
 		<Unit filename="src/Image.h" />
 		<Unit filename="src/Joint.cpp" />
@@ -233,6 +235,10 @@
 		<Unit filename="src/SpriteBatch.h" />
 		<Unit filename="src/Technique.cpp" />
 		<Unit filename="src/Technique.h" />
+		<Unit filename="src/Terrain.cpp" />
+		<Unit filename="src/Terrain.h" />
+		<Unit filename="src/TerrainPatch.cpp" />
+		<Unit filename="src/TerrainPatch.h" />
 		<Unit filename="src/TextBox.cpp" />
 		<Unit filename="src/TextBox.h" />
 		<Unit filename="src/Texture.cpp" />
@@ -373,6 +379,8 @@
 		<Unit filename="src/lua/lua_GestureGestureEvent.h" />
 		<Unit filename="src/lua/lua_Global.cpp" />
 		<Unit filename="src/lua/lua_Global.h" />
+		<Unit filename="src/lua/lua_HeightField.cpp" />
+		<Unit filename="src/lua/lua_HeightField.h" />
 		<Unit filename="src/lua/lua_Image.cpp" />
 		<Unit filename="src/lua/lua_Image.h" />
 		<Unit filename="src/lua/lua_ImageFormat.cpp" />
@@ -513,6 +521,8 @@
 		<Unit filename="src/lua/lua_RenderStateAutoBinding.h" />
 		<Unit filename="src/lua/lua_RenderStateBlend.cpp" />
 		<Unit filename="src/lua/lua_RenderStateBlend.h" />
+		<Unit filename="src/lua/lua_RenderStateDepthFunction.cpp" />
+		<Unit filename="src/lua/lua_RenderStateDepthFunction.h" />
 		<Unit filename="src/lua/lua_RenderStateStateBlock.cpp" />
 		<Unit filename="src/lua/lua_RenderStateStateBlock.h" />
 		<Unit filename="src/lua/lua_RenderTarget.cpp" />
@@ -533,6 +543,10 @@
 		<Unit filename="src/lua/lua_SpriteBatch.h" />
 		<Unit filename="src/lua/lua_Technique.cpp" />
 		<Unit filename="src/lua/lua_Technique.h" />
+		<Unit filename="src/lua/lua_Terrain.cpp" />
+		<Unit filename="src/lua/lua_Terrain.h" />
+		<Unit filename="src/lua/lua_TerrainFlags.cpp" />
+		<Unit filename="src/lua/lua_TerrainFlags.h" />
 		<Unit filename="src/lua/lua_TextBox.cpp" />
 		<Unit filename="src/lua/lua_TextBox.h" />
 		<Unit filename="src/lua/lua_Texture.cpp" />
