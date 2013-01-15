@@ -59,13 +59,23 @@ static float normalizeXInputJoystickAxis(int axisValue, int deadZone)
     else
     {
         int value = axisValue;
+        int maxVal;
         if (value < 0)
+        {
             value = -1;
+            maxVal = 32768;
+        }
         else if (value > 0)
+        {
             value = 1;
+            maxVal = 32767;
+        }
         else
-            value = 0;
-        return value * (absAxisValue - deadZone) / (float)(32768 - deadZone);
+        {
+            return 0;
+        }
+
+        return value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
     }
 }
 #endif
@@ -1170,7 +1180,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         {
             if (buttons & 1)
             {
-                gamepad->_buttons |= *mapping;
+                gamepad->_buttons |= (1 << *mapping);
             }
         }
 

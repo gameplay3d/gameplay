@@ -90,12 +90,18 @@ protected:
      */
     const char* getType() const;
 
+    const unsigned int getDataBinding() const;
+
+    void setDataBinding(unsigned int dataBinding);
+
 private:
 
     /**
      * Constructor.
      */
     Button(const Button& copy);
+
+    unsigned int _dataBinding;
 
 };
 

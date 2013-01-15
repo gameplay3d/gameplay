@@ -31,7 +31,7 @@ form VIRTUAL GAMEPAD
             alignment = ALIGN_VCENTER_HCENTER
             consumeEvents = false
             
-            gamepadButton AButton
+            button A
             {
                 mapping = BUTTON_A
                 style = buttonAStyle
@@ -39,7 +39,7 @@ form VIRTUAL GAMEPAD
                 alignment = ALIGN_BOTTOM_LEFT
             }
 
-            gamepadButton BButton
+            button B
             {
                 mapping = BUTTON_B
                 style = buttonBStyle

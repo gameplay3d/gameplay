@@ -182,17 +182,15 @@ void Game::shutdown()
         Platform::signalShutdown();
         finalize();
 
-        std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
-        std::vector<Gamepad*>::iterator it = gamepads->begin();
-        do
-        {
-            Gamepad* g = *it;
-            if (g)
-            {
-                SAFE_DELETE(g);
-                it = gamepads->erase(it);
-            }
-        } while (it != gamepads->end());
+        std::vector<Gamepad*>* gamepads = Gamepad::getGamepads(); 
+        if (gamepads) 
+        { 
+            for (size_t i = 0, count = gamepads->size(); i < count; ++i) 
+            { 
+                SAFE_DELETE((*gamepads)[i]); 
+            } 
+            gamepads->clear(); 
+        }
 
         _scriptController->finalizeGame();
 
