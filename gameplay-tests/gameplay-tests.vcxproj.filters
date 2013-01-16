@@ -67,6 +67,9 @@
     <ClInclude Include="src\FormsTest.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\LightTest.h">
+	  <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\PostProcessTest.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="src\FormsTest.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightTest.cpp">
+	  <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PostProcessTest.cpp">
       <Filter>src</Filter>

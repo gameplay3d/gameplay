@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Post Process", PostProcessTest, 12);
+    ADD_TEST("Graphics", "Post Process", PostProcessTest, 13);
 #endif
 
 #define FRAMEBUFFER_WIDTH 1024

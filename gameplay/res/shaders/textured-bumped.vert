@@ -14,12 +14,17 @@ attribute vec4 a_blendIndices;								// Vertex blend index int u_matrixPalette	
 
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space
-uniform mat4 u_inverseTransposeWorldMatrix;				    // Matrix to transform a normal to view space
+uniform mat4 u_inverseTransposeWorldViewMatrix;				// Matrix to transform a normal to view space
+
+#if defined(SPECULAR) || defined(SPOT_LIGHT) || defined(POINT_LIGHT)
+uniform mat4 u_worldViewMatrix;								// Matrix to tranform a position to view space
+uniform mat4 u_worldMatrix;								    // Matrix to tranform a position to world space
+#endif
+
 #if defined(SKINNING)
 uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices
 #endif
 #if defined(SPECULAR)
-uniform mat4 u_worldViewMatrix;								// Matrix to tranform a position to view space
 uniform vec3 u_cameraPosition;                 				// Position of the camera in view space
 #endif
 #if defined(TEXTURE_REPEAT)
@@ -80,7 +85,7 @@ void main()
     gl_Position = u_worldViewProjectionMatrix * position;
 
     // Transform the normal, tangent and binormals to view space.
-    mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldMatrix[0].xyz, u_inverseTransposeWorldMatrix[1].xyz, u_inverseTransposeWorldMatrix[2].xyz);
+	mat3 inverseTransposeWorldViewMatrix = mat3(u_inverseTransposeWorldViewMatrix[0].xyz, u_inverseTransposeWorldViewMatrix[1].xyz, u_inverseTransposeWorldViewMatrix[2].xyz);
     vec3 normalVector = normalize(inverseTransposeWorldViewMatrix * normal);
     
     // Create a transform to convert a vector to tangent space.
