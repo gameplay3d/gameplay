@@ -3,7 +3,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Billboards", BillboardTest, 11);
+    ADD_TEST("Graphics", "Billboards", BillboardTest, 12);
 #endif
 
 static const unsigned int MOVE_FORWARD = 1;

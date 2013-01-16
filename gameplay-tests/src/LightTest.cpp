@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Light", LightTest, 13);
+    ADD_TEST("Graphics", "Light", LightTest, 11);
 #endif
 
 static const float GROUND_WIDTH = 16.0f;
