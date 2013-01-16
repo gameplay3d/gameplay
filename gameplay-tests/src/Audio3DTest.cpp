@@ -324,10 +324,10 @@ void Audio3DTest::drawDebugText(int x, int y)
     _font->start();
     static const int V_SPACE = 16;
     AudioListener* audioListener = AudioListener::getInstance();
-    drawVector3("Listener Position", audioListener->getPosition(), x, y);
-    drawVector3("Listener Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
-    drawVector3("Listener Up", audioListener->getOrientationUp(), x, y+=V_SPACE);
-    drawVector3("Listener Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
+    drawVector3("Position", audioListener->getPosition(), x, y);
+    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
+    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=V_SPACE);
+    drawVector3("Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
     _font->finish();
 }
 

@@ -25,15 +25,6 @@ FormsTest::FormsTest()
     _formFiles.assign(formFiles, formFiles + __formsCount);
 }
 
-FormsTest::~FormsTest()
-{
-}
-
-FormsTest* FormsTest::create()
-{
-    return new FormsTest();
-}
-
 void FormsTest::finalize()
 {
     SAFE_RELEASE(_scene);
