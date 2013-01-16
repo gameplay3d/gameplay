@@ -276,7 +276,6 @@ void Control::setOpacity(float opacity, unsigned char states)
     {
         overlays[i]->setOpacity(opacity);
     }
-        
     _dirty = true;
 }
 
@@ -285,6 +284,25 @@ float Control::getOpacity(State state) const
     Theme::Style::Overlay* overlay = getOverlay(state);
     GP_ASSERT(overlay);
     return overlay->getOpacity();
+}
+
+void Control::setEnabled(bool enabled)
+{
+	if (enabled && _state == Control::DISABLED)
+	{
+		_state = Control::NORMAL;
+        _dirty = true;
+	}
+	else if (!enabled && _state != Control::DISABLED)
+	{
+		_state = Control::DISABLED;
+		_dirty = true;
+	}
+}
+
+bool Control::isEnabled() const
+{
+    return _state != DISABLED;
 }
 
 void Control::setBorder(float top, float bottom, float left, float right, unsigned char states)
@@ -318,7 +336,6 @@ void Control::setSkinRegion(const Rectangle& region, unsigned char states)
     {
         overlays[i]->setSkinRegion(region, _style->_tw, _style->_th);
     }
-
     _dirty = true;
 }
 
@@ -617,25 +634,6 @@ void Control::setState(State state)
 Control::State Control::getState() const
 {
     return _state;
-}
-
-void Control::setEnabled(bool enabled)
-{
-	if (enabled && _state == Control::DISABLED)
-	{
-		_state = Control::NORMAL;
-		_dirty = true;
-	}
-	else if (!enabled && _state != Control::DISABLED)
-	{
-		_state = Control::DISABLED;
-		_dirty = true;
-	}
-}
-
-bool Control::isEnabled() const
-{
-    return _state != DISABLED;
 }
 
 Theme::Style::OverlayType Control::getOverlayType() const

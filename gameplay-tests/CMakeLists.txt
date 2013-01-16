@@ -58,9 +58,13 @@ set(GAME_SRC
     src/TestsGame.h
     src/Audio3DTest.cpp
     src/Audio3DTest.h
+    src/BillboardTest.cpp
+    src/BillboardTest.h
     src/CreateSceneTest.cpp
     src/CreateSceneTest.h	
     src/CreateSceneTest.h
+    src/GamepadTest.cpp
+    src/GamepadTest.h
     src/GestureTest.cpp
     src/GestureTest.h
     src/InputTest.cpp
@@ -71,8 +75,10 @@ set(GAME_SRC
     src/MeshBatchTest.h
     src/MeshPrimitiveTest.cpp
     src/MeshPrimitiveTest.h
-    src/PhysicsSceneTest.cpp
-    src/PhysicsSceneTest.h
+    src/PhysicsCollisionObjectTest.cpp
+    src/PhysicsCollisionObjectTest.h
+    src/PostProcessTest.cpp
+    src/PostProcessTest.h
     src/SpriteBatchTest.cpp
     src/SpriteBatchTest.h
     src/TextTest.cpp

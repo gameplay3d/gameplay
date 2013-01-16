@@ -8,86 +8,7 @@
 static const float GROUND_WIDTH = 16.0f;
 static const float GROUND_HEIGHT = 16.0f;
 static const float GROUND_REPEAT_TEXTURE = 16.0f;
-
-const float INPUT_SENSITIVITY = 0.05f;
-
-void setTextureUnlitMaterial(Model* model, const char* texturePath, bool mipmap = true)
-{
-    Material* material = model->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
-    material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
-
-    // Load the texture from file.
-    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue(texturePath, mipmap);
-    if (mipmap)
-	{
-        sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
-	}
-	else
-	{
-        sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
-	}
-	sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
-    material->getStateBlock()->setCullFace(true);
-    material->getStateBlock()->setDepthTest(true);
-    material->getStateBlock()->setDepthWrite(true);
-	material->getStateBlock()->setBlend(true);
-	material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-	material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-}
-
-void LightTest::initDirectionalTechniqueCommonParams(const char* technique)
-{
-    _lighting->getTechnique(technique)->getParameter("u_lightDirection")->bindValue(_directionalLightNode, &Node::getForwardVectorWorld); 
-	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
-	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
-}
-
-void LightTest::initSpotTechniqueCommonParams(const char* technique)
-{
-	_lighting->getTechnique(technique)->getParameter("u_spotLightInnerAngleCos")->setValue(_spotLightNode->getLight()->getInnerAngleCos());
-	_lighting->getTechnique(technique)->getParameter("u_spotLightOuterAngleCos")->setValue(_spotLightNode->getLight()->getOuterAngleCos());
-	_lighting->getTechnique(technique)->getParameter("u_spotLightRangeInverse")->setValue(_spotLightNode->getLight()->getRangeInverse());
-	_lighting->getTechnique(technique)->getParameter("u_spotLightDirection")->bindValue(_spotLightNode, &Node::getForwardVectorView);
-	_lighting->getTechnique(technique)->getParameter("u_spotLightPosition")->bindValue(_spotLightNode, &Node::getTranslationView);
-	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
-	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
-}
-
-void LightTest::initPointTechniqueCommonParams(const char* technique)
-{
-	_lighting->getTechnique(technique)->getParameter("u_pointLightPosition")->bindValue(_pointLightNode, &Node::getTranslationView);
-	_lighting->getTechnique(technique)->getParameter("u_pointLightRangeInverse")->setValue(_pointLightNode->getLight()->getRangeInverse());
-	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
-	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
-}
-
-void LightTest::setColorValue(const Vector3& value)
-{
-	_lighting->getTechnique(("directional"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("directionalSpecular"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("directionalBumped"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("directionalSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
-
-	_lighting->getTechnique(("spot"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("spotSpecular"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("spotBumped"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("spotSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
-
-	_lighting->getTechnique(("point"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("pointSpecular"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("pointBumped"))->getParameter("u_lightColor")->setValue(value);
-	_lighting->getTechnique(("pointSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
-}
-
-void LightTest::setSpecularValue(float value)
-{
-	_lighting->getTechnique("directionalSpecular")->getParameter("u_specularExponent")->setValue(value);
-	_lighting->getTechnique("directionalSpecularBumped")->getParameter("u_specularExponent")->setValue(value);
-	_lighting->getTechnique("spotSpecular")->getParameter("u_specularExponent")->setValue(value);
-	_lighting->getTechnique("spotSpecularBumped")->getParameter("u_specularExponent")->setValue(value);
-	_lighting->getTechnique("pointSpecular")->getParameter("u_specularExponent")->setValue(value);
-	_lighting->getTechnique("pointSpecularBumped")->getParameter("u_specularExponent")->setValue(value);
-}
+static const float INPUT_SENSITIVITY = 0.05f;
 
 LightTest::LightTest()
     : _font(NULL), 
@@ -97,6 +18,7 @@ LightTest::LightTest()
 	  _directionalLightNode(NULL), 
 	  _pointLightNode(NULL), 
 	  _spotLightNode(NULL),
+      _properties(NULL),
 	  _model(NULL)
 {
 }
@@ -110,53 +32,45 @@ void LightTest::initialize()
 	Bundle* bundle = Bundle::create("res/common/lightBrickWall.gpb");
 	_scene = bundle->loadScene();
 
-	// Create a directional light (white)
+	// Get the wall model node
+	_modelNode = _scene->findNode("wall"); 
+	_model = _modelNode->getModel();
+
+	// Create a directional light and a reference icon for the light
 	Light* directionalLight = Light::createDirectional(Vector3::one());
 	_directionalLightNode = Node::create("directionalLight");
 	_directionalLightNode->setLight(directionalLight);
-
-	// Add a quad with a corresponding icon
 	Mesh* directionalLightQuadMesh = Mesh::createQuad(-0.3f, -0.3f, 0.6f, 0.6f);
 	_directionalLightQuadModel = Model::create(directionalLightQuadMesh);
-	setTextureUnlitMaterial(_directionalLightQuadModel, "res/png/directionalLightIcon.png"); 
+	setUnlitMaterialTexture(_directionalLightQuadModel, "res/png/light-directional.png"); 
 	_directionalLightNode->setModel(_directionalLightQuadModel);
-	_directionalLightNode->setTranslation(0.0f, 0.0f, 7.0f);
 	_scene->addNode(_directionalLightNode);
 
-	// Create a spotlight
+	// Create a spotlight and create a reference icon for the light
 	Light* spotLight = Light::createSpot(Vector3::one(), 100.0f, MATH_DEG_TO_RAD(30.0f), MATH_DEG_TO_RAD(40.0f));
 	_spotLightNode = Node::create("spotLight");
 	_spotLightNode->setLight(spotLight);
-
-	// Add a quad with a corresponding icon
 	Mesh* spotLightQuadMesh = Mesh::createQuad(-0.3f, -0.3f, 0.6f, 0.6f);
 	_spotLightQuadModel = Model::create(spotLightQuadMesh);
-	setTextureUnlitMaterial(_spotLightQuadModel, "res/png/spotLightIcon.png");
+	setUnlitMaterialTexture(_spotLightQuadModel, "res/png/light-spot.png");
 	_spotLightNode->setModel(_spotLightQuadModel);
 	_spotLightNode->setTranslation(0.0f, 0.0f, 8.0f);
 	_scene->addNode(_spotLightNode);
 
-	// Create a point light
+	// Create a point light and create a reference icon for the light
 	Light* pointLight = Light::createPoint(Vector3::one(), 16.0f);
 	_pointLightNode = Node::create("pointLight");
 	_pointLightNode->setLight(pointLight);
-
-    // Add a quad with a corresponding icon
 	Mesh* pointLightQuadMesh = Mesh::createQuad(-0.3f, -0.3f, 0.6f, 0.6f);
 	_pointLightQuadModel = Model::create(pointLightQuadMesh);
-	setTextureUnlitMaterial(_pointLightQuadModel, "res/png/pointLightIcon.png");
+	setUnlitMaterialTexture(_pointLightQuadModel, "res/png/light-point.png");
 	_pointLightNode->setModel(_pointLightQuadModel);
-
 	_pointLightNode->setTranslation(0.0f, 0.0f, 8.0f);
-
 	_scene->addNode(_pointLightNode);
 
-	// Just a basic bricked wall for this test
-	_modelNode = _scene->findNode("wall"); 
-	_model = _modelNode->getModel();
-
+    // Create and initialize ui form
 	_form = Form::create("res/common/light.form");
-
+    _properties = static_cast<Container*>(_form->getControl("lightProperties"));
 	_redSlider = static_cast<Slider*>(_form->getControl("redSlider"));
 	_redSlider->addListener(this, Control::Listener::VALUE_CHANGED);
     _greenSlider = static_cast<Slider*>(_form->getControl("blueSlider"));
@@ -165,7 +79,6 @@ void LightTest::initialize()
 	_blueSlider->addListener(this, Control::Listener::VALUE_CHANGED);
 	_specularSlider = static_cast<Slider*>(_form->getControl("specularSlider"));
 	_specularSlider->addListener(this, Control::Listener::VALUE_CHANGED);
-
 	_noLight = static_cast<RadioButton*>(_form->getControl("noLighting"));
 	_noLight->addListener(this, Control::Listener::VALUE_CHANGED);
 	_directional = static_cast<RadioButton*>(_form->getControl("directional"));
@@ -178,31 +91,27 @@ void LightTest::initialize()
 	_addSpecular->addListener(this, Control::Listener::VALUE_CHANGED);
 	_addBumped = static_cast<CheckBox*>(_form->getControl("bumpedCheckBox"));
 	_addBumped->addListener(this, Control::Listener::VALUE_CHANGED);
-
-	//Disable additional features untill lighting is enabled
-	_noLight->setSelected(true);
-	_addSpecular->setEnabled(false);
-	_addBumped->setEnabled(false);
-
+    // TODO: Broken
+    //_properties->setEnabled(false);
+    //_properties->setOpacity(0.25f);
+    _directional->setSelected(true);
 	_form->setConsumeInputEvents(false);
 	
+    // Create and initialize lights and materials for lights
 	_lighting = Material::create("res/common/light.material");
 	_model->setMaterial(_lighting);
-
-	initDirectionalTechniqueCommonParams( "directional");
-	initDirectionalTechniqueCommonParams("directionalSpecular");
-	initDirectionalTechniqueCommonParams("directionalBumped");
-	initDirectionalTechniqueCommonParams("directionalSpecularBumped");
-
-	initSpotTechniqueCommonParams("spot");
-	initSpotTechniqueCommonParams("spotSpecular");
-	initSpotTechniqueCommonParams("spotBumped");
-	initSpotTechniqueCommonParams("spotSpecularBumped");
-
-	initPointTechniqueCommonParams("point");
-	initPointTechniqueCommonParams("pointSpecular");
-	initPointTechniqueCommonParams("pointBumped");
-	initPointTechniqueCommonParams("pointSpecularBumped");
+	initializeDirectionalTechnique("directional");
+	initializeDirectionalTechnique("directionalSpecular");
+	initializeDirectionalTechnique("directionalBumped");
+	initializeDirectionalTechnique("directionalSpecularBumped");
+	initializeSpotTechnique("spot");
+	initializeSpotTechnique("spotSpecular");
+	initializeSpotTechnique("spotBumped");
+	initializeSpotTechnique("spotSpecularBumped");
+	initializePointTechnique("point");
+	initializePointTechnique("pointSpecular");
+	initializePointTechnique("pointBumped");
+	initializePointTechnique("pointSpecularBumped");
 
 	setSpecularValue(_specularSlider->getValue());
 
@@ -279,6 +188,7 @@ void LightTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 			}
 		}
 		break;
+
 	case Touch::TOUCH_RELEASE:
 		{
 			_touched = false;
@@ -287,6 +197,7 @@ void LightTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 			_usedForMoving = NULL;
 		}
 		break;
+
 	case Touch::TOUCH_MOVE:
 		{
 			int deltaX = x - _touchX;
@@ -309,6 +220,7 @@ void LightTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
 			_modelNode->rotate(pitch, MATH_DEG_TO_RAD(deltaY * 0.5f));
 		}
 		break;
+
 	default:
 		break;
 	};
@@ -338,51 +250,38 @@ void LightTest::controlEvent(Control* control, EventType evt)
 	switch(evt)
     {
 	case Listener::VALUE_CHANGED:
-		if ((control == _redSlider) ||
-			(control == _greenSlider) ||
-			(control == _blueSlider))
+		if ((control == _redSlider) || (control == _greenSlider) || (control == _blueSlider))
         {
 			Vector3 color(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue());
 			setColorValue(color);
-
-            char txt[15];
-            sprintf(txt, "Red\n\n%.2f", color.x);
-            _redSlider->setText(txt);
-			sprintf(txt, "Green\n\n%.2f", color.y);
-            _greenSlider->setText(txt);
-			sprintf(txt, "Blue\n\n%.2f", color.z);
-            _blueSlider->setText(txt);
         }
 		else if (control == _specularSlider)
         {
 			setSpecularValue(_specularSlider->getValue());
-
-            char txt[20];
-            sprintf(txt, "Specular\n\n%.2f", _specularSlider->getValue());
-            _specularSlider->setText(txt);
         }
 	    else if (control == _noLight)
         {
 			changeTechnique = true;
-
-			if (_noLight->isSelected())
-			{
-				_addSpecular->setChecked(false);
-				_addBumped->setChecked(false);
-				_addSpecular->setEnabled(false);
-				_addBumped->setEnabled(false);
-			}
+            if (_noLight->isSelected())
+            {
+                // TODO: Broken
+                //_properties->setEnabled(false);
+                //_properties->setOpacity(0.5f);
+            }
         }
-	    else if ((control == _directional) || 
-			     (control == _spot) ||
-			     (control == _point) ||
-				 (control == _addSpecular) ||
-				 (control == _addBumped))
+	    else if ((control == _directional) ||  (control == _spot) || (control == _point))
         {
 			changeTechnique = true;
-
-			_addSpecular->setEnabled(true);
-			_addBumped->setEnabled(true);
+            if (!_noLight->isSelected())
+            {
+			    // TODO: Broken
+                //_properties->setEnabled(true);
+                //_properties->setOpacity(1.0f);
+            }
+        }
+        else if ((control == _addSpecular) || (control == _addBumped))
+        {
+            changeTechnique = true;
         }
 	}
 
@@ -392,7 +291,6 @@ void LightTest::controlEvent(Control* control, EventType evt)
 		{
 			_lighting->setTechnique("unlit");
 		}
-		//Possible permutations of directional light only
 		else if (_directional->isSelected() && !_addSpecular->isChecked() && !_addBumped->isChecked())
 		{
 			_lighting->setTechnique("directional");
@@ -409,7 +307,6 @@ void LightTest::controlEvent(Control* control, EventType evt)
 		{
 			_lighting->setTechnique("directionalSpecularBumped");
 		}
-		//Possible permutations of directional and spot lights
 		else if (_spot->isSelected() && !_addSpecular->isChecked() && !_addBumped->isChecked())
 		{
 			_lighting->setTechnique("spot");
@@ -426,7 +323,6 @@ void LightTest::controlEvent(Control* control, EventType evt)
 		{
 			_lighting->setTechnique("spotSpecularBumped");
 		}
-		//Possible permutations of directional and point lights
 	    else if (_point->isSelected() && !_addSpecular->isChecked() && !_addBumped->isChecked())
 		{
 			_lighting->setTechnique("point");
@@ -444,4 +340,82 @@ void LightTest::controlEvent(Control* control, EventType evt)
 			_lighting->setTechnique("pointSpecularBumped");
 		}
 	}
+}
+
+void LightTest::initializeDirectionalTechnique(const char* technique)
+{
+    _lighting->getTechnique(technique)->getParameter("u_lightDirection")->bindValue(_directionalLightNode, &Node::getForwardVectorWorld); 
+	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
+}
+
+void LightTest::initializeSpotTechnique(const char* technique)
+{
+	_lighting->getTechnique(technique)->getParameter("u_spotLightInnerAngleCos")->setValue(_spotLightNode->getLight()->getInnerAngleCos());
+	_lighting->getTechnique(technique)->getParameter("u_spotLightOuterAngleCos")->setValue(_spotLightNode->getLight()->getOuterAngleCos());
+	_lighting->getTechnique(technique)->getParameter("u_spotLightRangeInverse")->setValue(_spotLightNode->getLight()->getRangeInverse());
+	_lighting->getTechnique(technique)->getParameter("u_spotLightDirection")->bindValue(_spotLightNode, &Node::getForwardVectorView);
+	_lighting->getTechnique(technique)->getParameter("u_spotLightPosition")->bindValue(_spotLightNode, &Node::getTranslationView);
+	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
+	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+}
+
+void LightTest::initializePointTechnique(const char* technique)
+{
+	_lighting->getTechnique(technique)->getParameter("u_pointLightPosition")->bindValue(_pointLightNode, &Node::getTranslationView);
+	_lighting->getTechnique(technique)->getParameter("u_pointLightRangeInverse")->setValue(_pointLightNode->getLight()->getRangeInverse());
+	_lighting->getTechnique(technique)->getParameter("u_ambientColor")->setValue(Vector3(0.0f, 0.0f, 0.0f));
+	_lighting->getTechnique(technique)->getParameter("u_lightColor")->setValue(Vector3(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue()));
+}
+
+void LightTest::setUnlitMaterialTexture(Model* model, const char* texturePath, bool mipmap)
+{
+    Material* material = model->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag");
+    material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
+
+    // Load the texture from file.
+    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue(texturePath, mipmap);
+    if (mipmap)
+	{
+        sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
+	}
+	else
+	{
+        sampler->setFilterMode(Texture::LINEAR, Texture::LINEAR);
+	}
+	sampler->setWrapMode(Texture::CLAMP, Texture::CLAMP);
+    material->getStateBlock()->setCullFace(true);
+    material->getStateBlock()->setDepthTest(true);
+    material->getStateBlock()->setDepthWrite(true);
+	material->getStateBlock()->setBlend(true);
+	material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+	material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
+}
+
+void LightTest::setColorValue(const Vector3& value)
+{
+	_lighting->getTechnique(("directional"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("directionalSpecular"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("directionalBumped"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("directionalSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
+
+	_lighting->getTechnique(("spot"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("spotSpecular"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("spotBumped"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("spotSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
+
+	_lighting->getTechnique(("point"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("pointSpecular"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("pointBumped"))->getParameter("u_lightColor")->setValue(value);
+	_lighting->getTechnique(("pointSpecularBumped"))->getParameter("u_lightColor")->setValue(value);
+}
+
+void LightTest::setSpecularValue(float value)
+{
+	_lighting->getTechnique("directionalSpecular")->getParameter("u_specularExponent")->setValue(value);
+	_lighting->getTechnique("directionalSpecularBumped")->getParameter("u_specularExponent")->setValue(value);
+	_lighting->getTechnique("spotSpecular")->getParameter("u_specularExponent")->setValue(value);
+	_lighting->getTechnique("spotSpecularBumped")->getParameter("u_specularExponent")->setValue(value);
+	_lighting->getTechnique("pointSpecular")->getParameter("u_specularExponent")->setValue(value);
+	_lighting->getTechnique("pointSpecularBumped")->getParameter("u_specularExponent")->setValue(value);
 }
