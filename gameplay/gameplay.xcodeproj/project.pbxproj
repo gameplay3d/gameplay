@@ -82,8 +82,6 @@
 		42789FDF15B0E83700866F5B /* AIStateMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FCB15B0E83700866F5B /* AIStateMachine.h */; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; };
-		42B701F715B08177002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B701F615B08177002BB8C3 /* liblua.a */; };
-		42B701F915B081B7002BB8C3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B701F815B081B6002BB8C3 /* liblua.a */; };
 		42B7FAE315B08049002BB8C3 /* ScreenDisplayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7FADD15B08049002BB8C3 /* ScreenDisplayer.cpp */; };
 		42B7FAE415B08049002BB8C3 /* ScreenDisplayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7FADD15B08049002BB8C3 /* ScreenDisplayer.cpp */; };
 		42B7FAE515B08049002BB8C3 /* ScriptController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7FADE15B08049002BB8C3 /* ScriptController.cpp */; };
@@ -716,12 +714,6 @@
 		42BCD6CD15EFD0F300C0E076 /* lua_VerticalLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42BCD45715EFD0F300C0E076 /* lua_VerticalLayout.cpp */; };
 		42BCD6CE15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BCD45815EFD0F300C0E076 /* lua_VerticalLayout.h */; };
 		42BCD6CF15EFD0F300C0E076 /* lua_VerticalLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 42BCD45815EFD0F300C0E076 /* lua_VerticalLayout.h */; };
-		42CCD556146EC1EB00353661 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD555146EC1EB00353661 /* libpng.a */; };
-		42CD0DAB147D8EA80000361E /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA6147D8EA80000361E /* libbullet.a */; };
-		42CD0DAC147D8EA80000361E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA7147D8EA80000361E /* libogg.a */; };
-		42CD0DAD147D8EA80000361E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA8147D8EA80000361E /* libvorbis.a */; };
-		42CD0DAE147D8EA80000361E /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA9147D8EA80000361E /* libvorbisenc.a */; };
-		42CD0DAF147D8EA80000361E /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DAA147D8EA80000361E /* libvorbisfile.a */; };
 		42CD0E46147D8FF60000361E /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB1147D8FF50000361E /* Animation.cpp */; };
 		42CD0E47147D8FF60000361E /* Animation.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DB2147D8FF50000361E /* Animation.h */; };
 		42CD0E48147D8FF60000361E /* AnimationClip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DB3147D8FF50000361E /* AnimationClip.cpp */; };
@@ -910,12 +902,6 @@
 		5B04C57114BFCFE100EB0071 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		5B04C57214BFCFE100EB0071 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4208DEE614A4079F00D3C511 /* Image.cpp */; };
 		5B04C57314BFCFE100EB0071 /* MeshBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4201818D14A41B18008C3F56 /* MeshBatch.cpp */; };
-		5B04C57514BFCFE100EB0071 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA6147D8EA80000361E /* libbullet.a */; };
-		5B04C57614BFCFE100EB0071 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA7147D8EA80000361E /* libogg.a */; };
-		5B04C57714BFCFE100EB0071 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA8147D8EA80000361E /* libvorbis.a */; };
-		5B04C57814BFCFE100EB0071 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DA9147D8EA80000361E /* libvorbisenc.a */; };
-		5B04C57914BFCFE100EB0071 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CD0DAA147D8EA80000361E /* libvorbisfile.a */; };
-		5B04C57A14BFCFE100EB0071 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CCD555146EC1EB00353661 /* libpng.a */; };
 		5B04C58114BFCFE100EB0071 /* Animation.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DB2147D8FF50000361E /* Animation.h */; };
 		5B04C58214BFCFE100EB0071 /* AnimationClip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DB4147D8FF50000361E /* AnimationClip.h */; };
 		5B04C58314BFCFE100EB0071 /* AnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0DB6147D8FF50000361E /* AnimationController.h */; };
@@ -1734,14 +1720,7 @@
 				5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */,
 				5B2BC75F1512514500D176CD /* OpenAL.framework in Frameworks */,
 				5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */,
-				42CD0DAB147D8EA80000361E /* libbullet.a in Frameworks */,
-				42CD0DAC147D8EA80000361E /* libogg.a in Frameworks */,
-				42CD0DAD147D8EA80000361E /* libvorbis.a in Frameworks */,
-				42CD0DAE147D8EA80000361E /* libvorbisenc.a in Frameworks */,
-				42CD0DAF147D8EA80000361E /* libvorbisfile.a in Frameworks */,
-				42CCD556146EC1EB00353661 /* libpng.a in Frameworks */,
 				4234D99E14686C52003031B3 /* Cocoa.framework in Frameworks */,
-				42B701F715B08177002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1756,13 +1735,6 @@
 				5BAF202B152F2AF0003E2AC3 /* OpenGLES.framework in Frameworks */,
 				5BAF202C152F2AF0003E2AC3 /* QuartzCore.framework in Frameworks */,
 				5BAF202D152F2AF0003E2AC3 /* UIKit.framework in Frameworks */,
-				5B04C57514BFCFE100EB0071 /* libbullet.a in Frameworks */,
-				5B04C57614BFCFE100EB0071 /* libogg.a in Frameworks */,
-				5B04C57714BFCFE100EB0071 /* libvorbis.a in Frameworks */,
-				5B04C57814BFCFE100EB0071 /* libvorbisenc.a in Frameworks */,
-				5B04C57914BFCFE100EB0071 /* libvorbisfile.a in Frameworks */,
-				5B04C57A14BFCFE100EB0071 /* libpng.a in Frameworks */,
-				42B701F915B081B7002BB8C3 /* liblua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3684,13 +3656,7 @@
 					"../external-deps/oggvorbis/include",
 					./gameplay,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/bullet/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/lua/lib/macosx\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
@@ -3729,13 +3695,7 @@
 					"../external-deps/oggvorbis/include",
 					./gameplay,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/bullet/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/lua/lib/macosx\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;
@@ -3775,13 +3735,7 @@
 					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
@@ -3823,13 +3777,7 @@
 					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
-					"\"$(SRCROOT)/../external-deps/lua/lib/ios/armv7\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;

@@ -44,6 +44,8 @@
 		5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206C152F2DDD003E2AC3 /* UIKit.framework */; };
 		F188C94B15C1971F0025FC73 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F188C94A15C1971F0025FC73 /* game.config */; };
 		F1E135091607709F00351BB4 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F188C94A15C1971F0025FC73 /* game.config */; };
+		F1F6196916A7215E00C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6196816A7215E00C4FEA1 /* liblua.a */; };
+		F1F6196C16A7216F00C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6196B16A7216F00C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +79,8 @@
 		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		F188C94A15C1971F0025FC73 /* game.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.config; sourceTree = "<group>"; };
+		F1F6196816A7215E00C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
+		F1F6196B16A7216F00C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1F6196916A7215E00C4FEA1 /* liblua.a in Frameworks */,
 				42438B531491AD2000D218B8 /* libgameplay.a in Frameworks */,
 				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
 				42C933261491A6E50098216A /* libogg.a in Frameworks */,
@@ -117,6 +122,7 @@
 				5B61611C14CCC24C0073B857 /* libvorbisenc.a in Frameworks */,
 				5B61611D14CCC24C0073B857 /* libvorbisfile.a in Frameworks */,
 				5B61611E14CCC24C0073B857 /* libpng.a in Frameworks */,
+				F1F6196C16A7216F00C4FEA1 /* liblua.a in Frameworks */,
 				5B61611F14CCC24C0073B857 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,11 +179,13 @@
 			children = (
 				42438B521491AD2000D218B8 /* libgameplay.a */,
 				42C933201491A6C70098216A /* libbullet.a */,
+				F1F6196B16A7216F00C4FEA1 /* liblua.a */,
 				42C933221491A6E50098216A /* libogg.a */,
 				42C933231491A6E50098216A /* libvorbis.a */,
 				42C933241491A6E50098216A /* libvorbisenc.a */,
 				42C933251491A6E50098216A /* libvorbisfile.a */,
 				42C9332A1491A7390098216A /* libpng.a */,
+				F1F6196816A7215E00C4FEA1 /* liblua.a */,
 				42C9332D1491A7810098216A /* libz.dylib */,
 			);
 			name = Libraries;
@@ -420,6 +428,7 @@
 					"\"../../external-deps/libpng/lib/macosx\"",
 					"\"../../external-deps/bullet/lib/macosx\"",
 					"\"../../external-deps/oggvorbis/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -447,6 +456,7 @@
 					"\"../../external-deps/libpng/lib/macosx\"",
 					"\"../../external-deps/bullet/lib/macosx\"",
 					"\"../../external-deps/oggvorbis/lib/macosx\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -476,6 +486,7 @@
 					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -506,6 +517,7 @@
 					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

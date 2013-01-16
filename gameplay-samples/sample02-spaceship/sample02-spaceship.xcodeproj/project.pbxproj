@@ -43,6 +43,7 @@
 		5BAF2051152F2BAB003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204B152F2BAB003E2AC3 /* OpenGLES.framework */; };
 		5BAF2052152F2BAB003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204C152F2BAB003E2AC3 /* QuartzCore.framework */; };
 		5BAF2053152F2BAB003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF204D152F2BAB003E2AC3 /* UIKit.framework */; };
+		F1F6195D16A7205B00C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195C16A7205B00C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		5BAF204B152F2BAB003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF204C152F2BAB003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF204D152F2BAB003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		F1F6195C16A7205B00C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				5B43D1A514C35A0E008A5D9D /* libvorbisenc.a in Frameworks */,
 				5B43D1A614C35A0E008A5D9D /* libvorbisfile.a in Frameworks */,
 				5B43D1A714C35A0E008A5D9D /* libpng.a in Frameworks */,
+				F1F6195D16A7205B00C4FEA1 /* liblua.a in Frameworks */,
 				5B43D1A814C35A0E008A5D9D /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,6 +137,7 @@
 				42CD0EF1147D932B0000361E /* libvorbisenc.a */,
 				42CD0EF2147D932B0000361E /* libvorbisfile.a */,
 				42CCD559146EC23C00353661 /* libpng.a */,
+				F1F6195C16A7205B00C4FEA1 /* liblua.a */,
 				42CCD557146EC22900353661 /* libz.dylib */,
 			);
 			name = Libraries;
@@ -474,6 +478,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -509,6 +514,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";

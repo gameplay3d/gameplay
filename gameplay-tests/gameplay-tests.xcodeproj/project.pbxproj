@@ -82,6 +82,8 @@
 		F10DEAB816726157006FFFDC /* BillboardTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F10DEAB516726157006FFFDC /* BillboardTest.cpp */; };
 		F1E4B3FA1671372E007516A7 /* FormsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E4B3F81671372E007516A7 /* FormsTest.cpp */; };
 		F1E4B3FB1671372E007516A7 /* FormsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E4B3F81671372E007516A7 /* FormsTest.cpp */; };
+		F1F6195216A71DB100C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195116A71DB100C4FEA1 /* liblua.a */; };
+		F1F6195516A71DD000C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195416A71DD000C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -153,6 +155,8 @@
 		F10DEAB616726157006FFFDC /* BillboardTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillboardTest.h; sourceTree = "<group>"; };
 		F1E4B3F81671372E007516A7 /* FormsTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormsTest.cpp; sourceTree = "<group>"; };
 		F1E4B3F91671372E007516A7 /* FormsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormsTest.h; sourceTree = "<group>"; };
+		F1F6195116A71DB100C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
+		F1F6195416A71DD000C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1F6195216A71DB100C4FEA1 /* liblua.a in Frameworks */,
 				B6871F3E1611220C00900743 /* libgameplay.a in Frameworks */,
 				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
 				42C933261491A6E50098216A /* libogg.a in Frameworks */,
@@ -180,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1F6195516A71DD000C4FEA1 /* liblua.a in Frameworks */,
 				B6871F3D161121F900900743 /* libgameplay.a in Frameworks */,
 				5BAF206D152F2DDD003E2AC3 /* CoreMotion.framework in Frameworks */,
 				5BAF206E152F2DDD003E2AC3 /* Foundation.framework in Frameworks */,
@@ -295,11 +301,13 @@
 			children = (
 				B6871F391611206000900743 /* libgameplay.a */,
 				42C933201491A6C70098216A /* libbullet.a */,
+				F1F6195416A71DD000C4FEA1 /* liblua.a */,
 				42C933221491A6E50098216A /* libogg.a */,
 				42C933231491A6E50098216A /* libvorbis.a */,
 				42C933241491A6E50098216A /* libvorbisenc.a */,
 				42C933251491A6E50098216A /* libvorbisfile.a */,
 				42C9332A1491A7390098216A /* libpng.a */,
+				F1F6195116A71DB100C4FEA1 /* liblua.a */,
 				42C9332D1491A7810098216A /* libz.dylib */,
 			);
 			name = Libraries;
@@ -582,6 +590,7 @@
 					"\"../../GamePlay/external-deps/bullet/lib/macosx\"",
 					"\"../../GamePlay/external-deps/oggvorbis/lib/macosx\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../external-deps/lua/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -611,6 +620,7 @@
 					"\"../../GamePlay/external-deps/bullet/lib/macosx\"",
 					"\"../../GamePlay/external-deps/oggvorbis/lib/macosx\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../external-deps/lua/lib/macosx\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -641,6 +651,7 @@
 					"\"../../GamePlay/external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../GamePlay/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -672,6 +683,7 @@
 					"\"../../GamePlay/external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../GamePlay/external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
