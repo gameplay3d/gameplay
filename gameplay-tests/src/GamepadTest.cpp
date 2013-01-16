@@ -1,20 +1,11 @@
 #include "GamepadTest.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Input", "Gamepad", GamepadTest, 2);
+    ADD_TEST("Input", "Gamepads", GamepadTest, 3);
 #endif
 
 GamepadTest::GamepadTest()
 {
-}
-
-GamepadTest::~GamepadTest()
-{
-}
-
-GamepadTest* GamepadTest::create()
-{
-    return new GamepadTest();
 }
 
 void GamepadTest::finalize()
@@ -65,11 +56,10 @@ void GamepadTest::update(float elapsedTime)
         {
             gamepad->update(elapsedTime);
 
-            sprintf(s, "Player %d -- VID = %d = %s, PID = %d = %s\nButtons: ", i,
-                gamepad->getVendorId(), gamepad->getVendorString(),
-                gamepad->getProductId(), gamepad->getProductString());
+            sprintf(s, "Player: %d - VendorID:%d,%s, Product ID:%d,%s\nButtons: ", i,
+                        gamepad->getVendorId(), gamepad->getVendorString(),
+                        gamepad->getProductId(), gamepad->getProductString());
             _status += s;
-
             for (int j = 0; j < 20; ++j)
             {
                 if (gamepad->isButtonDown((Gamepad::ButtonMapping)j))
@@ -78,9 +68,7 @@ void GamepadTest::update(float elapsedTime)
                     _status += s;
                 }
             }
-
             _status += "\n";
-
             for (unsigned int j = 0; j < gamepad->getJoystickCount(); ++j)
             {
                 Vector2 joystick;
@@ -88,13 +76,11 @@ void GamepadTest::update(float elapsedTime)
                 sprintf(s, "Joystick %d: (%f, %f)\n", j, joystick.x, joystick.y);
                 _status += s;
             }
-
             for (unsigned int j = 0; j < gamepad->getTriggerCount(); ++j)
             {
                 sprintf(s, "Trigger %d: %f\n", j, gamepad->getTriggerValue(j));
                 _status += s;
             }
-
             _status += "\n";
         }
     }
@@ -110,8 +96,10 @@ void GamepadTest::render(float elapsedTime)
             _gamepads[i]->draw();
     }
 
+    drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
+
     _font->start();
-    _font->drawText(_status.c_str(), 5, 5, 1, 0, 0, 1);
+    _font->drawText(_status.c_str(), 5, 25, Vector4::one());
     _font->finish();
 }
 

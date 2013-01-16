@@ -182,7 +182,6 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             {
                 notifyListeners(Listener::VALUE_CHANGED);
             }
-
             _dirty = true;
         }
         break;

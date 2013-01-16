@@ -146,7 +146,7 @@ void BillboardTest::update(float elapsedTime)
 void BillboardTest::render(float elapsedTime)
 {
     // Clear the color and depth buffers
-    clear(CLEAR_COLOR_DEPTH, Vector4::fromColor(0x326696FF), 1.0f, 0);
+    clear(CLEAR_COLOR_DEPTH, Vector4::fromColor(0x355D90FF), 1.0f, 0);
 
 	// Draw the ground
 	_ground->draw();
@@ -161,8 +161,7 @@ void BillboardTest::render(float elapsedTime)
 
 		// Rotate the node x/z to face the camera
 		Matrix m;
-        Matrix::createBillboard(node->getTranslationWorld(), camera->getNode()->getTranslationWorld(),
-                                camera->getNode()->getUpVectorWorld(), &m);
+        Matrix::createBillboard(node->getTranslationWorld(), camera->getNode()->getTranslationWorld(), camera->getNode()->getUpVectorWorld(), &m);
 		Quaternion q;
 		m.getRotation(&q);
 		node->setRotation(q);

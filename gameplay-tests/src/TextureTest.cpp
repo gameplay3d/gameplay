@@ -72,7 +72,7 @@ void TextureTest::initialize()
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
-        node->setTranslation(-36, cubeSize, 0);
+        node->setTranslation(-30, cubeSize, 0);
         // Find the position of the node in screen space
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         _text.push_back(_font->createText("Textured Quad", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
@@ -82,7 +82,7 @@ void TextureTest::initialize()
         Node* node = addQuadModelAndNode(_scene, mesh);
         SAFE_RELEASE(mesh);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
-        node->setTranslation(-25, cubeSize, 0);
+        node->setTranslation(-19, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         _text.push_back(_font->createText("createQuad points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
@@ -91,7 +91,7 @@ void TextureTest::initialize()
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setId("clamp");
-        node->setTranslation(-14, cubeSize, 0);
+        node->setTranslation(-8, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         _text.push_back(_font->createText("Wrap: Clamp", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
@@ -105,7 +105,7 @@ void TextureTest::initialize()
         {
             sampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
         }
-        node->setTranslation(-3, cubeSize, 0);
+        node->setTranslation(3, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         _text.push_back(_font->createText("Wrap: Repeat", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }

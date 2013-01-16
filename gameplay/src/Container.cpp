@@ -379,7 +379,6 @@ Animation* Container::getAnimation(const char* id) const
 {
     std::vector<Control*>::const_iterator itr = _controls.begin();
     std::vector<Control*>::const_iterator end = _controls.end();
-        
     Control* control = NULL;
     for (; itr != end; itr++)
     {
@@ -396,7 +395,6 @@ Animation* Container::getAnimation(const char* id) const
                 return animation;
         }
     }
-
     return NULL;
 }
 
@@ -438,9 +436,13 @@ void Container::update(const Control* container, const Vector2& offset)
 
     GP_ASSERT(_layout);
     if (_scroll != SCROLL_NONE)
+    {
         updateScroll();
+    }
     else
+    {
         _layout->update(this, Vector2::zero());
+    }
 }
 
 void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
@@ -459,6 +461,9 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
     {
         needsClear = true;
     }
+
+    if (!_visible)
+        return;
 
     spriteBatch->start();
     Control::drawBorder(spriteBatch, clip);
@@ -484,8 +489,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
         spriteBatch->start();
 
-        if (_scrollBarBounds.height > 0 &&
-            ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
+        if (_scrollBarBounds.height > 0 &&((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
@@ -516,8 +520,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
         }
 
-        if (_scrollBarBounds.width > 0 &&
-            ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
+        if (_scrollBarBounds.width > 0 && ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
         {
             const Rectangle& leftRegion = _scrollBarLeftCap->getRegion();
             const Theme::UVs& leftUVs = _scrollBarLeftCap->getUVs();

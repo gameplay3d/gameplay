@@ -1,4 +1,4 @@
-// Inputs
+// Attributes
 attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
 attribute vec2 a_texCoord0;									// Vertex Texture Coordinate				(u, v)
 #if defined(TEXCOORD1)
@@ -21,20 +21,20 @@ uniform vec2 u_textureRepeat;								// Texture repeat for tiling
 uniform vec2 u_textureOffset;								// Texture offset
 #endif
 
-// Outputs
+// Varyings
 varying vec2 v_texCoord0;									// Texture Coordinate
 #if defined(TEXCOORD1)
 varying vec2 v_texCoord1;                                   // Second tex coord for multi-texturing
 #endif
 
-// Vertex attribute accessors
+// Skinning 
 #if defined(SKINNING)
-#include "lib/attributes-skinning.vert"
+#include "skinning.vert"
 #else
-#include "lib/attributes.vert" 
+#include "skinning-none.vert" 
 #endif
 
-// Vertex Program
+
 void main()
 {
     // Get the vertex position

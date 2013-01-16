@@ -76,22 +76,24 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := gameplay-tests
 LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
+    FirstPersonCamera.cpp \
+    Grid.cpp \
+    Test.cpp \
+    TestsGame.cpp \
     Audio3DTest.cpp \
     BillboardTest \
     CreateSceneTest.cpp \
-    FirstPersonCamera.cpp \
     FormsTest.cpp \
     GestureTest.cpp \
-    Grid.cpp \
+    GamepadTest.cpp \
     InputTest.cpp \
+    LightTest.cpp \
     LoadSceneTest.cpp \
 	MeshBatchTest.cpp \
     MeshPrimitiveTest.cpp \
-	PhysicsSceneTest.cpp \
+	PhysicsCollisionObjectTest.cpp \
     PostProcessTest.cpp \
 	SpriteBatchTest.cpp \
-    Test.cpp \
-    TestsGame.cpp \
     TextTest.cpp \
     TextureTest.cpp \
 	TriangleTest.cpp

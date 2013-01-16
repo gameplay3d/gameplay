@@ -643,7 +643,7 @@
     <ClCompile Include="src\InputTest.cpp" />
     <ClCompile Include="src\LoadSceneTest.cpp" />
     <ClCompile Include="src\MeshPrimitiveTest.cpp" />
-    <ClCompile Include="src\PhysicsSceneTest.cpp" />
+    <ClCompile Include="src\PhysicsCollisionObjectTest.cpp" />
     <ClCompile Include="src\SpriteBatchTest.cpp" />
     <ClCompile Include="src\Test.cpp" />
     <ClCompile Include="src\TestsGame.cpp" />
@@ -666,7 +666,7 @@
     <ClInclude Include="src\InputTest.h" />
     <ClInclude Include="src\LoadSceneTest.h" />
     <ClInclude Include="src\MeshPrimitiveTest.h" />
-    <ClInclude Include="src\PhysicsSceneTest.h" />
+    <ClInclude Include="src\PhysicsCollisionObjectTest.h" />
     <ClInclude Include="src\SpriteBatchTest.h" />
     <ClInclude Include="src\Test.h" />
     <ClInclude Include="src\TestsGame.h" />

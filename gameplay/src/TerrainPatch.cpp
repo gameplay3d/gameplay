@@ -5,6 +5,10 @@
 #include "Scene.h"
 #include "Game.h"
 
+// Default terrain shaders
+#define TERRAIN_VSH "res/shaders/terrain.vert"
+#define TERRAIN_FSH "res/shaders/terrain.frag"
+
 namespace gameplay
 {
 
@@ -470,7 +474,7 @@ bool TerrainPatch::updateMaterial()
             }
         }
 
-        Material* material = Material::create("res/shaders/terrain.vert", "res/shaders/terrain.frag", defines.str().c_str());
+        Material* material = Material::create(TERRAIN_VSH, TERRAIN_FSH, defines.str().c_str());
         if (!material)
             return false;
         material->getStateBlock()->setCullFace(true);

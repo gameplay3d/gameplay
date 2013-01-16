@@ -18,7 +18,7 @@ GamePlay3D is an open-source, cross-platform 3D native C++ game framework making
 ## Supported Desktop Platforms
 - Microsoft Windows 7 (using Microsoft Visual Studio 2010)
 - Apple MacOS X (using Apple XCode 4)
-- Linux (using CMake or CodeBlocks 10)
+- Linux (using CMake)
 
 ## Roadmap for 'next' branch
 - [Version 1.7.0 Milestone](https://github.com/blackberry/GamePlay/issues?milestone=4)

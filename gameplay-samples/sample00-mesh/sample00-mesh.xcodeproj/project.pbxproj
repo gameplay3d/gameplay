@@ -43,6 +43,7 @@
 		5BAF2037152F2B47003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2031152F2B47003E2AC3 /* OpenGLES.framework */; };
 		5BAF2038152F2B47003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2032152F2B47003E2AC3 /* QuartzCore.framework */; };
 		5BAF2039152F2B47003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2033152F2B47003E2AC3 /* UIKit.framework */; };
+		F1F6195716A71F0D00C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195616A71F0D00C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		5BAF2031152F2B47003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2032152F2B47003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF2033152F2B47003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		F1F6195616A71F0D00C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,14 +111,15 @@
 				5BAF2037152F2B47003E2AC3 /* OpenGLES.framework in Frameworks */,
 				5BAF2038152F2B47003E2AC3 /* QuartzCore.framework in Frameworks */,
 				5BAF2039152F2B47003E2AC3 /* UIKit.framework in Frameworks */,
+				42685616157575030013522F /* libgameplay.a in Frameworks */,
 				5B04C5D414BFE1A200EB0071 /* libbullet.a in Frameworks */,
 				5B04C5D514BFE1A200EB0071 /* libogg.a in Frameworks */,
 				5B04C5D614BFE1A200EB0071 /* libvorbis.a in Frameworks */,
 				5B04C5D714BFE1A200EB0071 /* libvorbisenc.a in Frameworks */,
 				5B04C5D814BFE1A200EB0071 /* libvorbisfile.a in Frameworks */,
 				5B04C5D914BFE1A200EB0071 /* libpng.a in Frameworks */,
+				F1F6195716A71F0D00C4FEA1 /* liblua.a in Frameworks */,
 				5B04C5DA14BFE1A200EB0071 /* libz.dylib in Frameworks */,
-				42685616157575030013522F /* libgameplay.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +171,7 @@
 				42CD0EE5147D92E60000361E /* libvorbisenc.a */,
 				42CD0EE6147D92E60000361E /* libvorbisfile.a */,
 				42A3C5E3146CB7420091C1E4 /* libpng.a */,
+				F1F6195616A71F0D00C4FEA1 /* liblua.a */,
 				42A3C5E5146CB7690091C1E4 /* libz.dylib */,
 			);
 			name = Libraries;
@@ -487,6 +491,8 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -524,6 +530,8 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
