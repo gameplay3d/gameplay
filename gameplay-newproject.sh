@@ -159,7 +159,7 @@ gpPathAbs=`pwd`
 common_path=$projPath
 back=
 while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
-	common_path=$(dirname $common_path)
+	common_path=$(dirname "$common_path")
 	if [ -z "$back" ]; then
 		back=".."
 	else
@@ -280,9 +280,9 @@ aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/game.config"
 
 # Open the new project folder, use xdg-open on Linux
 if [[ "$unamestr" == "Linux" ]]; then
-	xdg-open $projPath
+	xdg-open "$projPath"
 else
-	open $projPath
+	open "$projPath"
 fi
 
 exit 0
