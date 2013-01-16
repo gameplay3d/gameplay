@@ -201,7 +201,7 @@ void SpaceshipGame::initializeMaterial(Material* material, bool lighting, bool s
     if (lighting)
     {
         // Apply lighting material parameters
-        material->setParameterAutoBinding("u_inverseTransposeWorldMatrix", RenderState::INVERSE_TRANSPOSE_WORLD_MATRIX);
+        material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", RenderState::INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX);
 
         Node* lightNode = _scene->findNode("directionalLight1");
         Vector3 lightDirection = lightNode->getForwardVector();
