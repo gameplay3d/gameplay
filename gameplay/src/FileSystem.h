@@ -181,6 +181,20 @@ public:
      */
     static void createFileFromAsset(const char* path);
 
+    /**
+     * Returns the extension of the given file path.
+     *
+     * The extension returned includes all character after and including the last '.'
+     * in the file path. The extension is returned as all uppercase.
+     *
+     * If the path does not contain an extension, an empty string is returned.
+     * 
+     * @param path File path.
+     *
+     * @return The file extension, all uppercase, including the '.'.
+     */
+    static std::string getExtension(const char* path);
+
 private:
 
     /**

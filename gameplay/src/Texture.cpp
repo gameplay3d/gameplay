@@ -273,7 +273,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipMapCount > 1 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipMapCount > 1 ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
@@ -477,6 +477,23 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, Stream* stream, GL
     return data;
 }
 
+int getMaskByteIndex(unsigned int mask)
+{
+    switch (mask)
+    {
+    case 0xff000000:
+        return 3;
+    case 0x00ff0000:
+        return 2;
+    case 0x0000ff00:
+        return 1;
+    case 0x000000ff:
+        return 0;
+    default:
+        return -1; // no or invalid mask
+    }
+}
+
 Texture* Texture::createCompressedDDS(const char* path)
 {
     GP_ASSERT(path);
@@ -556,15 +573,17 @@ Texture* Texture::createCompressedDDS(const char* path)
     dds_mip_level* mipLevels = new dds_mip_level[header.dwMipMapCount];
     memset(mipLevels, 0, sizeof(dds_mip_level) * header.dwMipMapCount);
 
-    GLenum format, internalFormat;
+    GLenum format = 0;
+    GLenum internalFormat = 0;
     bool compressed = false;
     GLsizei width = header.dwWidth;
     GLsizei height = header.dwHeight;
-    int bytesPerBlock;
+    Texture::Format textureFormat = Texture::UNKNOWN;
 
     if (header.ddspf.dwFlags & 0x4/*DDPF_FOURCC*/)
     {
         compressed = true;
+        int bytesPerBlock;
 
         // Compressed.
         switch (header.ddspf.dwFourCC)
@@ -601,18 +620,20 @@ Texture* Texture::createCompressedDDS(const char* path)
 
         for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
         {
-            mipLevels[i].width = width;
-            mipLevels[i].height = height;
-            mipLevels[i].size =  std::max(1, (width+3) >> 2) * std::max(1, (height+3) >> 2) * bytesPerBlock;
-            mipLevels[i].data = new GLubyte[mipLevels[i].size];
+            dds_mip_level& level = mipLevels[i];
 
-            if (stream->read(mipLevels[i].data, 1, mipLevels[i].size) != (unsigned int)mipLevels[i].size)
+            level.width = width;
+            level.height = height;
+            level.size =  std::max(1, (width+3) >> 2) * std::max(1, (height+3) >> 2) * bytesPerBlock;
+            level.data = new GLubyte[level.size];
+
+            if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
             {
                 GP_ERROR("Failed to load dds compressed texture bytes for texture: %s", path);
                 
                 // Cleanup mip data.
                 for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
-                    SAFE_DELETE_ARRAY(mipLevels[i].data);
+                    SAFE_DELETE_ARRAY(level.data);
                 SAFE_DELETE_ARRAY(mipLevels);
                 return texture;
             }
@@ -621,21 +642,114 @@ Texture* Texture::createCompressedDDS(const char* path)
             height = std::max(1, height >> 1);
         }
     }
-    else if (header.ddspf.dwFlags == 0x40/*DDPF_RGB*/)
+    else if (header.ddspf.dwFlags & 0x40/*DDPF_RGB*/)
     {
-        // RGB (uncompressed)
-        // Note: Use GL_BGR as internal format to flip bytes.
-        GP_ERROR("Failed to create texture from DDS file '%s': uncompressed RGB format is not supported.", path);
-        SAFE_DELETE_ARRAY(mipLevels);
-        return NULL;
-    }
-    else if (header.ddspf.dwFlags == 0x41/*DDPF_RGB|DDPF_ALPHAPIXELS*/)
-    {
-        // RGBA (uncompressed)
-        // Note: Use GL_BGRA as internal format to flip bytes.
-        GP_ERROR("Failed to create texture from DDS file '%s': uncompressed RGBA format is not supported.", path);
-        SAFE_DELETE_ARRAY(mipLevels);
-        return NULL;
+        // RGB/RGBA (uncompressed)
+        bool colorConvert = false;
+        unsigned int rmask = header.ddspf.dwRBitMask;
+        unsigned int gmask = header.ddspf.dwGBitMask;
+        unsigned int bmask = header.ddspf.dwBBitMask;
+        unsigned int amask = header.ddspf.dwABitMask;
+        int ridx = getMaskByteIndex(rmask);
+        int gidx = getMaskByteIndex(gmask);
+        int bidx = getMaskByteIndex(bmask);
+        int aidx = getMaskByteIndex(amask);
+
+        if (header.ddspf.dwRGBBitCount == 24)
+        {
+            format = internalFormat = GL_RGB;
+            textureFormat = Texture::RGB;
+            colorConvert = (ridx != 0) || (gidx != 1) || (bidx != 2);
+        }
+        else if (header.ddspf.dwRGBBitCount == 32)
+        {
+            format = internalFormat = GL_RGBA;
+            textureFormat = Texture::RGBA;
+            if (ridx == 0 && gidx == 1 && bidx == 2)
+            {
+                aidx = 3; // XBGR or ABGR
+                colorConvert = false;
+            }
+            else if (ridx == 2 && gidx == 1 && bidx == 0)
+            {
+                aidx = 3; // XRGB or ARGB
+                colorConvert = true;
+            }
+            else
+            {
+                format = 0; // invalid format
+            }
+        }
+
+        if (format == 0)
+        {
+            GP_ERROR("Failed to create texture from uncompressed DDS file '%s': Unsupported color format (must be one of R8G8B8, A8R8G8B8, A8B8G8R8, X8R8G8B8, X8B8G8R8.", path);
+            SAFE_DELETE_ARRAY(mipLevels);
+            return NULL;
+        }
+
+        // Read data.
+        for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+        {
+            dds_mip_level& level = mipLevels[i];
+
+            level.width = width;
+            level.height = height;
+            level.size =  width * height * (header.ddspf.dwRGBBitCount >> 3);
+            level.data = new GLubyte[level.size];
+
+            if (stream->read(level.data, 1, level.size) != (unsigned int)level.size)
+            {
+                GP_ERROR("Failed to load bytes for RGB dds texture: %s", path);
+
+                // Cleanup mip data.
+                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                    SAFE_DELETE_ARRAY(level.data);
+                SAFE_DELETE_ARRAY(mipLevels);
+                return texture;
+            }
+
+            width  = std::max(1, width >> 1);
+            height = std::max(1, height >> 1);
+        }
+
+        // Perform color conversion.
+        if (colorConvert)
+        {
+            // Note: While it's possible to use BGRA_EXT texture formats here and avoid CPU color conversion below,
+            // there seems to be different flavors of the BGRA extension, with some vendors requiring an internal
+            // format of RGBA and others requiring an internal format of BGRA.
+            // We could be smarter here later and skip color conversion in favor of GL_BGRA_EXT (for format
+            // and/or internal format) based on which GL extensions are available.
+            // Tip: Using A8B8G8R8 and X8B8G8R8 DDS format maps directly to GL RGBA and requires on no color conversion.
+            GLubyte *pixel, r, g, b, a;
+            if (format == GL_RGB)
+            {
+                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                {
+                    dds_mip_level& level = mipLevels[i];
+                    for (int j = 0; j < level.size; j += 3)
+                    {
+                        pixel = &level.data[j];
+                        r = pixel[ridx]; g = pixel[gidx]; b = pixel[bidx];
+                        pixel[0] = r; pixel[1] = g; pixel[2] = b;
+                    }
+                }
+            }
+            else if (format == GL_RGBA)
+            {
+                for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
+                {
+                    dds_mip_level& level = mipLevels[i];
+                    for (int j = 0; j < level.size; j += 4)
+                    {
+                        pixel = &level.data[j];
+                        r = pixel[ridx]; g = pixel[gidx]; b = pixel[bidx]; a = pixel[aidx];
+                        pixel[0] = r; pixel[1] = g; pixel[2] = b; pixel[3] = a;
+                    }
+                }
+            }
+        }
     }
     else
     {
@@ -644,7 +758,7 @@ Texture* Texture::createCompressedDDS(const char* path)
         SAFE_DELETE_ARRAY(mipLevels);
         return NULL;
     }
-    
+
     // Close file.
     stream->close();
 
@@ -652,7 +766,7 @@ Texture* Texture::createCompressedDDS(const char* path)
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, header.dwMipMapCount > 1 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR ) );
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, header.dwMipMapCount > 1 ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR ) );
 
     // Create gameplay texture.
     texture = new Texture();
@@ -665,18 +779,18 @@ Texture* Texture::createCompressedDDS(const char* path)
     // Load texture data.
     for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
     {
+        dds_mip_level& level = mipLevels[i];
         if (compressed)
         {
-            GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, i, format, mipLevels[i].width, mipLevels[i].height, 0, mipLevels[i].size, mipLevels[i].data) );
+            GL_ASSERT( glCompressedTexImage2D(GL_TEXTURE_2D, i, format, level.width, level.height, 0, level.size, level.data) );
         }
         else
         {
-            // TODO: For uncompressed formats, set GL_UNPACK_ALIGNMENT based on stride
-            GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, i, internalFormat, mipLevels[i].width, mipLevels[i].height, 0, format, GL_UNSIGNED_INT, mipLevels[i].data) );
+            GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, i, internalFormat, level.width, level.height, 0, format, GL_UNSIGNED_BYTE, level.data) );
         }
 
         // Clean up the texture data.
-        SAFE_DELETE_ARRAY(mipLevels[i].data);
+        SAFE_DELETE_ARRAY(level.data);
     }
 
     // Clean up mip levels structure.
@@ -688,6 +802,11 @@ Texture* Texture::createCompressedDDS(const char* path)
 Texture::Format Texture::getFormat() const
 {
     return _format;
+}
+
+const char* Texture::getPath() const
+{
+    return _path.c_str();
 }
 
 unsigned int Texture::getWidth() const
@@ -724,6 +843,7 @@ void Texture::generateMipmaps()
     if (!_mipmapped)
     {
         GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
+        GL_ASSERT( glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST) );
         GL_ASSERT( glGenerateMipmap(GL_TEXTURE_2D) );
 
         _mipmapped = true;
@@ -769,12 +889,14 @@ void Texture::Sampler::setWrapMode(Wrap wrapS, Wrap wrapT)
 {
     _wrapS = wrapS;
     _wrapT = wrapT;
+    _texture->setWrapMode(wrapS, wrapT);
 }
 
 void Texture::Sampler::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
 {
     _minFilter = minificationFilter;
     _magFilter = magnificationFilter;
+    _texture->setFilterMode(minificationFilter, magnificationFilter);
 }
 
 Texture* Texture::Sampler::getTexture() const
@@ -787,10 +909,6 @@ void Texture::Sampler::bind()
     GP_ASSERT(_texture);
 
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _texture->_handle) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)_wrapS) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)_wrapT) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)_minFilter) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)_magFilter) );
 }
 
 }
