@@ -42,10 +42,13 @@ uniform float u_modulateAlpha;              	// Modulation alpha
 #elif defined(SPOT_LIGHT)
 uniform float u_spotLightInnerAngleCos;			// The bright spot [0.0 - 1.0]
 uniform float u_spotLightOuterAngleCos;			// The soft outer part [0.0 - 1.0]
+uniform vec3 u_spotLightDirection;              // Direction of a spot light source
 #include "lib/lighting-spot.frag"
 #else
 #include "lib/lighting-directional.frag"
 #endif
+
+uniform vec3 u_cameraPosition;
 
 // Fragment Program
 void main()

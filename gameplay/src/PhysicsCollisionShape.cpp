@@ -1,7 +1,10 @@
 #include "Base.h"
 #include "PhysicsCollisionShape.h"
 #include "Node.h"
+#include "Image.h"
 #include "Properties.h"
+#include "FileSystem.h"
+#include "HeightField.h"
 
 namespace gameplay
 {
@@ -32,13 +35,12 @@ PhysicsCollisionShape::~PhysicsCollisionShape()
 
             // Also need to delete the btTriangleIndexVertexArray, if it exists.
             SAFE_DELETE(_meshInterface);
-
             break;
+
         case SHAPE_HEIGHTFIELD:
             if (_shapeData.heightfieldData)
             {
-                SAFE_DELETE_ARRAY(_shapeData.heightfieldData->heightData);
-                SAFE_DELETE_ARRAY(_shapeData.heightfieldData->normalData);
+                SAFE_RELEASE(_shapeData.heightfieldData->heightfield);
                 SAFE_DELETE(_shapeData.heightfieldData);
             }
             break;
@@ -55,7 +57,7 @@ PhysicsCollisionShape::Type PhysicsCollisionShape::getType() const
 }
 
 PhysicsCollisionShape::Definition::Definition()
-    : isExplicit(false), centerAbsolute(false)
+    : type(SHAPE_NONE), isExplicit(false), centerAbsolute(false)
 {
     memset(&data, 0, sizeof(data));
 }
@@ -69,8 +71,8 @@ PhysicsCollisionShape::Definition::Definition(const Definition& definition)
     switch (type)
     {
     case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
-        GP_ASSERT(data.heightfield);
-        data.heightfield->addRef();
+        if (data.heightfield)
+            data.heightfield->addRef();
         break;
 
     case PhysicsCollisionShape::SHAPE_MESH:
@@ -105,8 +107,8 @@ PhysicsCollisionShape::Definition& PhysicsCollisionShape::Definition::operator=(
         switch (type)
         {
         case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
-            GP_ASSERT(data.heightfield);
-            data.heightfield->addRef();
+            if (data.heightfield)
+                data.heightfield->addRef();
             break;
 
         case PhysicsCollisionShape::SHAPE_MESH:
@@ -119,7 +121,12 @@ PhysicsCollisionShape::Definition& PhysicsCollisionShape::Definition::operator=(
     return *this;
 }
 
-PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Node* node, Properties* properties)
+bool PhysicsCollisionShape::Definition::isEmpty() const
+{
+    return type == SHAPE_NONE;
+}
+
+PhysicsCollisionShape::Definition PhysicsCollisionShape::Definition::create(Node* node, Properties* properties)
 {
     GP_ASSERT(node);
 
@@ -127,17 +134,21 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
     if (!properties || !(strcmp(properties->getNamespace(), "collisionObject") == 0))
     {
         GP_ERROR("Failed to load physics collision shape from properties object: must be non-null object and have namespace equal to 'collisionObject'.");
-        return NULL;
+        return Definition();
     }
 
     // Set values to their defaults.
     PhysicsCollisionShape::Type type = PhysicsCollisionShape::SHAPE_BOX;
-    Vector3* extents = NULL;
-    Vector3* center = NULL;
+    Vector3 extents, center;
+    bool extentsSpecified = false;
+    bool centerSpecified = false;
     float radius = -1.0f;
+    float width = -1.0f;
     float height = -1.0f;
     bool centerIsAbsolute = false;
     const char* imagePath = NULL;
+    float maxHeight = 0;
+    float minHeight = 0;
     bool shapeSpecified = false;
 
     // Load the defined properties.
@@ -161,7 +172,7 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
             else
             {
                 GP_ERROR("Could not create physics collision shape; unsupported value for collision shape type: '%s'.", shapeStr.c_str());
-                return NULL;
+                return Definition();
             }
 
             shapeSpecified = true;
@@ -170,9 +181,21 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
         {
             imagePath = properties->getString();
         }
+        else if (strcmp(name, "maxHeight") == 0)
+        {
+            maxHeight = properties->getFloat();
+        }
+        else if (strcmp(name, "minHeight") == 0)
+        {
+            minHeight = properties->getFloat();
+        }
         else if (strcmp(name, "radius") == 0)
         {
             radius = properties->getFloat();
+        }
+        else if (strcmp(name, "width") == 0)
+        {
+            width = properties->getFloat();
         }
         else if (strcmp(name, "height") == 0)
         {
@@ -180,13 +203,13 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
         }
         else if (strcmp(name, "extents") == 0)
         {
-            extents = new Vector3();
-            properties->getVector3("extents", extents);
+            properties->getVector3("extents", &extents);
+            extentsSpecified = true;
         }
         else if (strcmp(name, "center") == 0)
         {
-            center = new Vector3();
-            properties->getVector3("center", center);
+            properties->getVector3("center", &center);
+            centerSpecified = true;
         }
         else if (strcmp(name, "centerAbsolute") == 0)
         {
@@ -201,136 +224,130 @@ PhysicsCollisionShape::Definition* PhysicsCollisionShape::Definition::create(Nod
     if (!shapeSpecified)
     {
         GP_ERROR("Missing 'shape' specifier for collision shape definition.");
-        return NULL;
+        return Definition();
     }
 
     // Create the collision shape.
-    PhysicsCollisionShape::Definition* shape = new PhysicsCollisionShape::Definition();
+    Definition shape;
     switch (type)
     {
-        case SHAPE_BOX:
-            if (extents)
+    case SHAPE_BOX:
+        if (extentsSpecified)
+        {
+            if (centerSpecified)
             {
-                if (center)
-                {
-                    *shape = box(*extents, *center, centerIsAbsolute);
-                }
-                else
-                {
-                    *shape = box(*extents);
-                }
+                shape = box(extents, center, centerIsAbsolute);
             }
             else
             {
-                *shape = box();
+                shape = box(extents);
             }
-            break;
-        case SHAPE_SPHERE:
-            if (radius != -1.0f)
+        }
+        else
+        {
+            shape = box();
+        }
+        break;
+
+    case SHAPE_SPHERE:
+        if (radius != -1.0f)
+        {
+            if (centerSpecified)
             {
-                if (center)
-                {
-                    *shape = sphere(radius, *center, centerIsAbsolute);
-                }
-                else
-                {
-                    *shape = sphere(radius);
-                }
+                shape = sphere(radius, center, centerIsAbsolute);
             }
             else
             {
-                *shape = sphere();
+                shape = sphere(radius);
             }
-            break;
-        case SHAPE_CAPSULE:
-            if (radius != -1.0f && height != -1.0f)
+        }
+        else
+        {
+            shape = sphere();
+        }
+        break;
+
+    case SHAPE_CAPSULE:
+        if (radius != -1.0f && height != -1.0f)
+        {
+            if (centerSpecified)
             {
-                if (center)
-                {
-                    *shape = capsule(radius, height, *center, centerIsAbsolute);
-                }
-                else
-                {
-                    *shape = capsule(radius, height);
-                }
+                shape = capsule(radius, height, center, centerIsAbsolute);
             }
             else
             {
-                *shape = capsule();
+                shape = capsule(radius, height);
             }
-            break;
-        case SHAPE_MESH:
+        }
+        else
+        {
+            shape = capsule();
+        }
+        break;
+
+    case SHAPE_MESH:
         {
             // Mesh is required on node.
             Mesh* nodeMesh = node->getModel() ? node->getModel()->getMesh() : NULL;
             if (nodeMesh == NULL)
             {
                 GP_ERROR("Cannot create mesh collision object for node without model/mesh.");
-                return NULL;
             }
-
-            // Check that the node's mesh's primitive type is supported.
-            switch (nodeMesh->getPrimitiveType())
+            else
             {
-                case Mesh::TRIANGLES:
+                // Check that the node's mesh's primitive type is supported.
+                switch (nodeMesh->getPrimitiveType())
                 {
-                    *shape = mesh(nodeMesh);
+                case Mesh::TRIANGLES:
+                    shape = mesh(nodeMesh);
                     break;
-                }
                 case Mesh::LINES:
                 case Mesh::LINE_STRIP:
                 case Mesh::POINTS:
                 case Mesh::TRIANGLE_STRIP:
                     GP_ERROR("Mesh collision objects are currently only supported on meshes with primitive type equal to TRIANGLES.");
-                    SAFE_DELETE(shape);
                     break;
+                }
             }
-
-            break;
         }
-        case SHAPE_HEIGHTFIELD:
+        break;
+
+    case SHAPE_HEIGHTFIELD:
+        {
             if (imagePath == NULL)
             {
-                GP_ERROR("Heightfield collision objects require an image path.");
-                SAFE_DELETE(shape);
-                return NULL;
+                // Node requires a valid terrain
+                if (node->getTerrain() == NULL)
+                {
+                    GP_ERROR("Heightfield collision objects can only be specified on nodes that have a valid terrain, or that specify an image path.");
+                }
+                else
+                {
+                    shape = PhysicsCollisionShape::heightfield();
+                }
             }
             else
             {
-                // Load the image data from the given file path.
-                Image* image = Image::create(imagePath);
-                if (!image)
-                {
-                    GP_ERROR("Failed create image for heightfield collision object from file '%s'.", imagePath);
-                    SAFE_DELETE(shape);
-                    return NULL;
-                }
+                std::string ext = FileSystem::getExtension(imagePath);
+                HeightField* heightfield = NULL;
+                if (ext == ".PNG")
+                    heightfield = HeightField::createFromImage(imagePath, minHeight, maxHeight);
+                else if (ext == ".RAW")
+                    heightfield = HeightField::createFromRAW(imagePath, (unsigned int)width, (unsigned int)height, minHeight, maxHeight);
 
-                // Ensure that the image's pixel format is supported.
-                switch (image->getFormat())
+                if (heightfield)
                 {
-                    case Image::RGB:
-                    case Image::RGBA:
-                        break;
-                    default:
-                        GP_ERROR("Heightmap: pixel format is not supported: %d.", image->getFormat());
-                        SAFE_RELEASE(image);
-                        SAFE_DELETE(shape);
-                        return NULL;
+                    shape = PhysicsCollisionShape::heightfield(heightfield);
+                    SAFE_RELEASE(heightfield);
                 }
-
-                *shape = PhysicsCollisionShape::heightfield(image);
-                SAFE_RELEASE(image);
             }
-            break;
-        default:
-            GP_ERROR("Unsupported physics collision shape type (%d).", type);
-            SAFE_DELETE(shape);
-            return NULL;
-    }
+        }
+        break;
 
-    SAFE_DELETE(extents);
-    SAFE_DELETE(center);
+    default:
+        GP_ERROR("Unsupported physics collision shape type (%d).", type);
+        break;
+    }
 
     return shape;
 }
@@ -396,14 +413,24 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::capsule(float radius, f
     return d;
 }
 
-PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(Image* image)
+PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield()
 {
-    GP_ASSERT(image);
-    image->addRef();
+    Definition d;
+    d.type = SHAPE_HEIGHTFIELD;
+    d.isExplicit = false;
+    d.centerAbsolute = false;
+    return d;
+}
+
+PhysicsCollisionShape::Definition PhysicsCollisionShape::heightfield(HeightField* heightfield)
+{
+    GP_ASSERT(heightfield);
+
+    heightfield->addRef();
 
     Definition d;
     d.type = SHAPE_HEIGHTFIELD;
-    d.data.heightfield = image;
+    d.data.heightfield = heightfield;
     d.isExplicit = true;
     d.centerAbsolute = false;
     return d;

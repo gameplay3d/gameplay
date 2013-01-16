@@ -1,10 +1,11 @@
 #include "Base.h"
 #include "Button.h"
+#include "Gamepad.h"
 
 namespace gameplay
 {
 
-Button::Button()
+Button::Button() : _dataBinding(0)
 {
 }
 
@@ -26,6 +27,14 @@ Button* Button::create(Theme::Style* style, Properties* properties)
 {
     Button* button = new Button();
     button->initialize(style, properties);
+
+    // Different types of data bindings can be named differently in a button namespace.
+    // Gamepad button mappings have the name "mapping" and correspond to Gamepad::ButtonMapping enums.
+    const char* mapping = properties->getString("mapping");
+    if (mapping)
+    {
+        button->_dataBinding = Gamepad::getButtonMappingFromString(mapping);
+    }
 
     return button;
 }
@@ -90,6 +99,16 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
 const char* Button::getType() const
 {
     return "button";
+}
+
+const unsigned int Button::getDataBinding() const
+{
+    return _dataBinding;
+}
+
+void Button::setDataBinding(unsigned int dataBinding)
+{
+    _dataBinding = dataBinding;
 }
 
 }

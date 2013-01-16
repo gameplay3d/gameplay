@@ -24,30 +24,16 @@ Game::Game()
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL),
       _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
-      _gamepads(NULL), _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
+      _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
-    _gamepads = new std::vector<Gamepad*>;
     _timeEvents = new std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >();
 }
 
 Game::~Game()
 {
-    if (_scriptListeners)
-    {
-        for (unsigned int i = 0; i < _scriptListeners->size(); i++)
-        {
-            SAFE_DELETE((*_scriptListeners)[i]);
-        }
-        SAFE_DELETE(_scriptListeners);
-    }
-
-    if (_scriptController)
-    {
-        _scriptController->finalize();
-        SAFE_DELETE(_scriptController);
-    }
+	SAFE_DELETE(_scriptController);
 
     // Do not call any virtual functions from the destructor.
     // Finalization is done from outside this class.
@@ -112,9 +98,6 @@ bool Game::startup()
     RenderState::initialize();
     FrameBuffer::initialize();
 
-    // Load any gamepads, ui or physical.
-    loadGamepads();
-
     _animationController = new AnimationController();
     _animationController->initialize();
 
@@ -129,6 +112,9 @@ bool Game::startup()
 
     _scriptController = new ScriptController();
     _scriptController->initialize();
+
+    // Load any gamepads, ui or physical.
+    loadGamepads();
 
     // Set the script callback functions.
     if (_properties)
@@ -181,20 +167,31 @@ void Game::shutdown()
         GP_ASSERT(_aiController);
 
         Platform::signalShutdown();
+
+		// Call user finalize
         finalize();
 
+		// Shutdown scripting system first so that any objects allocated in script are released before our subsystems are released
+		_scriptController->finalizeGame();
+		if (_scriptListeners)
+		{
+			for (size_t i = 0; i < _scriptListeners->size(); i++)
+			{
+				SAFE_DELETE((*_scriptListeners)[i]);
+			}
+			SAFE_DELETE(_scriptListeners);
+		}
+		_scriptController->finalize();
 
-        std::vector<Gamepad*>::iterator itr = _gamepads->begin();
-        std::vector<Gamepad*>::iterator end = _gamepads->end();
-        while (itr != end)
+        std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
+        if (gamepads)
         {
-            SAFE_DELETE(*itr);
-            itr++;
+            for (size_t i = 0, count = gamepads->size(); i < count; ++i)
+            {
+                SAFE_DELETE((*gamepads)[i]);
+            }
+            gamepads->clear();
         }
-        _gamepads->clear();
-        SAFE_DELETE(_gamepads);
-
-        _scriptController->finalizeGame();
 
         _animationController->finalize();
         SAFE_DELETE(_animationController);
@@ -216,7 +213,7 @@ void Game::shutdown()
 
         SAFE_DELETE(_properties);
 
-        _state = UNINITIALIZED;
+		_state = UNINITIALIZED;
     }
 }
 
@@ -263,7 +260,11 @@ void Game::resume()
 
 void Game::exit()
 {
-    shutdown();
+	// Schedule a call to shutdown rather than calling it right away.
+	// This handles the case of shutting down the script system from
+	// within a script function (which can cause errors).
+	static ShutdownListener listener;
+	schedule(0, &listener);
 }
 
 void Game::frame()
@@ -273,8 +274,13 @@ void Game::frame()
         initialize();
         _scriptController->initializeGame();
         _initialized = true;
-        triggerGamepadEvents(); // Now that the game has been initialized, trigger any gamepad attached events.
     }
+
+	static double lastFrameTime = Game::getGameTime();
+	double frameTime = getGameTime();
+
+    // Fire time events to scheduled TimeListeners
+    fireTimeEvents(frameTime);
 
     if (_state == Game::RUNNING)
     {
@@ -284,16 +290,11 @@ void Game::frame()
         GP_ASSERT(_aiController);
 
         // Update Time.
-        static double lastFrameTime = Game::getGameTime();
-        double frameTime = getGameTime();
         float elapsedTime = (frameTime - lastFrameTime);
         lastFrameTime = frameTime;
 
         // Update the scheduled and running animations.
         _animationController->update(elapsedTime);
-
-        // Fire time events to scheduled TimeListeners
-        fireTimeEvents(frameTime);
 
         // Update the physics.
         _physicsController->update(elapsedTime);
@@ -325,7 +326,7 @@ void Game::frame()
             _frameLastFPS = getGameTime();
         }
     }
-    else
+	else if (_state == Game::PAUSED)
     {
         // Application Update.
         update(0);
@@ -576,41 +577,23 @@ void Game::loadGamepads()
     // Load virtual gamepads.
     if (_properties)
     {
-        // Check if there is a virtual keyboard included in the .config file.
-        // If there is, try to create it and assign it to "player one".
+        // Check if there are any virtual gamepads included in the .config file.
+        // If there are, create and initialize them.
         Properties* gamepadProperties = _properties->getNamespace("gamepads", true);
-        unsigned int gamepadCount = 0;
         if (gamepadProperties && gamepadProperties->exists("form"))
         {
             const char* gamepadFormPath = gamepadProperties->getString("form");
             GP_ASSERT(gamepadFormPath);
-            Gamepad* gamepad = new Gamepad(gamepadCount, gamepadFormPath);
+            Gamepad* gamepad = Gamepad::add(gamepadFormPath);
             GP_ASSERT(gamepad);
-
-            _gamepads->push_back(gamepad);
-            gamepadCount++;
         }
     }
-
-    // Checks for any physical gamepads
-    getGamepadCount();
 }
 
-unsigned int Game::createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount)
+void Game::ShutdownListener::timeEvent(long timeDiff, void* cookie)
 {
-    Gamepad* gamepad = new Gamepad(id, handle, buttonCount, joystickCount, triggerCount);
-    GP_ASSERT(gamepad);
-    _gamepads->push_back(gamepad);
-    return (unsigned int)(_gamepads->size() - 1);
-}
-
-void Game::triggerGamepadEvents()
-{
-    for (std::vector<Gamepad*>::iterator itr = _gamepads->begin(); itr != _gamepads->end(); itr++)
-    {
-        if ((*itr)->isConnected())
-            gamepadEvent(Gamepad::CONNECTED_EVENT, (*itr));
-    }
+	Game::getInstance()->shutdown();
 }
 
 }
+

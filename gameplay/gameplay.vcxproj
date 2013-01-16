@@ -89,6 +89,7 @@
     <ClCompile Include="src\gameplay-main-blackberry.cpp" />
     <ClCompile Include="src\gameplay-main-linux.cpp" />
     <ClCompile Include="src\gameplay-main-windows.cpp" />
+    <ClCompile Include="src\HeightField.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
@@ -149,12 +150,13 @@
     <ClCompile Include="src\lua\lua_Game.cpp" />
     <ClCompile Include="src\lua\lua_GameClearFlags.cpp" />
     <ClCompile Include="src\lua\lua_Gamepad.cpp" />
-    <ClCompile Include="src\lua\lua_GamepadButtonState.cpp" />
+    <ClCompile Include="src\lua\lua_GamepadButtonMapping.cpp" />
     <ClCompile Include="src\lua\lua_GamepadGamepadEvent.cpp" />
     <ClCompile Include="src\lua\lua_GameState.cpp" />
     <ClCompile Include="src\lua\lua_Gesture.cpp" />
     <ClCompile Include="src\lua\lua_GestureGestureEvent.cpp" />
     <ClCompile Include="src\lua\lua_Global.cpp" />
+    <ClCompile Include="src\lua\lua_HeightField.cpp" />
     <ClCompile Include="src\lua\lua_Image.cpp" />
     <ClCompile Include="src\lua\lua_ImageFormat.cpp" />
     <ClCompile Include="src\lua\lua_Joint.cpp" />
@@ -225,6 +227,7 @@
     <ClCompile Include="src\lua\lua_RenderState.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateAutoBinding.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateBlend.cpp" />
+    <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStateBlock.cpp" />
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
     <ClCompile Include="src\lua\lua_Scene.cpp" />
@@ -235,6 +238,8 @@
     <ClCompile Include="src\lua\lua_Slider.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
+    <ClCompile Include="src\lua\lua_Terrain.cpp" />
+    <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
@@ -307,6 +312,8 @@
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
+    <ClCompile Include="src\Terrain.cpp" />
+    <ClCompile Include="src\TerrainPatch.cpp" />
     <ClCompile Include="src\TextBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Theme.cpp" />
@@ -357,6 +364,7 @@
     <ClInclude Include="src\Gamepad.h" />
     <ClInclude Include="src\gameplay.h" />
     <ClInclude Include="src\Gesture.h" />
+    <ClInclude Include="src\HeightField.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Joystick.h" />
@@ -418,12 +426,13 @@
     <ClInclude Include="src\lua\lua_Game.h" />
     <ClInclude Include="src\lua\lua_GameClearFlags.h" />
     <ClInclude Include="src\lua\lua_Gamepad.h" />
-    <ClInclude Include="src\lua\lua_GamepadButtonState.h" />
+    <ClInclude Include="src\lua\lua_GamepadButtonMapping.h" />
     <ClInclude Include="src\lua\lua_GamepadGamepadEvent.h" />
     <ClInclude Include="src\lua\lua_GameState.h" />
     <ClInclude Include="src\lua\lua_Gesture.h" />
     <ClInclude Include="src\lua\lua_GestureGestureEvent.h" />
     <ClInclude Include="src\lua\lua_Global.h" />
+    <ClInclude Include="src\lua\lua_HeightField.h" />
     <ClInclude Include="src\lua\lua_Image.h" />
     <ClInclude Include="src\lua\lua_ImageFormat.h" />
     <ClInclude Include="src\lua\lua_Joint.h" />
@@ -494,6 +503,7 @@
     <ClInclude Include="src\lua\lua_RenderState.h" />
     <ClInclude Include="src\lua\lua_RenderStateAutoBinding.h" />
     <ClInclude Include="src\lua\lua_RenderStateBlend.h" />
+    <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h" />
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h" />
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
     <ClInclude Include="src\lua\lua_Scene.h" />
@@ -504,6 +514,8 @@
     <ClInclude Include="src\lua\lua_Slider.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
+    <ClInclude Include="src\lua\lua_Terrain.h" />
+    <ClInclude Include="src\lua\lua_TerrainFlags.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />
@@ -575,6 +587,8 @@
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Technique.h" />
+    <ClInclude Include="src\Terrain.h" />
+    <ClInclude Include="src\TerrainPatch.h" />
     <ClInclude Include="src\TextBox.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
@@ -607,6 +621,8 @@
     <None Include="res\shaders\lib\lighting-spot.frag" />
     <None Include="res\shaders\lib\lighting-spot.vert" />
     <None Include="res\shaders\lib\lighting.frag" />
+    <None Include="res\shaders\terrain.frag" />
+    <None Include="res\shaders\terrain.vert" />
     <None Include="res\shaders\textured-bumped.frag" />
     <None Include="res\shaders\textured-bumped.vert" />
     <None Include="res\shaders\textured-unlit.frag" />
@@ -871,7 +887,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__BB10__;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
@@ -906,7 +922,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_XINPUT;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -918,6 +934,8 @@
     <Lib>
       <Verbose>
       </Verbose>
+      <AdditionalDependencies>XInput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMem|x64'">
@@ -946,7 +964,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__BB10__;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;GAMEPLAY_MEM_LEAK_DETECTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>

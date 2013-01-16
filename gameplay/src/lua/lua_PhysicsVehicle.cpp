@@ -5,8 +5,11 @@
 #include "Game.h"
 #include "MathUtil.h"
 #include "Node.h"
+#include "PhysicsCharacter.h"
 #include "PhysicsCollisionObject.h"
 #include "PhysicsController.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsRigidBody.h"
 #include "PhysicsVehicle.h"
 #include "PhysicsVehicleWheel.h"
 #include "ScriptController.h"
@@ -23,6 +26,11 @@ void luaRegister_PhysicsVehicle()
     {
         {"addCollisionListener", lua_PhysicsVehicle_addCollisionListener},
         {"addWheel", lua_PhysicsVehicle_addWheel},
+        {"asCharacter", lua_PhysicsVehicle_asCharacter},
+        {"asGhostObject", lua_PhysicsVehicle_asGhostObject},
+        {"asRigidBody", lua_PhysicsVehicle_asRigidBody},
+        {"asVehicle", lua_PhysicsVehicle_asVehicle},
+        {"asVehicleWheel", lua_PhysicsVehicle_asVehicleWheel},
         {"collidesWith", lua_PhysicsVehicle_collidesWith},
         {"getBoostGain", lua_PhysicsVehicle_getBoostGain},
         {"getBoostSpeed", lua_PhysicsVehicle_getBoostSpeed},
@@ -109,7 +117,7 @@ int lua_PhysicsVehicle_addCollisionListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     PhysicsVehicle* instance = getInstance(state);
                     instance->addCollisionListener(param1);
@@ -156,7 +164,7 @@ int lua_PhysicsVehicle_addCollisionListener(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -220,6 +228,226 @@ int lua_PhysicsVehicle_addWheel(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_asCharacter(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                void* returnPtr = (void*)instance->asCharacter();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "PhysicsCharacter");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicle_asCharacter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_asGhostObject(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                void* returnPtr = (void*)instance->asGhostObject();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "PhysicsGhostObject");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicle_asGhostObject - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_asRigidBody(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                void* returnPtr = (void*)instance->asRigidBody();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "PhysicsRigidBody");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicle_asRigidBody - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_asVehicle(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                void* returnPtr = (void*)instance->asVehicle();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "PhysicsVehicle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicle_asVehicle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicle_asVehicleWheel(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicle* instance = getInstance(state);
+                void* returnPtr = (void*)instance->asVehicleWheel();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "PhysicsVehicleWheel");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicle_asVehicleWheel - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -1186,7 +1414,7 @@ int lua_PhysicsVehicle_removeCollisionListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     PhysicsVehicle* instance = getInstance(state);
                     instance->removeCollisionListener(param1);
@@ -1233,7 +1461,7 @@ int lua_PhysicsVehicle_removeCollisionListener(lua_State* state)
                     (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;

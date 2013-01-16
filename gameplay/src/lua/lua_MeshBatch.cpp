@@ -313,7 +313,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
-                    ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+                    const char* param3 = ScriptUtil::getString(3, false);
 
                     // Get parameter 4 off the stack.
                     bool param4 = ScriptUtil::luaCheckBool(state, 4);
@@ -403,7 +403,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
-                    ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+                    const char* param3 = ScriptUtil::getString(3, false);
 
                     // Get parameter 4 off the stack.
                     bool param4 = ScriptUtil::luaCheckBool(state, 4);
@@ -501,7 +501,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
-                    ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+                    const char* param3 = ScriptUtil::getString(3, false);
 
                     // Get parameter 4 off the stack.
                     bool param4 = ScriptUtil::luaCheckBool(state, 4);

@@ -23,7 +23,7 @@ PhysicsGhostObject::PhysicsGhostObject(Node* node, const PhysicsCollisionShape::
     _ghostObject->setCollisionFlags(_ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
     // Initialize a physics motion state object for syncing the transform.
-    _motionState = new PhysicsMotionState(_node, &centerOfMassOffset);
+    _motionState = new PhysicsMotionState(_node, this, &centerOfMassOffset);
     _motionState->getWorldTransform(_ghostObject->getWorldTransform());
 
     // Add the ghost object to the physics world.
@@ -67,16 +67,15 @@ PhysicsGhostObject* PhysicsGhostObject::create(Node* node, Properties* propertie
     }
 
     // Load the physics collision shape definition.
-    PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
-    if (shape == NULL)
+    PhysicsCollisionShape::Definition shape = PhysicsCollisionShape::Definition::create(node, properties);
+    if (shape.isEmpty())
     {
         GP_ERROR("Failed to create collision shape during ghost object creation.");
         return NULL;
     }
 
     // Create the ghost object.
-    PhysicsGhostObject* ghost = new PhysicsGhostObject(node, *shape);
-    SAFE_DELETE(shape);
+    PhysicsGhostObject* ghost = new PhysicsGhostObject(node, shape);
 
     return ghost;
 }
