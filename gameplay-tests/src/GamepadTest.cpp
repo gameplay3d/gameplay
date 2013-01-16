@@ -56,7 +56,7 @@ void GamepadTest::update(float elapsedTime)
         {
             gamepad->update(elapsedTime);
 
-            sprintf(s, "Player: %d - VendorID:%d|%s, Product ID:%d|%s\nButtons: ", i,
+            sprintf(s, "Player: %d - VendorID:%d,%s, Product ID:%d,%s\nButtons: ", i,
                         gamepad->getVendorId(), gamepad->getVendorString(),
                         gamepad->getProductId(), gamepad->getProductString());
             _status += s;

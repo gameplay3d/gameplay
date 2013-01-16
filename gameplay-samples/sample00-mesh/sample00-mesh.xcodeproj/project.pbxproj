@@ -109,6 +109,7 @@
 				5BAF2037152F2B47003E2AC3 /* OpenGLES.framework in Frameworks */,
 				5BAF2038152F2B47003E2AC3 /* QuartzCore.framework in Frameworks */,
 				5BAF2039152F2B47003E2AC3 /* UIKit.framework in Frameworks */,
+				42685616157575030013522F /* libgameplay.a in Frameworks */,
 				5B04C5D414BFE1A200EB0071 /* libbullet.a in Frameworks */,
 				5B04C5D514BFE1A200EB0071 /* libogg.a in Frameworks */,
 				5B04C5D614BFE1A200EB0071 /* libvorbis.a in Frameworks */,
@@ -116,7 +117,6 @@
 				5B04C5D814BFE1A200EB0071 /* libvorbisfile.a in Frameworks */,
 				5B04C5D914BFE1A200EB0071 /* libpng.a in Frameworks */,
 				5B04C5DA14BFE1A200EB0071 /* libz.dylib in Frameworks */,
-				42685616157575030013522F /* libgameplay.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +487,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -524,6 +525,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/gameplay-byvblnepdcgmghbniqumwtwzdxny/Build/Products/Debug\"",
 				);
 				OTHER_LDFLAGS = "-ObjC++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
