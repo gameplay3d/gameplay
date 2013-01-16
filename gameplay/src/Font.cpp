@@ -4,34 +4,9 @@
 #include "FileSystem.h"
 #include "Bundle.h"
 
-// Default font vertex shader
-#define FONT_VSH \
-    "uniform mat4 u_projectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "attribute vec4 a_color;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-        "v_color = a_color;\n" \
-    "}\n"
-
-// Default font fragment shader
-#define FONT_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = v_color;\n" \
-        "gl_FragColor.a = texture2D(u_texture, v_texCoord).a * v_color.a;\n" \
-    "}"
+// Default font shaders
+#define FONT_VSH "res/shaders/font.vert"
+#define FONT_FSH "res/shaders/font.frag"
 
 namespace gameplay
 {
@@ -124,7 +99,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
-        __fontEffect = Effect::createFromSource(FONT_VSH, FONT_FSH);
+        __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH);
         if (__fontEffect == NULL)
         {
             GP_ERROR("Failed to create effect for font.");
