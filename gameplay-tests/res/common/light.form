@@ -27,7 +27,7 @@ form formLightSelect
 			style = iconNoBorder
 			imageSize = 35, 35
 			size = 200, 40
-			text = No Lighting
+			text = No Light
 			value = true
 		}
 

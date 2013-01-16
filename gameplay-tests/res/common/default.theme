@@ -191,6 +191,11 @@ theme mainMenu
         {
             imageList = activeImages
         }
+		
+		stateDisabled
+		{
+			opacity = 0.6
+		}
     }
 
     style topLeftAlignedEntry : basic
