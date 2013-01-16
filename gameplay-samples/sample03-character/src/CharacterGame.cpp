@@ -244,7 +244,7 @@ void CharacterGame::update(float elapsedTime)
         _gamepad->getJoystickValues(0, &_currentDirection);
     }
     
-    if (_currentDirection.isZero());
+    if (_currentDirection.isZero())
     {
         // Construct direction vector from keyboard input
         if (_keyFlags & NORTH)
