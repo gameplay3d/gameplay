@@ -44,6 +44,7 @@ void LightTest::initialize()
 	_directionalLightQuadModel = Model::create(directionalLightQuadMesh);
 	setUnlitMaterialTexture(_directionalLightQuadModel, "res/png/light-directional.png"); 
 	_directionalLightNode->setModel(_directionalLightQuadModel);
+    _directionalLightNode->setTranslation(0.0f, 0.0f, 7.0f);
 	_scene->addNode(_directionalLightNode);
 
 	// Create a spotlight and create a reference icon for the light
@@ -122,6 +123,7 @@ void LightTest::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_form);
 }
 
 void LightTest::update(float elapsedTime)
