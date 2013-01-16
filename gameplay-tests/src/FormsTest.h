@@ -14,6 +14,8 @@ public:
 
     static FormsTest* create();
 
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
 protected:
     void initialize();
     void finalize();
@@ -31,6 +33,8 @@ private:
     Form* _activeForm;
     std::vector<Form*> _forms;
     Gamepad* _gamepad;
+    Gamepad* _virtualGamepad;
+    Gamepad* _physicalGamepad;
     unsigned int _keyFlags;
     bool _touched;
     int _touchX;
@@ -38,7 +42,7 @@ private:
     std::vector<const char*> _formFiles;
 
     void formChanged();
-    void createTestForm(Theme::Style* style);
+    void createTestForm(Theme* theme);
 
     std::string _testString;
 };

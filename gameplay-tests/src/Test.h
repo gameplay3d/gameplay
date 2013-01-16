@@ -40,6 +40,7 @@ public:
     void frame();
     unsigned int getFrameRate() const;
     const Rectangle& getViewport() const;
+	void setViewport(const Rectangle& viewport);
     unsigned int getWidth() const;
     unsigned int getHeight() const;
     float getAspectRatio() const;
@@ -52,6 +53,9 @@ public:
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
     virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+    bool hasMouse();
+    bool isMouseCaptured();
+    void setMouseCaptured(bool captured);
     void setMultiTouch(bool enabled);
     bool isMultiTouch() const;
     void getAccelerometerValues(float* pitch, float* roll);
@@ -67,10 +71,7 @@ public:
     virtual void gestureTapEvent(int x, int y);
 
     // gamepad
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
-    unsigned int getGamepadCount() const;
-    unsigned int getGamepadsConnected();
-    Gamepad* getGamepad(unsigned int index) const;
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
 protected:
 

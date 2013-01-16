@@ -2,7 +2,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Text", TextTest, 100);
+    ADD_TEST("Graphics", "Text", TextTest, 9);
 #endif
 
 std::string _fontNames[] =
@@ -17,8 +17,8 @@ std::string _fontNames[] =
 };
 
 TextTest::TextTest()
-    : _font(NULL), _fontIndex(0), _stateBlock(NULL), _viewport(250, 100, 512, 200), _alignment(Font::ALIGN_LEFT),  
-    _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _simple(false), _rightToLeft(false), _fontsCount(7), _form(NULL)
+    : _form(NULL), _stateBlock(NULL), _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
+      _fontsCount(7), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
 {
 }
 

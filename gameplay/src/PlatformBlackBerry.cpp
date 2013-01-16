@@ -491,6 +491,149 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
     }
 }
 
+#ifdef __BB10__
+
+static const int __VIDs[] = {
+    0x1038,
+    0x057e,
+    0x25b6
+};
+
+static const int __PIDs[] = {
+    0x1412,
+    0x0306,
+    0x0001
+};
+
+static const char* __vendorStrings[] =
+{
+    "SteelSeries",
+    "Nintendo",
+    "Fructel"
+};
+
+static const char* __productStrings[] =
+{
+    "FREE",
+    "Wii Remote",
+    "Gametel"
+};
+
+static const unsigned int __knownGamepads = 3;
+
+void loadGamepad(GamepadHandle handle, int* buttonCount, int* joystickCount, int* productId, int* vendorId, char* id, char* productString, char* vendorString)
+{
+    screen_get_device_property_iv(handle, SCREEN_PROPERTY_BUTTON_COUNT, buttonCount);
+    screen_get_device_property_cv(handle, SCREEN_PROPERTY_ID_STRING, 128, id);
+    screen_get_device_property_cv(handle, SCREEN_PROPERTY_PRODUCT, 64, productString);
+    screen_get_device_property_cv(handle, SCREEN_PROPERTY_VENDOR, 64, vendorString);
+
+    // Check for the existence of analog sticks.
+    int analogs[3];
+    if (!screen_get_device_property_iv(handle, SCREEN_PROPERTY_ANALOG0, analogs))
+    {
+    	++(*joystickCount);
+    }
+
+    if (!screen_get_device_property_iv(handle, SCREEN_PROPERTY_ANALOG1, analogs))
+    {
+    	++(*joystickCount);
+    }
+
+    // ID string format: A-BBBB-CCCC-D.D
+    // A is the device's index
+    // BBBB is the device's Vendor ID (in hexadecimal)
+    // CCCC is the device's Product ID (also in hexadecimal)
+    // D.D is the device's version number
+    char* token = strtok(id, "-");
+    token = strtok(NULL, "-");
+    if (token)
+    {
+	    *vendorId = strtol(token, NULL, 16);
+    }
+
+    token = strtok(NULL, "-");
+    if (token)
+    {
+        *productId = strtol(token, NULL, 16);
+    }
+
+    // For gamepads unknown to BB10,
+    // check VID and PID against gamepads known to gameplay.
+    if (strlen(productString) == 0 || strlen(vendorString) == 0)
+    {
+        for (unsigned int i = 0; i < __knownGamepads; ++i)
+        {
+            if (__VIDs[i] == *vendorId && __PIDs[i] == *productId)
+            {
+            	strcpy(vendorString, __vendorStrings[i]);
+                strcpy(productString, __productStrings[i]);
+            }
+        }
+    }
+}
+
+void Platform::pollGamepadState(Gamepad* gamepad)
+{
+    screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_BUTTONS, (int*)&gamepad->_buttons);
+
+    unsigned int i;
+    for (i = 0; i < gamepad->_joystickCount; ++i)
+    {
+        GP_ASSERT(i < 2);
+
+        int analog[3];
+        switch (i)
+        {
+        case 0:
+            screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_ANALOG0, analog);
+            break;
+        case 1:
+            screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_ANALOG1, analog);
+            break;
+        }
+        
+        // So far we've tested two gamepads with analog sticks on BlackBerry:
+        // the SteelSeries FREE, and the iControlPad.
+        // Both return values between -128 and +127, with the y axis starting from
+        // the top at -128.
+        // 1 / 128 == 0.0078125f
+        // 1 / 127 == 0.0078740157480315f
+        //float x = (float)analog[0] * 0.0078125f;
+        //float y = -(float)analog[1] * 0.0078125f;
+        float x = (float)analog[0];
+        float y = -(float)analog[1];
+        x *= (x < 0) ? 0.0078125f : 0.0078740157480315f;
+        y *= (y > 0) ? 0.0078125f : 0.0078740157480315f;
+
+        gamepad->_joysticks[i].set(x, y);        
+    }
+
+    for (i = 0; i < gamepad->_triggerCount; ++i)
+    {
+        GP_ASSERT(i < 2);
+
+        int analog[3];
+        switch (i)
+        {
+        case 0:
+            screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_ANALOG0, analog);
+            break;
+        case 1:
+            screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_ANALOG1, analog);
+            break;
+        }
+
+        float value = (float)analog[2] * 0.0078125f;
+        gamepad->_triggers[i] = value;
+    }
+}
+#else
+void Platform::getGamepadButtonValues(GamepadHandle handle, unsigned int* out) { }
+void Platform::getGamepadJoystickValues(GamepadHandle handle, unsigned int joystickIndex, Vector2* outValue) { }
+void Platform::getGamepadTriggerValue(GamepadHandle handle, unsigned int triggerIndex, float* out) { }
+#endif
+
 Platform::Platform(Game* game)
     : _game(game)
 {
@@ -544,6 +687,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 {
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
+
+    screen_device_t* screenDevs;
 
     // Query game config
     int samples = 0;
@@ -832,6 +977,31 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
 
+    // Discover gamepad devices.
+    int count;
+    screen_get_context_property_iv(__screenContext, SCREEN_PROPERTY_DEVICE_COUNT, &count);
+    screenDevs = (screen_device_t*)calloc(count, sizeof(screen_device_t));
+    screen_get_context_property_pv(__screenContext, SCREEN_PROPERTY_DEVICES, (void**)screenDevs);
+
+	for (int i = 0; i < count; i++) {
+	    int type;
+        screen_get_device_property_iv(screenDevs[i], SCREEN_PROPERTY_TYPE, &type);
+
+        if (type == SCREEN_EVENT_GAMEPAD || type == SCREEN_EVENT_JOYSTICK)
+        {
+            int buttonCount = 0;
+            int joystickCount = 0;
+            int productId;
+            int vendorId;
+            char id[128];
+            char productString[64];
+            char vendorString[64];
+            loadGamepad(screenDevs[i], &buttonCount, &joystickCount, &productId, &vendorId, id, productString, vendorString);
+            Gamepad::add(id, screenDevs[i], buttonCount, joystickCount, 0, vendorId, productId, vendorString, productString);
+        }
+	}
+	free(screenDevs);
+
     return platform;
 
 error:
@@ -1055,6 +1225,43 @@ int Platform::enterMessagePump()
                         }
                         break;
                     }
+#ifdef __BB10__
+                    case SCREEN_EVENT_DEVICE:
+                    {
+                        // A device was attached or removed.
+                        screen_device_t device;
+                        int attached;
+
+                        screen_get_event_property_pv(__screenEvent, SCREEN_PROPERTY_DEVICE, (void**)&device);
+                        screen_get_event_property_iv(__screenEvent, SCREEN_PROPERTY_ATTACHED, &attached);
+
+                        if (attached)
+                        {
+                            int type;
+                            screen_get_device_property_iv(device, SCREEN_PROPERTY_TYPE, &type);
+                            if (type == SCREEN_EVENT_GAMEPAD || type == SCREEN_EVENT_JOYSTICK)
+                            {
+                                int buttonCount = 0;
+                                int joystickCount = 0;
+                                int productId;
+                                int vendorId;
+                                char id[128];
+                                char productString[64];
+                                char vendorString[64];
+                                loadGamepad(device, &buttonCount, &joystickCount, &productId, &vendorId, id, productString, vendorString);
+                                Gamepad::add(id, device, buttonCount, joystickCount, 0, vendorId, productId, vendorString, productString);
+                            }
+                        }
+                        else
+                        {
+                            Gamepad::remove(device);
+                        }
+
+                        break;
+                    }
+#endif
+                    default:
+                        break;
                 }
             }
             else if (domain == navigator_get_domain())
@@ -1363,65 +1570,6 @@ void Platform::unregisterGesture(Gesture::GestureEvent evt)
 bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 {
     return __gestureEventsProcessed.test(evt);
-}
-
-unsigned int Platform::getGamepadsConnected()
-{
-    return 0;
-}
-
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
-{
-    return false;
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle)
-{
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return false;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValues)
-{
-}
-
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
-{
-    return 0.0f;
 }
 
 bool Platform::launchURL(const char* url)

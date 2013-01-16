@@ -16,10 +16,8 @@ static const unsigned int MOVE_DOWN = 32;
 static const float MOVE_SPEED = 15.0f;
 static const float UP_DOWN_SPEED = 10.0f;
 
-#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
-
 Audio3DTest::Audio3DTest()
-    : _font(NULL), _scene(NULL), _cubeNode(NULL), _gamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
+    : _font(NULL), _scene(NULL), _cubeNode(NULL), _gamepad(NULL), _virtualGamepad(NULL), _physicalGamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
 {
 }
 
@@ -62,9 +60,23 @@ void Audio3DTest::initialize()
     _scene->addNode(_fpCamera.getRootNode());
     _scene->setActiveCamera(_fpCamera.getCamera());
 
-    _gamepad = getGamepad(0);
-    GP_ASSERT(_gamepad);
-    _gamepad->getForm()->setConsumeInputEvents(false);
+    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
+    std::vector<Gamepad*>::iterator it;
+    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    {
+        Gamepad* gamepad = *it;
+        if (gamepad->isVirtual())
+            _virtualGamepad = gamepad;
+        else if (!_physicalGamepad)
+        {
+            _physicalGamepad = gamepad;
+        }
+    }
+
+    if (_physicalGamepad)
+        _gamepad = _physicalGamepad;
+    else
+        _gamepad = _virtualGamepad;
 }
 
 void Audio3DTest::finalize()
@@ -117,9 +129,9 @@ void Audio3DTest::update(float elapsedTime)
             _fpCamera.moveDown(time * UP_DOWN_SPEED);
         }
     }
-    else if (_gamepad->isJoystickActive(0))
+    else if (_gamepad->getJoystickCount() > 0)
     {
-        _gamepad->getJoystickAxisValues(0, &move);
+        _gamepad->getJoystickValues(0, &move);
         move.x = -move.x;
     }
 
@@ -130,11 +142,11 @@ void Audio3DTest::update(float elapsedTime)
         _fpCamera.moveLeft(move.x);
     }
 
-    if (!_buttonPressed && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
+    if (!_buttonPressed && _gamepad->isButtonDown(Gamepad::BUTTON_A))
     {
         addSound("footsteps.wav");
     }
-    _buttonPressed = _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED;
+    _buttonPressed = _gamepad->isButtonDown(Gamepad::BUTTON_A);
 
     _gamepad->update(elapsedTime);
 }
@@ -335,4 +347,38 @@ void Audio3DTest::loadGrid(Scene* scene)
     Node* node = scene->addNode("grid");
     node->setModel(gridModel);
     gridModel->release();
+}
+
+void Audio3DTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setConsumeInputEvents(false);
+            _virtualGamepad = gamepad;
+        }
+        else
+        {
+            _physicalGamepad = gamepad;
+        }
+
+        if (_physicalGamepad)
+        {
+            _gamepad = _physicalGamepad;
+        }
+        else
+        {
+            _gamepad = _virtualGamepad;
+        }
+
+        break;
+    case Gamepad::DISCONNECTED_EVENT:
+        if (gamepad == _physicalGamepad)
+        {
+            _gamepad = _virtualGamepad;
+        }
+        break;
+    }
 }

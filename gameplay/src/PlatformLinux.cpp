@@ -24,6 +24,9 @@ static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
 static float __pitch;
 static float __roll;
+static bool __mouseCaptured = false;
+static float __mouseCapturePointX = 0;
+static float __mouseCapturePointY = 0;
 static bool __cursorVisible = true;
 static Display* __display;
 static Window   __window;
@@ -499,10 +502,16 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     __attachToWindow = (Window)attachToWindow;
     FileSystem::setResourcePath("./");
     Platform* platform = new Platform(game);
-
-    // Get window configuration
-
-    // Default values
+    
+    // Get the display and initialize
+    __display = XOpenDisplay(NULL);
+    if (__display == NULL)
+    {
+        perror("XOpenDisplay");
+        return NULL;
+    }
+     
+    // Get the window configuration values
     const char *title = NULL;
     int __x = 0, __y = 0, __width = 1280, __height = 800;
     bool fullscreen = false;
@@ -516,35 +525,29 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             // Read window rect.
             int x = config->getInt("x");
-            if (x != 0) __x = x;
-
             int y = config->getInt("y");
-            if (y != 0) __y = y;
-            
             int width = config->getInt("width");
-            if (width != 0) __width = width;
-
             int height = config->getInt("height");
-            if (height != 0) __height = height;
-
             fullscreen = config->getBool("fullscreen");
 
-
+            if (fullscreen && width == 0 && height == 0)
+            {
+                // Use the screen resolution if fullscreen is true but width and height were not set in the config
+                int screen_num = DefaultScreen(__display);
+                width = DisplayWidth(__display, screen_num);
+                height = DisplayHeight(__display, screen_num);
+            }
+            if (x != 0) __x = x;
+            if (y != 0) __y = y;
+            if (width != 0) __width = width;
+            if (height != 0) __height = height;
         }
-    }
-
-    // Get the display and initialize.
-    __display = XOpenDisplay(NULL);
-    if (__display == NULL)
-    {
-        perror("XOpenDisplay");
-        return NULL;
     }
 
     // GLX version
     GLint majorGLX, minorGLX = 0;
     glXQueryVersion(__display, &majorGLX, &minorGLX);
-    if(majorGLX == 1 && minorGLX < 2)
+    if (majorGLX == 1 && minorGLX < 2)
     {
         perror("GLX 1.2 or greater is required.");
         XCloseDisplay(__display);
@@ -563,25 +566,25 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
     // Get the configs
     int configAttribs[] = 
-    { 
+    {
         GLX_RENDER_TYPE,    GLX_RGBA_BIT,
         GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
         GLX_X_RENDERABLE,   True,
-        GLX_DEPTH_SIZE,     24, 
+        GLX_DEPTH_SIZE,     24,
         GLX_STENCIL_SIZE,   8,
         GLX_RED_SIZE,       8,
         GLX_GREEN_SIZE,     8,
         GLX_BLUE_SIZE,      8,
         GLX_DOUBLEBUFFER,   True,
-        0 
+        0
     };
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
-    if( configCount == 0 || configs == 0 )    
-    {    
+    if ( configCount == 0 || configs == 0 )
+    {
         perror( "glXChooseFBConfig" );
-        return NULL;    
+        return NULL;
     }
 
     // Create the windows
@@ -591,8 +594,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     XSetWindowAttributes winAttribs;
     long eventMask;
     eventMask = ExposureMask | VisibilityChangeMask | StructureNotifyMask |
-                KeyPressMask | KeyReleaseMask | PointerMotionMask | 
-                ButtonPressMask | ButtonReleaseMask | 
+                KeyPressMask | KeyReleaseMask | PointerMotionMask |
+                ButtonPressMask | ButtonReleaseMask |
                 EnterWindowMask | LeaveWindowMask;
     winAttribs.event_mask = eventMask;
     winAttribs.border_pixel = 0;
@@ -602,9 +605,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     GLint winMask;
     winMask = CWBorderPixel | CWBitGravity | CWEventMask| CWColormap;
    
-    __window = XCreateWindow(__display, DefaultRootWindow(__display), __x, __y, __width, __height, 0, 
+    __window = XCreateWindow(__display, DefaultRootWindow(__display), __x, __y, __width, __height, 0,
                             visualInfo->depth, InputOutput, visualInfo->visual, winMask,
-                            &winAttribs); 
+                            &winAttribs);
 
     // Tell the window manager that it should send the delete window notification through ClientMessage
     __atomWmDeleteWindow = XInternAtom(__display, "WM_DELETE_WINDOW", False);
@@ -635,7 +638,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     XStoreName(__display, __window, title ? title : "");
 
     __context = glXCreateContext(__display, visualInfo, NULL, True);
-    if(!__context)
+    if (!__context)
     {
         perror("glXCreateContext");
         return NULL;
@@ -645,7 +648,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     // Use OpenGL 2.x with GLEW
     glewExperimental = GL_TRUE;
     GLenum glewStatus = glewInit();
-    if(glewStatus != GLEW_OK)
+    if (glewStatus != GLEW_OK)
     {
         perror("glewInit");
         return NULL;
@@ -685,14 +688,14 @@ double timespec2millis(struct timespec *a)
     return (1000.0 * a->tv_sec) + (0.000001 * a->tv_nsec);
 }
 
-void updateWindowSize()    
-{    
-    GP_ASSERT(__display);    
+void updateWindowSize()
+{
+    GP_ASSERT(__display);
     GP_ASSERT(__window);
-    XWindowAttributes windowAttrs;    
-    XGetWindowAttributes(__display, __window, &windowAttrs);      
-    __windowSize[0] = windowAttrs.width;    
-    __windowSize[1] = windowAttrs.height;    
+    XWindowAttributes windowAttrs;
+    XGetWindowAttributes(__display, __window, &windowAttrs);
+    __windowSize[0] = windowAttrs.width;
+    __windowSize[1] = windowAttrs.height;
 }
 
 int Platform::enterMessagePump()
@@ -717,7 +720,7 @@ int Platform::enterMessagePump()
     // Run the game.
     _game->run();
 
-    // Setup select for message handling (to allow non-blocking)    
+    // Setup select for message handling (to allow non-blocking)
     int x11_fd = ConnectionNumber(__display);
     
     pollfd xpolls[1];
@@ -728,12 +731,12 @@ int Platform::enterMessagePump()
     while (true)
     {
         poll( xpolls, 1, 16 );
-        // handle all pending events in one block 
-        while (XPending(__display))    
+        // handle all pending events in one block
+        while (XPending(__display))
         {
            XNextEvent(__display, &evt);
         
-            switch (evt.type) 
+            switch (evt.type)
             {
             case ClientMessage:
                 {
@@ -751,7 +754,7 @@ int Platform::enterMessagePump()
                 }
                 break;
 
-            case Expose: 
+            case Expose:
                 {
                     updateWindowSize();
                 }
@@ -764,18 +767,18 @@ int Platform::enterMessagePump()
 
                     //TempSym needed because XConvertCase operates on two keysyms: One lower and the other upper, we are only interested in the upper case
                     KeySym tempSym;
-                    if(capsOn && !shiftDown)
+                    if (capsOn && !shiftDown)
                         XConvertCase(sym,  &tempSym, &sym);
 
                     Keyboard::Key key = getKey(sym);
                     gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_PRESS, key);
 
-                    if(key == Keyboard::KEY_CAPS_LOCK)
+                    if (key == Keyboard::KEY_CAPS_LOCK)
                         capsOn = !capsOn;
-                    if(key == Keyboard::KEY_SHIFT)
+                    if (key == Keyboard::KEY_SHIFT)
                         shiftDown = true;
 
-                    if(int character = getUnicode(key))
+                    if (int character = getUnicode(key))
                         gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_CHAR, character);
 
                 }
@@ -785,10 +788,10 @@ int Platform::enterMessagePump()
                 {
                     //detect and drop repeating keystrokes (no other way to do this using the event interface)
                     XEvent next;
-                    if( XPending(__display) )
+                    if ( XPending(__display) )
                     {
                         XPeekEvent(__display,&next);
-                        if( next.type == KeyPress 
+                        if ( next.type == KeyPress
                             && next.xkey.time == evt.xkey.time
                             && next.xkey.keycode == evt.xkey.keycode )
                         {
@@ -801,7 +804,7 @@ int Platform::enterMessagePump()
                     Keyboard::Key key = getKey(sym);
                     gameplay::Platform::keyEventInternal(gameplay::Keyboard::KEY_RELEASE, key);
 
-                    if(key == Keyboard::KEY_SHIFT)
+                    if (key == Keyboard::KEY_SHIFT)
                         shiftDown = false;
                 }
                 break;
@@ -809,7 +812,7 @@ int Platform::enterMessagePump()
             case ButtonPress:
                 {
                     gameplay::Mouse::MouseEvent mouseEvt;
-                    switch(evt.xbutton.button)
+                    switch (evt.xbutton.button)
                     {
                         case 1:
                             mouseEvt = gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON;
@@ -822,8 +825,8 @@ int Platform::enterMessagePump()
                             break;
                         case 4:
                         case 5:
-                            gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL, 
-                                                                   evt.xbutton.x, evt.xbutton.y, 
+                            gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_WHEEL,
+                                                                   evt.xbutton.x, evt.xbutton.y,
                                                                    evt.xbutton.button == Button4 ? 1 : -1);
                             break;
                         default:
@@ -839,7 +842,7 @@ int Platform::enterMessagePump()
             case ButtonRelease:
                 {
                     gameplay::Mouse::MouseEvent mouseEvt;
-                    switch(evt.xbutton.button)
+                    switch (evt.xbutton.button)
                     {
                         case 1:
                             mouseEvt = gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON;
@@ -862,25 +865,45 @@ int Platform::enterMessagePump()
         
             case MotionNotify:
                 {
-                    if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, evt.xmotion.x, evt.xmotion.y, 0))
+                    int x = evt.xmotion.x;
+                    int y = evt.xmotion.y;
+
+                    if (__mouseCaptured)
+                    {
+                        if (x == __mouseCapturePointX && y == __mouseCapturePointY)
+                        {
+                            // Discard the first MotionNotify following capture
+                            // since it contains bogus x,y data.
+                            break;
+                        }
+
+                        // Convert to deltas
+                        x -= __mouseCapturePointX;
+                        y -= __mouseCapturePointY;
+
+                        // Warp mouse back to center of screen.
+                        XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+                    }
+
+                    if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_MOVE, x, y, 0))
                     {
                         if (evt.xmotion.state & Button1Mask)
                         {
-                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, evt.xmotion.x, evt.xmotion.y, 0);
+                            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
                         }
                         else if (evt.xmotion.state & Button3Mask)
                         {
                             // Update the pitch and roll by adding the scaled deltas.
-                            __roll += (float)(evt.xbutton.x - lx) * ACCELEROMETER_X_FACTOR;
-                            __pitch += -(float)(evt.xbutton.y - ly) * ACCELEROMETER_Y_FACTOR;
+                            __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
+                            __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
 
                             // Clamp the values to the valid range.
                             __roll = max(min(__roll, 90.0f), -90.0f);
                             __pitch = max(min(__pitch, 90.0f), -90.0f);
 
                             // Update the last X/Y values.
-                            lx = evt.xbutton.x;
-                            ly = evt.xbutton.y;
+                            lx = x;
+                            ly = y;
                         }
                     }
                 }
@@ -895,7 +918,7 @@ int Platform::enterMessagePump()
         {
             // Game state will be uninitialized if game was closed through Game::exit()
             if (_game->getState() == Game::UNINITIALIZED)
-                break;            
+                break;
             
             _game->frame();
         }
@@ -908,8 +931,8 @@ int Platform::enterMessagePump()
     return 0;
 }
     
-void Platform::signalShutdown() 
-{ 
+void Platform::signalShutdown()
+{
     // nothing to do  
 }
 
@@ -992,13 +1015,31 @@ bool Platform::hasMouse()
 
 void Platform::setMouseCaptured(bool captured)
 {
-    // TODO
+    if (captured != __mouseCaptured)
+    {
+        if (captured)
+        {
+            // Hide the cursor and warp it to the center of the screen
+            __mouseCapturePointX = getDisplayWidth() / 2;
+            __mouseCapturePointY = getDisplayHeight() / 2;
+
+            setCursorVisible(false);
+            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+        }
+        else
+        {
+            // Restore cursor
+            XWarpPointer(__display, None, __window, 0, 0, 0, 0, __mouseCapturePointX, __mouseCapturePointY);
+            setCursorVisible(true);
+        }
+
+        __mouseCaptured = captured;
+    }
 }
 
 bool Platform::isMouseCaptured()
 {
-    // TODO
-    return false;
+    return __mouseCaptured;
 }
 
 void Platform::setCursorVisible(bool visible)
@@ -1007,7 +1048,17 @@ void Platform::setCursorVisible(bool visible)
     {
         if (visible)
         {
-            XDefineCursor(__display, __window, None);
+            Cursor invisibleCursor;
+            Pixmap bitmapNoData;
+            XColor black;
+            static char noData[] = {0, 0, 0, 0, 0, 0, 0, 0};
+            black.red = black.green = black.blue = 0;
+            bitmapNoData = XCreateBitmapFromData(__display, __window, noData, 8, 8);
+            invisibleCursor = XCreatePixmapCursor(__display, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
+
+            XDefineCursor(__display, __window, invisibleCursor);
+            XFreeCursor(__display, invisibleCursor);
+            XFreePixmap(__display, bitmapNoData);
         }
         else
         {

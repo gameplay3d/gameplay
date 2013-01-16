@@ -181,8 +181,8 @@ void LightTest::initialize()
 
 	//Disable additional features untill lighting is enabled
 	_noLight->setSelected(true);
-	_addSpecular->disable();
-	_addBumped->disable();
+	_addSpecular->setEnabled(false);
+	_addBumped->setEnabled(false);
 
 	_form->setConsumeInputEvents(false);
 	
@@ -353,7 +353,7 @@ void LightTest::controlEvent(Control* control, EventType evt)
 			sprintf(txt, "Blue\n\n%.2f", color.z);
             _blueSlider->setText(txt);
         }
-		else if ((control == _specularSlider) && (_addSpecular->isChecked()))
+		else if (control == _specularSlider)
         {
 			setSpecularValue(_specularSlider->getValue());
 
@@ -369,8 +369,8 @@ void LightTest::controlEvent(Control* control, EventType evt)
 			{
 				_addSpecular->setChecked(false);
 				_addBumped->setChecked(false);
-				_addSpecular->disable();
-				_addBumped->disable();
+				_addSpecular->setEnabled(false);
+				_addBumped->setEnabled(false);
 			}
         }
 	    else if ((control == _directional) || 
@@ -381,8 +381,8 @@ void LightTest::controlEvent(Control* control, EventType evt)
         {
 			changeTechnique = true;
 
-			_addSpecular->enable();
-			_addBumped->enable();
+			_addSpecular->setEnabled(true);
+			_addBumped->setEnabled(true);
         }
 	}
 

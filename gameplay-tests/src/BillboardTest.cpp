@@ -3,7 +3,7 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Billboards", BillboardTest, 9);
+    ADD_TEST("Graphics", "Billboards", BillboardTest, 11);
 #endif
 
 static const unsigned int MOVE_FORWARD = 1;
@@ -24,10 +24,8 @@ static const float BILLBOARD_WIDTH = 0.5f;
 static const float BILLBOARD_HEIGHT = 0.5f;
 static const unsigned int BILLBOARD_COUNT = 200;
 
-#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
-
 BillboardTest::BillboardTest()
-    : _font(NULL), _scene(NULL), _ground(NULL), _gamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
+    : _font(NULL), _scene(NULL), _ground(NULL), _gamepad(NULL), _virtualGamepad(NULL), _physicalGamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
 {
 }
 
@@ -52,10 +50,23 @@ void BillboardTest::initialize()
     // Load billboards
     loadBillboards();
 
-	// Create a gamepad
-    _gamepad = getGamepad(0);
-    GP_ASSERT(_gamepad);
-    _gamepad->getForm()->setConsumeInputEvents(false);
+    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
+    std::vector<Gamepad*>::iterator it;
+    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    {
+        Gamepad* gamepad = *it;
+        if (gamepad->isVirtual())
+            _virtualGamepad = gamepad;
+        else if (!_physicalGamepad)
+        {
+            _physicalGamepad = gamepad;
+        }
+    }
+
+    if (_physicalGamepad)
+        _gamepad = _physicalGamepad;
+    else
+        _gamepad = _virtualGamepad;
 }
 
 void BillboardTest::finalize()
@@ -76,12 +87,12 @@ void BillboardTest::update(float elapsedTime)
     float time = (float)elapsedTime / 1000.0f;
 
     _gamepad->update(elapsedTime);
-    if (_gamepad->getButtonState(0) == Gamepad::BUTTON_PRESSED)
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
         _moveFlags |= MOVE_DOWN;
     else
         _moveFlags &= ~MOVE_DOWN;
 
-    if (_gamepad->getButtonState(1) == Gamepad::BUTTON_PRESSED)
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
         _moveFlags |= MOVE_UP;
     else
         _moveFlags &= ~MOVE_UP;
@@ -118,9 +129,9 @@ void BillboardTest::update(float elapsedTime)
             _camera.moveDown(time * UP_DOWN_SPEED);
         }
     }
-    else if (_gamepad->isJoystickActive(0))
+    else if (_gamepad->getJoystickCount() > 0)
     {
-        _gamepad->getJoystickAxisValues(0, &move);
+        _gamepad->getJoystickValues(0, &move);
         move.x = -move.x;
     }
 
@@ -149,11 +160,9 @@ void BillboardTest::render(float elapsedTime)
 		Node* node = _billboards[i];
 
 		// Rotate the node x/z to face the camera
-		Vector3 eye = node->getTranslationWorld();
-		Vector3 target = camera->getNode()->getTranslationWorld();
 		Matrix m;
-		Matrix::createLookAt(eye, target, camera->getNode()->getUpVectorWorld(), &m);
-		m.transpose();
+        Matrix::createBillboard(node->getTranslationWorld(), camera->getNode()->getTranslationWorld(),
+                                camera->getNode()->getUpVectorWorld(), &m);
 		Quaternion q;
 		m.getRotation(&q);
 		node->setRotation(q);
@@ -331,4 +340,38 @@ void BillboardTest::loadBillboards()
     }
 	SAFE_RELEASE(effect);
 	SAFE_RELEASE(mesh);
+}
+
+void BillboardTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setConsumeInputEvents(false);
+            _virtualGamepad = gamepad;
+        }
+        else
+        {
+            _physicalGamepad = gamepad;
+        }
+
+        if (_physicalGamepad)
+        {
+            _gamepad = _physicalGamepad;
+        }
+        else
+        {
+            _gamepad = _virtualGamepad;
+        }
+
+        break;
+    case Gamepad::DISCONNECTED_EVENT:
+        if (gamepad == _physicalGamepad)
+        {
+            _gamepad = _virtualGamepad;
+        }
+        break;
+    }
 }

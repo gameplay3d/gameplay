@@ -319,7 +319,7 @@ protected:
     void addControls(Theme* theme, Properties* properties);
 
     /**
-     * Draws a sprite batch for the specified clipping rect .
+     * Draws a sprite batch for the specified clipping rect.
      *
      * @param spriteBatch The sprite batch to use.
      * @param clip The clipping rectangle.

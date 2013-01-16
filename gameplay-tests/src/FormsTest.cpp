@@ -1,20 +1,17 @@
 #include "FormsTest.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Forms", FormsTest, 101);
+    ADD_TEST("Graphics", "Forms", FormsTest, 10);
 #endif
 
 // Input bit-flags (powers of 2)
 #define KEY_A_MASK (1 << 0)
 #define KEY_B_MASK (1 << 1)
 
-#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
-#define BUTTON_B (_gamepad->isVirtual() ? 1 : 11)
-
 const static unsigned int __formsCount = 5;
 
 FormsTest::FormsTest()
-    : _scene(NULL), _formNode(NULL), _formNodeParent(NULL), _formSelect(NULL), _activeForm(NULL), _gamepad(NULL), _keyFlags(0)
+    : _scene(NULL), _formNode(NULL), _formNodeParent(NULL), _formSelect(NULL), _activeForm(NULL), _gamepad(NULL), _virtualGamepad(NULL), _physicalGamepad(NULL), _keyFlags(0)
 {
     const char* formFiles[] = 
     {
@@ -40,6 +37,7 @@ FormsTest* FormsTest::create()
 void FormsTest::finalize()
 {
     SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_formNode);
     SAFE_RELEASE(_formSelect);
     for (unsigned int i = 0; i < _forms.size(); i++)
     {
@@ -104,17 +102,16 @@ void FormsTest::initialize()
     
     RadioButton* form5Button = static_cast<RadioButton*>(_formSelect->getControl("form5"));
     form5Button->addListener(this, Control::Listener::CLICK);
-    
     for (unsigned int i = 0; i < _formFiles.size(); i++)
     {
         Form* form = Form::create(_formFiles[i]);
-        form->disable();
+        form->setEnabled(false);
         _forms.push_back(form);
     }
     _formIndex = 0;
 
     // Create a form programmatically.
-    createTestForm(_forms[0]->getTheme()->getStyle("buttonStyle"));
+    createTestForm(_forms[0]->getTheme());
 
     Button* button = static_cast<Button*>(_forms[0]->getControl("testButton"));
     button->addListener(this, Control::Listener::CLICK);
@@ -132,17 +129,31 @@ void FormsTest::initialize()
     
     formChanged();
 
-    _gamepad = getGamepad(0);
-    GP_ASSERT(_gamepad);
-    _gamepad->getForm()->setConsumeInputEvents(false);
+    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
+    std::vector<Gamepad*>::iterator it;
+    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    {
+        Gamepad* gamepad = *it;
+        if (gamepad->isVirtual())
+            _virtualGamepad = gamepad;
+        else if (!_physicalGamepad)
+        {
+            _physicalGamepad = gamepad;
+        }
+    }
+
+    if (_physicalGamepad)
+        _gamepad = _physicalGamepad;
+    else
+        _gamepad = _virtualGamepad;
 }
 
 void FormsTest::formChanged()
 {
     if (_activeForm)
-        _activeForm->disable();
+        _activeForm->setEnabled(false);
     _activeForm = _forms[_formIndex];
-    _activeForm->enable();
+    _activeForm->setEnabled(true);
 
     // Add the form to a node to allow it to be placed in 3D space.
     const Rectangle& bounds = _activeForm->getBounds();
@@ -160,45 +171,44 @@ void FormsTest::formChanged()
     _formNodeParent->setTranslation(0, 0, -1.5f);
     _formNode->setTranslation(-0.5f, -0.5f, 0);
     _formNode->setForm(_activeForm);
+
 }
 
-void FormsTest::createTestForm(Theme::Style* style)
+void FormsTest::createTestForm(Theme* theme)
 {
-    Form* form = Form::create("testForm", style);
+    Form* form = Form::create("testForm", theme->getStyle("buttonStyle"));
     form->setSize(600, 600);
 
-    Label* label = Label::create("testLabel", style);
-    label->setPosition(0, 10);
-    label->setSize(200, 200);
-    label->setText("This is a label.");
+    Label* label = Label::create("testLabel", theme->getStyle("iconNoBorder"));
+    label->setPosition(50, 50);
+    label->setSize(200, 50);
+    label->setText("Label:");
     form->addControl(label);
     label->release();
 
-    Button* button = Button::create("testButton", style);
-    button->setPosition(0, 210);
-    button->setSize(200, 200);
-    button->setText("This is a button.");
+    Button* button = Button::create("opacityButton", theme->getStyle("buttonStyle"));
+    button->setPosition(45, 100);
+    button->setSize(200, 100);
+    button->setText("This is a button.  Click to change its opacity.");
+    button->addListener(this, Control::Listener::CLICK);
     form->addControl(button);
     button->release();
 
-    form->disable();
+    form->setEnabled(false);
     _forms.push_back(form);
 }
 
 void FormsTest::update(float elapsedTime)
 {
-    // Check if we have any physical gamepad connections.
-    getGamepadsConnected();
-
     _gamepad->update(elapsedTime);
 
     float speedFactor = 0.001f * elapsedTime;
-    bool aDown = (_keyFlags & KEY_A_MASK) || (_gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED);
-    bool bDown = (_keyFlags & KEY_B_MASK) || (_gamepad->getButtonState(BUTTON_B) == Gamepad::BUTTON_PRESSED);
+    bool aDown = (_keyFlags & KEY_A_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_A);
+    bool bDown = (_keyFlags & KEY_B_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_B);
     Vector2 joyCommand;
-    if (_gamepad->isJoystickActive(0))
+    if (_gamepad->getJoystickCount() > 0)
     {
-        _gamepad->getJoystickAxisValues(0, &joyCommand);
+        _gamepad->getJoystickValues(0, &joyCommand);
     }
 
     if (bDown)
@@ -371,5 +381,45 @@ void FormsTest::controlEvent(Control* control, EventType evt)
     {
         _formIndex = 5;
         formChanged();
+    }
+    else if (strcmp("opacityButton", control->getId()) == 0)
+    {
+        float from[] = { 1.0f };
+        float to[] = { 0.5f };
+        control->createAnimationFromTo("opacityButton", Form::ANIMATE_OPACITY, from, to, Curve::LINEAR, 1000)->getClip()->play();
+    }
+}
+
+void FormsTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setConsumeInputEvents(false);
+            _virtualGamepad = gamepad;
+        }
+        else
+        {
+            _physicalGamepad = gamepad;
+        }
+
+        if (_physicalGamepad)
+        {
+            _gamepad = _physicalGamepad;
+        }
+        else
+        {
+            _gamepad = _virtualGamepad;
+        }
+
+        break;
+    case Gamepad::DISCONNECTED_EVENT:
+        if (gamepad == _physicalGamepad)
+        {
+            _gamepad = _virtualGamepad;
+        }
+        break;
     }
 }

@@ -625,7 +625,9 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
     }
 
     // Set the new world transformation to apply to fix the collision.
-    _node->translate(Vector3(currentPosition.x(), currentPosition.y(), currentPosition.z()) - startPosition);
+    Vector3 newPosition = Vector3(currentPosition.x(), currentPosition.y(), currentPosition.z()) - startPosition;
+    if (newPosition != Vector3::zero())
+        _node->translate(newPosition);
 
     return collision;
 }
@@ -687,8 +689,10 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
         stepDown(collisionWorld, deltaTimeStep);
 
     // Set new position.
-    btVector3 translation = _currentPosition - startPosition;
-    _node->translate(translation.x(), translation.y(), translation.z());
+    btVector3 newPosition = _currentPosition - startPosition;
+    Vector3 translation = Vector3(newPosition.x(), newPosition.y(), newPosition.z());
+    if (translation !=  Vector3::zero())
+        _node->translate(translation);
 }
 
 

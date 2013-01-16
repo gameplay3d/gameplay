@@ -11,7 +11,7 @@
 static const char* keyString(int key);
 
 InputTest::InputTest()
-    : _font(NULL), _mouseWheel(0), _mouseString("No Mouse")
+    :  _mouseString("No Mouse"), _font(NULL), _inputTestControls(NULL), _mouseWheel(0), _crosshair(NULL)
 {
 }
 
@@ -23,34 +23,60 @@ void InputTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
     assert(_font);
 
-    // Create a pause button to display the menu
+    // Reuse part of the gamepad texture as the crosshair in this test.
+    _crosshair = SpriteBatch::create("res/png/gamepad.png");
+    _crosshairDstRect.set(0, 0, 256, 256);
+    _crosshairSrcRect.set(256, 0, 256, 256);
+    _crosshairLowerLimit.set(-_crosshairSrcRect.width / 2.0f, -_crosshairSrcRect.height / 2.0f);
+    _crosshairUpperLimit.set((float)getWidth(), (float)getHeight());
+    _crosshairUpperLimit += _crosshairLowerLimit;
+
+    // Create input test controls
     _keyboardState = false;
-    _keyboardSwitch = Form::create("res/common/keyboard.form");
-    static_cast<Button*>(_keyboardSwitch->getControl("showKeyboardButton"))->addListener(this, Listener::CLICK);
+    _inputTestControls = Form::create("res/common/inputs.form");
+    static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->addListener(this, Listener::CLICK);
+    if (!hasMouse())
+    {
+        static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->setVisible(false);
+    }
+    _inputTestControls->getControl("restoreMouseLabel")->setVisible(false);
 
     _mousePoint.set(-100, -100);
 }
 
 void InputTest::finalize()
 {
+    setMouseCaptured(false);
     if (_keyboardState)
     {
         displayKeyboard(false);
     }
 
-    SAFE_RELEASE(_keyboardSwitch);
+    SAFE_RELEASE(_inputTestControls);
+    SAFE_DELETE(_crosshair);
     SAFE_RELEASE(_font);
 }
 
 void InputTest::update(float elapsedTime)
 {
-    _keyboardSwitch->update(Test::getAbsoluteTime());
+    _inputTestControls->update(Test::getAbsoluteTime());
 }
 
 void InputTest::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
+
+    _inputTestControls->draw();
+
+    if (isMouseCaptured())
+    {
+        // Draw crosshair at current offest w.r.t. center of screen
+        _crosshair->start();
+        _crosshair->draw(_crosshairDstRect, _crosshairSrcRect);
+        _crosshair->finish();
+    }
 
     // Draw text
     Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -107,8 +133,6 @@ void InputTest::render(float elapsedTime)
             _font->drawText(displayKeys.c_str(), x, y, fontColor, _font->getSize());
         }
     }
-    // Keyboard button
-    _keyboardSwitch->draw();
     // Draw the accelerometer values in the bottom right corner.
     static float pitch, roll;
     static float accelerometerDrawRate = 1000.0f;
@@ -182,6 +206,16 @@ bool InputTest::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
         break;
     case Mouse::MOUSE_MOVE:
         _mouseString.append("MOUSE_MOVE");
+        if (isMouseCaptured())
+        {
+            // Control crosshair from captured mouse
+            _crosshairDstRect.setPosition(_crosshairDstRect.x + x, _crosshairDstRect.y + y);
+
+            // Use screen limits to clamp the crosshair position
+            Vector2 pos(_crosshairDstRect.x, _crosshairDstRect.y);
+            pos.clamp(_crosshairLowerLimit, _crosshairUpperLimit);
+            _crosshairDstRect.setPosition(pos.x, pos.y);
+        }
         break;
     case Mouse::MOUSE_WHEEL:
         _mouseString.append("MOUSE_WHEEL");
@@ -206,6 +240,11 @@ void InputTest::keyEvent(Keyboard::KeyEvent evt, int key)
         if (key == Keyboard::KEY_ESCAPE)
         {
             _symbolsString.clear();
+        }
+
+        if (key == Keyboard::KEY_SPACE && hasMouse())
+        {
+            setCaptured(false);
         }
         break;
     case Keyboard::KEY_RELEASE:
@@ -234,10 +273,32 @@ void InputTest::controlEvent(Control* control, EventType evt)
     {
         _keyboardState = !_keyboardState;
         displayKeyboard(_keyboardState);
-        static_cast<Button*>(_keyboardSwitch->getControl("showKeyboardButton"))->setText(_keyboardState ? "Hide virtual keyboard" : "Show virtual keyboard");
+        static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->setText(_keyboardState ? "Hide virtual keyboard" : "Show virtual keyboard");
+    }
+    else if (strcmp(control->getId(), "captureMouseButton") == 0 && hasMouse())
+    {
+        setCaptured(true);
     }
 }
 
+void InputTest::setCaptured(bool captured)
+{
+    setMouseCaptured(captured);
+
+    if (!captured || isMouseCaptured())
+    {
+        _inputTestControls->getControl("showKeyboardButton")->setVisible(!captured);
+        _inputTestControls->getControl("captureMouseButton")->setVisible(!captured);
+        _inputTestControls->getControl("restoreMouseLabel")->setVisible(captured);
+    }
+
+    if (captured)
+    {
+        _crosshairDstRect.setPosition(
+            (float)getWidth()/2.0f + _crosshairLowerLimit.x,
+            (float)getHeight()/2.0f + _crosshairLowerLimit.y);
+    }
+}
 const char* keyString(int key)
 {
     // This function is helpful for finding collisions in the Keyboard::Key enum.
@@ -558,4 +619,5 @@ const char* keyString(int key)
     default:
         return "";
     };
+    return "";
 }

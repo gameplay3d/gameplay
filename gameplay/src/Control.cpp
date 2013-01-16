@@ -7,7 +7,7 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _autoWidth(false), _autoHeight(false), _listeners(NULL),
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
     _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(0), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -208,6 +208,7 @@ float Control::getHeight() const
 void Control::setAlignment(Alignment alignment)
 {
     _alignment = alignment;
+    _isAlignmentSet = true;
     _dirty = true;
 }
 
@@ -242,6 +243,27 @@ void Control::setAutoHeight(bool autoHeight)
 bool Control::getAutoHeight() const
 {
     return _autoHeight;
+}
+
+void Control::setVisible(bool visible)
+{
+    if (visible && !_visible)
+    {
+        setEnabled(true);
+        _visible = true;
+        _dirty = true;
+    }
+    else if (!visible && _visible)
+    {
+        setEnabled(false);
+        _visible = false;
+        _dirty = true;
+    }
+}
+
+bool Control::isVisible() const
+{
+    return _visible;
 }
 
 void Control::setOpacity(float opacity, unsigned char states)
@@ -597,19 +619,21 @@ Control::State Control::getState() const
     return _state;
 }
 
-void Control::disable()
+void Control::setEnabled(bool enabled)
 {
-    _state = DISABLED;
-    _dirty = true;
+	if (enabled && _state == Control::DISABLED)
+	{
+		_state = Control::NORMAL;
+		_dirty = true;
+	}
+	else if (!enabled && _state != Control::DISABLED)
+	{
+		_state = Control::DISABLED;
+		_dirty = true;
+	}
 }
 
-void Control::enable()
-{
-    _state = NORMAL;
-    _dirty = true;
-}
-
-bool Control::isEnabled()
+bool Control::isEnabled() const
 {
     return _state != DISABLED;
 }
@@ -1019,6 +1043,9 @@ void Control::drawText(const Rectangle& position)
 
 void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
 {
+    if (!_visible)
+        return;
+
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
@@ -1138,6 +1165,8 @@ void Control::getAnimationPropertyValue(int propertyId, AnimationValue* value)
         value->setFloat(0, _bounds.height);
         break;
     case ANIMATE_OPACITY:
+        value->setFloat(0, _opacity);
+        break;
     default:
         break;
     }
@@ -1176,6 +1205,7 @@ void Control::setAnimationPropertyValue(int propertyId, AnimationValue* value, f
         _dirty = true;
         break;
     case ANIMATE_OPACITY:
+        setOpacity(Curve::lerp(blendWeight, _opacity, value->getFloat(0)));
         _dirty = true;
         break;
     }

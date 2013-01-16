@@ -1,5 +1,5 @@
-#ifndef Audio3DTest_H_
-#define Audio3DTest_H_
+#ifndef AUDIO3DTEST_H_
+#define AUDIO3DTEST_H_
 
 #include "gameplay.h"
 #include "Test.h"
@@ -21,6 +21,8 @@ public:
     void keyEvent(Keyboard::KeyEvent evt, int key);
    
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
 protected:
 
@@ -51,6 +53,8 @@ private:
     Scene* _scene;
     Node* _cubeNode;
     Gamepad* _gamepad;
+    Gamepad* _virtualGamepad;
+    Gamepad* _physicalGamepad;
     unsigned int _moveFlags;
     int _prevX;
     int _prevY;

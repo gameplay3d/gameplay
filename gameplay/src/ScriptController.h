@@ -57,7 +57,7 @@ public:
     LuaArray(int count);
 
     /**
-     * Copy construcotr.
+     * Copy constructor.
      */
     LuaArray(const LuaArray<T>& copy);
 

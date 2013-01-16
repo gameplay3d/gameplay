@@ -64,6 +64,7 @@ void TestsGame::initialize()
             testButton->release();
         }
     }
+	_testSelectForm->setState(Control::FOCUS);
 }
 
 void TestsGame::finalize()
@@ -191,12 +192,18 @@ void TestsGame::controlEvent(Control* control, EventType evt)
             TestRecord testRecord = list[j];
             if (testRecord.title.compare(control->getId()) == 0)
             {
-                _testSelectForm->disable();
+                _testSelectForm->setEnabled(false);
                 runTest(testRecord.funcPtr);
                 return;
             }
         }
     }
+}
+
+void TestsGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    if (_activeTest)
+        _activeTest->gamepadEvent(evt, gamepad);
 }
 
 void TestsGame::runTest(void* func)
@@ -217,7 +224,7 @@ void TestsGame::exitActiveTest()
         _activeTest->finalize();
         SAFE_DELETE(_activeTest);
 
-        _testSelectForm->enable();
+        _testSelectForm->setEnabled(true);
     }
     // Reset some game options
     setMultiTouch(false);

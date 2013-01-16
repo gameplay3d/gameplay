@@ -68,6 +68,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\LightTest.h">
+	  <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PostProcessTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GamepadTest.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -127,6 +133,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\LightTest.cpp">
+	  <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PostProcessTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamepadTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

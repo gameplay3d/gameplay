@@ -40,78 +40,13 @@ static bool __cursorVisible = true;
 static unsigned int __gamepadsConnected = 0;
 
 #ifdef USE_XINPUT
-struct XInputGamepad
-{
-    static const unsigned int BUTTON_COUNT = 14;
-    static const unsigned int JOYSTICK_COUNT = 2;
-    static const unsigned int TRIGGER_COUNT = 2;
-    std::string id;
-    int handle;
-    bool connected;
-    XINPUT_STATE state;
-};
+static const unsigned int XINPUT_BUTTON_COUNT = 14;
+static const unsigned int XINPUT_JOYSTICK_COUNT = 2;
+static const unsigned int XINPUT_TRIGGER_COUNT = 2;
+#endif
 
-static XInputGamepad* __xinputGamepads = NULL;
-
-static DWORD getXInputGamepadButtonMask(unsigned int buttonHandle)
-{
-    switch(buttonHandle)
-    {
-    case 0:
-        return XINPUT_GAMEPAD_DPAD_UP;
-    case 1:
-        return XINPUT_GAMEPAD_DPAD_DOWN;
-    case 2:
-        return XINPUT_GAMEPAD_DPAD_LEFT;
-    case 3:
-        return XINPUT_GAMEPAD_DPAD_RIGHT;
-    case 4:
-        return XINPUT_GAMEPAD_START;
-    case 5:
-        return XINPUT_GAMEPAD_BACK;
-    case 6:
-        return XINPUT_GAMEPAD_LEFT_THUMB;
-    case 7:
-        return XINPUT_GAMEPAD_RIGHT_THUMB;
-    case 8:
-        return XINPUT_GAMEPAD_LEFT_SHOULDER;
-    case 9:
-        return XINPUT_GAMEPAD_RIGHT_SHOULDER;
-    case 10:
-        return XINPUT_GAMEPAD_A;
-    case 11:
-        return XINPUT_GAMEPAD_B;
-    case 12:
-        return XINPUT_GAMEPAD_X;
-    case 13:
-        return XINPUT_GAMEPAD_Y;
-    default:
-        return 0;
-    }
-}
-
-static bool getXInputState(unsigned long gamepadHandle)
-{
-    GP_ASSERT(0 <= gamepadHandle && gamepadHandle < XUSER_MAX_COUNT);
-
-    if (XInputGetState((DWORD)gamepadHandle, &__xinputGamepads[gamepadHandle].state) == ERROR_SUCCESS)
-        return (__xinputGamepads[gamepadHandle].connected = true);
-    else
-        return (__xinputGamepads[gamepadHandle].connected = false);
-}
-
-static bool getXInputButtonState(unsigned long gamepadHandle, unsigned long buttonHandle)
-{
-    GP_ASSERT(0 <= gamepadHandle && gamepadHandle < XUSER_MAX_COUNT);
-    GP_ASSERT(0 <= buttonHandle && buttonHandle < 14);
-    
-    WORD buttonMask = getXInputGamepadButtonMask(buttonHandle); // Conversion to button mask.
-
-    if ((__xinputGamepads[gamepadHandle].state.Gamepad.wButtons & buttonMask) == buttonMask)
-        return true;
-    else
-        return false;
-}
+#ifdef USE_XINPUT
+static XINPUT_STATE __xInputState;
 
 static float normalizeXInputJoystickAxis(int axisValue, int deadZone)
 {
@@ -124,61 +59,23 @@ static float normalizeXInputJoystickAxis(int axisValue, int deadZone)
     else
     {
         int value = axisValue;
+        int maxVal;
         if (value < 0)
+        {
             value = -1;
+            maxVal = 32768;
+        }
         else if (value > 0)
+        {
             value = 1;
+            maxVal = 32767;
+        }
         else
-            value = 0;
-        return value * (absAxisValue - deadZone) / (float)(32768 - deadZone);
-    }
-}
+        {
+            return 0;
+        }
 
-static float getXInputJoystickAxisX(unsigned long gamepadHandle, unsigned long joystickHandle)
-{
-    GP_ASSERT(0 <= gamepadHandle && gamepadHandle < XUSER_MAX_COUNT);
-    GP_ASSERT(0 <= joystickHandle && joystickHandle < 2);
-    
-    switch(joystickHandle)
-    {
-    case 0:
-        return normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-    case 1:
-        return normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-    default: return 0.0f;
-    }
-}
-
-static float getXInputJoystickAxisY(unsigned long gamepadHandle, unsigned long joystickHandle)
-{
-    GP_ASSERT(0 <= gamepadHandle && gamepadHandle < XUSER_MAX_COUNT);
-    GP_ASSERT(0 <= joystickHandle && joystickHandle < 2);
-
-    switch(joystickHandle)
-    {
-    case 0:
-        return normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-    case 1:
-        return normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-    default: return 0.0f;
-    }
-}
-
-static void getXInputJoystickAxisValues(unsigned long gamepadHandle, unsigned long joystickHandle, gameplay::Vector2* outValue)
-{
-    GP_ASSERT(0 <= gamepadHandle && gamepadHandle < XUSER_MAX_COUNT);
-    GP_ASSERT(0 <= joystickHandle && joystickHandle < 2);
-
-    switch(joystickHandle)
-    {
-    case 0:
-        outValue->x = normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-        outValue->y = normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-        break;
-    case 1:
-        outValue->x = normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-        outValue->y = normalizeXInputJoystickAxis(__xinputGamepads[gamepadHandle].state.Gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-        break;
+        return value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
     }
 }
 #endif
@@ -405,7 +302,7 @@ static gameplay::Keyboard::Key getKey(WPARAM win32KeyCode, bool shiftDown)
     }
 }
 
-void UpdateCapture(LPARAM lParam)
+static void UpdateCapture(LPARAM lParam)
 {
     if ((lParam & MK_LBUTTON) || (lParam & MK_MBUTTON) || (lParam & MK_RBUTTON))
         SetCapture(__hwnd);
@@ -413,11 +310,25 @@ void UpdateCapture(LPARAM lParam)
         ReleaseCapture();
 }
 
-void WarpMouse(int clientX, int clientY)
+static void WarpMouse(int clientX, int clientY)
 {
     POINT p = { clientX, clientY };
     ClientToScreen(__hwnd, &p);
     SetCursorPos(p.x, p.y);
+}
+
+
+/**
+ * Gets the width and height of the screen in pixels.
+ */
+static void getDesktopResolution(int& width, int& height)
+{
+   RECT desktop;
+   const HWND hDesktop = GetDesktopWindow();
+   // Get the size of screen to the variable desktop
+   GetWindowRect(hDesktop, &desktop);
+   width = desktop.right;
+   height = desktop.bottom;
 }
 
 LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -633,9 +544,6 @@ Platform::~Platform()
         DestroyWindow(__hwnd);
         __hwnd = 0;
     }
-#ifdef USE_XINPUT
-    SAFE_DELETE_ARRAY(__xinputGamepads);
-#endif
 }
 
 bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
@@ -872,6 +780,11 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 SAFE_DELETE_ARRAY(wtitle);
             }
 
+            // Read fullscreen state.
+            params.fullscreen = config->getBool("fullscreen");
+            // Read multisampling state.
+            params.samples = config->getInt("samples");
+
             // Read window rect.
             int x = config->getInt("x");
             if (x != 0)
@@ -880,17 +793,15 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             if (y != 0)
                 params.rect.top = y;
             int width = config->getInt("width");
+            int height = config->getInt("height");
+
+            if (width == 0 && height == 0 && params.fullscreen)
+                getDesktopResolution(width, height);
+
             if (width != 0)
                 params.rect.right = params.rect.left + width;
-            int height = config->getInt("height");
             if (height != 0)
                 params.rect.bottom = params.rect.top + height;
-
-            // Read fullscreen state.
-            params.fullscreen = config->getBool("fullscreen");
-
-            // Read multisampling state.
-            params.samples = config->getInt("samples");
         }
     }
 
@@ -961,9 +872,9 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             DEVMODE dm;
             memset(&dm, 0, sizeof(dm));
             dm.dmSize= sizeof(dm);
-            dm.dmPelsWidth	= width;
-            dm.dmPelsHeight	= height;
-            dm.dmBitsPerPel	= DEFAULT_COLOR_BUFFER_SIZE;
+            dm.dmPelsWidth  = width;
+            dm.dmPelsHeight = height;
+            dm.dmBitsPerPel = DEFAULT_COLOR_BUFFER_SIZE;
             dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
             // Try to set selected mode and get results. NOTE: CDS_FULLSCREEN gets rid of start bar.
@@ -995,26 +906,16 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
 #ifdef USE_XINPUT
     // Initialize XInputGamepads.
-    __xinputGamepads = new XInputGamepad[XUSER_MAX_COUNT];
-    for (unsigned int i = 0; i < XUSER_MAX_COUNT; i++)
+    for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
     {
-        switch(i)
+        if (XInputGetState(i, &__xInputState) == NO_ERROR)
         {
-        case 0:
-            __xinputGamepads[i].id = "XINPUT 1";
-            break;
-        case 1:
-            __xinputGamepads[i].id = "XINPUT 2";
-            break;
-        case 2:
-            __xinputGamepads[i].id = "XINPUT 3";
-            break;
-        case 3:
-            __xinputGamepads[i].id = "XINPUT 4";
-            break;
+            // Gamepad is connected.
+            char id[9];
+            sprintf(id, "XInput %d", i);
+            Gamepad::add(id, i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT,
+                         0, 0, "Unknown", "XInput Gamepad");
         }
-        __xinputGamepads[i].connected = false;
-        __xinputGamepads[i].handle = -1;
     }
 #endif
 
@@ -1068,6 +969,21 @@ int Platform::enterMessagePump()
         }
         else
         {
+#ifdef USE_XINPUT
+            // Check for connected XInput gamepads.
+            for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
+            {
+                if (XInputGetState(i, &__xInputState) == NO_ERROR && !Gamepad::getGamepad(i))
+                {
+                    // Gamepad was just connected.
+                    char id[9];
+                    sprintf(id, "XInput %d", i);
+                    Gamepad::add(id, i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT,
+                                    0, 0, "Unknown", "XInput Gamepad");
+                }
+            }
+#endif
+
             _game->frame();
             SwapBuffers(__hdc);
         }
@@ -1230,196 +1146,103 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
     return false;
 }
 
-unsigned int Platform::getGamepadsConnected()
-{
-    // Check to see what xbox360 gamepads are connected.
-    __gamepadsConnected = 0;
-
 #ifdef USE_XINPUT
-    for (unsigned int i = 0; i < XUSER_MAX_COUNT; i++)
-    {
-        if (isGamepadConnected(i))
-            __gamepadsConnected++;
-    }    
-#endif
-    return __gamepadsConnected;
-}
-
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
+void Platform::pollGamepadState(Gamepad* gamepad)
 {
+    GP_ASSERT(gamepad->_handle < XUSER_MAX_COUNT);
 
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-    Game* game = Game::getInstance();
-    GP_ASSERT(game);
-
-    if (__xinputGamepads[gamepadHandle].handle == -1)
-        __xinputGamepads[gamepadHandle].handle = game->createGamepad(__xinputGamepads[gamepadHandle].id.c_str(), gamepadHandle, __xinputGamepads[gamepadHandle].BUTTON_COUNT, 
-            __xinputGamepads[gamepadHandle].JOYSTICK_COUNT, __xinputGamepads[gamepadHandle].TRIGGER_COUNT);
-
-    bool isConnected = __xinputGamepads[gamepadHandle].connected;
-    if (getXInputState(gamepadHandle))
+    if (XInputGetState(gamepad->_handle, &__xInputState) == NO_ERROR)
     {
-        if (!isConnected)
+        WORD buttons = __xInputState.Gamepad.wButtons;
+
+        // Map XInput buttons to Gamepad::ButtonMappings enum.
+        static const unsigned int xInputMapping[16] = {
+            Gamepad::BUTTON_UP,    // 0x0001
+            Gamepad::BUTTON_DOWN,  // 0x0002
+            Gamepad::BUTTON_LEFT,  // 0x0004
+            Gamepad::BUTTON_RIGHT, // 0x0008
+            Gamepad::BUTTON_MENU2, // 0x0010
+            Gamepad::BUTTON_MENU1, // 0x0020
+            Gamepad::BUTTON_L3,    // 0x0040
+            Gamepad::BUTTON_R3,    // 0x0080
+            Gamepad::BUTTON_L1,    // 0x0100
+            Gamepad::BUTTON_R1,    // 0x0200
+            0,
+            0,
+            Gamepad::BUTTON_A,     // 0x1000
+            Gamepad::BUTTON_B,     // 0x2000
+            Gamepad::BUTTON_X,     // 0x4000
+            Gamepad::BUTTON_Y      // 0x8000
+        };
+
+        const unsigned int *mapping = xInputMapping;
+        for (gamepad->_buttons = 0; buttons; buttons >>= 1, mapping++)
         {
-            __xinputGamepads[gamepadHandle].connected = true;
-            
-            Gamepad* gamepad = game->getGamepad(__xinputGamepads[gamepadHandle].handle);
-            GP_ASSERT(gamepad);
-            if (game->isInitialized())
-                game->gamepadEvent(Gamepad::CONNECTED_EVENT, game->getGamepad(__xinputGamepads[gamepadHandle].handle)); 
+            if (buttons & 1)
+            {
+                gamepad->_buttons |= (1 << *mapping);
+            }
         }
-        return true;
+
+        unsigned int i;
+        for (i = 0; i < gamepad->_joystickCount; ++i)
+        {
+            GP_ASSERT(i < 2);
+
+            float x;
+            float y;
+            switch (i)
+            {
+            case 0:
+                x = normalizeXInputJoystickAxis(__xInputState.Gamepad.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+                y = normalizeXInputJoystickAxis(__xInputState.Gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+                break;
+            case 1:
+                x = normalizeXInputJoystickAxis(__xInputState.Gamepad.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+                y = normalizeXInputJoystickAxis(__xInputState.Gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+                break;
+            }
+
+            gamepad->_joysticks[i].set(x, y);
+        }
+
+        for (i = 0; i < gamepad->_triggerCount; ++i)
+        {
+            GP_ASSERT(i < 2);
+
+            BYTE trigger;
+            switch (i)
+            {
+            case 0:
+                trigger = __xInputState.Gamepad.bLeftTrigger;
+                break;
+            case 1:
+                trigger = __xInputState.Gamepad.bRightTrigger;
+                break;
+            }
+
+            if (trigger < XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+            {
+                gamepad->_triggers[i] = 0.0f;
+            }
+            else
+            {
+                gamepad->_triggers[i] = (float)trigger / 255.0f;
+            }
+        }
     }
     else
     {
-        if (isConnected)
-        {
-            // if it was connected, but now isn't pass the detached event to gamepadEvent()
-            __xinputGamepads[gamepadHandle].connected = false;
-            
-            Gamepad* gamepad = game->getGamepad(__xinputGamepads[gamepadHandle].handle);
-            GP_ASSERT(gamepad);
-            if (game->isInitialized())
-                game->gamepadEvent(Gamepad::DISCONNECTED_EVENT, game->getGamepad(__xinputGamepads[gamepadHandle].handle));
-        }
-        return false;
+        // Gamepad was disconnected.
+        Gamepad::remove(gamepad);
     }
+}
+#else
+void Platform::pollGamepadState(Gamepad* gamepad)
+{
+    // TODO: Support generic HID gamepads (including XBox controllers) without requiring XInput.
+}
 #endif
-
-    return false;
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle) 
-{
-
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    return __xinputGamepads[gamepadHandle].id.c_str();
-#endif
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-    if (!__xinputGamepads[gamepadHandle].connected)
-        return 0;
-
-    return XInputGamepad::BUTTON_COUNT;
-#endif
-
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-    return getXInputButtonState(gamepadHandle, buttonIndex);
-#endif
-
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    if (!__xinputGamepads[gamepadHandle].connected)
-        return 0;
-
-    return XInputGamepad::JOYSTICK_COUNT;
-#endif
-
-    return 0;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    return getXInputJoystickAxisX(gamepadHandle, joystickIndex);
-#endif 
-
-    return 0.0f;
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    return getXInputJoystickAxisY(gamepadHandle, joystickIndex);
-#endif
-
-    return 0.0f;
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
-{
-    
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    getXInputJoystickAxisValues(gamepadHandle, joystickIndex, outValue);
-#endif
-
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    return (getXInputJoystickAxisX(gamepadHandle, joystickIndex) != 0.0f || getXInputJoystickAxisY(gamepadHandle, joystickIndex) != 0.0f);
-#endif 
-
-    return false;
-}
-
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
-{
-
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-
-    return XInputGamepad::TRIGGER_COUNT;
-#endif
-
-    return 0;
-}
-
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
-{
-    
-#ifdef USE_XINPUT
-    GP_ASSERT(0 <= gamepadHandle);
-    GP_ASSERT(gamepadHandle < XUSER_MAX_COUNT);
-    //TODO:
-#endif
-    return 0.0f;
-}
 
 void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
