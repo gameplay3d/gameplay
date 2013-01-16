@@ -1,6 +1,6 @@
 #define LIGHTING
 
-// Inputs
+// Attributes
 attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
 attribute vec3 a_normal;									// Vertex Normal							(x, y, z)
 #if defined(SKINNING)
@@ -31,33 +31,34 @@ uniform float u_spotLightRangeInverse;						// Inverse of light range.
 #else
 #endif
 
-// Outputs
+// Varyings
 varying vec3 v_normalVector;								// Normal vector in view space.
 #if defined(SPECULAR)
 varying vec3 v_cameraDirection;								// Direction the camera is looking at in tangent space.
 #endif
+
 // Lighting
 #if defined(POINT_LIGHT)
 varying vec3 v_vertexToPointLightDirection;					// Direction of point light w.r.t current vertex in tangent space.
 varying float v_pointLightAttenuation;						// Attenuation of point light.
-#include "lib/lighting-point.vert"
+#include "lighting-point.vert"
 #elif defined(SPOT_LIGHT)
 varying vec3 v_vertexToSpotLightDirection;					// Direction of the spot light w.r.t current vertex in tangent space.
 varying float v_spotLightAttenuation;						// Attenuation of spot light.
-#include "lib/lighting-spot.vert"
+#include "lighting-spot.vert"
 #else
 uniform vec3 u_lightDirection;								// Direction of light
-#include "lib/lighting-directional.vert"
+#include "lighting-directional.vert"
 #endif
 
-// Vertex attribute accessors
+// Skinning
 #if defined(SKINNING)
-#include "lib/attributes-skinning.vert"
+#include "skinning.vert"
 #else
-#include "lib/attributes.vert" 
+#include "skinning-none.vert" 
 #endif
 
-// Vertex program
+
 void main()
 {
     // Get the position and normal

@@ -2,7 +2,22 @@
 precision highp float;
 #endif
 
-// Inputs
+// Uniforms
+uniform vec3 u_ambientColor;                    // Ambient color
+uniform vec3 u_lightColor;                      // Light color
+uniform vec3 u_lightDirection;					// Light direction
+#if defined(DEBUG_PATCHES)
+uniform float u_row;                            // Patch row
+uniform float u_column;                         // Patch column
+#endif
+#if (LAYER_COUNT > 0)
+uniform sampler2D u_samplers[SAMPLER_COUNT];    // Surface layer samplers
+#endif
+#if defined (NORMAL_MAP)
+uniform sampler2D u_normalMap;                  // Normal map
+#endif
+
+// Varyings
 #if defined(NORMAL_MAP)
 vec3 v_normalVector;                            // Normal vector variable (from normal map)
 #else
@@ -10,26 +25,9 @@ varying vec3 v_normalVector;					// Normal vector from vertex shader
 #endif
 varying vec2 v_texCoord0;
 
-// Uniforms
-uniform vec3 u_ambientColor;                    // Ambient color
-uniform vec3 u_lightColor;                      // Light color
-uniform vec3 u_lightDirection;					// Light direction
-
-#if defined(DEBUG_PATCHES)
-uniform float u_row;
-uniform float u_column;
-#endif
-
-#if (LAYER_COUNT > 0)
-uniform sampler2D u_samplers[SAMPLER_COUNT];
-#endif
-
-#if defined (NORMAL_MAP)
-uniform sampler2D u_normalMap;
-#endif
-
-#include "lib/lighting.frag"
-#include "lib/lighting-directional.frag"
+// Lighting
+#include "lighting.frag"
+#include "lighting-directional.frag"
 
 #if (LAYER_COUNT > 1)
 void blendLayer(sampler2D textureMap, vec2 textureRepeat, float alphaBlend)
@@ -42,6 +40,7 @@ void blendLayer(sampler2D textureMap, vec2 textureRepeat, float alphaBlend)
     _baseColor.rgb = _baseColor.rgb * (1.0 - alphaBlend) + diffuse * alphaBlend;
 }
 #endif
+
 
 void main()
 {
