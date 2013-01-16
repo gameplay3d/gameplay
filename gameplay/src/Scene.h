@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "MeshBatch.h"
 #include "ScriptController.h"
+#include "Light.h"
 
 namespace gameplay
 {
@@ -27,10 +28,12 @@ public:
     /**
      * Creates a new empty scene.
      * 
+     * @param id ID of the new scene, or NULL to use an empty string for the ID (default).
+     *
      * @return The newly created empty scene.
      * @script{create}
      */
-    static Scene* create();
+    static Scene* create(const char* id = NULL);
 
     /**
      * Loads a scene from the given '.scene' file.
@@ -41,6 +44,17 @@ public:
      * @script{create}
      */
     static Scene* load(const char* filePath);
+
+    /**
+     * Gets a currently active scene.
+     *
+     * If id is an NULL, the first active scene is returned.
+     *
+     * @param id ID of the scene to retrieve, or NULL to retrieve the first active scene.
+     *
+     * @return The scene that matches the specified ID, or NULL if no matching scene could be found.
+     */
+    static Scene* getScene(const char* id = NULL);
 
     /**
      * Gets the identifier for the scene.
@@ -147,9 +161,13 @@ public:
     void bindAudioListenerToCamera(bool bind);
 
     /**
-     * Returns the ambient color of the scene. Black is the default color.
+     * Returns the ambient color of the scene.
+     *
+     * The default ambient light color is black (0,0,0).
+     *
+     * This value can be bound to materials using the SCENE_LIGHT_AMBIENT_COLOR auto binding.
      * 
-     * @return The ambient color of the scene.
+     * @return The scene's ambient color.
      */
     const Vector3& getAmbientColor() const;
 
@@ -159,8 +177,58 @@ public:
      * @param red The red channel between 0.0 and 1.0.
      * @param green The green channel between 0.0 and 1.0.
      * @param blue The blue channel between 0.0 and 1.0.
+     *
+     * @see getAmbientColor()
      */
     void setAmbientColor(float red, float green, float blue);
+
+    /**
+     * Returns the light color of the scene.
+     *
+     * The default light color is white (1,1,1).
+     *
+     * This color is typically used to represent the color of the main directional light (i.e. the Sun) in a scene.
+     * The corresponding direction can be queried using Scene::getLightDirection().
+     *
+     * This value can be bound to materials using the SCENE_LIGHT_COLOR auto binding.
+     *
+     * @return The scene's light color.
+     */
+    const Vector3& getLightColor() const;
+
+    /**
+     * Sets the scene's light color.
+     *
+     * @param red The red channel between 0.0 and 1.0.
+     * @param green The green channel between 0.0 and 1.0.
+     * @param blue The blue channel between 0.0 and 1.0.
+     *
+     * @see getLightColor()
+     */
+    void setLightColor(float red, float green, float blue);
+
+    /**
+     * Returns the current light direction for the scene.
+     *
+     * The default value is (0,-1,0), which is a pointing directly down the Y-axis.
+     *
+     * This value is typically used to represent the the main directional lihgt (i.e. the Sun) in a scene.
+     * The corresponding light color can be queried using Scene::getLightColor().
+     *
+     * This value can be bound to materials using the SCENE_LIGHT_DIRECTION auto binding.
+     *
+     * @return The scene's light direction.
+     */
+    const Vector3& getLightDirection() const;
+
+    /**
+     * Sets the scene's light direction.
+     *
+     * @param direction The new light direction.
+     *
+     * @see getLightDirection()
+     */
+    void setLightDirection(const Vector3& direction);
 
     /**
      * Visits each node in the scene and calls the specified method pointer.
@@ -222,7 +290,7 @@ private:
     /**
      * Constructor.
      */
-    Scene();
+    Scene(const char* id);
 
     /**
      * Hidden copy constructor.
@@ -262,6 +330,8 @@ private:
     Node* _lastNode;
     unsigned int _nodeCount;
     Vector3 _ambientColor;
+    Vector3 _lightColor;
+    Vector3 _lightDirection;
     bool _bindAudioListenerToCamera;
     MeshBatch* _debugBatch;
 };

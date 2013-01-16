@@ -4,6 +4,11 @@
 #include "Game.h"
 #include "Node.h"
 #include "ScriptController.h"
+#include "PhysicsRigidBody.h"
+#include "PhysicsCharacter.h"
+#include "PhysicsGhostObject.h"
+#include "PhysicsVehicle.h"
+#include "PhysicsVehicleWheel.h"
 
 namespace gameplay
 {
@@ -165,6 +170,31 @@ bool PhysicsCollisionObject::collidesWith(PhysicsCollisionObject* object) const
     return callback.result;
 }
 
+PhysicsRigidBody* PhysicsCollisionObject::asRigidBody()
+{
+    return getType() == RIGID_BODY ? static_cast<PhysicsRigidBody*>(this) : NULL;
+}
+
+PhysicsCharacter* PhysicsCollisionObject::asCharacter()
+{
+    return getType() == CHARACTER ? static_cast<PhysicsCharacter*>(this) : NULL;
+}
+
+PhysicsGhostObject* PhysicsCollisionObject::asGhostObject()
+{
+    return getType() == GHOST_OBJECT ? static_cast<PhysicsGhostObject*>(this) : NULL;
+}
+
+PhysicsVehicle* PhysicsCollisionObject::asVehicle()
+{
+    return getType() == VEHICLE ? static_cast<PhysicsVehicle*>(this) : NULL;
+}
+
+PhysicsVehicleWheel* PhysicsCollisionObject::asVehicleWheel()
+{
+    return getType() == VEHICLE_WHEEL ? static_cast<PhysicsVehicleWheel*>(this) : NULL;
+}
+
 PhysicsCollisionObject::CollisionPair::CollisionPair(PhysicsCollisionObject* objectA, PhysicsCollisionObject* objectB)
     : objectA(objectA), objectB(objectB)
 {
@@ -187,8 +217,8 @@ bool PhysicsCollisionObject::CollisionPair::operator < (const CollisionPair& col
     return false;
 }
 
-PhysicsCollisionObject::PhysicsMotionState::PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset) : _node(node),
-    _centerOfMassOffset(btTransform::getIdentity())
+PhysicsCollisionObject::PhysicsMotionState::PhysicsMotionState(Node* node, PhysicsCollisionObject* collisionObject, const Vector3* centerOfMassOffset) :
+    _node(node), _collisionObject(collisionObject), _centerOfMassOffset(btTransform::getIdentity())
 {
     if (centerOfMassOffset)
     {
@@ -206,7 +236,9 @@ PhysicsCollisionObject::PhysicsMotionState::~PhysicsMotionState()
 void PhysicsCollisionObject::PhysicsMotionState::getWorldTransform(btTransform &transform) const
 {
     GP_ASSERT(_node);
-    if (_node->getCollisionObject() && _node->getCollisionObject()->isKinematic())
+    GP_ASSERT(_collisionObject);
+
+    if (_collisionObject->isKinematic())
         updateTransformFromNode();
 
     transform = _centerOfMassOffset.inverse() * _worldTransform;
@@ -249,6 +281,11 @@ void PhysicsCollisionObject::PhysicsMotionState::updateTransformFromNode() const
     {
         _worldTransform = btTransform(BQ(rotation), btVector3(m.m[12], m.m[13], m.m[14]));
     }
+}
+
+void PhysicsCollisionObject::PhysicsMotionState::setCenterOfMassOffset(const Vector3& centerOfMassOffset)
+{
+    _centerOfMassOffset.setOrigin(BV(centerOfMassOffset));
 }
 
 PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)

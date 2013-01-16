@@ -38,7 +38,7 @@ material texturedSpecular
 			defines = SPECULAR
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldMatrix = INVERSE_TRANSPOSE_WORLD_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             u_worldViewMatrix = WORLD_VIEW_MATRIX
             u_cameraPosition = CAMERA_VIEW_POSITION
             u_specularExponent = 50
@@ -71,7 +71,7 @@ material texturedTransparent
             fragmentShader = res/shaders/textured.frag
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldMatrix = INVERSE_TRANSPOSE_WORLD_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
             sampler u_diffuseTexture
             {
@@ -104,7 +104,7 @@ material colored
             fragmentShader = res/shaders/colored.frag
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldMatrix = INVERSE_TRANSPOSE_WORLD_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
             renderState
             {

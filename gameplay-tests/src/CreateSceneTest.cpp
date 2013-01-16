@@ -107,7 +107,7 @@ void CreateSceneTest::initialize()
     // These parameters are normally set in a .material file but this example sets them programmatically.
     // Bind the uniform "u_worldViewProjectionMatrix" to use the WORLD_VIEW_PROJECTION_MATRIX from the scene's active camera and the node that the model belongs to.
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
-    material->setParameterAutoBinding("u_inverseTransposeWorldMatrix", "INVERSE_TRANSPOSE_WORLD_MATRIX");
+    material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
 
     // Bind the light's direction to the material.
     material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);

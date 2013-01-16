@@ -10,7 +10,6 @@ form menu
     container controlsContainer
     {
         style = noBorder
-        position = 0, 0
         autoWidth = true
         height = 60
 
@@ -20,7 +19,6 @@ form menu
             autoWidth = true
 			textAlignment =  ALIGN_LEFT
             height = 30
-			position = 10, 0
             text = Controls
         }
 
@@ -42,16 +40,6 @@ form menu
             selected = false
         }
     }
-
-	label gameLabel
-	{
-		style = title
-        autoWidth = true
-		textAlignment =  ALIGN_LEFT
-        height = 30
-		position = 10, 70
-        text = Game
-	}
 
     // Reset
     button newGameButton

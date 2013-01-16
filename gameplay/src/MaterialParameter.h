@@ -27,6 +27,12 @@ namespace gameplay
  * setting the parameter value to a pointer to a Matrix, any changes
  * to the Matrix will automatically be reflected in the technique the
  * next time the parameter is applied to the render state.
+ *
+ * Note that for parameter values to arrays or pointers, the 
+ * MaterialParameter will keep a long-lived reference to the passed
+ * in array/pointer. Therefore, you must ensure that the pointers
+ * you pass in are valid for the lifetime of the MaterialParameter
+ * object.
  */
 class MaterialParameter : public AnimationTarget, public Ref
 {
@@ -47,9 +53,12 @@ public:
     /**
      * Returns the texture sampler or NULL if this MaterialParameter is not a sampler type.
      * 
+     * @param index Index of the sampler (if the parameter is a sampler array),
+     *      or zero if it is a single sampler value.
+     *
      * @return The texture sampler or NULL if this MaterialParameter is not a sampler type.
      */
-    Texture::Sampler* getSampler() const;
+    Texture::Sampler* getSampler(unsigned int index = 0) const;
 
     /**
      * Sets the value of this parameter to a float value.
@@ -115,6 +124,13 @@ public:
      * Sets the value of this parameter to the specified texture sampler.
      */
     void setValue(const Texture::Sampler* sampler);
+
+    /**
+     * Sets the value of this parameter to the specified texture sampler array.
+     *
+     * @script{ignore}
+     */
+    void setValue(const Texture::Sampler** samplers, unsigned int count);
 
     /**
      * Loads a texture sampler from the specified path and sets it as the value of this parameter.
@@ -298,6 +314,8 @@ private:
         /** @script{ignore} */
         const Texture::Sampler* samplerValue;
         /** @script{ignore} */
+        const Texture::Sampler** samplerArrayValue;
+        /** @script{ignore} */
         MethodBinding* method;
     } _value;
     
@@ -305,12 +323,15 @@ private:
     {
         NONE,
         FLOAT,
+        FLOAT_ARRAY,
         INT,
+        INT_ARRAY,
         VECTOR2,
         VECTOR3,
         VECTOR4,
         MATRIX,
         SAMPLER,
+        SAMPLER_ARRAY,
         METHOD
     } _type;
     

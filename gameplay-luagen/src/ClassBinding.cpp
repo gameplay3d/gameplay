@@ -88,7 +88,7 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
     // Write out the header.
     {
         string path = dir + string("lua_") + uniquename + string(".h");
-        ofstream o(path.c_str());
+        ostringstream o;
         if (!o)
         {
             GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
@@ -122,13 +122,14 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
         if (bindingNS)
             o << "}\n\n";
         o << "#endif\n";
-        o.close();
+
+        writeFile(path, o.str());
     }
 
     // Write out the implementation.
     {
         string path = dir + string("lua_") + uniquename + string(".cpp");
-        ofstream o(path.c_str());
+        ostringstream o;
         if (!o)
         {
             GP_ERROR("Failed to open file '%s' for generating Lua bindings.", path.c_str());
@@ -288,7 +289,8 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
 
         if (bindingNS)
             o << "}\n";
-        o.close();
+
+        writeFile(path, o.str());
     }
 
     SAFE_DELETE(constructorUniqueName);

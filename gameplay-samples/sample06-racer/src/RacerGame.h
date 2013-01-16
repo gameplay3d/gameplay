@@ -123,6 +123,7 @@ private:
     unsigned int _mouseFlags;
     float _steering;
     Gamepad* _gamepad;
+    Gamepad* _physicalGamepad;
     Gamepad* _virtualGamepad;
     AnimationClip* _virtualGamepadClip;
     PhysicsVehicle* _carVehicle;
