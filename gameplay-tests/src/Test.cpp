@@ -15,12 +15,10 @@ const Game::ClearFlags& Test::CLEAR_COLOR_DEPTH_STENCIL = Game::CLEAR_COLOR_DEPT
 
 Test::Test()
 {
-    
 }
 
 Test::~Test()
 {
-    
 }
 
 bool Test::isVsync()
@@ -203,17 +201,14 @@ bool Test::isGestureRegistered(Gesture::GestureEvent evt)
 
 void Test::gestureSwipeEvent(int x, int y, int direction)
 {
-
 }
 
 void Test::gesturePinchEvent(int x, int y, float scale)
 {
-
 }
 
 void Test::gestureTapEvent(int x, int y)
 {
-
 }
 
 void Test::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)

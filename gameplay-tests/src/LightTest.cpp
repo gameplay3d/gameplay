@@ -94,7 +94,7 @@ void LightTest::initialize()
     // TODO: Broken
     //_properties->setEnabled(false);
     //_properties->setOpacity(0.25f);
-    _noLight->setSelected(true);
+    _directional->setSelected(true);
 	_form->setConsumeInputEvents(false);
 	
     // Create and initialize lights and materials for lights

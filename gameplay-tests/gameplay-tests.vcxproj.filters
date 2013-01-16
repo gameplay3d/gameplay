@@ -52,9 +52,6 @@
     <ClInclude Include="src\MeshBatchTest.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsSceneTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\TriangleTest.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -68,12 +65,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\LightTest.h">
-	  <Filter>src</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PostProcessTest.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\GamepadTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsCollisionObjectTest.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -117,9 +117,6 @@
     <ClCompile Include="src\MeshBatchTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsSceneTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\TriangleTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -133,12 +130,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\LightTest.cpp">
-	  <Filter>src</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PostProcessTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\GamepadTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsCollisionObjectTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
