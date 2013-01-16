@@ -16,8 +16,8 @@ Gamepad::Gamepad(const char* formPath)
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
     _id = _form->getId();
-    _vendorString = "GamePlay";
-    _productString = "Virtual Gamepad";
+    _vendorString = "None";
+    _productString = "Virtual";
 
     for (int i = 0; i < 2; ++i)
     {
