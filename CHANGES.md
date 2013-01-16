@@ -1,13 +1,26 @@
 ## v1.6.0
-- Adds Stream interface for reading/writing files instead of using fread/fwrite. 
-- Android no longer needs to copy files to the SD card before reading them. None of the Android samples require an SD card.
+- Adds file Stream interface for reading/writing files instead of using fread/fwrite. 
+- Adds additional gameplay-tests for billboards and forms.
+- Adds support for launching the browser via launchURL(const char*).
+- Adds physics support for setLinearFactor and setAngularFactor  on rigid bodies.
+- Adds option for fullscreen without width/height config to use native desktop resolution.
+- Adds Linux support for OpenAL PulseAudio back-end.
+- Adds support for latest Bullet Physics 2.81 with NEON optimizations for mobile targets.
+- Adds Windows 7 64-bit support.
+- Fixes to external-deps to reduce the size of the libraries on Windows.
+- Fixes for Android to no longer need to copy files to the SD card before reading them. None of the Android samples require an SD card.
+- Fixes for animation of opacity on UI and fonts.
+- Fixes in UI for removing controls and also setVisible(bool)
+- Fixes for UI controls missing on MacOSX.
+- Fixes for setting UI alignment programmatically.
+- Fixes for directional and spotlight shaders.
 
 ## v1.5.0
 
 - Linux support. (tested on Ubuntu 12)
 - CMake support for makefile generation for Linux.
 - CodeBlocks 10 IDE support for Linux.
-- Gamepad controllers support for desktops.
+- Gamepad API support for desktops.
 - Touch gesture support for tap, swipe and pinch.
 - Vehicle physics support via new PhysicsVehicle and PhysicsVehicleWheel classes.
 - Adds new racer sample (sample06-racer).

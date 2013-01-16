@@ -114,7 +114,7 @@ public:
     void getCorners(Vector3* corners) const;
 
     /**
-     * Tests whether this frustum instersects the specified point.
+     * Tests whether this frustum intersects the specified point.
      *
      * @param point The point to test intersection with.
      *
@@ -123,7 +123,7 @@ public:
     bool intersects(const Vector3& point) const;
 
     /**
-     * Tests whether this frustum instersects the specified point.
+     * Tests whether this frustum intersects the specified point.
      *
      * @param x The x coordinate.
      * @param y The y coordinate.

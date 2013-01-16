@@ -342,12 +342,30 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("PAUSED", "PAUSED", scopePath);
     }
 
-    // Register enumeration Gamepad::ButtonState.
+    // Register enumeration Gamepad::ButtonMapping.
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Gamepad");
-        ScriptUtil::registerConstantString("BUTTON_PRESSED", "BUTTON_PRESSED", scopePath);
-        ScriptUtil::registerConstantString("BUTTON_RELEASED", "BUTTON_RELEASED", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_A", "BUTTON_A", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_B", "BUTTON_B", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_C", "BUTTON_C", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_X", "BUTTON_X", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_Y", "BUTTON_Y", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_Z", "BUTTON_Z", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU1", "BUTTON_MENU1", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU2", "BUTTON_MENU2", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU3", "BUTTON_MENU3", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU4", "BUTTON_MENU4", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_L1", "BUTTON_L1", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_L2", "BUTTON_L2", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_L3", "BUTTON_L3", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_R1", "BUTTON_R1", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_R2", "BUTTON_R2", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_R3", "BUTTON_R3", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_UP", "BUTTON_UP", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_DOWN", "BUTTON_DOWN", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_LEFT", "BUTTON_LEFT", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_RIGHT", "BUTTON_RIGHT", scopePath);
     }
 
     // Register enumeration Gamepad::GamepadEvent.
@@ -818,8 +836,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_GameClearFlags((Game::ClearFlags)value);
     if (enumname == "Game::State")
         return lua_stringFromEnum_GameState((Game::State)value);
-    if (enumname == "Gamepad::ButtonState")
-        return lua_stringFromEnum_GamepadButtonState((Gamepad::ButtonState)value);
+    if (enumname == "Gamepad::ButtonMapping")
+        return lua_stringFromEnum_GamepadButtonMapping((Gamepad::ButtonMapping)value);
     if (enumname == "Gamepad::GamepadEvent")
         return lua_stringFromEnum_GamepadGamepadEvent((Gamepad::GamepadEvent)value);
     if (enumname == "Gesture::GestureEvent")

@@ -48,6 +48,7 @@ static char* __title = NULL;
 static bool __fullscreen = false;
 static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
+static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
 static bool __cursorVisible = true;
 static View* __view = NULL;
@@ -582,7 +583,7 @@ double getMachTimeInMilliseconds()
 - (void)hidValueAvailable:(IOHIDValueRef)value
 {
     IOHIDElementRef element = IOHIDValueGetElement(value);
-	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
+    IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
     if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
     CFIndex integerValue = IOHIDValueGetIntegerValue(value);
@@ -848,8 +849,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    float y;
     if (__mouseCaptured)
     {
+        if (__mouseCapturedFirstPass)
+        {
+            // Discard the first mouseMoved event following transition into capture
+            // since it contains bogus x,y data.
+            __mouseCapturedFirstPass = false;
+            return;
+        }
+
         point.x = [event deltaX];
         point.y = [event deltaY];
 
@@ -859,9 +869,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         centerPoint.x = rect.origin.x + (rect.size.width / 2);
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
+        y = point.y;
+    }
+    else
+    {
+        y = __height - point.y;
     }
     
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -1461,6 +1476,12 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            if (__fullscreen && width == 0 && height == 0)
+            {
+                CGRect mainMonitor = CGDisplayBounds(CGMainDisplayID());
+                __width = CGRectGetWidth(mainMonitor);
+                __height = CGRectGetHeight(mainMonitor);
+            }
         }
     }
 
@@ -1603,6 +1624,7 @@ void Platform::setMouseCaptured(bool captured)
         if (captured)
         {
             [NSCursor hide];
+            __mouseCapturedFirstPass = true;
         }
         else
         {   
@@ -1726,139 +1748,8 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
      return [__view isGestureRegistered:evt];
 }
 
-unsigned int Platform::getGamepadsConnected()
+void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    Game* game = Game::getInstance();
-    
-    if(game->isInitialized())
-    {
-        // Locate any newly connected devices
-        for(OSXGamepad* gamepad in __gamepads)
-        {
-            NSNumber* locationID = [gamepad locationID];
-            if([__activeGamepads objectForKey:locationID] == NULL)
-            {
-                unsigned int handle = game->createGamepad([[gamepad identifierName] cStringUsingEncoding:NSASCIIStringEncoding],
-                                                          [locationID unsignedIntValue],
-                                                          [gamepad numberOfButtons],
-                                                          [gamepad numberOfSticks],
-                                                          [gamepad numberOfTriggerButtons]);
-                NSNumber* handleObj = [NSNumber numberWithUnsignedInt:handle];
-                [__activeGamepads setObject:handleObj forKey:locationID];
-                game->gamepadEvent(Gamepad::CONNECTED_EVENT, game->getGamepad(handle));
-            }
-        }
-        
-        // Detect any disconnected gamepads
-        NSMutableArray* deadGamepads = [NSMutableArray array];
-        for(NSNumber* locationID in __activeGamepads)
-        {
-            OSXGamepad* gamepad = gamepadForLocationID(locationID);
-            if(gamepad == NULL)
-            {
-                NSNumber* gameHandle = [__activeGamepads objectForKey:locationID];
-                game->gamepadEvent(Gamepad::DISCONNECTED_EVENT, game->getGamepad([gameHandle unsignedIntValue]));
-                [deadGamepads addObject:locationID];
-            }
-        }
-        [__activeGamepads removeObjectsForKeys:deadGamepads];
-    }
-    return [__gamepads count];
-}
-
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    return (gamepad != NULL);
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    if(gamepad)
-    {
-        return [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding];
-    }
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    if(gamepad)
-    {
-        return [gamepad numberOfButtons];
-    }
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadButton* button = [gamepad buttonAtIndex:buttonIndex];
-    if(button)
-    {
-        return [button state];
-    }
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    if(gamepad)
-    {
-        return [gamepad numberOfSticks];
-    }
-    return 0;
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return true;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadAxis* xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
-    return [xAxis calibratedValue];
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadAxis* yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
-    return [yAxis calibratedValue];
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadAxis* xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
-    OSXGamepadAxis* yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
-    if(outValue)
-    {
-        outValue->x = [xAxis calibratedValue];
-        outValue->y = [yAxis calibratedValue];
-    }
-}
-
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
-{
-    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
-    return [gamepad numberOfTriggerButtons];
-}
-
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadButton* button = [gamepad triggerButtonAtIndex:triggerIndex];
-    if(button)
-    {
-        return [button stateValue];
-    }
-    return 0.0f;
 }
 
 }
@@ -1942,25 +1833,25 @@ CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, U
 
 CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return NULL;
-	}
+        return NULL;
+    }
     return (CFStringRef)typeRef;
 }
 
 int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return 0;
-	}
+        return 0;
+    }
     
     int value;
-	CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
-	return value;
+    CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
+    return value;
 }
 
 static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 

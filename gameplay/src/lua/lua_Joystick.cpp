@@ -31,8 +31,6 @@ void luaRegister_Joystick()
         {"createAnimationFromBy", lua_Joystick_createAnimationFromBy},
         {"createAnimationFromTo", lua_Joystick_createAnimationFromTo},
         {"destroyAnimation", lua_Joystick_destroyAnimation},
-        {"disable", lua_Joystick_disable},
-        {"enable", lua_Joystick_enable},
         {"getAlignment", lua_Joystick_getAlignment},
         {"getAnimation", lua_Joystick_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Joystick_getAnimationPropertyComponentCount},
@@ -55,6 +53,7 @@ void luaRegister_Joystick()
         {"getImageColor", lua_Joystick_getImageColor},
         {"getImageRegion", lua_Joystick_getImageRegion},
         {"getImageUVs", lua_Joystick_getImageUVs},
+        {"getIndex", lua_Joystick_getIndex},
         {"getInnerRegionSize", lua_Joystick_getInnerRegionSize},
         {"getMargin", lua_Joystick_getMargin},
         {"getOpacity", lua_Joystick_getOpacity},
@@ -77,6 +76,7 @@ void luaRegister_Joystick()
         {"isContainer", lua_Joystick_isContainer},
         {"isEnabled", lua_Joystick_isEnabled},
         {"isRelative", lua_Joystick_isRelative},
+        {"isVisible", lua_Joystick_isVisible},
         {"release", lua_Joystick_release},
         {"removeListener", lua_Joystick_removeListener},
         {"removeScriptCallback", lua_Joystick_removeScriptCallback},
@@ -89,6 +89,7 @@ void luaRegister_Joystick()
         {"setConsumeInputEvents", lua_Joystick_setConsumeInputEvents},
         {"setCursorColor", lua_Joystick_setCursorColor},
         {"setCursorRegion", lua_Joystick_setCursorRegion},
+        {"setEnabled", lua_Joystick_setEnabled},
         {"setFocusIndex", lua_Joystick_setFocusIndex},
         {"setFont", lua_Joystick_setFont},
         {"setFontSize", lua_Joystick_setFontSize},
@@ -110,6 +111,7 @@ void luaRegister_Joystick()
         {"setTextAlignment", lua_Joystick_setTextAlignment},
         {"setTextColor", lua_Joystick_setTextColor},
         {"setTextRightToLeft", lua_Joystick_setTextRightToLeft},
+        {"setVisible", lua_Joystick_setVisible},
         {"setWidth", lua_Joystick_setWidth},
         {"setZIndex", lua_Joystick_setZIndex},
         {NULL, NULL}
@@ -676,70 +678,6 @@ int lua_Joystick_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joystick_disable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Joystick* instance = getInstance(state);
-                instance->disable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Joystick_disable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joystick_enable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Joystick* instance = getInstance(state);
-                instance->enable();
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Joystick_enable - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -1787,6 +1725,41 @@ int lua_Joystick_getImageUVs(lua_State* state)
     return 0;
 }
 
+int lua_Joystick_getIndex(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joystick* instance = getInstance(state);
+                unsigned int result = instance->getIndex();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joystick_getIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joystick_getInnerRegionSize(lua_State* state)
 {
     // Get the number of parameters.
@@ -2791,6 +2764,41 @@ int lua_Joystick_isRelative(lua_State* state)
     return 0;
 }
 
+int lua_Joystick_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joystick* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joystick_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Joystick_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -3336,6 +3344,42 @@ int lua_Joystick_setCursorRegion(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joystick_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Joystick* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joystick_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4450,6 +4494,42 @@ int lua_Joystick_setTextRightToLeft(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joystick_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Joystick* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Joystick_setVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
