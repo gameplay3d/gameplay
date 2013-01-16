@@ -563,6 +563,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
     glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");
     glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int *value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
+    glXSwapIntervalEXT = (void(*)(Display* dpy, GLXDrawable drawable, int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalEXT");
+    glXSwapIntervalMESA = (int(*)(unsigned int interval))glXGetProcAddressARB((GLubyte*)"glXSwapIntervalMESA");
 
     // Get the configs
     int configAttribs[] = 
@@ -661,8 +663,10 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     printf("GL version: %d.%d\n", versionGL[0], versionGL[1]);
 
     // TODO: Get this workings
-    //if (GLXEW_EXT_swap_control)
-    //    glXSwapIntervalEXT(__display, glXGetCurrentDrawable(), __vsync ? 1 : 0);
+    if (glXSwapIntervalEXT)
+        glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
+    else if(glXSwapIntervalMESA)
+        glXSwapIntervalMESA(__vsync ? 1 : 0);
  
     return platform;
 }
@@ -973,9 +977,11 @@ bool Platform::isVsync()
 
 void Platform::setVsync(bool enable)
 {
-    // TODO: Get this working
-    //if (GLXEW_EXT_swap_control)
-    //    glXSwapIntervalEXT(__display, glXGetCurrentDrawable(), __vsync ? 1 : 0);
+    if (glXSwapIntervalEXT)
+        glXSwapIntervalEXT(__display, __window, __vsync ? 1 : 0);
+    else if(glXSwapIntervalMESA)
+        glXSwapIntervalMESA(__vsync ? 1 : 0);
+
     __vsync = enable;
 }
 
@@ -1131,63 +1137,8 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
     return false;
 }
 
-unsigned int Platform::getGamepadsConnected()
+void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    return 0;
-}
-
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
-{
-    return false;
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle)
-{
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return false;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
-{
-}
-
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
-{
-    return 0.0f;
 }
 
 bool Platform::launchURL(const char* url)
