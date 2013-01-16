@@ -34,10 +34,17 @@ protected:
     void render(float elapsedTime);
 
 private:
-	void initDirectionalTechniqueCommonParams(const char* technique);
-	void initSpotTechniqueCommonParams(const char* technique);
-	void initPointTechniqueCommonParams(const char* technique);
+
+	void initializeDirectionalTechnique(const char* technique);
+
+	void initializeSpotTechnique(const char* technique);
+
+	void initializePointTechnique(const char* technique);
+
+    void setUnlitMaterialTexture(Model* model, const char* texturePath, bool mipmap = true);
+
 	void setColorValue(const Vector3& value);
+
 	void setSpecularValue(float);
 
     bool drawScene(Node* node);
@@ -45,7 +52,6 @@ private:
     Font* _font;
     Scene* _scene;
 	Node* _modelNode;
-
     Node* _directionalLightNode;
 	Node* _pointLightNode;
 	Node* _spotLightNode;
@@ -63,18 +69,19 @@ private:
 
 	Material* _lighting;
 	
-	Slider* _redSlider;
-	Slider* _greenSlider;
-	Slider* _blueSlider;
-	Slider* _specularSlider;
-
 	RadioButton* _noLight;
 	RadioButton* _directional;
 	RadioButton* _spot;
 	RadioButton* _point;
 
-	CheckBox* _addSpecular;
+    Container* _properties;
+	Slider* _redSlider;
+	Slider* _greenSlider;
+	Slider* _blueSlider;
+	Slider* _specularSlider;
+    CheckBox* _addSpecular;
 	CheckBox* _addBumped;
+
 
 	Form* _form;
     

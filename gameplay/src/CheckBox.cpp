@@ -96,7 +96,6 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
         }
         break;
     }
-
     return Button::touchEvent(evt, x, y, contactIndex);
 }
 
