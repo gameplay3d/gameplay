@@ -1,4 +1,4 @@
-// Inputs
+// Attributes
 attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
 #ifndef NORMAL_MAP
 attribute vec3 a_normal;									// Vertex Normal							(x, y, z)
@@ -21,7 +21,7 @@ uniform mat4 u_normalMatrix;					            // Matrix used for normal vector tr
 #endif
 uniform vec3 u_lightDirection;								// Direction of light
 
-// Outputs
+// Varyings
 #ifndef NORMAL_MAP
 varying vec3 v_normalVector;								// Normal vector out
 #endif
@@ -36,6 +36,7 @@ varying vec2 v_texCoord2;
 varying vec2 v_texCoord3;
 #endif
 
+
 void main()
 {
     // Transform position to clip space.
@@ -45,9 +46,7 @@ void main()
     // Pass normal to fragment shader
     v_normalVector = (u_normalMatrix * vec4(a_normal.x, a_normal.y, a_normal.z, 0)).xyz;
 #endif
-
     v_texCoord0 = a_texCoord0;
-
 #if LAYER_COUNT > 1
     v_texCoord1 = a_texCoord1;
 #endif

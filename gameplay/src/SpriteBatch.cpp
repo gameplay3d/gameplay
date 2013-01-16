@@ -14,33 +14,9 @@
     vtx.u = vu; vtx.v = vv; \
     vtx.r = vr; vtx.g = vg; vtx.b = vb; vtx.a = va
 
-// Default sprite vertex shader
-#define SPRITE_VSH \
-    "uniform mat4 u_projectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "attribute vec4 a_color;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-        "v_color = a_color;\n" \
-    "}\n"
-
-// Default sprite fragment shader
-#define SPRITE_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = v_color * texture2D(u_texture, v_texCoord);\n" \
-    "}\n"
+// Default sprite shaders
+#define SPRITE_VSH "res/shaders/sprite.vert"
+#define SPRITE_FSH "res/shaders/sprite.frag"
 
 namespace gameplay
 {
@@ -88,7 +64,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int
         // Create our static sprite effect.
         if (__spriteEffect == NULL)
         {
-            __spriteEffect = Effect::createFromSource(SPRITE_VSH, SPRITE_FSH);
+            __spriteEffect = Effect::createFromFile(SPRITE_VSH, SPRITE_FSH);
             if (__spriteEffect == NULL)
             {
                 GP_ERROR("Unable to load sprite effect.");
