@@ -14,13 +14,13 @@ uniform vec4 u_modulateColor;               // Modulation color
 uniform float u_modulateAlpha;              // Modulation alpha
 #endif
 
-// Inputs
+// Varyings
 varying vec2 v_texCoord0;                	// Texture coordinate(u, v)
 #if defined(TEXCOORD1)
 varying vec2 v_texCoord1;                   // Second tex coord for multi-texturing
 #endif
 
-// Fragment Program
+
 void main()
 {
     // Sample the texture for the color

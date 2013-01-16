@@ -12,7 +12,6 @@ void applyLight(mat3 tangentSpaceTransformMatrix)
     v_cameraDirection = u_cameraPosition - positionWorldViewSpace.xyz;
 
     #endif
-
 }
 
 #else
