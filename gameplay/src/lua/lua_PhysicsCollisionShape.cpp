@@ -2,7 +2,10 @@
 #include "ScriptController.h"
 #include "lua_PhysicsCollisionShape.h"
 #include "Base.h"
+#include "FileSystem.h"
 #include "Game.h"
+#include "HeightField.h"
+#include "Image.h"
 #include "Node.h"
 #include "PhysicsCollisionShape.h"
 #include "Properties.h"
@@ -540,35 +543,54 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
+        case 0:
+        {
+            void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::heightfield());
+            if (returnPtr)
+            {
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = true;
+                luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
-                if (!param1Valid)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TTABLE || lua_type(state, 1) == LUA_TNIL))
                 {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Image'.");
-                    lua_error(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::heightfield(param1));
-                if (returnPtr)
-                {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    void* returnPtr = (void*)new PhysicsCollisionShape::Definition(PhysicsCollisionShape::heightfield(param1));
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
 
-                return 1;
-            }
+                    return 1;
+                }
+            } while (0);
 
             lua_pushstring(state, "lua_PhysicsCollisionShape_static_heightfield - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
@@ -576,7 +598,7 @@ int lua_PhysicsCollisionShape_static_heightfield(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
             lua_error(state);
             break;
         }

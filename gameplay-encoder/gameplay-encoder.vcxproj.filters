@@ -130,6 +130,12 @@
     <ClCompile Include="src\Heightmap.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Image.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NormalMapGenerator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexElement.h">
@@ -259,6 +265,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Heightmap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Image.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NormalMapGenerator.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

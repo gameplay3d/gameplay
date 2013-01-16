@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "MeshPart.h"
 #include "Bundle.h"
+#include "Terrain.h"
 
 #ifdef GAMEPLAY_MEM_LEAK_DETECTION
 #undef new
@@ -865,8 +866,19 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
 
     case PhysicsCollisionShape::SHAPE_HEIGHTFIELD:
         {
-            // Build heightfield rigid body from the passed in shape.
-            collisionShape = createHeightfield(node, shape.data.heightfield, centerOfMassOffset);
+            if (shape.isExplicit)
+            {
+                // Build heightfield rigid body from the passed in shape.
+                collisionShape = createHeightfield(node, shape.data.heightfield, centerOfMassOffset);
+            }
+            else
+            {
+                // Build the heightfield from an attached terrain's height array
+                if (node->getTerrain() == NULL)
+                    GP_ERROR("Empty heightfield collision shapes can only be used on nodes that have an attached Terrain.");
+                else
+                    collisionShape = createHeightfield(node, node->getTerrain()->_heightfield, centerOfMassOffset);
+            }
         }
         break;
 
@@ -876,6 +888,7 @@ PhysicsCollisionShape* PhysicsController::createShape(Node* node, const PhysicsC
             collisionShape = createMesh(shape.data.mesh, scale);
         }
         break;
+
     default:
         GP_ERROR("Unsupported collision shape type (%d).", shape.type);
         break;
@@ -983,147 +996,53 @@ PhysicsCollisionShape* PhysicsController::createCapsule(float radius, float heig
     return shape;
 }
 
-PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset)
+PhysicsCollisionShape* PhysicsController::createHeightfield(Node* node, HeightField* heightfield, Vector3* centerOfMassOffset)
 {
     GP_ASSERT(node);
-    GP_ASSERT(image);
+    GP_ASSERT(heightfield);
     GP_ASSERT(centerOfMassOffset);
 
-    // Get the dimensions of the heightfield.
-    // If the node has a mesh defined, use the dimensions of the bounding box for the mesh.
-    // Otherwise simply use the image dimensions (with a max height of 255).
-    float width, length, minHeight, maxHeight;
-    if (node->getModel() && node->getModel()->getMesh())
+    // Inspect the height array for the min and max values
+    float* heights = heightfield->getArray();
+    float minHeight = FLT_MAX, maxHeight = -FLT_MAX;
+    for (unsigned int i = 0, count = heightfield->getColumnCount()*heightfield->getRowCount(); i < count; ++i)
     {
-        const BoundingBox& box = node->getModel()->getMesh()->getBoundingBox();
-        width = box.max.x - box.min.x;
-        length = box.max.z - box.min.z;
-        minHeight = box.min.y;
-        maxHeight = box.max.y;
-    }
-    else
-    {
-        width = image->getWidth();
-        length = image->getHeight();
-        minHeight = 0.0f;
-        maxHeight = 255.0f;
+        float h = heights[i];
+        if (h < minHeight)
+            minHeight = h;
+        if (h > maxHeight)
+            maxHeight = h;
     }
 
-    // Get the size in bytes of a pixel (we ensure that the image's
-    // pixel format is actually supported before calling this constructor).
-    unsigned int pixelSize = 0;
-    switch (image->getFormat())
+    // Compute initial heightfield scale by pulling the current world scale out of the node
+    Vector3 scale;
+    node->getWorldMatrix().getScale(&scale);
+
+    // If the node has a terrain, apply the terrain's local scale to the world scale
+    if (node->getTerrain())
     {
-        case Image::RGB:
-            pixelSize = 3;
-            break;
-        case Image::RGBA:
-            pixelSize = 4;
-            break;
-        default:
-            GP_ERROR("Unsupported pixel format for heightmap image (%d).", image->getFormat());
-            return NULL;
+        Vector3& tScale = node->getTerrain()->_localScale;
+        scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
     }
 
-    // Calculate the heights for each pixel.
-    float* heights = new float[image->getWidth() * image->getHeight()];
-    unsigned char* data = image->getData();
-    for (unsigned int x = 0, w = image->getWidth(); x < w; ++x)
-    {
-        for (unsigned int y = 0, h = image->getHeight(); y < h; ++y)
-        {
-            //
-            // Originally in GamePlay this was normalizedHeightGrayscale which generally yielded
-            // only 8-bit precision. This has been replaced by normalizedHeightPacked (with a
-            // corresponding change in gameplay-encoder).
-            //
-            // BACKWARD COMPATIBILITY
-            // In grayscale images where r=g=b this will maintain some degree of compatibility,
-            // to within 0.4%. This can be seen by setting r=g=b=x and comparing the grayscale
-            // height expression to the packed height expression: the error is 2^-8 + 2^-16
-            // which is just under 0.4%.
-            //
-            heights[x + y * w] = normalizedHeightPacked(
-                data[(x + y * w) * pixelSize + 0],
-                data[(x + y * w) * pixelSize + 1],
-                data[(x + y * w) * pixelSize + 2]) * (maxHeight - minHeight) + minHeight;
-        }
-    }
+    // Compute initial center of mass offset necessary to move the height from its position in bullet
+    // physics (always centered around origin) to its intended location.
+    centerOfMassOffset->set(0, -(minHeight + (maxHeight-minHeight)*0.5f) * scale.y, 0);
 
+    // Create our heightfield data to be stored in the collision shape
     PhysicsCollisionShape::HeightfieldData* heightfieldData = new PhysicsCollisionShape::HeightfieldData();
-    heightfieldData->heightData = NULL;
-    heightfieldData->normalData = NULL;
+    heightfieldData->heightfield = heightfield;
+    heightfieldData->heightfield->addRef();
     heightfieldData->inverseIsDirty = true;
+    heightfieldData->minHeight = minHeight;
+    heightfieldData->maxHeight = maxHeight;
 
-    unsigned int sizeWidth = width;
-    unsigned int sizeHeight = length;
-    GP_ASSERT(sizeWidth);
-    GP_ASSERT(sizeHeight);
-    
-    // Generate the heightmap data needed for physics (one height per world unit).
-    heightfieldData->width = sizeWidth + 1;
-    heightfieldData->height = sizeHeight + 1;
-    heightfieldData->heightData = new float[heightfieldData->width * heightfieldData->height];
-    heightfieldData->normalData = new Vector3[heightfieldData->width * heightfieldData->height];
-    unsigned int heightIndex = 0, prevRowIndex = 0, prevColIndex = 0;
-    float widthImageFactor = (float)(image->getWidth() - 1) / sizeWidth;
-    float heightImageFactor = (float)(image->getHeight() - 1) / sizeHeight;
-    float x = 0.0f;
-    float z = 0.0f;
-    const float horizStepsize = 1.0f;
-    for (unsigned int row = 0, z = 0.0f; row <= sizeHeight; row++, z += horizStepsize)
-    {
-        for (unsigned int col = 0, x = 0.0f; col <= sizeWidth; col++, x += horizStepsize)
-        {
-            heightIndex = row * heightfieldData->width + col;
-            prevRowIndex = heightIndex - heightfieldData->width; // ignored if row<1
-            prevColIndex = heightIndex - 1; // ignored if col<1
-
-            heightfieldData->heightData[heightIndex] = calculateHeight(heights, image->getWidth(), image->getHeight(), x * widthImageFactor, (sizeHeight - z) * heightImageFactor);
-
-            //
-            // Normal calculation based on height data using a backward difference.
-            //
-            if (row == 0 || col == 0)
-            {
-                // This is just a safe default value.
-                heightfieldData->normalData[heightIndex].set(Vector3::unitY());
-            }
-            else
-            {
-                heightfieldData->normalData[heightIndex].set(
-                    heightfieldData->heightData[prevColIndex] - heightfieldData->heightData[heightIndex],
-                    horizStepsize,
-                    heightfieldData->heightData[prevRowIndex] - heightfieldData->heightData[heightIndex]);
-                heightfieldData->normalData[heightIndex].normalize();
-            }
-
-            // For the starting row, just copy from the second row (i.e., a forward difference).
-            if (row == 1)
-            {
-                heightfieldData->normalData[prevRowIndex].set(heightfieldData->normalData[heightIndex]);
-            }
-
-            // For the starting column, just copy from the second column (i.e., a forward difference).
-            // (We don't care which of the 2 valid sources heightfieldData->normalData[0] ultimately comes from).
-            if (col == 1)
-            {
-                heightfieldData->normalData[prevColIndex].set(heightfieldData->normalData[heightIndex]);
-            }
-        }
-    }
-    SAFE_DELETE_ARRAY(heights);
-
-    // Offset the heightmap's center of mass according to the way that Bullet calculates the origin 
-    // of its heightfield collision shape; see documentation for the btHeightfieldTerrainShape for more info.
-    Vector3 s;
-    node->getWorldMatrix().getScale(&s);
-    GP_ASSERT(s.y);
-    centerOfMassOffset->set(0.0f, -(maxHeight - (0.5f * (maxHeight - minHeight))) / s.y, 0.0f);
-
-    // Create the bullet terrain shape.
+    // Create the bullet terrain shape
     btHeightfieldTerrainShape* terrainShape = bullet_new<btHeightfieldTerrainShape>(
-        heightfieldData->width, heightfieldData->height, heightfieldData->heightData, 1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
+        heightfield->getColumnCount(), heightfield->getRowCount(), heightfield->getArray(), 1.0f, minHeight, maxHeight, 1, PHY_FLOAT, false);
+
+    // Set initial bullet local scaling for the heightfield
+    terrainShape->setLocalScaling(BV(scale));
 
     // Create our collision shape object and store heightfieldData in it.
     PhysicsCollisionShape* shape = new PhysicsCollisionShape(PhysicsCollisionShape::SHAPE_HEIGHTFIELD, terrainShape);
@@ -1308,78 +1227,6 @@ void PhysicsController::destroyShape(PhysicsCollisionShape* shape)
     }
 }
 
-float PhysicsController::calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
-    const Matrix* worldMatrix, Vector3* normalData, Vector3* normalResult)
-{
-    GP_ASSERT(data);
-
-    unsigned int x1 = x;
-    unsigned int y1 = y;
-    unsigned int x2 = x1 + 1;
-    unsigned int y2 = y1 + 1;
-    float tmp;
-    float xFactor = modf(x, &tmp);
-    float yFactor = modf(y, &tmp);
-    float xFactorI = 1.0f - xFactor;
-    float yFactorI = 1.0f - yFactor;
-
-    if (x2 >= width && y2 >= height)
-    {
-        if (normalResult)
-        {
-            normalResult->set(normalData[x1 + y1 * width]);
-            worldMatrix->transformVector(normalResult);
-        }
-        return data[x1 + y1 * width];
-    }
-    else if (x2 >= width)
-    {
-        if (normalResult)
-        {
-            normalResult->set(normalData[x1 + y1 * width] * yFactorI + normalData[x1 + y2 * width] * yFactor);
-            normalResult->normalize();
-            worldMatrix->transformVector(normalResult);
-        }
-        return data[x1 + y1 * width] * yFactorI + data[x1 + y2 * width] * yFactor;
-    }
-    else if (y2 >= height)
-    {
-        if (normalResult)
-        {
-            normalResult->set(normalData[x1 + y1 * width] * xFactorI + normalData[x2 + y1 * width] * xFactor);
-            normalResult->normalize();
-            worldMatrix->transformVector(normalResult);
-        }
-        return data[x1 + y1 * width] * xFactorI + data[x2 + y1 * width] * xFactor;
-    }
-    else
-    {
-        float a = xFactorI * yFactorI;
-        float b = xFactorI * yFactor;
-        float c = xFactor * yFactor;
-        float d = xFactor * yFactorI;
-        if (normalResult)
-        {
-            normalResult->set(normalData[x1 + y1 * width] * a + normalData[x1 + y2 * width] * b +
-                normalData[x2 + y2 * width] * c + normalData[x2 + y1 * width] * d);
-            normalResult->normalize();
-            worldMatrix->transformVector(normalResult);
-        }
-        return data[x1 + y1 * width] * a + data[x1 + y2 * width] * b +
-            data[x2 + y2 * width] * c + data[x2 + y1 * width] * d;
-    }
-}
-
-float PhysicsController::normalizedHeightGrayscale(float r, float g, float b)
-{
-    return (r + g + b) / 768.0f;
-}
-
-float PhysicsController::normalizedHeightPacked(float r, float g, float b)
-{
-    return (256.0f*r + g + 0.00390625f*b) / 65536.0f;
-}
-
 void PhysicsController::addConstraint(PhysicsRigidBody* a, PhysicsRigidBody* b, PhysicsConstraint* constraint)
 {
     GP_ASSERT(a);
@@ -1435,7 +1282,7 @@ void PhysicsController::removeConstraint(PhysicsConstraint* constraint)
 
 PhysicsController::DebugDrawer::DebugDrawer()
     : _mode(btIDebugDraw::DBG_DrawAabb | btIDebugDraw::DBG_DrawConstraintLimits | btIDebugDraw::DBG_DrawConstraints | 
-       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _viewProjection(NULL), _meshBatch(NULL)
+       btIDebugDraw::DBG_DrawContactPoints | btIDebugDraw::DBG_DrawWireframe), _meshBatch(NULL), _lineCount(0)
 {
     // Vertex shader for drawing colored lines.
     const char* vs_str = 
@@ -1466,14 +1313,14 @@ PhysicsController::DebugDrawer::DebugDrawer()
     Material* material = Material::create(effect);
     GP_ASSERT(material && material->getStateBlock());
     material->getStateBlock()->setDepthTest(true);
+    material->getStateBlock()->setDepthFunction(RenderState::DEPTH_LEQUAL);
 
     VertexFormat::Element elements[] =
     {
         VertexFormat::Element(VertexFormat::POSITION, 3),
         VertexFormat::Element(VertexFormat::COLOR, 4),
     };
-    _meshBatch = MeshBatch::create(VertexFormat(elements, 2), Mesh::LINES, material, false);
-
+    _meshBatch = MeshBatch::create(VertexFormat(elements, 2), Mesh::LINES, material, false, 4096, 4096);
     SAFE_RELEASE(material);
     SAFE_RELEASE(effect);
 }
@@ -1486,42 +1333,49 @@ PhysicsController::DebugDrawer::~DebugDrawer()
 void PhysicsController::DebugDrawer::begin(const Matrix& viewProjection)
 {
     GP_ASSERT(_meshBatch);
-    _viewProjection = &viewProjection;
     _meshBatch->start();
+    _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(viewProjection);
 }
 
 void PhysicsController::DebugDrawer::end()
 {
-    GP_ASSERT(_meshBatch && _meshBatch->getMaterial() && _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix"));
+    GP_ASSERT(_meshBatch && _meshBatch->getMaterial());
     _meshBatch->finish();
-    _meshBatch->getMaterial()->getParameter("u_viewProjectionMatrix")->setValue(_viewProjection);
     _meshBatch->draw();
+    _lineCount = 0;
 }
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor)
 {
     GP_ASSERT(_meshBatch);
 
-    static DebugDrawer::DebugVertex fromVertex, toVertex;
+    static DebugDrawer::DebugVertex vertices[2];
 
-    fromVertex.x = from.getX();
-    fromVertex.y = from.getY();
-    fromVertex.z = from.getZ();
-    fromVertex.r = fromColor.getX();
-    fromVertex.g = fromColor.getY();
-    fromVertex.b = fromColor.getZ();
-    fromVertex.a = 1.0f;
+    vertices[0].x = from.getX();
+    vertices[0].y = from.getY();
+    vertices[0].z = from.getZ();
+    vertices[0].r = fromColor.getX();
+    vertices[0].g = fromColor.getY();
+    vertices[0].b = fromColor.getZ();
+    vertices[0].a = 1.0f;
 
-    toVertex.x = to.getX();
-    toVertex.y = to.getY();
-    toVertex.z = to.getZ();
-    toVertex.r = toColor.getX();
-    toVertex.g = toColor.getY();
-    toVertex.b = toColor.getZ();
-    toVertex.a = 1.0f;
+    vertices[1].x = to.getX();
+    vertices[1].y = to.getY();
+    vertices[1].z = to.getZ();
+    vertices[1].r = toColor.getX();
+    vertices[1].g = toColor.getY();
+    vertices[1].b = toColor.getZ();
+    vertices[1].a = 1.0f;
 
-    _meshBatch->add(&fromVertex, 1);
-    _meshBatch->add(&toVertex, 1);
+    _meshBatch->add(vertices, 2);
+
+    ++_lineCount;
+    if (_lineCount >= 4096)
+    {
+        // Flush the batch when it gets full (don't want to to grow infinitely)
+        end();
+        _meshBatch->start();
+    }
 }
 
 void PhysicsController::DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)

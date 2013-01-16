@@ -200,6 +200,13 @@ public:
     static Texture* create(TextureHandle handle, int width, int height, Format format = UNKNOWN);
 
     /**
+     * Returns the path that the texture was originally loaded from (if applicable).
+     *
+     * @return The texture path, or an empty string if the texture was not loaded from file.
+     */
+    const char* getPath() const;
+
+    /**
      * Gets the format of the texture.
      *
      * @return The texture format.

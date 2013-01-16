@@ -402,9 +402,9 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 // Query uniform info.
                 GL_ASSERT( glGetActiveUniform(program, i, length, NULL, &uniformSize, &uniformType, uniformName) );
                 uniformName[length] = '\0';  // null terminate
-                if (uniformSize > 1 && length > 3)
+                if (length > 3)
                 {
-                    // This is an array uniform. I'm stripping array indexers off it since GL does not
+                    // If this is an array uniform, strip array indexers off it since GL does not
                     // seem to be consistent across different drivers/implementations in how it returns
                     // array uniforms. On some systems it will return "u_matrixArray", while on others
                     // it will return "u_matrixArray[0]".
@@ -423,7 +423,15 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 uniform->_name = uniformName;
                 uniform->_location = uniformLocation;
                 uniform->_type = uniformType;
-                uniform->_index = uniformType == GL_SAMPLER_2D ? (samplerIndex++) : 0;
+                if (uniformType == GL_SAMPLER_2D)
+                {
+                    uniform->_index = samplerIndex;
+                    samplerIndex += uniformSize;
+                }
+                else
+                {
+                    uniform->_index = 0;
+                }
 
                 effect->_uniforms[uniformName] = uniform;
             }
@@ -559,6 +567,28 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
     const_cast<Texture::Sampler*>(sampler)->bind();
 
     GL_ASSERT( glUniform1i(uniform->_location, uniform->_index) );
+}
+
+void Effect::setValue(Uniform* uniform, const Texture::Sampler** values, unsigned int count)
+{
+    GP_ASSERT(uniform);
+    GP_ASSERT(uniform->_type == GL_SAMPLER_2D);
+    GP_ASSERT(values);
+
+    // Set samplers as active and load texture unit array
+    GLint units[32];
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index + i) );
+
+        // Bind the sampler - this binds the texture and applies sampler state
+        const_cast<Texture::Sampler*>(values[i])->bind();
+
+        units[i] = uniform->_index + i;
+    }
+
+    // Pass texture unit array to GL
+    GL_ASSERT( glUniform1iv(uniform->_location, count, units) );
 }
 
 void Effect::bind()

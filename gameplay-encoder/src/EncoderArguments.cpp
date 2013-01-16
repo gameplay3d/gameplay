@@ -8,6 +8,8 @@
     #define realpath(A,B)    _fullpath(B,A,PATH_MAX)
 #endif
 
+#define MAX_HEIGHTMAP_SIZE 2049
+
 namespace gameplay
 {
 
@@ -17,6 +19,7 @@ extern int __logVerbosity = 1;
 
 EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontSize(0),
+    _normalMap(false),
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
@@ -24,6 +27,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _optimizeAnimations(false)
 {
     __instance = this;
+
+    memset(_heightmapResolution, 0, sizeof(int) * 2);
 
     if (argc > 1)
     {
@@ -91,27 +96,41 @@ std::string EncoderArguments::getOutputDirPath() const
     }
 }
 
+std::string EncoderArguments::getOutputFileExtension() const
+{
+    switch (getFileFormat())
+    {
+    case FILEFORMAT_PNG:
+    case FILEFORMAT_RAW:
+        if (_normalMap)
+            return ".png";
+
+    default:
+        return ".gpb";
+    }
+}
+
 std::string EncoderArguments::getOutputFilePath() const
 {
     if (_fileOutputPath.size() > 0)
     {
+        // Output file explicitly set
         return _fileOutputPath;
     }
     else
     {
+        // Generate an output file path
         int pos = _filePath.find_last_of('.');
-        if (pos > 0)
+        std::string outputFilePath(pos > 0 ? _filePath.substr(0, pos) : _filePath);
+
+        // Modify the original file name if the output extension can be the same as the input
+        if (_normalMap)
         {
-            std::string outputFilePath(_filePath.substr(0, pos));
-            outputFilePath.append(".gpb");
-            return outputFilePath;
+            outputFilePath.append("_normalmap");
         }
-        else
-        {
-            std::string outputFilePath(_filePath);
-            outputFilePath.append(".gpb");
-            return outputFilePath;
-        }
+
+        outputFilePath.append(getOutputFileExtension());
+        return outputFilePath;
     }
 }
 
@@ -152,6 +171,22 @@ const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeigh
     return _heightmaps;
 }
 
+bool EncoderArguments::normalMapGeneration() const
+{
+    return _normalMap;
+}
+
+void EncoderArguments::getHeightmapResolution(int* x, int* y) const
+{
+    *x = _heightmapResolution[0];
+    *y = _heightmapResolution[1];
+}
+
+const Vector3& EncoderArguments::getHeightmapWorldSize() const
+{
+    return _heightmapWorldSize;
+}
+
 bool EncoderArguments::parseErrorOccured() const
 {
     return _parseError;
@@ -168,6 +203,21 @@ bool EncoderArguments::fileExists() const
         }
     }
     return false;
+}
+
+void splitString(const char* str, std::vector<std::string>* tokens)
+{
+    // Split node id list into tokens
+    unsigned int length = strlen(str);
+    char* temp = new char[length + 1];
+    strcpy(temp, str);
+    char* tok = strtok(temp, ",");
+    while (tok)
+    {
+        tokens->push_back(tok);
+        tok = strtok(NULL, ",");
+    }
+    delete[] temp;
 }
 
 void EncoderArguments::printUsage() const
@@ -191,12 +241,27 @@ void EncoderArguments::printUsage() const
         "\t\tremoving any channels that contain default/identity values\n" \
         "\t\tand removing any duplicate contiguous keyframes, which are common\n" \
         "\t\twhen exporting baked animation data.\n");
-    LOG(1, "  -h \"<node ids>\" <filename>\n" \
+    LOG(1, "  -h <size> \"<node ids>\" <filename>\n" \
         "\t\tGenerates a single heightmap image using meshes from the specified\n" \
-        "\t\tnodes. Node id list should be in quotes with a space between each id.\n" \
+        "\t\tnodes. <size> should be two comma-separated numbers in the format\n" \
+        "\t\t\"X,Y\", indicating the dimensions of the produced heightmap image.\n" \
+        "\t\t<node ids> should be in quotes with a space between each id.\n" \
         "\t\tFilename is the name of the image (PNG) to be saved.\n" \
         "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n" \
         "\t\tFor 24-bit packed height data use -hp instead of -h.\n");
+    LOG(1, "\n");
+    LOG(1, "Normal map generation options:\n" \
+        "  -n\t\tGenerate normal map (requires input file of type PNG or RAW)\n" \
+        "  -s\t\tSize/resolution of the input heightmap image (requried for RAW files)\n" \
+        "  -w <size>\tSpecifies the size of an input terran heightmap file in world\n" \
+        "\t\tunits, along the X, Y and Z axes. <size> should be three comma-separated\n" \
+        "\t\tnumbers in the format \"X,Y,Z\". The Y value represents the maximum\n" \
+        "\t\tpossible height value of a full intensity heightmap pixel.\n" \
+        "\n" \
+        "  Normal map generation can be used to create object-space normal maps from heightmap\n" \
+        "  images. Heightmaps must be in either PNG format (where the intensity of each pixel\n" \
+        "  represents a height value), or in RAW format (8 or 16-bit), which is a common\n" \
+        "  headerless format supported by most terran generation tools.\n");
     LOG(1, "\n");
     LOG(1, "TTF file options:\n");
     LOG(1, "  -s <size>\tSize of the font.\n");
@@ -252,23 +317,33 @@ EncoderArguments::FileFormat EncoderArguments::getFileFormat() const
     {
         ext = _filePath.substr(pos + 1);
     }
+    for (size_t i = 0; i < ext.size(); ++i)
+        ext[i] = (char)tolower(ext[i]);
     
     // Match every supported extension with its format constant
-    if (ext.compare("dae") == 0 || ext.compare("DAE") == 0)
+    if (ext.compare("dae") == 0)
     {
         return FILEFORMAT_DAE;
     }
-    if (ext.compare("fbx") == 0 || ext.compare("FBX") == 0)
+    if (ext.compare("fbx") == 0)
     {
         return FILEFORMAT_FBX;
     }
-    if (ext.compare("ttf") == 0 || ext.compare("TTF") == 0)
+    if (ext.compare("ttf") == 0)
     {
         return FILEFORMAT_TTF;
     }
-    if (ext.compare("gpb") == 0 || ext.compare("GPB") == 0)
+    if (ext.compare("gpb") == 0)
     {
         return FILEFORMAT_GPB;
+    }
+    if (ext.compare("png") == 0)
+    {
+        return FILEFORMAT_PNG;
+    }
+    if (ext.compare("raw") == 0)
+    {
+        return FILEFORMAT_RAW;
     }
 
     return FILEFORMAT_UNKNOWN;
@@ -342,25 +417,36 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             if (str.compare("-heightmap") == 0 || str.compare("-h") == 0 || isHighPrecision)
             {
                 (*index)++;
-                if (*index < (options.size() + 1))
+                if (*index < (options.size() + 2))
                 {
                     _heightmaps.resize(_heightmaps.size() + 1);
                     HeightmapOption& heightmap = _heightmaps.back();
                     
                     heightmap.isHighPrecision = isHighPrecision;
 
-                    // Split node id list into tokens
-                    unsigned int length = options[*index].size() + 1;
-                    char* nodeIds = new char[length];
-                    strcpy(nodeIds, options[*index].c_str());
-                    nodeIds[length-1] = 0;
-                    char* id = strtok(nodeIds, " ");
-                    while (id)
+                    // Read heightmap size
+                    std::vector<std::string> parts;
+                    splitString(options[*index].c_str(), &parts);
+                    if (parts.size() != 2)
                     {
-                        heightmap.nodeIds.push_back(id);
-                        id = strtok(NULL, " ");
+                        LOG(1, "Error: invalid size argument for -h|-heightmap.\n");
+                        _parseError = true;
+                        return;
                     }
-                    delete[] nodeIds;
+                    heightmap.width = atoi(parts[0].c_str());
+                    heightmap.height = atoi(parts[1].c_str());
+
+                    // Put some artificial bounds on heightmap dimensions
+                    if (heightmap.width <= 0 || heightmap.height <= 0 || heightmap.width > MAX_HEIGHTMAP_SIZE || heightmap.height > MAX_HEIGHTMAP_SIZE)
+                    {
+                        LOG(1, "Error: size argument for -h|-heightmap must be between (1,1) and (%d,%d).\n", (int)MAX_HEIGHTMAP_SIZE, (int)MAX_HEIGHTMAP_SIZE);
+                        _parseError = true;
+                        return;
+                    }
+
+                    // Split node id list into tokens
+                    (*index)++;
+                    splitString(options[*index].c_str(), &heightmap.nodeIds);
 
                     // Store output filename
                     (*index)++;
@@ -391,34 +477,90 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             }
         }
         break;
+    case 'n':
+        _normalMap = true;
+        break;
+    case 'w':
+        {
+            // Read world size
+            (*index)++;
+            if (*index >= options.size())
+            {
+                LOG(1, "Error: missing world size argument for -w.\n");
+                _parseError = true;
+                return;
+            }
+            std::vector<std::string> parts;
+            splitString(options[*index].c_str(), &parts);
+            if (parts.size() != 3)
+            {
+                LOG(1, "Error: invalid world size argument for -w.\n");
+                _parseError = true;
+                return;
+            }
+            _heightmapWorldSize.x = (float)atof(parts[0].c_str());
+            _heightmapWorldSize.y = (float)atof(parts[1].c_str());
+            _heightmapWorldSize.z = (float)atof(parts[2].c_str());
+            if (_heightmapWorldSize.x == 0 || _heightmapWorldSize.y == 0 || _heightmapWorldSize.z == 0)
+            {
+                LOG(1, "Error: invalid world size argument for -w.\n");
+                _parseError = true;
+                return;
+            }
+        }
+        break;
     case 'p':
         _fontPreview = true;
         break;
     case 's':
-        // Font Size
-
-        // old format was -s##
-        if (str.length() > 2)
+        if (_normalMap)
         {
-            char n = str[2];
-            if (n > '0' && n <= '9')
+            (*index)++;
+            if (*index >= options.size())
             {
-                const char* number = str.c_str() + 2;
-                _fontSize = atoi(number);
-                break;
+                LOG(1, "Error: missing argument for -s.\n");
+                _parseError = true;
+                return;
             }
-        }
-
-        (*index)++;
-        if (*index < options.size())
-        {
-            _fontSize = atoi(options[*index].c_str());
+            // Heightmap size
+            std::vector<std::string> parts;
+            splitString(options[*index].c_str(), &parts);
+            if (parts.size() != 2 ||
+                (_heightmapResolution[0] = atoi(parts[0].c_str())) <= 0 ||
+                (_heightmapResolution[1] = atoi(parts[1].c_str())) <= 0)
+            {
+                LOG(1, "Error: invalid argument for -s.\n");
+                _parseError = true;
+                return;
+            }
         }
         else
         {
-            LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
-            _parseError = true;
-            return;
+            // Font Size
+
+            // old format was -s##
+            if (str.length() > 2)
+            {
+                char n = str[2];
+                if (n > '0' && n <= '9')
+                {
+                    const char* number = str.c_str() + 2;
+                    _fontSize = atoi(number);
+                    break;
+                }
+            }
+
+            (*index)++;
+            if (*index < options.size())
+            {
+                _fontSize = atoi(options[*index].c_str());
+            }
+            else
+            {
+                LOG(1, "Error: missing arguemnt for -%c.\n", str[1]);
+                _parseError = true;
+                return;
+            }
         }
         break;
     case 't':
@@ -434,6 +576,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
             else if (__logVerbosity > 4)
                 __logVerbosity = 4;
         }
+        break;
     default:
         break;
     }
@@ -446,10 +589,12 @@ void EncoderArguments::setInputfilePath(const std::string& inputPath)
 
 void EncoderArguments::setOutputfilePath(const std::string& outputPath)
 {
+    std::string ext = getOutputFileExtension();
+
     if (outputPath.size() > 0 && outputPath[0] != '\0')
     {
         std::string realPath = getRealPath(outputPath);
-        if (endsWith(realPath.c_str(), ".gpb"))
+        if (endsWith(realPath.c_str(), ext.c_str()))
         {
             _fileOutputPath.assign(realPath);
         }
@@ -459,7 +604,7 @@ void EncoderArguments::setOutputfilePath(const std::string& outputPath)
 
             _fileOutputPath.assign(outputPath);
             _fileOutputPath.append(filenameNoExt);
-            _fileOutputPath.append(".gpb");
+            _fileOutputPath.append(ext);
         }
         else
         {
@@ -470,7 +615,7 @@ void EncoderArguments::setOutputfilePath(const std::string& outputPath)
                 _fileOutputPath = realPath.substr(0, pos);
                 _fileOutputPath.append("/");
                 _fileOutputPath.append(filenameNoExt);
-                _fileOutputPath.append(".gpb");
+                _fileOutputPath.append(ext);
             }
         }
     }

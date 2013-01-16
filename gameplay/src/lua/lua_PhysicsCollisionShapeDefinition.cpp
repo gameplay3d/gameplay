@@ -2,7 +2,10 @@
 #include "ScriptController.h"
 #include "lua_PhysicsCollisionShapeDefinition.h"
 #include "Base.h"
+#include "FileSystem.h"
 #include "Game.h"
+#include "HeightField.h"
+#include "Image.h"
 #include "Node.h"
 #include "PhysicsCollisionShape.h"
 #include "Properties.h"
@@ -16,6 +19,7 @@ void luaRegister_PhysicsCollisionShapeDefinition()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"isEmpty", lua_PhysicsCollisionShapeDefinition_isEmpty},
         {NULL, NULL}
     };
     const luaL_Reg* lua_statics = NULL;
@@ -134,6 +138,41 @@ int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsCollisionShapeDefinition_isEmpty(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsCollisionShape::Definition* instance = getInstance(state);
+                bool result = instance->isEmpty();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionShapeDefinition_isEmpty - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
