@@ -92,9 +92,8 @@ void LightTest::initialize()
 	_addSpecular->addListener(this, Control::Listener::VALUE_CHANGED);
 	_addBumped = static_cast<CheckBox*>(_form->getControl("bumpedCheckBox"));
 	_addBumped->addListener(this, Control::Listener::VALUE_CHANGED);
-    // TODO: Broken
-    //_properties->setEnabled(false);
-    //_properties->setOpacity(0.25f);
+
+    _properties->setEnabled(false);
     _noLight->setSelected(true);
 	_form->setConsumeInputEvents(false);
 	
@@ -266,9 +265,7 @@ void LightTest::controlEvent(Control* control, EventType evt)
 			changeTechnique = true;
             if (_noLight->isSelected())
             {
-                // TODO: Broken
-                //_properties->setEnabled(false);
-                //_properties->setOpacity(0.5f);
+                _properties->setEnabled(false);
             }
         }
 	    else if ((control == _directional) ||  (control == _spot) || (control == _point))
@@ -276,9 +273,7 @@ void LightTest::controlEvent(Control* control, EventType evt)
 			changeTechnique = true;
             if (!_noLight->isSelected())
             {
-			    // TODO: Broken
-                //_properties->setEnabled(true);
-                //_properties->setOpacity(1.0f);
+                _properties->setEnabled(true);
             }
         }
         else if ((control == _addSpecular) || (control == _addBumped))
