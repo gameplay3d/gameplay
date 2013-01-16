@@ -462,6 +462,9 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
         needsClear = true;
     }
 
+    if (!_visible)
+        return;
+
     spriteBatch->start();
     Control::drawBorder(spriteBatch, clip);
     spriteBatch->finish();
