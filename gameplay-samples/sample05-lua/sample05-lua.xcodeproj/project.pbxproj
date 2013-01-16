@@ -43,6 +43,7 @@
 		5BAF2070152F2DDD003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */; };
 		5BAF2071152F2DDD003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */; };
 		5BAF2072152F2DDD003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF206C152F2DDD003E2AC3 /* UIKit.framework */; };
+		F1F6196616A7212200C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6196516A7212200C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		5BAF206A152F2DDD003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206B152F2DDD003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		5BAF206C152F2DDD003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		F1F6196516A7212200C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				5B61611C14CCC24C0073B857 /* libvorbisenc.a in Frameworks */,
 				5B61611D14CCC24C0073B857 /* libvorbisfile.a in Frameworks */,
 				5B61611E14CCC24C0073B857 /* libpng.a in Frameworks */,
+				F1F6196616A7212200C4FEA1 /* liblua.a in Frameworks */,
 				5B61611F14CCC24C0073B857 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +179,7 @@
 				42C933241491A6E50098216A /* libvorbisenc.a */,
 				42C933251491A6E50098216A /* libvorbisfile.a */,
 				42C9332A1491A7390098216A /* libpng.a */,
+				F1F6196516A7212200C4FEA1 /* liblua.a */,
 				42C9332D1491A7810098216A /* libz.dylib */,
 			);
 			name = Libraries;
@@ -475,6 +479,7 @@
 					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -506,6 +511,7 @@
 					"\"../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

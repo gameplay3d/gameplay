@@ -10,27 +10,9 @@
 #include "CheckBox.h"
 #include "Scene.h"
 
-#define FORM_VSH \
-    "uniform mat4 u_worldViewProjectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_worldViewProjectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-    "}\n"
-
-#define FORM_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = texture2D(u_texture, v_texCoord);\n" \
-    "}\n"
+// Default form shaders
+#define FORM_VSH "res/shaders/form.vert"
+#define FORM_FSH "res/shaders/form.frag"
 
 namespace gameplay
 {
@@ -332,7 +314,7 @@ static Effect* createEffect()
     Effect* effect = NULL;
     if (__formEffect == NULL)
     {
-        __formEffect = Effect::createFromSource(FORM_VSH, FORM_FSH);
+        __formEffect = Effect::createFromFile(FORM_VSH, FORM_FSH);
         if (__formEffect == NULL)
         {
             GP_ERROR("Unable to load form effect.");
