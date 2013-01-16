@@ -1,11 +1,11 @@
-#include "PhysicsSceneTest.h"
+#include "PhysicsCollisionObjectTest.h"
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Physics", "Physics Scene", PhysicsSceneTest, 1);
+    ADD_TEST("Physics", "Collision Objects", PhysicsCollisionObjectTest, 1);
 #endif
 
-PhysicsSceneTest::PhysicsSceneTest()
+PhysicsCollisionObjectTest::PhysicsCollisionObjectTest()
     : _font(NULL), _scene(NULL), _lightNode(NULL), _form(NULL), _objectType(SPHERE), _throw(true), _drawDebug(0), _wireFrame(false)
 {
     const char* paths[] = {"res/common/physics.physics#ball","res/common/physics.physics#box", "res/common/physics.physics#capsule", "res/common/physics.physics#duck"};
@@ -18,7 +18,7 @@ PhysicsSceneTest::PhysicsSceneTest()
     _colors.assign(colors, colors + 4);
 }
 
-void PhysicsSceneTest::initialize()
+void PhysicsCollisionObjectTest::initialize()
 {
     // Create the font for drawing the framerate.
     _font = Font::create("res/common/arial18.gpb");
@@ -27,7 +27,7 @@ void PhysicsSceneTest::initialize()
     // Use the aspect ratio of the display instead of the aspect ratio defined in the scene file.
     _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
     _lightNode = _scene->findNode("directionalLight");
-    _scene->visit(this, &PhysicsSceneTest::bindLights);
+    _scene->visit(this, &PhysicsCollisionObjectTest::bindLights);
 
     _form = Form::create("res/common/physics.form");
     static_cast<Button*>(_form->getControl("wireframeButton"))->addListener(this, Control::Listener::CLICK);
@@ -38,25 +38,25 @@ void PhysicsSceneTest::initialize()
     shapeButton->setTextColor(_colors[_objectType]);
 }
 
-void PhysicsSceneTest::finalize()
+void PhysicsCollisionObjectTest::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
 }
 
-void PhysicsSceneTest::update(float elapsedTime)
+void PhysicsCollisionObjectTest::update(float elapsedTime)
 {
     _form->update(elapsedTime);
 }
 
-void PhysicsSceneTest::render(float elapsedTime)
+void PhysicsCollisionObjectTest::render(float elapsedTime)
 {
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0);
 
     // Visit all the nodes in the scene, drawing the models/mesh.
-    _scene->visit(this, &PhysicsSceneTest::drawScene);
+    _scene->visit(this, &PhysicsCollisionObjectTest::drawScene);
 
     if (_drawDebug == 1)
     {
@@ -69,7 +69,7 @@ void PhysicsSceneTest::render(float elapsedTime)
     _form->draw();
 }
 
-void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void PhysicsCollisionObjectTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     switch (evt)
     {
@@ -95,7 +95,7 @@ void PhysicsSceneTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned 
     };
 }
 
-void PhysicsSceneTest::keyEvent(Keyboard::KeyEvent evt, int key)
+void PhysicsCollisionObjectTest::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (evt == Keyboard::KEY_PRESS)
     {
@@ -113,7 +113,7 @@ void PhysicsSceneTest::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 }
 
-bool PhysicsSceneTest::drawScene(Node* node)
+bool PhysicsCollisionObjectTest::drawScene(Node* node)
 {
     Model* model = node->getModel();
     if (model)
@@ -121,7 +121,7 @@ bool PhysicsSceneTest::drawScene(Node* node)
     return true;
 }
 
-bool PhysicsSceneTest::bindLights(Node* node)
+bool PhysicsCollisionObjectTest::bindLights(Node* node)
 {
     Model* model = node->getModel();
     if (model)
@@ -152,7 +152,7 @@ bool PhysicsSceneTest::bindLights(Node* node)
     return true;
 }
 
-void PhysicsSceneTest::fireProjectile(const Ray& ray)
+void PhysicsCollisionObjectTest::fireProjectile(const Ray& ray)
 {
     Node* clone = _scene->findNode(_nodeIds[_objectType])->clone();
     clone->setRotation(Quaternion::identity());
@@ -187,19 +187,19 @@ void PhysicsSceneTest::fireProjectile(const Ray& ray)
     clone->release();
 }
 
-void PhysicsSceneTest::incrementDebugDraw()
+void PhysicsCollisionObjectTest::incrementDebugDraw()
 {
     _drawDebug = (_drawDebug + 1) % 2;
     static_cast<Button*>(_form->getControl("drawDebugButton"))->setText(_drawDebug == 0 ? "Normal" : "Debug");
 }
 
-void PhysicsSceneTest::toggleWireframe()
+void PhysicsCollisionObjectTest::toggleWireframe()
 {
     _wireFrame = !_wireFrame;
     static_cast<Button*>(_form->getControl("wireframeButton"))->setText(_wireFrame ? "Wireframe" : "Solid");
 }
 
-void PhysicsSceneTest::controlEvent(Control* control, EventType evt)
+void PhysicsCollisionObjectTest::controlEvent(Control* control, EventType evt)
 {
     Button* button = static_cast<Button*>(control);
 

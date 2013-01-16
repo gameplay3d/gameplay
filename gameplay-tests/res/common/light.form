@@ -7,13 +7,21 @@ form formLightSelect
     autoWidth = true
     autoHeight = true
 
-	container lightingOptions
+	container lightingType
     {
 		style = basic
         layout = LAYOUT_VERTICAL
         position = 0, 20
-        size = 230, 260
+        size = 230, 210
 		
+        label
+        {
+            style = iconNoBorder
+            size = 210, 20
+            textAlignment = ALIGN_TOP_HCENTER
+            text = Type
+        }
+        
 		radioButton noLighting
 		{
 			style = iconNoBorder
@@ -49,7 +57,70 @@ form formLightSelect
 			text = Point Light
 			value = false
 		}
+	}
 
+	container lightProperties
+    {
+		style = basic
+        layout = LAYOUT_VERTICAL
+        position = 0, 230
+        size = 230, 380
+    
+        label
+        {
+            style = iconNoBorder
+            size = 210, 20
+            textAlignment = ALIGN_TOP_HCENTER
+            text = Properties
+        }
+        
+		slider redSlider
+		{
+			style = iconNoBorder
+			size = 210, 60
+			orientation = HORIZONTAL
+            textAlignment = ALIGN_LEFT
+			min = 0
+			max = 1
+			value = 1.0
+			text = Red
+		}
+	
+		slider greenSlider
+		{
+			style = iconNoBorder
+			size = 210, 60
+			orientation = HORIZONTAL
+            textAlignment = ALIGN_LEFT
+			min = 0
+			max = 1
+			value = 1.0
+			text = Green
+		}
+
+		slider blueSlider
+		{
+			style = iconNoBorder
+			size = 210, 60
+			orientation = HORIZONTAL
+            textAlignment = ALIGN_LEFT
+			min = 0
+			max = 1
+			value = 1.0
+			text = Blue
+		}
+
+		slider specularSlider
+		{
+			style = iconNoBorder
+			size = 210, 60
+			orientation = HORIZONTAL
+            textAlignment = ALIGN_LEFT
+			min = 1
+			max = 500
+			value = 1
+			text = Specular
+		}
 		checkbox specularCheckBox
 		{
 			style = iconNoBorder
@@ -66,58 +137,6 @@ form formLightSelect
 			size = 200, 40
 			text = Enable BumpMapping
 			value = false
-		}
-	}
-
-	container lightColor
-    {
-		style = basic
-        layout = LAYOUT_VERTICAL
-        position = 0, 280
-        size = 230, 400
-		
-		slider redSlider
-		{
-			style = noBorder
-			size = 210, 100
-			orientation = HORIZONTAL
-			min = 0
-			max = 1
-			value = 1.0
-			text = Red
-		}
-	
-		slider greenSlider
-		{
-			style = noBorder
-			size = 210, 100
-			orientation = HORIZONTAL
-			min = 0
-			max = 1
-			value = 1.0
-			text = Green
-		}
-
-		slider blueSlider
-		{
-			style = noBorder
-			size = 210, 100
-			orientation = HORIZONTAL
-			min = 0
-			max = 1
-			value = 1.0
-			text = Blue
-		}
-
-		slider specularSlider
-		{
-			style = noBorder
-			size = 210, 100
-			orientation = HORIZONTAL
-			min = 1
-			max = 500
-			value = 1
-			text = Specular
 		}
 	}
 }

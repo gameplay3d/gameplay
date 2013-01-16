@@ -1,5 +1,5 @@
-#ifndef PHYSICSSCENETEST_H_
-#define PHYSICSSCENETEST_H_
+#ifndef PHYSICSCOLLISIONOBJECTTEST_H_
+#define PHYSICSCOLLISIONOBJECTTEST_H_
 
 #include "gameplay.h"
 #include "Test.h"
@@ -9,11 +9,11 @@ using namespace gameplay;
 /**
  * Test loading a physics scene from .scene file with .physics bindings
  */
-class PhysicsSceneTest : public Test, Control::Listener
+class PhysicsCollisionObjectTest : public Test, Control::Listener
 {
 public:
 
-    PhysicsSceneTest();
+    PhysicsCollisionObjectTest();
 
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
