@@ -610,8 +610,7 @@ public:
      * Set the opacity of this control.
      *
      * @param opacity The new opacity.
-     * @param states The states to set this property on.
-     *               One or more members of the Control::State enum, ORed together.
+     * @param states The states to set this property on. One or more members of the Control::State enum, OR'ed together.
      */
     void setOpacity(float opacity, unsigned char states = STATE_ALL);
 
@@ -623,6 +622,20 @@ public:
      * @return The opacity of this control for a given state.
      */
     float getOpacity(State state = NORMAL) const;
+
+	/**
+	 * Enables/Disables a control. 
+	 *
+	 * @param enabled true if the control is enabled; false if disabled.
+	 */
+	virtual void setEnabled(bool enabled);
+
+    /**
+     * Get whether this control is currently enabled.
+     *
+     * @return Whether this control is currently enabled.
+     */
+    bool isEnabled() const;
 
     /**
      * Get the bounds of this control, relative to its parent container, after clipping.
@@ -651,20 +664,6 @@ public:
      * @return This control's current state.
      */
     State getState() const;
-
-	/**
-	 * Enables/Disables a control. 
-	 *
-	 * @param enabled true if the control is enabled; false if disabled.
-	 */
-	void setEnabled(bool enabled);
-
-    /**
-     * Get whether this control is currently enabled.
-     *
-     * @return Whether this control is currently enabled.
-     */
-    bool isEnabled() const;
 
     /**
      * Set whether this control consumes input events,
