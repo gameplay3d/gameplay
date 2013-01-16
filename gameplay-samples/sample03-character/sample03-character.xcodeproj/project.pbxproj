@@ -43,6 +43,7 @@
 		5BAF205E152F2BDB003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2058152F2BDB003E2AC3 /* OpenGLES.framework */; };
 		5BAF205F152F2BDB003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2059152F2BDB003E2AC3 /* QuartzCore.framework */; };
 		5BAF2060152F2BDB003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF205A152F2BDB003E2AC3 /* UIKit.framework */; };
+		F1F6196016A7209E00C4FEA1 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195F16A7209E00C4FEA1 /* liblua.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,7 @@
 		5BAF205A152F2BDB003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		DDBBAE861574040C00D39DE7 /* game.dxt.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game.dxt.config; sourceTree = "<group>"; };
 		DDBBAE8B1574067600D39DE7 /* game.pvrtc.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = game.pvrtc.config; sourceTree = "<group>"; };
+		F1F6195F16A7209E00C4FEA1 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				5B43D1CE14C35F4C008A5D9D /* libvorbisenc.a in Frameworks */,
 				5B43D1CF14C35F4C008A5D9D /* libvorbisfile.a in Frameworks */,
 				5B43D1D014C35F4C008A5D9D /* libpng.a in Frameworks */,
+				F1F6196016A7209E00C4FEA1 /* liblua.a in Frameworks */,
 				5B43D1D114C35F4C008A5D9D /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +139,7 @@
 				42CD0EFD147D93560000361E /* libvorbisenc.a */,
 				42CD0EFE147D93560000361E /* libvorbisfile.a */,
 				42CCD5A9146EC5F000353661 /* libpng.a */,
+				F1F6195F16A7209E00C4FEA1 /* liblua.a */,
 				42CCD5A7146EC5DE00353661 /* libz.dylib */,
 			);
 			name = Libraries;
@@ -478,6 +482,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -513,6 +518,7 @@
 					"\"$(SRCROOT)/../../external-deps/libpng/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
 					"\"$(SRCROOT)/../../external-deps/oggvorbis/lib/ios/$(CURRENT_ARCH)\"",
+					"\"$(SRCROOT)/../../external-deps/lua/lib/ios/$(CURRENT_ARCH)\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
