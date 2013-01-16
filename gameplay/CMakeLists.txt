@@ -333,8 +333,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_GameClearFlags.h
     src/lua/lua_Gamepad.cpp
     src/lua/lua_Gamepad.h
-    src/lua/lua_GamepadButtonState.cpp
-    src/lua/lua_GamepadButtonState.h
+    src/lua/lua_GamepadButtonMapping.cpp
+    src/lua/lua_GamepadButtonMapping.h
     src/lua/lua_GamepadGamepadEvent.cpp
     src/lua/lua_GamepadGamepadEvent.h
     src/lua/lua_GameState.cpp
