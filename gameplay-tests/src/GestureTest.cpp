@@ -149,7 +149,7 @@ void GestureTest::gestureSwipeEvent(int x, int y, int direction)
 void GestureTest::gesturePinchEvent(int x, int y, float scale)
 {
     std::ostringstream convert;
-    convert << "Pinch " << x << ", " << y << "scale(" << scale << ")";
+    convert << "Pinch " << x << ", " << y << " scale(" << scale << ")";
     _eventLog.push_front(convert.str());
 }
 
