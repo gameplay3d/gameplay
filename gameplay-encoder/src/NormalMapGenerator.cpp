@@ -135,7 +135,7 @@ void NormalMapGenerator::generate()
         fseek(fp, 0, SEEK_SET);
 
         unsigned char* data = new unsigned char[fileSize];
-        if (fread(data, 1, fileSize, fp) != fileSize)
+        if (fread(data, 1, fileSize, fp) != (size_t)fileSize)
         {
             fclose(fp);
             delete[] data;
@@ -159,9 +159,9 @@ void NormalMapGenerator::generate()
         {
             // 16-bit (0-65535)
             int idx;
-            for (unsigned int y = 0, i = 0; y < _resolutionY; ++y)
+            for (unsigned int y = 0, i = 0; y < (unsigned int)_resolutionY; ++y)
             {
-                for (unsigned int x = 0; x < _resolutionX; ++x, ++i)
+                for (unsigned int x = 0; x < (unsigned int)_resolutionX; ++x, ++i)
                 {
                     idx = (y * _resolutionX + x) << 1;
                     heights[i] = ((data[idx] | (int)data[idx+1] << 8) / 65535.0f) * _worldSize.y;
@@ -171,9 +171,9 @@ void NormalMapGenerator::generate()
         else
         {
             // 8-bit (0-255)
-            for (unsigned int y = 0, i = 0; y < _resolutionY; ++y)
+            for (unsigned int y = 0, i = 0; y < (unsigned int)_resolutionY; ++y)
             {
-                for (unsigned int x = 0; x < _resolutionX; ++x, ++i)
+                for (unsigned int x = 0; x < (unsigned int)_resolutionX; ++x, ++i)
                 {
                     heights[i] = (data[y * _resolutionX + x] / 255.0f) * _worldSize.y;
                 }
