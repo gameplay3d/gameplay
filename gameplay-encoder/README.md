@@ -25,7 +25,7 @@ Simply execute the gameplay-encoder command-line executable:
 
 `Usage: gameplay-encoder [options] <file(s)>`
 
-Note: Linux Ubuntu 12 (64-bit), you must first install the required 32-bit libs via:
+Note: On Linux Ubuntu 12 (64-bit), you must first install the required 32-bit libs via:
 
 `sudo apt-get install ia32-libs`
 
