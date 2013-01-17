@@ -143,7 +143,7 @@
 - Fixes to the material/shader system.
 - Fixes to the ParticleEmitter.
 
-## v1.0.1
+## v1.0.0
 
 - Initial release.
 
