@@ -132,13 +132,11 @@ HeightField* HeightField::create(const char* path, unsigned int width, unsigned 
         heightfield = HeightField::create(width, height);
         float* heights = heightfield->getArray();
 
-        // RAW files have an origin of bottom left, whereas our height array needs an origin of
-        // top left, so we need to flip the Y as we write height values out.
         if (bits == 16)
         {
             // 16-bit (0-65535)
             int idx;
-            for (int y = height-1, i = 0; y >= 0; --y)
+            for (unsigned int y = 0, i = 0; y < height; ++y)
             {
                 for (unsigned int x = 0; x < width; ++x, ++i)
                 {
@@ -150,7 +148,7 @@ HeightField* HeightField::create(const char* path, unsigned int width, unsigned 
         else
         {
             // 8-bit (0-255)
-            for (int y = height-1, i = 0; y >= 0; --y)
+            for (unsigned int y = 0, i = 0; y < height; ++y)
             {
                 for (unsigned int x = 0; x < width; ++x, ++i)
                 {
