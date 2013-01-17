@@ -22,6 +22,7 @@
 - Adds support for latest Bullet Physics 2.81 with NEON optimizations for mobile targets.
 - Adds support for preprocessor directive NO_LUA_BINDINGS in the gameplay project to omit inclusion of generated lua bindings in compilation for developer mode value. 
 - Adds optimizations to Lua generator to only write generated files if they differ from existing files, reducing both build times and committing of unchanged script binding files.
+- Adds changes to Slider for setValueTextVisible, setValueTextAlignment, setValueTextPrecision and getters.
 - Adds Windows 7 64-bit support.
 - Fixes to external-deps to reduce the size of the libraries on Windows.
 - Fixes for Android to no longer need to copy files to the SD card before reading them. None of the Android samples require an SD card.
