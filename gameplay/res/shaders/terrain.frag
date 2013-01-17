@@ -47,7 +47,8 @@ void main()
 #if (LAYER_COUNT > 0)
     // Set base diffuse color
     vec2 uvCoord = mod(v_texCoord0 * TEXTURE_REPEAT_0, vec2(1,1));
-	_baseColor = texture2D(u_samplers[TEXTURE_INDEX_0], uvCoord);
+	_baseColor.rgb = texture2D(u_samplers[TEXTURE_INDEX_0], uvCoord).rgb;
+    _baseColor.a = 1;
 #else
     // If no layers are defined, simple use a white color
     _baseColor = vec4(1,1,1,1);
