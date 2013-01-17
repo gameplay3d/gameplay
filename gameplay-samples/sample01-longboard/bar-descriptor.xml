@@ -23,21 +23,15 @@
     <!-- Fourth digit segment of the package version. First three segments are taken from the 
          <versionNumber> element.  Must be an integer from 0 to 2^16-1 -->
     <buildId>1</buildId>
-                 
-    <!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. Optional. -->
-    <!-- <versionLabel></versionLabel> -->
 
     <!-- Description, displayed in the BlackBerry Tablet OS application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>Longboard Sample</description>
 
-    <!-- Copyright information. Optional. -->
-    <!-- <copyright></copyright> -->
-
-    <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
+    <!-- Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>RIM Canada</author>
 
-    <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
+    <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
 
     <initialWindow>
@@ -47,7 +41,7 @@
         <transparent>false</transparent>
     </initialWindow>
     
-    <!--  The category where the application appears. Either core.games or core.media. -->
+    <!-- The category where the application appears. Either core.games or core.media. -->
     <category>core.games</category>
  
     <asset path="icon.png">icon.png</asset>
@@ -57,9 +51,7 @@
     <asset path="res/longboard_wheels.png">res/longboard_wheels.png</asset>
     <asset path="res/overlay_gradient.png">res/overlay_gradient.png</asset>
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
-    <asset path="../../gameplay/res/shaders/textured-unlit.frag">res/shaders/textured-unlit.frag</asset>
-    <asset path="../../gameplay/res/shaders/textured-unlit.vert">res/shaders/textured-unlit.vert</asset>
-    <asset path="../../gameplay/res/shaders/lib">res/shaders/lib</asset>
+    <asset path="../../gameplay/res/shaders">res/shaders</asset>
     
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
@@ -90,18 +82,18 @@
        <asset path="Simulator-Coverage/sample01-longboard" entry="true" type="Qnx/Elf">sample01-longboard</asset>
     </configuration>
     
-    <!--  The icon for the application, which should be 150x150. -->
+    <!-- The icon for the application, which should be 150x150. -->
     <icon>
         <image>icon.png</image>
     </icon>
     
-    <!--  The splash screen that will appear when your application is launching. Should be 1024x600. -->
+    <!-- The splash screen that will appear when your application is launching, which should be 1280x768. -->
     <!-- <splashscreen></splashscreen> -->
 
     <!-- Request permission to execute native code.  Required for native applications. -->
     <action system="true">run_native</action>
     
-    <!--  The permissions requested by your application. -->
+    <!-- The permissions requested by your application. -->
     <!--  <action>access_shared</action> -->
     <!--  <action>record_audio</action> -->
     <!--  <action>read_geolocation</action> -->
