@@ -488,11 +488,9 @@ bool TerrainPatch::updateMaterial()
         material->getParameter("u_lightColor")->bindValue(this, &TerrainPatch::getLightColor);
         material->getParameter("u_lightDirection")->bindValue(this, &TerrainPatch::getLightDirection);
         if (_layers.size() > 0)
-        {
             material->getParameter("u_samplers")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
-            if (_terrain->_normalMap)
-                material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
-        }
+        if (_terrain->_normalMap)
+            material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
 
         if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
         {
