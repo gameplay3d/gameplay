@@ -127,6 +127,11 @@ PhysicsController* Test::getPhysicsController() const
     return Game::getInstance()->getPhysicsController();
 }
 
+ScriptController* Test::getScriptController() const
+{
+	return Game::getInstance()->getScriptController();
+}
+
 void Test::displayKeyboard(bool display)
 {
     Game::getInstance()->displayKeyboard(display);
