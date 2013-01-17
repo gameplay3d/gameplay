@@ -769,8 +769,8 @@ void luaRegister_lua_Global()
         std::vector<std::string> scopePath;
         scopePath.push_back("Terrain");
         ScriptUtil::registerConstantString("DEBUG_PATCHES", "DEBUG_PATCHES", scopePath);
-        ScriptUtil::registerConstantString("ENABLE_FRUSTUM_CULLING", "ENABLE_FRUSTUM_CULLING", scopePath);
-        ScriptUtil::registerConstantString("ENABLE_LEVEL_OF_DETAIL", "ENABLE_LEVEL_OF_DETAIL", scopePath);
+        ScriptUtil::registerConstantString("FRUSTUM_CULLING", "FRUSTUM_CULLING", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_OF_DETAIL", "LEVEL_OF_DETAIL", scopePath);
     }
 
     // Register enumeration Texture::Filter.

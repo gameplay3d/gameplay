@@ -98,7 +98,7 @@ public:
          * Frustum culling uses the scene's active camera. The terrain must be attached
          * to a node that is within a scene for this to work.
          */
-        ENABLE_FRUSTUM_CULLING = 2,
+        FRUSTUM_CULLING = 2,
 
          /**
           * Enables level of detail (on by default).
@@ -107,7 +107,7 @@ public:
           * "detailLevels" was not set to a value greater than 1 in the terrain
           * properties file at creation time.
           */
-         ENABLE_LEVEL_OF_DETAIL = 8
+         LEVEL_OF_DETAIL = 8
     };
 
     /**
@@ -149,7 +149,7 @@ public:
      *      physics hegihtfield is scaled by this amount. Pass Vector3::one() to use the exact dimensions and heights
      *      in the supplied height array.
      * @param patchSize Size of terrain patches (number of quads).
-     * @param detailLevel Number of detail levels to generate for the terrain (a value of one generates only the base
+     * @param detailLevels Number of detail levels to generate for the terrain (a value of one generates only the base
      *      level, resulting in no LOD at runtime.
      * @param skirtScale A positive value indicates that vertical skirts should be generated at the specified
      *      scale, which is relative to the height of the terrain. For example, a value of 0.5f indicates that
@@ -160,10 +160,8 @@ public:
      * @return A new Terrain.
      * @script{create}
      */
-    static Terrain* create(HeightField* heightfield,
-        const Vector3& scale = Vector3::one(), unsigned int patchSize = 32,
-        unsigned int detailLevels = 1, float skirtScale = 0.0f,
-        const char* normalMapPath = NULL);
+    static Terrain* create(HeightField* heightfield, const Vector3& scale = Vector3::one(), unsigned int patchSize = 32,  
+                           unsigned int detailLevels = 1, float skirtScale = 0.0f, const char* normalMapPath = NULL);
 
     /**
      * Sets the detail textures information for a terrain layer.
@@ -202,9 +200,9 @@ public:
      * @script{ignore}
      */
     bool setLayer(int index,
-        const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
-        const char* blendPath = NULL, int blendChannel = 0,
-        int row = -1, int column = -1);
+                  const char* texturePath, const Vector2& textureRepeat = Vector2::one(),
+                  const char* blendPath = NULL, int blendChannel = 0, 
+                  int row = -1, int column = -1);
 
     /**
      * Returns the node that this terrain is bound to.
@@ -367,7 +365,6 @@ private:
     mutable Matrix _normalMatrix;
     mutable unsigned int _dirtyFlags;
     BoundingBox _boundingBox;
-
 };
 
 }
