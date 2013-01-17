@@ -38,14 +38,12 @@ namespace gameplay
          * pixel, while maxHeight maxHeight is mapped to full intensity pixels.
          *
          * @param path Path to a heightfield image.
-         * @param width Width of the image (required for headerless/RAW files, can be zero for other image formats).
-         * @param height Height of the image (required for headerless/RAW files, can be zero for other image formats).
-         * @param minHeight Minimum height value for a zero intensity pixel.
-         * @param maxHeight Maximum height value for a full intensity heightfield pixel (must be >= minHeight).
+         * @param heightMin Minimum height value for a zero intensity pixel.
+         * @param heightMax Maximum height value for a full intensity heightfield pixel (must be >= minHeight).
          * 
          * @return The new HeightField.
          */
-        static HeightField* createFromImage(const char* path, float minHeight = 0, float maxHeight = 1);
+        static HeightField* createFromImage(const char* path, float heightMin = 0, float heightMax = 1);
 
         /**
          * Creates a HeightField from the specified RAW8 or RAW16 file.
@@ -67,12 +65,12 @@ namespace gameplay
          * @param path Path to the RAW file.
          * @param width Width of the RAW data.
          * @param height Height of the RAW data.
-         * @param minHeight Minimum height value for a zero intensity pixel.
-         * @param maxHeight Maximum height value for a full intensity heightfield pixel (must be >= minHeight).
+         * @param heightMin Minimum height value for a zero intensity pixel.
+         * @param heightMax Maximum height value for a full intensity heightfield pixel (must be >= minHeight).
          * 
          * @return The new HeightField.
          */
-        static HeightField* createFromRAW(const char* path, unsigned int width, unsigned int height, float minHeight = 0, float maxHeight = 1);
+        static HeightField* createFromRAW(const char* path, unsigned int width, unsigned int height, float heightMin = 0, float heightMax = 1);
 
         /**
          * Returns a pointer to the underying height array.
@@ -130,7 +128,7 @@ namespace gameplay
         /**
          * Internal method for creating a HeightField.
          */
-        static HeightField* create(const char* path, unsigned int width, unsigned int height, float minHeight, float maxHeight);
+        static HeightField* create(const char* path, unsigned int width, unsigned int height, float heightMin, float heightMax);
 
         float* _array;
         unsigned int _cols;

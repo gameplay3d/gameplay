@@ -71,30 +71,23 @@ private:
     /**
      * Internal method to create new terrain patch.
      */
-    static TerrainPatch* create(Terrain* terrain,
-        unsigned int row, unsigned int column,
-        float* heights, unsigned int width, unsigned int height,
-        unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
-        float xOffset, float zOffset,
-        unsigned int maxStep, float verticalSkirtSize);
+    static TerrainPatch* create(Terrain* terrain, 
+                                unsigned int row, unsigned int column,
+                                float* heights, unsigned int width, unsigned int height,
+                                unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
+                                float xOffset, float zOffset, unsigned int maxStep, float verticalSkirtSize);
 
     /**
      * Adds a single LOD level to the terrain patch.
      */
     void addLOD(float* heights, unsigned int width, unsigned int height,
-        unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
-        float xOffset, float zOffset,
-        unsigned int step, float verticalSkirtSize);
+                unsigned int x1, unsigned int z1, unsigned int x2, unsigned int z2,
+                float xOffset, float zOffset, unsigned int step, float verticalSkirtSize);
 
     /**
      * Sets details for a layer of this patch.
      */
     bool setLayer(int index, const char* texturePath, const Vector2& textureRepeat, const char* blendPath, int blendChannel);
-
-    /**
-     * Sets the level of detail for the terrain patch.
-     */
-    void setLod(unsigned int lod);
 
     /**
      * Adds a sampler to the patch.

@@ -93,6 +93,36 @@ void Slider::setValue(float value)
     _value = MATH_CLAMP(value, _min, _max);
 }
 
+void Slider::setValueTextVisible(bool valueTextVisible)
+{
+    _valueTextVisible = valueTextVisible;
+}
+
+bool Slider::isValueTextVisible() const
+{
+    return _valueTextVisible;
+}
+
+void Slider::setValueTextAlignment(Font::Justify alignment)
+{
+    _valueTextAlignment = alignment;
+}
+
+Font::Justify Slider::getValueTextAlignment() const
+{
+    return _valueTextAlignment;
+}
+
+void Slider::setValueTextPrecision(unsigned int precision)
+{
+    _valueTextPrecision = precision;
+}
+
+unsigned int Slider::getValueTextPrecision() const
+{
+    return _valueTextPrecision;
+}
+
 void Slider::addListener(Control::Listener* listener, int eventFlags)
 {
     if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
@@ -342,36 +372,6 @@ void Slider::drawText(const Rectangle& clip)
 const char* Slider::getType() const
 {
     return "slider";
-}
-
-void Slider::setValueTextVisible(bool valueTextVisible)
-{
-    _valueTextVisible = valueTextVisible;
-}
-
-bool Slider::getValueTextVisible() const
-{
-    return _valueTextVisible;
-}
-
-void Slider::setValueTextAlignment(Font::Justify alignment)
-{
-    _valueTextAlignment = alignment;
-}
-
-Font::Justify Slider::getValueTextAlignment() const
-{
-    return _valueTextAlignment;
-}
-
-void Slider::setValueTextPrecision(unsigned int precision)
-{
-    _valueTextPrecision = precision;
-}
-
-unsigned int Slider::getValueTextPrecision() const
-{
-    return _valueTextPrecision;
 }
 
 }

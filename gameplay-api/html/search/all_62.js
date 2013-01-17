@@ -23,5 +23,5 @@ var searchData=
   ['bundle',['Bundle',['../classgameplay_1_1_bundle.html',1,'gameplay']]],
   ['button',['Button',['../classgameplay_1_1_button.html',1,'gameplay']]],
   ['button',['Button',['../classgameplay_1_1_button.html#a0d5ed8952e44fc624ccf67e952041030',1,'gameplay::Button']]],
-  ['buttonstate',['ButtonState',['../classgameplay_1_1_gamepad.html#a694e7bfa39b124303ee059e0635e9486',1,'gameplay::Gamepad']]]
+  ['buttonmapping',['ButtonMapping',['../classgameplay_1_1_gamepad.html#a91729957739fbe8a6b88f3e17c2a7ff9',1,'gameplay::Gamepad']]]
 ];

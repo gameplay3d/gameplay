@@ -520,7 +520,7 @@ void TerrainPatch::draw(bool wireframe)
     BoundingBox bounds = getBoundingBox(true);
 
     // If the box does not intersect the view frustum, cull it
-    if (_terrain->isFlagSet(Terrain::ENABLE_FRUSTUM_CULLING) && !camera->getFrustum().intersects(bounds))
+    if (_terrain->isFlagSet(Terrain::FRUSTUM_CULLING) && !camera->getFrustum().intersects(bounds))
         return;
 
     if (!updateMaterial())
@@ -536,7 +536,7 @@ void TerrainPatch::draw(bool wireframe)
 bool TerrainPatch::isVisible() const
 {
     // If frustum culling is disabled, assume the patch is always visible
-    if ((_terrain->_flags & Terrain::ENABLE_FRUSTUM_CULLING) == 0)
+    if ((_terrain->_flags & Terrain::FRUSTUM_CULLING) == 0)
         return true;
 
     Scene* scene = _terrain->_node ? _terrain->_node->getScene() : NULL;
@@ -615,7 +615,7 @@ const Vector3& TerrainPatch::getLightDirection() const
 
 size_t TerrainPatch::computeLOD(Camera* camera, const BoundingBox& worldBounds) const
 {
-    if (!_terrain->isFlagSet(Terrain::ENABLE_LEVEL_OF_DETAIL) || _levels.size() == 0)
+    if (!_terrain->isFlagSet(Terrain::LEVEL_OF_DETAIL) || _levels.size() == 0)
         return 0; // base level
 
     // Compute LOD to use based on very simple distance metric.
