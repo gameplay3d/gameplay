@@ -65,7 +65,8 @@ int main(int argc, char** argv)
     // Ensure the user is calling the program correctly.
     if (argc < 2 || argc > 4)
     {
-        GP_ERROR("Usage: gameplay-luagen <doxygen-xml-input-directory> [output-directory] [binding-namespace]");
+        printf("Usage: gameplay-luagen <doxygen-xml-input-directory> [output-directory] [binding-namespace]\n");
+        exit(0);
     }
 
     // Generate the bindings.
