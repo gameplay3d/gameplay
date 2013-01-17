@@ -94,6 +94,7 @@ LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
 	PhysicsCollisionObjectTest.cpp \
     PostProcessTest.cpp \
 	SpriteBatchTest.cpp \
+	TerrainTest.cpp \
     TextTest.cpp \
     TextureTest.cpp \
 	TriangleTest.cpp
