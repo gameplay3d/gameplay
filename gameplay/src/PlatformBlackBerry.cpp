@@ -599,8 +599,6 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         // the top at -128.
         // 1 / 128 == 0.0078125f
         // 1 / 127 == 0.0078740157480315f
-        //float x = (float)analog[0] * 0.0078125f;
-        //float y = -(float)analog[1] * 0.0078125f;
         float x = (float)analog[0];
         float y = -(float)analog[1];
         x *= (x < 0) ? 0.0078125f : 0.0078740157480315f;
