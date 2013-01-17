@@ -19,6 +19,7 @@ Test::Test()
 
 Test::~Test()
 {
+	enableScriptCamera(false);
 }
 
 bool Test::isVsync()
@@ -177,6 +178,11 @@ void Test::getAccelerometerValues(float* pitch, float* roll)
 void Test::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
     Game::getInstance()->schedule(timeOffset, timeListener, cookie);
+}
+
+void Test::enableScriptCamera(bool enable)
+{
+	Game::getInstance()->getScriptController()->executeFunction<void>("camera_setActive", "b", enable);
 }
 
 bool Test::isGestureSupported(Gesture::GestureEvent evt)
