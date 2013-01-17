@@ -76,6 +76,9 @@
     <ClInclude Include="src\PhysicsCollisionObjectTest.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\TerrainTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MeshPrimitiveTest.cpp">
@@ -139,6 +142,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PhysicsCollisionObjectTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

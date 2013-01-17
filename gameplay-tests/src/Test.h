@@ -60,6 +60,7 @@ public:
     bool isMultiTouch() const;
     void getAccelerometerValues(float* pitch, float* roll);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
+	void enableScriptCamera(bool enable);
 
     // gestures
     bool isGestureSupported(Gesture::GestureEvent evt);
