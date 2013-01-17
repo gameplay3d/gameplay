@@ -98,7 +98,7 @@ void InputTest::render(float elapsedTime)
         int x = _mousePoint.x - (int)(width>>1);
         int y = _mousePoint.y - (int)(height>>1);
         _font->drawText(buffer, x, y, fontColor, _font->getSize());
-        if (_mouseString.length() > 0)
+        if (!_keyboardState && _mouseString.length() > 0)
         {
             int y = getHeight() - _font->getSize();
             _font->drawText(_mouseString.c_str(), 0, y, fontColor, _font->getSize());
@@ -148,9 +148,12 @@ void InputTest::render(float elapsedTime)
         accelerometerDrawRate = 0.0f;
         getAccelerometerValues(&pitch, &roll);
     }
-    sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
-    _font->measureText(buffer, _font->getSize(), &width, &height);
-    _font->drawText(buffer, getWidth() - width, getHeight() - height, fontColor, _font->getSize());
+    if (!_keyboardState)
+    {
+        sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
+        _font->measureText(buffer, _font->getSize(), &width, &height);
+        _font->drawText(buffer, getWidth() - width, getHeight() - height, fontColor, _font->getSize());
+    }
     _font->finish();
 }
 
