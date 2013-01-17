@@ -297,6 +297,8 @@ private:
 
     static GLubyte* readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
 
+    static int getMaskByteIndex(unsigned int mask);
+
     std::string _path;
     TextureHandle _handle;
     Format _format;

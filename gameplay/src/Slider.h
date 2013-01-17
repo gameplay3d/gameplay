@@ -110,16 +110,46 @@ public:
      */
     const char* getType() const;
 
-    void setValueTextVisible(bool displayValue);
+    /**
+     * Sets if the slider value text is rendered below the control.
+     * 
+     * @param visible If the slider value text is rendered below the control. 
+     */
+    void setValueTextVisible(bool visible);
 
-    bool getValueTextVisible() const;
+    /**
+     * Gets if the slider value text is rendered below the control.
+     *
+     * @return true if the slider value text is rendered below the control, false if otherwise.
+     */
+    bool isValueTextVisible() const;
 
+    /**
+     * Sets the slider value text alignment.
+     * 
+     * @param alignment the slider value text alignment. 
+     */
     void setValueTextAlignment(Font::Justify alignment);
 
+    /**
+     * Gets the slider value text alignment.
+     *
+     * @return The slider value text alignment. 
+     */
     Font::Justify getValueTextAlignment() const;
 
+    /**
+     * Sets the precision, which is the number floating point digits after the decimal.
+     *
+     * @param precision The number floating point precision/digits after the decimal.
+     */
     void setValueTextPrecision(unsigned int precision);
 
+    /**
+     * Gets the precision, which is the number floating point digits after the decimal.
+     *
+     * @return The number floating point precision/digits after the decimal.
+     */
     unsigned int getValueTextPrecision() const;
 
     /**

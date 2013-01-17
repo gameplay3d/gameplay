@@ -477,7 +477,7 @@ GLubyte* Texture::readCompressedPVRTCLegacy(const char* path, Stream* stream, GL
     return data;
 }
 
-int getMaskByteIndex(unsigned int mask)
+int Texture::getMaskByteIndex(unsigned int mask)
 {
     switch (mask)
     {
