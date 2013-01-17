@@ -22,10 +22,12 @@ For more information goto "http://www.autodesk.com/fbx".
 
 ## Running gameplay-encoder
 Simply execute the gameplay-encoder command-line executable:
-Usage: gameplay-encoder [options] <file(s)>
 
-Note: Linux Ubuntu 12 (64-bit), you must first install the required 32-bit libs via:
-sudo apt-get install ia32-libs
+`Usage: gameplay-encoder [options] <file(s)>`
+
+Note: On Linux Ubuntu 12 (64-bit), you must first install the required 32-bit libs via:
+
+`sudo apt-get install ia32-libs`
 
 ## Building gameplay-encoder
 The gameplay-encoder comes pre-built for Windows 7, MacOS X and Linux Ubuntu 12 (32-bit) in the 'bin' folder.
@@ -56,7 +58,7 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
   * Example: /Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a  (Add Other)
 - Build gameplay-encoder
 
-### Building with FBX Support on Linux Ubuntu 12 (32-bit)
+### Building with FBX Support on Linux Ubuntu 12 (32-bit) using CMake
 - Download and install the FBX SDK for MacOS X (http://www.autodesk.com/fbx)
 - Edit the gameplay-encoder/CMakeLists.txt adding the following:
 - Add the FBX include directory to Header Search Paths: (Build Settings)
@@ -69,10 +71,13 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
 - Add the FBX library to the library to the add_definitions(-l...) section of the CMakeLists.txt
   * Example -lfbxsdk-2013.3-static
 - Build gameplay-encoder by uncommenting the last line in the gameplay/CMakeLists.txt and running the CMake build via:
-  > mkdir build
-  > cd build
-  > cmake ..
-  > make
+
+```
+mkdir build
+cd build
+cmake ..
+make
+ ```
 
 ## Bundle File Format
 The gameplay bundle file format is well defined in the gameplay-encoder/gameplay-bundle.txt file.

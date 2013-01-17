@@ -16,10 +16,10 @@
 #Find out which OS we're on. 
 unamestr=$(uname)
 
-#Switch-on alias expansion within the script (see http://chiefsandendians.blogspot.co.uk/2010/07/linux-scripts-and-alias.html)
+# Switch-on alias expansion within the script 
 shopt -s expand_aliases
 
-#alias the sed in-place command for OSX and Linux - incompatibilities between BSD and Linux sed args
+#Alias the sed in-place command for OSX and Linux - incompatibilities between BSD and Linux sed args
 if [[ "$unamestr" == "Darwin" ]]; then
 	alias aliassedinplace='sed -i ""'
 else
@@ -43,7 +43,6 @@ if [[ "$projName" == "" ]]; then
 	exit -1;
 fi
 echo 
-
 echo
 echo "2. Enter a game title."
 echo
@@ -117,7 +116,6 @@ if [[ "$className" == "" ]]; then
 fi
 echo 
 
-
 echo
 echo "7. Enter the project path."
 echo
@@ -170,7 +168,6 @@ gpPath=${back}/${gpPathAbs#$common_path/}
 if [[ ${gpPathAbs} == ${common_path} ]]; then
 	gpPath=${back}
 fi
-
 
 #############################################
 # Copy Microsoft Visual Studio project files
@@ -239,12 +236,10 @@ cp "gameplay-template/android/template.build.xml" "$projPath/android/build.xml"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
 
 cp "gameplay-template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
-
 cp "gameplay-template/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
-
 
 cp "gameplay-template/icon.png" "$projPath/android/res/drawable/icon.png"
 cp "gameplay-template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
@@ -258,7 +253,6 @@ cp "gameplay-template/gameplay-template-CMakeLists.txt" "$projPath/CMakeLists.tx
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/CMakeLists.txt"
-
 
 #############################################
 # Copy source files
