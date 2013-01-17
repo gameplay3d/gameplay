@@ -170,7 +170,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Game.cpp \
     lua/lua_GameClearFlags.cpp \
     lua/lua_Gamepad.cpp \
-    lua/lua_GamepadButtonState.cpp \
+    lua/lua_GamepadButtonMapping.cpp \
     lua/lua_GamepadGamepadEvent.cpp \
     lua/lua_GameState.cpp \
     lua/lua_Gesture.cpp \
