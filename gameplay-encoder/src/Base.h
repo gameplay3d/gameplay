@@ -20,6 +20,11 @@
 #include <algorithm>
 #include <sys/stat.h>
 
+using std::memcpy;
+using std::size_t;
+using std::min;
+using std::max;
+
 // PNG
 #include <png.h>
 

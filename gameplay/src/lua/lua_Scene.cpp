@@ -9,6 +9,7 @@
 #include "Ref.h"
 #include "Scene.h"
 #include "SceneLoader.h"
+#include "Terrain.h"
 
 namespace gameplay
 {
