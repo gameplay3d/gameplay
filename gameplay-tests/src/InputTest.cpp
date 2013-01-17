@@ -70,6 +70,11 @@ void InputTest::render(float elapsedTime)
 
     _inputTestControls->draw();
 
+    // Draw text
+    Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
+    unsigned int width, height;
+    char buffer[50];
+    _font->start();
     if (isMouseCaptured())
     {
         // Draw crosshair at current offest w.r.t. center of screen
@@ -77,19 +82,35 @@ void InputTest::render(float elapsedTime)
         _crosshair->draw(_crosshairDstRect, _crosshairSrcRect);
         _crosshair->finish();
     }
-
-    // Draw text
-    Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
-    unsigned int width, height;
-    char buffer[50];
-    _font->start();
-    for (std::map<unsigned int, Vector2>::const_iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+    else
     {
-        sprintf(buffer, "%u", it->first);
+        for (std::list<TouchPoint>::const_iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+        {
+            sprintf(buffer, "T_%u(%d,%d)", it->_id, (int)it->_coord.x, (int)it->_coord.y);
+            _font->measureText(buffer, _font->getSize(), &width, &height);
+            int x = it->_coord.x - (int)(width>>1);
+            int y = it->_coord.y - (int)(height>>1);
+            _font->drawText(buffer, x, y, fontColor, _font->getSize());
+        }
+        // Mouse
+        sprintf(buffer, "M(%d,%d)", (int)_mousePoint.x, (int)_mousePoint.y);
         _font->measureText(buffer, _font->getSize(), &width, &height);
-        int x = it->second.x - (int)(width>>1);
-        int y = it->second.y - (int)(height>>1);
+        int x = _mousePoint.x - (int)(width>>1);
+        int y = _mousePoint.y - (int)(height>>1);
         _font->drawText(buffer, x, y, fontColor, _font->getSize());
+        if (_mouseString.length() > 0)
+        {
+            int y = getHeight() - _font->getSize();
+            _font->drawText(_mouseString.c_str(), 0, y, fontColor, _font->getSize());
+        }
+        if (_mouseWheel)
+        {
+            sprintf(buffer, "%d", _mouseWheel);
+            _font->measureText(buffer, _font->getSize(), &width, &height);
+            int x = _mouseWheelPoint.x - (int)(width>>1);
+            int y = _mouseWheelPoint.y + 4;
+            _font->drawText(buffer, x, y, fontColor, _font->getSize());
+        }
     }
     // Pressed keys
     if (_keyboardString.length() > 0)
@@ -100,21 +121,6 @@ void InputTest::render(float elapsedTime)
     if (_symbolsString.length() > 0)
     {
         _font->drawText(_symbolsString.c_str(), 0, _font->getSize(), fontColor, _font->getSize());
-    }
-    // Mouse
-    _font->drawText("M", _mousePoint.x, _mousePoint.y, fontColor, _font->getSize());
-    if (_mouseString.length() > 0)
-    {
-        int y = getHeight() - _font->getSize();
-        _font->drawText(_mouseString.c_str(), 0, y, fontColor, _font->getSize());
-    }
-    if (_mouseWheel)
-    {
-        sprintf(buffer, "%d", _mouseWheel);
-        _font->measureText(buffer, _font->getSize(), &width, &height);
-        int x = _mouseWheelPoint.x - (int)(width>>1);
-        int y = _mouseWheelPoint.y + 4;
-        _font->drawText(buffer, x, y, fontColor, _font->getSize());
     }
     // Held keys
     if (!_downKeys.empty())
@@ -161,18 +167,54 @@ bool InputTest::drawScene(Node* node)
 
 void InputTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    _touchPoints[contactIndex].x = x;
-    _touchPoints[contactIndex].y = y;
+    TouchPoint* tp = NULL;
+
+    // Not optimal, however we expect the list size to be very small (<10)
+    for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+    {
+        if (it->_id == contactIndex)
+        {
+            tp = &(*it); // (seems redundant, however due to STD)
+            break;
+        }
+    }
+
+    // Add a new touch point if not found above
+    if (!tp)
+    {
+        tp = new TouchPoint();
+        tp->_id = contactIndex;
+        _touchPoints.push_back(*tp);
+    }
+
+    // Update the touch point
+    tp->_coord.x = x;
+    tp->_coord.y = y;
+    tp->_isStale = false; // (could be overwritten below)
 
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
+        // Purge all stale touch points
+        for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+        {
+            if (it->_isStale)
+            {
+                _touchPoints.erase(it);
+            }
+        }
+
         if (x < 30 && y < 30)
         {
             displayKeyboard(true);
         }
         break;
     case Touch::TOUCH_RELEASE:
+        // Mark the current touch point as stale
+        if (tp)
+        {
+            tp->_isStale = true;
+        }
         break;
     case Touch::TOUCH_MOVE:
         break;
