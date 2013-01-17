@@ -222,6 +222,11 @@ public:
      */
     static bool isGestureRegistered(Gesture::GestureEvent evt);
 
+    /**
+     * Polls the platform for the updated Gamepad states such as joysticks, buttons and trigger values.
+     *
+     * @param gamepad The gamepad to be returned with the latest polled values populated.
+     */
     static void pollGamepadState(Gamepad* gamepad);
 
     /**
