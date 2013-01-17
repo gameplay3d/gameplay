@@ -46,6 +46,7 @@ var searchData=
   ['_7escripttarget',['~ScriptTarget',['../classgameplay_1_1_script_target.html#a0616861a5b80a35e7f1a4c97a09423f9',1,'gameplay::ScriptTarget']]],
   ['_7eslider',['~Slider',['../classgameplay_1_1_slider.html#ad3b4ccc06217743fbb7aa4b8f751ba38',1,'gameplay::Slider']]],
   ['_7espritebatch',['~SpriteBatch',['../classgameplay_1_1_sprite_batch.html#affacb9af6342ee4a7e62b91928349eaf',1,'gameplay::SpriteBatch']]],
+  ['_7estream',['~Stream',['../classgameplay_1_1_stream.html#a3a04ac6aabde8ecdd27990553da8df89',1,'gameplay::Stream']]],
   ['_7etext',['~Text',['../classgameplay_1_1_font_1_1_text.html#a841802718d99e3c9d2108ca5e1e90413',1,'gameplay::Font::Text']]],
   ['_7etextbox',['~TextBox',['../classgameplay_1_1_text_box.html#a46fbc10c5b3e4d70c7316b55b71b563b',1,'gameplay::TextBox']]],
   ['_7etransform',['~Transform',['../classgameplay_1_1_transform.html#a6d1d3cb7465bac73bc79874dc2471140',1,'gameplay::Transform']]],
