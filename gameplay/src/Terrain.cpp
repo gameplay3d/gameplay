@@ -15,7 +15,7 @@ namespace gameplay
 // specified terrain size, expressed as a ratio of the average
 // of the dimensions of the terrain heightfield:
 //
-//   maxHeight = (image.width + image.height) / 2 * DEFAULT_TERRAIN_HEIGHT_RATIO
+//   heightMax = (image.width + image.height) / 2 * DEFAULT_TERRAIN_HEIGHT_RATIO
 //
 #define DEFAULT_TERRAIN_HEIGHT_RATIO 0.3f
 
@@ -30,7 +30,7 @@ namespace gameplay
 float getDefaultHeight(unsigned int width, unsigned int height);
 
 Terrain::Terrain() :
-    _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(ENABLE_FRUSTUM_CULLING | ENABLE_LEVEL_OF_DETAIL),
+    _heightfield(NULL), _node(NULL), _normalMap(NULL), _flags(FRUSTUM_CULLING | LEVEL_OF_DETAIL),
     _dirtyFlags(TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX)
 {
 }

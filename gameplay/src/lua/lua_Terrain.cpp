@@ -614,7 +614,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -642,7 +642,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -670,7 +670,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -711,7 +711,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -756,7 +756,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -805,7 +805,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -858,7 +858,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
@@ -915,7 +915,7 @@ int lua_Terrain_static_create(lua_State* state)
                     {
                         ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
                         object->instance = returnPtr;
-                        object->owns = false;
+                        object->owns = true;
                         luaL_getmetatable(state, "Terrain");
                         lua_setmetatable(state, -2);
                     }
