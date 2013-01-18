@@ -116,6 +116,16 @@ inline void Game::getAccelerometerValues(float* pitch, float* roll)
     Platform::getAccelerometerValues(pitch, roll);
 }
 
+inline unsigned int Game::getGamepadCount() const
+{
+    return Gamepad::getGamepadCount();
+}
+
+inline Gamepad* Game::getGamepad(unsigned int index) const
+{
+    return Gamepad::getGamepad(index);
+}
+
 inline void Game::displayKeyboard(bool display)
 {
     Platform::displayKeyboard(display);

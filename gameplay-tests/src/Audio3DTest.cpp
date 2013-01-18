@@ -60,11 +60,10 @@ void Audio3DTest::initialize()
     _scene->addNode(_fpCamera.getRootNode());
     _scene->setActiveCamera(_fpCamera.getCamera());
 
-    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
-    std::vector<Gamepad*>::iterator it;
-    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    unsigned int gamepadCount = getGamepadCount();
+    for (unsigned int i = 0; i < gamepadCount; i++)
     {
-        Gamepad* gamepad = *it;
+        Gamepad* gamepad = getGamepad(i);
         if (gamepad->isVirtual())
             _virtualGamepad = gamepad;
         else if (!_physicalGamepad)
@@ -133,6 +132,12 @@ void Audio3DTest::update(float elapsedTime)
     {
         _gamepad->getJoystickValues(0, &move);
         move.x = -move.x;
+    }
+    if (_gamepad->getJoystickCount() > 1)
+    {
+        Vector2 joy2;
+        _gamepad->getJoystickValues(1, &joy2);
+        _fpCamera.rotate(MATH_DEG_TO_RAD(joy2.x * 2.0f), MATH_DEG_TO_RAD(joy2.y * 2.0f));
     }
 
     if (!move.isZero())

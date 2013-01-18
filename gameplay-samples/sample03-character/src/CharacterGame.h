@@ -102,6 +102,8 @@ private:
     Vector3 _oldBallPosition;
     bool _hasBall;
     bool _applyKick;
+    bool _kicking;
+    float _kickDelay;
     bool* _buttonPressed;
     Gamepad* _gamepad;
     Gamepad* _physicalGamepad;

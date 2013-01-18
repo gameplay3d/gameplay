@@ -120,11 +120,10 @@ void FormsTest::initialize()
     
     formChanged();
 
-    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
-    std::vector<Gamepad*>::iterator it;
-    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    unsigned int gamepadCount = getGamepadCount();
+    for (unsigned int i = 0; i < gamepadCount; i++)
     {
-        Gamepad* gamepad = *it;
+        Gamepad* gamepad = getGamepad(i);
         if (gamepad->isVirtual())
             _virtualGamepad = gamepad;
         else if (!_physicalGamepad)
@@ -200,6 +199,17 @@ void FormsTest::update(float elapsedTime)
     if (_gamepad->getJoystickCount() > 0)
     {
         _gamepad->getJoystickValues(0, &joyCommand);
+    }
+    if (_gamepad->getJoystickCount() > 1)
+    {
+        Vector2 joy2;
+        _gamepad->getJoystickValues(1, &joy2);
+        Matrix m;
+        _formNodeParent->getWorldMatrix().transpose(&m);
+        Vector3 yaw;
+        m.getUpVector(&yaw);
+        _formNodeParent->rotate(yaw, speedFactor * joy2.x * 2.0f);
+        _formNodeParent->rotateX(-speedFactor * joy2.y * 2.0f);
     }
 
     if (bDown)

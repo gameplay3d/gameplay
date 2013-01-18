@@ -47,6 +47,7 @@ static const unsigned int XINPUT_TRIGGER_COUNT = 2;
 
 #ifdef USE_XINPUT
 static XINPUT_STATE __xInputState;
+static bool __connectedXInput[4];
 
 static float normalizeXInputJoystickAxis(int axisValue, int deadZone)
 {
@@ -910,11 +911,13 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     {
         if (XInputGetState(i, &__xInputState) == NO_ERROR)
         {
-            // Gamepad is connected.
-            char id[9];
-            sprintf(id, "XInput %d", i);
-            Gamepad::add(id, i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT,
-                         0, 0, "Unknown", "XInput Gamepad");
+            if (!__connectedXInput[i])
+            {
+                // Gamepad is connected.
+                Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
+                __connectedXInput[i] = true;
+            }
+
         }
     }
 #endif
@@ -973,13 +976,11 @@ int Platform::enterMessagePump()
             // Check for connected XInput gamepads.
             for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
             {
-                if (XInputGetState(i, &__xInputState) == NO_ERROR && !Gamepad::getGamepad(i))
+                if (XInputGetState(i, &__xInputState) == NO_ERROR && !__connectedXInput[i])
                 {
                     // Gamepad was just connected.
-                    char id[9];
-                    sprintf(id, "XInput %d", i);
-                    Gamepad::add(id, i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT,
-                                    0, 0, "Unknown", "XInput Gamepad");
+                    Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
+                    __connectedXInput[i] = true;
                 }
             }
 #endif
@@ -1234,7 +1235,8 @@ void Platform::pollGamepadState(Gamepad* gamepad)
     else
     {
         // Gamepad was disconnected.
-        Gamepad::remove(gamepad);
+        Platform::gamepadEventDisconnectedInternal(gamepad->_handle);
+        __connectedXInput[gamepad->_handle] = false;
     }
 }
 #else
@@ -1278,8 +1280,15 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+}
+
+void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
+{
+    Gamepad::remove(handle);
 }
 
 bool Platform::launchURL(const char* url)
