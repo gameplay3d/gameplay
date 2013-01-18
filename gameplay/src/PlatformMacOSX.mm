@@ -1817,21 +1817,21 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         static const unsigned int PS3Mapping[17] = {
             Gamepad::BUTTON_MENU1,  // 0x0001
             Gamepad::BUTTON_L3,     // 0x0002
-            Gamepad::BUTTON_R3,     // 0x0004
-            Gamepad::BUTTON_MENU2,  // 0x0008
-            Gamepad::BUTTON_UP,     // 0x0010
-            Gamepad::BUTTON_RIGHT,  // 0x0020
-            Gamepad::BUTTON_DOWN,   // 0x0040
-            Gamepad::BUTTON_LEFT,   // 0x0080
-            Gamepad::BUTTON_L2,     // 0x0100
-            Gamepad::BUTTON_R2,     // 0x0200
-            Gamepad::BUTTON_L1,     // 0x0400
-            Gamepad::BUTTON_R1,     // 0x0800
-            Gamepad::BUTTON_Y,      // 0x1000
-            Gamepad::BUTTON_B,      // 0x2000
-            Gamepad::BUTTON_A,      // 0x4000
-            Gamepad::BUTTON_X,      // 0x8000
-            Gamepad::BUTTON_MENU3   // 0x10000
+            Gamepad::BUTTON_UP,     // 0x0004
+            Gamepad::BUTTON_RIGHT,  // 0x0008
+            Gamepad::BUTTON_DOWN,   // 0x0010
+            Gamepad::BUTTON_LEFT,   // 0x0020
+            Gamepad::BUTTON_L2,     // 0x0040
+            Gamepad::BUTTON_R2,     // 0x0080
+            Gamepad::BUTTON_L1,     // 0x0100
+            Gamepad::BUTTON_R1,     // 0x0200
+            Gamepad::BUTTON_Y,      // 0x0400
+            Gamepad::BUTTON_B,      // 0x0800
+            Gamepad::BUTTON_A,      // 0x1000
+            Gamepad::BUTTON_X,      // 0x2000
+            Gamepad::BUTTON_MENU3,  // 0x4000
+            0,                      // 0x8000
+            0                       // 0x10000
         };
         
         const unsigned int* mapping = NULL;
@@ -1842,21 +1842,30 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         }
         
         gamepad->_buttons = 0;
-        //for (OSXGamepadButton *b in [gp buttons])
+        
         for (int i = 0; i < [gp numberOfButtons]; ++i)
         {
             OSXGamepadButton* b = [gp buttonAtIndex: i];
             if ([b state])
             {
                 // This button is down.
-                gamepad->_buttons |= (1 << mapping[i]);
+                if (mapping)
+                    gamepad->_buttons |= (1 << mapping[i]);
+                else
+                    gamepad->_buttons |= (1 << i);
             }
         }
 
         for (unsigned int i = 0; i < [gp numberOfSticks]; ++i)
         {
-            gamepad->_joysticks[i].x = [[gp axisAtIndex: i*2] calibratedValue];
-            gamepad->_joysticks[i].y = [[gp axisAtIndex: i*2 + 1] calibratedValue];
+            float rawX = [[gp axisAtIndex: i*2] calibratedValue];
+            float rawY = -[[gp axisAtIndex: i*2 + 1] calibratedValue];
+            if (std::fabs(rawX) <= 0.05f)
+                rawX = 0;
+            if (std::fabs(rawY) <= 0.05f)
+                rawY = 0;
+            gamepad->_joysticks[i].x = rawX;
+            gamepad->_joysticks[i].y = rawY;
         }
         
         for (unsigned int i = 0; i < [gp numberOfTriggerButtons]; ++i)

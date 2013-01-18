@@ -1,31 +1,27 @@
 #include "GamepadTest.h"
 
 #if defined(ADD_TEST)
-    //ADD_TEST("Input", "Gamepads", GamepadTest, 3);
+    ADD_TEST("Input", "Gamepads", GamepadTest, 3);
 #endif
 
-GamepadTest::GamepadTest() : _player1(NULL), _player2(NULL)
+GamepadTest::GamepadTest() : _gamepad(NULL)
 {
 }
 
 void GamepadTest::finalize()
 {
     SAFE_RELEASE(_font);
-    if (_player1->isVirtual())
-    {
-        _player1->getForm()->setEnabled(false);
-    }
 }
 
 void GamepadTest::initialize()
 {
     setMultiTouch(true);
 
-    unsigned int gamepadCount = getGamepadCount();
-    if (gamepadCount == 1)
-        _player1 = getGamepad(0);
-    if (gamepadCount == 2)
-        _player2 = getGamepad(1);
+    _gamepad = getGamepad(0);
+    // This is needed because the virtual gamepad is shared between all tests.
+    // TestsGame always ensures the virtual gamepad is disabled when a test is exited.
+    if (_gamepad && _gamepad->isVirtual())
+        _gamepad->getForm()->setEnabled(true);
 
     _font = Font::create("res/common/arial18.gpb");
     _status = "Looking for gamepads...";
@@ -68,10 +64,8 @@ void GamepadTest::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned in
 void GamepadTest::update(float elapsedTime)
 {
     _status = "";
-    if (_player1)
-        updateGamepad(elapsedTime, _player1, 1);
-    if (_player2)
-        updateGamepad(elapsedTime, _player2, 2);
+    if (_gamepad)
+        updateGamepad(elapsedTime, _gamepad, 1);
 }
 
 void GamepadTest::render(float elapsedTime)
@@ -84,8 +78,8 @@ void GamepadTest::render(float elapsedTime)
     _font->drawText(_status.c_str(), 5, 25, Vector4::one());
     _font->finish();
 
-    if (_player1 && _player1->isVirtual())
-        _player1->draw();
+
+    _gamepad->draw();
 }
 
 void GamepadTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
@@ -93,35 +87,12 @@ void GamepadTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
     switch(evt)
     {
         case Gamepad::CONNECTED_EVENT:
-        {   
-            // Virtual Gamepad event come right when the game starts
-            if (gamepad->isVirtual())
-            {
-                gamepad->getForm()->setConsumeInputEvents(false);
-                _player1 = gamepad;
-            }
-            else
-            {
-                // First physical gamepad will go in player 2
-                if (_player2 == NULL)
-                {
-                    _player2 = gamepad;
-                }
-                else
-                {
-                    // Second physical gamepad will bump virtual gamepad out of player one
-                    _player1 = gamepad;
-                }
-            }
-            break;
-        }
         case Gamepad::DISCONNECTED_EVENT:
-        {
-            if (gamepad == _player2)
-                _player2 = NULL;
-            else if (gamepad == _player1)
-                _player1 = NULL;
+            _gamepad = getGamepad(0);
+            // This is needed because the virtual gamepad is shared between all tests.
+            // TestsGame always ensures the virtual gamepad is disabled when a test is exited.
+            if (_gamepad && _gamepad->isVirtual())
+                _gamepad->getForm()->setEnabled(true);
             break;
-        }
     }
 }
