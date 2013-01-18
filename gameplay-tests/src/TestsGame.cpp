@@ -74,7 +74,7 @@ void TestsGame::initialize()
 
     for (unsigned int i = 0; i < gamepadCount; i++)
     {
-        Gamepad* gamepad = getGamepad(i);
+        Gamepad* gamepad = getGamepad(i, false);
         if (gamepad->isVirtual())
         {
             gamepad->getForm()->setEnabled(false);

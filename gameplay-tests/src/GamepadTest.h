@@ -31,8 +31,7 @@ private:
 
     void updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player);
 
-    Gamepad* _player1;
-    Gamepad* _player2;
+    Gamepad* _gamepad;
     
     Font* _font;
     std::string _status;
