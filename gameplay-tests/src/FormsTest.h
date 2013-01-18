@@ -36,8 +36,6 @@ private:
     Form* _activeForm;
     std::vector<Form*> _forms;
     Gamepad* _gamepad;
-    Gamepad* _virtualGamepad;
-    Gamepad* _physicalGamepad;
     unsigned int _keyFlags;
     bool _touched;
     int _touchX;

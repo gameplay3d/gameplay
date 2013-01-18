@@ -172,7 +172,7 @@ void Test::setMultiTouch(bool enabled)
 
 bool Test::isMultiTouch() const
 {
-    return Platform::isMultiTouch();
+    return Game::getInstance()->isMultiTouch();
 }
 
 void Test::getAccelerometerValues(float* pitch, float* roll)
