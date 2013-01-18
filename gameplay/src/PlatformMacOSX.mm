@@ -23,7 +23,7 @@ using namespace std;
 using namespace gameplay;
 
 @class View;
-@class OSXGamepad;
+@class HIDGamepad;
 
 // Default to 720p
 static int __width = 1280;
@@ -58,9 +58,9 @@ static NSMutableArray *__gamepads = NULL;
 static IOHIDManagerRef __hidManagerRef = NULL;
 
 // Gamepad Helper Function
-OSXGamepad *gamepadForLocationID(NSNumber *locationID);
-OSXGamepad *gamepadForLocationIDValue(unsigned int locationIDValue);
-OSXGamepad *gamepadForGameHandle(int gameHandle);
+HIDGamepad *gamepadForLocationID(NSNumber *locationID);
+HIDGamepad *gamepadForLocationIDValue(unsigned int locationIDValue);
+HIDGamepad *gamepadForGameHandle(int gameHandle);
 
 
 // IOHid Helper Functions
@@ -89,7 +89,7 @@ double getMachTimeInMilliseconds()
 }
 
 
-@interface OSXGamepadAxis : NSObject
+@interface HIDGamepadAxis : NSObject
 {
     IOHIDElementRef e;
     CFIndex v;
@@ -109,7 +109,7 @@ double getMachTimeInMilliseconds()
 - (CFIndex)value;
 - (void)setValue:(CFIndex)value;
 @end
-@implementation OSXGamepadAxis
+@implementation HIDGamepadAxis
 + gamepadAxisWithAxisElement:(IOHIDElementRef)element
 {
     return [[[[self class] alloc] initWithAxisElement:element] autorelease];
@@ -170,7 +170,7 @@ double getMachTimeInMilliseconds()
 }
 @end
 
-@interface OSXGamepadButton : NSObject
+@interface HIDGamepadButton : NSObject
 {
     IOHIDElementRef e;
     IOHIDElementRef te;
@@ -194,7 +194,7 @@ double getMachTimeInMilliseconds()
 - (bool)state;
 - (void)setState:(bool)state;
 @end
-@implementation OSXGamepadButton
+@implementation HIDGamepadButton
 + gamepadButtonWithButtonElement:(IOHIDElementRef)element
 {
     return [[[[self class] alloc] initWithButtonElement:element] autorelease];
@@ -263,7 +263,7 @@ double getMachTimeInMilliseconds()
 }
 - (float)calibratedStateValue
 {
-    return (float)triggerValue; // TODO: Need to figure out expected range
+    return (float)triggerValue / 255.0f;
 }
 - (bool)state
 {
@@ -275,7 +275,7 @@ double getMachTimeInMilliseconds()
 }
 @end
 
-@interface OSXGamepad : NSObject
+@interface HIDGamepad : NSObject
 {
     IOHIDDeviceRef hidDeviceRef;
     IOHIDQueueRef queueRef;
@@ -294,7 +294,7 @@ double getMachTimeInMilliseconds()
 - (NSNumber*)locationID;
 
 - (void)initializeGamepadElements;
-- (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie;
+- (HIDGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie;
 
 - (bool)startListening;
 - (void)stopListening;
@@ -310,12 +310,12 @@ double getMachTimeInMilliseconds()
 - (NSUInteger)numberOfSticks;
 - (NSUInteger)numberOfButtons;
 - (NSUInteger)numberOfTriggerButtons;
-- (OSXGamepadAxis*)axisAtIndex:(NSUInteger)index;
-- (OSXGamepadButton*)buttonAtIndex:(NSUInteger)index;
-- (OSXGamepadButton*)triggerButtonAtIndex:(NSUInteger)index;
+- (HIDGamepadAxis*)axisAtIndex:(NSUInteger)index;
+- (HIDGamepadButton*)buttonAtIndex:(NSUInteger)index;
+- (HIDGamepadButton*)triggerButtonAtIndex:(NSUInteger)index;
 @end
 
-@implementation OSXGamepad
+@implementation HIDGamepad
 
 @synthesize hidDeviceRef;
 @synthesize queueRef;
@@ -386,7 +386,7 @@ double getMachTimeInMilliseconds()
                 case kHIDUsage_GD_Ry:
                 case kHIDUsage_GD_Rz:
                 {
-                    OSXGamepadAxis *axis = [OSXGamepadAxis gamepadAxisWithAxisElement:hidElement];
+                    HIDGamepadAxis *axis = [HIDGamepadAxis gamepadAxisWithAxisElement:hidElement];
                     [[self axes] addObject:axis];
                 }
                     break;
@@ -400,7 +400,7 @@ double getMachTimeInMilliseconds()
         }
         if(type == kIOHIDElementTypeInput_Button)
         {
-            OSXGamepadButton *button = [OSXGamepadButton gamepadButtonWithButtonElement:hidElement];
+            HIDGamepadButton *button = [HIDGamepadButton gamepadButtonWithButtonElement:hidElement];
             [[self buttons] addObject:button];
         }
     }
@@ -420,32 +420,35 @@ double getMachTimeInMilliseconds()
         {
             if((unsigned long)cookie == 39)
             {
-                OSXGamepadButton *leftTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)9];
+                //[self buttonAtIndex:8]; 
+                HIDGamepadButton *leftTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)9];
                 if(leftTriggerButton)
                 {
                     [leftTriggerButton setTriggerElement:hidElement];
                     [[self triggerButtons] addObject:leftTriggerButton];
-                    [[self buttons] removeObject:leftTriggerButton]; // Defer to gamepad team on this line..  not sure how they intend to tackle
+                    // I would have thought this would work but it seems to mess things up, even after re-mapping the buttons.
+                    //[[self buttons] removeObject:leftTriggerButton];
                 }
             }
             if((unsigned long)cookie == 40)
             {
-                OSXGamepadButton *rightTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)10];
+                //[self buttonAtIndex:9];
+                HIDGamepadButton *rightTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)10];
                 if(rightTriggerButton)
                 {
                     [rightTriggerButton setTriggerElement:hidElement];
                     [[self triggerButtons] addObject:rightTriggerButton];
-                    [[self buttons] removeObject:rightTriggerButton];
+                    //[[self buttons] removeObject:rightTriggerButton];
                 }
             }
         }
     }
-    
 }
 
-- (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie {
-    for(OSXGamepadButton *b in [self buttons]) {
-        if([b cookie] == cookie) return b;
+- (HIDGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie {
+    for(HIDGamepadButton *b in [self buttons]) {
+        if([b cookie] == cookie)
+            return b;
     }
     return NULL;
 }
@@ -541,9 +544,9 @@ double getMachTimeInMilliseconds()
     return [[self triggerButtons] count];
 }
 
-- (OSXGamepadButton*)triggerButtonAtIndex:(NSUInteger)index
+- (HIDGamepadButton*)triggerButtonAtIndex:(NSUInteger)index
 {
-    OSXGamepadButton *b = NULL;
+    HIDGamepadButton *b = NULL;
     if(index < [[self triggerButtons] count])
     {
         b = [[self triggerButtons] objectAtIndex:index];
@@ -551,18 +554,18 @@ double getMachTimeInMilliseconds()
     return b;
 }
 
-- (OSXGamepadAxis*)axisAtIndex:(NSUInteger)index
+- (HIDGamepadAxis*)axisAtIndex:(NSUInteger)index
 {
-    OSXGamepadAxis *a = NULL;
+    HIDGamepadAxis *a = NULL;
     if(index < [[self axes] count])
     {
         a = [[self axes] objectAtIndex:index];
     }
     return a;
 }
-- (OSXGamepadButton*)buttonAtIndex:(NSUInteger)index
+- (HIDGamepadButton*)buttonAtIndex:(NSUInteger)index
 {
-    OSXGamepadButton *b = NULL;
+    HIDGamepadButton *b = NULL;
     if(index < [[self buttons] count])
     {
         b = [[self buttons] objectAtIndex:index];
@@ -572,20 +575,21 @@ double getMachTimeInMilliseconds()
 - (NSArray*)watchedElements
 {
     NSMutableArray *r = [NSMutableArray array];
-    for(OSXGamepadButton *b in [self buttons])
+    for(HIDGamepadButton *b in [self buttons])
     {
         [r addObject:(id)[b element]];
     }
-    for(OSXGamepadAxis *a in [self axes])
+    for(HIDGamepadAxis *a in [self axes])
     {
         [r addObject:(id)[a element]];
     }
-    for(OSXGamepadButton* t in [self triggerButtons])
+    for(HIDGamepadButton* t in [self triggerButtons])
     {
-        [r addObject:(id)[t element]];
+        [r addObject:(id)[t triggerElement]];
     }
     return [NSArray arrayWithArray:r];
 }
+
 - (void)hidValueAvailable:(IOHIDValueRef)value
 {
     IOHIDElementRef element = IOHIDValueGetElement(value);
@@ -594,7 +598,7 @@ double getMachTimeInMilliseconds()
     if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
     CFIndex integerValue = IOHIDValueGetIntegerValue(value);
     
-    for(OSXGamepadAxis *a in [self axes])
+    for(HIDGamepadAxis *a in [self axes])
     {
         if([a cookie] == cookie)
         {
@@ -602,7 +606,7 @@ double getMachTimeInMilliseconds()
         }
     }
     
-    for(OSXGamepadButton *b in [self buttons])
+    for(HIDGamepadButton *b in [self buttons])
     {
         if([b cookie] == cookie)
         {
@@ -611,7 +615,7 @@ double getMachTimeInMilliseconds()
         }
     }
     
-    for(OSXGamepadButton *b in [self triggerButtons])
+    for(HIDGamepadButton *b in [self triggerButtons])
     {
         if([b triggerCookie] == cookie)
         {
@@ -667,7 +671,7 @@ double getMachTimeInMilliseconds()
 - (void) detectGamepads: (Game*) game
 {
     // Locate any newly connected devices
-    for(OSXGamepad* gamepad in __gamepads)
+    for(HIDGamepad* gamepad in __gamepads)
     {
         NSNumber* locationID = [gamepad locationID];
         if([__activeGamepads objectForKey:locationID] == NULL)
@@ -676,7 +680,7 @@ double getMachTimeInMilliseconds()
             Platform::gamepadEventConnectedInternal((unsigned int)[locationID intValue],
                                                     [gamepad numberOfButtons],
                                                     [gamepad numberOfSticks],
-                                                    0, //[gamepad numberOfTriggerButtons], PS3 triggers are not working yet
+                                                    [gamepad numberOfTriggerButtons],
                                                     [gamepad vendorID],
                                                     [gamepad productID],
                                                     [[gamepad manufacturerName] cStringUsingEncoding:NSASCIIStringEncoding],
@@ -690,7 +694,7 @@ double getMachTimeInMilliseconds()
     NSMutableArray* deadGamepads = [NSMutableArray array];
     for(NSNumber* locationID in __activeGamepads)
     {
-        OSXGamepad* gamepad = gamepadForLocationID(locationID);
+        HIDGamepad* gamepad = gamepadForLocationID(locationID);
         if(gamepad == NULL)
         {
             NSNumber* gameHandle = [__activeGamepads objectForKey:locationID];
@@ -1810,11 +1814,13 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    OSXGamepad* gp = gamepadForGameHandle(gamepad->_handle);
+    HIDGamepad* gp = gamepadForGameHandle(gamepad->_handle);
     
     if (gp)
     {
-        static const unsigned int PS3Mapping[17] = {
+        // Haven't figured out how to have the triggers not also show up in the buttons array.
+        // So for now a value of -1 means "Don't map this button."
+        static const int PS3Mapping[17] = {
             Gamepad::BUTTON_MENU1,  // 0x0001
             Gamepad::BUTTON_L3,     // 0x0002
             Gamepad::BUTTON_R3,     // 0x0004
@@ -1823,8 +1829,8 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             Gamepad::BUTTON_RIGHT,  // 0x0020
             Gamepad::BUTTON_DOWN,   // 0x0040
             Gamepad::BUTTON_LEFT,   // 0x0080
-            Gamepad::BUTTON_L2,     // 0x0100
-            Gamepad::BUTTON_R2,     // 0x0200
+            -1,                     // Gamepad::BUTTON_L2,     // 0x0100
+            -1,                     // Gamepad::BUTTON_R2,     // 0x0200
             Gamepad::BUTTON_L1,     // 0x0400
             Gamepad::BUTTON_R1,     // 0x0800
             Gamepad::BUTTON_Y,      // 0x1000
@@ -1834,7 +1840,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             Gamepad::BUTTON_MENU3   // 0x10000
         };
         
-        const unsigned int* mapping = NULL;
+        const int* mapping = NULL;
         if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
             gamepad->_productId == SONY_USB_PS3_PRODUCT_ID)
         {
@@ -1842,21 +1848,35 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         }
         
         gamepad->_buttons = 0;
-        //for (OSXGamepadButton *b in [gp buttons])
+        
         for (int i = 0; i < [gp numberOfButtons]; ++i)
         {
-            OSXGamepadButton* b = [gp buttonAtIndex: i];
+            HIDGamepadButton* b = [gp buttonAtIndex: i];
             if ([b state])
             {
                 // This button is down.
-                gamepad->_buttons |= (1 << mapping[i]);
+                if (mapping)
+                {
+                    if (mapping[i] >= 0)
+                        gamepad->_buttons |= (1 << mapping[i]);
+                }
+                else
+                {
+                    gamepad->_buttons |= (1 << i);
+                }
             }
         }
 
         for (unsigned int i = 0; i < [gp numberOfSticks]; ++i)
         {
-            gamepad->_joysticks[i].x = [[gp axisAtIndex: i*2] calibratedValue];
-            gamepad->_joysticks[i].y = [[gp axisAtIndex: i*2 + 1] calibratedValue];
+            float rawX = [[gp axisAtIndex: i*2] calibratedValue];
+            float rawY = -[[gp axisAtIndex: i*2 + 1] calibratedValue];
+            if (std::fabs(rawX) <= 0.07f)
+                rawX = 0;
+            if (std::fabs(rawY) <= 0.07f)
+                rawY = 0;
+            gamepad->_joysticks[i].x = rawX;
+            gamepad->_joysticks[i].y = rawY;
         }
         
         for (unsigned int i = 0; i < [gp numberOfTriggerButtons]; ++i)
@@ -1868,10 +1888,10 @@ void Platform::pollGamepadState(Gamepad* gamepad)
 
 }
 
-OSXGamepad* gamepadForLocationID(NSNumber* locationID)
+HIDGamepad* gamepadForLocationID(NSNumber* locationID)
 {
-    OSXGamepad* fgamepad = NULL;
-    for(OSXGamepad* gamepad in __gamepads)
+    HIDGamepad* fgamepad = NULL;
+    for(HIDGamepad* gamepad in __gamepads)
     {
         if([[gamepad locationID] isEqual:locationID])
         {
@@ -1882,14 +1902,14 @@ OSXGamepad* gamepadForLocationID(NSNumber* locationID)
     return fgamepad;
 }
 
-OSXGamepad* gamepadForLocationIDValue(unsigned int locationIDValue)
+HIDGamepad* gamepadForLocationIDValue(unsigned int locationIDValue)
 {
     return gamepadForLocationID([NSNumber numberWithUnsignedInt:locationIDValue]);
 }
 
-OSXGamepad* gamepadForGameHandle(int gameHandle)
+HIDGamepad* gamepadForGameHandle(int gameHandle)
 {
-    OSXGamepad* gamepad = NULL;
+    HIDGamepad* gamepad = NULL;
     for(NSNumber* locationID in __activeGamepads)
     {
         NSNumber* handleID = [__activeGamepads objectForKey:locationID];
@@ -1972,7 +1992,7 @@ static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void
     CFNumberRef locID = (CFNumberRef)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDLocationIDKey));
     if(locID)
     {
-        OSXGamepad* gamepad = [[OSXGamepad alloc] initWithDevice:inIOHIDDeviceRef];
+        HIDGamepad* gamepad = [[HIDGamepad alloc] initWithDevice:inIOHIDDeviceRef];
         [__gamepads addObject:gamepad];
     }
     
@@ -1986,7 +2006,7 @@ static void hidDeviceRemovalCallback(void* inContext, IOReturn inResult, void* i
     {
         for(int i = 0; i < [__gamepads count]; i++)
         {
-            OSXGamepad* gamepad = [__gamepads objectAtIndex:i];
+            HIDGamepad* gamepad = [__gamepads objectAtIndex:i];
             if([[gamepad locationID] isEqual:locID])
             {
                 removeIndex = i;
@@ -2002,7 +2022,7 @@ static void hidDeviceRemovalCallback(void* inContext, IOReturn inResult, void* i
 
 static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult,  void* inSender)
 {
-    OSXGamepad* d = (OSXGamepad*)inContext;
+    HIDGamepad* d = (HIDGamepad*)inContext;
     do
     {
         IOHIDValueRef valueRef = IOHIDQueueCopyNextValueWithTimeout( ( IOHIDQueueRef ) inSender, 0. );
