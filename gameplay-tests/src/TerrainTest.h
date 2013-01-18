@@ -6,7 +6,7 @@
 
 using namespace gameplay;
 
-class TerrainTest : public Test
+class TerrainTest : public Test, public Control::Listener
 {
 public:
 
@@ -19,6 +19,8 @@ public:
     void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    void controlEvent(Control* control, EventType evt);
 
 protected:
 
@@ -37,10 +39,12 @@ private:
 	Font* _font;
 	Scene* _scene;
 	Terrain* _terrain;
+    Form* _form;
+    bool _formVisible;
     Node* _sky;
+    Vector2 _formSize;
 	bool _wireframe;
 	bool _snapToGround;
-    bool _normalMap;
 
 };
 
