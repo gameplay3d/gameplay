@@ -21,6 +21,8 @@ class PhysicsCollisionObject
 {
     friend class PhysicsController;
     friend class PhysicsConstraint;
+    friend class PhysicsRigidBody;
+    friend class PhysicsGhostObject;
 
 public:
 
@@ -289,6 +291,7 @@ public:
     PhysicsVehicleWheel* asVehicleWheel();
 
 protected:
+
     /**
      * Handles collision event callbacks to Lua script functions.
      */
@@ -312,59 +315,6 @@ protected:
     };
 
     /**
-     * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
-     * 
-     * @see btMotionState
-     */
-    class PhysicsMotionState : public btMotionState
-    {
-        friend class PhysicsConstraint;
-        
-    public:
-
-        /**
-         * Creates a physics motion state for a rigid body.
-         * 
-         * @param node The node that contains the transformation to be associated with the motion state.
-         * @param collisionObject The collision object that owns the motion state.
-         * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
-         */
-        PhysicsMotionState(Node* node, PhysicsCollisionObject* collisionObject, const Vector3* centerOfMassOffset = NULL);
-
-        /**
-         * Destructor.
-         */
-        virtual ~PhysicsMotionState();
-
-        /**
-         * @see btMotionState::getWorldTransform
-         */
-        virtual void getWorldTransform(btTransform &transform) const;
-
-        /**
-         * @see btMotionState::setWorldTransform
-         */
-        virtual void setWorldTransform(const btTransform &transform);
-
-        /**
-         * Updates the motion state's world transform from the GamePlay Node object's world transform.
-         */
-        void updateTransformFromNode() const;
-
-        /**
-         * Sets the center of mass offset for the associated collision shape.
-         */
-        void setCenterOfMassOffset(const Vector3& centerOfMassOffset);
-
-    private:
-
-        Node* _node;
-        PhysicsCollisionObject* _collisionObject;
-        btTransform _centerOfMassOffset;
-        mutable btTransform _worldTransform;
-    };
-
-    /**
      * Constructor.
      */
     PhysicsCollisionObject(Node* node);
@@ -380,11 +330,6 @@ protected:
      * Pointer to Node contained by this collision object.
      */ 
     Node* _node;
-
-    /** 
-     * The PhysicsCollisionObject's motion state.
-     */
-    PhysicsMotionState* _motionState;
     
     /**
      * The PhysicsCollisionObject's collision shape.
@@ -400,6 +345,66 @@ protected:
      * The list of script listeners.
      */
     std::vector<ScriptListener*>* _scriptListeners;
+
+private:
+
+    /**
+     * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
+     * 
+     * @see btMotionState
+     */
+    class PhysicsMotionState : public btMotionState
+    {
+        friend class PhysicsConstraint;
+        
+    public:
+        
+        /**
+         * Creates a physics motion state for a rigid body.
+         * 
+         * @param node The node that contains the transformation to be associated with the motion state.
+         * @param collisionObject The collision object that owns the motion state.
+         * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
+         */
+        PhysicsMotionState(Node* node, PhysicsCollisionObject* collisionObject, const Vector3* centerOfMassOffset = NULL);
+        
+        /**
+         * Destructor.
+         */
+        virtual ~PhysicsMotionState();
+        
+        /**
+         * @see btMotionState::getWorldTransform
+         */
+        virtual void getWorldTransform(btTransform &transform) const;
+        
+        /**
+         * @see btMotionState::setWorldTransform
+         */
+        virtual void setWorldTransform(const btTransform &transform);
+        
+        /**
+         * Updates the motion state's world transform from the GamePlay Node object's world transform.
+         */
+        void updateTransformFromNode() const;
+        
+        /**
+         * Sets the center of mass offset for the associated collision shape.
+         */
+        void setCenterOfMassOffset(const Vector3& centerOfMassOffset);
+        
+    private:
+        
+        Node* _node;
+        PhysicsCollisionObject* _collisionObject;
+        btTransform _centerOfMassOffset;
+        mutable btTransform _worldTransform;
+    };
+
+    /** 
+     * The PhysicsCollisionObject's motion state.
+     */
+    PhysicsMotionState* _motionState;
 };
 
 }
