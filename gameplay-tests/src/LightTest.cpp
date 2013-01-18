@@ -7,7 +7,6 @@
 
 static const float GROUND_WIDTH = 16.0f;
 static const float GROUND_HEIGHT = 16.0f;
-static const float GROUND_REPEAT_TEXTURE = 16.0f;
 static const float INPUT_SENSITIVITY = 0.05f;
 
 LightTest::LightTest()
