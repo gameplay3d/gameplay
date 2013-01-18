@@ -9,13 +9,12 @@ namespace gameplay
 static std::vector<Gamepad*> __gamepads;
 
 Gamepad::Gamepad(const char* formPath)
-    : _id(""), _handle(0), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL)
+    : _handle(0), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
-    _id = _form->getId();
     _vendorString = "None";
     _productString = "Virtual";
 
@@ -32,10 +31,10 @@ Gamepad::Gamepad(const char* formPath)
     bindGamepadControls(_form);
 }
 
-Gamepad::Gamepad(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                  unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-    : _id(id), _handle(handle), _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
-      _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _form(NULL)
+    : _handle(handle), _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
+      _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _form(NULL), _buttons(0)
 {
 }
 
@@ -47,10 +46,11 @@ Gamepad::~Gamepad()
     }
 }
 
-Gamepad* Gamepad::add(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-    unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
+Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                      unsigned int vendorId, unsigned int productId, 
+                      const char* vendorString, const char* productString)
 {
-    Gamepad* gamepad = new Gamepad(id, handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
 
     __gamepads.push_back(gamepad);
     Game::getInstance()->gamepadEvent(CONNECTED_EVENT, gamepad);
@@ -129,28 +129,18 @@ void Gamepad::bindGamepadControls(Container* container)
             Button* button = (Button*)control;
             _uiButtons[button->getDataBinding()] = button;
             _buttonCount++;
-        }   
-    }
-}
-
-Gamepad* Gamepad::getGamepad(GamepadHandle handle)
-{
-    std::vector<Gamepad*>::const_iterator it;
-    for (it = __gamepads.begin(); it != __gamepads.end(); it++)
-    {
-        Gamepad* gamepad = *it;
-        if (!gamepad->isVirtual() && gamepad->_handle == handle)
-        {
-            return gamepad;
         }
     }
-
-    return NULL;
 }
 
-std::vector<Gamepad*>* Gamepad::getGamepads()
+unsigned int Gamepad::getGamepadCount()
 {
-    return &__gamepads;
+    return __gamepads.size();
+}
+
+Gamepad* Gamepad::getGamepad(unsigned int index)
+{
+    return __gamepads[index];
 }
 
 Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
@@ -198,11 +188,6 @@ Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
 
     GP_WARN("Unknown GamepadButton string.");
     return BUTTON_A;
-}
-
-const char* Gamepad::getId() const
-{
-    return _id.c_str();
 }
 
 const unsigned int Gamepad::getVendorId() const

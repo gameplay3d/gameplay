@@ -104,6 +104,8 @@ void RacerGame::initialize()
     _brakingSound = AudioSource::create("res/common/braking.wav");
     _brakingSound->setLooped(false);
     _brakingSound->setGain(0.5f);
+
+    _gamepad = getGamepad(0);
 }
 
 bool RacerGame::initializeScene(Node* node)

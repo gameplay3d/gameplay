@@ -238,6 +238,7 @@ public:
      * @param contactIndex An integer to identify this contact point within the currently active touch set.
      *
      * @see Touch::TouchEvent
+     * @script{ignore}
      */
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
@@ -250,6 +251,7 @@ public:
      * 
      * @see Keyboard::KeyEvent
      * @see Keyboard::Key
+     * @script{ignore}
      */
     static void keyEventInternal(Keyboard::KeyEvent evt, int key);
 
@@ -265,18 +267,39 @@ public:
      * @return True if the mouse event is consumed or false if it is not consumed.
      *
      * @see Mouse::MouseEvent
+     * @script{ignore}
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
-     * Gamepad callback on gamepad events. This is called only from platform when gamepad are connectd and disconnected.
+     * Gamepad callback from platform on gamepad events when a gamepad is connected.
      *
-     * @param evt The mouse event that occurred.
-     * @param gamepad The gamepad that is either connected or disconnected from the platform.
+     * @param handle The gamepad handle
+     * @param buttonCount The number of buttons
+     * @param joystickCount The number of joysticks
+     * @param triggerCount The number of triggers
+     * @param vendorId The vendor id
+     * @param productId The product id
+     * @param vendorString The vendor string/name.
+     * @param productString The product string/name.
      *
      * @see Gamepad::GamepadEvent
+     * @script{ignore}
      */
-    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    static void gamepadEventConnectedInternal(GamepadHandle handle, 
+                                              unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                              unsigned int vendorId, unsigned int productId, 
+                                              const char* vendorString, const char* productString);
+
+    /**
+     * Gamepad callback from platform on gamepad events when a gamepad is disconnected.
+     *
+     * @param handle The gamepad handle
+     *
+     * @see Gamepad::GamepadEvent
+     * @script{ignore}
+     */
+    static void gamepadEventDisconnectedInternal(GamepadHandle handle);
 
     /**
      * Opens an URL in an external browser, if available.

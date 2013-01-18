@@ -29,8 +29,11 @@ protected:
 
 private:
 
-    Gamepad* _virtualGamepad;
-    Gamepad* _gamepads[2];
+    void updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player);
+
+    Gamepad* _player1;
+    Gamepad* _player2;
+    
     Font* _font;
     std::string _status;
 };

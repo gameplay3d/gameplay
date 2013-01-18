@@ -186,7 +186,8 @@ void CharacterGame::jump()
 void CharacterGame::kick()
 {
     if (!_jumpClip->isPlaying())
-        play("kick", false, 1.0f);
+        play("kick", false, 1.75f);
+    _kicking = true;
 }
 
 bool CharacterGame::isOnFloor() const
@@ -207,6 +208,8 @@ void CharacterGame::update(float elapsedTime)
         _hasBall = false;
         _applyKick = false;
     }
+    if (!_kickClip->isPlaying())
+        _kicking = false;
 
     _gamepad->update(elapsedTime);
 
@@ -239,9 +242,18 @@ void CharacterGame::update(float elapsedTime)
 
     _currentDirection.set(Vector2::zero());
 
-    if (_gamepad->getJoystickCount() > 0)
+    if (!_kicking)
     {
-        _gamepad->getJoystickValues(0, &_currentDirection);
+        if (_gamepad->getJoystickCount() > 0)
+        {
+            _gamepad->getJoystickValues(0, &_currentDirection);
+        }
+    }
+    if (_gamepad->getJoystickCount() > 1)
+    {
+        Vector2 out;
+        _gamepad->getJoystickValues(1, &out);
+       _character->getNode()->rotateY(-MATH_DEG_TO_RAD(out.x * 2.0f));
     }
     
     if (_currentDirection.isZero())
