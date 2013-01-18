@@ -982,6 +982,12 @@ int Platform::enterMessagePump()
                     Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
                     __connectedXInput[i] = true;
                 }
+                else if (XInputGetState(i, &__xInputState) != NO_ERROR && __connectedXInput[i])
+                {
+                    // Gamepad was just disconnected.
+                    __connectedXInput[i] = false;
+                    Platform::gamepadEventDisconnectedInternal(i);
+                }
             }
 #endif
 
@@ -1231,12 +1237,6 @@ void Platform::pollGamepadState(Gamepad* gamepad)
                 gamepad->_triggers[i] = (float)trigger / 255.0f;
             }
         }
-    }
-    else
-    {
-        // Gamepad was disconnected.
-        __connectedXInput[gamepad->_handle] = false;
-        Platform::gamepadEventDisconnectedInternal(gamepad->_handle);
     }
 }
 #else

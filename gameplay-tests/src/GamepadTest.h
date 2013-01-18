@@ -31,6 +31,8 @@ private:
 
     void updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player);
 
+    const char* getStringFromButtonMapping(Gamepad::ButtonMapping mapping);
+    
     Gamepad* _gamepad;
     
     Font* _font;
