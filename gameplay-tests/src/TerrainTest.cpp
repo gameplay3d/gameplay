@@ -41,9 +41,6 @@ void TerrainTest::initialize()
 
     // Use script camera for navigation
 	enableScriptCamera(true);
-
-    // HACK - remove
-    getGamepad(0)->getForm()->setEnabled(false);
 }
 
 void TerrainTest::finalize()
