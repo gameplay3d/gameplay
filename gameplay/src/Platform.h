@@ -235,7 +235,7 @@ public:
      * @param evt The touch event that occurred.
      * @param x The x position of the touch in pixels. Left edge is zero.
      * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     * @param contactIndex An integer to identify this contact point within the currently active touch set.
      *
      * @see Touch::TouchEvent
      */
@@ -267,6 +267,16 @@ public:
      * @see Mouse::MouseEvent
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Gamepad callback on gamepad events. This is called only from platform when gamepad are connectd and disconnected.
+     *
+     * @param evt The mouse event that occurred.
+     * @param gamepad The gamepad that is either connected or disconnected from the platform.
+     *
+     * @see Gamepad::GamepadEvent
+     */
+    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
      * Opens an URL in an external browser, if available.
