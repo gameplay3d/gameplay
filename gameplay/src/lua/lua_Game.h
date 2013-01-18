@@ -23,6 +23,8 @@ int lua_Game_getAudioController(lua_State* state);
 int lua_Game_getAudioListener(lua_State* state);
 int lua_Game_getConfig(lua_State* state);
 int lua_Game_getFrameRate(lua_State* state);
+int lua_Game_getGamepad(lua_State* state);
+int lua_Game_getGamepadCount(lua_State* state);
 int lua_Game_getHeight(lua_State* state);
 int lua_Game_getPhysicsController(lua_State* state);
 int lua_Game_getScriptController(lua_State* state);

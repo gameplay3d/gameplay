@@ -14,11 +14,18 @@ namespace gameplay
 class Game;
 
 /**
- * Defines a platform.
+ * Defines a platform abstraction.
+ * 
+ * This class has only a few public methods for creating a platform 
+ *
  */
 class Platform
 {
 public:
+
+    friend class Game;
+    friend class Gamepad;
+    friend class ScreenDisplayer;
 
     /**
      * Destructor.
@@ -48,6 +55,8 @@ public:
      * @return The platform message pump return code.
      */
     int enterMessagePump();
+
+private:
     
     /**
      * This method informs the platform that the game is shutting down 
@@ -230,55 +239,6 @@ public:
     static void pollGamepadState(Gamepad* gamepad);
 
     /**
-     * Touch callback on touch events. This method handles passing the touch event to the form or to the game.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex An integer to identify this contact point within the currently active touch set.
-     *
-     * @see Touch::TouchEvent
-     */
-    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
-     * Keyboard callback on keyPress events.
-     *
-     * @param evt The key event that occurred.
-     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
-     *            If evt is KEY_CHAR then key is the unicode value of the character.
-     * 
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
-
-    /**
-     * Mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
-     * then it is interpreted as a touch event instead.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     *
-     * @return True if the mouse event is consumed or false if it is not consumed.
-     *
-     * @see Mouse::MouseEvent
-     */
-    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-
-    /**
-     * Gamepad callback on gamepad events. This is called only from platform when gamepad are connectd and disconnected.
-     *
-     * @param evt The mouse event that occurred.
-     * @param gamepad The gamepad that is either connected or disconnected from the platform.
-     *
-     * @see Gamepad::GamepadEvent
-     */
-    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad);
-
-    /**
      * Opens an URL in an external browser, if available.
      *
      * @param url URL to be opened.
@@ -286,8 +246,6 @@ public:
      * @return True if URL was opened successfully, false otherwise.
      */
     static bool launchURL(const char* url);
-    
-private:
 
     /**
      * Constructor.
@@ -298,6 +256,46 @@ private:
      * Constructor.
      */
     Platform(const Platform& copy);
+
+public:
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                              unsigned int vendorId, unsigned int productId, 
+                                              const char* vendorString, const char* productString);
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventDisconnectedInternal(GamepadHandle handle);
+
+private:
 
     Game* _game;                // The game this platform is interfacing with.
 };
