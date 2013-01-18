@@ -404,7 +404,7 @@ double getMachTimeInMilliseconds()
             [[self buttons] addObject:button];
         }
     }
-    // Go back and get proprietary information (e.g. triggers) and asscoaite with appropriate values
+    // Go back and get proprietary information (e.g. triggers) and associate with appropriate values
     // Example for other trigger buttons
     uint32_t vendorID = [self vendorID];
     uint32_t productID = [self productID];
@@ -420,28 +420,29 @@ double getMachTimeInMilliseconds()
         {
             if((unsigned long)cookie == 39)
             {
-                OSXGamepadButton *leftTrigger = [self buttonWithCookie:(IOHIDElementCookie)9];
-                if(leftTrigger)
+                OSXGamepadButton *leftTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)9];
+                if(leftTriggerButton)
                 {
-                    [leftTrigger setTriggerElement:hidElement];
-                    [[self triggerButtons] addObject:leftTrigger];
-                    //[[self buttons] removeObject:leftTrigger]; Defer to gamepad team on this line..  not sure how they intend to tackle
+                    [leftTriggerButton setTriggerElement:hidElement];
+                    [[self triggerButtons] addObject:leftTriggerButton];
+                    [[self buttons] removeObject:leftTriggerButton]; // Defer to gamepad team on this line..  not sure how they intend to tackle
                 }
             }
             if((unsigned long)cookie == 40)
             {
-                OSXGamepadButton *rightTrigger = [self buttonWithCookie:(IOHIDElementCookie)10];
-                if(rightTrigger)
+                OSXGamepadButton *rightTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)10];
+                if(rightTriggerButton)
                 {
-                    [rightTrigger setTriggerElement:hidElement];
-                    [[self triggerButtons] addObject:rightTrigger];
-                    //[[self buttons] removeObject:rightTrigger];
+                    [rightTriggerButton setTriggerElement:hidElement];
+                    [[self triggerButtons] addObject:rightTriggerButton];
+                    [[self buttons] removeObject:rightTriggerButton];
                 }
             }
         }
     }
     
 }
+
 - (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie {
     for(OSXGamepadButton *b in [self buttons]) {
         if([b cookie] == cookie) return b;
@@ -466,6 +467,7 @@ double getMachTimeInMilliseconds()
         IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
         IOHIDQueueAddElement([self queueRef], hidElement);
     }
+    
     IOHIDQueueScheduleWithRunLoop([self queueRef], CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     
     return true;
@@ -578,6 +580,10 @@ double getMachTimeInMilliseconds()
     {
         [r addObject:(id)[a element]];
     }
+    for(OSXGamepadButton* t in [self triggerButtons])
+    {
+        [r addObject:(id)[t element]];
+    }
     return [NSArray arrayWithArray:r];
 }
 - (void)hidValueAvailable:(IOHIDValueRef)value
@@ -613,9 +619,14 @@ double getMachTimeInMilliseconds()
             break;
         }
     }
+
 }
 
+
 @end
+
+
+
 
 @interface View : NSOpenGLView <NSWindowDelegate>
 {
@@ -625,8 +636,10 @@ double getMachTimeInMilliseconds()
 
 @protected
     Game* _game;
-    unsigned int _gestureEvents;    
-}
+    unsigned int _gestureEvents;
+}    
+- (void) detectGamepads: (Game*) game;
+
 @end
 
 
@@ -651,6 +664,43 @@ double getMachTimeInMilliseconds()
     return kCVReturnSuccess;
 }
 
+- (void) detectGamepads: (Game*) game
+{
+    // Locate any newly connected devices
+    for(OSXGamepad* gamepad in __gamepads)
+    {
+        NSNumber* locationID = [gamepad locationID];
+        if([__activeGamepads objectForKey:locationID] == NULL)
+        {            
+            // Gameplay::add is friended to Platform, but we're not in Platform right now.
+            Platform::gamepadEventConnectedInternal((unsigned int)[locationID intValue],
+                                                    [gamepad numberOfButtons],
+                                                    [gamepad numberOfSticks],
+                                                    0, //[gamepad numberOfTriggerButtons], PS3 triggers are not working yet
+                                                    [gamepad vendorID],
+                                                    [gamepad productID],
+                                                    [[gamepad manufacturerName] cStringUsingEncoding:NSASCIIStringEncoding],
+                                                    [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding]);
+
+            [__activeGamepads setObject:locationID forKey:locationID];
+        }
+    }
+    
+    // Detect any disconnected gamepads
+    NSMutableArray* deadGamepads = [NSMutableArray array];
+    for(NSNumber* locationID in __activeGamepads)
+    {
+        OSXGamepad* gamepad = gamepadForLocationID(locationID);
+        if(gamepad == NULL)
+        {
+            NSNumber* gameHandle = [__activeGamepads objectForKey:locationID];
+            Platform::gamepadEventDisconnectedInternal((unsigned int)[locationID intValue]);
+            [deadGamepads addObject:locationID];
+        }
+    }
+    [__activeGamepads removeObjectsForKeys:deadGamepads];
+}
+
 -(void) update
 {       
     [gameLock lock];
@@ -659,6 +709,8 @@ double getMachTimeInMilliseconds()
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
     if (_game)
     {
+        [self detectGamepads: _game];
+        
         _game->frame();
     }
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
@@ -879,7 +931,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) mouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__leftMouseDown && !__mouseCaptured)
+    if (__leftMouseDown)
     {
         [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
     }
@@ -1712,7 +1764,7 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     
     return result;
 }
-
+    
 void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                                              unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {
@@ -1758,6 +1810,60 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
+    OSXGamepad* gp = gamepadForGameHandle(gamepad->_handle);
+    
+    if (gp)
+    {
+        static const unsigned int PS3Mapping[17] = {
+            Gamepad::BUTTON_MENU1,  // 0x0001
+            Gamepad::BUTTON_L3,     // 0x0002
+            Gamepad::BUTTON_R3,     // 0x0004
+            Gamepad::BUTTON_MENU2,  // 0x0008
+            Gamepad::BUTTON_UP,     // 0x0010
+            Gamepad::BUTTON_RIGHT,  // 0x0020
+            Gamepad::BUTTON_DOWN,   // 0x0040
+            Gamepad::BUTTON_LEFT,   // 0x0080
+            Gamepad::BUTTON_L2,     // 0x0100
+            Gamepad::BUTTON_R2,     // 0x0200
+            Gamepad::BUTTON_L1,     // 0x0400
+            Gamepad::BUTTON_R1,     // 0x0800
+            Gamepad::BUTTON_Y,      // 0x1000
+            Gamepad::BUTTON_B,      // 0x2000
+            Gamepad::BUTTON_A,      // 0x4000
+            Gamepad::BUTTON_X,      // 0x8000
+            Gamepad::BUTTON_MENU3   // 0x10000
+        };
+        
+        const unsigned int* mapping = NULL;
+        if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
+            gamepad->_productId == SONY_USB_PS3_PRODUCT_ID)
+        {
+            mapping = PS3Mapping;
+        }
+        
+        gamepad->_buttons = 0;
+        //for (OSXGamepadButton *b in [gp buttons])
+        for (int i = 0; i < [gp numberOfButtons]; ++i)
+        {
+            OSXGamepadButton* b = [gp buttonAtIndex: i];
+            if ([b state])
+            {
+                // This button is down.
+                gamepad->_buttons |= (1 << mapping[i]);
+            }
+        }
+
+        for (unsigned int i = 0; i < [gp numberOfSticks]; ++i)
+        {
+            gamepad->_joysticks[i].x = [[gp axisAtIndex: i*2] calibratedValue];
+            gamepad->_joysticks[i].y = [[gp axisAtIndex: i*2 + 1] calibratedValue];
+        }
+        
+        for (unsigned int i = 0; i < [gp numberOfTriggerButtons]; ++i)
+        {
+            gamepad->_triggers[i] = [[gp triggerButtonAtIndex: i] calibratedStateValue];
+        }
+    }
 }
 
 }
