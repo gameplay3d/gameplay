@@ -186,7 +186,7 @@ void Game::shutdown()
         unsigned int gamepadCount = Gamepad::getGamepadCount();
         for (unsigned int i = 0; i < gamepadCount; i++)
         {
-            Gamepad* gamepad = Gamepad::getGamepad(i);
+            Gamepad* gamepad = Gamepad::getGamepad(i, false);
             SAFE_DELETE(gamepad);
         }
 
@@ -576,13 +576,24 @@ void Game::loadGamepads()
     {
         // Check if there are any virtual gamepads included in the .config file.
         // If there are, create and initialize them.
-        Properties* gamepadProperties = _properties->getNamespace("gamepads", true);
-        if (gamepadProperties && gamepadProperties->exists("form"))
+        Properties* inner = _properties->getNextNamespace();
+        while (inner != NULL)
         {
-            const char* gamepadFormPath = gamepadProperties->getString("form");
-            GP_ASSERT(gamepadFormPath);
-            Gamepad* gamepad = Gamepad::add(gamepadFormPath);
-            GP_ASSERT(gamepad);
+            std::string spaceName(inner->getNamespace());
+            // This namespace was accidentally named "gamepads" originally but we'll keep this check
+            // for backwards compatibility.
+            if (spaceName == "gamepads" || spaceName == "gamepad")
+            {
+                if (inner->exists("form"))
+                {
+                    const char* gamepadFormPath = inner->getString("form");
+                    GP_ASSERT(gamepadFormPath);
+                    Gamepad* gamepad = Gamepad::add(gamepadFormPath);
+                    GP_ASSERT(gamepad);
+                }
+            }
+
+            inner = _properties->getNextNamespace();
         }
     }
 }
