@@ -11,6 +11,10 @@ GamepadTest::GamepadTest()
 void GamepadTest::finalize()
 {
     SAFE_RELEASE(_font);
+    if (_virtualGamepad)
+    {
+        _virtualGamepad->getForm()->setEnabled(false);
+    }
 }
 
 void GamepadTest::initialize()
@@ -30,6 +34,12 @@ void GamepadTest::initialize()
         Gamepad* gamepad = *it;
         if (gamepad)
         {
+            if (gamepad->isVirtual())
+            {
+                gamepad->getForm()->setEnabled(true);
+                _virtualGamepad = gamepad;
+            }
+
             _gamepads[i] = gamepad;
             i++;
         }
