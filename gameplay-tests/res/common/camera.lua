@@ -1,7 +1,7 @@
 
 -- Move speed (m/s)
-MOVE_SPEED_NORMAL = 20
-MOVE_SPEED_FAST = 2500
+MOVE_SPEED_NORMAL = 1
+MOVE_SPEED_FAST = 5
 
 -- Move flags
 MOVE_FORWARD = 1
@@ -34,11 +34,17 @@ function camera_setActive(flag)
         local eulers = camera_quatToEuler(_cameraNode:getRotation())
         _yaw = eulers:y()
         _pitch = eulers:x()
+        print("x: " .. eulers:x() .. " - y: " .. eulers:y() .. " - roll: " .. eulers:z())
     else
 		-- Release scene and camera
 		_scene = nil
 		_cameraNode = nil
 	end
+end
+
+function camera_setSpeed(normal, fast)
+    MOVE_SPEED_NORMAL = normal
+    MOVE_SPEED_FAST = fast
 end
 
 function camera_update(elapsedTime)
@@ -167,10 +173,10 @@ function camera_touchEvent(evt, x, y, contactIndex)
     	if contactIndex == 0 then
 	        _delta:set(x - _touch:x(), y - _touch:y())
 	        _touch:set(x, y)
-	        _pitch = _pitch + -math.rad(_delta:y() * 0.5)
-	        _yaw = _yaw + math.rad(_delta:x() * 0.5)
+	        _pitch = _pitch - math.rad(_delta:y() * 0.5)
+	        _yaw = _yaw - math.rad(_delta:x() * 0.5)
 	        _cameraNode:setRotation(Quaternion.identity())
-	        _cameraNode:rotateY(-_yaw)
+	        _cameraNode:rotateY(_yaw)
 	        _cameraNode:rotateX(_pitch)
 	    end
     end

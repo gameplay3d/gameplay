@@ -41,6 +41,7 @@ void TerrainTest::initialize()
 
     // Use script camera for navigation
 	enableScriptCamera(true);
+    setScriptCameraSpeed(100, 1000);
 
     // HACK - remove
     Gamepad::getGamepads()->at(0)->getForm()->setEnabled(false);
@@ -68,7 +69,7 @@ void TerrainTest::update(float elapsedTime)
 		float height = _terrain->getHeight(pos.x, pos.z);
 
 		// Snap our camera to the ground
-		camera->setTranslationY(height + 5);
+		camera->setTranslationY(height + 10);
 	}
 
     // Keep the sky centered around the viewer
@@ -174,5 +175,9 @@ void TerrainTest::controlEvent(Control* control, EventType evt)
     else if (strcmp(control->getId(), "snapToGround") == 0)
     {
         _snapToGround = static_cast<CheckBox*>(control)->isChecked();
+        if (_snapToGround)
+            setScriptCameraSpeed(20, 80);
+        else
+            setScriptCameraSpeed(200, 800);
     }
 }

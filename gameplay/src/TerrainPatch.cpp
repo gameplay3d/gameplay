@@ -561,8 +561,11 @@ unsigned int TerrainPatch::getVisibleTriangleCount() const
 
     // Does the current camera intersect this patch at all?
     BoundingBox bounds = getBoundingBox(true);
-    if (!camera->getFrustum().intersects(bounds))
-        return 0;
+    if (_terrain->_flags & Terrain::FRUSTUM_CULLING)
+    {
+        if (!camera->getFrustum().intersects(bounds))
+            return 0;
+    }
 
     // Return the triangle count of the LOD level depending on the camera
     size_t lod = computeLOD(camera, bounds);

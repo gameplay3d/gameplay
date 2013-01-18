@@ -190,6 +190,11 @@ void Test::enableScriptCamera(bool enable)
 	Game::getInstance()->getScriptController()->executeFunction<void>("camera_setActive", "b", enable);
 }
 
+void Test::setScriptCameraSpeed(float normal, float fast)
+{
+    Game::getInstance()->getScriptController()->executeFunction<void>("camera_setSpeed", "ff", normal, fast);
+}
+
 bool Test::isGestureSupported(Gesture::GestureEvent evt)
 {
     return Game::getInstance()->isGestureSupported(evt);
