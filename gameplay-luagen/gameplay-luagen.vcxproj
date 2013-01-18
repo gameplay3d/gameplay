@@ -126,10 +126,10 @@
       </Message>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(ProjectDir)..\bin\win32\$(TargetFileName)</Command>
+      <Command>copy $(TargetPath) $(ProjectDir)..\bin\windows\$(TargetFileName)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Copying executable to bin/win32 folder ...</Message>
+      <Message>Copying executable to bin/windows folder ...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

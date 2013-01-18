@@ -71,12 +71,15 @@ void luaRegister_Slider()
         {"getTextRightToLeft", lua_Slider_getTextRightToLeft},
         {"getType", lua_Slider_getType},
         {"getValue", lua_Slider_getValue},
+        {"getValueTextAlignment", lua_Slider_getValueTextAlignment},
+        {"getValueTextPrecision", lua_Slider_getValueTextPrecision},
         {"getWidth", lua_Slider_getWidth},
         {"getX", lua_Slider_getX},
         {"getY", lua_Slider_getY},
         {"getZIndex", lua_Slider_getZIndex},
         {"isContainer", lua_Slider_isContainer},
         {"isEnabled", lua_Slider_isEnabled},
+        {"isValueTextVisible", lua_Slider_isValueTextVisible},
         {"isVisible", lua_Slider_isVisible},
         {"release", lua_Slider_release},
         {"removeListener", lua_Slider_removeListener},
@@ -114,6 +117,9 @@ void luaRegister_Slider()
         {"setTextColor", lua_Slider_setTextColor},
         {"setTextRightToLeft", lua_Slider_setTextRightToLeft},
         {"setValue", lua_Slider_setValue},
+        {"setValueTextAlignment", lua_Slider_setValueTextAlignment},
+        {"setValueTextPrecision", lua_Slider_setValueTextPrecision},
+        {"setValueTextVisible", lua_Slider_setValueTextVisible},
         {"setVisible", lua_Slider_setVisible},
         {"setWidth", lua_Slider_setWidth},
         {"setZIndex", lua_Slider_setZIndex},
@@ -2530,6 +2536,76 @@ int lua_Slider_getValue(lua_State* state)
     return 0;
 }
 
+int lua_Slider_getValueTextAlignment(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Slider* instance = getInstance(state);
+                Font::Justify result = instance->getValueTextAlignment();
+
+                // Push the return value onto the stack.
+                lua_pushstring(state, lua_stringFromEnum_FontJustify(result));
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Slider_getValueTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_getValueTextPrecision(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Slider* instance = getInstance(state);
+                unsigned int result = instance->getValueTextPrecision();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Slider_getValueTextPrecision - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Slider_getWidth(lua_State* state)
 {
     // Get the number of parameters.
@@ -2727,6 +2803,41 @@ int lua_Slider_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Slider_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_isValueTextVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Slider* instance = getInstance(state);
+                bool result = instance->isValueTextVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Slider_isValueTextVisible - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4524,6 +4635,114 @@ int lua_Slider_setValue(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Slider_setValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_setValueTextAlignment(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                Font::Justify param1 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 2));
+
+                Slider* instance = getInstance(state);
+                instance->setValueTextAlignment(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Slider_setValueTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_setValueTextPrecision(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                Slider* instance = getInstance(state);
+                instance->setValueTextPrecision(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Slider_setValueTextPrecision - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Slider_setValueTextVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Slider* instance = getInstance(state);
+                instance->setValueTextVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Slider_setValueTextVisible - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

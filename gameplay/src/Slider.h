@@ -110,16 +110,46 @@ public:
      */
     const char* getType() const;
 
-    void setValueTextVisible(bool displayValue);
+    /**
+     * Sets if the slider value text is rendered below the control.
+     * 
+     * @param visible If the slider value text is rendered below the control. 
+     */
+    void setValueTextVisible(bool visible);
 
-    bool getValueTextVisible() const;
+    /**
+     * Gets if the slider value text is rendered below the control.
+     *
+     * @return true if the slider value text is rendered below the control, false if otherwise.
+     */
+    bool isValueTextVisible() const;
 
+    /**
+     * Sets the slider value text alignment.
+     * 
+     * @param alignment the slider value text alignment. 
+     */
     void setValueTextAlignment(Font::Justify alignment);
 
+    /**
+     * Gets the slider value text alignment.
+     *
+     * @return The slider value text alignment. 
+     */
     Font::Justify getValueTextAlignment() const;
 
+    /**
+     * Sets the precision, which is the number floating point digits after the decimal.
+     *
+     * @param precision The number floating point precision/digits after the decimal.
+     */
     void setValueTextPrecision(unsigned int precision);
 
+    /**
+     * Gets the precision, which is the number floating point digits after the decimal.
+     *
+     * @return The number floating point precision/digits after the decimal.
+     */
     unsigned int getValueTextPrecision() const;
 
     /**
@@ -162,7 +192,7 @@ protected:
      * @param evt The touch event that occurred.
      * @param x The x position of the touch in pixels. Left edge is zero.
      * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     * @param contactIndex An integer to identify this contact point within the currently active touch set.
      *
      * @return Whether the touch event was consumed by the control.
      *

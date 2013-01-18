@@ -106,7 +106,7 @@ void* debugAlloc(std::size_t size, const char* file, int line)
     mem += sizeof(MemoryAllocationRecord);
 
     rec->address = (unsigned long)mem;
-    rec->size = size;
+    rec->size = (unsigned int)size;
     rec->file = file;
     rec->line = line;
     rec->next = __memoryAllocations;
@@ -114,7 +114,7 @@ void* debugAlloc(std::size_t size, const char* file, int line)
 
     // Capture the stack frame (up to MAX_STACK_FRAMES) if we 
     // are running on Windows and the user has enabled it.
-#if defined(WIN32)
+#if defined(WIN32) && defined(_M_IX86)
     rec->trackStackTrace = __trackStackTrace;
     if (rec->trackStackTrace)
     {

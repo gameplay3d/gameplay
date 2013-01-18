@@ -77,7 +77,7 @@ protected:
      * @param evt The touch event that occurred.
      * @param x The x position of the touch in pixels. Left edge is zero.
      * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     * @param contactIndex An integer to identify this contact point within the currently active touch set.
      *
      * @return Whether the touch event was consumed by the control.
      *
@@ -90,8 +90,18 @@ protected:
      */
     const char* getType() const;
 
+    /**
+     * Gets the data binding index for this control.
+     *
+     * @return The data binding index for control. 
+     */
     const unsigned int getDataBinding() const;
 
+    /**
+     * Sets the data binding provider for this control.
+     *
+     * @param dataBinding The data binding index for control. 
+     */
     void setDataBinding(unsigned int dataBinding);
 
 private:
