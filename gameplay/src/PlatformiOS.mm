@@ -1388,7 +1388,11 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     {
         return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
     }
-}    
+}
+
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+}
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {

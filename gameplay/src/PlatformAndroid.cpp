@@ -1252,6 +1252,10 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+}
+
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
     // Pinch currently not implemented

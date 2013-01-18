@@ -9,6 +9,7 @@ int lua_Platform__gc(lua_State* state);
 int lua_Platform_enterMessagePump(lua_State* state);
 int lua_Platform_static_canExit(lua_State* state);
 int lua_Platform_static_displayKeyboard(lua_State* state);
+int lua_Platform_static_gamepadEventInternal(lua_State* state);
 int lua_Platform_static_getAbsoluteTime(lua_State* state);
 int lua_Platform_static_getAccelerometerValues(lua_State* state);
 int lua_Platform_static_getDisplayHeight(lua_State* state);
