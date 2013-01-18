@@ -68,14 +68,8 @@
         <copy file="../res/propulsion_glow.png" tofile="assets/res/propulsion_glow.png"/>
         <copy file="../res/spaceship.gpb" tofile="assets/res/spaceship.gpb"/>
         <copy file="../res/spaceship.wav" tofile="assets/res/spaceship.wav"/>
-        <copy file="../../../gameplay/res/shaders/colored.vert" tofile="assets/res/shaders/colored.vert"/>
-        <copy file="../../../gameplay/res/shaders/colored.frag" tofile="assets/res/shaders/colored.frag"/>
-        <copy file="../../../gameplay/res/shaders/textured.vert" tofile="assets/res/shaders/textured.vert"/>
-        <copy file="../../../gameplay/res/shaders/textured.frag" tofile="assets/res/shaders/textured.frag"/>
-        <copy file="../../../gameplay/res/shaders/textured-unlit.vert" tofile="assets/res/shaders/textured-unlit.vert"/>
-        <copy file="../../../gameplay/res/shaders/textured-unlit.frag" tofile="assets/res/shaders/textured-unlit.frag"/>
-        <copy todir="assets/res/shaders/lib">
-            <fileset dir="../../../gameplay/res/shaders/lib"/>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>

@@ -1,0 +1,39 @@
+terrain
+{
+	heightmap
+	{
+		path = res/common/terrain/heightmap.raw
+		size = 256, 256
+	}
+
+	size = 10000, 4000, 10000
+	patchSize = 32
+	detailLevels = 3
+	skirtScale = 0.1
+
+    normalMap = res/common/terrain/normalmap.dds
+
+	layer rock
+	{
+		texture
+		{
+			path = res/common/terrain/rock.dds
+			repeat = 20,20
+		}
+	}
+
+	layer grass
+	{
+		texture
+		{
+			path = res/common/terrain/grass.dds
+			repeat = 750,750
+		}
+
+		blend
+		{
+			path = res/common/terrain/grass.dds
+            channel = 3
+		}
+	}
+}

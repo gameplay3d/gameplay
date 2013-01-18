@@ -72,7 +72,10 @@
         <copy file="../res/fire.png" tofile="assets/res/fire.png"/>
         <copy file="../res/smoke.particle" tofile="assets/res/smoke.particle"/>
         <copy file="../res/smoke.png" tofile="assets/res/smoke.png"/>
-		<copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
+        <copy todir="assets/res/shaders">
+          <fileset dir="../../../gameplay/res/shaders"/>
+        </copy>
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
     <!-- Import the actual build file.

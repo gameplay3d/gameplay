@@ -2,7 +2,7 @@
 Command-line tool for encoding games assets like true-type fonts and 3D scene files
 into a simple binary-based bundle file format for the gameplay 3D game framework runtime. 
 The 'bin' folder contains pre-built versions of the gameplay-encoder executables for 
-Windows 7, MacOS X and Linux (tested on Ubuntu 12) with support built-in support for:
+Windows 7, MacOS X and Linux Ubuntu 12 (32-bit) with support built-in support for:
 
 ## TrueType Font
 TrueType Fonts represent a standard in defining outline fonts and has become the 
@@ -20,8 +20,17 @@ between several Autodesk content creation packages
 Autodesk® Maya®, Autodesk® 3ds Max®, Autodesk® MotionBuilder®, Autodesk® Mudbox®, and Autodesk® Softimage®
 For more information goto "http://www.autodesk.com/fbx".
 
+## Running gameplay-encoder
+Simply execute the gameplay-encoder command-line executable:
+
+`Usage: gameplay-encoder [options] <file(s)>`
+
+Note: On Linux Ubuntu 12 (64-bit), you must first install the required 32-bit libs via:
+
+`sudo apt-get install ia32-libs`
+
 ## Building gameplay-encoder
-The gameplay-encoder comes pre-built for Windows 7, MacOS X and Linux x64 in the 'bin' folder.
+The gameplay-encoder comes pre-built for Windows 7, MacOS X and Linux Ubuntu 12 (32-bit) in the 'bin' folder.
 However, to build the gameplay-encoder yourself just open either the 
 Visual Studio 2010 project "gameplay-encoder.vccproj" on Windows 7 or
 XCode project "gameplay-encoder.xcodeproj" on MacOSX.
@@ -39,8 +48,8 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
   * Example: fbxsdk-2013.3-mdd.lib
 - Build gameplay-encoder
 
-### Building with FBX Support on Mac OS X using XCode 4.3.2+
-- Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
+### Building with FBX Support on MacOS X using XCode 4
+- Download and install the FBX SDK for MacOS X (http://www.autodesk.com/fbx)
 - Edit the project properties of target "gameplay-encoder".
 - Add Preprocessor Macro "USE_FBX" to both Debug/Release sections. (Build Settings)
 - Add the FBX include directory to Header Search Paths: (Build Settings)
@@ -49,8 +58,8 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
   * Example: /Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a  (Add Other)
 - Build gameplay-encoder
 
-### Building with FBX Support on Linux
-- Download and install the FBX SDK for Mac OS X (http://www.autodesk.com/fbx)
+### Building with FBX Support on Linux Ubuntu 12 (32-bit) using CMake
+- Download and install the FBX SDK for MacOS X (http://www.autodesk.com/fbx)
 - Edit the gameplay-encoder/CMakeLists.txt adding the following:
 - Add the FBX include directory to Header Search Paths: (Build Settings)
   * Example: /usr/include/fbxsdk
@@ -61,7 +70,14 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
   * Example: fbxsdk-2013.3-static
 - Add the FBX library to the library to the add_definitions(-l...) section of the CMakeLists.txt
   * Example -lfbxsdk-2013.3-static
-- Build gameplay-encoder via main cmake .. in build then make.
+- Build gameplay-encoder by uncommenting the last line in the gameplay/CMakeLists.txt and running the CMake build via:
+
+```
+mkdir build
+cd build
+cmake ..
+make
+ ```
 
 ## Bundle File Format
 The gameplay bundle file format is well defined in the gameplay-encoder/gameplay-bundle.txt file.

@@ -34,7 +34,7 @@ form basicControls
     {
         style = topLeftNoBorder
         position = 55, 315
-        size = 190, 80
+        size = 190, 60
         orientation = HORIZONTAL
         min = -100
         max = 100

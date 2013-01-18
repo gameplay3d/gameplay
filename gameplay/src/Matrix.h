@@ -213,7 +213,7 @@ public:
     static void createOrthographicOffCenter(float left, float right, float bottom, float top,
                                             float zNearPlane, float zFarPlane, Matrix* dst);
 
-    /*
+    /**
      * Creates a spherical billboard that rotates around a specified object position.
      *
      * This method computes the facing direction of the billboard from the object position
@@ -230,7 +230,7 @@ public:
     static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
                                 const Vector3& cameraUpVector, Matrix* dst);
 
-    /*
+    /**
      * Creates a spherical billboard that rotates around a specified object position with
      * provision for a safe default orientation.
      *
@@ -243,15 +243,14 @@ public:
      * @param objectPosition The position of the object the billboard will rotate around.
      * @param cameraPosition The position of the camera.
      * @param cameraUpVector The up vector of the camera.
-     * @param cameraForwardVector The forward vector of the camera, used if the positions
-     *                            are too close.
+     * @param cameraForwardVector The forward vector of the camera, used if the positions are too close.
      * @param dst A matrix to store the result in.
      */
     static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
                                 const Vector3& cameraUpVector, const Vector3& cameraForwardVector,
                                 Matrix* dst);
 
-    /*
+    /**
      * Fills in an existing Matrix so that it reflects the coordinate system about a specified Plane.
      *
      * @param plane The Plane about which to create a reflection.
