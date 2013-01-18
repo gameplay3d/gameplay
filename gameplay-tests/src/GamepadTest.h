@@ -29,6 +29,7 @@ protected:
 
 private:
 
+    Gamepad* _virtualGamepad;
     Gamepad* _gamepads[2];
     Font* _font;
     std::string _status;

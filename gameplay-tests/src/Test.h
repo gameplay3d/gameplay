@@ -49,6 +49,7 @@ public:
     AudioController* getAudioController() const;
     AnimationController* getAnimationController() const;
     PhysicsController* getPhysicsController() const;
+    ScriptController* getScriptController() const;
     void displayKeyboard(bool display);
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
     virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);

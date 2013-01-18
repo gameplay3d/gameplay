@@ -135,11 +135,6 @@ void Slider::addListener(Control::Listener* listener, int eventFlags)
 
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -243,11 +238,6 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
 
 bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
         case Mouse::MOUSE_PRESS_LEFT_BUTTON:
