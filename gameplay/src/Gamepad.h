@@ -59,48 +59,6 @@ public:
     };
 
     /**
-     * Get all connected gamepads.
-     *
-     * @return A vector of all connected gamepads.
-     */
-    static std::vector<Gamepad*>* getGamepads();
-
-    /**
-     * Get this gamepad's ID as a string.
-     *
-     * @return This gamepad's ID as a string.
-     */
-    const char* getId() const;
-
-    /**
-     * Get this gamepad's vendor ID.
-     *
-     * @return This gamepad's vendor ID.
-     */
-    const unsigned int getVendorId() const;
-
-    /**
-     * Get this gamepad's product ID.
-     *
-     * @return This gamepad's product ID.
-     */
-    const unsigned int getProductId() const;
-
-    /**
-     * Get this gamepad's vendor name.
-     *
-     * @return This gamepad's vendor name.
-     */
-    const char* getVendorString() const;
-
-    /**
-     * Get this gamepad's product name.
-     *
-     * @return This gamepad's product name.
-     */
-    const char* getProductString() const;
-
-    /**
      * Gets the number of buttons on this gamepad.
      *
      * @return The number of buttons on this gamepad.
@@ -148,6 +106,34 @@ public:
      */
     float getTriggerValue(unsigned int triggerId) const;
 
+   /**
+     * Get this gamepad's vendor ID.
+     *
+     * @return This gamepad's vendor ID.
+     */
+    const unsigned int getVendorId() const;
+
+    /**
+     * Get this gamepad's product ID.
+     *
+     * @return This gamepad's product ID.
+     */
+    const unsigned int getProductId() const;
+
+    /**
+     * Get this gamepad's vendor name.
+     *
+     * @return This gamepad's vendor name.
+     */
+    const char* getVendorString() const;
+
+    /**
+     * Get this gamepad's product name.
+     *
+     * @return This gamepad's product name.
+     */
+    const char* getProductString() const;
+
     /**
      * Returns whether the gamepad is currently represented with a UI form or not.
      *
@@ -191,36 +177,39 @@ private:
     /**
      * Constructs a physical gamepad.
      *
-     * @param id The gamepad's id.
      * @param handle The gamepad handle
      * @param buttonCount the number of buttons on the gamepad. 
      * @param joystickCount the number of joysticks on the gamepad.
      * @param triggerCount the number of triggers on the gamepad.
+     * @param vendorId The vendor id
+     * @param productId The product id
+     * @param vendorString The vendor string/name.
+     * @param productString The product string/name.
      */
-    Gamepad(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-            unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
+    Gamepad(GamepadHandle handle, 
+            unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+            unsigned int vendorId, unsigned int productId, 
+            const char* vendorString, const char* productString);
 
     /**
      * Copy constructor.
      */
     Gamepad(const Gamepad& copy);
 
-    /**
-     * Used by platforms to add gamepads to the set available to games.
-     */
-    static Gamepad* add(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                        unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
+    static Gamepad* add(GamepadHandle handle, 
+                        unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                        unsigned int vendorId, unsigned int productId, 
+                        const char* vendorString, const char* productString);
 
-    /**
-     * Used by Game::loadGamepads() to add virtual gamepads from a game's config file.
-     */
     static Gamepad* add(const char* formPath);
 
     static void remove(GamepadHandle handle);
 
     static void remove(Gamepad* gamepad);
 
-    static Gamepad* getGamepad(GamepadHandle handle);
+    static unsigned int getGamepadCount();
+
+    static Gamepad* getGamepad(unsigned int index);
 
     static ButtonMapping getButtonMappingFromString(const char* string);
 
