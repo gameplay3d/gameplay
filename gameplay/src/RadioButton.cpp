@@ -91,11 +91,6 @@ void RadioButton::addListener(Control::Listener* listener, int eventFlags)
 
 bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
     case Touch::TOUCH_RELEASE:

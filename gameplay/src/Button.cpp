@@ -41,9 +41,6 @@ Button* Button::create(Theme::Style* style, Properties* properties)
 
 bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (!isEnabled())
-        return false;
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS:

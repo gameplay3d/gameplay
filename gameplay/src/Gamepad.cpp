@@ -225,9 +225,12 @@ const char* Gamepad::getProductString() const
 
 void Gamepad::update(float elapsedTime)
 {
-    if (_form && _form->isEnabled())
+    if (_form)
     {
-        _form->update(elapsedTime);
+        if (_form->isEnabled())
+        {
+            _form->update(elapsedTime);
+        }
     }
     else
     {

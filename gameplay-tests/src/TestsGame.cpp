@@ -65,6 +65,18 @@ void TestsGame::initialize()
         }
     }
 	_testSelectForm->setState(Control::FOCUS);
+
+    // Disable virtual gamepads.
+    std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
+    std::vector<Gamepad*>::iterator it;
+    for (it = gamepads->begin(); it != gamepads->end(); it++)
+    {
+        Gamepad* gamepad = *it;
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setEnabled(false);
+        }
+    }
 }
 
 void TestsGame::finalize()
