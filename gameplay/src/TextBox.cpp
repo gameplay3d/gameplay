@@ -49,11 +49,6 @@ void TextBox::addListener(Control::Listener* listener, int eventFlags)
 
 bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {   
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS: 
