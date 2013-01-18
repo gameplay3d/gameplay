@@ -121,9 +121,9 @@ inline unsigned int Game::getGamepadCount() const
     return Gamepad::getGamepadCount();
 }
 
-inline Gamepad* Game::getGamepad(unsigned int index) const
+inline Gamepad* Game::getGamepad(unsigned int index, bool preferPhysical) const
 {
-    return Gamepad::getGamepad(index);
+    return Gamepad::getGamepad(index, preferPhysical);
 }
 
 inline void Game::displayKeyboard(bool display)

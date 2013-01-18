@@ -450,14 +450,14 @@ public:
     /**
      * Gets the gamepad at the specified index. 
      *
-     * The gamepad index can change when connnected and disconnected so you
-     * cannot relie on this other than iterating through them all to display
+     * The gamepad index can change when connected and disconnected so you
+     * cannot rely on this other than iterating through them all to display
      * them or poll them.
      *
      * @param index The index of the gamepad to retrieve.
      * @return The gamepad at the specified index.
      */
-    inline Gamepad* getGamepad(unsigned int index) const;
+    inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 
     /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
