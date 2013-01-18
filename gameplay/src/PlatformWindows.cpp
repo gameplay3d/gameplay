@@ -1278,6 +1278,10 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+}
+
 bool Platform::launchURL(const char* url)
 {
     if (url == NULL || *url == '\0')

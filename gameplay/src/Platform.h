@@ -269,6 +269,16 @@ public:
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
+     * Gamepad callback on gamepad events. This is called only from platform when gamepad are connectd and disconnected.
+     *
+     * @param evt The mouse event that occurred.
+     * @param gamepad The gamepad that is either connected or disconnected from the platform.
+     *
+     * @see Gamepad::GamepadEvent
+     */
+    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
+    /**
      * Opens an URL in an external browser, if available.
      *
      * @param url URL to be opened.
