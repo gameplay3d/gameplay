@@ -9,7 +9,7 @@ namespace gameplay
 static std::vector<Gamepad*> __gamepads;
 
 Gamepad::Gamepad(const char* formPath)
-    : _handle(0), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
+    : _handle(INT_MAX), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
@@ -74,9 +74,9 @@ void Gamepad::remove(GamepadHandle handle)
         Gamepad* gamepad = *it;
         if (gamepad->_handle == handle)
         {
+            it = __gamepads.erase(it);
             Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, gamepad);
             SAFE_DELETE(gamepad);
-            it = __gamepads.erase(it);
         }
         else
         {
@@ -93,9 +93,9 @@ void Gamepad::remove(Gamepad* gamepad)
         Gamepad* g = *it;
         if (g == gamepad)
         {
+            it = __gamepads.erase(it);
             Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, g);
             SAFE_DELETE(gamepad);
-            it = __gamepads.erase(it);
         }
         else
         {
@@ -138,9 +138,36 @@ unsigned int Gamepad::getGamepadCount()
     return __gamepads.size();
 }
 
-Gamepad* Gamepad::getGamepad(unsigned int index)
+Gamepad* Gamepad::getGamepad(unsigned int index, bool preferPhysical)
 {
-    return __gamepads[index];
+    unsigned int count = __gamepads.size();
+    if (index >= count)
+        return NULL;
+
+    if (!preferPhysical)
+        return __gamepads[index];
+
+    // Virtual gamepads are guaranteed to come before physical gamepads in the vector.
+    Gamepad* backupVirtual = NULL;
+    if (index < count && __gamepads[index]->isVirtual())
+    {
+        backupVirtual = __gamepads[index];
+    }
+
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        if (!__gamepads[i]->isVirtual())
+        {
+            // __gamepads[i] is the first physical gamepad 
+            // and should be returned from getGamepad(0, true).
+            if (index + i < count)
+            {
+                return __gamepads[index + i];
+            }
+        }
+    }
+
+    return backupVirtual;
 }
 
 Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
