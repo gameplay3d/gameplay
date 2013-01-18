@@ -613,12 +613,9 @@ double getMachTimeInMilliseconds()
             break;
         }
     }
-
 }
 
-
 @end
-
 
 @interface View : NSOpenGLView <NSWindowDelegate>
 {
@@ -1716,20 +1713,15 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     return result;
 }
 
-void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {
-    if (evt == Gamepad::CONNECTED_EVENT)
-    {
-        Gamepad::add(gamepad->_id.c_str(), 
-                     gamepad->_handle, 
-                     gamepad->_buttonCount, gamepad->_joystickCount, gamepad->_triggerCount,
-                     gamepad->_vendorId, gamepad->_productId, 
-                     gamepad->_vendorString.c_str(), gamepad->_productString.c_str());
-    }
-    else if (evt == Gamepad::DISCONNECTED_EVENT) 
-    {
-        Gamepad::remove(gamepad);
-    }
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+}
+
+void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
+{
+    Gamepad::remove(handle);
 }
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
@@ -1769,7 +1761,6 @@ void Platform::pollGamepadState(Gamepad* gamepad)
 }
 
 }
-
 
 OSXGamepad* gamepadForLocationID(NSNumber* locationID)
 {

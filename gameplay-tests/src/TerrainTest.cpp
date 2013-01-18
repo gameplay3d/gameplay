@@ -43,7 +43,7 @@ void TerrainTest::initialize()
 	enableScriptCamera(true);
 
     // HACK - remove
-    Gamepad::getGamepads()->at(0)->getForm()->setEnabled(false);
+    getGamepad(0)->getForm()->setEnabled(false);
 }
 
 void TerrainTest::finalize()
