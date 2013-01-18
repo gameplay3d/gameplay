@@ -56,7 +56,10 @@ void BillboardTest::initialize()
     {
         Gamepad* gamepad = *it;
         if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setEnabled(true);
             _virtualGamepad = gamepad;
+        }
         else if (!_physicalGamepad)
         {
             _physicalGamepad = gamepad;
@@ -80,6 +83,11 @@ void BillboardTest::finalize()
 		node->release();
     }
     _billboards.clear();
+
+    if (_virtualGamepad)
+    {
+        _virtualGamepad->getForm()->setEnabled(false);
+    }
 }
 
 void BillboardTest::update(float elapsedTime)

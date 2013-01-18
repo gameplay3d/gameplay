@@ -590,7 +590,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled())
+        if (form->isEnabled() && form->isVisible())
         {
             if (form->_node)
             {
@@ -636,7 +636,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled())
+        if (form->isEnabled() && form->isVisible())
         {
             if (form->keyEvent(evt, key))
                 return true;
@@ -654,7 +654,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled())
+        if (form->isEnabled() && form->isVisible())
         {
             if (form->_node)
             {
