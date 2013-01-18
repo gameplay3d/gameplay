@@ -65,7 +65,10 @@ void Audio3DTest::initialize()
     {
         Gamepad* gamepad = getGamepad(i);
         if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setEnabled(true);
             _virtualGamepad = gamepad;
+        }
         else if (!_physicalGamepad)
         {
             _physicalGamepad = gamepad;
@@ -88,6 +91,11 @@ void Audio3DTest::finalize()
         it->second->release();
     }
     _audioNodes.clear();
+
+    if (_virtualGamepad)
+    {
+        _virtualGamepad->getForm()->setEnabled(false);
+    }
 }
 
 void Audio3DTest::update(float elapsedTime)

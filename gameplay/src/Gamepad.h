@@ -225,16 +225,14 @@ private:
 
     static unsigned int getIndexFromMapping(Gamepad::ButtonMapping mapping);
 
-    std::string _id;
     GamepadHandle _handle;        // The handle of the Gamepad.
+    unsigned int _buttonCount;    // Number of buttons.
+    unsigned int _joystickCount;  // Number of joysticks.
+    unsigned int _triggerCount;   // Number of triggers.
     unsigned int _vendorId;
     unsigned int _productId;
     std::string _vendorString;
     std::string _productString;
-
-    unsigned int _buttonCount;    // Number of buttons.
-    unsigned int _joystickCount;  // Number of joysticks.
-    unsigned int _triggerCount;   // Number of triggers.
     
     // Data needed for virtual gamepads.
     Form* _form;

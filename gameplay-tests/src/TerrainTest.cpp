@@ -6,7 +6,7 @@
 #endif
 
 TerrainTest::TerrainTest()
-	: _font(NULL), _scene(NULL), _terrain(NULL), _sky(NULL), _wireframe(false), _snapToGround(true), _normalMap(false)
+	: _font(NULL), _scene(NULL), _terrain(NULL), _sky(NULL), _form(NULL), _formVisible(true), _wireframe(false), _snapToGround(false)
 {
 }
 
@@ -17,21 +17,46 @@ TerrainTest::~TerrainTest()
 void TerrainTest::initialize()
 {
     setVsync(false);
-	_font = Font::create("res/common/arial18.gpb");
+
+    // Load scene
 	_scene = Scene::load("res/common/terrain/test.scene");
 	_terrain = _scene->findNode("terrain")->getTerrain();
     _sky = _scene->findNode("sky");
+
+    // Load font
+	_font = Font::create("res/common/arial18.gpb");
+
+    // Setup form
+    _form = Form::create("res/common/terrain/terrain.form");
+    _formSize.set(_form->getWidth(), _form->getHeight());
+    _form->getControl("plusButton")->addListener(this, Control::Listener::CLICK);
+    _form->getControl("minusButton")->addListener(this, Control::Listener::CLICK);
+    _form->getControl("lod")->addListener(this, Control::Listener::VALUE_CHANGED);
+    _form->getControl("culling")->addListener(this, Control::Listener::VALUE_CHANGED);
+    _form->getControl("wireframe")->addListener(this, Control::Listener::VALUE_CHANGED);
+    _form->getControl("patches")->addListener(this, Control::Listener::VALUE_CHANGED);
+    _form->getControl("snapToGround")->addListener(this, Control::Listener::VALUE_CHANGED);
+    _form->getControl("plusButton")->setVisible(false);
+    _form->getControl("plusButton")->setEnabled(false);
+
+    // Use script camera for navigation
 	enableScriptCamera(true);
+
+    // HACK - remove
+    getGamepad(0)->getForm()->setEnabled(false);
 }
 
 void TerrainTest::finalize()
 {
 	SAFE_RELEASE(_font);
 	SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_form);
 }
 
 void TerrainTest::update(float elapsedTime)
 {
+    _form->update(elapsedTime);
+
     Node* camera = _scene->getActiveCamera()->getNode();
 
 	if (_snapToGround)
@@ -55,15 +80,31 @@ void TerrainTest::render(float elapsedTime)
 {
 	clear(Game::CLEAR_COLOR_DEPTH, 0, 0, 0, 1, 1, 0);
 
+    // Draw scene
 	_scene->visit(this, &TerrainTest::drawScene);
 
-    // Draw stats
-    Node* camera = _scene->getActiveCamera()->getNode();
-    std::ostringstream str;
-    str << "FPS: " << getFrameRate() << "\n"
-        << "Position: (" << camera->getTranslationX() << ", " << camera->getTranslationY() << ", " << camera->getTranslationZ() << ")\n";
+    // Draw form
+    _form->draw();
+
+    // Draw FPS
+    char buffer[1024];
+    sprintf(buffer, "FPS: %d", getFrameRate());
     _font->start();
-    _font->drawText(str.str().c_str(), 5, 5, Vector4(1,1,0,1));
+    _font->drawText(buffer, 65, 18, Vector4::one(), 30);
+    if (_formVisible)
+    {
+        // Draw stats
+        sprintf(buffer,
+            "Total Pathces: %d\n" \
+            "Visible Pathces: %d\n" \
+            "Total Triangles: %d\n" \
+            "Visible Triangles: %d\n",
+            _terrain->getPatchCount(),
+            _terrain->getVisiblePatchCount(),
+            _terrain->getTriangleCount(),
+            _terrain->getVisibleTriangleCount());
+        _font->drawText(buffer, 25, 225, Vector4::one(), 20);
+    }
     _font->finish();
 }
 
@@ -83,21 +124,6 @@ bool TerrainTest::drawScene(Node* node)
 
 void TerrainTest::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    if (evt == Keyboard::KEY_PRESS)
-    {
-        switch (key)
-        {
-        case Keyboard::KEY_G:
-        case Keyboard::KEY_CAPITAL_G:
-            _snapToGround = !_snapToGround;
-            break;
-
-        case Keyboard::KEY_T:
-        case Keyboard::KEY_CAPITAL_T:
-            _wireframe = !_wireframe;
-            break;
-        }
-    }
 }
 
 void TerrainTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -107,4 +133,46 @@ void TerrainTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
 bool TerrainTest::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
+}
+
+void TerrainTest::controlEvent(Control* control, EventType evt)
+{
+    if (strcmp(control->getId(), "plusButton") == 0)
+    {
+        control->setVisible(false);
+        control->setEnabled(false);
+        _form->getControl("minusButton")->setVisible(true);
+        _form->getControl("minusButton")->setEnabled(true);
+        _form->setSize(_formSize.x, _formSize.y);
+        _formVisible = true;
+    }
+    else if (strcmp(control->getId(), "minusButton") == 0)
+    {
+        control->setVisible(false);
+        control->setEnabled(false);
+        _form->getControl("plusButton")->setVisible(true);
+        _form->getControl("plusButton")->setEnabled(true);
+        _form->setSize(50, 50);
+        _formVisible = false;
+    }
+    else if (strcmp(control->getId(), "lod") == 0)
+    {
+        _terrain->setFlag(Terrain::LEVEL_OF_DETAIL, static_cast<CheckBox*>(control)->isChecked());
+    }
+    else if (strcmp(control->getId(), "culling") == 0)
+    {
+        _terrain->setFlag(Terrain::FRUSTUM_CULLING, static_cast<CheckBox*>(control)->isChecked());
+    }
+    else if (strcmp(control->getId(), "wireframe") == 0)
+    {
+        _wireframe = static_cast<CheckBox*>(control)->isChecked();
+    }
+    else if (strcmp(control->getId(), "patches") == 0)
+    {
+        _terrain->setFlag(Terrain::DEBUG_PATCHES, static_cast<CheckBox*>(control)->isChecked());
+    }
+    else if (strcmp(control->getId(), "snapToGround") == 0)
+    {
+        _snapToGround = static_cast<CheckBox*>(control)->isChecked();
+    }
 }

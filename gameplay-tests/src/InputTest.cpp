@@ -199,11 +199,15 @@ void InputTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int con
     {
     case Touch::TOUCH_PRESS:
         // Purge all stale touch points
-        for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+        for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); )
         {
             if (it->_isStale)
             {
-                _touchPoints.erase(it);
+                it = _touchPoints.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
 

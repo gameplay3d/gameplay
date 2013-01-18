@@ -126,7 +126,7 @@ theme mainMenu
     {
         color = #C3D9BFff
     }
-    
+
     skin formEntry : mainNormal
     {
         region = 78, 1, 46, 46
@@ -142,6 +142,54 @@ theme mainMenu
         
         region = 4, 82, 68, 5
         color = #ffffffff
+    }
+
+    skin plusNormal
+    {
+        region = 81, 139, 40, 40
+        color = #4A8799ff
+    }
+
+    skin plusActive : plusNormal
+    {
+        color = #C3D9BFff
+    }
+
+    skin minusNormal
+    {
+        region = 81, 184, 40, 40
+        color = #4A8799ff
+    }
+
+    skin minusActive : minusNormal
+    {
+        color = #C3D9BFff
+    }
+
+    style plus
+    {
+        stateNormal
+        {
+            skin = plusNormal
+        }
+
+        stateActive
+        {
+            skin = plusActive
+        }
+    }
+
+    style minus
+    {
+        stateNormal
+        {
+            skin = minusNormal
+        }
+
+        stateActive
+        {
+            skin = minusActive
+        }
     }
 
     style underlined

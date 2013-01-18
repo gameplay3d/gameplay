@@ -1255,7 +1255,7 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
 void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                                              unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {
-    Gamepad::add(GamepadHandle handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
 }
 
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)

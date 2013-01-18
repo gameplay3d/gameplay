@@ -68,6 +68,18 @@ void TestsGame::initialize()
         }
     }
     _testSelectForm->setState(Control::FOCUS);
+
+    // Disable virtual gamepads.
+    unsigned int gamepadCount = getGamepadCount();
+
+    for (unsigned int i = 0; i < gamepadCount; i++)
+    {
+        Gamepad* gamepad = getGamepad(i);
+        if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setEnabled(false);
+        }
+    }
 }
 
 void TestsGame::finalize()

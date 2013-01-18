@@ -167,7 +167,9 @@ void Container::addControls(Theme* theme, Properties* properties)
         }
         else
         {
-            GP_ERROR("Failed to create control; unrecognized control name '%s'.", controlName.c_str());
+            // Ignore - not a valid control name.
+            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
+            // to set padding on containers).
         }
 
         // Add the new control to the form.
@@ -608,7 +610,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (!control->isEnabled())
+        if (!control->isEnabled() || !control->isVisible())
         {
             continue;
         }
@@ -1024,7 +1026,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
 
 bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 {
-    if (!isEnabled())
+    if (!isEnabled() || !isVisible())
     {
         return false;
     }
@@ -1051,7 +1053,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (!control->isEnabled())
+        if (!control->isEnabled() || !control->isVisible())
         {
             continue;
         }
@@ -1085,7 +1087,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
     }
 
-    if (!isEnabled())
+    if (!isEnabled() || !isVisible())
     {
         release();
         return (_consumeInputEvents | eventConsumed);

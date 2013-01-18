@@ -11,6 +11,10 @@ GamepadTest::GamepadTest() : _player1(NULL), _player2(NULL)
 void GamepadTest::finalize()
 {
     SAFE_RELEASE(_font);
+    if (_player1->isVirtual())
+    {
+        _player1->getForm()->setEnabled(false);
+    }
 }
 
 void GamepadTest::initialize()

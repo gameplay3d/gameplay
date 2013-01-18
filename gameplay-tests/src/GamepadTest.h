@@ -33,6 +33,7 @@ private:
 
     Gamepad* _player1;
     Gamepad* _player2;
+    
     Font* _font;
     std::string _status;
 };
