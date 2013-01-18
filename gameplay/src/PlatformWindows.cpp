@@ -1235,8 +1235,8 @@ void Platform::pollGamepadState(Gamepad* gamepad)
     else
     {
         // Gamepad was disconnected.
-        Platform::gamepadEventDisconnectedInternal(gamepad->_handle);
         __connectedXInput[gamepad->_handle] = false;
+        Platform::gamepadEventDisconnectedInternal(gamepad->_handle);
     }
 }
 #else

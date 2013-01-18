@@ -50,8 +50,6 @@ private:
 	Scene* _scene;
 	Model* _ground;
     Gamepad* _gamepad;
-    Gamepad* _virtualGamepad;
-    Gamepad* _physicalGamepad;
     unsigned int _moveFlags;
     int _prevX;
     int _prevY;

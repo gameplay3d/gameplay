@@ -53,8 +53,6 @@ private:
     Scene* _scene;
     Node* _cubeNode;
     Gamepad* _gamepad;
-    Gamepad* _virtualGamepad;
-    Gamepad* _physicalGamepad;
     unsigned int _moveFlags;
     int _prevX;
     int _prevY;

@@ -237,6 +237,12 @@ void TestsGame::runTest(void* func)
 
 void TestsGame::exitActiveTest()
 {
+    Gamepad* virtualGamepad = getGamepad(0, false);
+    if (virtualGamepad && virtualGamepad->isVirtual())
+    {
+        virtualGamepad->getForm()->setEnabled(false);
+    }
+
     if (_activeTest)
     {
         _activeTest->finalize();
