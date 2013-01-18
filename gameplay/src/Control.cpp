@@ -760,9 +760,6 @@ void Control::addSpecificListener(Control::Listener* listener, Listener::EventTy
 
 bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (!isEnabled())
-        return false;
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -816,11 +813,6 @@ bool Control::keyEvent(Keyboard::KeyEvent evt, int key)
 
 bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     // By default, mouse events are either interpreted as touch events or ignored.
     switch (evt)
     {

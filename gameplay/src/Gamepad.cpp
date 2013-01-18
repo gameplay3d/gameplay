@@ -15,7 +15,6 @@ Gamepad::Gamepad(const char* formPath)
     _form = Form::create(formPath);
     GP_ASSERT(_form);
     _form->setConsumeInputEvents(false);
-    _id = _form->getId();
     _vendorString = "None";
     _productString = "Virtual";
 
@@ -76,6 +75,7 @@ void Gamepad::remove(GamepadHandle handle)
         if (gamepad->_handle == handle)
         {
             Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, gamepad);
+            SAFE_DELETE(gamepad);
             it = __gamepads.erase(it);
         }
         else
@@ -94,6 +94,7 @@ void Gamepad::remove(Gamepad* gamepad)
         if (g == gamepad)
         {
             Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, g);
+            SAFE_DELETE(gamepad);
             it = __gamepads.erase(it);
         }
         else
@@ -211,9 +212,12 @@ const char* Gamepad::getProductString() const
 
 void Gamepad::update(float elapsedTime)
 {
-    if (_form && _form->isEnabled())
+    if (_form)
     {
-        _form->update(elapsedTime);
+        if (_form->isEnabled())
+        {
+            _form->update(elapsedTime);
+        }
     }
     else
     {
