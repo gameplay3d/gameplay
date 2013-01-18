@@ -80,6 +80,8 @@ set(GAME_SRC
     src/PostProcessTest.h
     src/SpriteBatchTest.cpp
     src/SpriteBatchTest.h
+    src/TerrainTest.cpp
+    src/TerrainTest.h
     src/Test.cpp
     src/Test.h
     src/TestsGame.cpp

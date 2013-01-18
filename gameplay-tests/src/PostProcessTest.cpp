@@ -17,7 +17,7 @@ PostProcessTest::Compositor* PostProcessTest::Compositor::create(FrameBuffer* sr
     Material* material = Material::create(materialPath);
     Texture::Sampler* sampler = Texture::Sampler::create(srcBuffer->getRenderTarget()->getTexture());
     material->getParameter("u_texture")->setValue(sampler);
-
+    SAFE_RELEASE(sampler);
     if (__model == NULL)
     {
         Mesh* mesh = Mesh::createQuadFullscreen();
@@ -31,6 +31,11 @@ PostProcessTest::Compositor* PostProcessTest::Compositor::create(FrameBuffer* sr
 PostProcessTest::Compositor::Compositor(FrameBuffer* srcBuffer, FrameBuffer* dstBuffer, Material* material, const char* techniqueId)
     : _srcBuffer(srcBuffer), _dstBuffer(dstBuffer), _material(material),  _techniqueId(techniqueId)
 {
+}
+
+PostProcessTest::Compositor::~Compositor()
+{
+    SAFE_RELEASE(_material);
 }
 
 const char* PostProcessTest::Compositor::getTechniqueId() const
@@ -131,6 +136,13 @@ void PostProcessTest::finalize()
 {
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
+    for (std::vector<Compositor*>::iterator it = _compositors.begin(); it != _compositors.end(); ++it)
+    {
+        delete *it;
+    }
+    _compositors.clear();
+    SAFE_RELEASE(__model);
+    SAFE_RELEASE(_frameBuffer);
 }
 
 void PostProcessTest::update(float elapsedTime)

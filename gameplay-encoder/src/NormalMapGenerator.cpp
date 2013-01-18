@@ -60,6 +60,16 @@ void calculateNormal(
     Vector3::cross(Q, P, normal);
 }
 
+float normalizedHeightPacked(float r, float g, float b)
+{
+    // This formula is intended for 24-bit packed heightmap images (that are generated
+    // with gameplay-encoder. However, it is also compatible with normal grayscale 
+    // heightmap images, with an error of approximately 0.4%. This can be seen by
+    // setting r=g=b=x and comparing the grayscale height expression to the packed
+    // height expression: the error is 2^-8 + 2^-16 which is just under 0.4%.
+    return (256.0f*r + g + 0.00390625f*b) / 65536.0f;
+}
+
 void NormalMapGenerator::generate()
 {
     // Load the input heightmap
@@ -76,8 +86,6 @@ void NormalMapGenerator::generate()
             return;
         }
 
-        // TODO: Add command-line argument for high precision heightmaps
-
         _resolutionX = image->getWidth();
         _resolutionY = image->getHeight();
         int size = _resolutionX * _resolutionY;
@@ -88,20 +96,20 @@ void NormalMapGenerator::generate()
             switch (image->getFormat())
             {
             case Image::LUMINANCE:
-                heights[i] = data[i];
+                heights[i] = data[i] / 255.0f;
                 break;
             case Image::RGB:
             case Image::RGBA:
                 {
                     int pos = i * image->getBpp();
-                    heights[i] = (data[pos] + data[pos+1] + data[pos+2]) / 3.0f;
+                    heights[i] = normalizedHeightPacked(data[pos], data[pos+1], data[pos+2]);
                 }
                 break;
             default:
                 heights[i] = 0.0f;
                 break;
             }
-            heights[i] = (heights[i] / 255.0f) * _worldSize.y;
+            heights[i] = heights[i] * _worldSize.y;
         }
         SAFE_DELETE(image);
     }
@@ -110,16 +118,69 @@ void NormalMapGenerator::generate()
         // Load heights from RAW 8 or 16-bit file
         if (_resolutionX <= 0 || _resolutionY <= 0)
         {
-            LOG(1, "Missing resolution argument - must be explicitly specified for RAW heightmap files: %s\n.", _inputFile.c_str());
+            LOG(1, "Missing resolution argument - must be explicitly specified for RAW heightmap files: %s.\n", _inputFile.c_str());
             return;
         }
 
-        // TODO
-        heights = new float[_resolutionX * _resolutionY];
-        // TODO
+        // Read all data from file
+        FILE* fp = fopen(_inputFile.c_str(), "rb");
+        if (fp == NULL)
+        {
+            LOG(1, "Failed to open input file: %s.\n", _inputFile.c_str());
+            return;
+        }
 
-        LOG(1, "RAW files not yet implemented...");
-        return;
+        fseek(fp, 0, SEEK_END);
+        long fileSize = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        unsigned char* data = new unsigned char[fileSize];
+        if (fread(data, 1, fileSize, fp) != (size_t)fileSize)
+        {
+            fclose(fp);
+            delete[] data;
+            LOG(1, "Failed to read bytes from input file: %s.\n", _inputFile.c_str());
+            return;
+        }
+        fclose(fp);
+
+        // Determine if the RAW file is 8-bit or 16-bit based on file size.
+        int bits = (fileSize / (_resolutionX * _resolutionY)) * 8;
+        if (bits != 8 && bits != 16)
+        {
+            LOG(1, "Invalid RAW file - must be 8-bit or 16-bit, but found neither: %s.", _inputFile.c_str());
+            delete[] data;
+            return;
+        }
+
+        int size = _resolutionX * _resolutionY;
+        heights = new float[size];
+        if (bits == 16)
+        {
+            // 16-bit (0-65535)
+            int idx;
+            for (unsigned int y = 0, i = 0; y < (unsigned int)_resolutionY; ++y)
+            {
+                for (unsigned int x = 0; x < (unsigned int)_resolutionX; ++x, ++i)
+                {
+                    idx = (y * _resolutionX + x) << 1;
+                    heights[i] = ((data[idx] | (int)data[idx+1] << 8) / 65535.0f) * _worldSize.y;
+                }
+            }
+        }
+        else
+        {
+            // 8-bit (0-255)
+            for (unsigned int y = 0, i = 0; y < (unsigned int)_resolutionY; ++y)
+            {
+                for (unsigned int x = 0; x < (unsigned int)_resolutionX; ++x, ++i)
+                {
+                    heights[i] = (data[y * _resolutionX + x] / 255.0f) * _worldSize.y;
+                }
+            }
+        }
+
+        delete[] data;
     }
     else
     {

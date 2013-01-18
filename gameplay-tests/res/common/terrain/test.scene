@@ -1,0 +1,46 @@
+scene terrainTestScene
+{
+	node terrain
+	{
+		terrain = res/common/terrain/test.terrain
+
+		collisionObject
+		{
+			type = RIGID_BODY
+			shape = HEIGHTFIELD
+			mass = 0
+			kinematic = true
+		}
+	}
+
+    node sky
+    {
+        url = res/common/terrain/sky.gpb#sphere
+
+        material = res/common/terrain/sky.material
+
+        scale = 30000,30000,30000
+        translate = 0,25000,0
+    }
+
+	node camera
+	{
+		camera
+		{
+			type = PERSPECTIVE
+			nearPlane = 0.25
+			farPlane = 100000
+		}
+
+		translate = 3800, 0, -1600
+		rotate = 0,1,0, 90
+	}
+
+	// Basic scene lighting properties
+	ambientColor = 0.2, 0.2, 0.2
+	lightColor = 1, 1, 1
+	lightDirection = -1, -1, -1
+
+	// Set active camera
+	activeCamera = camera
+}

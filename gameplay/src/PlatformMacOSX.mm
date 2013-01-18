@@ -882,7 +882,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) mouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__leftMouseDown)
+    if (__leftMouseDown && !__mouseCaptured)
     {
         [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
     }
@@ -1714,6 +1714,22 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     [__view->gameLock unlock];
     
     return result;
+}
+
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    if (evt == Gamepad::CONNECTED_EVENT)
+    {
+        Gamepad::add(gamepad->_id.c_str(), 
+                     gamepad->_handle, 
+                     gamepad->_buttonCount, gamepad->_joystickCount, gamepad->_triggerCount,
+                     gamepad->_vendorId, gamepad->_productId, 
+                     gamepad->_vendorString.c_str(), gamepad->_productString.c_str());
+    }
+    else if (evt == Gamepad::DISCONNECTED_EVENT) 
+    {
+        Gamepad::remove(gamepad);
+    }
 }
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)

@@ -67,10 +67,8 @@
         <copy file="../res/longboard_wheels.png" tofile="assets/res/longboard_wheels.png"/>
         <copy file="../res/overlay_gradient.png" tofile="assets/res/overlay_gradient.png"/>
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
-        <copy file="../../../gameplay/res/shaders/textured-unlit.vert" tofile="assets/res/shaders/textured-unlit.vert"/>
-        <copy file="../../../gameplay/res/shaders/textured-unlit.frag" tofile="assets/res/shaders/textured-unlit.frag"/>
-        <copy todir="assets/res/shaders/lib">
-            <fileset dir="../../../gameplay/res/shaders/lib"/>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
     </target>
 

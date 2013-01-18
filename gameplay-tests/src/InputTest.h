@@ -40,8 +40,16 @@ private:
     void setCaptured(bool captured);
 
 private:
+    
+    class TouchPoint
+    {
+    public:
+        unsigned int _id;
+        Vector2 _coord;
+        bool _isStale;
+    };
 
-    std::map<unsigned int, Vector2>  _touchPoints;
+    std::list<TouchPoint> _touchPoints;
     std::set<int> _downKeys;
     Vector2 _mousePoint;
     Vector2 _mouseWheelPoint;

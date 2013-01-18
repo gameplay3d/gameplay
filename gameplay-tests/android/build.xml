@@ -72,9 +72,6 @@
 		<copy todir="assets/res/shaders">
             <fileset dir="../../gameplay/res/shaders"/>
         </copy>
-        <copy todir="assets/res/shaders/lib">
-            <fileset dir="../../gameplay/res/shaders/lib"/>
-        </copy>
     </target>
 
     <!-- Import the actual build file.

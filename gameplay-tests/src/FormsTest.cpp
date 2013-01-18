@@ -34,6 +34,11 @@ void FormsTest::finalize()
     {
         SAFE_RELEASE(_forms[i]);
     }
+
+    if (_virtualGamepad)
+    {
+        _virtualGamepad->getForm()->setEnabled(false);
+    }
 }
 
 void printProperties(Properties* properties, unsigned int tabCount)
@@ -126,7 +131,10 @@ void FormsTest::initialize()
     {
         Gamepad* gamepad = *it;
         if (gamepad->isVirtual())
+        {
+            gamepad->getForm()->setEnabled(true);
             _virtualGamepad = gamepad;
+        }
         else if (!_physicalGamepad)
         {
             _physicalGamepad = gamepad;

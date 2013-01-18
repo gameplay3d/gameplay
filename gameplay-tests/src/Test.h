@@ -49,6 +49,7 @@ public:
     AudioController* getAudioController() const;
     AnimationController* getAnimationController() const;
     PhysicsController* getPhysicsController() const;
+    ScriptController* getScriptController() const;
     void displayKeyboard(bool display);
     virtual void keyEvent(Keyboard::KeyEvent evt, int key);
     virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
@@ -60,6 +61,7 @@ public:
     bool isMultiTouch() const;
     void getAccelerometerValues(float* pitch, float* roll);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
+	void enableScriptCamera(bool enable);
 
     // gestures
     bool isGestureSupported(Gesture::GestureEvent evt);

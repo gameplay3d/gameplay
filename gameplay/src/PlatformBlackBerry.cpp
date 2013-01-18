@@ -491,19 +491,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
     }
 }
 
-#ifdef __BB10__
-
-static const int __VIDs[] = {
-    0x1038,
-    0x057e,
-    0x25b6
-};
-
-static const int __PIDs[] = {
-    0x1412,
-    0x0306,
-    0x0001
-};
+#ifdef BLACKBERRY_USE_GAMEPAD
 
 static const char* __vendorStrings[] =
 {
@@ -517,6 +505,18 @@ static const char* __productStrings[] =
     "FREE",
     "Wii Remote",
     "Gametel"
+};
+
+static const int __VIDs[] = {
+    0x1038,
+    0x057e,
+    0x25b6
+};
+
+static const int __PIDs[] = {
+    0x1412,
+    0x0306,
+    0x0001
 };
 
 static const unsigned int __knownGamepads = 3;
@@ -1518,6 +1518,22 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     else
     {
         return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
+    }
+}
+
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    if (evt == Gamepad::CONNECTED_EVENT)
+    {
+        Gamepad::add(gamepad->_id.c_str(), 
+                     gamepad->_handle, 
+                     gamepad->_buttonCount, gamepad->_joystickCount, gamepad->_triggerCount,
+                     gamepad->_vendorId, gamepad->_productId, 
+                     gamepad->_vendorString.c_str(), gamepad->_productString.c_str());
+    }
+    else if (evt == Gamepad::DISCONNECTED_EVENT) 
+    {
+        Gamepad::remove(gamepad);
     }
 }
 
