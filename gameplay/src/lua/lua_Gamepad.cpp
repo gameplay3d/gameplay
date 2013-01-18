@@ -17,7 +17,6 @@ void luaRegister_Gamepad()
         {"draw", lua_Gamepad_draw},
         {"getButtonCount", lua_Gamepad_getButtonCount},
         {"getForm", lua_Gamepad_getForm},
-        {"getId", lua_Gamepad_getId},
         {"getJoystickCount", lua_Gamepad_getJoystickCount},
         {"getJoystickValues", lua_Gamepad_getJoystickValues},
         {"getProductId", lua_Gamepad_getProductId},
@@ -31,11 +30,7 @@ void luaRegister_Gamepad()
         {"update", lua_Gamepad_update},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] = 
-    {
-        {"getGamepads", lua_Gamepad_static_getGamepads},
-        {NULL, NULL}
-    };
+    const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
     ScriptUtil::registerClass("Gamepad", lua_members, NULL, NULL, lua_statics, scopePath);
@@ -146,41 +141,6 @@ int lua_Gamepad_getForm(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Gamepad_getForm - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Gamepad_getId(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Gamepad* instance = getInstance(state);
-                const char* result = instance->getId();
-
-                // Push the return value onto the stack.
-                lua_pushstring(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Gamepad_getId - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -556,43 +516,6 @@ int lua_Gamepad_isVirtual(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Gamepad_static_getGamepads(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 0:
-        {
-            void* returnPtr = (void*)Gamepad::getGamepads();
-            if (returnPtr)
-            {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                object->instance = returnPtr;
-                object->owns = false;
-                luaL_getmetatable(state, "Gamepad");
-                lua_setmetatable(state, -2);
-            }
-            else
-            {
-                lua_pushnil(state);
-            }
-
-            return 1;
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }

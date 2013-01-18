@@ -441,6 +441,25 @@ public:
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
+     * Gets the current number of gamepads currently connected to the system.
+     *
+     * @return The number of gamepads currently connected to the system.
+     */
+    inline unsigned int getGamepadCount() const;
+
+    /**
+     * Gets the gamepad at the specified index. 
+     *
+     * The gamepad index can change when connnected and disconnected so you
+     * cannot relie on this other than iterating through them all to display
+     * them or poll them.
+     *
+     * @param index The index of the gamepad to retrieve.
+     * @return The gamepad at the specified index.
+     */
+    inline Gamepad* getGamepad(unsigned int index) const;
+
+    /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
