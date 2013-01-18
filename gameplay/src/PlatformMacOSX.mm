@@ -1716,6 +1716,22 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     return result;
 }
 
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    if (evt == Gamepad::CONNECTED_EVENT)
+    {
+        Gamepad::add(gamepad->_id.c_str(), 
+                     gamepad->_handle, 
+                     gamepad->_buttonCount, gamepad->_joystickCount, gamepad->_triggerCount,
+                     gamepad->_vendorId, gamepad->_productId, 
+                     gamepad->_vendorString.c_str(), gamepad->_productString.c_str());
+    }
+    else if (evt == Gamepad::DISCONNECTED_EVENT) 
+    {
+        Gamepad::remove(gamepad);
+    }
+}
+
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
     // Swipe unsupported as it is considered moving mouse cursor
