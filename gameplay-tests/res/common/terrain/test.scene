@@ -32,7 +32,7 @@ scene terrainTestScene
 			farPlane = 100000
 		}
 
-		translate = 3800, 0, -1600
+		translate = 3800, 2000, -1600
 		rotate = 0,1,0, 90
 	}
 

@@ -482,15 +482,15 @@ bool TerrainPatch::updateMaterial()
 
         // Set material parameter bindings
         material->getParameter("u_worldViewProjectionMatrix")->bindValue(_terrain, &Terrain::getWorldViewProjectionMatrix);
-        if (!_terrain->_normalMap)
+        if (_terrain->_normalMap)
+            material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
+        else
             material->getParameter("u_normalMatrix")->bindValue(_terrain, &Terrain::getNormalMatrix);
         material->getParameter("u_ambientColor")->bindValue(this, &TerrainPatch::getAmbientColor);
         material->getParameter("u_lightColor")->bindValue(this, &TerrainPatch::getLightColor);
         material->getParameter("u_lightDirection")->bindValue(this, &TerrainPatch::getLightDirection);
         if (_layers.size() > 0)
             material->getParameter("u_samplers")->setValue((const Texture::Sampler**)&_samplers[0], (unsigned int)_samplers.size());
-        if (_terrain->_normalMap)
-            material->getParameter("u_normalMap")->setValue(_terrain->_normalMap);
 
         if (_terrain->isFlagSet(Terrain::DEBUG_PATCHES))
         {

@@ -167,7 +167,9 @@ void Container::addControls(Theme* theme, Properties* properties)
         }
         else
         {
-            GP_ERROR("Failed to create control; unrecognized control name '%s'.", controlName.c_str());
+            // Ignore - not a valid control name.
+            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
+            // to set padding on containers).
         }
 
         // Add the new control to the form.
