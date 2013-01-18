@@ -209,7 +209,7 @@ private:
 
     static unsigned int getGamepadCount();
 
-    static Gamepad* getGamepad(unsigned int index);
+    static Gamepad* getGamepad(unsigned int index, bool preferPhysical = true);
 
     static ButtonMapping getButtonMappingFromString(const char* string);
 
