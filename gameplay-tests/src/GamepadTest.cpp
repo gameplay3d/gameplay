@@ -32,7 +32,7 @@ void GamepadTest::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned in
     char s[128];
     gamepad->update(elapsedTime);
 
-    sprintf(s, "Player: %d - VendorID:%d,%s, Product ID:%d,%s\nButtons: ", 
+    sprintf(s, "Player: %d - VendorID: %d, %s, Product ID: %d, %s\nButtons: ", 
                 player, 
                 gamepad->getVendorId(), gamepad->getVendorString(),
                 gamepad->getProductId(), gamepad->getProductString());
@@ -41,7 +41,7 @@ void GamepadTest::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned in
     {
         if (gamepad->isButtonDown((Gamepad::ButtonMapping)j))
         {
-            sprintf(s, "%d ", j);
+            sprintf(s, "%s ", getStringFromButtonMapping((Gamepad::ButtonMapping)j));
             _status += s;
         }
     }
@@ -94,5 +94,52 @@ void GamepadTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
             if (_gamepad && _gamepad->isVirtual())
                 _gamepad->getForm()->setEnabled(true);
             break;
+    }
+}
+
+const char* GamepadTest::getStringFromButtonMapping(Gamepad::ButtonMapping mapping)
+{
+    switch (mapping)
+    {
+        case Gamepad::BUTTON_A:
+            return "A";
+        case Gamepad::BUTTON_B:
+            return "B";
+        case Gamepad::BUTTON_C:
+            return "C";
+        case Gamepad::BUTTON_X:
+            return "X";
+        case Gamepad::BUTTON_Y:
+            return "Y";
+        case Gamepad::BUTTON_Z:
+            return "Z";
+        case Gamepad::BUTTON_MENU1:
+            return "MENU1";
+        case Gamepad::BUTTON_MENU2:
+            return "MENU2";
+        case Gamepad::BUTTON_MENU3:
+            return "MENU3";
+        case Gamepad::BUTTON_MENU4:
+            return "MENU4";
+        case Gamepad::BUTTON_L1:
+            return "L1";
+        case Gamepad::BUTTON_L2:
+            return "L2";
+        case Gamepad::BUTTON_L3:
+            return "L3";
+        case Gamepad::BUTTON_R1:
+            return "R1";
+        case Gamepad::BUTTON_R2:
+            return "R2";
+        case Gamepad::BUTTON_R3:
+            return "R3";
+        case Gamepad::BUTTON_UP:
+            return "UP";
+        case Gamepad::BUTTON_DOWN:
+            return "DOWN";
+        case Gamepad::BUTTON_LEFT:
+            return "LEFT";
+        case Gamepad::BUTTON_RIGHT:
+            return "RIGHT";
     }
 }
