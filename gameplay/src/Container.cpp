@@ -610,7 +610,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (!control->isEnabled())
+        if (!control->isEnabled() || !control->isVisible())
         {
             continue;
         }
@@ -1026,7 +1026,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
 
 bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 {
-    if (!isEnabled())
+    if (!isEnabled() || !isVisible())
     {
         return false;
     }
@@ -1053,7 +1053,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (!control->isEnabled())
+        if (!control->isEnabled() || !control->isVisible())
         {
             continue;
         }
@@ -1087,7 +1087,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
     }
 
-    if (!isEnabled())
+    if (!isEnabled() || !isVisible())
     {
         release();
         return (_consumeInputEvents | eventConsumed);

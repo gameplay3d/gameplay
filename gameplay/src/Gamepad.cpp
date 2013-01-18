@@ -33,7 +33,7 @@ Gamepad::Gamepad(const char* formPath)
 }
 
 Gamepad::Gamepad(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                 unsigned int vendorId, unsigned int productId, char* vendorString, char* productString)
+                 unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
     : _id(id), _handle(handle), _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
       _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _form(NULL)
 {
@@ -48,7 +48,7 @@ Gamepad::~Gamepad()
 }
 
 Gamepad* Gamepad::add(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-    unsigned int vendorId, unsigned int productId, char* vendorString, char* productString)
+    unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {
     Gamepad* gamepad = new Gamepad(id, handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
 
@@ -75,6 +75,7 @@ void Gamepad::remove(GamepadHandle handle)
         if (gamepad->_handle == handle)
         {
             Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, gamepad);
+            SAFE_DELETE(gamepad);
             it = __gamepads.erase(it);
         }
         else
@@ -93,6 +94,7 @@ void Gamepad::remove(Gamepad* gamepad)
         if (g == gamepad)
         {
             Game::getInstance()->gamepadEvent(DISCONNECTED_EVENT, g);
+            SAFE_DELETE(gamepad);
             it = __gamepads.erase(it);
         }
         else
@@ -225,9 +227,12 @@ const char* Gamepad::getProductString() const
 
 void Gamepad::update(float elapsedTime)
 {
-    if (_form && _form->isEnabled())
+    if (_form)
     {
-        _form->update(elapsedTime);
+        if (_form->isEnabled())
+        {
+            _form->update(elapsedTime);
+        }
     }
     else
     {

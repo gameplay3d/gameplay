@@ -198,7 +198,7 @@ private:
      * @param triggerCount the number of triggers on the gamepad.
      */
     Gamepad(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-            unsigned int vendorId, unsigned int productId, char* vendorString, char* productString);
+            unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
 
     /**
      * Copy constructor.
@@ -209,7 +209,7 @@ private:
      * Used by platforms to add gamepads to the set available to games.
      */
     static Gamepad* add(const char* id, GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                        unsigned int vendorId, unsigned int productId, char* vendorString, char* productString);
+                        unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
 
     /**
      * Used by Game::loadGamepads() to add virtual gamepads from a game's config file.
