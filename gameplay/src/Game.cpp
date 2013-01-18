@@ -183,14 +183,11 @@ void Game::shutdown()
 		}
 		_scriptController->finalize();
 
-        std::vector<Gamepad*>* gamepads = Gamepad::getGamepads();
-        if (gamepads)
+        unsigned int gamepadCount = Gamepad::getGamepadCount();
+        for (unsigned int i = 0; i < gamepadCount; i++)
         {
-            for (size_t i = 0, count = gamepads->size(); i < count; ++i)
-            {
-                SAFE_DELETE((*gamepads)[i]);
-            }
-            gamepads->clear();
+            Gamepad* gamepad = Gamepad::getGamepad(i);
+            SAFE_DELETE(gamepad);
         }
 
         _animationController->finalize();

@@ -44,7 +44,7 @@ void TerrainTest::initialize()
     setScriptCameraSpeed(100, 1000);
 
     // HACK - remove
-    Gamepad::getGamepads()->at(0)->getForm()->setEnabled(false);
+    getGamepad(0)->getForm()->setEnabled(false);
 }
 
 void TerrainTest::finalize()
