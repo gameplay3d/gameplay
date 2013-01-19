@@ -18,11 +18,11 @@ static const float UP_DOWN_SPEED = 1.0f;
 
 static const float GROUND_WIDTH = 4.0f;
 static const float GROUND_HEIGHT = 4.0f;
-static const float GROUND_REPEAT_TEXTURE = 10.0f;
+static const float GROUND_REPEAT_TEXTURE = 30.0f;
 
 static const float BILLBOARD_WIDTH = 0.5f;
 static const float BILLBOARD_HEIGHT = 0.5f;
-static const unsigned int BILLBOARD_COUNT = 200;
+static const unsigned int BILLBOARD_COUNT = 300;
 
 BillboardTest::BillboardTest()
     : _font(NULL), _scene(NULL), _ground(NULL), _gamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
