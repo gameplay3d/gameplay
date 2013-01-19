@@ -6,6 +6,7 @@
 #include "HeightField.h"
 #include "Texture.h"
 #include "BoundingBox.h"
+#include "TerrainPatch.h"
 
 namespace gameplay
 {
