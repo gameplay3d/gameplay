@@ -153,7 +153,7 @@ void TerrainTest::render(float elapsedTime)
             _terrain->getVisiblePatchCount(),
             _terrain->getTriangleCount(),
             _terrain->getVisibleTriangleCount());
-        _font->drawText(buffer, 25, 245, Vector4::one(), 20);
+        _font->drawText(buffer, 25, 300, Vector4::one(), 20);
     }
     _font->finish();
 }
