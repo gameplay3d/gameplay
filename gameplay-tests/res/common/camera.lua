@@ -1,7 +1,7 @@
 
 -- Move speed (m/s)
-MOVE_SPEED_NORMAL = 20
-MOVE_SPEED_FAST = 2500
+MOVE_SPEED_NORMAL = 1
+MOVE_SPEED_FAST = 5
 
 -- Move flags
 MOVE_FORWARD = 1
@@ -39,6 +39,11 @@ function camera_setActive(flag)
 		_scene = nil
 		_cameraNode = nil
 	end
+end
+
+function camera_setSpeed(normal, fast)
+    MOVE_SPEED_NORMAL = normal
+    MOVE_SPEED_FAST = fast
 end
 
 function camera_update(elapsedTime)
@@ -167,10 +172,10 @@ function camera_touchEvent(evt, x, y, contactIndex)
     	if contactIndex == 0 then
 	        _delta:set(x - _touch:x(), y - _touch:y())
 	        _touch:set(x, y)
-	        _pitch = _pitch + -math.rad(_delta:y() * 0.5)
-	        _yaw = _yaw + math.rad(_delta:x() * 0.5)
+	        _pitch = _pitch - math.rad(_delta:y() * 0.5)
+	        _yaw = _yaw - math.rad(_delta:x() * 0.5)
 	        _cameraNode:setRotation(Quaternion.identity())
-	        _cameraNode:rotateY(-_yaw)
+	        _cameraNode:rotateY(_yaw)
 	        _cameraNode:rotateX(_pitch)
 	    end
     end
