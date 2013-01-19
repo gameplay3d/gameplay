@@ -907,9 +907,43 @@ int lua_Game_getGamepad(lua_State* state)
             lua_error(state);
             break;
         }
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                // Get parameter 2 off the stack.
+                bool param2 = ScriptUtil::luaCheckBool(state, 3);
+
+                Game* instance = getInstance(state);
+                void* returnPtr = (void*)instance->getGamepad(param1, param2);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Gamepad");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Game_getGamepad - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }
