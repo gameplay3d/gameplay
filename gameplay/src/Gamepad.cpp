@@ -9,7 +9,7 @@ namespace gameplay
 static std::vector<Gamepad*> __gamepads;
 
 Gamepad::Gamepad(const char* formPath)
-    : _handle(INT_MAX), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
+    : _handle((GamepadHandle)INT_MAX), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
