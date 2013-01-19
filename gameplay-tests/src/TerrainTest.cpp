@@ -22,9 +22,9 @@ struct TerrainHitFilter : public PhysicsController::HitFilter
 };
 
 TerrainTest::TerrainTest()
-	: _font(NULL), _scene(NULL), _terrain(NULL), _sky(NULL), _form(NULL), 
-    _formVisible(true), _wireframe(false), _debugPhysics(false), _snapToGround(false), _vsync(true),
-    _mode(MODE_LOOK), _sphere(NULL), _box(NULL)
+	: _font(NULL), _scene(NULL), _terrain(NULL), _form(NULL),  _formVisible(true), _sky(NULL),
+	  _wireframe(false), _debugPhysics(false), _snapToGround(false), _vsync(true),
+	  _mode(MODE_LOOK), _sphere(NULL), _box(NULL)
 {
 }
 

@@ -82,7 +82,6 @@ private:
     CheckBox* _addSpecular;
 	CheckBox* _addBumped;
 
-
 	Form* _form;
     
 	bool _touched;

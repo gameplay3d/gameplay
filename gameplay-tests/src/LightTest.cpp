@@ -5,20 +5,38 @@
     ADD_TEST("Graphics", "Light", LightTest, 11);
 #endif
 
-static const float GROUND_WIDTH = 16.0f;
-static const float GROUND_HEIGHT = 16.0f;
-static const float INPUT_SENSITIVITY = 0.05f;
-
 LightTest::LightTest()
     : _font(NULL), 
 	  _scene(NULL), 
-	  _usedForMoving(NULL),
-	  _modelNode(NULL), 
+      _modelNode(NULL),
 	  _directionalLightNode(NULL), 
 	  _pointLightNode(NULL), 
 	  _spotLightNode(NULL),
+	  _usedForMoving(NULL),
+	  _model(NULL),
+	  _directionalLightQuadModel(NULL),
+	  _spotLightQuadModel(NULL),
+	  _pointLightQuadModel(NULL),
+	  _unlitMaterial(NULL),
+	  _texturedMaterial(NULL),
+	  _bumpedMaterial(NULL),
+	  _bumpedSpecularMaterial(NULL),
+	  _lighting(NULL),
+	  _noLight(NULL),
+	  _directional(NULL),
+	  _spot(NULL),
+	  _point(NULL),
       _properties(NULL),
-	  _model(NULL)
+      _redSlider(NULL),
+      _greenSlider(NULL),
+      _blueSlider(NULL),
+      _specularSlider(NULL),
+      _addSpecular(NULL),
+      _addBumped(NULL),
+      _form(NULL),
+      _touched(false),
+      _touchX(0),
+      _touchY(0)
 {
 }
 
@@ -279,6 +297,7 @@ void LightTest::controlEvent(Control* control, EventType evt)
         {
             changeTechnique = true;
         }
+		break;
 	}
 
 	if (changeTechnique)
