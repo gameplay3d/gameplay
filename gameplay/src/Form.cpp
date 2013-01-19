@@ -26,7 +26,6 @@ Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL)
 
 Form::~Form()
 {
-    SAFE_RELEASE(_node);
     SAFE_DELETE(_spriteBatch);
     SAFE_RELEASE(_frameBuffer);
     SAFE_RELEASE(_theme);

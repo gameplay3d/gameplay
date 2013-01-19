@@ -11,6 +11,7 @@ namespace gameplay
 {
 
 class Node;
+class TerrainPatch;
 
 /**
  * Defines a Terrain that is capable of rendering large landscapes from 2D heightmap images.
@@ -349,6 +350,11 @@ private:
      * Returns a matrix to be used for transforming normal vectors for the terrain.
      */
     const Matrix& getNormalMatrix() const;
+
+    /**
+     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
+     */
+    const Matrix& getWorldViewMatrix() const;
 
     /**
      * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.

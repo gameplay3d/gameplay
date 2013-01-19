@@ -8,8 +8,26 @@ namespace gameplay
 
 static std::vector<Gamepad*> __gamepads;
 
+
+
+GamepadHandle _handle;        // The handle of the Gamepad.
+unsigned int _buttonCount;    // Number of buttons.
+unsigned int _joystickCount;  // Number of joysticks.
+unsigned int _triggerCount;   // Number of triggers.
+unsigned int _vendorId;
+unsigned int _productId;
+std::string _vendorString;
+std::string _productString;
+Form* _form;
+Joystick* _uiJoysticks[2];
+Button* _uiButtons[20];
+unsigned int _buttons;
+Vector2 _joysticks[2];
+float _triggers[2];
+
+
 Gamepad::Gamepad(const char* formPath)
-    : _handle((GamepadHandle)INT_MAX), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
+    : _handle((GamepadHandle)INT_MAX),  _buttonCount(0), _joystickCount(0), _triggerCount(0), _vendorId(0), _productId(0), _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
@@ -33,8 +51,9 @@ Gamepad::Gamepad(const char* formPath)
 
 Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                  unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-    : _handle(handle), _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
-      _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _form(NULL), _buttons(0)
+    : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
+      _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
+      _form(NULL), _buttons(0)
 {
 }
 
