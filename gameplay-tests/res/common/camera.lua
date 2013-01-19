@@ -34,7 +34,6 @@ function camera_setActive(flag)
         local eulers = camera_quatToEuler(_cameraNode:getRotation())
         _yaw = eulers:y()
         _pitch = eulers:x()
-        print("x: " .. eulers:x() .. " - y: " .. eulers:y() .. " - roll: " .. eulers:z())
     else
 		-- Release scene and camera
 		_scene = nil

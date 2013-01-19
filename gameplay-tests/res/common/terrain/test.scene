@@ -32,15 +32,21 @@ scene terrainTestScene
 			farPlane = 100000
 		}
 
-		translate = 3800, 2000, -1600
-		rotate = 0,1,0, 90
+		translate = 3095, 369, -4393
+		rotate = 0,1,0, 148
 	}
 
 	// Basic scene lighting properties
 	ambientColor = 0.2, 0.2, 0.2
 	lightColor = 1, 1, 1
-	lightDirection = -1, -1, -1
+	lightDirection = -1, -0.75, -0.75
 
 	// Set active camera
 	activeCamera = camera
+
+    physics
+    {
+        // Bump up gravity force for this sample since our units are larger than normal
+        gravity = 0, -90, 0
+    }
 }
