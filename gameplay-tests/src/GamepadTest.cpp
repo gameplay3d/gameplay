@@ -141,5 +141,7 @@ const char* GamepadTest::getStringFromButtonMapping(Gamepad::ButtonMapping mappi
             return "LEFT";
         case Gamepad::BUTTON_RIGHT:
             return "RIGHT";
+        default:
+            return "";
     }
 }
