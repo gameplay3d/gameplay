@@ -2,32 +2,16 @@
 #include "Gamepad.h"
 #include "Game.h"
 #include "Button.h"
+#include "Platform.h"
 
 namespace gameplay
 {
 
 static std::vector<Gamepad*> __gamepads;
 
-
-
-GamepadHandle _handle;        // The handle of the Gamepad.
-unsigned int _buttonCount;    // Number of buttons.
-unsigned int _joystickCount;  // Number of joysticks.
-unsigned int _triggerCount;   // Number of triggers.
-unsigned int _vendorId;
-unsigned int _productId;
-std::string _vendorString;
-std::string _productString;
-Form* _form;
-Joystick* _uiJoysticks[2];
-Button* _uiButtons[20];
-unsigned int _buttons;
-Vector2 _joysticks[2];
-float _triggers[2];
-
-
 Gamepad::Gamepad(const char* formPath)
-    : _handle((GamepadHandle)INT_MAX),  _buttonCount(0), _joystickCount(0), _triggerCount(0), _vendorId(0), _productId(0), _form(NULL), _buttons(0)
+    : _handle((GamepadHandle)INT_MAX), _buttonCount(0), _joystickCount(0), _triggerCount(0), _vendorId(0), _productId(0),
+      _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
