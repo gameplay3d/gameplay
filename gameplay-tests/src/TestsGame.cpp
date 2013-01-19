@@ -10,7 +10,7 @@ std::vector<TestsGame::TestRecordList>* TestsGame::_tests = NULL;
 TestsGame game;
 
 TestsGame::TestsGame()
-    : _font(NULL), _activeTest(NULL), _testSelectForm(NULL)
+    : _activeTest(NULL), _font(NULL),  _testSelectForm(NULL)
 {
 }
 

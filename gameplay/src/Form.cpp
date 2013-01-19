@@ -482,10 +482,9 @@ void Form::updateBounds()
         }
  
         _viewportClipBounds.set(x, y, width, height);
-
         _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
-            width + border.left + padding.left + border.right + padding.right,
-            height + border.top + padding.top + border.bottom + padding.bottom);
+                                width + border.left + padding.left + border.right + padding.right,
+                                height + border.top + padding.top + border.bottom + padding.bottom);
         if (_clearBounds.isEmpty())
         {
             _clearBounds.set(_absoluteClipBounds);
@@ -516,9 +515,13 @@ void Form::updateBounds()
 
         GP_ASSERT(_layout);
         if (_scroll != SCROLL_NONE)
+        {
             updateScroll();
+        }
         else
+        {
             _layout->update(this, Vector2::zero());
+        }
     }
 }
 
@@ -547,11 +550,10 @@ void Form::draw()
         Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height),  true/*WAS _skin!=NULL*/, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
-        // Rebind the previous framebuffer and game viewport.
-        previousFrameBuffer->bind();
-
         // restore the previous game viewport
         game->setViewport(prevViewport);
+        // Rebind the previous framebuffer and game viewport.
+        previousFrameBuffer->bind();
     }
 
     // Draw either with a 3D quad or sprite batch

@@ -38,8 +38,6 @@
 #include "VertexFormat.h"
 #include "VertexAttributeBinding.h"
 #include "Model.h"
-#include "HeightField.h"
-#include "Terrain.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Scene.h"
@@ -52,6 +50,8 @@
 #include "RenderTarget.h"
 #include "DepthStencilTarget.h"
 #include "ScreenDisplayer.h"
+#include "HeightField.h"
+#include "Terrain.h"
 
 // Audio
 #include "AudioController.h"
