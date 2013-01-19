@@ -24,42 +24,46 @@ vec3 v_normalVector;                            // Normal vector variable (from 
 varying vec3 v_normalVector;					// Normal vector from vertex shader
 #endif
 varying vec2 v_texCoord0;
+#if (LAYER_COUNT > 0)
+varying vec2 v_texCoordLayer0;
+#endif
+#if (LAYER_COUNT > 1)
+varying vec2 v_texCoordLayer1;
+#endif
+#if (LAYER_COUNT > 2)
+varying vec2 v_texCoordLayer2;
+#endif
 
 // Lighting
 #include "lighting.frag"
 #include "lighting-directional.frag"
 
 #if (LAYER_COUNT > 1)
-void blendLayer(sampler2D textureMap, vec2 textureRepeat, float alphaBlend)
+void blendLayer(sampler2D textureMap, vec2 texCoord, float alphaBlend)
 {
-    vec2 uv = mod(v_texCoord0 * textureRepeat, vec2(1,1));
-
     // Sample full intensity diffuse color
-    vec3 diffuse = texture2D(textureMap, uv).rgb;
+    vec3 diffuse = texture2D(textureMap,  mod(texCoord, vec2(1,1))).rgb;
 
     _baseColor.rgb = _baseColor.rgb * (1.0 - alphaBlend) + diffuse * alphaBlend;
 }
 #endif
 
-
 void main()
 {
 #if (LAYER_COUNT > 0)
-    // Set base diffuse color
-    vec2 uvCoord = mod(v_texCoord0 * TEXTURE_REPEAT_0, vec2(1,1));
-	_baseColor.rgb = texture2D(u_samplers[TEXTURE_INDEX_0], uvCoord).rgb;
+    // Sample base texture
+	_baseColor.rgb = texture2D(u_samplers[TEXTURE_INDEX_0], mod(v_texCoordLayer0, vec2(1,1))).rgb;
     _baseColor.a = 1.0;
 #else
-    // If no layers are defined, simple use a white color
+    // If no layers are defined, simply use a white color
     _baseColor = vec4(1,1,1,1);
 #endif
 
 #if (LAYER_COUNT > 1)
-    blendLayer(u_samplers[TEXTURE_INDEX_1], TEXTURE_REPEAT_1, texture2D(u_samplers[BLEND_INDEX_1], v_texCoord0)[BLEND_CHANNEL_1]);
+    blendLayer(u_samplers[TEXTURE_INDEX_1], v_texCoordLayer1, texture2D(u_samplers[BLEND_INDEX_1], v_texCoord0)[BLEND_CHANNEL_1]);
 #endif
-
 #if (LAYER_COUNT > 2)
-    blendLayer(u_samplers[TEXTURE_INDEX_2], TEXTURE_REPEAT_2, texture2D(u_samplers[BLEND_INDEX_2], v_texCoord0)[BLEND_CHANNEL_2]);
+    blendLayer(u_samplers[TEXTURE_INDEX_2], v_texCoordLayer2, texture2D(u_samplers[BLEND_INDEX_2], v_texCoord0)[BLEND_CHANNEL_2]);
 #endif
 
 #if defined(DEBUG_PATCHES)

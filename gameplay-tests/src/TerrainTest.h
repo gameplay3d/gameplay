@@ -48,9 +48,9 @@ private:
 	Font* _font;
 	Scene* _scene;
 	Terrain* _terrain;
+	Node* _sky;
     Form* _form;
     bool _formVisible;
-    Node* _sky;
     Vector2 _formSize;
 	bool _wireframe;
     bool _debugPhysics;
