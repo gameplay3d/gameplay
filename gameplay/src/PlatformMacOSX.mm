@@ -935,7 +935,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) mouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__leftMouseDown)
+    if (__leftMouseDown && !__mouseCaptured)
     {
         [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
     }

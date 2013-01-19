@@ -844,7 +844,6 @@ void Node::setForm(Form* form)
     }
 }
 
-
 const BoundingSphere& Node::getBoundingSphere() const
 {
     if (_dirtyBits & NODE_DIRTY_BOUNDS)
