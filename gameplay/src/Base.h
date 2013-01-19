@@ -279,7 +279,7 @@ typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
 
 /** Gamepad handle definitions vary by platform. */
-#ifdef __QNX__
+#if defined(__QNX__) && defined (USE_BLACKBERRY_GAMEPAD)
     typedef screen_device_t GamepadHandle;
 #elif USE_XINPUT
     typedef unsigned long GamepadHandle;

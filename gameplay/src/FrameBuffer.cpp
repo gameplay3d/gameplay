@@ -80,9 +80,6 @@ FrameBuffer* FrameBuffer::create(const char* id)
 
 FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned int height)
 {
-    // Call getMaxRenderTargets() to force __maxRenderTargets to be set
-    getMaxRenderTargets();
-
     RenderTarget* renderTarget = NULL;
     if (width > 0 && height > 0)
     {
@@ -197,7 +194,6 @@ RenderTarget* FrameBuffer::getRenderTarget(unsigned int index) const
     {
         return _renderTargets[index];
     }
-
     return NULL;
 }
 
@@ -257,6 +253,5 @@ FrameBuffer* FrameBuffer::bindDefault()
     __currentFrameBuffer = __defaultFrameBuffer;
     return __defaultFrameBuffer;
 }
-
 
 }
