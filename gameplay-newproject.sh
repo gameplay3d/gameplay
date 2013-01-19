@@ -176,7 +176,7 @@ fi
 # Copy Microsoft Visual Studio project files
 #############################################
 cp "gameplay-template/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
-aliassedinplace "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj"
 
