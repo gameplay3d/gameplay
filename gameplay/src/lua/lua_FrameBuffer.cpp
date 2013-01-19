@@ -129,9 +129,21 @@ int lua_FrameBuffer_bind(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
-                instance->bind();
-                
-                return 0;
+                void* returnPtr = (void*)instance->bind();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_FrameBuffer_bind - Failed to match the given parameters to a valid function signature.");
@@ -560,9 +572,21 @@ int lua_FrameBuffer_static_bindDefault(lua_State* state)
     {
         case 0:
         {
-            FrameBuffer::bindDefault();
-            
-            return 0;
+            void* returnPtr = (void*)FrameBuffer::bindDefault();
+            if (returnPtr)
+            {
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "FrameBuffer");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
             break;
         }
         default:

@@ -4,17 +4,19 @@
 
 #include "Base.h"
 #include "FrameBuffer.h"
+#include "Game.h"
+
+#define FRAMEBUFFER_ID_DEFAULT "org.gameplay3d.framebuffer.default"
 
 namespace gameplay
 {
-
 static unsigned int __maxRenderTargets = 0;
 static std::vector<FrameBuffer*> __frameBuffers;
-static FrameBufferHandle __defaultHandle = 0;
-static FrameBufferHandle __currentHandle = 0;
+static FrameBuffer* __defaultFrameBuffer = NULL;
+static FrameBuffer* __currentFrameBuffer = NULL;
 
-FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height) :
-    _id(id ? id : ""), _width(width), _height(height), _handle(0), 
+FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle) :
+    _id(id ? id : ""), _width(width), _height(height), _handle(handle), 
     _renderTargets(NULL), _depthStencilTarget(NULL)
 {
 }
@@ -57,8 +59,8 @@ void FrameBuffer::initialize()
     // On many platforms this will simply be the zero (0) handle, but this is not always the case.
     GLint fbo;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo);
-    __defaultHandle = (FrameBufferHandle)fbo;
-    __currentHandle = __defaultHandle;
+    __defaultFrameBuffer = new FrameBuffer(FRAMEBUFFER_ID_DEFAULT, 0, 0, (FrameBufferHandle)fbo);
+    __currentFrameBuffer = __defaultFrameBuffer;
 
     // Query the max supported color attachments. This glGet operation is not supported
     // on GL ES 2.x, so if the define does not exist, assume a value of 1.
@@ -96,8 +98,7 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
     // Create the frame buffer
     GLuint handle = 0;
     GL_ASSERT( glGenFramebuffers(1, &handle) );
-    FrameBuffer* frameBuffer = new FrameBuffer(id, width, height);
-    frameBuffer->_handle = handle;
+    FrameBuffer* frameBuffer = new FrameBuffer(id, width, height, handle);
     
     // Create the render target array for the new frame buffer
     frameBuffer->_renderTargets = new RenderTarget*[__maxRenderTargets];
@@ -157,11 +158,9 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
     GP_ASSERT(index < __maxRenderTargets);
     GP_ASSERT(_renderTargets);
 
+    // No change
     if (_renderTargets[index] == target)
-    {
-        // No change.
         return;
-    }
 
     // Release our reference to the current RenderTarget at this index.
     SAFE_RELEASE(_renderTargets[index]);
@@ -186,8 +185,9 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
         }
 
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentHandle) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentFrameBuffer->_handle) );
     }
+
 }
 
 RenderTarget* FrameBuffer::getRenderTarget(unsigned int index) const
@@ -234,7 +234,7 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         }
 
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentHandle) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentFrameBuffer->_handle) );
     }
 }
 
@@ -243,21 +243,19 @@ DepthStencilTarget* FrameBuffer::getDepthStencilTarget() const
     return _depthStencilTarget;
 }
 
-void FrameBuffer::bind()
+FrameBuffer* FrameBuffer::bind()
 {
-    // Bind this FrameBuffer for rendering.
     GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
-
-    // Update the current FBO handle
-    __currentHandle = _handle;
+    FrameBuffer* previousFrameBuffer = __currentFrameBuffer;
+    __currentFrameBuffer = this;
+    return previousFrameBuffer;
 }
 
-void FrameBuffer::bindDefault()
+FrameBuffer* FrameBuffer::bindDefault()
 {
-    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __defaultHandle) );
-
-    // Update the current FBO handle
-    __currentHandle = __defaultHandle;
+    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __defaultFrameBuffer->_handle) );
+    __currentFrameBuffer = __defaultFrameBuffer;
+    return __defaultFrameBuffer;
 }
 
 
