@@ -35,7 +35,7 @@ struct CollidesWithCallback : public btCollisionWorld::ContactResultCallback
 };
 
 PhysicsCollisionObject::PhysicsCollisionObject(Node* node)
-    : _node(node), _motionState(NULL), _collisionShape(NULL), _enabled(true), _scriptListeners(NULL)
+    : _node(node), _collisionShape(NULL), _enabled(true), _scriptListeners(NULL), _motionState(NULL)
 {
 }
 

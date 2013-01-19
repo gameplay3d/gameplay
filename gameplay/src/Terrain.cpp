@@ -554,6 +554,18 @@ const Matrix& Terrain::getNormalMatrix() const
     return _normalMatrix;
 }
 
+const Matrix& Terrain::getWorldViewMatrix() const
+{
+    static Matrix worldView;
+
+    if (_node)
+        Matrix::multiply(_node->getViewMatrix(), getWorldMatrix(), &worldView);
+    else
+        worldView = getWorldMatrix(); // no node, so nothing to get view from
+
+    return worldView;
+}
+
 const Matrix& Terrain::getWorldViewProjectionMatrix() const
 {
     static Matrix worldViewProj;
