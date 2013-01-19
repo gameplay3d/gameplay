@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "Terrain.h"
+#include "TerrainPatch.h"
 #include "Node.h"
 #include "FileSystem.h"
 

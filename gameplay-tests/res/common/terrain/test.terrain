@@ -18,7 +18,7 @@ terrain
 		texture
 		{
 			path = res/common/terrain/rock.dds
-			repeat = 20,20
+			repeat = 30,30
 		}
 	}
 
@@ -32,7 +32,7 @@ terrain
 
 		blend
 		{
-			path = res/common/terrain/grass.dds
+            path = res/common/terrain/grass.dds
             channel = 3
 		}
 	}
