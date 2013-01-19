@@ -239,6 +239,10 @@ public:
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts a single parameter of type Node*.
      *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
+     *
      * @param instance The pointer to an instance of the object that contains visitMethod.
      * @param visitMethod The pointer to the class method to call for each node in the scene.
      */
@@ -253,8 +257,11 @@ public:
      * 
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts two parameters: a Node pointer and a cookie of a
-     * user-specified type. The scene traversal continues while visitMethod return
-     * true. Returning false will cause the traversal to stop.
+     * user-specified type.
+     *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.
      * @param visitMethod The pointer to the class method to call for each node in the scene.
@@ -272,6 +279,10 @@ public:
      * The visitMethod parameter must be a string containing the name of a
      * valid Lua function that has a boolean return type and accepts a 
      * single parameter of type Node*.
+     *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
      *
      * @param visitMethod The name of the Lua function to call for each node in the scene.
      */
@@ -311,18 +322,18 @@ private:
      * Visits the given node and all of its children recursively.
      */
     template <class T>
-    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*));
+    void visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*));
 
     /**
      * Visits the given node and all of its children recursively.
      */
     template <class T, class C>
-    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
+    void visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
 
     /**
      * Visits the given node and all of its children recursively.
      */
-    inline bool visitNode(Node* node, const char* visitMethod);
+    inline void visitNode(Node* node, const char* visitMethod);
 
     std::string _id;
     Camera* _activeCamera;
@@ -341,8 +352,7 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*))
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        if (!visitNode(node, instance, visitMethod))
-            return;
+        visitNode(node, instance, visitMethod);
     }
 }
 
@@ -352,8 +362,7 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        if (!visitNode(node, instance, visitMethod, cookie))
-            return;
+        visitNode(node, instance, visitMethod, cookie);
     }
 }
 
@@ -361,59 +370,51 @@ inline void Scene::visit(const char* visitMethod)
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        if (!visitNode(node, visitMethod))
-            return;
+        visitNode(node, visitMethod);
     }
 }
 
 template <class T>
-bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
+void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
 {
     // Invoke the visit method for this node.
     if (!(instance->*visitMethod)(node))
-        return false;
+        return;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!visitNode(child, instance, visitMethod))
-            return false;
+        visitNode(child, instance, visitMethod);
     }
-
-    return true;
 }
 
 template <class T, class C>
-bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
+void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
 {
     // Invoke the visit method for this node.
     if (!(instance->*visitMethod)(node, cookie))
-        return false;
+        return;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!visitNode(child, instance, visitMethod, cookie))
-            return false;
+        visitNode(child, instance, visitMethod, cookie);
     }
-
-    return true;
 }
 
-inline bool Scene::visitNode(Node* node, const char* visitMethod)
+inline void Scene::visitNode(Node* node, const char* visitMethod)
 {
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
     // Invoke the visit method for this node.
-    if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", node))
-        return false;
+    if (!sc->executeFunction<bool>(visitMethod, "<Node>", node))
+        return;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", child))
-            return false;
+        visitNode(child, visitMethod);
     }
-
-    return true;
 }
 
 }
