@@ -125,22 +125,27 @@ public:
     DepthStencilTarget* getDepthStencilTarget() const;
  
     /**
-     * Binds this FrameBuffer for off-screen rendering.
+     * Binds this FrameBuffer for off-screen rendering and return you the curently bound one.
+     *
+     * You should keep the return FrameBuffer and store it and call bind() when you rendering is complete.
+     *
+     * @ return The currently bound framebuffer.
      */
-    void bind();
+    FrameBuffer* bind();
 
     /**
      * Binds the default FrameBuffer for rendering to the display.
+     *
+     * @ return The default framebuffer.
      */
-    static void bindDefault(); 
+    static FrameBuffer* bindDefault(); 
      
 private:
-
 
     /**
      * Constructor.
      */
-    FrameBuffer(const char* id, unsigned int width, unsigned int height);
+    FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle);
 
     /**
      * Destructor.
