@@ -1289,7 +1289,10 @@ int Platform::enterMessagePump()
                     break;
                 }
                 case NAVIGATOR_EXIT:
-                    _game->exit();
+                	// Call Game::shutdown directly, instead of Game::exit.
+                	// We need to do this since exit() queues a request to shutdown for the
+                	// next frame, which will never get executed because we are suspended.
+                    _game->shutdown();
                     break;
                 }
             }
@@ -1327,7 +1330,7 @@ int Platform::enterMessagePump()
             rc = eglSwapBuffers(__eglDisplay, __eglSurface);
             if (rc != EGL_TRUE)
             {
-                _game->exit();
+                _game->shutdown();
                 perror("eglSwapBuffers");
                 break;
             }
