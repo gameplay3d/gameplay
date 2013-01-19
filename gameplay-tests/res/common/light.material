@@ -1,6 +1,6 @@
 material lighting
 {
-	u_textureRepeat = 5, 5	
+	u_textureRepeat = 1.5, 1.5
 	
 	technique unlit
     {

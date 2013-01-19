@@ -10,7 +10,7 @@ std::vector<TestsGame::TestRecordList>* TestsGame::_tests = NULL;
 TestsGame game;
 
 TestsGame::TestsGame()
-    : _font(NULL), _activeTest(NULL), _testSelectForm(NULL)
+    : _activeTest(NULL), _font(NULL),  _testSelectForm(NULL)
 {
 }
 
@@ -74,7 +74,7 @@ void TestsGame::initialize()
 
     for (unsigned int i = 0; i < gamepadCount; i++)
     {
-        Gamepad* gamepad = getGamepad(i);
+        Gamepad* gamepad = getGamepad(i, false);
         if (gamepad->isVirtual())
         {
             gamepad->getForm()->setEnabled(false);

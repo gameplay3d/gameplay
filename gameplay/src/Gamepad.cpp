@@ -2,6 +2,7 @@
 #include "Gamepad.h"
 #include "Game.h"
 #include "Button.h"
+#include "Platform.h"
 
 namespace gameplay
 {
@@ -9,7 +10,8 @@ namespace gameplay
 static std::vector<Gamepad*> __gamepads;
 
 Gamepad::Gamepad(const char* formPath)
-    : _handle(INT_MAX), _vendorId(0), _productId(0), _buttonCount(0), _joystickCount(0), _triggerCount(0), _form(NULL), _buttons(0)
+    : _handle((GamepadHandle)INT_MAX), _buttonCount(0), _joystickCount(0), _triggerCount(0), _vendorId(0), _productId(0),
+      _form(NULL), _buttons(0)
 {
     GP_ASSERT(formPath);
     _form = Form::create(formPath);
@@ -33,8 +35,9 @@ Gamepad::Gamepad(const char* formPath)
 
 Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                  unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-    : _handle(handle), _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
-      _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _form(NULL), _buttons(0)
+    : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
+      _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
+      _form(NULL), _buttons(0)
 {
 }
 
