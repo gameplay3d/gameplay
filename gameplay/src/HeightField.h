@@ -52,7 +52,7 @@ namespace gameplay
          * or 16-bit (RAW16) format. RAW16 files must have little endian (PC) byte ordering. Since
          * RAW files have no header, you must specify the dimensions of the data in the file.
          * This method automatically determines (based on file size) whether the input file
-         * is RAW8 or RAW16.
+         * is RAW8 or RAW16. RAW files must have a .raw or .r16 file extension.
          *
          * RAW files are commonly used in software that produces heightmap images. Using RAW16 is 
          * preferred or any 8-bit heightfield source since it allows greater precision, resulting in
@@ -62,7 +62,7 @@ namespace gameplay
          * intensity to height values. The minHeight parameter is mapped to zero intensity
          * pixel, while maxHeight maxHeight is mapped to full intensity pixels.
          *
-         * @param path Path to the RAW file.
+         * @param path Path to the RAW file (must end in a .raw or .r16 file extension).
          * @param width Width of the RAW data.
          * @param height Height of the RAW data.
          * @param heightMin Minimum height value for a zero intensity pixel.

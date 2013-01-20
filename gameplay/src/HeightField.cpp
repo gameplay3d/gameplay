@@ -50,21 +50,13 @@ HeightField* HeightField::create(const char* path, unsigned int width, unsigned 
     GP_ASSERT(path);
     GP_ASSERT(heightMax >= heightMin);
 
-    // Validate input parameters
-    size_t pathLength = strlen(path);
-    if (pathLength <= 4)
-    {
-        GP_WARN("Unrecognized file extension for heightfield image: %s.", path);
-        return NULL;
-    }
-
     float heightScale = heightMax - heightMin;
 
     HeightField* heightfield = NULL;
 
     // Load height data from image
-    const char* ext = path + (pathLength - 4);
-    if (ext[0] == '.' && toupper(ext[1]) == 'P' && toupper(ext[2]) == 'N' && toupper(ext[3]) == 'G')
+    std::string ext = FileSystem::getExtension(path);
+    if (ext == ".PNG")
     {
         // Normal image
         Image* image = Image::create(path);
@@ -102,7 +94,7 @@ HeightField* HeightField::create(const char* path, unsigned int width, unsigned 
 
         SAFE_RELEASE(image);
     }
-    else if (ext[0] == '.' && toupper(ext[1]) == 'R' && toupper(ext[2]) == 'A' && toupper(ext[3]) == 'W')
+    else if (ext == ".RAW" || ext == ".R16")
     {
         // RAW image (headerless)
         if (width < 2 || height < 2 || heightMax < 0)
