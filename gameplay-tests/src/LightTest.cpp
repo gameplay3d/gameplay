@@ -91,9 +91,9 @@ void LightTest::initialize()
     _properties = static_cast<Container*>(_form->getControl("lightProperties"));
 	_redSlider = static_cast<Slider*>(_form->getControl("redSlider"));
 	_redSlider->addListener(this, Control::Listener::VALUE_CHANGED);
-    _greenSlider = static_cast<Slider*>(_form->getControl("blueSlider"));
+    _greenSlider = static_cast<Slider*>(_form->getControl("greenSlider"));
 	_greenSlider->addListener(this, Control::Listener::VALUE_CHANGED);
-    _blueSlider = static_cast<Slider*>(_form->getControl("greenSlider"));
+    _blueSlider = static_cast<Slider*>(_form->getControl("blueSlider"));
 	_blueSlider->addListener(this, Control::Listener::VALUE_CHANGED);
 	_specularSlider = static_cast<Slider*>(_form->getControl("specularSlider"));
 	_specularSlider->addListener(this, Control::Listener::VALUE_CHANGED);
