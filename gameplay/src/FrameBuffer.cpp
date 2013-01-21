@@ -72,8 +72,7 @@ void FrameBuffer::initialize()
 
 void FrameBuffer::finalize()
 {
-    SAFE_DELETE(_defaultFrameBuffer);
-    SAFE_DELETE(_currentFrameBuffer);
+    SAFE_RELEASE(_defaultFrameBuffer);
 }
 
 FrameBuffer* FrameBuffer::create(const char* id)
