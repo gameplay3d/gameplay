@@ -163,6 +163,8 @@ private:
 
     static void initialize();
 
+    static void finalize();
+
     static bool isPowerOfTwo(unsigned int value);
 
     std::string _id;
@@ -171,6 +173,11 @@ private:
     FrameBufferHandle _handle;
     RenderTarget** _renderTargets;
     DepthStencilTarget* _depthStencilTarget;
+
+    static unsigned int _maxRenderTargets;
+    static std::vector<FrameBuffer*> _frameBuffers;
+    static FrameBuffer* _defaultFrameBuffer;
+    static FrameBuffer* _currentFrameBuffer;
 };
 
 }
