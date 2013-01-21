@@ -429,7 +429,7 @@ private:
     std::string _path;
     unsigned int _referenceCount;
     Reference* _references;
-    FILE* _file;
+    Stream* _stream;
 
     std::vector<MeshSkinData*> _meshSkins;
     std::map<std::string, Node*>* _trackedNodes;

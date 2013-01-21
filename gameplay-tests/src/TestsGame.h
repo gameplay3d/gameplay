@@ -69,6 +69,8 @@ public:
      */
     void controlEvent(Control* control, EventType evt);
 
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
     /**
      * Adds a test.
      * 

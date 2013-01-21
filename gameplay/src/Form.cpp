@@ -10,27 +10,9 @@
 #include "CheckBox.h"
 #include "Scene.h"
 
-#define FORM_VSH \
-    "uniform mat4 u_worldViewProjectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_worldViewProjectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-    "}\n"
-
-#define FORM_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = texture2D(u_texture, v_texCoord);\n" \
-    "}\n"
+// Default form shaders
+#define FORM_VSH "res/shaders/form.vert"
+#define FORM_FSH "res/shaders/form.frag"
 
 namespace gameplay
 {
@@ -44,7 +26,6 @@ Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL)
 
 Form::~Form()
 {
-    SAFE_RELEASE(_node);
     SAFE_DELETE(_spriteBatch);
     SAFE_RELEASE(_frameBuffer);
     SAFE_RELEASE(_theme);
@@ -98,6 +79,8 @@ Form* Form::create(const char* id, Theme::Style* style, Layout::Type layoutType)
     // Get default projection matrix.
     Game* game = Game::getInstance();
     Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &form->_defaultProjectionMatrix);
+
+    form->updateBounds();
 
     __forms.push_back(form);
 
@@ -200,6 +183,8 @@ Form* Form::create(const char* url)
     form->addControls(theme, formProperties);
 
     SAFE_DELETE(properties);
+    
+    form->updateBounds();
 
     __forms.push_back(form);
 
@@ -209,7 +194,7 @@ Form* Form::create(const char* url)
 Form* Form::getForm(const char* id)
 {
     std::vector<Form*>::const_iterator it;
-    for (it = __forms.begin(); it < __forms.end(); it++)
+    for (it = __forms.begin(); it < __forms.end(); ++it)
     {
         Form* f = *it;
         GP_ASSERT(f);
@@ -247,7 +232,7 @@ void Form::setSize(float width, float height)
         _u2 = width / (float)w;
         _v1 = height / (float)h;
 
-        // Create framebuffer if necessary.
+        // Create framebuffer if necessary. TODO: Use pool to cache.
         if (_frameBuffer)
             SAFE_RELEASE(_frameBuffer)
         
@@ -264,16 +249,17 @@ void Form::setSize(float width, float height)
 
         // Clear the framebuffer black
         Game* game = Game::getInstance();
-        _frameBuffer->bind();
-        Rectangle prevViewport = game->getViewport();
+        FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
+        Rectangle previousViewport = game->getViewport();
+
         game->setViewport(Rectangle(0, 0, width, height));
         _theme->setProjectionMatrix(_projectionMatrix);
         game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
-        FrameBuffer::bindDefault();
-        game->setViewport(prevViewport);
+
+        previousFrameBuffer->bind();
+        game->setViewport(previousViewport);
     }
-    
     _bounds.width = width;
     _bounds.height = height;
     _dirty = true;
@@ -328,7 +314,7 @@ static Effect* createEffect()
     Effect* effect = NULL;
     if (__formEffect == NULL)
     {
-        __formEffect = Effect::createFromSource(FORM_VSH, FORM_FSH);
+        __formEffect = Effect::createFromFile(FORM_VSH, FORM_FSH);
         if (__formEffect == NULL)
         {
             GP_ERROR("Unable to load form effect.");
@@ -403,6 +389,11 @@ void Form::setNode(Node* node)
 }
 
 void Form::update(float elapsedTime)
+{
+    updateBounds();
+}
+
+void Form::updateBounds()
 {
     if (isDirty())
     {
@@ -490,10 +481,9 @@ void Form::update(float elapsedTime)
         }
  
         _viewportClipBounds.set(x, y, width, height);
-
         _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
-            width + border.left + padding.left + border.right + padding.right,
-            height + border.top + padding.top + border.bottom + padding.bottom);
+                                width + border.left + padding.left + border.right + padding.right,
+                                height + border.top + padding.top + border.bottom + padding.bottom);
         if (_clearBounds.isEmpty())
         {
             _clearBounds.set(_absoluteClipBounds);
@@ -524,9 +514,13 @@ void Form::update(float elapsedTime)
 
         GP_ASSERT(_layout);
         if (_scroll != SCROLL_NONE)
+        {
             updateScroll();
+        }
         else
+        {
             _layout->update(this, Vector2::zero());
+        }
     }
 }
 
@@ -544,7 +538,7 @@ void Form::draw()
     if (isDirty())
     {
         GP_ASSERT(_frameBuffer);
-        _frameBuffer->bind();
+        FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
 
         Game* game = Game::getInstance();
         Rectangle prevViewport = game->getViewport();
@@ -552,14 +546,14 @@ void Form::draw()
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
-        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height), _skin != NULL, false, _bounds.height);
+        Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height),
+                        _skin != NULL, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
-
-        // Rebind the default framebuffer and game viewport.
-        FrameBuffer::bindDefault();
 
         // restore the previous game viewport
         game->setViewport(prevViewport);
+        // Rebind the previous framebuffer and game viewport.
+        previousFrameBuffer->bind();
     }
 
     // Draw either with a 3D quad or sprite batch
@@ -598,7 +592,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled())
+        if (form->isEnabled() && form->isVisible())
         {
             if (form->_node)
             {
@@ -644,7 +638,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled())
+        if (form->isEnabled() && form->isVisible())
         {
             if (form->keyEvent(evt, key))
                 return true;
@@ -662,7 +656,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled())
+        if (form->isEnabled() && form->isVisible())
         {
             if (form->_node)
             {
@@ -710,13 +704,12 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
 bool Form::projectPoint(int x, int y, Vector3* point)
 {
     Scene* scene = _node->getScene();
-    GP_ASSERT(scene);
-    Camera* camera = scene->getActiveCamera();
+    Camera* camera;
 
-    if (camera)
+    if (scene && (camera = scene->getActiveCamera()))
     {
         // Get info about the form's position.
-        Matrix m = _node->getMatrix();
+        Matrix m = _node->getWorldMatrix();
         Vector3 min(0, 0, 0);
         m.transformPoint(&min);
 
@@ -731,7 +724,7 @@ bool Form::projectPoint(int x, int y, Vector3* point)
         // by the quad's forward vector and one of its points to the plane defined by the same vector and the origin.
         const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
         const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-        const float distance = abs(d) /  sqrt(a*a + b*b + c*c);
+        const float distance = fabs(d) /  sqrt(a*a + b*b + c*c);
         Plane plane(normal, -distance);
 
         // Check for collision with plane.

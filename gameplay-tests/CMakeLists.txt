@@ -18,6 +18,7 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/bullet/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/oggvorbis/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/openal/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/glew/lib/linux/${ARCH_DIR}
 )
 
@@ -41,39 +42,50 @@ set(GAMEPLAY_LIBRARIES
     X11
 ) 
 
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -logg -lvorbis -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL -lrt -ldl -lX11)
+add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL -lrt -ldl -lX11)
 
 set( GAME_NAME gameplay-tests)
 
 set(GAME_SRC
-    
-    src/FirstPersonCamera.cpp
-    src/FirstPersonCamera.h
-    src/Grid.cpp
-    src/Grid.h
-    src/Test.cpp
-    src/Test.h
-    src/TestsGame.cpp
-    src/TestsGame.h
     src/Audio3DTest.cpp
     src/Audio3DTest.h
+    src/BillboardTest.cpp
+    src/BillboardTest.h
     src/CreateSceneTest.cpp
     src/CreateSceneTest.h	
     src/CreateSceneTest.h
+    src/FirstPersonCamera.cpp
+    src/FirstPersonCamera.h
+    src/FormsTest.cpp
+    src/FormsTest.h
+    src/GamepadTest.cpp
+    src/GamepadTest.h
     src/GestureTest.cpp
     src/GestureTest.h
+    src/Grid.cpp
+    src/Grid.h
     src/InputTest.cpp
     src/InputTest.h
+    src/LightTest.cpp
+    src/LightTest.h
     src/LoadSceneTest.cpp
     src/LoadSceneTest.h
     src/MeshBatchTest.cpp
     src/MeshBatchTest.h
     src/MeshPrimitiveTest.cpp
     src/MeshPrimitiveTest.h
-    src/PhysicsSceneTest.cpp
-    src/PhysicsSceneTest.h
+    src/PhysicsCollisionObjectTest.cpp
+    src/PhysicsCollisionObjectTest.h
+    src/PostProcessTest.cpp
+    src/PostProcessTest.h
     src/SpriteBatchTest.cpp
     src/SpriteBatchTest.h
+    src/TerrainTest.cpp
+    src/TerrainTest.h
+    src/Test.cpp
+    src/Test.h
+    src/TestsGame.cpp
+    src/TestsGame.h
     src/TextTest.cpp
     src/TextTest.h
     src/TextureTest.cpp

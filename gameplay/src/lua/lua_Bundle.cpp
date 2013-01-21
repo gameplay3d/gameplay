@@ -130,7 +130,7 @@ int lua_Bundle_contains(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 bool result = instance->contains(param1);
@@ -278,7 +278,7 @@ int lua_Bundle_loadFont(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadFont(param1);
@@ -326,7 +326,7 @@ int lua_Bundle_loadMesh(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadMesh(param1);
@@ -374,7 +374,7 @@ int lua_Bundle_loadNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadNode(param1);
@@ -448,7 +448,7 @@ int lua_Bundle_loadScene(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Bundle* instance = getInstance(state);
                 void* returnPtr = (void*)instance->loadScene(param1);
@@ -527,7 +527,7 @@ int lua_Bundle_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Bundle::create(param1);
                 if (returnPtr)

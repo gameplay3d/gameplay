@@ -3,6 +3,9 @@
 
 //TRACK_MEMORY();
 
+// Generated file list (extern from Base.h)
+std::vector<string> generatedFiles;
+
 void printError(const char* format, ...)
 {
     va_list argptr;
@@ -23,12 +26,47 @@ void printError(const char* format, ...)
     va_end(argptr);
 }
 
+void writeFile(const std::string& path, const std::string& text)
+{
+    generatedFiles.push_back(path);
+
+    // Read in content of path to compare before writing
+    bool changed = true;
+    ifstream in(path.c_str());
+    if (in.is_open())
+    {
+        changed = false;
+        istringstream textStream(text, istringstream::in);
+        string line1, line2;
+        while (in.good() && textStream.good())
+        {
+            getline(in, line1);
+            getline(textStream, line2);
+            if (line1 != line2 || in.good() != textStream.good())
+            {
+                // Files differ
+                changed = true;
+                break;
+            }
+        }
+        in.close();
+    }
+
+    if (changed)
+    {
+        ofstream o(path.c_str());
+        o << text;
+        o.close();
+    }
+}
+
 int main(int argc, char** argv)
 {
     // Ensure the user is calling the program correctly.
     if (argc < 2 || argc > 4)
     {
-        GP_ERROR("Usage: gameplay-luagen <doxygen-xml-input-directory> [output-directory] [binding-namespace]");
+        printf("Usage: gameplay-luagen <doxygen-xml-input-directory> [output-directory] [binding-namespace]\n");
+        exit(0);
     }
 
     // Generate the bindings.

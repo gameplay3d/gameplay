@@ -1,8 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <queue>
-
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Touch.h"
@@ -17,7 +15,6 @@
 #include "Vector4.h"
 #include "TimeListener.h"
 
-
 namespace gameplay
 {
 
@@ -28,8 +25,8 @@ class ScriptController;
  */
 class Game
 {
-
     friend class Platform;
+	friend class ShutdownListener;
 
 public:
     
@@ -298,7 +295,7 @@ public:
      * @param evt The touch event that occurred.
      * @param x The x position of the touch in pixels. Left edge is zero.
      * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     * @param contactIndex An integer to identify this contact point within the currently active touch set.
      *
      * @see Touch::TouchEvent
      */
@@ -444,29 +441,26 @@ public:
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
-     * Gets the number of gamepad's that can be used in the game. Includes gamepads not connected.
-     * 
-     * @return The number of gamepad's that can be used in the game.
+     * Gets the current number of gamepads currently connected to the system.
+     *
+     * @return The number of gamepads currently connected to the system.
      */
     inline unsigned int getGamepadCount() const;
 
     /**
-     * Gets the number of physical gamepad's attached/connected to the game.
-     * Can be called to detects if any gamepads have been attached or detached.
-     * 
-     * @return The number of gamepads attached to the Platform.
-     */
-    inline unsigned int getGamepadsConnected();
-
-    /**
-     * Gets the gamepad at the specified index.
+     * Gets the gamepad at the specified index. 
      *
-     * @param index The index to get the gamepad for: 0 <= index <= Game::getGamepadCount()
+     * The gamepad index can change when connected and disconnected so you
+     * cannot rely on this other than iterating through them all to display
+     * them or poll them.
+     *
+     * @param index The index of the gamepad to retrieve.
+     * @return The gamepad at the specified index.
      */
-    inline Gamepad* getGamepad(unsigned int index) const;
+    inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 
     /**
-     * Sets muli-touch is to be enabled/disabled. Default is disabled.
+     * Sets multi-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
      */
@@ -516,6 +510,15 @@ public:
      * @param function The Lua script function that will receive the event.
      */
     void schedule(float timeOffset, const char* function);
+
+    /**
+     * Opens an URL in an external browser, if available.
+     *
+     * @param url URL to be opened.
+     *
+     * @return True if URL was opened successfully, false otherwise.
+     */
+    bool launchURL(const char *url) const;
 
 protected:
 
@@ -600,6 +603,11 @@ private:
         std::string function;
     };
 
+	struct ShutdownListener : public TimeListener
+	{
+		void timeEvent(long timeDiff, void* cookie);
+	};
+
     /**
      * TimeEvent represents the event that is sent to TimeListeners as a result of calling Game::schedule().
      */
@@ -648,24 +656,6 @@ private:
      */
     void loadGamepads();
 
-    /** 
-     * Creates a Gamepad object from a .form file.
-     *
-     * @param gamepadId The gamepad id (typically equal to the corresponding player's number).
-     * @param gamepadFormPath The path to the .form file.
-     */
-    Gamepad* createGamepad(const char* gamepadId, const char* gamepadFormPath);
-
-    /**
-     * Creates a Gamepad object for a physical gamepad.
-     */
-    unsigned int createGamepad(const char* id, unsigned int handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount);
-
-    /**
-     * Triggers any Gamepad::CONNECTED_EVENTS after initialization.
-     */
-    void triggerGamepadEvents();
-
     bool _initialized;                          // If game has initialized yet.
     State _state;                               // The game state.
     unsigned int _pausedCount;                  // Number of times pause() has been called.
@@ -686,7 +676,6 @@ private:
     PhysicsController* _physicsController;      // Controls the simulation of a physics scene and entities.
     AIController* _aiController;                // Controls AI simulation.
     AudioListener* _audioListener;              // The audio listener in 3D space.
-    std::vector<Gamepad*>* _gamepads;           // The connected gamepads.
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
     std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.

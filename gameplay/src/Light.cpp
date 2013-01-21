@@ -161,15 +161,11 @@ void Light::setRange(float range)
     {
     case POINT:
         GP_ASSERT(_point);
-        GP_ASSERT(range);
-
         _point->range = range;
         _point->rangeInverse = 1.0f / range;
         break;
     case SPOT:
         GP_ASSERT(_spot);
-        GP_ASSERT(range);
-
         _spot->range = range;
         _spot->rangeInverse = 1.0f / range;
         break;
@@ -276,14 +272,12 @@ Light::Directional::Directional(const Vector3& color)
 Light::Point::Point(const Vector3& color, float range)
     : color(color), range(range)
 {
-    GP_ASSERT(range);
     rangeInverse = 1.0f / range;
 }
 
 Light::Spot::Spot(const Vector3& color, float range, float innerAngle, float outerAngle)
     : color(color), range(range), innerAngle(innerAngle), outerAngle(outerAngle)
 {
-    GP_ASSERT(range);
     rangeInverse = 1.0f / range;
     innerAngleCos = cos(innerAngle);
     outerAngleCos = cos(outerAngle);

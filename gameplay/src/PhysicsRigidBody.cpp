@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "MeshPart.h"
 #include "Node.h"
+#include "Terrain.h"
 
 namespace gameplay
 {
@@ -21,7 +22,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
     GP_ASSERT(_collisionShape && _collisionShape->getShape());
 
     // Create motion state object.
-    _motionState = new PhysicsMotionState(node, (centerOfMassOffset.lengthSquared() > MATH_EPSILON) ? &centerOfMassOffset : NULL);
+    _motionState = new PhysicsMotionState(node, this, (centerOfMassOffset.lengthSquared() > MATH_EPSILON) ? &centerOfMassOffset : NULL);
 
     // If the mass is non-zero, then the object is dynamic so we calculate the local 
     // inertia. However, if the collision shape is a triangle mesh, we don't calculate 
@@ -31,7 +32,7 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
         _collisionShape->getShape()->calculateLocalInertia(parameters.mass, localInertia);
 
     // Create the Bullet physics rigid body object.
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(parameters.mass, _motionState, _collisionShape->getShape(), localInertia);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(parameters.mass, NULL, _collisionShape->getShape(), localInertia);
     rbInfo.m_friction = parameters.friction;
     rbInfo.m_restitution = parameters.restitution;
     rbInfo.m_linearDamping = parameters.linearDamping;
@@ -39,6 +40,10 @@ PhysicsRigidBody::PhysicsRigidBody(Node* node, const PhysicsCollisionShape::Defi
 
     // Create + assign the new bullet rigid body object.
     _body = bullet_new<btRigidBody>(rbInfo);
+
+    // Set motion state after rigid body assignment, since bullet will callback on the motion state interface to query
+    // the initial transform and it will need to access to rigid body (_body).
+    _body->setMotionState(_motionState);
 
     // Set other initially defined properties.
     setKinematic(parameters.kinematic);
@@ -176,8 +181,8 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties, c
     }
 
     // Load the physics collision shape definition.
-    PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
-    if (shape == NULL)
+    PhysicsCollisionShape::Definition shape = PhysicsCollisionShape::Definition::create(node, properties);
+    if (shape.isEmpty())
     {
         GP_ERROR("Failed to create collision shape during rigid body creation.");
         return NULL;
@@ -240,8 +245,7 @@ PhysicsRigidBody* PhysicsRigidBody::create(Node* node, Properties* properties, c
     }
 
     // Create the rigid body.
-    PhysicsRigidBody* body = new PhysicsRigidBody(node, *shape, parameters);
-    SAFE_DELETE(shape);
+    PhysicsRigidBody* body = new PhysicsRigidBody(node, shape, parameters);
 
     if (gravity)
     {
@@ -275,46 +279,53 @@ void PhysicsRigidBody::setEnabled(bool enable)
         _body->setMotionState(_motionState);
 }
 
-float PhysicsRigidBody::getHeight(float x, float y, Vector3* normal) const
+float PhysicsRigidBody::getHeight(float x, float z) const
 {
     GP_ASSERT(_collisionShape);
+    GP_ASSERT(_node);
+
+    // If our node has a terrain, call getHeight() on it since we need to factor in local
+    // scaling on the terrain into the height calculation.
+    if (_node->getTerrain())
+        return _node->getTerrain()->getHeight(x, z);
 
     // This function is only supported for heightfield rigid bodies.
     if (_collisionShape->getType() != PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
-        GP_ERROR("Attempting to get the height of a non-heightfield rigid body.");
+        GP_WARN("Attempting to get the height of a non-heightfield rigid body.");
         return 0.0f;
     }
 
     GP_ASSERT(_collisionShape->_shapeData.heightfieldData);
-    GP_ASSERT(_node);
 
-    // Calculate the correct x, y position relative to the heightfield data.
+    // Ensure inverse matrix is updated so we can transform from world back into local heightfield coordinates for indexing
     if (_collisionShape->_shapeData.heightfieldData->inverseIsDirty)
     {
-        _node->getWorldMatrix().invert(&_collisionShape->_shapeData.heightfieldData->inverse);
         _collisionShape->_shapeData.heightfieldData->inverseIsDirty = false;
+
+        _node->getWorldMatrix().invert(&_collisionShape->_shapeData.heightfieldData->inverse);
     }
 
-    float w = _collisionShape->_shapeData.heightfieldData->width;
-    float h = _collisionShape->_shapeData.heightfieldData->height;
+    // Calculate the correct x, z position relative to the heightfield data.
+    float cols = _collisionShape->_shapeData.heightfieldData->heightfield->getColumnCount();
+    float rows = _collisionShape->_shapeData.heightfieldData->heightfield->getRowCount();
 
-    GP_ASSERT(w - 1);
-    GP_ASSERT(h - 1);
+    GP_ASSERT(cols > 0);
+    GP_ASSERT(rows > 0);
 
-    Vector3 v = _collisionShape->_shapeData.heightfieldData->inverse * Vector3(x, 0.0f, y);
-    x = (v.x + (0.5f * (w - 1))) * w / (w - 1);
-    y = (v.z + (0.5f * (h - 1))) * h / (h - 1);
+    Vector3 v = _collisionShape->_shapeData.heightfieldData->inverse * Vector3(x, 0.0f, z);
+    x = v.x + (cols - 1) * 0.5f;
+    z = v.z + (rows - 1) * 0.5f;
 
-    // Check that the x, y position is within the bounds.
-    if (x < 0.0f || x > w || y < 0.0f || y > h)
-    {
-        GP_ERROR("Attempting to get height at point '%f, %f', which is outside the range of the heightfield with width %d and height %d.", x, y, w, h);
-        return 0.0f;
-    }
+    // Get the unscaled height value from the HeightField
+    float height = _collisionShape->_shapeData.heightfieldData->heightfield->getHeight(x, z);
 
-    return PhysicsController::calculateHeight(_collisionShape->_shapeData.heightfieldData->heightData, w, h, x, y,
-        &_node->getWorldMatrix(), _collisionShape->_shapeData.heightfieldData->normalData, normal);
+    // Apply scale back to height
+    Vector3 worldScale;
+    _node->getWorldMatrix().getScale(&worldScale);
+    height *= worldScale.y;
+
+    return height;
 }
 
 void PhysicsRigidBody::addConstraint(PhysicsConstraint* constraint)
@@ -354,7 +365,27 @@ void PhysicsRigidBody::transformChanged(Transform* transform, long cookie)
     if (getShapeType() == PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
     {
         GP_ASSERT(_collisionShape && _collisionShape->_shapeData.heightfieldData);
+
+        // Dirty the heightfield's inverse matrix (used to compute height values from world-space coordinates)
         _collisionShape->_shapeData.heightfieldData->inverseIsDirty = true;
+
+        // Update local scaling for the heightfield.
+        Vector3 scale;
+        _node->getWorldMatrix().getScale(&scale);
+
+        // If the node has a terrain attached, factor in the terrain local scaling as well for the collision shape
+        if (_node->getTerrain())
+        {
+            Vector3& tScale = _node->getTerrain()->_localScale;
+            scale.set(scale.x * tScale.x, scale.y * tScale.y, scale.z * tScale.z);
+        }
+
+        _collisionShape->_shape->setLocalScaling(BV(scale));
+
+        // Update center of mass offset
+        float minHeight = _collisionShape->_shapeData.heightfieldData->minHeight;
+        float maxHeight = _collisionShape->_shapeData.heightfieldData->maxHeight;
+        _motionState->setCenterOfMassOffset(Vector3(0, -(minHeight + (maxHeight-minHeight)*0.5f) * scale.y, 0));
     }
 }
 

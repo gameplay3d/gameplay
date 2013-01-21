@@ -1,0 +1,70 @@
+material postprocess
+{
+    renderState
+    {
+        depthTest = false            
+    }
+
+    technique Passthrough
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_passthrough.frag
+        }
+    }
+    technique Grayscale
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_grayscale.frag
+        }
+    }
+    
+    technique Sepia
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_sepia.frag
+        }
+    }
+    
+    technique Pixelate
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_pixelate.frag
+        }
+    }
+    
+    technique Sobel Edge
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_sobeledge.frag
+        }
+    }
+    
+    technique Gaussian Blur
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_gaussianblur.frag
+        }
+    } 
+    
+    technique Old Film
+    {
+        pass
+        {
+            vertexShader = res/common/postprocess/postprocess.vert
+            fragmentShader = res/common/postprocess/postprocess_oldfilm.frag
+        }
+    }
+}
+

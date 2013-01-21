@@ -253,6 +253,82 @@ void Model::setNode(Node* node)
     }
 }
 
+static bool drawWireframe(Mesh* mesh)
+{
+    switch (mesh->getPrimitiveType())
+    {
+    case Mesh::TRIANGLES:
+        {
+            unsigned int vertexCount = mesh->getVertexCount();
+            for (unsigned int i = 0; i < vertexCount; i += 3)
+            {
+                GL_ASSERT( glDrawArrays(GL_LINE_LOOP, i, 3) );
+            }
+        }
+        return true;
+
+    case Mesh::TRIANGLE_STRIP:
+        {
+            unsigned int vertexCount = mesh->getVertexCount();
+            for (unsigned int i = 2; i < vertexCount; ++i)
+            {
+                GL_ASSERT( glDrawArrays(GL_LINE_LOOP, i-2, 3) );
+            }
+        }
+        return true;
+
+    default:
+        // not supported
+        return false;
+    }
+}
+
+static bool drawWireframe(MeshPart* part)
+{
+    unsigned int indexCount = part->getIndexCount();
+    unsigned int indexSize = 0;
+    switch (part->getIndexFormat())
+    {
+    case Mesh::INDEX8:
+        indexSize = 1;
+        break;
+    case Mesh::INDEX16:
+        indexSize = 2;
+        break;
+    case Mesh::INDEX32:
+        indexSize = 4;
+        break;
+    default:
+        GP_ERROR("Unsupported index format (%d).", part->getIndexFormat());
+        return false;
+    }
+
+    switch (part->getPrimitiveType())
+    {
+    case Mesh::TRIANGLES:
+        {
+            for (unsigned int i = 0; i < indexCount; i += 3)
+            {
+                GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), ((const GLvoid*)(i*indexSize))) );
+            }
+        }
+        return true;
+
+    case Mesh::TRIANGLE_STRIP:
+        {
+            for (unsigned int i = 2; i < indexCount; ++i)
+            {
+                GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), ((const GLvoid*)((i-2)*indexSize))) );
+            }
+        }
+        return true;
+
+    default:
+        // not supported
+        return false;
+    }
+}
+
 void Model::draw(bool wireframe)
 {
     GP_ASSERT(_mesh);
@@ -272,15 +348,7 @@ void Model::draw(bool wireframe)
                 GP_ASSERT(pass);
                 pass->bind();
                 GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
-                if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
-                {
-                    unsigned int vertexCount = _mesh->getVertexCount();
-                    for (unsigned int j = 0; j < vertexCount; j += 3)
-                    {
-                        GL_ASSERT( glDrawArrays(GL_LINE_LOOP, j, 3) );
-                    }
-                }
-                else
+                if (!wireframe || !drawWireframe(_mesh))
                 {
                     GL_ASSERT( glDrawArrays(_mesh->getPrimitiveType(), 0, _mesh->getVertexCount()) );
                 }
@@ -308,32 +376,7 @@ void Model::draw(bool wireframe)
                     GP_ASSERT(pass);
                     pass->bind();
                     GL_ASSERT( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer) );
-                    if (wireframe && (_mesh->getPrimitiveType() == Mesh::TRIANGLES || _mesh->getPrimitiveType() == Mesh::TRIANGLE_STRIP))
-                    {
-                        unsigned int indexCount = part->getIndexCount();
-                        unsigned int indexSize = 0;
-                        switch (part->getIndexFormat())
-                        {
-                        case Mesh::INDEX8:
-                            indexSize = 1;
-                            break;
-                        case Mesh::INDEX16:
-                            indexSize = 2;
-                            break;
-                        case Mesh::INDEX32:
-                            indexSize = 4;
-                            break;
-                        default:
-                            GP_ERROR("Unsupported index format (%d).", part->getIndexFormat());
-                            continue;
-                        }
-
-                        for (unsigned int k = 0; k < indexCount; k += 3)
-                        {
-                            GL_ASSERT( glDrawElements(GL_LINE_LOOP, 3, part->getIndexFormat(), ((const GLvoid*)(k*indexSize))) );
-                        }
-                    }
-                    else
+                    if (!wireframe || !drawWireframe(part))
                     {
                         GL_ASSERT( glDrawElements(part->getPrimitiveType(), part->getIndexCount(), part->getIndexFormat(), 0) );
                     }

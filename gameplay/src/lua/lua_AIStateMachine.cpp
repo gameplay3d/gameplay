@@ -51,7 +51,7 @@ int lua_AIStateMachine_addState(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     AIStateMachine* instance = getInstance(state);
                     void* returnPtr = (void*)instance->addState(param1);
@@ -206,7 +206,7 @@ int lua_AIStateMachine_getState(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 AIStateMachine* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getState(param1);
@@ -298,7 +298,7 @@ int lua_AIStateMachine_setState(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     AIStateMachine* instance = getInstance(state);
                     void* returnPtr = (void*)instance->setState(param1);

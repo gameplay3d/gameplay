@@ -173,7 +173,10 @@ void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
 {
     GP_ASSERT(dst);
 
-    MathUtil::crossVector3((const float*)&v1, (const float*)&v2, (float*)dst);
+    // NOTE: This code assumes Vector3 struct members are contiguous floats in memory.
+    // We might want to revisit this (and other areas of code that make this assumption)
+    // later to guarantee 100% safety/compatibility.
+    MathUtil::crossVector3(&v1.x, &v2.x, &dst->x);
 }
 
 float Vector3::distance(const Vector3& v) const

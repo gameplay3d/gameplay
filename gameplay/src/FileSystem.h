@@ -1,6 +1,8 @@
 #ifndef FILESYSTEM_H_
 #define FILESYSTEM_H_
 
+#include "Stream.h"
+
 namespace gameplay
 {
 
@@ -12,6 +14,16 @@ class Properties;
 class FileSystem
 {
 public:
+
+    /**
+     * Mode flags for opening a stream.
+     * @script{ignore}
+     */
+    enum StreamMode
+    {
+        READ = 1,
+        WRITE = 2
+    };
 
     /**
      * Destructor.
@@ -108,6 +120,22 @@ public:
     static bool fileExists(const char* filePath);
 
     /**
+     * Opens a byte stream for the given resource path.
+     *
+     * If <code>path</code> is a file path, the file at the specified location is opened relative to the currently set
+     * resource path.
+     *
+     * @param path The path to the resource to be opened, relative to the currently set resource path.
+     * @param mode The mode used to open the file.
+     * 
+     * @return A stream that can be used to read or write to the file depending on the mode.
+     *         Returns NULL if there was an error. (Request mode not supported).
+     * 
+     * @script{ignore}
+     */
+    static Stream* open(const char* path, size_t mode = READ);
+
+    /**
      * Opens the specified file.
      *
      * The file at the specified location is opened, relative to the currently set
@@ -152,6 +180,20 @@ public:
      * @param path The path to the file.
      */
     static void createFileFromAsset(const char* path);
+
+    /**
+     * Returns the extension of the given file path.
+     *
+     * The extension returned includes all character after and including the last '.'
+     * in the file path. The extension is returned as all uppercase.
+     *
+     * If the path does not contain an extension, an empty string is returned.
+     * 
+     * @param path File path.
+     *
+     * @return The file extension, all uppercase, including the '.'.
+     */
+    static std::string getExtension(const char* path);
 
 private:
 

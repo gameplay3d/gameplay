@@ -1,29 +1,37 @@
-## gameplay v1.5.0
-An open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
+## gameplay v1.6.0
+
+GamePlay3D is an open-source, cross-platform 3D native C++ game framework making it easy to learn and write mobile and desktop games. 
+
+<img align="right" src="https://raw.github.com/wiki/blackberry/GamePlay/img/logo.png" alt="gameplay" />
+
+- [Website](http://www.gameplay3d.org/)
+- [Forums](http://www.gameplay3d.org/forums/)
+- [Wiki](https://github.com/blackberry/GamePlay/wiki)
+- [API Reference](http://www.gameplay3d.org/api.php)
+- [Development Guide](https://github.com/blackberry/GamePlay/wiki#wiki-Development_Guide)
 
 ## Supported Mobile Platforms
-- BlackBerry 10 and PlayBook 2.0 (using BlackBerry Native SDK)
-- Apple iOS 5.1 (using Apple XCode 4.3.2)
-- Google Android 2.3+ (using Google Android NDK, SDK API level 9+)
+- [BlackBerry 10 and PlayBook](https://github.com/blackberry/GamePlay/wiki/BlackBerry-Setup) (using BlackBerry Native SDK)
+- [Apple iOS 5](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode 4)
+- [Google Android 2.3+](https://github.com/blackberry/GamePlay/wiki/Android-NDK-Setup) (using Google Android NDK)
 
 ## Supported Desktop Platforms
-- Microsoft Windows 7 (using Microsoft Visual Studio 2010)
-- Apple MacOS X (using Apple XCode 4.3.2)
-- Linux (using CMake or CodeBlocks 10)
+- [Microsoft Windows 7](https://github.com/blackberry/GamePlay/wiki/Visual-Studio-Setup) (using Microsoft Visual Studio 2010)
+- [Apple MacOS X](https://github.com/blackberry/GamePlay/wiki/Apple-Xcode-Setup) (using Apple XCode 4)
+- [Linux](https://github.com/blackberry/GamePlay/wiki/Linux-Setup) (using CMake)
 
 ## Roadmap for 'next' branch
-- AI Pathfinding
-- Terrain and Water
-- Asset Pipeline improvements
+- [Version 1.7.0 Milestone](https://github.com/blackberry/GamePlay/issues?milestone=4)
 
 ## License
-The project is open sourced under the Apache 2.0 license.
+The project is open sourced under the [Apache 2.0 license](http://www.tldrlegal.com/license/apache-license-2.0-%28apache-2.0%29).
 
-## Bug Reporting and Feature Requests
-If you find a bug in a Sample, or have an enhancement request, simply file an 
-[Issue](https://github.com/blackberry/GamePlay/issues) and send a message (via github messages) 
-to the Committers to the project to let them know that you have filed 
-an [Issue](https://github.com/blackberry/GamePlay/issues).
+## Bug Reporting
+Please log bugs under [Issues](https://github.com/blackberry/GamePlay/issues) on github.
+If you are unsure if your problem is a bug then post on the [Help Forum](http://www.gameplay3d.org/forums/viewforum.php?f=3).
+
+## Feature Requests
+Please post feature requests on the [Feature Request Forum](http://www.gameplay3d.org/forums/viewforum.php?f=4). Approved feature requests will be added to the github issues list. 
 
 ## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 

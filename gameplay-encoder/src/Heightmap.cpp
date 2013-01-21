@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "Heightmap.h"
 #include "GPBFile.h"
 #include "Thread.h"
@@ -15,13 +16,17 @@ struct HeightmapThreadData
     const Vector3* rayDirection;        // [in]
     const std::vector<Mesh*>* meshes;   // [in]
     const BoundingVolume* bounds;       // [in]
-    int minX;                           // [in]
-    int maxX;                           // [in]
-    int minZ;                           // [in]
-    int maxZ;                           // [in]
+    float minX;                         // [in]
+    float maxX;                         // [in]
+    float minZ;                         // [in]
+    float maxZ;                         // [in]
+    float stepX;                        // [in]
+    float stepZ;                        // [in]
     float minHeight;                    // [out]
     float maxHeight;                    // [out]
     float* heights;                     // [in][out]
+    int width;                          // [in]
+    int height;                         // [in]
     int heightIndex;                    // [in]
 };
 
@@ -36,7 +41,7 @@ bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const Vect
 int intersect_triangle(const float orig[3], const float dir[3], const float vert0[3], const float vert1[3], const float vert2[3], float *t, float *u, float *v);
 bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const std::vector<Vertex>& vertices, const std::vector<MeshPart*>& parts, Vector3* point);
 
-void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* filename, bool highP)
+void Heightmap::generate(const std::vector<std::string>& nodeIds, int width, int height, const char* filename, bool highP)
 {
     LOG(1, "Generating heightmap: %s...\n", filename);
 
@@ -92,12 +97,10 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
     Vector3 rayOrigin(0, bounds.max.y + 10, 0);
     Vector3 rayDirection(0, -1, 0);
 
-    int minX = (int)ceil(bounds.min.x);
-    int maxX = (int)floor(bounds.max.x);
-    int minZ = (int)ceil(bounds.min.z);
-    int maxZ = (int)floor(bounds.max.z);
-    int width = maxX - minX + 1;
-    int height = maxZ - minZ + 1;
+    float minX = bounds.min.x;
+    float maxX = bounds.max.x;
+    float minZ = bounds.min.z;
+    float maxZ = bounds.max.z;
     int size = width * height;
     float* heights = new float[size];
     float minHeight = FLT_MAX;
@@ -105,11 +108,14 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
 
     __totalHeightmapScanlines = height;
 
+    // Determine # of threads to spawn
+    int threadCount = min(THREAD_COUNT, height);
+
     // Split the work into separate threads to make max use of available cpu cores and speed up computation.
-    HeightmapThreadData threadData[THREAD_COUNT];
-    THREAD_HANDLE threads[THREAD_COUNT];
-    int stepSize = height / THREAD_COUNT;
-    for (int i = 0; i < THREAD_COUNT; ++i)
+    HeightmapThreadData* threadData = new HeightmapThreadData[threadCount];
+    THREAD_HANDLE* threads = new THREAD_HANDLE[threadCount];
+    int stepSize = height / threadCount;
+    for (int i = 0, remaining = height; i < threadCount; ++i, remaining -= stepSize)
     {
         HeightmapThreadData& data = threadData[i];
         data.rayHeight = rayOrigin.y;
@@ -120,9 +126,13 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
         data.maxX = maxX;
         data.minZ = minZ + (stepSize * i);
         data.maxZ = data.minZ + stepSize - 1;
-        if (i == THREAD_COUNT - 1)
+        if (i == threadCount - 1)
             data.maxZ = maxZ;
+        data.stepX = (maxX - minX) / width;
+        data.stepZ = (maxZ - minZ) / height;
         data.heights = heights;
+        data.width = width;
+        data.height = remaining > stepSize ? stepSize : remaining;
         data.heightIndex = width * (stepSize * i);
 
         // Start the processing thread
@@ -134,14 +144,14 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
     }
 
     // Wait for all threads to terminate
-    waitForThreads(THREAD_COUNT, threads);
+    waitForThreads(threadCount, threads);
 
     // Close all thread handles and free memory allocations.
-    for (int i = 0; i < THREAD_COUNT; ++i)
+    for (int i = 0; i < threadCount; ++i)
         closeThread(threads[i]);
 
     // Update min/max height from all completed threads
-    for (int i = 0; i < THREAD_COUNT; ++i)
+    for (int i = 0; i < threadCount; ++i)
     {
         if (threadData[i].minHeight < minHeight)
             minHeight = threadData[i].minHeight;
@@ -153,7 +163,7 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
 
     if (__failedRayCasts)
     {
-        LOG(1, "Warning: %d triangle intersections failed for heightmap: %s\n", __failedRayCasts, filename);
+        LOG(2, "Warning: %d triangle intersections failed for heightmap: %s\n", __failedRayCasts, filename);
 
         // Go through and clamp any height values that are set to -FLT_MAX to the min recorded height value
         // (otherwise the range of height values will be far too large).
@@ -234,6 +244,10 @@ void Heightmap::generate(const std::vector<std::string>& nodeIds, const char* fi
     LOG(1, "Saved heightmap: %s\n", filename);
 
 error:
+    if (threadData)
+        delete[] threadData;
+    if (threads)
+        delete[] threads;
     if (heights)
         delete[] heights;
     if (fp)
@@ -252,10 +266,6 @@ int generateHeightmapChunk(void* threadData)
 
     Vector3 rayOrigin(0, data->rayHeight, 0);
     const Vector3& rayDirection = *data->rayDirection;
-    int minX = data->minX;
-    int maxX = data->maxX;
-    int minZ = data->minZ;
-    int maxZ = data->maxZ;
     const std::vector<Mesh*>& meshes = *data->meshes;
     float* heights = data->heights;
 
@@ -264,15 +274,18 @@ int generateHeightmapChunk(void* threadData)
     float maxHeight = -FLT_MAX;
     int index = data->heightIndex;
 
-    for (int z = minZ; z <= maxZ; ++z)
+    int zi = 0;
+    for (float z = data->minZ; zi < data->height; z += data->stepZ, ++zi)
     {
         LOG(1, "\r\t%d%%", (int)(((float)__processedHeightmapScanLines / __totalHeightmapScanlines) * 100.0f));
 
-        rayOrigin.z = (float)z;
-        for (int x = minX; x <= maxX; ++x)
+        rayOrigin.z = z;
+
+        int xi = 0;
+        for (float x = data->minX; xi < data->width; x += data->stepX, ++xi)
         {
             float h = -FLT_MAX;
-            rayOrigin.x = (float)x;
+            rayOrigin.x = x;
 
             for (unsigned int i = 0, count = meshes.size(); i < count; ++i)
             {
@@ -283,7 +296,7 @@ int generateHeightmapChunk(void* threadData)
                 if (!intersect(rayOrigin, rayDirection, mesh->bounds.min, mesh->bounds.max))
                     continue;
 
-                // Computer intersection point of ray with mesh
+                // Compute the intersection point of ray with mesh
                 if (intersect(rayOrigin, rayDirection, mesh->vertices, mesh->parts, &intersectionPoint))
                 {
                     if (intersectionPoint.y > h)

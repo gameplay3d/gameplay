@@ -46,6 +46,7 @@ class	btIDebugDraw
 		DBG_DrawConstraints = (1 << 11),
 		DBG_DrawConstraintLimits = (1 << 12),
 		DBG_FastWireframe = (1<<13),
+        DBG_DrawNormals = (1<<14),
 		DBG_MAX_DEBUG_DRAW_MODE
 	};
 
@@ -279,6 +280,7 @@ class	btIDebugDraw
 		}
 	}
 	
+  
 	virtual void drawBox(const btVector3& bbMin, const btVector3& bbMax, const btVector3& color)
 	{
 		drawLine(btVector3(bbMin[0], bbMin[1], bbMin[2]), btVector3(bbMax[0], bbMin[1], bbMin[2]), color);

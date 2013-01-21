@@ -11,7 +11,7 @@
 static const char* keyString(int key);
 
 InputTest::InputTest()
-    : _font(NULL), _mouseWheel(0), _mouseString("No Mouse")
+    :  _mouseString("No Mouse"), _font(NULL), _inputTestControls(NULL), _mouseWheel(0), _crosshair(NULL)
 {
 }
 
@@ -23,16 +23,44 @@ void InputTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
     assert(_font);
 
+    // Reuse part of the gamepad texture as the crosshair in this test.
+    _crosshair = SpriteBatch::create("res/png/gamepad.png");
+    _crosshairDstRect.set(0, 0, 256, 256);
+    _crosshairSrcRect.set(256, 0, 256, 256);
+    _crosshairLowerLimit.set(-_crosshairSrcRect.width / 2.0f, -_crosshairSrcRect.height / 2.0f);
+    _crosshairUpperLimit.set((float)getWidth(), (float)getHeight());
+    _crosshairUpperLimit += _crosshairLowerLimit;
+
+    // Create input test controls
+    _keyboardState = false;
+    _inputTestControls = Form::create("res/common/inputs.form");
+    static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->addListener(this, Listener::CLICK);
+    if (!hasMouse())
+    {
+        static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->setVisible(false);
+    }
+    _inputTestControls->getControl("restoreMouseLabel")->setVisible(false);
+
     _mousePoint.set(-100, -100);
 }
 
 void InputTest::finalize()
 {
+    setMouseCaptured(false);
+    if (_keyboardState)
+    {
+        displayKeyboard(false);
+    }
+
+    SAFE_RELEASE(_inputTestControls);
+    SAFE_DELETE(_crosshair);
     SAFE_RELEASE(_font);
 }
 
 void InputTest::update(float elapsedTime)
 {
+    _inputTestControls->update(Test::getAbsoluteTime());
 }
 
 void InputTest::render(float elapsedTime)
@@ -40,18 +68,49 @@ void InputTest::render(float elapsedTime)
     // Clear the color and depth buffers
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
+    _inputTestControls->draw();
+
     // Draw text
     Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
     unsigned int width, height;
     char buffer[50];
     _font->start();
-    for (std::map<unsigned int, Vector2>::const_iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+    if (isMouseCaptured())
     {
-        sprintf(buffer, "%u", it->first);
+        // Draw crosshair at current offest w.r.t. center of screen
+        _crosshair->start();
+        _crosshair->draw(_crosshairDstRect, _crosshairSrcRect);
+        _crosshair->finish();
+    }
+    else
+    {
+        for (std::list<TouchPoint>::const_iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+        {
+            sprintf(buffer, "T_%u(%d,%d)", it->_id, (int)it->_coord.x, (int)it->_coord.y);
+            _font->measureText(buffer, _font->getSize(), &width, &height);
+            int x = it->_coord.x - (int)(width>>1);
+            int y = it->_coord.y - (int)(height>>1);
+            _font->drawText(buffer, x, y, fontColor, _font->getSize());
+        }
+        // Mouse
+        sprintf(buffer, "M(%d,%d)", (int)_mousePoint.x, (int)_mousePoint.y);
         _font->measureText(buffer, _font->getSize(), &width, &height);
-        int x = it->second.x - (int)(width>>1);
-        int y = it->second.y - (int)(height>>1);
+        int x = _mousePoint.x - (int)(width>>1);
+        int y = _mousePoint.y - (int)(height>>1);
         _font->drawText(buffer, x, y, fontColor, _font->getSize());
+        if (!_keyboardState && _mouseString.length() > 0)
+        {
+            int y = getHeight() - _font->getSize();
+            _font->drawText(_mouseString.c_str(), 0, y, fontColor, _font->getSize());
+        }
+        if (_mouseWheel)
+        {
+            sprintf(buffer, "%d", _mouseWheel);
+            _font->measureText(buffer, _font->getSize(), &width, &height);
+            int x = _mouseWheelPoint.x - (int)(width>>1);
+            int y = _mouseWheelPoint.y + 4;
+            _font->drawText(buffer, x, y, fontColor, _font->getSize());
+        }
     }
     // Pressed keys
     if (_keyboardString.length() > 0)
@@ -62,21 +121,6 @@ void InputTest::render(float elapsedTime)
     if (_symbolsString.length() > 0)
     {
         _font->drawText(_symbolsString.c_str(), 0, _font->getSize(), fontColor, _font->getSize());
-    }
-    // Mouse
-    _font->drawText("M", _mousePoint.x, _mousePoint.y, fontColor, _font->getSize());
-    if (_mouseString.length() > 0)
-    {
-        int y = getHeight() - _font->getSize();
-        _font->drawText(_mouseString.c_str(), 0, y, fontColor, _font->getSize());
-    }
-    if (_mouseWheel)
-    {
-        sprintf(buffer, "%d", _mouseWheel);
-        _font->measureText(buffer, _font->getSize(), &width, &height);
-        int x = _mouseWheelPoint.x - (int)(width>>1);
-        int y = _mouseWheelPoint.y + 4;
-        _font->drawText(buffer, x, y, fontColor, _font->getSize());
     }
     // Held keys
     if (!_downKeys.empty())
@@ -104,9 +148,12 @@ void InputTest::render(float elapsedTime)
         accelerometerDrawRate = 0.0f;
         getAccelerometerValues(&pitch, &roll);
     }
-    sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
-    _font->measureText(buffer, _font->getSize(), &width, &height);
-    _font->drawText(buffer, getWidth() - width, getHeight() - height, fontColor, _font->getSize());
+    if (!_keyboardState)
+    {
+        sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
+        _font->measureText(buffer, _font->getSize(), &width, &height);
+        _font->drawText(buffer, getWidth() - width, getHeight() - height, fontColor, _font->getSize());
+    }
     _font->finish();
 }
 
@@ -123,18 +170,58 @@ bool InputTest::drawScene(Node* node)
 
 void InputTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    _touchPoints[contactIndex].x = x;
-    _touchPoints[contactIndex].y = y;
+    TouchPoint* tp = NULL;
+
+    // Not optimal, however we expect the list size to be very small (<10)
+    for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
+    {
+        if (it->_id == contactIndex)
+        {
+            tp = &(*it); // (seems redundant, however due to STD)
+            break;
+        }
+    }
+
+    // Add a new touch point if not found above
+    if (!tp)
+    {
+        tp = new TouchPoint();
+        tp->_id = contactIndex;
+        _touchPoints.push_back(*tp);
+    }
+
+    // Update the touch point
+    tp->_coord.x = x;
+    tp->_coord.y = y;
+    tp->_isStale = false; // (could be overwritten below)
 
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
+        // Purge all stale touch points
+        for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); )
+        {
+            if (it->_isStale)
+            {
+                it = _touchPoints.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
         if (x < 30 && y < 30)
         {
             displayKeyboard(true);
         }
         break;
     case Touch::TOUCH_RELEASE:
+        // Mark the current touch point as stale
+        if (tp)
+        {
+            tp->_isStale = true;
+        }
         break;
     case Touch::TOUCH_MOVE:
         break;
@@ -168,6 +255,16 @@ bool InputTest::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
         break;
     case Mouse::MOUSE_MOVE:
         _mouseString.append("MOUSE_MOVE");
+        if (isMouseCaptured())
+        {
+            // Control crosshair from captured mouse
+            _crosshairDstRect.setPosition(_crosshairDstRect.x + x, _crosshairDstRect.y + y);
+
+            // Use screen limits to clamp the crosshair position
+            Vector2 pos(_crosshairDstRect.x, _crosshairDstRect.y);
+            pos.clamp(_crosshairLowerLimit, _crosshairUpperLimit);
+            _crosshairDstRect.setPosition(pos.x, pos.y);
+        }
         break;
     case Mouse::MOUSE_WHEEL:
         _mouseString.append("MOUSE_WHEEL");
@@ -193,6 +290,11 @@ void InputTest::keyEvent(Keyboard::KeyEvent evt, int key)
         {
             _symbolsString.clear();
         }
+
+        if (key == Keyboard::KEY_SPACE && hasMouse())
+        {
+            setCaptured(false);
+        }
         break;
     case Keyboard::KEY_RELEASE:
         _keyboardString.clear();
@@ -214,6 +316,38 @@ void InputTest::keyEvent(Keyboard::KeyEvent evt, int key)
     };
 }
 
+void InputTest::controlEvent(Control* control, EventType evt)
+{
+    if (strcmp(control->getId(), "showKeyboardButton") == 0)
+    {
+        _keyboardState = !_keyboardState;
+        displayKeyboard(_keyboardState);
+        static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->setText(_keyboardState ? "Hide virtual keyboard" : "Show virtual keyboard");
+    }
+    else if (strcmp(control->getId(), "captureMouseButton") == 0 && hasMouse())
+    {
+        setCaptured(true);
+    }
+}
+
+void InputTest::setCaptured(bool captured)
+{
+    setMouseCaptured(captured);
+
+    if (!captured || isMouseCaptured())
+    {
+        _inputTestControls->getControl("showKeyboardButton")->setVisible(!captured);
+        _inputTestControls->getControl("captureMouseButton")->setVisible(!captured);
+        _inputTestControls->getControl("restoreMouseLabel")->setVisible(captured);
+    }
+
+    if (captured)
+    {
+        _crosshairDstRect.setPosition(
+            (float)getWidth()/2.0f + _crosshairLowerLimit.x,
+            (float)getHeight()/2.0f + _crosshairLowerLimit.y);
+    }
+}
 const char* keyString(int key)
 {
     // This function is helpful for finding collisions in the Keyboard::Key enum.
@@ -534,4 +668,5 @@ const char* keyString(int key)
     default:
         return "";
     };
+    return "";
 }

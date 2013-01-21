@@ -68,13 +68,9 @@
         <copy file="../res/duck.material" tofile="assets/res/duck.material"/>
         <copy file="../res/duck-diffuse.png" tofile="assets/res/duck-diffuse.png"/>
         <copy file="../res/grid.material" tofile="assets/res/grid.material"/>
-        <copy file="../../../gameplay/res/shaders/textured.vert" tofile="assets/res/shaders/textured.vert"/>
-        <copy file="../../../gameplay/res/shaders/textured.frag" tofile="assets/res/shaders/textured.frag"/>
-        <copy file="../../../gameplay/res/shaders/colored-unlit.vert" tofile="assets/res/shaders/colored-unlit.vert"/>
-        <copy file="../../../gameplay/res/shaders/colored-unlit.frag" tofile="assets/res/shaders/colored-unlit.frag"/>
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
-        <copy todir="assets/res/shaders/lib">
-            <fileset dir="../../../gameplay/res/shaders/lib"/>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
     </target>
 

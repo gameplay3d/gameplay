@@ -1,9 +1,45 @@
+## v1.6.0
+- Adds file Stream interface for reading/writing files instead of using fread/fwrite. 
+- Adds Terrain class to support for heightmap based terrains featuring LOD, multiple surface layers, loading from PNG, RAW8/16, full transform, physics, patch culling and verticle skirt for cracks.
+- Adds object-space normal map generation to gameplay-encoder for terrain normal map generation.
+- Adds scene support for loading .terrain files in .scene files.
+- Adds scene support for inline cameras to .scene files.
+- Adds suppoft for defining .scene files without 'path' to gpb. New node can not be create in .scene file.
+- Adds static Scene::getScene(const char*) to query currently active scenes in a game, helpful for script access.
+- Adds support for multiple translate, rotate and scale commands in a single node entity within .scene files, processed in-order they are defined.
+- Adds scene support for material auto binding scene ambient color, light color and light direction.
+- Adds support for setting the depth compare function on materials.
+- Adds support for texture/sampler arrays being passed to materials.
+- Adds support for loading uncompressed DDS textures for the following formats: R8G8B8, A8R8G8B8, A8B8G8R8, X8R8G8B8, X8B8G8R8
+- Adds improvments to prefer higher quality mipmap generation.
+- Adds improved Gamepad API support for button enumeration, triggers and some mobile Gamepad support on BlackBerry.
+- Adds additional gameplay-tests for billboards, forms, gamepads and lights.
+- Adds support for launching the browser via launchURL(const char*).
+- Adds physics support for setLinearFactor and setAngularFactor  on rigid bodies.
+- Adds methods to PhysicsCollisionObject to allow conversion to subclass types (i.e. PhysicsRigidBody, PhysicsCharacter, etc) from script.
+- Adds option for fullscreen without width/height config to use native desktop resolution.
+- Adds Linux support for OpenAL PulseAudio back-end.
+- Adds support for latest Bullet Physics 2.81 with NEON optimizations for mobile targets.
+- Adds support for preprocessor directive NO_LUA_BINDINGS in the gameplay project to omit inclusion of generated lua bindings in compilation for developer mode value. 
+- Adds optimizations to Lua generator to only write generated files if they differ from existing files, reducing both build times and committing of unchanged script binding files.
+- Adds changes to Slider for setValueTextVisible, setValueTextAlignment, setValueTextPrecision and getters.
+- Adds Windows 7 64-bit support.
+- Fixes to external-deps to reduce the size of the libraries on Windows.
+- Fixes for Android to no longer need to copy files to the SD card before reading them. None of the Android samples require an SD card.
+- Fixes for animation of opacity on UI and fonts.
+- Fixes in UI for removing controls and also setVisible(bool).
+- Fixes for UI controls missing on MacOSX.
+- Fixes for setting UI alignment programmatically.
+- Fixes for lighting shaders.
+- Fixes to the texture minification mode from GL_LINEAR_MIPMAP_LINEAR to GL_NEAREST_MIPMAP_LINEAR for newly created textures with mipmaps.
+- Fixes minor memory leaks and possible access violations when calling Game::exit() from script.
+- Fixes physics debug drawing for large scenes causing the internal MeshBatch to grow to an enormous size.
+
 ## v1.5.0
 
 - Linux support. (tested on Ubuntu 12)
 - CMake support for makefile generation for Linux.
-- CodeBlocks 10 IDE support for Linux.
-- Gamepad controllers support for desktops.
+- Gamepad API support for desktops.
 - Touch gesture support for tap, swipe and pinch.
 - Vehicle physics support via new PhysicsVehicle and PhysicsVehicleWheel classes.
 - Adds new racer sample (sample06-racer).
@@ -16,7 +52,7 @@
 - Adds Game/Platform::canExit for testing device capabilities to quit. (only ios)
 - Web community forums at http://www.gameplay3d.org/forums.
 - Changed keyTimes from unsigned long[]  to unsigned int[]. (breaks compat. in AnimationTarget and Animation::Channel)
-- Fixed inconsistencies from Bundle::getObjectID() to Bundle::getObjectId() (breaks compat. in Bundle)
+- Fixes inconsistencies from Bundle::getObjectID() to Bundle::getObjectId() (breaks compat. in Bundle)
 - Fixes the texture coordinates of Mesh::createQuad(float x, float y, float width, float height).
 - Fixes line-wise distortion when loading RGB png's into textures that are non-power of two.
 - Fixes inconsistencies in createXXXX methods.  (breaks compat. in Scene)
@@ -24,7 +60,7 @@
 - Fixes Lua print logging.
 - Fixes Lua errors to be treated as runtime warnings.
 - Fixes setVertexData to pointers instead of constant data.
-- Fixed AudioSource so that it doesn't loop by default.
+- Fixes AudioSource so that it doesn't loop by default.
 - Fixes minor UI scrolling issues.
 
 ## v1.4.0
@@ -47,7 +83,7 @@
 - Fixes to FrameBuffer, RenderTarget and DepthStencilTarget.
 - Fixes user switching in MacOSX to other applications with Apple-Tab.
 - Fixes measureText with empty string to be proper size.
-- Fixed for aliased text by applying linear filtering by default on Fonts.
+- Fixes for aliased text by applying linear filtering by default on Fonts.
 - Fixes RenderState::StateBlock::bindNoRestore() issue where blend function was not restored to the proper defaults.
 - Fixes some inconsistencies in Game event method names for menuEvent. (breaks compat. in Game)
 - Fixes some inconsistencies with AnimationClip::getID() to be same as Node::getId() and other classes. (breaks compat. in AnimationClip)
@@ -108,7 +144,7 @@
 - Fixes to the material/shader system.
 - Fixes to the ParticleEmitter.
 
-## v1.0.1
+## v1.0.0
 
 - Initial release.
 

@@ -99,8 +99,8 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     }
 
     // Load the physics collision shape definition.
-    PhysicsCollisionShape::Definition* shape = PhysicsCollisionShape::Definition::create(node, properties);
-    if (shape == NULL)
+    PhysicsCollisionShape::Definition shape = PhysicsCollisionShape::Definition::create(node, properties);
+    if (shape.isEmpty())
     {
         GP_ERROR("Failed to create collision shape during physics character creation.");
         return NULL;
@@ -133,10 +133,9 @@ PhysicsCharacter* PhysicsCharacter::create(Node* node, Properties* properties)
     }
 
     // Create the physics character.
-    PhysicsCharacter* character = new PhysicsCharacter(node, *shape, mass);
+    PhysicsCharacter* character = new PhysicsCharacter(node, shape, mass);
     character->setMaxStepHeight(maxStepHeight);
     character->setMaxSlopeAngle(maxSlopeAngle);
-    SAFE_DELETE(shape);
 
     return character;
 }
@@ -625,7 +624,9 @@ bool PhysicsCharacter::fixCollision(btCollisionWorld* world)
     }
 
     // Set the new world transformation to apply to fix the collision.
-    _node->translate(Vector3(currentPosition.x(), currentPosition.y(), currentPosition.z()) - startPosition);
+    Vector3 newPosition = Vector3(currentPosition.x(), currentPosition.y(), currentPosition.z()) - startPosition;
+    if (newPosition != Vector3::zero())
+        _node->translate(newPosition);
 
     return collision;
 }
@@ -687,8 +688,10 @@ void PhysicsCharacter::updateAction(btCollisionWorld* collisionWorld, btScalar d
         stepDown(collisionWorld, deltaTimeStep);
 
     // Set new position.
-    btVector3 translation = _currentPosition - startPosition;
-    _node->translate(translation.x(), translation.y(), translation.z());
+    btVector3 newPosition = _currentPosition - startPosition;
+    Vector3 translation = Vector3(newPosition.x(), newPosition.y(), newPosition.z());
+    if (translation !=  Vector3::zero())
+        _node->translate(translation);
 }
 
 
