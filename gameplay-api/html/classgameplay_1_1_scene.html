@@ -820,6 +820,7 @@ template&lt;class T &gt; </div>
 <p>Visits each node in the scene and calls the specified method pointer.</p>
 <p>Calling this method invokes the specified method pointer for each node in the scene hierarchy.</p>
 <p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts a single parameter of type Node*.</p>
+<p>A depth-first traversal of the scene continues while the visit method returns true. Returning false will stop traversing further children for the given node and the traversal will continue at the next sibling.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>The pointer to an instance of the object that contains visitMethod. </td></tr>
@@ -863,7 +864,8 @@ template&lt;class T , class C &gt; </div>
 </div><div class="memdoc">
 <p>Visits each node in the scene and calls the specified method pointer.</p>
 <p>Calling this method invokes the specified method pointer for each node in the scene hierarchy, passing the <a class="el" href="classgameplay_1_1_node.html">Node</a> and the specified cookie value.</p>
-<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a cookie of a user-specified type. The scene traversal continues while visitMethod return true. Returning false will cause the traversal to stop.</p>
+<p>The visitMethod parameter must be a pointer to a method that has a bool return type and accepts two parameters: a <a class="el" href="classgameplay_1_1_node.html">Node</a> pointer and a cookie of a user-specified type.</p>
+<p>A depth-first traversal of the scene continues while the visit method returns true. Returning false will stop traversing further children for the given node and the traversal will continue at the next sibling.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>The pointer to an instance of the object that contains visitMethod. </td></tr>
@@ -899,6 +901,7 @@ template&lt;class T , class C &gt; </div>
 <p>Visits each node in the scene and calls the specified Lua function.</p>
 <p>Calling this method invokes the specified Lua function for each node in the scene hierarchy.</p>
 <p>The visitMethod parameter must be a string containing the name of a valid Lua function that has a boolean return type and accepts a single parameter of type Node*.</p>
+<p>A depth-first traversal of the scene continues while the visit method returns true. Returning false will stop traversing further children for the given node and the traversal will continue at the next sibling.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">visitMethod</td><td>The name of the Lua function to call for each node in the scene. </td></tr>
@@ -911,7 +914,7 @@ template&lt;class T , class C &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 16 2013 21:25:08 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 21 2013 15:52:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

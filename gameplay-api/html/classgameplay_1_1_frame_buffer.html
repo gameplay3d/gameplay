@@ -105,8 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5369b0adca5a7666ca4499083531fa0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3821840761f4a5017a95b5003153b0c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_depth_stencil_target.html">DepthStencilTarget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a3821840761f4a5017a95b5003153b0c5">getDepthStencilTarget</a> () const </td></tr>
 <tr class="separator:a3821840761f4a5017a95b5003153b0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84e07fb4a32d5cb954ae734e232e5a7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a84e07fb4a32d5cb954ae734e232e5a7f">bind</a> ()</td></tr>
-<tr class="separator:a84e07fb4a32d5cb954ae734e232e5a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae19ca6c54af5ba88dce456ab88af8ad0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ae19ca6c54af5ba88dce456ab88af8ad0">bind</a> ()</td></tr>
+<tr class="separator:ae19ca6c54af5ba88dce456ab88af8ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classgameplay_1_1_ref"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgameplay_1_1_ref')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td></tr>
 <tr class="memitem:a66e39f63477efb32cc190f6605ef0c74 inherit pub_methods_classgameplay_1_1_ref"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_ref.html#a66e39f63477efb32cc190f6605ef0c74">addRef</a> ()</td></tr>
 <tr class="separator:a66e39f63477efb32cc190f6605ef0c74 inherit pub_methods_classgameplay_1_1_ref"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,8 +125,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a2d4b1f194d1b2e90028ff89320fd34cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad370566c9456ae2a278c7e174e33138f"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad370566c9456ae2a278c7e174e33138f">getMaxRenderTargets</a> ()</td></tr>
 <tr class="separator:ad370566c9456ae2a278c7e174e33138f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0b065270a2511c0d228bb0ec117ab6d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#ad0b065270a2511c0d228bb0ec117ab6d">bindDefault</a> ()</td></tr>
-<tr class="separator:ad0b065270a2511c0d228bb0ec117ab6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d1ad214098f6796d6c4027b8a432015"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frame_buffer.html#a6d1ad214098f6796d6c4027b8a432015">bindDefault</a> ()</td></tr>
+<tr class="separator:a6d1ad214098f6796d6c4027b8a432015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -139,26 +139,30 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a4442b32c090160052130593d6523945c inherit pro_methods_classgameplay_1_1_ref"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Defines a video output off all graphics buffer containing a complete frame of data. This consists of a <a class="el" href="classgameplay_1_1_render_target.html">RenderTarget</a> and <a class="el" href="classgameplay_1_1_depth_stencil_target.html">DepthStencilTarget</a> holding the color, depth and stencil data in the rendering frame.</p>
-<p>to change the default <a class="el" href="classgameplay_1_1_game.html">Game</a> framebuffer call Game::setFrameBuffer(myFrameBuffer); To restore back to the default call Game::setFrameBuffer(NULL). This is useful for rendering shadows and other post-processing effects. </p>
+<div class="textblock"><p>Defines a frame buffer object that may contain one or more render targets and optionally a depth-stencil target.</p>
+<p>Frame buffers can be created and used for off-screen rendering, which is useful for techniques such as shadow mapping and post-processing. Render targets within a frame buffer can be both written to and read (by calling <a class="el" href="classgameplay_1_1_render_target.html#aca282696a1585bea61afa91361ea7b22">RenderTarget::getTexture</a>).</p>
+<p>When binding a custom frame buffer, you should always store the return value of <a class="el" href="classgameplay_1_1_frame_buffer.html#ae19ca6c54af5ba88dce456ab88af8ad0">FrameBuffer::bind</a> and restore it when you are finished drawing to your frame buffer.</p>
+<p>To bind the default frame buffer, call <a class="el" href="classgameplay_1_1_frame_buffer.html#a6d1ad214098f6796d6c4027b8a432015">FrameBuffer::bindDefault</a>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a84e07fb4a32d5cb954ae734e232e5a7f"></a>
+<a class="anchor" id="ae19ca6c54af5ba88dce456ab88af8ad0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void gameplay::FrameBuffer::bind </td>
+          <td class="memname"><a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>* gameplay::FrameBuffer::bind </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Binds this <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> for off-screen rendering. </p>
+<p>Binds this <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> for off-screen rendering and return you the curently bound one.</p>
+<p>You should keep the return <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> and store it and call <a class="el" href="classgameplay_1_1_frame_buffer.html#ae19ca6c54af5ba88dce456ab88af8ad0">bind()</a> when you rendering is complete.</p>
+<p>@ return The currently bound framebuffer. </p>
 
 </div>
 </div>
-<a class="anchor" id="ad0b065270a2511c0d228bb0ec117ab6d"></a>
+<a class="anchor" id="a6d1ad214098f6796d6c4027b8a432015"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -166,7 +170,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void gameplay::FrameBuffer::bindDefault </td>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a>* gameplay::FrameBuffer::bindDefault </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -178,7 +182,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Binds the default <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> for rendering to the display. </p>
+<p>Binds the default <a class="el" href="classgameplay_1_1_frame_buffer.html">FrameBuffer</a> for rendering to the display.</p>
+<p>@ return The default framebuffer. </p>
 
 </div>
 </div>
@@ -476,7 +481,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 16 2013 21:25:05 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 21 2013 15:52:18 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

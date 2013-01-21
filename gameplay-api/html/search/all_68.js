@@ -1,7 +1,7 @@
 var searchData=
 [
   ['hasmaterial',['hasMaterial',['../classgameplay_1_1_model.html#a3a93e00f225d15d6501f201154c374fa',1,'gameplay::Model']]],
-  ['hasmouse',['hasMouse',['../classgameplay_1_1_game.html#a691572c633a283712e15a5f5f4de48b7',1,'gameplay::Game::hasMouse()'],['../classgameplay_1_1_platform.html#a611399220693bdd2c3a147ba43997edc',1,'gameplay::Platform::hasMouse()']]],
+  ['hasmouse',['hasMouse',['../classgameplay_1_1_game.html#a691572c633a283712e15a5f5f4de48b7',1,'gameplay::Game']]],
   ['hastag',['hasTag',['../classgameplay_1_1_node.html#a2bd733be82848d3d244d976e283aace2',1,'gameplay::Node']]],
   ['height',['height',['../classgameplay_1_1_rectangle.html#aed5d50931e284d00d61aaf9a129ed828',1,'gameplay::Rectangle']]],
   ['heightfield',['heightfield',['../structgameplay_1_1_physics_collision_shape_1_1_definition.html#a523256b14201ff4a1b9283f0277124d5',1,'gameplay::PhysicsCollisionShape::Definition::heightfield()'],['../classgameplay_1_1_physics_collision_shape.html#a29bfd9434e3c3189afec915bb60cc8a2',1,'gameplay::PhysicsCollisionShape::heightfield()'],['../classgameplay_1_1_physics_collision_shape.html#a67aea251379fd4b1a36d1b3dddd99002',1,'gameplay::PhysicsCollisionShape::heightfield(HeightField *heightfield)']]],
