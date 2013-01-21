@@ -206,6 +206,7 @@ void Game::shutdown()
 
         SAFE_DELETE(_audioListener);
 
+        FrameBuffer::finalize();
         RenderState::finalize();
 
         SAFE_DELETE(_properties);
