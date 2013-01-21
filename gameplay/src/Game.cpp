@@ -577,6 +577,7 @@ void Game::loadGamepads()
     {
         // Check if there are any virtual gamepads included in the .config file.
         // If there are, create and initialize them.
+        _properties->rewind();
         Properties* inner = _properties->getNextNamespace();
         while (inner != NULL)
         {
