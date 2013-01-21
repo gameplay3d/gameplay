@@ -38,6 +38,16 @@ PostProcessTest::Compositor::~Compositor()
     SAFE_RELEASE(_material);
 }
 
+FrameBuffer* PostProcessTest::Compositor::getSrcFrameBuffer() const 
+{ 
+    return _srcBuffer; 
+}
+
+FrameBuffer* PostProcessTest::Compositor::getDstFrameBuffer() const
+{ 
+    return _dstBuffer; 
+}
+
 const char* PostProcessTest::Compositor::getTechniqueId() const
 {
     return _techniqueId;
@@ -48,7 +58,7 @@ Material* PostProcessTest::Compositor::getMaterial() const
     return _material;
 }
 
-void PostProcessTest::Compositor::blit(const Rectangle& dst, bool clearBuffer, const Vector4& clearColor)
+void PostProcessTest::Compositor::blit(const Rectangle& dst)
 {
     if (__material != _material)
     {
@@ -57,16 +67,8 @@ void PostProcessTest::Compositor::blit(const Rectangle& dst, bool clearBuffer, c
     }
     __material->setTechnique(_techniqueId);
 
-    if (_dstBuffer)
-        _dstBuffer->bind();
-    else
-        FrameBuffer::bindDefault();
-
-    if (clearBuffer)
-        Game::getInstance()->clear(CLEAR_COLOR, clearColor, 1.0f, 0);
-
     __model->draw();
-    }
+}
 
 PostProcessTest::PostProcessTest()
     : _font(NULL), _scene(NULL), _modelNode(NULL), _frameBuffer(NULL), _compositorIndex(0)
@@ -102,28 +104,28 @@ void PostProcessTest::initialize()
     // Create our compositors that all output to the default framebuffer.
     Compositor* compositor = NULL;
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Passthrough");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Passthrough");
     _compositors.push_back(compositor);
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Grayscale");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Grayscale");
     _compositors.push_back(compositor);
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Sepia");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Sepia");
     _compositors.push_back(compositor);
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Pixelate");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Pixelate");
     _compositors.push_back(compositor);
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Sobel Edge");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Sobel Edge");
     _compositors.push_back(compositor);
     compositor->getMaterial()->getParameter("u_width")->setValue((float)FRAMEBUFFER_WIDTH / 2.0f);
     compositor->getMaterial()->getParameter("u_height")->setValue((float)FRAMEBUFFER_HEIGHT / 2.0f);
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Gaussian Blur");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Gaussian Blur");
     _compositors.push_back(compositor);
     compositor->getMaterial()->getParameter("u_length")->setValue(1.0f / ((float)FRAMEBUFFER_WIDTH / 2.0f));
 
-    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess.material", "Old Film");
+    compositor = Compositor::create(_frameBuffer, NULL, "res/common/postprocess/postprocess.material", "Old Film");
     _compositors.push_back(compositor);
     compositor->getMaterial()->getParameter("u_sepiaValue")->setValue(0.8f);
     compositor->getMaterial()->getParameter("u_noiseValue")->setValue(0.4f);
@@ -166,27 +168,43 @@ void PostProcessTest::render(float elapsedTime)
 {
     Rectangle defaultViewport = Game::getInstance()->getViewport();
     
-    // Draw into the framebuffer
+    // Draw into the framebuffer (step 1)
     Game::getInstance()->setViewport(Rectangle(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));
-    _frameBuffer->bind();
+    FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
     _scene->visit(this, &PostProcessTest::drawScene);
-    
+
     // Bind the current compositor
     Game::getInstance()->setViewport(defaultViewport);
     Compositor* compositor = _compositors[_compositorIndex];
-    compositor->blit(defaultViewport, true);
+
+    FrameBuffer* compositorDstFrameBuffer = compositor->getDstFrameBuffer();
+    FrameBuffer* prevToCompositeFrameBuffer = NULL;
+    if (compositorDstFrameBuffer)
+    {
+        prevToCompositeFrameBuffer = compositorDstFrameBuffer->bind();
+    }
+    else
+    {
+        prevToCompositeFrameBuffer = previousFrameBuffer->bind();
+    }
+
+    Game::getInstance()->clear(CLEAR_COLOR, Vector4(0, 0, 0, 1), 1.0f, 0);
+    compositor->blit(defaultViewport);
     drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
     drawTechniqueId(compositor->getTechniqueId());
-    
+
+    previousFrameBuffer->bind();
+
     // Draw the pass through compositor at index 0 at quarter of the size and bottom right. dont clear the dest just draw last on top
     float quarterWidth = getWidth() / 4;
     float quarterHeight = getHeight() / 4;
     Rectangle offsetViewport = Rectangle(getWidth() - quarterWidth, 0, quarterWidth, quarterHeight);
     Game::getInstance()->setViewport(offsetViewport);
     compositor = _compositors[0];
-    compositor->blit(offsetViewport, false);
+    compositor->blit(offsetViewport);
     Game::getInstance()->setViewport(defaultViewport);
+
 }
 
 bool PostProcessTest::drawScene(Node* node)

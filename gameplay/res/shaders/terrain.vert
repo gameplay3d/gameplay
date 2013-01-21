@@ -4,15 +4,6 @@ attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
 attribute vec3 a_normal;									// Vertex Normal							(x, y, z)
 #endif
 attribute vec2 a_texCoord0;
-#if LAYER_COUNT > 1
-attribute vec2 a_texCoord1;
-#endif
-#if LAYER_COUNT > 2
-attribute vec2 a_texCoord2;
-#endif
-#if LAYER_COUNT > 3
-attribute vec2 a_texCoord3;
-#endif
 
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;					// World view projection matrix
@@ -26,16 +17,15 @@ uniform vec3 u_lightDirection;								// Direction of light
 varying vec3 v_normalVector;								// Normal vector out
 #endif
 varying vec2 v_texCoord0;
+#if LAYER_COUNT > 0
+varying vec2 v_texCoordLayer0;
+#endif
 #if LAYER_COUNT > 1
-varying vec2 v_texCoord1;
+varying vec2 v_texCoordLayer1;
 #endif
 #if LAYER_COUNT > 2
-varying vec2 v_texCoord2;
+varying vec2 v_texCoordLayer2;
 #endif
-#if LAYER_COUNT > 3
-varying vec2 v_texCoord3;
-#endif
-
 
 void main()
 {
@@ -46,14 +36,18 @@ void main()
     // Pass normal to fragment shader
     v_normalVector = (u_normalMatrix * vec4(a_normal.x, a_normal.y, a_normal.z, 0)).xyz;
 #endif
+
+    // Pass base texture coord
     v_texCoord0 = a_texCoord0;
+
+    // Pass repeated texture coordinates for each layer
+#if LAYER_COUNT > 0
+    v_texCoordLayer0 = a_texCoord0 * TEXTURE_REPEAT_0;
+#endif
 #if LAYER_COUNT > 1
-    v_texCoord1 = a_texCoord1;
+    v_texCoordLayer1 = a_texCoord0 * TEXTURE_REPEAT_1;
 #endif
 #if LAYER_COUNT > 2
-    v_texCoord2 = a_texCoord2;
-#endif
-#if LAYER_COUNT > 3
-    v_texCoord3 = a_texCoord3;
+    v_texCoordLayer2 = a_texCoord0 * TEXTURE_REPEAT_2;
 #endif
 }

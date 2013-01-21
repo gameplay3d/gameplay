@@ -62,6 +62,7 @@ public:
     void getAccelerometerValues(float* pitch, float* roll);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
 	void enableScriptCamera(bool enable);
+    void setScriptCameraSpeed(float normal, float fast);
 
     // gestures
     bool isGestureSupported(Gesture::GestureEvent evt);

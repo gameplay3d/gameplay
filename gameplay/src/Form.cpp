@@ -26,7 +26,6 @@ Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL)
 
 Form::~Form()
 {
-    SAFE_RELEASE(_node);
     SAFE_DELETE(_spriteBatch);
     SAFE_RELEASE(_frameBuffer);
     SAFE_RELEASE(_theme);
@@ -233,7 +232,7 @@ void Form::setSize(float width, float height)
         _u2 = width / (float)w;
         _v1 = height / (float)h;
 
-        // Create framebuffer if necessary.
+        // Create framebuffer if necessary. TODO: Use pool to cache.
         if (_frameBuffer)
             SAFE_RELEASE(_frameBuffer)
         
@@ -250,16 +249,17 @@ void Form::setSize(float width, float height)
 
         // Clear the framebuffer black
         Game* game = Game::getInstance();
-        _frameBuffer->bind();
-        Rectangle prevViewport = game->getViewport();
+        FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
+        Rectangle previousViewport = game->getViewport();
+
         game->setViewport(Rectangle(0, 0, width, height));
         _theme->setProjectionMatrix(_projectionMatrix);
         game->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0, 0);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
-        FrameBuffer::bindDefault();
-        game->setViewport(prevViewport);
+
+        previousFrameBuffer->bind();
+        game->setViewport(previousViewport);
     }
-    
     _bounds.width = width;
     _bounds.height = height;
     _dirty = true;
@@ -481,10 +481,9 @@ void Form::updateBounds()
         }
  
         _viewportClipBounds.set(x, y, width, height);
-
         _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
-            width + border.left + padding.left + border.right + padding.right,
-            height + border.top + padding.top + border.bottom + padding.bottom);
+                                width + border.left + padding.left + border.right + padding.right,
+                                height + border.top + padding.top + border.bottom + padding.bottom);
         if (_clearBounds.isEmpty())
         {
             _clearBounds.set(_absoluteClipBounds);
@@ -515,9 +514,13 @@ void Form::updateBounds()
 
         GP_ASSERT(_layout);
         if (_scroll != SCROLL_NONE)
+        {
             updateScroll();
+        }
         else
+        {
             _layout->update(this, Vector2::zero());
+        }
     }
 }
 
@@ -535,7 +538,7 @@ void Form::draw()
     if (isDirty())
     {
         GP_ASSERT(_frameBuffer);
-        _frameBuffer->bind();
+        FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
 
         Game* game = Game::getInstance();
         Rectangle prevViewport = game->getViewport();
@@ -547,11 +550,10 @@ void Form::draw()
                         _skin != NULL, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
-        // Rebind the default framebuffer and game viewport.
-        FrameBuffer::bindDefault();
-
         // restore the previous game viewport
         game->setViewport(prevViewport);
+        // Rebind the previous framebuffer and game viewport.
+        previousFrameBuffer->bind();
     }
 
     // Draw either with a 3D quad or sprite batch

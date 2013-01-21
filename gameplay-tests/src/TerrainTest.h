@@ -34,17 +34,32 @@ protected:
 
 	bool drawScene(Node* node);
 
+    void setMessage(const char* message);
+
 private:
+
+    enum Mode
+    {
+        MODE_LOOK,
+        MODE_DROP_SPHERE,
+        MODE_DROP_BOX
+    };
 
 	Font* _font;
 	Scene* _scene;
 	Terrain* _terrain;
+	Node* _sky;
     Form* _form;
     bool _formVisible;
-    Node* _sky;
     Vector2 _formSize;
 	bool _wireframe;
+    bool _debugPhysics;
 	bool _snapToGround;
+    bool _vsync;
+    Mode _mode;
+    Node* _sphere;
+    Node* _box;
+    std::list<Node*> _shapes;
 
 };
 
