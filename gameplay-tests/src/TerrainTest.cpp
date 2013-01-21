@@ -30,6 +30,11 @@ TerrainTest::TerrainTest()
 
 TerrainTest::~TerrainTest()
 {
+    SAFE_RELEASE(_box);
+    SAFE_RELEASE(_sphere);
+    SAFE_RELEASE(_form);
+    SAFE_RELEASE(_font);
+    SAFE_RELEASE(_scene);
 }
 
 void TerrainTest::initialize()
