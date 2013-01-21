@@ -297,6 +297,13 @@ public:
      */
     static void pollGamepadState(Gamepad* gamepad);
 
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void shutdownInternal();
+
 private:
 
     Game* _game;                // The game this platform is interfacing with.

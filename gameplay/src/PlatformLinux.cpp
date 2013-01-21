@@ -1130,6 +1130,11 @@ void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
     Gamepad::remove(handle);
 }
 
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
+}
+
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
     return false;
