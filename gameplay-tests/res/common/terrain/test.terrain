@@ -2,7 +2,7 @@ terrain
 {
 	heightmap
 	{
-		path = res/common/terrain/heightmap.raw
+		path = res/common/terrain/heightmap.r16
 		size = 256, 256
 	}
 
@@ -22,12 +22,27 @@ terrain
 		}
 	}
 
-	layer grass
+    layer dirt
+    {
+		texture
+		{
+			path = res/common/terrain/dirt.dds
+			repeat = 750,750
+		}
+
+		blend
+		{
+            path = res/common/terrain/dirt.dds
+            channel = 3
+		}
+    }
+
+    layer grass
 	{
 		texture
 		{
 			path = res/common/terrain/grass.dds
-			repeat = 750,750
+			repeat = 500,500
 		}
 
 		blend

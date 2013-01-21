@@ -94,7 +94,7 @@ form terrainForm
 		    {
                 position = 10, 250
 			    text = Snap To Ground (6)
-                checked = false
+                checked = true
 		    }
         }
     }

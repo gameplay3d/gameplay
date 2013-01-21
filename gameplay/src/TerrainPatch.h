@@ -41,6 +41,8 @@ private:
     struct Level
     {
         Model* model;
+
+        Level();
     };
 
     struct LayerCompare
