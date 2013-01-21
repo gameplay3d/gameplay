@@ -1,15 +1,18 @@
 #ifndef TERRAIN_H_
 #define TERRAIN_H_
 
-#include "TerrainPatch.h"
 #include "Transform.h"
 #include "Properties.h"
 #include "HeightField.h"
+#include "Texture.h"
+#include "BoundingBox.h"
+#include "TerrainPatch.h"
 
 namespace gameplay
 {
 
 class Node;
+class TerrainPatch;
 
 /**
  * Defines a Terrain that is capable of rendering large landscapes from 2D heightmap images.
@@ -21,7 +24,8 @@ class Node;
  * 2. 24-bit high precision heightmap image (PNG), which can be generated from a mesh using
  *    gameplay-encoder.
  * 3. 8-bit or 16-bit RAW heightmap image using PC byte ordering (little endian), which is
- *    compatible with many external tools such as World Machine, Unity and more.
+ *    compatible with many external tools such as World Machine, Unity and more. The file
+ *    extension must be either .raw or .r16 for RAW files.
  *
  * Physics/collision is supported by setting a rigid body collision object on the Node that
  * the terrain is attached to. The collision shape should be specified using
@@ -348,6 +352,11 @@ private:
      * Returns a matrix to be used for transforming normal vectors for the terrain.
      */
     const Matrix& getNormalMatrix() const;
+
+    /**
+     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
+     */
+    const Matrix& getWorldViewMatrix() const;
 
     /**
      * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.

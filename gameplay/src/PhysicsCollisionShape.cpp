@@ -332,7 +332,7 @@ PhysicsCollisionShape::Definition PhysicsCollisionShape::Definition::create(Node
                 HeightField* heightfield = NULL;
                 if (ext == ".PNG")
                     heightfield = HeightField::createFromImage(imagePath, minHeight, maxHeight);
-                else if (ext == ".RAW")
+                else if (ext == ".RAW" || ext == ".R16")
                     heightfield = HeightField::createFromRAW(imagePath, (unsigned int)width, (unsigned int)height, minHeight, maxHeight);
 
                 if (heightfield)

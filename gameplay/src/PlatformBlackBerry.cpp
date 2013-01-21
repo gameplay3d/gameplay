@@ -491,35 +491,31 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
     }
 }
 
-#ifdef BLACKBERRY_USE_GAMEPAD
+#ifdef USE_BLACKBERRY_GAMEPAD
 
 static const char* __vendorStrings[] =
 {
     "SteelSeries",
     "Nintendo",
-    "Fructel"
 };
 
 static const char* __productStrings[] =
 {
     "FREE",
     "Wii Remote",
-    "Gametel"
 };
 
 static const int __VIDs[] = {
     0x1038,
     0x057e,
-    0x25b6
 };
 
 static const int __PIDs[] = {
     0x1412,
     0x0306,
-    0x0001
 };
 
-static const unsigned int __knownGamepads = 3;
+static const unsigned int __knownGamepads = 2;
 
 void queryGamepad(GamepadHandle handle, int* buttonCount, int* joystickCount, int* productId, int* vendorId, char* productString, char* vendorString)
 {
@@ -627,6 +623,10 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         gamepad->_triggers[i] = value;
     }
 }
+#else
+void Platform::pollGamepadState(Gamepad* gamepad)
+{
+}
 #endif
 
 Platform::Platform(Game* game)
@@ -682,8 +682,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 {
     FileSystem::setResourcePath("./app/native/");
     Platform* platform = new Platform(game);
-
-    screen_device_t* screenDevs;
 
     // Query game config
     int samples = 0;
@@ -972,7 +970,10 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress("glIsVertexArrayOES");
     }
 
- #ifdef BLACKBERRY_USE_GAMEPAD
+ #ifdef USE_BLACKBERRY_GAMEPAD
+
+    screen_device_t* screenDevs;
+
     // Discover initial gamepad devices.
     int count;
     screen_get_context_property_iv(__screenContext, SCREEN_PROPERTY_DEVICE_COUNT, &count);
@@ -1220,7 +1221,7 @@ int Platform::enterMessagePump()
                         }
                         break;
                     }
-#ifdef BLACKBERRY_USE_GAMEPAD
+#ifdef USE_BLACKBERRY_GAMEPAD
                     case SCREEN_EVENT_DEVICE:
                     {
                         // A device was attached or removed.
@@ -1288,7 +1289,10 @@ int Platform::enterMessagePump()
                     break;
                 }
                 case NAVIGATOR_EXIT:
-                    _game->exit();
+                	// Call Game::shutdown directly, instead of Game::exit.
+                	// We need to do this since exit() queues a request to shutdown for the
+                	// next frame, which will never get executed because we are suspended.
+                    _game->shutdown();
                     break;
                 }
             }
@@ -1326,7 +1330,7 @@ int Platform::enterMessagePump()
             rc = eglSwapBuffers(__eglDisplay, __eglSurface);
             if (rc != EGL_TRUE)
             {
-                _game->exit();
+                _game->shutdown();
                 perror("eglSwapBuffers");
                 break;
             }

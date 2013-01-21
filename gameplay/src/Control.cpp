@@ -43,6 +43,8 @@ void Control::initialize(Theme::Style* style, Properties* properties)
 
     _consumeInputEvents = properties->getBool("consumeInputEvents", true);
 
+    _visible = properties->getBool("visible", true);
+
     if (properties->exists("zIndex"))
     {
         _zIndex = properties->getInt("zIndex");
