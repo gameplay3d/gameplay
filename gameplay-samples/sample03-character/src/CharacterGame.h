@@ -17,24 +17,29 @@ public:
     CharacterGame();
 
     /**
-     * @see Game::touchEvent
-     */
-    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
      * @see Game::keyEvent
      */
     void keyEvent(Keyboard::KeyEvent evt, int key);
 
     /**
-     * @see AnimationClip::Listener::animationEvent
+     * @see Game::touchEvent
      */
-    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
+    void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+    /**
+     * @see Game::mouseEvent
+     */
+    bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
      * @see Game::gamepadEvent
      */
     void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+
+    /**
+     * @see AnimationClip::Listener::animationEvent
+     */
+    void animationEvent(AnimationClip* clip, AnimationClip::Listener::EventType type);
 
     /**
      * @see PhysicsCollisionObject::CollisionListener::collisionEvent
@@ -43,7 +48,6 @@ public:
                                     const PhysicsCollisionObject::CollisionPair& collisionPair,
                                     const Vector3& contactPointA = Vector3::zero(),
                                     const Vector3& contactPointB = Vector3::zero());
-
 protected:
 
     /**
@@ -105,10 +109,8 @@ private:
     bool _kicking;
     float _kickDelay;
     bool* _buttonPressed;
-    Gamepad* _gamepad;
-    Gamepad* _physicalGamepad;
-    Gamepad* _virtualGamepad;
     Vector2 _currentDirection;
+    Gamepad* _gamepad;
 
 };
 
