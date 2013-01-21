@@ -198,6 +198,7 @@ aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
 aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
 
 cp "gameplay-template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
+cp "gameplay-template/Default-568h@2x.png" "$projPath/Default-568h@2x.png"
 aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"
 aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
