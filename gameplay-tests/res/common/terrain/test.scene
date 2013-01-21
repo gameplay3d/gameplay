@@ -32,8 +32,13 @@ scene terrainTestScene
 			farPlane = 100000
 		}
 
+        // Starting position on ground
 		translate = 3095, 369, -4393
 		rotate = 0,1,0, 148
+
+        // Screenshot position in air (screenshots)
+        //translate = 3824, 1466, -3622
+        //rotate = 0, 1.0, 0, 142
 	}
 
 	// Basic scene lighting properties
