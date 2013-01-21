@@ -667,6 +667,10 @@ TerrainPatch::Layer::~Layer()
 {
 }
 
+TerrainPatch::Level::Level() : model(NULL)
+{
+}
+
 bool TerrainPatch::LayerCompare::operator() (const Layer* lhs, const Layer* rhs) const
 {
     return (lhs->index < rhs->index);
