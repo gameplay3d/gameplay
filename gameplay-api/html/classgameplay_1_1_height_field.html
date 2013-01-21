@@ -275,12 +275,12 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Creates a <a class="el" href="classgameplay_1_1_height_field.html">HeightField</a> from the specified RAW8 or RAW16 file.</p>
-<p>RAW files are header-less files containing intensity values, either in 8-bit (RAW8) or 16-bit (RAW16) format. RAW16 files must have little endian (PC) byte ordering. Since RAW files have no header, you must specify the dimensions of the data in the file. This method automatically determines (based on file size) whether the input file is RAW8 or RAW16.</p>
+<p>RAW files are header-less files containing intensity values, either in 8-bit (RAW8) or 16-bit (RAW16) format. RAW16 files must have little endian (PC) byte ordering. Since RAW files have no header, you must specify the dimensions of the data in the file. This method automatically determines (based on file size) whether the input file is RAW8 or RAW16. RAW files must have a .raw or .r16 file extension.</p>
 <p>RAW files are commonly used in software that produces heightmap images. Using RAW16 is preferred or any 8-bit heightfield source since it allows greater precision, resulting in smoother height transitions.</p>
 <p>The minHeight and maxHeight parameters provides a mapping from heightfield pixel intensity to height values. The minHeight parameter is mapped to zero intensity pixel, while maxHeight maxHeight is mapped to full intensity pixels.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">path</td><td>Path to the RAW file. </td></tr>
+    <tr><td class="paramname">path</td><td>Path to the RAW file (must end in a .raw or .r16 file extension). </td></tr>
     <tr><td class="paramname">width</td><td>Width of the RAW data. </td></tr>
     <tr><td class="paramname">height</td><td>Height of the RAW data. </td></tr>
     <tr><td class="paramname">heightMin</td><td>Minimum height value for a zero intensity pixel. </td></tr>
@@ -384,7 +384,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 16 2013 21:25:06 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 21 2013 15:52:18 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>
