@@ -453,8 +453,13 @@ public:
      * The gamepad index can change when connected and disconnected so you
      * cannot rely on this other than iterating through them all to display
      * them or poll them.
+     * 
+     * The preferPhysical will bump over virtual gamepads if physical gamepads are
+     * connected and return the request index of the first or second physcial and then 
+     * return back to the first virtual after.
      *
      * @param index The index of the gamepad to retrieve.
+     * @param preferPhysical true if you prefer return a physical if exist; false if only virtual.
      * @return The gamepad at the specified index.
      */
     inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
