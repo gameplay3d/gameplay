@@ -1033,9 +1033,6 @@ void Control::drawText(const Rectangle& position)
 
 void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
 {
-    if (!_visible)
-        return;
-
     if (needsClear)
     {
         GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
@@ -1043,6 +1040,9 @@ void Control::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsCl
         Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
         GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
     }
+
+    if (!_visible)
+        return;
 
     spriteBatch->start();
     drawBorder(spriteBatch, clip);

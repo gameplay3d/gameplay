@@ -544,7 +544,7 @@ void Form::draw()
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
         Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height),
-                        true/*WAS _skin!=NULL*/, false, _bounds.height);
+                        _skin != NULL, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
         // Rebind the default framebuffer and game viewport.
