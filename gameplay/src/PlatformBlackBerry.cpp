@@ -1532,6 +1532,11 @@ void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
     Gamepad::remove(handle);
 }
 
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
+}
+
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
     // All are supported no need to test the bitset
