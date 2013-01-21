@@ -158,7 +158,7 @@ Additional Inherited Members</h2></td></tr>
 <ol type="1">
 <li>Basic intensity image (PNG), where the intensity of pixel represents the height of the terrain.</li>
 <li>24-bit high precision heightmap image (PNG), which can be generated from a mesh using gameplay-encoder.</li>
-<li>8-bit or 16-bit RAW heightmap image using PC byte ordering (little endian), which is compatible with many external tools such as World Machine, Unity and more.</li>
+<li>8-bit or 16-bit RAW heightmap image using PC byte ordering (little endian), which is compatible with many external tools such as World Machine, Unity and more. The file extension must be either .raw or .r16 for RAW files.</li>
 </ol>
 <p>Physics/collision is supported by setting a rigid body collision object on the <a class="el" href="classgameplay_1_1_node.html">Node</a> that the terrain is attached to. The collision shape should be specified using <a class="el" href="classgameplay_1_1_physics_collision_shape.html#a29bfd9434e3c3189afec915bb60cc8a2">PhysicsCollisionShape::heightfield()</a>, which will utilize the internal height array of the terrain to define the collision shape. Define a collision object in this way will allow the terrain to automatically interact with other rigid bodies, characters and vehicles in the scene.</p>
 <p>Surface detail is provided via texture splatting, where multiple texture layers can be added along with blend maps to define how different layers blend with each other. These layers can be defined in terrain properties files, as well as with the setLayer method. The number of supported layers depends on the target hardware, although typically 2-3 levels is sufficient. Multiple blend maps for different layers can be packed into different channels of a single texture for more efficient texture utilization. Levels can be applied across the entire terrain, or in more complex cases, for individual patches only.</p>
@@ -664,7 +664,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 16 2013 21:25:08 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 21 2013 15:52:20 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>
