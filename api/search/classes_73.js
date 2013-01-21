@@ -11,5 +11,6 @@ var searchData=
   ['slider',['Slider',['../classgameplay_1_1_slider.html',1,'gameplay']]],
   ['spritebatch',['SpriteBatch',['../classgameplay_1_1_sprite_batch.html',1,'gameplay']]],
   ['stateblock',['StateBlock',['../classgameplay_1_1_render_state_1_1_state_block.html',1,'gameplay::RenderState']]],
+  ['stream',['Stream',['../classgameplay_1_1_stream.html',1,'gameplay']]],
   ['style',['Style',['../classgameplay_1_1_theme_1_1_style.html',1,'gameplay::Theme']]]
 ];
