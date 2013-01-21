@@ -354,6 +354,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_DESTROY:
+        gameplay::Platform::shutdownInternal();
         PostQuitMessage(0);
         return 0;
 
@@ -966,7 +967,7 @@ int Platform::enterMessagePump()
 
             if (msg.message == WM_QUIT)
             {
-                _game->exit();
+                gameplay::Platform::shutdownInternal();
                 return msg.wParam;
             }
         }
@@ -1289,6 +1290,11 @@ void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
 }
 
 bool Platform::launchURL(const char* url)
