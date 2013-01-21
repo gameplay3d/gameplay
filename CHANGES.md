@@ -1,4 +1,5 @@
 ## v1.6.0
+
 - Adds file Stream interface for reading/writing files instead of using fread/fwrite. 
 - Adds Terrain class to support for heightmap based terrains featuring LOD, multiple surface layers, loading from PNG, RAW8/16, full transform, physics, patch culling and verticle skirt for cracks.
 - Adds object-space normal map generation to gameplay-encoder for terrain normal map generation.
@@ -23,7 +24,8 @@
 - Adds support for preprocessor directive NO_LUA_BINDINGS in the gameplay project to omit inclusion of generated lua bindings in compilation for developer mode value. 
 - Adds optimizations to Lua generator to only write generated files if they differ from existing files, reducing both build times and committing of unchanged script binding files.
 - Adds changes to Slider for setValueTextVisible, setValueTextAlignment, setValueTextPrecision and getters.
-- Adds Windows 7 64-bit support.
+- Adds Microsoft Windows 7 64-bit support.
+- Adds Apple iOS 6 support.
 - Fixes to external-deps to reduce the size of the libraries on Windows.
 - Fixes for Android to no longer need to copy files to the SD card before reading them. None of the Android samples require an SD card.
 - Fixes for animation of opacity on UI and fonts.
