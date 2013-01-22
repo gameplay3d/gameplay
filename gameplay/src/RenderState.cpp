@@ -383,7 +383,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 }
 
 RenderState::StateBlock::StateBlock()
-    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false), _depthFunction(RenderState::DEPTH_LESS),
+    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(true), _depthFunction(RenderState::DEPTH_LESS),
       _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
       _bits(0L)
 {
