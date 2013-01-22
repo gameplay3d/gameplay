@@ -47,7 +47,7 @@ void ParticlesGame::initialize()
     SAFE_RELEASE(camera);
 
     // Create a font for drawing the framerate.
-    _font = Font::create("res/arial18.gpb");
+    _font = Font::create("res/arial.gpb");
 
     // Load preset emitters.
     loadEmitters();
@@ -177,346 +177,218 @@ void ParticlesGame::controlEvent(Control* control, EventType evt)
             Vector4 startColor = emitter->getColorStart();
             startColor.x = _startRed->getValue();
             emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Red\n\n%.2f", _startRed->getValue());
-            _startRed->setText(txt);
         }
         else if (control == _startGreen)
         {
             Vector4 startColor = emitter->getColorStart();
             startColor.y = _startGreen->getValue();
             emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Green\n\n%.2f", _startGreen->getValue());
-            _startGreen->setText(txt);
         }
         else if (control == _startBlue)
         {
             Vector4 startColor = emitter->getColorStart();
             startColor.z = _startBlue->getValue();
             emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Blue\n\n%.2f", _startBlue->getValue());
-            _startBlue->setText(txt);
         }
         else if (control == _startAlpha)
         {
             Vector4 startColor = emitter->getColorStart();
             startColor.w = _startAlpha->getValue();
             emitter->setColor(startColor, emitter->getColorStartVariance(), emitter->getColorEnd(), emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Alpha\n\n%.2f", _startAlpha->getValue());
-            _startAlpha->setText(txt);
         }
         else if (control == _endRed)
         {
             Vector4 endColor = emitter->getColorEnd();
             endColor.x = _endRed->getValue();
             emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Red\n\n%.2f", _endRed->getValue());
-            _endRed->setText(txt);
         }
         else if (control == _endGreen)
         {
             Vector4 endColor = emitter->getColorEnd();
             endColor.y = _endGreen->getValue();
             emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Green\n\n%.2f", _endGreen->getValue());
-            _endGreen->setText(txt);
         }
         else if (control == _endBlue)
         {
             Vector4 endColor = emitter->getColorEnd();
             endColor.z = _endBlue->getValue();
             emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Blue\n\n%.2f", _endBlue->getValue());
-            _endBlue->setText(txt);
         }
         else if (control == _endAlpha)
         {
             Vector4 endColor = emitter->getColorEnd();
             endColor.w = _endAlpha->getValue();
             emitter->setColor(emitter->getColorStart(), emitter->getColorStartVariance(), endColor, emitter->getColorEndVariance());
-
-            char txt[15];
-            sprintf(txt, "Alpha\n\n%.2f", _endAlpha->getValue());
-            _endAlpha->setText(txt);
         }
         else if (control == _startMin)
         {
             emitter->setSize(_startMin->getValue(), emitter->getSizeStartMax(), emitter->getSizeEndMin(), emitter->getSizeEndMax());
-            char txt[25];
-            sprintf(txt, "Min. Begin Size\n\n%.1f", _startMin->getValue());
-            _startMin->setText(txt);
         }
         else if (control == _startMax)
         {
             emitter->setSize(emitter->getSizeStartMin(), _startMax->getValue(), emitter->getSizeEndMin(), emitter->getSizeEndMax());
-            char txt[25];
-            sprintf(txt, "Max. Begin Size\n\n%.1f", _startMax->getValue());
-            _startMax->setText(txt);
         }
         else if (control == _endMin)
         {
             emitter->setSize(emitter->getSizeStartMin(), emitter->getSizeStartMax(), _endMin->getValue(), emitter->getSizeEndMax());
-            char txt[25];
-            sprintf(txt, "Min. End Size\n\n%.1f", _endMin->getValue());
-            _endMin->setText(txt);
         }
         else if (control == _endMax)
         {
             emitter->setSize(emitter->getSizeStartMin(), emitter->getSizeStartMax(), emitter->getSizeEndMin(), _endMax->getValue());
-            char txt[25];
-            sprintf(txt, "Max. End Size\n\n%.1f", _endMax->getValue());
-            _endMax->setText(txt);
         }
         else if (control == _energyMin)
         {
             emitter->setEnergy(_energyMin->getValue(), emitter->getEnergyMax());
-            char txt[25];
-            sprintf(txt, "Min. Energy\n\n%.0f", _energyMin->getValue());
-            _energyMin->setText(txt);
         }
         else if (control == _energyMax)
         {
             emitter->setEnergy(emitter->getEnergyMin(), _energyMax->getValue());
-            char txt[25];
-            sprintf(txt, "Max. Energy\n\n%.0f", _energyMax->getValue());
-            _energyMax->setText(txt);
         }
         else if (control == _emissionRate)
         {
             emitter->setEmissionRate(_emissionRate->getValue());
-            char txt[25];
-            sprintf(txt, "Emission Rate\n\n%.0f", _emissionRate->getValue());
-            _emissionRate->setText(txt);
         }
         else if (control == _posVarX)
         {
             Vector3 posVar = emitter->getPositionVariance();
             posVar.x = _posVarX->getValue();
             emitter->setPosition(emitter->getPosition(), posVar);
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", posVar.x);
-            _posVarX->setText(txt);
         }
         else if (control == _posVarY)
         {
             Vector3 posVar = emitter->getPositionVariance();
             posVar.y = _posVarY->getValue();
             emitter->setPosition(emitter->getPosition(), posVar);
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", posVar.y);
-            _posVarY->setText(txt);
         }
         else if (control == _posVarZ)
         {
             Vector3 posVar = emitter->getPositionVariance();
             posVar.z = _posVarZ->getValue();
             emitter->setPosition(emitter->getPosition(), posVar);
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", posVar.z);
-            _posVarZ->setText(txt);
         }
         else if (control == _velX)
         {
             Vector3 vel = emitter->getVelocity();
             vel.x = _velX->getValue();
             emitter->setVelocity(vel, emitter->getVelocityVariance());
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", vel.x);
-            _velX->setText(txt);
         }
         else if (control == _velY)
         {
             Vector3 vel = emitter->getVelocity();
             vel.y = _velY->getValue();
             emitter->setVelocity(vel, emitter->getVelocityVariance());
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", vel.y);
-            _velY->setText(txt);
         }
         else if (control == _velZ)
         {
             Vector3 vel = emitter->getVelocity();
             vel.z = _velZ->getValue();
             emitter->setVelocity(vel, emitter->getVelocityVariance());
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", vel.z);
-            _velZ->setText(txt);
         }
         else if (control == _velVarX)
         {
             Vector3 velVar = emitter->getVelocityVariance();
             velVar.x = _velVarX->getValue();
             emitter->setVelocity(emitter->getVelocity(), velVar);
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", velVar.x);
-            _velVarX->setText(txt);
         }
         else if (control == _velVarY)
         {
             Vector3 velVar = emitter->getVelocityVariance();
             velVar.y = _velVarY->getValue();
             emitter->setVelocity(emitter->getVelocity(), velVar);
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", velVar.y);
-            _velVarY->setText(txt);
         }
         else if (control == _velVarZ)
         {
             Vector3 velVar = emitter->getVelocityVariance();
             velVar.z = _velVarZ->getValue();
             emitter->setVelocity(emitter->getVelocity(), velVar);
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", velVar.z);
-            _velVarZ->setText(txt);
         }
         else if (control == _accelX)
         {
             Vector3 accel = emitter->getAcceleration();
             accel.x = _accelX->getValue();
             emitter->setAcceleration(accel, emitter->getAccelerationVariance());
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", accel.x);
-            _accelX->setText(txt);
         }
         else if (control == _accelY)
         {
             Vector3 accel = emitter->getAcceleration();
             accel.y = _accelY->getValue();
             emitter->setAcceleration(accel, emitter->getAccelerationVariance());
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", accel.y);
-            _accelY->setText(txt);
         }
         else if (control == _accelZ)
         {
             Vector3 accel = emitter->getAcceleration();
             accel.z = _accelZ->getValue();
             emitter->setAcceleration(accel, emitter->getAccelerationVariance());
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", accel.z);
-            _accelZ->setText(txt);
         }
         else if (control == _accelVarX)
         {
             Vector3 accelVar = emitter->getAccelerationVariance();
             accelVar.x = _accelVarX->getValue();
             emitter->setAcceleration(emitter->getAcceleration(), accelVar);
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", accelVar.x);
-            _accelVarX->setText(txt);
         }
         else if (control == _accelVarY)
         {
             Vector3 accelVar = emitter->getAccelerationVariance();
             accelVar.y = _accelVarY->getValue();
             emitter->setAcceleration(emitter->getAcceleration(), accelVar);
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", accelVar.y);
-            _accelVarY->setText(txt);
         }
         else if (control == _accelVarZ)
         {
             Vector3 accelVar = emitter->getAccelerationVariance();
             accelVar.z = _accelVarZ->getValue();
             emitter->setAcceleration(emitter->getAcceleration(), accelVar);
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", accelVar.z);
-            _accelVarZ->setText(txt);
         }
         else if (control == _spinSpeedMin)
         {
             emitter->setRotationPerParticle(_spinSpeedMin->getValue(), emitter->getRotationPerParticleSpeedMax());
-            char txt[25];
-            sprintf(txt, "Min.\n\n%.2f", _spinSpeedMin->getValue());
-            _spinSpeedMin->setText(txt);
         }
         else if (control == _spinSpeedMax)
         {
             emitter->setRotationPerParticle(emitter->getRotationPerParticleSpeedMin(), _spinSpeedMax->getValue());
-            char txt[25];
-            sprintf(txt, "Min.\n\n%.2f", _spinSpeedMax->getValue());
-            _spinSpeedMax->setText(txt);
         }
         else if (control == _axisX)
         {
             Vector3 axis = emitter->getRotationAxis();
             axis.x = _axisX->getValue();
             emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), axis, emitter->getRotationAxisVariance());
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", _axisX->getValue());
-            _axisX->setText(txt);
         }
         else if (control == _axisY)
         {
             Vector3 axis = emitter->getRotationAxis();
             axis.y = _axisY->getValue();
             emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), axis, emitter->getRotationAxisVariance());
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", _axisY->getValue());
-            _axisY->setText(txt);
         }
         else if (control == _axisZ)
         {
             Vector3 axis = emitter->getRotationAxis();
             axis.z = _axisZ->getValue();
             emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), axis, emitter->getRotationAxisVariance());
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", _axisZ->getValue());
-            _axisZ->setText(txt);
         }
         else if (control == _axisVarX)
         {
             Vector3 axisVar = emitter->getRotationAxisVariance();
             axisVar.x = _axisVarX->getValue();
             emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), axisVar);
-            char txt[25];
-            sprintf(txt, "X\n\n%.2f", _axisVarX->getValue());
-            _axisVarX->setText(txt);
         }
         else if (control == _axisVarY)
         {
             Vector3 axisVar = emitter->getRotationAxisVariance();
             axisVar.y = _axisVarY->getValue();
             emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), axisVar);
-            char txt[25];
-            sprintf(txt, "Y\n\n%.2f", _axisVarY->getValue());
-            _axisVarY->setText(txt);
         }
         else if (control == _axisVarZ)
         {
             Vector3 axisVar = emitter->getRotationAxisVariance();
             axisVar.z = _axisVarZ->getValue();
             emitter->setRotation(emitter->getRotationSpeedMin(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), axisVar);
-            char txt[25];
-            sprintf(txt, "Z\n\n%.2f", _axisVarZ->getValue());
-            _axisVarZ->setText(txt);
         }
         else if (control == _rotationSpeedMin)
         {
             emitter->setRotation(_rotationSpeedMin->getValue(), emitter->getRotationSpeedMax(), emitter->getRotationAxis(), emitter->getRotationAxisVariance());
-            char txt[25];
-            sprintf(txt, "Min.\n\n%.2f", _rotationSpeedMin->getValue());
-            _rotationSpeedMin->setText(txt);
         }
         else if (control == _rotationSpeedMax)
         {
             emitter->setRotation(emitter->getRotationSpeedMin(), _rotationSpeedMax->getValue(), emitter->getRotationAxis(), emitter->getRotationAxisVariance());
-            char txt[25];
-            sprintf(txt, "Max.\n\n%.2f", _rotationSpeedMax->getValue());
-            _rotationSpeedMax->setText(txt);
         }
         else if (control == _burstSize)
         {
@@ -801,182 +673,78 @@ void ParticlesGame::emitterChanged()
     _cameraParent->setIdentity();
 
     // Set the values of UI controls to display the new emitter's settings.
-    char txt[25];
-
     _startRed->setValue(emitter->getColorStart().x);
-    sprintf(txt, "Red\n\n%.2f", _startRed->getValue());
-    _startRed->setText(txt);
-
     _startGreen->setValue(emitter->getColorStart().y);
-    sprintf(txt, "Green\n\n%.2f", _startGreen->getValue());
-    _startGreen->setText(txt);
-
     _startBlue->setValue(emitter->getColorStart().z);
-    sprintf(txt, "Blue\n\n%.2f", _startBlue->getValue());
-    _startBlue->setText(txt);
-
-    _startAlpha->setValue(emitter->getColorStart().w);
-    sprintf(txt, "Alpha\n\n%.2f", _startAlpha->getValue());
-    _startAlpha->setText(txt);
+    _startAlpha->setValue(emitter->getColorStart().w);    
 
     _endRed->setValue(emitter->getColorEnd().x);
-    sprintf(txt, "Red\n\n%.2f", _endRed->getValue());
-    _endRed->setText(txt);
-
     _endGreen->setValue(emitter->getColorEnd().y);
-    sprintf(txt, "Green\n\n%.2f", _endGreen->getValue());
-    _endGreen->setText(txt);
-
     _endBlue->setValue(emitter->getColorEnd().z);
-    sprintf(txt, "Blue\n\n%.2f", _endBlue->getValue());
-    _endBlue->setText(txt);
-
     _endAlpha->setValue(emitter->getColorEnd().w);
-    sprintf(txt, "Alpha\n\n%.2f", _endAlpha->getValue());
-    _endAlpha->setText(txt);
 
     _startMin->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
     _startMin->setValue(emitter->getSizeStartMin());
-    sprintf(txt, "Min. Begin Size\n\n%.1f", _startMin->getValue());
-    _startMin->setText(txt);
 
     _startMax->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
     _startMax->setValue(emitter->getSizeStartMax());
-    sprintf(txt, "Max. Begin Size\n\n%.1f", _startMax->getValue());
-    _startMax->setText(txt);
     
     _endMin->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
     _endMin->setValue(emitter->getSizeEndMin());
-    sprintf(txt, "Min. End Size\n\n%.1f", _endMin->getValue());
-    _endMin->setText(txt);
-
     _endMax->setMax(PARTICLE_SIZE_MAX[_particleEmitterIndex]);
     _endMax->setValue(emitter->getSizeEndMax());
-    sprintf(txt, "Max. End Size\n\n%.1f", _endMax->getValue());
-    _endMax->setText(txt);
 
     _energyMin->setValue(emitter->getEnergyMin());
-    sprintf(txt, "Min. Energy\n\n%.0f", _energyMin->getValue());
-    _energyMin->setText(txt);
-
     _energyMax->setValue(emitter->getEnergyMax());
-    sprintf(txt, "Max. Energy\n\n%.0f", _energyMax->getValue());
-    _energyMax->setText(txt);
 
     _emissionRate->setMax(EMIT_RATE_MAX[_particleEmitterIndex]);
     _emissionRate->setValue(emitter->getEmissionRate());
-    sprintf(txt, "Emission Rate\n\n%.0f", _emissionRate->getValue());
-    _emissionRate->setText(txt);
 
+    char txt[25];
     sprintf(txt, "Burst Size\n\n%.0f", _burstSize->getValue());
     _burstSize->setText(txt);
 
     const Vector3& posVar = emitter->getPositionVariance();
     _posVarX->setValue(posVar.x);
-    sprintf(txt, "X\n\n%.2f", posVar.x);
-    _posVarX->setText(txt);
-
     _posVarY->setValue(posVar.y);
-    sprintf(txt, "Y\n\n%.2f", posVar.y);
-    _posVarY->setText(txt);
-
     _posVarZ->setValue(posVar.z);
-    sprintf(txt, "Z\n\n%.2f", posVar.z);
-    _posVarZ->setText(txt);
 
     const Vector3& vel = emitter->getVelocity();
-    _velX->setValue(vel.x);
-    sprintf(txt, "X\n\n%.2f", vel.x);
-    _velX->setText(txt);
-
+    _velX->setValue(vel.x);    
     _velY->setValue(vel.y);
-    sprintf(txt, "Y\n\n%.2f", vel.y);
-    _velY->setText(txt);
-
     _velZ->setValue(vel.z);
-    sprintf(txt, "Z\n\n%.2f", vel.z);
-    _velZ->setText(txt);
 
     const Vector3& velVar = emitter->getVelocityVariance();
     _velVarX->setValue(velVar.x);
-    sprintf(txt, "X\n\n%.2f", velVar.x);
-    _velVarX->setText(txt);
-
     _velVarY->setValue(velVar.y);
-    sprintf(txt, "Y\n\n%.2f", velVar.y);
-    _velVarY->setText(txt);
-    
     _velVarZ->setValue(velVar.z);
-    sprintf(txt, "Z\n\n%.2f", velVar.z);
-    _velVarZ->setText(txt);
 
     const Vector3& accel = emitter->getAcceleration();
     _accelX->setValue(accel.x);
-    sprintf(txt, "X\n\n%.2f", accel.x);
-    _accelX->setText(txt);
-
     _accelY->setValue(accel.y);
-    sprintf(txt, "Y\n\n%.2f", accel.y);
-    _accelY->setText(txt);
-
     _accelZ->setValue(accel.z);
-    sprintf(txt, "Z\n\n%.2f", accel.z);
-    _accelZ->setText(txt);
 
     const Vector3& accelVar = emitter->getAccelerationVariance();
     _accelVarX->setValue(accelVar.x);
-    sprintf(txt, "X\n\n%.2f", accelVar.x);
-    _accelVarX->setText(txt);
-
     _accelVarY->setValue(accelVar.y);
-    sprintf(txt, "Y\n\n%.2f", accelVar.y);
-    _accelVarY->setText(txt);
-
     _accelVarZ->setValue(accelVar.z);
-    sprintf(txt, "Z\n\n%.2f", accelVar.z);
-    _accelVarZ->setText(txt);
 
     _spinSpeedMin->setValue(emitter->getRotationPerParticleSpeedMin());
-    sprintf(txt, "Min.\n\n%.2f", emitter->getRotationPerParticleSpeedMin());
-    _spinSpeedMin->setText(txt);
-
     _spinSpeedMax->setValue(emitter->getRotationPerParticleSpeedMax());
-    sprintf(txt, "Max.\n\n%.2f", emitter->getRotationPerParticleSpeedMax());
-    _spinSpeedMax->setText(txt);
 
     const Vector3& axis = emitter->getRotationAxis();
     _axisX->setValue(axis.x);
-    sprintf(txt, "X\n\n%.2f", axis.x);
-    _axisX->setText(txt);
-
-    _axisY->setValue(axis.y);
-    sprintf(txt, "Y\n\n%.2f", axis.y);
-    _axisY->setText(txt);
-    
+    _axisY->setValue(axis.y);    
     _axisZ->setValue(axis.z);
-    sprintf(txt, "Z\n\n%.2f", axis.z);
-    _axisZ->setText(txt);
+
 
     const Vector3& axisVar = emitter->getRotationAxisVariance();
     _axisVarX->setValue(axisVar.x);
-    sprintf(txt, "X\n\n%.2f", axisVar.x);
-    _axisVarX->setText(txt);
-
     _axisVarY->setValue(axisVar.y);
-    sprintf(txt, "Y\n\n%.2f", axisVar.y);
-    _axisVarY->setText(txt);
-
     _axisVarZ->setValue(axisVar.z);
-    sprintf(txt, "Z\n\n%.2f", axisVar.z);
-    _axisVarZ->setText(txt);
 
     _rotationSpeedMin->setValue(emitter->getRotationSpeedMin());
-    sprintf(txt, "Min.\n\n%.2f", emitter->getRotationSpeedMin());
-    _rotationSpeedMin->setText(txt);
-
     _rotationSpeedMax->setValue(emitter->getRotationSpeedMax());
-    sprintf(txt, "Max.\n\n%.2f", emitter->getRotationSpeedMax());
-    _rotationSpeedMax->setText(txt);
 }
 
 void ParticlesGame::drawSplash(void* param)
@@ -994,6 +762,6 @@ void ParticlesGame::drawFrameRate(Font* font, const Vector4& color, unsigned int
     char buffer[30];
     sprintf(buffer, "FPS: %u\nParticles: %u", fps, _particleEmitterNode->getParticleEmitter()->getParticlesCount());
     font->start();
-    font->drawText(buffer, x, y, color, font->getSize());
+    font->drawText(buffer, x, y, color, 28);
     font->finish();
 }
