@@ -127,7 +127,7 @@ form particleEditor
     {
         style = particleProps
         alignment = ALIGN_TOP_RIGHT
-        width = 220
+        width = 210
         autoHeight = true
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL
