@@ -7,9 +7,11 @@
 #include "Pass.h"
 #include "Ref.h"
 #include "RenderState.h"
+#include "Scene.h"
 #include "Technique.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
+#include "lua_RenderStateDepthFunction.h"
 
 namespace gameplay
 {
@@ -63,11 +65,9 @@ int lua_RenderState__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -97,11 +97,9 @@ int lua_RenderState_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -128,7 +126,7 @@ int lua_RenderState_getParameter(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 RenderState* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getParameter(param1);
@@ -147,11 +145,9 @@ int lua_RenderState_getParameter(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_getParameter - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState_getParameter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -184,11 +180,9 @@ int lua_RenderState_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -230,11 +224,9 @@ int lua_RenderState_getStateBlock(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_getStateBlock - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState_getStateBlock - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -264,11 +256,9 @@ int lua_RenderState_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -291,41 +281,46 @@ int lua_RenderState_setParameterAutoBinding(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
+                    // Get parameter 2 off the stack.
+                    RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
 
-                RenderState* instance = getInstance(state);
-                instance->setParameterAutoBinding(param1, param2);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                    RenderState* instance = getInstance(state);
+                    instance->setParameterAutoBinding(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
+                    // Get parameter 2 off the stack.
+                    const char* param2 = ScriptUtil::getString(3, false);
 
-                RenderState* instance = getInstance(state);
-                instance->setParameterAutoBinding(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_setParameterAutoBinding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    RenderState* instance = getInstance(state);
+                    instance->setParameterAutoBinding(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_RenderState_setParameterAutoBinding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -352,18 +347,22 @@ int lua_RenderState_setStateBlock(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<RenderState::StateBlock> param1 = ScriptUtil::getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<RenderState::StateBlock> param1 = ScriptUtil::getObjectPointer<RenderState::StateBlock>(2, "RenderStateStateBlock", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'RenderState::StateBlock'.");
+                    lua_error(state);
+                }
 
                 RenderState* instance = getInstance(state);
                 instance->setStateBlock(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderState_setStateBlock - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderState_setStateBlock - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

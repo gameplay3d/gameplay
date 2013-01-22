@@ -52,13 +52,31 @@
     <ClInclude Include="src\MeshBatchTest.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsSceneTest.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\TriangleTest.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\GestureTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BillboardTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FormsTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LightTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PostProcessTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GamepadTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsCollisionObjectTest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainTest.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,13 +120,31 @@
     <ClCompile Include="src\MeshBatchTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsSceneTest.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\TriangleTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\GestureTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BillboardTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FormsTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PostProcessTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamepadTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsCollisionObjectTest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -22,7 +22,7 @@ namespace gameplay
 
 void luaRegister_Label()
 {
-    const luaL_Reg lua_members[] =
+    const luaL_Reg lua_members[] = 
     {
         {"addListener", lua_Label_addListener},
         {"addRef", lua_Label_addRef},
@@ -31,8 +31,6 @@ void luaRegister_Label()
         {"createAnimationFromBy", lua_Label_createAnimationFromBy},
         {"createAnimationFromTo", lua_Label_createAnimationFromTo},
         {"destroyAnimation", lua_Label_destroyAnimation},
-        {"disable", lua_Label_disable},
-        {"enable", lua_Label_enable},
         {"getAlignment", lua_Label_getAlignment},
         {"getAnimation", lua_Label_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Label_getAnimationPropertyComponentCount},
@@ -74,7 +72,9 @@ void luaRegister_Label()
         {"getZIndex", lua_Label_getZIndex},
         {"isContainer", lua_Label_isContainer},
         {"isEnabled", lua_Label_isEnabled},
+        {"isVisible", lua_Label_isVisible},
         {"release", lua_Label_release},
+        {"removeListener", lua_Label_removeListener},
         {"removeScriptCallback", lua_Label_removeScriptCallback},
         {"setAlignment", lua_Label_setAlignment},
         {"setAnimationPropertyValue", lua_Label_setAnimationPropertyValue},
@@ -85,6 +85,7 @@ void luaRegister_Label()
         {"setConsumeInputEvents", lua_Label_setConsumeInputEvents},
         {"setCursorColor", lua_Label_setCursorColor},
         {"setCursorRegion", lua_Label_setCursorRegion},
+        {"setEnabled", lua_Label_setEnabled},
         {"setFocusIndex", lua_Label_setFocusIndex},
         {"setFont", lua_Label_setFont},
         {"setFontSize", lua_Label_setFontSize},
@@ -104,11 +105,12 @@ void luaRegister_Label()
         {"setTextAlignment", lua_Label_setTextAlignment},
         {"setTextColor", lua_Label_setTextColor},
         {"setTextRightToLeft", lua_Label_setTextRightToLeft},
+        {"setVisible", lua_Label_setVisible},
         {"setWidth", lua_Label_setWidth},
         {"setZIndex", lua_Label_setZIndex},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] =
+    const luaL_Reg lua_statics[] = 
     {
         {"ANIMATE_OPACITY", lua_Label_static_ANIMATE_OPACITY},
         {"ANIMATE_POSITION", lua_Label_static_ANIMATE_POSITION},
@@ -152,14 +154,12 @@ int lua_Label__gc(lua_State* state)
                     Label* instance = (Label*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -187,21 +187,25 @@ int lua_Label_addListener(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->addListener(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_addListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_addListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -228,14 +232,12 @@ int lua_Label_addRef(lua_State* state)
             {
                 Label* instance = getInstance(state);
                 instance->addRef();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -270,14 +272,12 @@ int lua_Label_addScriptCallback(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_addScriptCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -300,177 +300,187 @@ int lua_Label_createAnimation(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
-
-                Label* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+                    // Get parameter 2 off the stack.
+                    const char* param2 = ScriptUtil::getString(3, false);
+
+                    Label* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Properties> param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
-
-                Label* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Properties> param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    Label* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
-
-                // Get parameter 6 off the stack.
-                Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
-
-                Label* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                    // Get parameter 4 off the stack.
+                    ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
+
+                    // Get parameter 5 off the stack.
+                    ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
+
+                    // Get parameter 6 off the stack.
+                    Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
+
+                    Label* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 9:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
-
-                // Get parameter 6 off the stack.
-                ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
-
-                // Get parameter 7 off the stack.
-                ScriptUtil::LuaArray<float> param7 = ScriptUtil::getFloatPointer(8);
-
-                // Get parameter 8 off the stack.
-                Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
-
-                Label* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                    // Get parameter 4 off the stack.
+                    ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
+
+                    // Get parameter 5 off the stack.
+                    ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
+
+                    // Get parameter 6 off the stack.
+                    ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
+
+                    // Get parameter 7 off the stack.
+                    ScriptUtil::LuaArray<float> param7 = ScriptUtil::getFloatPointer(8);
+
+                    // Get parameter 8 off the stack.
+                    Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
+
+                    Label* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Label_createAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -502,7 +512,7 @@ int lua_Label_createAnimationFromBy(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -536,11 +546,9 @@ int lua_Label_createAnimationFromBy(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -572,7 +580,7 @@ int lua_Label_createAnimationFromTo(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -606,11 +614,9 @@ int lua_Label_createAnimationFromTo(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -637,14 +643,12 @@ int lua_Label_destroyAnimation(lua_State* state)
             {
                 Label* instance = getInstance(state);
                 instance->destroyAnimation();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_destroyAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_destroyAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -653,91 +657,21 @@ int lua_Label_destroyAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Label* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_destroyAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_destroyAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Label_disable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Label* instance = getInstance(state);
-                instance->disable();
-
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Label_disable - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Label_enable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Label* instance = getInstance(state);
-                instance->enable();
-
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Label_enable - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -765,11 +699,9 @@ int lua_Label_getAlignment(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -811,11 +743,9 @@ int lua_Label_getAnimation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -824,7 +754,7 @@ int lua_Label_getAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Label* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation(param1);
@@ -843,11 +773,9 @@ int lua_Label_getAnimation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -884,11 +812,9 @@ int lua_Label_getAnimationPropertyComponentCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -919,18 +845,22 @@ int lua_Label_getAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AnimationValue'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -963,11 +893,9 @@ int lua_Label_getAutoHeight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAutoHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1000,11 +928,9 @@ int lua_Label_getAutoWidth(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getAutoWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1046,11 +972,9 @@ int lua_Label_getBorder(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1078,11 +1002,9 @@ int lua_Label_getBorder(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1124,11 +1046,9 @@ int lua_Label_getBounds(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getBounds - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1170,11 +1090,9 @@ int lua_Label_getClip(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getClip - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getClip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1216,11 +1134,9 @@ int lua_Label_getClipBounds(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getClipBounds - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getClipBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1253,11 +1169,9 @@ int lua_Label_getConsumeInputEvents(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1303,11 +1217,9 @@ int lua_Label_getCursorColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getCursorColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getCursorColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1353,11 +1265,9 @@ int lua_Label_getCursorRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getCursorRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getCursorRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1403,11 +1313,9 @@ int lua_Label_getCursorUVs(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getCursorUVs - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getCursorUVs - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1440,11 +1348,9 @@ int lua_Label_getFocusIndex(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getFocusIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getFocusIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1486,11 +1392,9 @@ int lua_Label_getFont(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1518,11 +1422,9 @@ int lua_Label_getFont(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1555,11 +1457,9 @@ int lua_Label_getFontSize(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1578,11 +1478,9 @@ int lua_Label_getFontSize(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1615,11 +1513,9 @@ int lua_Label_getHeight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1652,11 +1548,9 @@ int lua_Label_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1684,7 +1578,7 @@ int lua_Label_getImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1706,11 +1600,9 @@ int lua_Label_getImageColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getImageColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getImageColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1738,7 +1630,7 @@ int lua_Label_getImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1760,11 +1652,9 @@ int lua_Label_getImageRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getImageRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getImageRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1792,7 +1682,7 @@ int lua_Label_getImageUVs(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1814,11 +1704,9 @@ int lua_Label_getImageUVs(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getImageUVs - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getImageUVs - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1860,11 +1748,9 @@ int lua_Label_getMargin(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getMargin - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getMargin - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1897,11 +1783,9 @@ int lua_Label_getOpacity(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1920,11 +1804,9 @@ int lua_Label_getOpacity(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1966,11 +1848,9 @@ int lua_Label_getPadding(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getPadding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2003,11 +1883,9 @@ int lua_Label_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2049,11 +1927,9 @@ int lua_Label_getSkinColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2081,11 +1957,9 @@ int lua_Label_getSkinColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2127,11 +2001,9 @@ int lua_Label_getSkinRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2159,11 +2031,9 @@ int lua_Label_getSkinRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2196,11 +2066,9 @@ int lua_Label_getState(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2242,11 +2110,9 @@ int lua_Label_getStyle(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getStyle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getStyle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2279,11 +2145,9 @@ int lua_Label_getText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2316,11 +2180,9 @@ int lua_Label_getTextAlignment(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2339,11 +2201,9 @@ int lua_Label_getTextAlignment(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2385,11 +2245,9 @@ int lua_Label_getTextColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2417,11 +2275,9 @@ int lua_Label_getTextColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2454,11 +2310,9 @@ int lua_Label_getTextRightToLeft(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2477,11 +2331,9 @@ int lua_Label_getTextRightToLeft(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2514,11 +2366,9 @@ int lua_Label_getType(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getType - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2551,11 +2401,9 @@ int lua_Label_getWidth(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2588,11 +2436,9 @@ int lua_Label_getX(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2625,11 +2471,9 @@ int lua_Label_getY(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2662,11 +2506,9 @@ int lua_Label_getZIndex(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_getZIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_getZIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2699,11 +2541,9 @@ int lua_Label_isContainer(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_isContainer - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_isContainer - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2736,11 +2576,44 @@ int lua_Label_isEnabled(lua_State* state)
 
                 return 1;
             }
-            else
+
+            lua_pushstring(state, "lua_Label_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Label_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
-                lua_pushstring(state, "lua_Label_isEnabled - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
+                Label* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
+
+            lua_pushstring(state, "lua_Label_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2767,19 +2640,59 @@ int lua_Label_release(lua_State* state)
             {
                 Label* instance = getInstance(state);
                 instance->release();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Label_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
+
+                Label* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Label_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -2809,14 +2722,12 @@ int lua_Label_removeScriptCallback(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2847,14 +2758,12 @@ int lua_Label_setAlignment(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setAlignment(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2885,18 +2794,22 @@ int lua_Label_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AnimationValue'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -2910,21 +2823,25 @@ int lua_Label_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AnimationValue'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 Label* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2955,14 +2872,12 @@ int lua_Label_setAutoHeight(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setAutoHeight(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setAutoHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2993,14 +2908,12 @@ int lua_Label_setAutoWidth(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setAutoWidth(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setAutoWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3043,14 +2956,12 @@ int lua_Label_setBorder(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
@@ -3079,14 +2990,12 @@ int lua_Label_setBorder(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4, param5);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3113,18 +3022,22 @@ int lua_Label_setBounds(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setBounds(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setBounds - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3155,14 +3068,12 @@ int lua_Label_setConsumeInputEvents(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setConsumeInputEvents(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3190,21 +3101,25 @@ int lua_Label_setCursorColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->setCursorColor(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setCursorColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setCursorColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3232,26 +3147,66 @@ int lua_Label_setCursorRegion(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->setCursorRegion(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setCursorRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setCursorRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Label_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Label* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Label_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3277,14 +3232,12 @@ int lua_Label_setFocusIndex(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setFocusIndex(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setFocusIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setFocusIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3311,18 +3264,22 @@ int lua_Label_setFont(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Font'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setFont(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3332,21 +3289,25 @@ int lua_Label_setFont(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Font'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->setFont(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3377,14 +3338,12 @@ int lua_Label_setFontSize(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setFontSize(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3401,14 +3360,12 @@ int lua_Label_setFontSize(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setFontSize(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3439,14 +3396,12 @@ int lua_Label_setHeight(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setHeight(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3474,21 +3429,25 @@ int lua_Label_setImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setImageColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setImageColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -3499,24 +3458,28 @@ int lua_Label_setImageColor(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
 
                 Label* instance = getInstance(state);
                 instance->setImageColor(param1, *param2, param3);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setImageColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setImageColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3544,21 +3507,25 @@ int lua_Label_setImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setImageRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setImageRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -3569,24 +3536,28 @@ int lua_Label_setImageRegion(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
 
                 Label* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2, param3);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setImageRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setImageRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3629,14 +3600,12 @@ int lua_Label_setMargin(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setMargin(param1, param2, param3, param4);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setMargin - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setMargin - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3667,14 +3636,12 @@ int lua_Label_setOpacity(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setOpacity(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3691,14 +3658,12 @@ int lua_Label_setOpacity(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setOpacity(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3741,14 +3706,12 @@ int lua_Label_setPadding(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setPadding(param1, param2, param3, param4);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setPadding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3783,14 +3746,12 @@ int lua_Label_setPosition(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setPosition(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setPosition - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setPosition - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3825,14 +3786,12 @@ int lua_Label_setSize(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setSize(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3859,18 +3818,22 @@ int lua_Label_setSkinColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setSkinColor(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3880,21 +3843,25 @@ int lua_Label_setSkinColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->setSkinColor(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3921,18 +3888,22 @@ int lua_Label_setSkinRegion(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3942,21 +3913,25 @@ int lua_Label_setSkinRegion(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->setSkinRegion(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3987,14 +3962,12 @@ int lua_Label_setState(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setState(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4021,18 +3994,22 @@ int lua_Label_setStyle(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Theme::Style> param1 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Theme::Style> param1 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Theme::Style'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setStyle(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setStyle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setStyle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4059,18 +4036,16 @@ int lua_Label_setText(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Label* instance = getInstance(state);
                 instance->setText(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4101,14 +4076,12 @@ int lua_Label_setTextAlignment(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setTextAlignment(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4125,14 +4098,12 @@ int lua_Label_setTextAlignment(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setTextAlignment(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4159,18 +4130,22 @@ int lua_Label_setTextColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Label* instance = getInstance(state);
                 instance->setTextColor(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4180,21 +4155,25 @@ int lua_Label_setTextColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Label* instance = getInstance(state);
                 instance->setTextColor(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4225,14 +4204,12 @@ int lua_Label_setTextRightToLeft(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setTextRightToLeft(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4249,19 +4226,53 @@ int lua_Label_setTextRightToLeft(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setTextRightToLeft(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Label_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Label* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Label_setVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4287,14 +4298,12 @@ int lua_Label_setWidth(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setWidth(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4325,14 +4334,12 @@ int lua_Label_setZIndex(lua_State* state)
 
                 Label* instance = getInstance(state);
                 instance->setZIndex(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_setZIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_setZIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4478,10 +4485,16 @@ int lua_Label_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Theme::Style'.");
+                    lua_error(state);
+                }
 
                 void* returnPtr = (void*)Label::create(param1, param2);
                 if (returnPtr)
@@ -4499,11 +4512,9 @@ int lua_Label_static_create(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Label_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Label_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

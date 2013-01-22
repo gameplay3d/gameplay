@@ -184,7 +184,7 @@ void PhysicsVehicle::initialize()
     btRigidBody* body = static_cast<btRigidBody*>(_rigidBody->getCollisionObject());
     btDynamicsWorld* dynamicsWorld = Game::getInstance()->getPhysicsController()->_world;
     _vehicleRaycaster = new VehicleNotMeRaycaster(dynamicsWorld, body);
-    _vehicle = new btRaycastVehicle(_vehicleTuning, body, _vehicleRaycaster);
+    _vehicle = bullet_new<btRaycastVehicle>(_vehicleTuning, body, _vehicleRaycaster);
     body->setActivationState(DISABLE_DEACTIVATION);
     dynamicsWorld->addVehicle(_vehicle);
     _vehicle->setCoordinateSystem(0, 1, 2);
@@ -233,7 +233,7 @@ void PhysicsVehicle::setEnabled(bool enable)
 
 unsigned int PhysicsVehicle::getNumWheels() const
 {
-    return _wheels.size();
+    return (unsigned int)_wheels.size();
 }
 
 PhysicsVehicleWheel* PhysicsVehicle::getWheel(unsigned int i)
@@ -243,7 +243,7 @@ PhysicsVehicleWheel* PhysicsVehicle::getWheel(unsigned int i)
 
 void PhysicsVehicle::addWheel(PhysicsVehicleWheel* wheel)
 {
-    unsigned int i = _wheels.size();
+    unsigned i = (unsigned int)_wheels.size();
     _wheels.push_back(wheel);
     wheel->setHost(this, i);
     wheel->addToVehicle(_vehicle);

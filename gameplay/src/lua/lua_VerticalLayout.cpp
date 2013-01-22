@@ -61,11 +61,9 @@ int lua_VerticalLayout__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -95,11 +93,9 @@ int lua_VerticalLayout_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -132,11 +128,9 @@ int lua_VerticalLayout_getBottomToTop(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout_getBottomToTop - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout_getBottomToTop - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -169,11 +163,9 @@ int lua_VerticalLayout_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -206,11 +198,9 @@ int lua_VerticalLayout_getType(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout_getType - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout_getType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -240,11 +230,9 @@ int lua_VerticalLayout_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -278,11 +266,9 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_VerticalLayout_setBottomToTop - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_VerticalLayout_setBottomToTop - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

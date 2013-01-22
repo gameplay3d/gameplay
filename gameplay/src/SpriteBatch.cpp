@@ -14,33 +14,9 @@
     vtx.u = vu; vtx.v = vv; \
     vtx.r = vr; vtx.g = vg; vtx.b = vb; vtx.a = va
 
-// Default sprite vertex shader
-#define SPRITE_VSH \
-    "uniform mat4 u_projectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "attribute vec4 a_color;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-        "v_color = a_color;\n" \
-    "}\n"
-
-// Default sprite fragment shader
-#define SPRITE_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = v_color * texture2D(u_texture, v_texCoord);\n" \
-    "}\n"
+// Default sprite shaders
+#define SPRITE_VSH "res/shaders/sprite.vert"
+#define SPRITE_FSH "res/shaders/sprite.frag"
 
 namespace gameplay
 {
@@ -73,12 +49,12 @@ SpriteBatch::~SpriteBatch()
 SpriteBatch* SpriteBatch::create(const char* texturePath, Effect* effect, unsigned int initialCapacity)
 {
     Texture* texture = Texture::create(texturePath);
-    SpriteBatch* batch = SpriteBatch::create(texture);
+    SpriteBatch* batch = SpriteBatch::create(texture, effect, initialCapacity);
     SAFE_RELEASE(texture);
     return batch;
 }
 
-SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int initialCapacity)
+SpriteBatch* SpriteBatch::create(Texture* texture,  Effect* effect, unsigned int initialCapacity)
 {
     GP_ASSERT(texture != NULL);
 
@@ -88,7 +64,7 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
         // Create our static sprite effect.
         if (__spriteEffect == NULL)
         {
-            __spriteEffect = Effect::createFromSource(SPRITE_VSH, SPRITE_FSH);
+            __spriteEffect = Effect::createFromFile(SPRITE_VSH, SPRITE_FSH);
             if (__spriteEffect == NULL)
             {
                 GP_ERROR("Unable to load sprite effect.");
@@ -154,10 +130,11 @@ SpriteBatch* SpriteBatch::create(Texture* texture, Effect* effect, unsigned int 
     batch->_textureWidthRatio = 1.0f / (float)texture->getWidth();
     batch->_textureHeightRatio = 1.0f / (float)texture->getHeight();
 
-    // Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
-    Game* game = Game::getInstance();
-    Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &batch->_projectionMatrix);
-    material->getParameter("u_projectionMatrix")->bindValue(batch, &SpriteBatch::getProjectionMatrix);
+	// Bind an ortho projection to the material by default (user can override with setProjectionMatrix)
+	Game* game = Game::getInstance();
+	Matrix::createOrthographicOffCenter(0, game->getWidth(), game->getHeight(), 0, 0, 1, &batch->_projectionMatrix);
+	material->getParameter("u_projectionMatrix")->bindValue(batch, &SpriteBatch::getProjectionMatrix);
+	
     return batch;
 }
 
@@ -185,7 +162,7 @@ void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& 
     float u2 = u1 + _textureWidthRatio * src.width;
     float v2 = v1 - _textureHeightRatio * src.height;
 
-    draw(dst.x, dst.y, dst.z, scale.x, scale.y, u2, v2, u1, v1, color);
+    draw(dst.x, dst.y, dst.z, scale.x, scale.y, u1, v1, u2, v2, color);
 }
 
 void SpriteBatch::draw(const Vector3& dst, const Rectangle& src, const Vector2& scale, const Vector4& color,

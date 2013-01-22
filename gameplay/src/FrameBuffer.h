@@ -9,13 +9,17 @@ namespace gameplay
 {
 
 /**
- * Defines a video output off all graphics buffer containing a complete frame of data.
- * This consists of a RenderTarget and DepthStencilTarget holding the color, depth and
- * stencil data in the rendering frame. 
- * 
- * to change the default Game framebuffer call Game::setFrameBuffer(myFrameBuffer);
- * To restore back to the default call Game::setFrameBuffer(NULL).
- * This is useful for rendering shadows and other post-processing effects.
+ * Defines a frame buffer object that may contain one or more render targets and optionally
+ * a depth-stencil target.
+ *
+ * Frame buffers can be created and used for off-screen rendering, which is useful for 
+ * techniques such as shadow mapping and post-processing. Render targets within a frame
+ * buffer can be both written to and read (by calling RenderTarget::getTexture).
+ *
+ * When binding a custom frame buffer, you should always store the return value of 
+ * FrameBuffer::bind and restore it when you are finished drawing to your frame buffer.
+ *
+ * To bind the default frame buffer, call FrameBuffer::bindDefault.
  */
 class FrameBuffer : public Ref
 {
@@ -24,11 +28,30 @@ class FrameBuffer : public Ref
 public:
 
     /**
+     * Creates a new, empty FrameBuffer object.
+     *
+     * The new FrameBuffer does not have any render targets or a depth/stencil target and these
+     * must be added before it can be used. The FrameBuffer is added to the list of available
+     * FrameBuffers.
+     *
+     * @param id The ID of the new FrameBuffer. Uniqueness is recommended but not enforced.
+     *
+     * @return A newly created FrameBuffer.
+     * @script{create}
+     */
+    static FrameBuffer* create(const char* id);
+
+    /**
      * Creates a new FrameBuffer with a single RenderTarget of the specified width and height,
      * and adds the FrameBuffer to the list of available FrameBuffers.
+     *
+     * If width and height are non-zero a default RenderTarget of type RGBA will be created
+     * and added to the FrameBuffer, with the same ID. The ID of the render target can be
+     * changed later via RenderTarget::setId(const char*).
+     *
      * You can additionally add a DepthStencilTarget using FrameBuffer::setDepthStencilTarget.
      *
-     * @param id The ID of the new FrameBuffer.  Uniqueness is recommended but not enforced.
+     * @param id The ID of the new FrameBuffer. Uniqueness is recommended but not enforced.
      * @param width The width of the RenderTarget to be created and attached.
      * @param height The height of the RenderTarget to be created and attached.
      *
@@ -106,22 +129,27 @@ public:
     DepthStencilTarget* getDepthStencilTarget() const;
  
     /**
-     * Binds this FrameBuffer for off-screen rendering.
+     * Binds this FrameBuffer for off-screen rendering and return you the curently bound one.
+     *
+     * You should keep the return FrameBuffer and store it and call bind() when you rendering is complete.
+     *
+     * @ return The currently bound framebuffer.
      */
-    void bind();
+    FrameBuffer* bind();
 
     /**
      * Binds the default FrameBuffer for rendering to the display.
+     *
+     * @ return The default framebuffer.
      */
-    static void bindDefault(); 
+    static FrameBuffer* bindDefault(); 
      
 private:
-
 
     /**
      * Constructor.
      */
-    FrameBuffer(const char* id, unsigned int width, unsigned int height);
+    FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle);
 
     /**
      * Destructor.
@@ -135,6 +163,8 @@ private:
 
     static void initialize();
 
+    static void finalize();
+
     static bool isPowerOfTwo(unsigned int value);
 
     std::string _id;
@@ -143,6 +173,11 @@ private:
     FrameBufferHandle _handle;
     RenderTarget** _renderTargets;
     DepthStencilTarget* _depthStencilTarget;
+
+    static unsigned int _maxRenderTargets;
+    static std::vector<FrameBuffer*> _frameBuffers;
+    static FrameBuffer* _defaultFrameBuffer;
+    static FrameBuffer* _currentFrameBuffer;
 };
 
 }

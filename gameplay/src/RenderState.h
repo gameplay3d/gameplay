@@ -84,8 +84,47 @@ public:
         /**
          * Binds the matrix palette of MeshSkin attached to a node's model.
          */
-        MATRIX_PALETTE
+        MATRIX_PALETTE,
+
+        /**
+         * Binds the current scene's ambient color (Vector3).
+         */
+        SCENE_AMBIENT_COLOR,
+
+        /**
+         * Binds the current scene's light color (Vector3).
+         *
+         * This is typically used for the main directional light in a scene, such as the Sun.
+         */
+        SCENE_LIGHT_COLOR,
+
+        /**
+         * Binds the current scene's light direction (Vector3).
+         *
+         * This is typically used for the main directional light in a scene, such as the Sun.
+         */
+        SCENE_LIGHT_DIRECTION
     };
+
+    /**
+     * Callback function prototype for resolving material parameter auto bindings.
+     *
+     * Functions matching this callback signature can be registered via the 
+     * RenderState::registerAutoBindingResolver method to extend or override the set
+     * of built-in material parameter auto bindings.
+     *
+     * @param autoBinding Name of the auto binding to resolve.
+     * @param node Node that is bound to the material of the specified parameter.
+     * @param parameter Material parameter to set the binding on.
+     *
+     * @return True ONLY if the implementations explicitly handles the auto binding, false otherwise.
+     *      Returning true here will prevent any further code (including built-in resolving code) from
+     *      handling the auto binding.
+     *
+     * @see RenderState::registerAutoBindingResolver(const char*, RenderState::AutoBindingResolver)
+     * @script{ignore}
+     */
+    typedef bool (*ResolveAutoBindingCallback) (const char* autoBinding, Node* node, MaterialParameter* parameter);
 
     /**
      * Defines blend constants supported by the blend function.
@@ -105,6 +144,27 @@ public:
         BLEND_CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
         BLEND_ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
         BLEND_SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE
+    };
+
+    /**
+     * Defines the supported depth compare functions.
+     *
+     * Depth compare functions specify the comparison that takes place between the
+     * incoming pixel's depth value and the depth value already in the depth buffer.
+     * If the compare function passes, the new pixel will be drawn.
+     *
+     * The intial depth compare function is DEPTH_LESS.
+     */
+    enum DepthFunction
+    {
+        DEPTH_NEVER = GL_NEVER,
+        DEPTH_LESS = GL_LESS,
+        DEPTH_EQUAL = GL_EQUAL,
+        DEPTH_LEQUAL = GL_LEQUAL,
+        DEPTH_GREATER = GL_GREATER,
+        DEPTH_NOTEQUAL = GL_NOTEQUAL,
+        DEPTH_GEQUAL = GL_GEQUAL,
+        DEPTH_ALWAYS = GL_ALWAYS
     };
 
     /**
@@ -167,6 +227,8 @@ public:
         /**
          * Toggles depth testing.
          *
+         * By default, depth testing is disabled.
+         *
          * @param enabled true to enable, false to disable.
          */
         void setDepthTest(bool enabled);
@@ -177,6 +239,16 @@ public:
          * @param enabled true to enable, false to disable.
          */
         void setDepthWrite(bool enabled);
+
+        /**
+         * Sets the depth function to use when depth testing is enabled.
+         *
+         * When not explicitly set and when depth testing is enabled, the default
+         * depth function is DEPTH_LESS.
+         *
+         * @param func The depth function.
+         */
+        void setDepthFunction(DepthFunction func);
 
         /**
          * Sets a render state from the given name and value strings.
@@ -217,6 +289,7 @@ public:
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
         bool _depthWriteEnabled;
+        DepthFunction _depthFunction;
         bool _blendEnabled;
         Blend _blendSrc;
         Blend _blendDst;
@@ -286,6 +359,36 @@ public:
      */
     StateBlock* getStateBlock() const;
 
+    /**
+     * Registers a custom auto binding resolver.
+     *
+     * Implementing a custom auto binding resolver allows the set of built-in parameter auto
+     * bindings to be extended or overridden. Any parameter auto binding that is set on a
+     * material will be forwarded to any custom auto binding resolvers, in the order in which
+     * they are registered. If a registered resolver returns true (specifying that it handles
+     * the specified autoBinding), no further code will be executed for that autoBinding.
+     * This allows auto binding resolvers to not only implement new/custom binding strings,
+     * but it also lets them override existing/built-in ones. For this reason, you should
+     * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
+     * false otherwise.
+     *
+     * Note that the custom resolver is called only once for a RenderState object when its
+     * node binding is initially set. This occurs when a material is initially bound to a
+     * Model that belongs to a Node. The resolver is NOT called each frame or each time
+     * the RenderState is bound. Therefore, when implementing custom auto bindings for values
+     * that change over time, the you should bind a method pointer onto the passed in
+     * MaterialParaemter using the MaterialParameter::bindValue method. This way, the bound
+     * method will be called each frame to set an updated value into the MaterialParameter.
+     *
+     * If no registered resolvers explicitly handle an auto binding, the binding will attempt
+     * to be resolved using the internal/built-in resolver, which is able to handle any
+     * auto bindings found in the RenderState::AutoBinding enumeration.
+     *
+     * @param callback Callback function for resolving parameter auto bindings.
+     * @script{ignore}
+     */
+    static void registerAutoBindingResolver(ResolveAutoBindingCallback callback);
+
 protected:
 
     /**
@@ -320,9 +423,12 @@ protected:
     void setNodeBinding(Node* node);
 
     /**
-     * Applies the specified auto-binding.
+     * Applies the specified custom auto-binding.
+     *
+     * @param uniformName Name of the shader uniform.
+     * @param autoBinding Name of the auto binding.s
      */
-    void applyAutoBinding(const char* uniformName, AutoBinding binding);
+    void applyAutoBinding(const char* uniformName, const char* autoBinding);
 
     /**
      * Binds the render state for this RenderState and any of its parents, top-down, 
@@ -358,14 +464,14 @@ private:
 protected:
 
     /**
-     * Collection of MaterialParameter's to be applied to the gamplay::Effect.
+     * Collection of MaterialParameter's to be applied to the gameplay::Effect.
      */
     mutable std::vector<MaterialParameter*> _parameters;
-    
+
     /**
-     * Map of IDs to AutoBindings.
+     * Map of parameter names to auto binding strings.
      */
-    std::map<std::string, AutoBinding> _autoBindings;
+    std::map<std::string, std::string> _autoBindings;
 
     /**
      * The Node bound to the RenderState.
@@ -381,6 +487,11 @@ protected:
      * The RenderState's parent.
      */
     RenderState* _parent;
+
+    /**
+     * Map of custom auto binding resolvers.
+     */
+    static std::vector<ResolveAutoBindingCallback> _customAutoBindingResolvers;
 };
 
 }

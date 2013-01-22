@@ -200,6 +200,17 @@ public:
     void setValue(Uniform* uniform, const Texture::Sampler* sampler);
 
     /**
+     * Sets a sampler array uniform value.
+     *
+     * @param uniform The uniform to set.
+     * @param values The sampler array to set.
+     * @param count The number of elements in the array.
+     *
+     * @script{ignore}
+     */
+    void setValue(Uniform* uniform, const Texture::Sampler** values, unsigned int count);
+
+    /**
      * Binds this effect to make it the currently active effect for the rendering system.
      */
     void bind();

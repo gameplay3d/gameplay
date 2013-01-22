@@ -32,6 +32,7 @@ Joystick* Joystick::create(Theme::Style* style, Properties* properties)
 {
     Joystick* joystick = new Joystick();
     joystick->initialize(style, properties);
+    joystick->_index = properties->getInt("index");
     return joystick;
 }
 

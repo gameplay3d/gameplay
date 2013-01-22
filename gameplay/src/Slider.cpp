@@ -9,7 +9,9 @@ static const float SCROLL_FRACTION = 0.1f;
 // e.g. to prevent its parent container from scrolling at the same time.
 static const float SLIDER_THRESHOLD = 5.0f;
 
-Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _minImage(NULL), _maxImage(NULL), _trackImage(NULL), _markerImage(NULL)
+Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _minImage(NULL),
+    _maxImage(NULL), _trackImage(NULL), _markerImage(NULL), _valueTextVisible(false),
+    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText("")
 {
 }
 
@@ -40,6 +42,13 @@ Slider* Slider::create(Theme::Style* style, Properties* properties)
     slider->_max = properties->getFloat("max");
     slider->_value = properties->getFloat("value");
     slider->_step = properties->getFloat("step");
+    slider->_valueTextVisible = properties->getBool("valueTextVisible");
+    slider->_valueTextPrecision = properties->getInt("valueTextPrecision");
+
+    if (properties->exists("valueTextAlignment"))
+    {
+        slider->_valueTextAlignment = Font::getJustify(properties->getString("valueTextAlignment"));
+    }
 
     return slider;
 }
@@ -49,7 +58,7 @@ void Slider::setMin(float min)
     _min = min;
 }
 
-float Slider::getMin()
+float Slider::getMin() const
 {
     return _min;
 }
@@ -59,7 +68,7 @@ void Slider::setMax(float max)
     _max = max;
 }
 
-float Slider::getMax()
+float Slider::getMax() const
 {
     return _max;
 }
@@ -69,12 +78,12 @@ void Slider::setStep(float step)
     _step = step;
 }
 
-float Slider::getStep()
+float Slider::getStep() const
 {
     return _step;
 }
 
-float Slider::getValue()
+float Slider::getValue() const
 {
     return _value;
 }
@@ -82,6 +91,36 @@ float Slider::getValue()
 void Slider::setValue(float value)
 {
     _value = MATH_CLAMP(value, _min, _max);
+}
+
+void Slider::setValueTextVisible(bool valueTextVisible)
+{
+    _valueTextVisible = valueTextVisible;
+}
+
+bool Slider::isValueTextVisible() const
+{
+    return _valueTextVisible;
+}
+
+void Slider::setValueTextAlignment(Font::Justify alignment)
+{
+    _valueTextAlignment = alignment;
+}
+
+Font::Justify Slider::getValueTextAlignment() const
+{
+    return _valueTextAlignment;
+}
+
+void Slider::setValueTextPrecision(unsigned int precision)
+{
+    _valueTextPrecision = precision;
+}
+
+unsigned int Slider::getValueTextPrecision() const
+{
+    return _valueTextPrecision;
 }
 
 void Slider::addListener(Control::Listener* listener, int eventFlags)
@@ -96,11 +135,6 @@ void Slider::addListener(Control::Listener* listener, int eventFlags)
 
 bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
@@ -182,7 +216,6 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             {
                 notifyListeners(Listener::VALUE_CHANGED);
             }
-
             _dirty = true;
         }
         break;
@@ -205,11 +238,6 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
 
 bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
         case Mouse::MOUSE_PRESS_LEFT_BUTTON:
@@ -260,6 +288,10 @@ void Slider::update(const Control* container, const Vector2& offset)
     _maxImage = getImage("maxCap", _state);
     _markerImage = getImage("marker", _state);
     _trackImage = getImage("track", _state);
+
+    char s[32];
+    sprintf(s, "%.*f", _valueTextPrecision, _value);
+    _valueText = s;
 }
 
 void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
@@ -313,6 +345,18 @@ void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     pos.x = _viewportBounds.x + minCapRegion.width * 0.5f + markerPosition;
     pos.y = midY - markerRegion.height / 2.0f;
     spriteBatch->draw(pos.x, pos.y, markerRegion.width, markerRegion.height, marker.u1, marker.v1, marker.u2, marker.v2, markerColor, _viewportClipBounds);
+}
+
+void Slider::drawText(const Rectangle& clip)
+{
+    Label::drawText(clip);
+
+    if (_valueTextVisible && _font)
+    {
+        _font->start();
+        _font->drawText(_valueText.c_str(), _textBounds, _textColor, getFontSize(_state), _valueTextAlignment, true, getTextRightToLeft(_state), &_viewportClipBounds);
+        _font->finish();
+    }
 }
 
 const char* Slider::getType() const

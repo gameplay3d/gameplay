@@ -46,11 +46,9 @@ int lua_AnimationController_stopAllAnimations(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationController_stopAllAnimations - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationController_stopAllAnimations - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

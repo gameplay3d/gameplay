@@ -54,11 +54,9 @@ int lua_ScreenDisplayer__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_ScreenDisplayer__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_ScreenDisplayer__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -147,7 +145,7 @@ int lua_ScreenDisplayer_static_start(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 2);
@@ -156,11 +154,9 @@ int lua_ScreenDisplayer_static_start(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_ScreenDisplayer_static_start - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_ScreenDisplayer_static_start - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

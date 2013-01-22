@@ -5,9 +5,6 @@
     </Filter>
     <Filter Include="src">
     </Filter>
-    <Filter Include="res\shaders">
-      <UniqueIdentifier>{7f4ffc57-f331-41d5-8ee2-f0e67cd26710}</UniqueIdentifier>
-    </Filter>
     <Filter Include="config">
       <UniqueIdentifier>{e9cd44da-992f-4483-8fec-0eb7f7d982d6}</UniqueIdentifier>
     </Filter>
@@ -32,9 +29,6 @@
     </None>
     <None Include="res\common\game.material">
       <Filter>res</Filter>
-    </None>
-    <None Include="res\shaders\textured-alphatest.frag">
-      <Filter>res\shaders</Filter>
     </None>
     <None Include="game.atc.config">
       <Filter>config</Filter>

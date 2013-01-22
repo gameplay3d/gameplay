@@ -61,11 +61,9 @@ int lua_Frustum__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -107,53 +105,64 @@ int lua_Frustum__init(lua_State* state)
         }
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true);
-
-                void* returnPtr = (void*)new Frustum(*param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Frustum");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(1, "Matrix", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
+                    void* returnPtr = (void*)new Frustum(*param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Frustum");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(1, "Frustum", true);
-
-                void* returnPtr = (void*)new Frustum(*param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA || lua_type(state, 1) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Frustum");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(1, "Frustum", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum__init - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    void* returnPtr = (void*)new Frustum(*param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Frustum");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Frustum__init - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -195,11 +204,9 @@ int lua_Frustum_getBottom(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getBottom - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getBottom - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -226,18 +233,22 @@ int lua_Frustum_getCorners(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
 
                 Frustum* instance = getInstance(state);
                 instance->getCorners(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getCorners - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getCorners - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -279,11 +290,9 @@ int lua_Frustum_getFar(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getFar - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getFar - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -325,11 +334,9 @@ int lua_Frustum_getLeft(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -356,18 +363,22 @@ int lua_Frustum_getMatrix(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Matrix'.");
+                    lua_error(state);
+                }
 
                 Frustum* instance = getInstance(state);
                 instance->getMatrix(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getMatrix - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -409,11 +420,9 @@ int lua_Frustum_getNear(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getNear - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getNear - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -455,11 +464,9 @@ int lua_Frustum_getRight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getRight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getRight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -501,11 +508,9 @@ int lua_Frustum_getTop(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_getTop - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Frustum_getTop - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -528,112 +533,145 @@ int lua_Frustum_intersects(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Frustum* instance = getInstance(state);
-                bool result = instance->intersects(*param1);
+                    Frustum* instance = getInstance(state);
+                    bool result = instance->intersects(*param1);
 
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Frustum* instance = getInstance(state);
-                bool result = instance->intersects(*param1);
+                    Frustum* instance = getInstance(state);
+                    bool result = instance->intersects(*param1);
 
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Frustum* instance = getInstance(state);
-                bool result = instance->intersects(*param1);
+                    Frustum* instance = getInstance(state);
+                    bool result = instance->intersects(*param1);
 
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Frustum* instance = getInstance(state);
-                float result = instance->intersects(*param1);
+                    Frustum* instance = getInstance(state);
+                    float result = instance->intersects(*param1);
 
-                // Push the return value onto the stack.
-                lua_pushnumber(state, result);
+                    // Push the return value onto the stack.
+                    lua_pushnumber(state, result);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Frustum* instance = getInstance(state);
-                float result = instance->intersects(*param1);
+                    Frustum* instance = getInstance(state);
+                    float result = instance->intersects(*param1);
 
-                // Push the return value onto the stack.
-                lua_pushnumber(state, result);
+                    // Push the return value onto the stack.
+                    lua_pushnumber(state, result);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_intersects - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Frustum_intersects - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                float param1 = (float)luaL_checknumber(state, 2);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    float param1 = (float)luaL_checknumber(state, 2);
 
-                // Get parameter 2 off the stack.
-                float param2 = (float)luaL_checknumber(state, 3);
+                    // Get parameter 2 off the stack.
+                    float param2 = (float)luaL_checknumber(state, 3);
 
-                // Get parameter 3 off the stack.
-                float param3 = (float)luaL_checknumber(state, 4);
+                    // Get parameter 3 off the stack.
+                    float param3 = (float)luaL_checknumber(state, 4);
 
-                Frustum* instance = getInstance(state);
-                bool result = instance->intersects(param1, param2, param3);
+                    Frustum* instance = getInstance(state);
+                    bool result = instance->intersects(param1, param2, param3);
 
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
+                    // Push the return value onto the stack.
+                    lua_pushboolean(state, result);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Frustum_intersects - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Frustum_intersects - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -656,33 +694,44 @@ int lua_Frustum_set(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Frustum* instance = getInstance(state);
-                instance->set(*param1);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true);
+                    Frustum* instance = getInstance(state);
+                    instance->set(*param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
-                Frustum* instance = getInstance(state);
-                instance->set(*param1);
-                
-                return 0;
-            }
-            else
+            do
             {
-                lua_pushstring(state, "lua_Frustum_set - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    Frustum* instance = getInstance(state);
+                    instance->set(*param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Frustum_set - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

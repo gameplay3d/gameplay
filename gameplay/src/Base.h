@@ -14,6 +14,7 @@
 #include <cstdarg>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <cstring>
 #include <vector>
@@ -21,6 +22,7 @@
 #include <set>
 #include <stack>
 #include <map>
+#include <queue>
 #include <algorithm>
 #include <limits>
 #include <functional>
@@ -186,9 +188,10 @@ using std::va_list;
 
 // Graphics (OpenGL)
 #ifdef __QNX__
-#include <EGL/egl.h>
+    #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
+    #include <screen/screen.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
@@ -274,6 +277,15 @@ typedef GLuint TextureHandle;
 typedef GLuint FrameBufferHandle;
 /** Render buffer handle. */
 typedef GLuint RenderBufferHandle;
+
+/** Gamepad handle definitions vary by platform. */
+#if defined(__QNX__) && defined(USE_BLACKBERRY_GAMEPAD)
+    typedef screen_device_t GamepadHandle;
+#elif defined(USE_XINPUT)
+    typedef unsigned long GamepadHandle;
+#else
+    typedef unsigned int GamepadHandle;
+#endif
 }
 
 /**
@@ -295,34 +307,9 @@ typedef GLuint RenderBufferHandle;
     } while(0)
 #endif
 
-/**
- * Executes the specified GL code and checks the GL error afterwards
- * to ensure it succeeded.
- *
- * This macro should be used instead of GL_ASSERT for code that must
- * be checked in both debug and release builds. The GL_LAST_ERROR
- * macro can be used afterwards to check whether a GL error was
- * encountered executing the specified code.
- */
-#define GL_CHECK( gl_code ) do \
-    { \
-        while (glGetError() != GL_NO_ERROR) ; \
-        gl_code; \
-        __gl_error_code = glGetError(); \
-        if (__gl_error_code != GL_NO_ERROR) \
-        { \
-            GP_ERROR(#gl_code ": %d", (int)__gl_error_code); \
-        } \
-    } while(0)
-
 /** Global variable to hold GL errors
  * @script{ignore} */
 extern GLenum __gl_error_code;
-
-/**
- * Accesses the most recently set global GL error.
- */
-#define GL_LAST_ERROR() __gl_error_code
 
 /**
  * Executes the specified AL code and checks the AL error afterwards

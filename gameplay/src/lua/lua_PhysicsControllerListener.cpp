@@ -10,6 +10,7 @@
 #include "PhysicsRigidBody.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Terrain.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
@@ -57,11 +58,9 @@ int lua_PhysicsControllerListener_statusEvent(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsControllerListener_statusEvent - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsControllerListener_statusEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

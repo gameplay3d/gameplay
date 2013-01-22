@@ -85,11 +85,9 @@ int lua_AnimationClip__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -112,33 +110,41 @@ int lua_AnimationClip_addBeginListener(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                AnimationClip* instance = getInstance(state);
-                instance->addBeginListener(param1);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    AnimationClip* instance = getInstance(state);
+                    instance->addBeginListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
-                AnimationClip* instance = getInstance(state);
-                instance->addBeginListener(param1);
-                
-                return 0;
-            }
-            else
+            do
             {
-                lua_pushstring(state, "lua_AnimationClip_addBeginListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->addBeginListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_addBeginListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -161,33 +167,41 @@ int lua_AnimationClip_addEndListener(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                AnimationClip* instance = getInstance(state);
-                instance->addEndListener(param1);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    AnimationClip* instance = getInstance(state);
+                    instance->addEndListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
 
-                AnimationClip* instance = getInstance(state);
-                instance->addEndListener(param1);
-                
-                return 0;
-            }
-            else
+            do
             {
-                lua_pushstring(state, "lua_AnimationClip_addEndListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
+
+                    AnimationClip* instance = getInstance(state);
+                    instance->addEndListener(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_addEndListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -210,41 +224,49 @@ int lua_AnimationClip_addListener(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                // Get parameter 2 off the stack.
-                unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
 
-                AnimationClip* instance = getInstance(state);
-                instance->addListener(param1, param2);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER)
+                    AnimationClip* instance = getInstance(state);
+                    instance->addListener(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
+                    // Get parameter 2 off the stack.
+                    unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
 
-                AnimationClip* instance = getInstance(state);
-                instance->addListener(param1, param2);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_addListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    AnimationClip* instance = getInstance(state);
+                    instance->addListener(param1, param2);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_AnimationClip_addListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -274,11 +296,9 @@ int lua_AnimationClip_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -306,7 +326,13 @@ int lua_AnimationClip_crossFade(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AnimationClip'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
@@ -316,11 +342,9 @@ int lua_AnimationClip_crossFade(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_crossFade - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_crossFade - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -353,11 +377,9 @@ int lua_AnimationClip_getActiveDuration(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getActiveDuration - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getActiveDuration - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -399,11 +421,9 @@ int lua_AnimationClip_getAnimation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -436,11 +456,9 @@ int lua_AnimationClip_getBlendWeight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getBlendWeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getBlendWeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -473,11 +491,9 @@ int lua_AnimationClip_getDuration(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getDuration - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getDuration - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -510,11 +526,9 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getElaspedTime - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getElaspedTime - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -547,11 +561,9 @@ int lua_AnimationClip_getEndTime(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getEndTime - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getEndTime - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -584,11 +596,9 @@ int lua_AnimationClip_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -621,11 +631,9 @@ int lua_AnimationClip_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -658,11 +666,9 @@ int lua_AnimationClip_getRepeatCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getRepeatCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getRepeatCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -695,11 +701,9 @@ int lua_AnimationClip_getSpeed(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getSpeed - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getSpeed - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -732,11 +736,9 @@ int lua_AnimationClip_getStartTime(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_getStartTime - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_getStartTime - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -769,11 +771,9 @@ int lua_AnimationClip_isPlaying(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_isPlaying - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_isPlaying - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -803,11 +803,9 @@ int lua_AnimationClip_pause(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_pause - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_pause - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -837,11 +835,9 @@ int lua_AnimationClip_play(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_play - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_play - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -871,11 +867,9 @@ int lua_AnimationClip_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -909,11 +903,9 @@ int lua_AnimationClip_setActiveDuration(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_setActiveDuration - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_setActiveDuration - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -947,11 +939,9 @@ int lua_AnimationClip_setBlendWeight(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_setBlendWeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_setBlendWeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -985,11 +975,9 @@ int lua_AnimationClip_setRepeatCount(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_setRepeatCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_setRepeatCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1023,11 +1011,9 @@ int lua_AnimationClip_setSpeed(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_setSpeed - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_setSpeed - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1074,11 +1060,9 @@ int lua_AnimationClip_stop(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_AnimationClip_stop - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_AnimationClip_stop - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

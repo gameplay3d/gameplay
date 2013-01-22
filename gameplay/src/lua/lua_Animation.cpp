@@ -69,11 +69,9 @@ int lua_Animation__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -103,11 +101,9 @@ int lua_Animation_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -136,7 +132,7 @@ int lua_Animation_createClip(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
@@ -161,11 +157,9 @@ int lua_Animation_createClip(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_createClip - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_createClip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -192,18 +186,16 @@ int lua_Animation_createClips(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->createClips(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_createClips - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_createClips - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -226,85 +218,91 @@ int lua_Animation_getClip(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            do
             {
-                Animation* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getClip();
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "AnimationClip");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    Animation* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->getClip();
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "AnimationClip");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_getClip - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Animation_getClip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                Animation* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getClip(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "AnimationClip");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
+                    Animation* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->getClip(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "AnimationClip");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                Animation* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getClip(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "AnimationClip");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_getClip - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Animation* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->getClip(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "AnimationClip");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Animation_getClip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -337,11 +335,9 @@ int lua_Animation_getClipCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_getClipCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_getClipCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -374,11 +370,9 @@ int lua_Animation_getDuration(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_getDuration - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_getDuration - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -411,11 +405,9 @@ int lua_Animation_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -448,11 +440,9 @@ int lua_Animation_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -482,11 +472,9 @@ int lua_Animation_pause(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_pause - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_pause - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -495,18 +483,16 @@ int lua_Animation_pause(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->pause(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_pause - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_pause - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -536,11 +522,9 @@ int lua_Animation_play(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_play - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_play - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -549,18 +533,16 @@ int lua_Animation_play(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->play(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_play - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_play - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -590,11 +572,9 @@ int lua_Animation_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -624,11 +604,9 @@ int lua_Animation_stop(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_stop - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_stop - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -637,18 +615,16 @@ int lua_Animation_stop(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Animation* instance = getInstance(state);
                 instance->stop(param1);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_stop - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_stop - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -675,7 +651,13 @@ int lua_Animation_targets(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<AnimationTarget> param1 = ScriptUtil::getObjectPointer<AnimationTarget>(2, "AnimationTarget", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<AnimationTarget> param1 = ScriptUtil::getObjectPointer<AnimationTarget>(2, "AnimationTarget", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'AnimationTarget'.");
+                    lua_error(state);
+                }
 
                 Animation* instance = getInstance(state);
                 bool result = instance->targets(param1);
@@ -685,11 +667,9 @@ int lua_Animation_targets(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Animation_targets - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Animation_targets - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

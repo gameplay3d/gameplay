@@ -127,6 +127,44 @@ inline void PhysicsRigidBody::setGravity(float x, float y, float z)
     _body->setGravity(btVector3(x, y, z));
 }
 
+inline Vector3 PhysicsRigidBody::getAngularFactor() const
+{
+    GP_ASSERT(_body);
+    const btVector3& f = _body->getAngularFactor();
+    return Vector3(f.x(), f.y(), f.z());
+}
+
+inline void PhysicsRigidBody::setAngularFactor(const Vector3& angularFactor)
+{
+    GP_ASSERT(_body);
+    _body->setAngularFactor(BV(angularFactor));
+}
+
+inline void PhysicsRigidBody::setAngularFactor(float x, float y, float z)
+{
+    GP_ASSERT(_body);
+    _body->setAngularFactor(btVector3(x, y, z));
+}
+
+inline Vector3 PhysicsRigidBody::getLinearFactor() const
+{
+    GP_ASSERT(_body);
+    const btVector3& f = _body->getLinearFactor();
+    return Vector3(f.x(), f.y(), f.z());
+}
+
+inline void PhysicsRigidBody::setLinearFactor(const Vector3& angularFactor)
+{
+    GP_ASSERT(_body);
+    _body->setLinearFactor(BV(angularFactor));
+}
+
+inline void PhysicsRigidBody::setLinearFactor(float x, float y, float z)
+{
+    GP_ASSERT(_body);
+    _body->setLinearFactor(btVector3(x, y, z));
+}
+
 inline bool PhysicsRigidBody::isStatic() const
 {
     GP_ASSERT(_body);

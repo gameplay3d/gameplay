@@ -167,7 +167,9 @@ void Container::addControls(Theme* theme, Properties* properties)
         }
         else
         {
-            GP_ERROR("Failed to create control; unrecognized control name '%s'.", controlName.c_str());
+            // Ignore - not a valid control name.
+            // This used to fail, but I see no reason to hard fail here (this also fixes not being able
+            // to set padding on containers).
         }
 
         // Add the new control to the form.
@@ -218,7 +220,7 @@ unsigned int Container::addControl(Control* control)
         _controls.push_back(control);
         control->addRef();
         control->_parent = this;
-        return _controls.size() - 1;
+        return (unsigned int)(_controls.size() - 1);
     }
     else
     {
@@ -230,7 +232,7 @@ unsigned int Container::addControl(Control* control)
             Control* c = _controls[i];
             if (c == control)
             {
-                return i;
+                return (unsigned int)i;
             }
         }
 
@@ -278,6 +280,7 @@ void Container::removeControl(const char* id)
         Control* c = *it;
         if (strcmp(id, c->getId()) == 0)
         {
+            c->_parent = NULL;
             SAFE_RELEASE(c);
             _controls.erase(it);
             return;
@@ -293,6 +296,7 @@ void Container::removeControl(Control* control)
     {
         if (*it == control)
         {
+            control->_parent = NULL;
             SAFE_RELEASE(control);
             _controls.erase(it);
             return;
@@ -377,7 +381,6 @@ Animation* Container::getAnimation(const char* id) const
 {
     std::vector<Control*>::const_iterator itr = _controls.begin();
     std::vector<Control*>::const_iterator end = _controls.end();
-        
     Control* control = NULL;
     for (; itr != end; itr++)
     {
@@ -394,7 +397,6 @@ Animation* Container::getAnimation(const char* id) const
                 return animation;
         }
     }
-
     return NULL;
 }
 
@@ -436,9 +438,13 @@ void Container::update(const Control* container, const Vector2& offset)
 
     GP_ASSERT(_layout);
     if (_scroll != SCROLL_NONE)
+    {
         updateScroll();
+    }
     else
+    {
         _layout->update(this, Vector2::zero());
+    }
 }
 
 void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
@@ -457,6 +463,9 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
     {
         needsClear = true;
     }
+
+    if (!_visible)
+        return;
 
     spriteBatch->start();
     Control::drawBorder(spriteBatch, clip);
@@ -482,8 +491,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
         spriteBatch->start();
 
-        if (_scrollBarBounds.height > 0 &&
-            ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
+        if (_scrollBarBounds.height > 0 &&((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
@@ -514,8 +522,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
             spriteBatch->draw(bounds.x, bounds.y, bounds.width, bounds.height, bottomUVs.u1, bottomUVs.v1, bottomUVs.u2, bottomUVs.v2, bottomColor, clipRegion);
         }
 
-        if (_scrollBarBounds.width > 0 &&
-            ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
+        if (_scrollBarBounds.width > 0 && ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL))
         {
             const Rectangle& leftRegion = _scrollBarLeftCap->getRegion();
             const Theme::UVs& leftUVs = _scrollBarLeftCap->getUVs();
@@ -603,7 +610,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (!control->isEnabled())
+        if (!control->isEnabled() || !control->isVisible())
         {
             continue;
         }
@@ -696,8 +703,7 @@ void Container::updateScroll()
 
     // Calculate total width and height.
     std::vector<Control*> controls = getControls();
-    unsigned int controlsCount = controls.size();
-    for (unsigned int i = 0; i < controlsCount; i++)
+    for (size_t i = 0, controlsCount = controls.size(); i < controlsCount; i++)
     {
         Control* control = controls.at(i);
 
@@ -1020,7 +1026,7 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
 
 bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 {
-    if (!isEnabled())
+    if (!isEnabled() || !isVisible())
     {
         return false;
     }
@@ -1047,7 +1053,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (!control->isEnabled())
+        if (!control->isEnabled() || !control->isVisible())
         {
             continue;
         }
@@ -1081,7 +1087,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
     }
 
-    if (!isEnabled())
+    if (!isEnabled() || !isVisible())
     {
         release();
         return (_consumeInputEvents | eventConsumed);
@@ -1108,11 +1114,11 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
         break;
     case Touch::TOUCH_RELEASE:
-		if (eventConsumed)
-		{
-			if (_contactIndices > 0)
-				_contactIndices--;
-		}
+        if (eventConsumed)
+        {
+            if (_contactIndices > 0)
+                _contactIndices--;
+        }
         break;
     }
 
@@ -1127,10 +1133,10 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     release();
     if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-		y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-    	return (_consumeInputEvents | eventConsumed);
+        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        return (_consumeInputEvents | eventConsumed);
     else
-    	return eventConsumed;
+        return eventConsumed;
 }
 
 Container::Scroll Container::getScroll(const char* scroll)

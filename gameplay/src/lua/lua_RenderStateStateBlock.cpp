@@ -7,9 +7,11 @@
 #include "Pass.h"
 #include "Ref.h"
 #include "RenderState.h"
+#include "Scene.h"
 #include "Technique.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
+#include "lua_RenderStateDepthFunction.h"
 
 namespace gameplay
 {
@@ -26,6 +28,7 @@ void luaRegister_RenderStateStateBlock()
         {"setBlendDst", lua_RenderStateStateBlock_setBlendDst},
         {"setBlendSrc", lua_RenderStateStateBlock_setBlendSrc},
         {"setCullFace", lua_RenderStateStateBlock_setCullFace},
+        {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
         {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
         {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
         {"setState", lua_RenderStateStateBlock_setState},
@@ -72,11 +75,9 @@ int lua_RenderStateStateBlock__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -106,11 +107,9 @@ int lua_RenderStateStateBlock_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -140,11 +139,9 @@ int lua_RenderStateStateBlock_bind(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_bind - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_bind - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -177,11 +174,9 @@ int lua_RenderStateStateBlock_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -211,11 +206,9 @@ int lua_RenderStateStateBlock_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -249,11 +242,9 @@ int lua_RenderStateStateBlock_setBlend(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setBlend - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setBlend - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -287,11 +278,9 @@ int lua_RenderStateStateBlock_setBlendDst(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setBlendDst - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setBlendDst - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -325,11 +314,9 @@ int lua_RenderStateStateBlock_setBlendSrc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setBlendSrc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setBlendSrc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -363,11 +350,45 @@ int lua_RenderStateStateBlock_setCullFace(lua_State* state)
                 
                 return 0;
             }
-            else
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setCullFace - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setDepthFunction(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setCullFace - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
+                // Get parameter 1 off the stack.
+                RenderState::DepthFunction param1 = (RenderState::DepthFunction)lua_enumFromString_RenderStateDepthFunction(luaL_checkstring(state, 2));
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setDepthFunction(param1);
+                
+                return 0;
             }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setDepthFunction - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -401,11 +422,9 @@ int lua_RenderStateStateBlock_setDepthTest(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setDepthTest - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setDepthTest - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -439,11 +458,9 @@ int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setDepthWrite - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setDepthWrite - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -471,21 +488,19 @@ int lua_RenderStateStateBlock_setState(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
+                const char* param2 = ScriptUtil::getString(3, false);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setState(param1, param2);
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_RenderStateStateBlock_setState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

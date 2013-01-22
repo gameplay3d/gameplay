@@ -38,7 +38,7 @@ namespace gameplay
 
 void luaRegister_Form()
 {
-    const luaL_Reg lua_members[] =
+    const luaL_Reg lua_members[] = 
     {
         {"addControl", lua_Form_addControl},
         {"addListener", lua_Form_addListener},
@@ -48,9 +48,7 @@ void luaRegister_Form()
         {"createAnimationFromBy", lua_Form_createAnimationFromBy},
         {"createAnimationFromTo", lua_Form_createAnimationFromTo},
         {"destroyAnimation", lua_Form_destroyAnimation},
-        {"disable", lua_Form_disable},
         {"draw", lua_Form_draw},
-        {"enable", lua_Form_enable},
         {"getAlignment", lua_Form_getAlignment},
         {"getAnimation", lua_Form_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Form_getAnimationPropertyComponentCount},
@@ -98,8 +96,10 @@ void luaRegister_Form()
         {"isEnabled", lua_Form_isEnabled},
         {"isScrollBarsAutoHide", lua_Form_isScrollBarsAutoHide},
         {"isScrolling", lua_Form_isScrolling},
+        {"isVisible", lua_Form_isVisible},
         {"release", lua_Form_release},
         {"removeControl", lua_Form_removeControl},
+        {"removeListener", lua_Form_removeListener},
         {"removeScriptCallback", lua_Form_removeScriptCallback},
         {"setAlignment", lua_Form_setAlignment},
         {"setAnimationPropertyValue", lua_Form_setAnimationPropertyValue},
@@ -110,6 +110,7 @@ void luaRegister_Form()
         {"setConsumeInputEvents", lua_Form_setConsumeInputEvents},
         {"setCursorColor", lua_Form_setCursorColor},
         {"setCursorRegion", lua_Form_setCursorRegion},
+        {"setEnabled", lua_Form_setEnabled},
         {"setFocusIndex", lua_Form_setFocusIndex},
         {"setFont", lua_Form_setFont},
         {"setFontSize", lua_Form_setFontSize},
@@ -131,12 +132,13 @@ void luaRegister_Form()
         {"setTextAlignment", lua_Form_setTextAlignment},
         {"setTextColor", lua_Form_setTextColor},
         {"setTextRightToLeft", lua_Form_setTextRightToLeft},
+        {"setVisible", lua_Form_setVisible},
         {"setWidth", lua_Form_setWidth},
         {"setZIndex", lua_Form_setZIndex},
         {"update", lua_Form_update},
         {NULL, NULL}
     };
-    const luaL_Reg lua_statics[] =
+    const luaL_Reg lua_statics[] = 
     {
         {"ANIMATE_OPACITY", lua_Form_static_ANIMATE_OPACITY},
         {"ANIMATE_POSITION", lua_Form_static_ANIMATE_POSITION},
@@ -182,14 +184,12 @@ int lua_Form__gc(lua_State* state)
                     Form* instance = (Form*)object->instance;
                     SAFE_RELEASE(instance);
                 }
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -216,7 +216,13 @@ int lua_Form_addControl(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 unsigned int result = instance->addControl(param1);
@@ -226,11 +232,9 @@ int lua_Form_addControl(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_addControl - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_addControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -258,21 +262,25 @@ int lua_Form_addListener(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->addListener(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_addListener - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_addListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -299,14 +307,12 @@ int lua_Form_addRef(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->addRef();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -341,14 +347,12 @@ int lua_Form_addScriptCallback(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_addScriptCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_addScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -371,177 +375,187 @@ int lua_Form_createAnimation(lua_State* state)
     {
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
-
-                Form* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
+                    // Get parameter 2 off the stack.
+                    const char* param2 = ScriptUtil::getString(3, false);
+
+                    Form* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Properties> param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false);
-
-                Form* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_createAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Properties> param2 = ScriptUtil::getObjectPointer<Properties>(3, "Properties", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    Form* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_createAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
-
-                // Get parameter 6 off the stack.
-                Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
-
-                Form* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_createAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                    // Get parameter 4 off the stack.
+                    ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
+
+                    // Get parameter 5 off the stack.
+                    ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
+
+                    // Get parameter 6 off the stack.
+                    Curve::InterpolationType param6 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 7));
+
+                    Form* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_createAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 9:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
-
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
-
-                // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
-
-                // Get parameter 6 off the stack.
-                ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
-
-                // Get parameter 7 off the stack.
-                ScriptUtil::LuaArray<float> param7 = ScriptUtil::getFloatPointer(8);
-
-                // Get parameter 8 off the stack.
-                Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
-
-                Form* instance = getInstance(state);
-                void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 7) == LUA_TTABLE || lua_type(state, 7) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 8) == LUA_TTABLE || lua_type(state, 8) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 9) == LUA_TSTRING || lua_type(state, 9) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Animation");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_createAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
+
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+
+                    // Get parameter 4 off the stack.
+                    ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
+
+                    // Get parameter 5 off the stack.
+                    ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
+
+                    // Get parameter 6 off the stack.
+                    ScriptUtil::LuaArray<float> param6 = ScriptUtil::getFloatPointer(7);
+
+                    // Get parameter 7 off the stack.
+                    ScriptUtil::LuaArray<float> param7 = ScriptUtil::getFloatPointer(8);
+
+                    // Get parameter 8 off the stack.
+                    Curve::InterpolationType param8 = (Curve::InterpolationType)lua_enumFromString_CurveInterpolationType(luaL_checkstring(state, 9));
+
+                    Form* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->createAnimation(param1, param2, param3, param4, param5, param6, param7, param8);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Animation");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_createAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -573,7 +587,7 @@ int lua_Form_createAnimationFromBy(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -607,11 +621,9 @@ int lua_Form_createAnimationFromBy(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_createAnimationFromBy - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -643,7 +655,7 @@ int lua_Form_createAnimationFromTo(lua_State* state)
                 lua_type(state, 7) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 int param2 = (int)luaL_checkint(state, 3);
@@ -677,11 +689,9 @@ int lua_Form_createAnimationFromTo(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_createAnimationFromTo - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -708,14 +718,12 @@ int lua_Form_destroyAnimation(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->destroyAnimation();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_destroyAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_destroyAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -724,57 +732,21 @@ int lua_Form_destroyAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Form* instance = getInstance(state);
                 instance->destroyAnimation(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_destroyAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_destroyAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Form_disable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Form* instance = getInstance(state);
-                instance->disable();
-
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_disable - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -796,48 +768,12 @@ int lua_Form_draw(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->draw();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_draw - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+
+            lua_pushstring(state, "lua_Form_draw - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Form_enable(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Form* instance = getInstance(state);
-                instance->enable();
-
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_enable - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
             break;
         }
         default:
@@ -870,11 +806,9 @@ int lua_Form_getAlignment(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -916,11 +850,9 @@ int lua_Form_getAnimation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -929,7 +861,7 @@ int lua_Form_getAnimation(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Form* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getAnimation(param1);
@@ -948,11 +880,9 @@ int lua_Form_getAnimation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAnimation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAnimation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -989,11 +919,9 @@ int lua_Form_getAnimationPropertyComponentCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAnimationPropertyComponentCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1024,18 +952,22 @@ int lua_Form_getAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AnimationValue'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->getAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1068,11 +1000,9 @@ int lua_Form_getAutoHeight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAutoHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAutoHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1105,11 +1035,9 @@ int lua_Form_getAutoWidth(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getAutoWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1151,11 +1079,9 @@ int lua_Form_getBorder(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1183,11 +1109,9 @@ int lua_Form_getBorder(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1229,11 +1153,9 @@ int lua_Form_getBounds(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getBounds - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1275,11 +1197,9 @@ int lua_Form_getClip(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getClip - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getClip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1321,11 +1241,9 @@ int lua_Form_getClipBounds(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getClipBounds - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getClipBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1358,11 +1276,9 @@ int lua_Form_getConsumeInputEvents(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1385,57 +1301,62 @@ int lua_Form_getControl(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                Form* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getControl(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Control");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
-                return 1;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                    Form* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->getControl(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Control");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                Form* instance = getInstance(state);
-                void* returnPtr = (void*)instance->getControl(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = false;
-                    luaL_getmetatable(state, "Control");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getControl - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Form* instance = getInstance(state);
+                    void* returnPtr = (void*)instance->getControl(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = false;
+                        luaL_getmetatable(state, "Control");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_getControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1481,11 +1402,9 @@ int lua_Form_getCursorColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getCursorColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getCursorColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1531,11 +1450,9 @@ int lua_Form_getCursorRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getCursorRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getCursorRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1581,11 +1498,9 @@ int lua_Form_getCursorUVs(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getCursorUVs - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getCursorUVs - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1618,11 +1533,9 @@ int lua_Form_getFocusIndex(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getFocusIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getFocusIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1664,11 +1577,9 @@ int lua_Form_getFont(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1696,11 +1607,9 @@ int lua_Form_getFont(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1733,11 +1642,9 @@ int lua_Form_getFontSize(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1756,11 +1663,9 @@ int lua_Form_getFontSize(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1793,11 +1698,9 @@ int lua_Form_getHeight(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1830,11 +1733,9 @@ int lua_Form_getId(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getId - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1862,7 +1763,7 @@ int lua_Form_getImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1884,11 +1785,9 @@ int lua_Form_getImageColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getImageColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getImageColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1916,7 +1815,7 @@ int lua_Form_getImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1938,11 +1837,9 @@ int lua_Form_getImageRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getImageRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getImageRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1970,7 +1867,7 @@ int lua_Form_getImageUVs(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 Control::State param2 = (Control::State)lua_enumFromString_ControlState(luaL_checkstring(state, 3));
@@ -1992,11 +1889,9 @@ int lua_Form_getImageUVs(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getImageUVs - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getImageUVs - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2038,11 +1933,9 @@ int lua_Form_getLayout(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getLayout - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getLayout - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2084,11 +1977,9 @@ int lua_Form_getMargin(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getMargin - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getMargin - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2121,11 +2012,9 @@ int lua_Form_getOpacity(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2144,11 +2033,9 @@ int lua_Form_getOpacity(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2190,11 +2077,9 @@ int lua_Form_getPadding(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getPadding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2227,11 +2112,9 @@ int lua_Form_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2264,11 +2147,9 @@ int lua_Form_getScroll(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getScroll - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getScroll - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2310,11 +2191,9 @@ int lua_Form_getSkinColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2342,11 +2221,9 @@ int lua_Form_getSkinColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2388,11 +2265,9 @@ int lua_Form_getSkinRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2420,11 +2295,9 @@ int lua_Form_getSkinRegion(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2457,11 +2330,9 @@ int lua_Form_getState(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2503,11 +2374,9 @@ int lua_Form_getStyle(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getStyle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getStyle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2540,11 +2409,9 @@ int lua_Form_getTextAlignment(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2563,11 +2430,9 @@ int lua_Form_getTextAlignment(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2609,11 +2474,9 @@ int lua_Form_getTextColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2641,11 +2504,9 @@ int lua_Form_getTextColor(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2678,11 +2539,9 @@ int lua_Form_getTextRightToLeft(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -2701,11 +2560,9 @@ int lua_Form_getTextRightToLeft(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2747,11 +2604,9 @@ int lua_Form_getTheme(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getTheme - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getTheme - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2784,11 +2639,9 @@ int lua_Form_getType(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getType - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2821,11 +2674,9 @@ int lua_Form_getWidth(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2858,11 +2709,9 @@ int lua_Form_getX(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getX - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2895,11 +2744,9 @@ int lua_Form_getY(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getY - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2932,11 +2779,9 @@ int lua_Form_getZIndex(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_getZIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_getZIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -2964,21 +2809,25 @@ int lua_Form_insertControl(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->insertControl(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_insertControl - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_insertControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3011,11 +2860,9 @@ int lua_Form_isContainer(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_isContainer - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_isContainer - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3048,11 +2895,9 @@ int lua_Form_isEnabled(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_isEnabled - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3085,11 +2930,9 @@ int lua_Form_isScrollBarsAutoHide(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_isScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_isScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3122,11 +2965,44 @@ int lua_Form_isScrolling(lua_State* state)
 
                 return 1;
             }
-            else
+
+            lua_pushstring(state, "lua_Form_isScrolling - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_isVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
-                lua_pushstring(state, "lua_Form_isScrolling - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
+                Form* instance = getInstance(state);
+                bool result = instance->isVisible();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
             }
+
+            lua_pushstring(state, "lua_Form_isVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3153,14 +3029,12 @@ int lua_Form_release(lua_State* state)
             {
                 Form* instance = getInstance(state);
                 instance->release();
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3183,44 +3057,98 @@ int lua_Form_removeControl(lua_State* state)
     {
         case 2:
         {
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    lua_type(state, 2) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                    Form* instance = getInstance(state);
+                    instance->removeControl(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
+
+                    Form* instance = getInstance(state);
+                    instance->removeControl(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
+            {
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    Form* instance = getInstance(state);
+                    instance->removeControl(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_removeControl - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
-
-                Form* instance = getInstance(state);
-                instance->removeControl(param1);
-
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
-
-                Form* instance = getInstance(state);
-                instance->removeControl(param1);
-
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Control::Listener> param1 = ScriptUtil::getObjectPointer<Control::Listener>(2, "ControlListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Control::Listener'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
-                instance->removeControl(param1);
-
+                instance->removeListener(param1);
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_removeControl - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3255,14 +3183,12 @@ int lua_Form_removeScriptCallback(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_removeScriptCallback - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3293,14 +3219,12 @@ int lua_Form_setAlignment(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAlignment(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3331,18 +3255,22 @@ int lua_Form_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AnimationValue'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -3356,21 +3284,25 @@ int lua_Form_setAnimationPropertyValue(lua_State* state)
                 int param1 = (int)luaL_checkint(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false);
+                bool param2Valid;
+                ScriptUtil::LuaArray<AnimationValue> param2 = ScriptUtil::getObjectPointer<AnimationValue>(3, "AnimationValue", false, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'AnimationValue'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 float param3 = (float)luaL_checknumber(state, 4);
 
                 Form* instance = getInstance(state);
                 instance->setAnimationPropertyValue(param1, param2, param3);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setAnimationPropertyValue - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3401,14 +3333,12 @@ int lua_Form_setAutoHeight(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAutoHeight(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setAutoHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setAutoHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3439,14 +3369,12 @@ int lua_Form_setAutoWidth(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setAutoWidth(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setAutoWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setAutoWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3489,14 +3417,12 @@ int lua_Form_setBorder(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
@@ -3525,14 +3451,12 @@ int lua_Form_setBorder(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setBorder(param1, param2, param3, param4, param5);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setBorder - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setBorder - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3559,18 +3483,22 @@ int lua_Form_setBounds(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setBounds(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setBounds - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3601,14 +3529,12 @@ int lua_Form_setConsumeInputEvents(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setConsumeInputEvents(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setConsumeInputEvents - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3636,21 +3562,25 @@ int lua_Form_setCursorColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->setCursorColor(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setCursorColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setCursorColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3678,26 +3608,66 @@ int lua_Form_setCursorRegion(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->setCursorRegion(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setCursorRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setCursorRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setEnabled(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setEnabled(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -3723,14 +3693,12 @@ int lua_Form_setFocusIndex(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFocusIndex(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setFocusIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setFocusIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3757,18 +3725,22 @@ int lua_Form_setFont(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Font'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setFont(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3778,21 +3750,25 @@ int lua_Form_setFont(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Font> param1 = ScriptUtil::getObjectPointer<Font>(2, "Font", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Font'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->setFont(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setFont - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setFont - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3823,14 +3799,12 @@ int lua_Form_setFontSize(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFontSize(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -3847,14 +3821,12 @@ int lua_Form_setFontSize(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setFontSize(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setFontSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setFontSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3885,14 +3857,12 @@ int lua_Form_setHeight(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setHeight(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setHeight - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3920,21 +3890,25 @@ int lua_Form_setImageColor(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setImageColor(param1, *param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setImageColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setImageColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -3945,24 +3919,28 @@ int lua_Form_setImageColor(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
 
                 Form* instance = getInstance(state);
                 instance->setImageColor(param1, *param2, param3);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setImageColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setImageColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -3990,21 +3968,25 @@ int lua_Form_setImageRegion(lua_State* state)
                 (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setImageRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setImageRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
@@ -4015,24 +3997,28 @@ int lua_Form_setImageRegion(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned char param3 = (unsigned char)luaL_checkunsigned(state, 4);
 
                 Form* instance = getInstance(state);
                 instance->setImageRegion(param1, *param2, param3);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setImageRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setImageRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4075,14 +4061,12 @@ int lua_Form_setMargin(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setMargin(param1, param2, param3, param4);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setMargin - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setMargin - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4109,18 +4093,22 @@ int lua_Form_setNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setNode(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setNode - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4151,14 +4139,12 @@ int lua_Form_setOpacity(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setOpacity(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4175,14 +4161,12 @@ int lua_Form_setOpacity(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setOpacity(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setOpacity - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setOpacity - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4225,14 +4209,12 @@ int lua_Form_setPadding(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setPadding(param1, param2, param3, param4);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setPadding - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setPadding - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4267,14 +4249,12 @@ int lua_Form_setPosition(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setPosition(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setPosition - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setPosition - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4305,14 +4285,12 @@ int lua_Form_setScroll(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setScroll(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setScroll - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setScroll - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4343,14 +4321,12 @@ int lua_Form_setScrollBarsAutoHide(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setScrollBarsAutoHide(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4385,14 +4361,12 @@ int lua_Form_setSize(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setSize(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4419,18 +4393,22 @@ int lua_Form_setSkinColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setSkinColor(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4440,21 +4418,25 @@ int lua_Form_setSkinColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->setSkinColor(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setSkinColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setSkinColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4481,18 +4463,22 @@ int lua_Form_setSkinRegion(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setSkinRegion(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4502,21 +4488,25 @@ int lua_Form_setSkinRegion(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->setSkinRegion(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setSkinRegion - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setSkinRegion - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4547,14 +4537,12 @@ int lua_Form_setState(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setState(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setState - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setState - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4581,18 +4569,22 @@ int lua_Form_setStyle(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Theme::Style> param1 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Theme::Style> param1 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Theme::Style'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setStyle(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setStyle - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setStyle - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4623,14 +4615,12 @@ int lua_Form_setTextAlignment(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextAlignment(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4647,14 +4637,12 @@ int lua_Form_setTextAlignment(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextAlignment(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setTextAlignment - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setTextAlignment - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4681,18 +4669,22 @@ int lua_Form_setTextColor(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Form* instance = getInstance(state);
                 instance->setTextColor(*param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4702,21 +4694,25 @@ int lua_Form_setTextColor(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 2 off the stack.
                 unsigned char param2 = (unsigned char)luaL_checkunsigned(state, 3);
 
                 Form* instance = getInstance(state);
                 instance->setTextColor(*param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setTextColor - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setTextColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4747,14 +4743,12 @@ int lua_Form_setTextRightToLeft(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextRightToLeft(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
@@ -4771,19 +4765,53 @@ int lua_Form_setTextRightToLeft(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setTextRightToLeft(param1, param2);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setTextRightToLeft - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setVisible(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setVisible(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setVisible - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -4809,14 +4837,12 @@ int lua_Form_setWidth(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setWidth(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setWidth - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -4847,14 +4873,12 @@ int lua_Form_setZIndex(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->setZIndex(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_setZIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_setZIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -5013,104 +5037,113 @@ int lua_Form_static_create(lua_State* state)
     {
         case 1:
         {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
-
-                void* returnPtr = (void*)Form::create(param1);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Form");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(1, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    void* returnPtr = (void*)Form::create(param1);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Form");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
-
-                void* returnPtr = (void*)Form::create(param1, param2);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Form");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(1, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    void* returnPtr = (void*)Form::create(param1, param2);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Form");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 3:
         {
-            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
-
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false);
-
-                // Get parameter 3 off the stack.
-                Layout::Type param3 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 3));
-
-                void* returnPtr = (void*)Form::create(param1, param2, param3);
-                if (returnPtr)
+                if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
-                    object->instance = returnPtr;
-                    object->owns = true;
-                    luaL_getmetatable(state, "Form");
-                    lua_setmetatable(state, -2);
-                }
-                else
-                {
-                    lua_pushnil(state);
-                }
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(1, false);
 
-                return 1;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Form_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Theme::Style> param2 = ScriptUtil::getObjectPointer<Theme::Style>(2, "ThemeStyle", false, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    Layout::Type param3 = (Layout::Type)lua_enumFromString_LayoutType(luaL_checkstring(state, 3));
+
+                    void* returnPtr = (void*)Form::create(param1, param2, param3);
+                    if (returnPtr)
+                    {
+                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        object->instance = returnPtr;
+                        object->owns = true;
+                        luaL_getmetatable(state, "Form");
+                        lua_setmetatable(state, -2);
+                    }
+                    else
+                    {
+                        lua_pushnil(state);
+                    }
+
+                    return 1;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Form_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -5136,7 +5169,7 @@ int lua_Form_static_getForm(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Form::getForm(param1);
                 if (returnPtr)
@@ -5154,11 +5187,9 @@ int lua_Form_static_getForm(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_static_getForm - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_static_getForm - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -5189,14 +5220,12 @@ int lua_Form_update(lua_State* state)
 
                 Form* instance = getInstance(state);
                 instance->update(param1);
-
+                
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Form_update - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Form_update - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
