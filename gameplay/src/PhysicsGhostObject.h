@@ -8,8 +8,6 @@
 namespace gameplay
 {
 
-class PhysicsMotionState;
-
 /**
  * Defines a class for physics ghost objects.
  */

@@ -2,6 +2,6 @@
 
 REM Make collada file.
 
-"..\..\..\bin\win32\gameplay-encoder.exe" scene.dae ../common/scene.gpb
+"..\..\..\bin\windows\gameplay-encoder.exe" scene.dae ../common/scene.gpb
 
 pause

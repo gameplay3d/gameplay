@@ -17,11 +17,10 @@ void MathUtil::smooth(float* x, float target, float elapsedTime, float responseT
 void MathUtil::smooth(float* x, float target, float elapsedTime, float riseTime, float fallTime)
 {
     GP_ASSERT(x);
-
-    float delta;
+    
     if (elapsedTime > 0)
     {
-        delta = target - *x;
+        float delta = target - *x;
         *x += delta * elapsedTime / (elapsedTime + (delta > 0 ? riseTime : fallTime));
     }
 }

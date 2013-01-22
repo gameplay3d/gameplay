@@ -2,7 +2,7 @@
 
 A pre-built version of all required external dependencies is included here for convenience. However, you may at some point wish to rebuild some or all of the external depencies if for example you want to target a different processor, build with a different character encoding, etc.
 
-Each external library folder includes a 'version.txt' file that lists the current version of the external library that is expected by GamePlay, so ensure you grab the correct source code version when building libraries.
+Each external library folder includes a 'README.md' file that lists the current version of the external library that is expected by GamePlay, so ensure you grab the correct source code version when building libraries.
 
 Generally you should build external libraries in Release mode, not Debug, unless you have a specific need to debug the third party libraries.
 

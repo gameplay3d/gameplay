@@ -14,11 +14,18 @@ namespace gameplay
 class Game;
 
 /**
- * Defines a platform.
+ * Defines a platform abstraction.
+ * 
+ * This class has only a few public methods for creating a platform 
+ *
  */
 class Platform
 {
 public:
+
+    friend class Game;
+    friend class Gamepad;
+    friend class ScreenDisplayer;
 
     /**
      * Destructor.
@@ -48,6 +55,8 @@ public:
      * @return The platform message pump return code.
      */
     int enterMessagePump();
+
+private:
     
     /**
      * This method informs the platform that the game is shutting down 
@@ -221,148 +230,15 @@ public:
      * @param evt The gesture event to register to start recognizing events for.
      */
     static bool isGestureRegistered(Gesture::GestureEvent evt);
-    
-    /** 
-     * Gets the number of gamepad devices connected to the Platform.
-     *
-     * Note: Calling this method also checks if any gamepads have been attached to or detached from the Platform 
-     *
-     * @return the number of gamepads connected to the Platform.
-     */
-    static unsigned int getGamepadsConnected();
 
     /**
-     * Gets whether the specified gamepad is connected to the Platform.
+     * Opens an URL in an external browser, if available.
      *
-     * @param gamepadHandle the handle to the gamepad.
+     * @param url URL to be opened.
+     *
+     * @return True if URL was opened successfully, false otherwise.
      */
-    static bool isGamepadConnected(unsigned int gamepadHandle);
-
-    /**
-     * Gets the specified gamepad's ID.
-     *
-     * @param gamepadHandle the handle to the gamepad.
-     * @return the ID of the specified gamepad.
-     */
-    static const char* getGamepadId(unsigned int gamepadHandle);
-
-    /**
-     * Gets the number of buttons on the specified gamepad.
-     * 
-     * @param gamepadHandle handle to the gamepad to get the number of buttons for.
-     * @return the number of buttons on the gamepad.
-     */
-    static unsigned int getGamepadButtonCount(unsigned int gamepadHandle);
-
-    /**
-     * Gets the button state for the specified gamepad and button index.
-     *
-     * @param gamepadHandle handle to the gamepad to query the button state for.
-     * @param buttonIndex the index to the button to retrieve the state for.
-     */
-    static bool getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex);
-
-    /**
-     * Gets the number of joysticks on the specified gamepad.
-     * 
-     * @param gamepadHandle handle to the gamepad to get the number of joysticks for.
-     * @return the number of joysticks supported on the gamepad.
-     */
-    static unsigned int getGamepadJoystickCount(unsigned int gamepadHandle);
-
-    /** 
-     * Returns whether the joystick on the specified gamepad is active.
-     *
-     * @param gamepadHandle The handle to the gamepad.
-     * @param joystickIndex The index of the joystick.
-     * @return true if the joystick is active; false if the joystick is inactive.
-     */
-    static bool isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex);
-
-    /**
-     * Gets the value of the joystick's x-axis on the specified joystick.
-     *
-     * @param gamepadHandle The handle to the gamepad.
-     * @param joystickIndex The index of the joystick.
-     * @return the value of the joystick's x-axis.
-     */
-    static float getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex);
-
-    /**
-     * Gets the value of the joystick's x-axis on the specified joystick.
-     *
-     * @param gamepadHandle The handle to the gamepad.
-     * @param joystickIndex The index of the joystick.
-     * @return the value of the joystick's x-axis.
-     */
-    static float getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex);
-
-    /**
-     * Gets the values for the specified gamepad and joystick index.
-     *
-     * @param gamepadHandle handle to the gamepad to query the joystick value for.
-     * @param joystickIndex the index to the joystick to retrieve the value for.
-     * @param outValue will be populated with the current value of the specified joystick.
-     */
-    static void getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue);
-
-    /**
-     * Gets the number of triggers on the specified gamepad.
-     *
-     * @param gamepadHandle handle to the gamepad to get the number of triggers for.
-     * @return the number of triggers supported on the gamepad.
-     */ 
-    static unsigned int getGamepadTriggerCount(unsigned int gamepadHandle);
-
-    /**
-     * Gets the value for the specified gamepad and trigger index.
-     *
-     * @param gamepadHandle handle to the gamepad to query the trigger value for.
-     * @param triggerIndex the index to the trigger to retrieve the value for.
-     * @return the value of the specified trigger.
-     */
-    static float getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex);
-
-    /**
-     * Touch callback on touch events. This method handles passing the touch event to the form or to the game.
-     *
-     * @param evt The touch event that occurred.
-     * @param x The x position of the touch in pixels. Left edge is zero.
-     * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
-     *
-     * @see Touch::TouchEvent
-     */
-    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-
-    /**
-     * Keyboard callback on keyPress events.
-     *
-     * @param evt The key event that occurred.
-     * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
-     *            If evt is KEY_CHAR then key is the unicode value of the character.
-     * 
-     * @see Keyboard::KeyEvent
-     * @see Keyboard::Key
-     */
-    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
-
-    /**
-     * Mouse callback on mouse events. If the game does not consume the mouse move event or left mouse click event
-     * then it is interpreted as a touch event instead.
-     *
-     * @param evt The mouse event that occurred.
-     * @param x The x position of the mouse in pixels. Left edge is zero.
-     * @param y The y position of the mouse in pixels. Top edge is zero.
-     * @param wheelDelta The number of mouse wheel ticks. Positive is up (forward), negative is down (backward).
-     *
-     * @return True if the mouse event is consumed or false if it is not consumed.
-     *
-     * @see Mouse::MouseEvent
-     */
-    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
-    
-private:
+    static bool launchURL(const char* url);
 
     /**
      * Constructor.
@@ -373,6 +249,62 @@ private:
      * Constructor.
      */
     Platform(const Platform& copy);
+
+public:
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void keyEventInternal(Keyboard::KeyEvent evt, int key);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                              unsigned int vendorId, unsigned int productId, 
+                                              const char* vendorString, const char* productString);
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventDisconnectedInternal(GamepadHandle handle);
+
+    /**
+     * Internal metehod used by Gamepad that polls the platform for the updated Gamepad
+     * states such as joysticks, buttons and trigger values.
+     *
+     * @param gamepad The gamepad to be returned with the latest polled values populated.
+     * @script{ignore}
+     */
+    static void pollGamepadState(Gamepad* gamepad);
+
+   /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void shutdownInternal();
+
+private:
 
     Game* _game;                // The game this platform is interfacing with.
 };

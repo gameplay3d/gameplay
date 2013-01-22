@@ -2,6 +2,7 @@ var searchData=
 [
   ['a',['a',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a764182ac9b3e7db246dd1d0d8eeda046',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex']]],
   ['angulardamping',['angularDamping',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#aef99ab3434cf6a01bbffc4703328a9fe',1,'gameplay::PhysicsRigidBody::Parameters']]],
+  ['angularfactor',['angularFactor',['../structgameplay_1_1_physics_rigid_body_1_1_parameters.html#abc14351f256fed962e741e86d35e0766',1,'gameplay::PhysicsRigidBody::Parameters']]],
   ['animate_5fopacity',['ANIMATE_OPACITY',['../classgameplay_1_1_control.html#a0550cbfcaa518b112c2796a9e7a17777',1,'gameplay::Control']]],
   ['animate_5fposition',['ANIMATE_POSITION',['../classgameplay_1_1_control.html#aefc69c44cc549f575b66faee33af06d6',1,'gameplay::Control']]],
   ['animate_5fposition_5fx',['ANIMATE_POSITION_X',['../classgameplay_1_1_control.html#a87c33d17cf1bd74f0eb64d802c07f228',1,'gameplay::Control']]],

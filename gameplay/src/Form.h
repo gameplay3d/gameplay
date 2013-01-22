@@ -184,6 +184,11 @@ private:
     void initializeQuad(Mesh* mesh);
 
     /**
+     * Update this form's bounds.
+     */
+    void updateBounds();
+
+    /**
      * Propagate touch events to enabled forms.
      *
      * @return Whether the touch event was consumed by a form.

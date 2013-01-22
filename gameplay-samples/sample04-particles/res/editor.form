@@ -14,7 +14,7 @@ form particleEditor
         label title
         {
             style = title
-            size = 140, 30
+            size = 160, 30
             text = Presets
         }
 
@@ -23,7 +23,7 @@ form particleEditor
            style = iconNoBorder
            text = Fire
            group = presets
-           size = 140, 40
+           size = 160, 40
            imageSize = 35, 35
            selected = true
         }
@@ -77,6 +77,10 @@ form particleEditor
             value = 100
             step = 0
             text = Emission Rate
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2            
         }
 
         slider burstSize : emissionRate
@@ -146,23 +150,27 @@ form particleEditor
             max = 5
             value = 1.5
             step = 0
-            text = Min. Begin Size
+            text = Min Begin
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
             consumeInputEvents = false
         }
 
         slider startMax : startMin
         {
-            text = Max. Begin Size
+            text = Max Begin
         }
 
         slider endMin : startMin
         {
-            text = Min. End Size
+            text = Min End
         }
 
         slider endMax : startMin
         {
-            text = Max. End Size
+            text = Max End
         }
 
         // Energy
@@ -178,13 +186,17 @@ form particleEditor
             orientation = HORIZONTAL
             min = 0
             max = 5000
-            text = Min. Energy
+            text = Min
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2            
             consumeInputEvents = false
         }
 
         slider energyMax : energyMin
         {
-            text = Max. Energy
+            text = Max
         }
 
         // Start color
@@ -201,6 +213,10 @@ form particleEditor
             min = 0
             max = 1
             text = Red
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
             consumeInputEvents = false
         }
 
@@ -251,14 +267,17 @@ form particleEditor
         {
             min = 0
             max = 10
+            text = X
         }
 
         slider posVarY : posVarX
         {
+            text = Y
         }
 
         slider posVarZ : posVarX
         {
+            text = Z
         }
 
         // Initial velocity
@@ -271,14 +290,17 @@ form particleEditor
         {
             min = -10
             max = 10
+            text = X
         }
 
         slider velocityY : velocityX
         {
+            text = Y
         }
 
         slider velocityZ : velocityX
         {
+            text = Z
         }
 
         // Velocity variance
@@ -307,14 +329,17 @@ form particleEditor
 
         slider accelX : velocityX
         {
+            text = X
         }
 
         slider accelY : accelX
         {
+            text = Y
         }
 
         slider accelZ : accelX
         {
+            text = Z
         }
 
         // Acceleration variance
@@ -325,14 +350,17 @@ form particleEditor
 
         slider accelVarX : posVarX
         {
+            text = X
         }
 
         slider accelVarY : posVarX
         {
+            text = Y
         }
 
         slider accelVarZ : posVarX
         {
+            text = Z
         }
 
         // Local rotation speed
@@ -343,10 +371,12 @@ form particleEditor
 
         slider spinSpeedMin : velocityX
         {
+            text = Min
         }
 
         slider spinSpeedMax : spinSpeedMin
         {
+            text = Max
         }
 
         // Rotation axis
@@ -357,14 +387,17 @@ form particleEditor
 
         slider axisX : startRed
         {
+            text = X
         }
 
         slider axisY : axisX
         {
+            text = Y
         }
 
         slider axisZ : axisX
         {
+            text = Z
         }
 
         // Rotation axis variance
@@ -375,14 +408,17 @@ form particleEditor
 
         slider axisVarX : axisX
         {
+            text = X
         }
 
         slider axisVarY : axisVarX
         {
+            text = Y
         }
 
         slider axisVarZ : axisVarX
         {
+            text = Z
         }
 
         // Axis rotation speed
@@ -393,10 +429,12 @@ form particleEditor
 
         slider rotationSpeedMin : velocityX
         {
+            text = Min
         }
 
         slider rotationSpeedMax : rotationSpeedMin
         {
+            text = Max
         }
     }
 }

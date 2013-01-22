@@ -6,6 +6,11 @@ namespace gameplay
 
 // Lua bindings for PhysicsGhostObject.
 int lua_PhysicsGhostObject_addCollisionListener(lua_State* state);
+int lua_PhysicsGhostObject_asCharacter(lua_State* state);
+int lua_PhysicsGhostObject_asGhostObject(lua_State* state);
+int lua_PhysicsGhostObject_asRigidBody(lua_State* state);
+int lua_PhysicsGhostObject_asVehicle(lua_State* state);
+int lua_PhysicsGhostObject_asVehicleWheel(lua_State* state);
 int lua_PhysicsGhostObject_collidesWith(lua_State* state);
 int lua_PhysicsGhostObject_getCollisionShape(lua_State* state);
 int lua_PhysicsGhostObject_getNode(lua_State* state);

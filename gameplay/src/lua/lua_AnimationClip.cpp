@@ -134,7 +134,7 @@ int lua_AnimationClip_addBeginListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     AnimationClip* instance = getInstance(state);
                     instance->addBeginListener(param1);
@@ -191,7 +191,7 @@ int lua_AnimationClip_addEndListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     AnimationClip* instance = getInstance(state);
                     instance->addEndListener(param1);
@@ -253,7 +253,7 @@ int lua_AnimationClip_addListener(lua_State* state)
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);

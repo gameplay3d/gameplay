@@ -34,12 +34,12 @@ PhysicsHingeConstraint::PhysicsHingeConstraint(PhysicsRigidBody* a, const Quater
 
         btTransform frameInA(BQ(rotationOffsetA), BV(tA));
         btTransform frameInB(BQ(rotationOffsetB), BV(tB));
-        _constraint = new btHingeConstraint(*a->_body, *b->_body, frameInA, frameInB);
+        _constraint = bullet_new<btHingeConstraint>(*a->_body, *b->_body, frameInA, frameInB);
     }
     else
     {
         btTransform frameInA(BQ(rotationOffsetA), BV(tA));
-        _constraint = new btHingeConstraint(*a->_body, frameInA);
+        _constraint = bullet_new<btHingeConstraint>(*a->_body, frameInA);
     }
 }
 

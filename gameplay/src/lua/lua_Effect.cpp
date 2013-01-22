@@ -232,7 +232,7 @@ int lua_Effect_getUniform(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     Effect* instance = getInstance(state);
                     void* returnPtr = (void*)instance->getUniform(param1);
@@ -343,7 +343,7 @@ int lua_Effect_getVertexAttribute(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Effect* instance = getInstance(state);
                 void* returnPtr = (void*)new GLint(instance->getVertexAttribute(param1));
@@ -934,10 +934,10 @@ int lua_Effect_static_createFromFile(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Effect::createFromFile(param1, param2);
                 if (returnPtr)
@@ -967,13 +967,13 @@ int lua_Effect_static_createFromFile(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+                const char* param3 = ScriptUtil::getString(3, false);
 
                 void* returnPtr = (void*)Effect::createFromFile(param1, param2, param3);
                 if (returnPtr)
@@ -1020,10 +1020,10 @@ int lua_Effect_static_createFromSource(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Effect::createFromSource(param1, param2);
                 if (returnPtr)
@@ -1053,13 +1053,13 @@ int lua_Effect_static_createFromSource(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<const char> param3 = ScriptUtil::getString(3, false);
+                const char* param3 = ScriptUtil::getString(3, false);
 
                 void* returnPtr = (void*)Effect::createFromSource(param1, param2, param3);
                 if (returnPtr)

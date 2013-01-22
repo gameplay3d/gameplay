@@ -61,6 +61,8 @@
 		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
 		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
 		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
+		B661733F16A61CE40083A307 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661733D16A61CE40083A307 /* Image.cpp */; };
+		B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */; };
 		F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCD0315D554B800DB35DB /* Heightmap.cpp */; };
 /* End PBXBuildFile section */
 
@@ -179,6 +181,10 @@
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
 		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		B661733D16A61CE40083A307 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
+		B661733E16A61CE40083A307 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
+		B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalMapGenerator.cpp; path = src/NormalMapGenerator.cpp; sourceTree = SOURCE_ROOT; };
+		B661734216A61CFA0083A307 /* NormalMapGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NormalMapGenerator.h; path = src/NormalMapGenerator.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0315D554B800DB35DB /* Heightmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heightmap.cpp; path = src/Heightmap.cpp; sourceTree = SOURCE_ROOT; };
 		F18DCD0415D554B800DB35DB /* Heightmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Heightmap.h; path = src/Heightmap.h; sourceTree = SOURCE_ROOT; };
 		F18DCD0515D554B800DB35DB /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = src/Thread.h; sourceTree = SOURCE_ROOT; };
@@ -278,6 +284,8 @@
 				42C8EDD614724CD700E43619 /* GPBDecoder.h */,
 				42C8EDD714724CD700E43619 /* GPBFile.cpp */,
 				42C8EDD814724CD700E43619 /* GPBFile.h */,
+				B661733D16A61CE40083A307 /* Image.cpp */,
+				B661733E16A61CE40083A307 /* Image.h */,
 				42C8EDD914724CD700E43619 /* Light.cpp */,
 				42C8EDDA14724CD700E43619 /* Light.h */,
 				42C8EDDD14724CD700E43619 /* main.cpp */,
@@ -299,6 +307,8 @@
 				42C8EDED14724CD700E43619 /* Model.h */,
 				42C8EDEE14724CD700E43619 /* Node.cpp */,
 				42C8EDEF14724CD700E43619 /* Node.h */,
+				B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */,
+				B661734216A61CFA0083A307 /* NormalMapGenerator.h */,
 				42C8EDF014724CD700E43619 /* Object.cpp */,
 				42C8EDF114724CD700E43619 /* Object.h */,
 				42C8EDF214724CD700E43619 /* Quaternion.cpp */,
@@ -444,6 +454,8 @@
 				42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */,
 				4251B12C152D044B002F6199 /* Curve.cpp in Sources */,
 				F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */,
+				B661733F16A61CE40083A307 /* Image.cpp in Sources */,
+				B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
