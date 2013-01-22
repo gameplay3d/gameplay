@@ -15,7 +15,7 @@ DepthStencilTarget::~DepthStencilTarget()
 {
     // Destroy GL resources.
     if (_renderBuffer)
-        GL_ASSERT( glDeleteTextures(1, &_renderBuffer) );
+        GL_ASSERT( glDeleteRenderbuffers(1, &_renderBuffer) );
 
     // Remove from vector.
     std::vector<DepthStencilTarget*>::iterator it = std::find(__depthStencilTargets.begin(), __depthStencilTargets.end(), this);
