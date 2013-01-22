@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "MeshBatch.h"
 #include "ScriptController.h"
+#include "Light.h"
 
 namespace gameplay
 {
@@ -27,10 +28,12 @@ public:
     /**
      * Creates a new empty scene.
      * 
+     * @param id ID of the new scene, or NULL to use an empty string for the ID (default).
+     *
      * @return The newly created empty scene.
      * @script{create}
      */
-    static Scene* create();
+    static Scene* create(const char* id = NULL);
 
     /**
      * Loads a scene from the given '.scene' file.
@@ -41,6 +44,17 @@ public:
      * @script{create}
      */
     static Scene* load(const char* filePath);
+
+    /**
+     * Gets a currently active scene.
+     *
+     * If id is an NULL, the first active scene is returned.
+     *
+     * @param id ID of the scene to retrieve, or NULL to retrieve the first active scene.
+     *
+     * @return The scene that matches the specified ID, or NULL if no matching scene could be found.
+     */
+    static Scene* getScene(const char* id = NULL);
 
     /**
      * Gets the identifier for the scene.
@@ -74,7 +88,7 @@ public:
      * @param id The ID of the node to find.
      * @param nodes Vector of nodes to be populated with matches.
      * @param recursive true if a recursive search should be performed, false otherwise.
-     * @param exactMatch true if only nodes whos ID exactly matches the specified ID are returned,
+     * @param exactMatch true if only nodes who's ID exactly matches the specified ID are returned,
      *      or false if nodes that start with the given ID are returned.
      * 
      * @return The number of matches found.
@@ -147,9 +161,13 @@ public:
     void bindAudioListenerToCamera(bool bind);
 
     /**
-     * Returns the ambient color of the scene. Black is the default color.
+     * Returns the ambient color of the scene.
+     *
+     * The default ambient light color is black (0,0,0).
+     *
+     * This value can be bound to materials using the SCENE_LIGHT_AMBIENT_COLOR auto binding.
      * 
-     * @return The ambient color of the scene.
+     * @return The scene's ambient color.
      */
     const Vector3& getAmbientColor() const;
 
@@ -159,8 +177,58 @@ public:
      * @param red The red channel between 0.0 and 1.0.
      * @param green The green channel between 0.0 and 1.0.
      * @param blue The blue channel between 0.0 and 1.0.
+     *
+     * @see getAmbientColor()
      */
     void setAmbientColor(float red, float green, float blue);
+
+    /**
+     * Returns the light color of the scene.
+     *
+     * The default light color is white (1,1,1).
+     *
+     * This color is typically used to represent the color of the main directional light (i.e. the Sun) in a scene.
+     * The corresponding direction can be queried using Scene::getLightDirection().
+     *
+     * This value can be bound to materials using the SCENE_LIGHT_COLOR auto binding.
+     *
+     * @return The scene's light color.
+     */
+    const Vector3& getLightColor() const;
+
+    /**
+     * Sets the scene's light color.
+     *
+     * @param red The red channel between 0.0 and 1.0.
+     * @param green The green channel between 0.0 and 1.0.
+     * @param blue The blue channel between 0.0 and 1.0.
+     *
+     * @see getLightColor()
+     */
+    void setLightColor(float red, float green, float blue);
+
+    /**
+     * Returns the current light direction for the scene.
+     *
+     * The default value is (0,-1,0), which is a pointing directly down the Y-axis.
+     *
+     * This value is typically used to represent the the main directional lihgt (i.e. the Sun) in a scene.
+     * The corresponding light color can be queried using Scene::getLightColor().
+     *
+     * This value can be bound to materials using the SCENE_LIGHT_DIRECTION auto binding.
+     *
+     * @return The scene's light direction.
+     */
+    const Vector3& getLightDirection() const;
+
+    /**
+     * Sets the scene's light direction.
+     *
+     * @param direction The new light direction.
+     *
+     * @see getLightDirection()
+     */
+    void setLightDirection(const Vector3& direction);
 
     /**
      * Visits each node in the scene and calls the specified method pointer.
@@ -170,6 +238,10 @@ public:
      *
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts a single parameter of type Node*.
+     *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.
      * @param visitMethod The pointer to the class method to call for each node in the scene.
@@ -185,8 +257,11 @@ public:
      * 
      * The visitMethod parameter must be a pointer to a method that has a bool
      * return type and accepts two parameters: a Node pointer and a cookie of a
-     * user-specified type. The scene traversal continues while visitMethod return
-     * true. Returning false will cause the traversal to stop.
+     * user-specified type.
+     *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
      *
      * @param instance The pointer to an instance of the object that contains visitMethod.
      * @param visitMethod The pointer to the class method to call for each node in the scene.
@@ -205,6 +280,10 @@ public:
      * valid Lua function that has a boolean return type and accepts a 
      * single parameter of type Node*.
      *
+     * A depth-first traversal of the scene continues while the visit method
+     * returns true. Returning false will stop traversing further children for
+     * the given node and the traversal will continue at the next sibling.
+     *
      * @param visitMethod The name of the Lua function to call for each node in the scene.
      */
     inline void visit(const char* visitMethod);
@@ -212,7 +291,7 @@ public:
     /**
      * Draws debugging information (bounding volumes, etc.) for the scene.
      *
-     * @param debugFlags Bitwise combination of debug flags from mthe DebugFlags 
+     * @param debugFlags Bitwise combination of debug flags from the DebugFlags
      *        enumeration, specifying which debugging information to draw.
      */
     void drawDebug(unsigned int debugFlags);
@@ -222,7 +301,7 @@ private:
     /**
      * Constructor.
      */
-    Scene();
+    Scene(const char* id);
 
     /**
      * Hidden copy constructor.
@@ -243,18 +322,18 @@ private:
      * Visits the given node and all of its children recursively.
      */
     template <class T>
-    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*));
+    void visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*));
 
     /**
      * Visits the given node and all of its children recursively.
      */
     template <class T, class C>
-    bool visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
+    void visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie);
 
     /**
      * Visits the given node and all of its children recursively.
      */
-    inline bool visitNode(Node* node, const char* visitMethod);
+    inline void visitNode(Node* node, const char* visitMethod);
 
     std::string _id;
     Camera* _activeCamera;
@@ -262,6 +341,8 @@ private:
     Node* _lastNode;
     unsigned int _nodeCount;
     Vector3 _ambientColor;
+    Vector3 _lightColor;
+    Vector3 _lightDirection;
     bool _bindAudioListenerToCamera;
     MeshBatch* _debugBatch;
 };
@@ -271,8 +352,7 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*))
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        if (!visitNode(node, instance, visitMethod))
-            return;
+        visitNode(node, instance, visitMethod);
     }
 }
 
@@ -282,8 +362,7 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        if (!visitNode(node, instance, visitMethod, cookie))
-            return;
+        visitNode(node, instance, visitMethod, cookie);
     }
 }
 
@@ -291,59 +370,51 @@ inline void Scene::visit(const char* visitMethod)
 {
     for (Node* node = getFirstNode(); node != NULL; node = node->getNextSibling())
     {
-        if (!visitNode(node, visitMethod))
-            return;
+        visitNode(node, visitMethod);
     }
 }
 
 template <class T>
-bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
+void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
 {
     // Invoke the visit method for this node.
     if (!(instance->*visitMethod)(node))
-        return false;
+        return;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!visitNode(child, instance, visitMethod))
-            return false;
+        visitNode(child, instance, visitMethod);
     }
-
-    return true;
 }
 
 template <class T, class C>
-bool Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
+void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
 {
     // Invoke the visit method for this node.
     if (!(instance->*visitMethod)(node, cookie))
-        return false;
+        return;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!visitNode(child, instance, visitMethod, cookie))
-            return false;
+        visitNode(child, instance, visitMethod, cookie);
     }
-
-    return true;
 }
 
-inline bool Scene::visitNode(Node* node, const char* visitMethod)
+inline void Scene::visitNode(Node* node, const char* visitMethod)
 {
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
     // Invoke the visit method for this node.
-    if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", node))
-        return false;
+    if (!sc->executeFunction<bool>(visitMethod, "<Node>", node))
+        return;
 
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
-        if (!Game::getInstance()->getScriptController()->executeFunction<bool>(visitMethod, "<Node>", child))
-            return false;
+        visitNode(child, visitMethod);
     }
-
-    return true;
 }
 
 }

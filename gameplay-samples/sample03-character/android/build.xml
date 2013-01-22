@@ -101,17 +101,11 @@
         <copy file="../res/design/windowledge.png" tofile="assets/res/design/windowledge.png"/>
         <copy file="../res/design/wood.png" tofile="assets/res/design/wood.png"/>
         <copy file="../res/design/woodn.png" tofile="assets/res/design/woodn.png"/>
-        <copy file="../../../gameplay/res/shaders/colored.vert" tofile="assets/res/shaders/colored.vert"/>
-        <copy file="../../../gameplay/res/shaders/colored.frag" tofile="assets/res/shaders/colored.frag"/>
-        <copy file="../../../gameplay/res/shaders/textured.vert" tofile="assets/res/shaders/textured.vert"/>
-        <copy file="../../../gameplay/res/shaders/textured.frag" tofile="assets/res/shaders/textured.frag"/>
-        <copy file="../../../gameplay/res/shaders/textured-unlit.vert" tofile="assets/res/shaders/textured-unlit.vert"/>
-        <copy file="../../../gameplay/res/shaders/textured-unlit.frag" tofile="assets/res/shaders/textured-unlit.frag"/>
         <copy todir="assets/res/common">
             <fileset dir="../res/common"/>
         </copy>
-        <copy todir="assets/res/shaders/lib">
-            <fileset dir="../../../gameplay/res/shaders/lib"/>
+        <copy todir="assets/res/shaders">
+            <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
         <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>

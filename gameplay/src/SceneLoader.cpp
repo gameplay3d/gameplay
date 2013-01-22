@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Bundle.h"
 #include "SceneLoader.h"
+#include "Terrain.h"
 
 namespace gameplay
 {
@@ -42,19 +43,31 @@ Scene* SceneLoader::loadInternal(const char* url)
     }
 
     // Get the path to the main GPB.
-    _gpbPath = sceneProperties->getString("path");
+    const char* path = sceneProperties->getString("path");
+    if (path)
+        _gpbPath = path;
 
     // Build the node URL/property and animation reference tables and load the referenced files/store the inline properties objects.
     buildReferenceTables(sceneProperties);
     loadReferencedFiles();
 
     // Load the main scene data from GPB and apply the global scene properties.
-    Scene* scene = loadMainSceneData(sceneProperties);
-    if (!scene)
+    Scene* scene = NULL;
+    if (!_gpbPath.empty())
     {
-        GP_ERROR("Failed to load main scene from bundle.");
-        SAFE_DELETE(properties);
-        return NULL;
+        // Load scene from bundle
+        scene = loadMainSceneData(sceneProperties);
+        if (!scene)
+        {
+            GP_ERROR("Failed to load main scene from bundle.");
+            SAFE_DELETE(properties);
+            return NULL;
+        }
+    }
+    else
+    {
+        // Create a new empty scene
+        scene = Scene::create(sceneProperties->getId());
     }
 
     // First apply the node url properties. Following that,
@@ -67,6 +80,8 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::AUDIO | 
         SceneNodeProperty::MATERIAL | 
         SceneNodeProperty::PARTICLE |
+        SceneNodeProperty::TERRAIN |
+        SceneNodeProperty::CAMERA |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
         SceneNodeProperty::TRANSLATE);
@@ -82,6 +97,24 @@ Scene* SceneLoader::loadInternal(const char* url)
                 sceneNode._nodes[n]->setTag(itr->first.c_str(), itr->second.c_str());
         }
     }
+
+    // Set active camera
+    const char* activeCamera = sceneProperties->getString("activeCamera");
+    if (activeCamera)
+    {
+        Node* camera = scene->findNode(activeCamera);
+        if (camera && camera->getCamera())
+            scene->setActiveCamera(camera->getCamera());
+    }
+
+    // Set ambient and light properties
+    Vector3 vec3;
+    if (sceneProperties->getVector3("ambientColor", &vec3))
+        scene->setAmbientColor(vec3.x, vec3.y, vec3.z);
+    if (sceneProperties->getVector3("lightColor", &vec3))
+        scene->setLightColor(vec3.x, vec3.y, vec3.z);
+    if (sceneProperties->getVector3("lightDirection", &vec3))
+        scene->setLightDirection(vec3);
 
     // Create animations for scene
     createAnimations(scene);
@@ -177,6 +210,8 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
     if (snp._type == SceneNodeProperty::AUDIO ||
         snp._type == SceneNodeProperty::MATERIAL ||
         snp._type == SceneNodeProperty::PARTICLE ||
+        snp._type == SceneNodeProperty::TERRAIN ||
+        snp._type == SceneNodeProperty::CAMERA ||
         snp._type == SceneNodeProperty::COLLISION_OBJECT)
     {
         // Check to make sure the referenced properties object was loaded properly.
@@ -217,6 +252,20 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             ParticleEmitter* particleEmitter = ParticleEmitter::create(p);
             node->setParticleEmitter(particleEmitter);
             SAFE_RELEASE(particleEmitter);
+            break;
+        }
+        case SceneNodeProperty::TERRAIN:
+        {
+            Terrain* terrain = Terrain::create(p);
+            node->setTerrain(terrain);
+            SAFE_RELEASE(terrain);
+            break;
+        }
+        case SceneNodeProperty::CAMERA:
+        {
+            Camera* camera = Camera::create(p);
+            node->setCamera(camera);
+            SAFE_RELEASE(camera);
             break;
         }
         case SceneNodeProperty::COLLISION_OBJECT:
@@ -297,21 +346,21 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         {
             Vector3 t;
             if (np && np->getVector3("translate", &t))
-                node->setTranslation(t);
+                node->translate(t);
             break;
         }
         case SceneNodeProperty::ROTATE:
         {
             Quaternion r;
             if (np && np->getQuaternionFromAxisAngle("rotate", &r))
-                node->setRotation(r);
+                node->rotate(r);
             break;
         }
         case SceneNodeProperty::SCALE:
         {
             Vector3 s;
             if (np && np->getVector3("scale", &s))
-                node->setScale(s);
+                node->scale(s);
             break;
         }
         default:
@@ -470,7 +519,8 @@ void SceneLoader::applyNodeUrls(Scene* scene)
             }
             else
             {
-                GP_ERROR("Failed to locate node with id '%s' in bundle '%s'.", sceneNode._nodeID, _gpbPath.c_str());
+                // There is no node in the scene with this ID, so create a new empty node
+                sceneNode._nodes.push_back(scene->addNode(sceneNode._nodeID));
             }
         }
     }
@@ -519,6 +569,18 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, propertyUrl.c_str());
                     _properties[propertyUrl] = subns;
                 }
+                else if (strcmp(subns->getNamespace(), "terrain") == 0)
+                {
+                    propertyUrl += "terrain/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::TERRAIN, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
+                else if (strcmp(subns->getNamespace(), "camera") == 0)
+                {
+                    propertyUrl += "camera/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::CAMERA, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
                 else if (strcmp(subns->getNamespace(), "collisionObject") == 0)
                 {
                     propertyUrl += "collisionObject/" + std::string(subns->getId());
@@ -564,6 +626,14 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "particle") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::PARTICLE, ns->getString());
+                }
+                else if (strcmp(name, "terrain") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::TERRAIN, ns->getString());
+                }
+                else if (strcmp(name, "camera") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::CAMERA, ns->getString());
                 }
                 else if (strcmp(name, "collisionObject") == 0)
                 {
@@ -793,15 +863,6 @@ Scene* SceneLoader::loadMainSceneData(const Properties* sceneProperties)
         GP_ERROR("Failed to load scene from '%s'.", _gpbPath.c_str());
         SAFE_RELEASE(bundle);
         return NULL;
-    }
-
-    // Go through the supported scene properties and apply them to the scene.
-    const char* name = sceneProperties->getString("activeCamera");
-    if (name)
-    {
-        Node* camera = scene->findNode(name);
-        if (camera && camera->getCamera())
-            scene->setActiveCamera(camera->getCamera());
     }
 
     SAFE_RELEASE(bundle);

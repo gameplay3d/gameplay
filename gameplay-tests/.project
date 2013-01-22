@@ -2,6 +2,9 @@
 <projectDescription>
 	<name>gameplay-tests</name>
 	<comment></comment>
+	<projects>
+		<project>gameplay</project>
+	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>

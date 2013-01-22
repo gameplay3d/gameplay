@@ -67,7 +67,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="game.config" />
-    <None Include="res\arial18.gpb" />
+    <None Include="res\arial.gpb" />
+    <None Include="res\arial.ttf" />
     <None Include="res\editor.form" />
     <None Include="res\editor.png" />
     <None Include="res\editor.theme" />

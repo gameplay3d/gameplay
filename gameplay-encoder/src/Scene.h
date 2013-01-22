@@ -59,7 +59,7 @@ private:
 
     /**
      * Recursively calculates the ambient color of the scene starting at the given node.
-     * The ambient light color is added to the givne float array.
+     * The ambient light color is added to the given float array.
      * 
      * @param node The node in this scene to traverse from.
      * @param values Pointer to 3 floats that contains the calculated ambient color.
