@@ -6,6 +6,7 @@ namespace gameplay
 
 // Lua bindings for Game.
 int lua_Game__gc(lua_State* state);
+int lua_Game_canExit(lua_State* state);
 int lua_Game_clear(lua_State* state);
 int lua_Game_displayKeyboard(lua_State* state);
 int lua_Game_exit(lua_State* state);
@@ -24,7 +25,6 @@ int lua_Game_getConfig(lua_State* state);
 int lua_Game_getFrameRate(lua_State* state);
 int lua_Game_getGamepad(lua_State* state);
 int lua_Game_getGamepadCount(lua_State* state);
-int lua_Game_getGamepadsConnected(lua_State* state);
 int lua_Game_getHeight(lua_State* state);
 int lua_Game_getPhysicsController(lua_State* state);
 int lua_Game_getScriptController(lua_State* state);
@@ -39,6 +39,7 @@ int lua_Game_isInitialized(lua_State* state);
 int lua_Game_isMouseCaptured(lua_State* state);
 int lua_Game_isMultiTouch(lua_State* state);
 int lua_Game_keyEvent(lua_State* state);
+int lua_Game_launchURL(lua_State* state);
 int lua_Game_menuEvent(lua_State* state);
 int lua_Game_mouseEvent(lua_State* state);
 int lua_Game_pause(lua_State* state);

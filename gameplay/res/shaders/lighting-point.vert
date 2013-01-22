@@ -28,25 +28,22 @@ void applyLight(mat3 tangentSpaceTransformMatrix)
 
 void applyLight(vec4 position)
 {
-    // World space position.
-    vec4 positionWorldViewSpace = u_worldViewMatrix * position;
+    // World view space position.
+	vec4 positionWorldViewSpace = u_worldViewMatrix * position;
     
-    // Compute the light direction.
-    vec3 lightDirection = u_pointLightPosition - positionWorldViewSpace.xyz;
-   
-    vec4 vertexToPointLightDirection;
-    vertexToPointLightDirection.xyz = lightDirection;
+    // Compute the light direction with light position and the vertex position.
+	v_vertexToPointLightDirection = u_pointLightPosition - positionWorldViewSpace.xyz;
    
     // Attenuation
-    v_pointLightAttenuation = 1.0 - dot(lightDirection * u_pointLightRangeInverse, lightDirection * u_pointLightRangeInverse);
+    v_pointLightAttenuation = 1.0 - dot(v_vertexToPointLightDirection * u_pointLightRangeInverse, v_vertexToPointLightDirection * u_pointLightRangeInverse);
 
     // Output light direction.
-    v_vertexToPointLightDirection =  vertexToPointLightDirection;
+    //v_vertexToPointLightDirection = lightDirection;
    
-    #if defined (SPECULAR)
-   
-    vec3 cameraDirection = normalize(v_cameraDirection);
+    #if defined (SPECULAR)  
 
+	v_cameraDirection = u_cameraPosition - positionWorldViewSpace.xyz;
+	
     #endif
 }
 

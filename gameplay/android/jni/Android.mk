@@ -52,6 +52,7 @@ LOCAL_SRC_FILES := \
     Frustum.cpp \
     Game.cpp \
     Gamepad.cpp \
+    HeightField.cpp \
     Image.cpp \
     Joint.cpp \
     Joystick.cpp \
@@ -103,6 +104,8 @@ LOCAL_SRC_FILES := \
     Slider.cpp \
     SpriteBatch.cpp \
     Technique.cpp \
+    Terrain.cpp \
+    TerrainPatch.cpp \
     TextBox.cpp \
     Texture.cpp \
     Theme.cpp \
@@ -167,12 +170,13 @@ LOCAL_SRC_FILES := \
     lua/lua_Game.cpp \
     lua/lua_GameClearFlags.cpp \
     lua/lua_Gamepad.cpp \
-    lua/lua_GamepadButtonState.cpp \
+    lua/lua_GamepadButtonMapping.cpp \
     lua/lua_GamepadGamepadEvent.cpp \
     lua/lua_GameState.cpp \
     lua/lua_Gesture.cpp \
     lua/lua_GestureGestureEvent.cpp \
     lua/lua_Global.cpp \
+    lua/lua_HeightField.cpp \
     lua/lua_Image.cpp \
     lua/lua_ImageFormat.cpp \
     lua/lua_Joint.cpp \
@@ -243,6 +247,7 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderState.cpp \
     lua/lua_RenderStateAutoBinding.cpp \
     lua/lua_RenderStateBlend.cpp \
+    lua/lua_RenderStateDepthFunction.cpp \
     lua/lua_RenderStateStateBlock.cpp \
     lua/lua_RenderTarget.cpp \
     lua/lua_Scene.cpp \
@@ -253,6 +258,8 @@ LOCAL_SRC_FILES := \
     lua/lua_Slider.cpp \
     lua/lua_SpriteBatch.cpp \
     lua/lua_Technique.cpp \
+    lua/lua_Terrain.cpp \
+    lua/lua_TerrainFlags.cpp \
     lua/lua_TextBox.cpp \
     lua/lua_Texture.cpp \
     lua/lua_TextureFilter.cpp \

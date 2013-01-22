@@ -1,7 +1,10 @@
 #include "Base.h"
 #include "FileSystem.h"
 #include "ScriptController.h"
+
+#ifndef NO_LUA_BINDINGS
 #include "lua/lua_all_bindings.h"
+#endif
 
 #define GENERATE_LUA_GET_POINTER(type, checkFunc) \
     ScriptController* sc = Game::getInstance()->getScriptController(); \
@@ -79,7 +82,7 @@ void ScriptUtil::registerConstantBool(const std::string& name, bool value, const
         lua_setfield(sc->_lua, -2, name.c_str());
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -112,7 +115,7 @@ void ScriptUtil::registerConstantNumber(const std::string& name, double value, c
         lua_setfield(sc->_lua, -2, name.c_str());
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -145,7 +148,7 @@ void ScriptUtil::registerConstantString(const std::string& name, const std::stri
         lua_setfield(sc->_lua, -2, name.c_str());
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -234,7 +237,7 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
         lua_settable(sc->_lua, -3);
 
         // Pop all the parent tables off the stack.
-        int size = scopePath.size();
+        int size = (int)scopePath.size();
         lua_pop(sc->_lua, size);
     }
     else
@@ -372,76 +375,100 @@ std::string ScriptController::loadUrl(const char* url)
     return id;
 }
 
-bool ScriptController::getBool(const char* name)
+bool ScriptController::getBool(const char* name, bool defaultValue)
 {
     lua_getglobal(_lua, name);
-    return ScriptUtil::luaCheckBool(_lua, -1);
+    bool b = lua_isboolean(_lua, -1) ? ScriptUtil::luaCheckBool(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return b;
 }
 
-char ScriptController::getChar(const char* name)
+char ScriptController::getChar(const char* name, char defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (char)luaL_checkint(_lua, -1);
+    char c = lua_isnumber(_lua, -1) ?  (char)luaL_checkint(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return c;
 }
 
-short ScriptController::getShort(const char* name)
+short ScriptController::getShort(const char* name, short defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (short)luaL_checkint(_lua, -1);
+    short n = lua_isnumber(_lua, -1) ? (short)luaL_checkint(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-int ScriptController::getInt(const char* name)
+int ScriptController::getInt(const char* name, int defaultValue)
 {
     lua_getglobal(_lua, name);
-    return luaL_checkint(_lua, -1);
+    int n = lua_isnumber(_lua, -1) ? luaL_checkint(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-long ScriptController::getLong(const char* name)
+long ScriptController::getLong(const char* name, long defaultValue)
 {
     lua_getglobal(_lua, name);
-    return luaL_checklong(_lua, -1);
+    long n = lua_isnumber(_lua, -1) ? luaL_checklong(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-unsigned char ScriptController::getUnsignedChar(const char* name)
+unsigned char ScriptController::getUnsignedChar(const char* name, unsigned char defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned char)luaL_checkunsigned(_lua, -1);
+    unsigned char c = lua_isnumber(_lua, -1) ? (unsigned char)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return c;
 }
 
-unsigned short ScriptController::getUnsignedShort(const char* name)
+unsigned short ScriptController::getUnsignedShort(const char* name, unsigned short defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned short)luaL_checkunsigned(_lua, -1);
+    unsigned short n = lua_isnumber(_lua, -1) ? (unsigned short)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-unsigned int ScriptController::getUnsignedInt(const char* name)
+unsigned int ScriptController::getUnsignedInt(const char* name, unsigned int defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned int)luaL_checkunsigned(_lua, -1);
+    unsigned int n = lua_isnumber(_lua, -1) ? (unsigned int)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-unsigned long ScriptController::getUnsignedLong(const char* name)
+unsigned long ScriptController::getUnsignedLong(const char* name, unsigned long defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (unsigned long)luaL_checkunsigned(_lua, -1);
+    unsigned long n = lua_isnumber(_lua, -1) ? (unsigned long)luaL_checkunsigned(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
-float ScriptController::getFloat(const char* name)
+float ScriptController::getFloat(const char* name, float defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (float)luaL_checknumber(_lua, -1);
+    float f = lua_isnumber(_lua, -1) ? (float)luaL_checknumber(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return f;
 }
 
-double ScriptController::getDouble(const char* name)
+double ScriptController::getDouble(const char* name, double defaultValue)
 {
     lua_getglobal(_lua, name);
-    return (double)luaL_checknumber(_lua, -1);
+    double n = lua_isnumber(_lua, -1) ? (double)luaL_checknumber(_lua, -1) : defaultValue;
+    lua_pop(_lua, 1);
+    return n;
 }
 
 const char* ScriptController::getString(const char* name)
 {
     lua_getglobal(_lua, name);
-    return luaL_checkstring(_lua, -1);
+    const char* s = lua_isstring(_lua, -1) ? luaL_checkstring(_lua, -1) : NULL;
+    lua_pop(_lua, 1);
+    return s;
 }
 
 void ScriptController::setBool(const char* name, bool v)
@@ -550,6 +577,7 @@ static const char* lua_loadfile_function =
     "    local oldLoadfile = loadfile\n"
     "    loadfile = function(filename)\n"
     "        if filename ~= nil and not FileSystem.isAbsolutePath(filename) then\n"
+    "            FileSystem.createFileFromAsset(filename)\n"
     "            filename = FileSystem.getResourcePath() .. filename\n"
     "        end\n"
     "        return oldLoadfile(filename)\n"
@@ -561,6 +589,7 @@ static const char* lua_dofile_function =
     "    local oldDofile = dofile\n"
     "    dofile = function(filename)\n"
     "        if filename ~= nil and not FileSystem.isAbsolutePath(filename) then\n"
+    "            FileSystem.createFileFromAsset(filename)\n"
     "            filename = FileSystem.getResourcePath() .. filename\n"
     "        end\n"
     "        return oldDofile(filename)\n"
@@ -574,7 +603,10 @@ void ScriptController::initialize()
     if (!_lua)
         GP_ERROR("Failed to initialize Lua scripting engine.");
     luaL_openlibs(_lua);
+
+#ifndef NO_LUA_BINDINGS
     lua_RegisterAllBindings();
+#endif
 
     // Create our own print() function that uses gameplay::print.
     if (luaL_dostring(_lua, lua_print_function))
@@ -600,17 +632,34 @@ void ScriptController::initializeGame()
 void ScriptController::finalize()
 {
     if (_lua)
+	{
         lua_close(_lua);
+		_lua = NULL;
+	}
 }
 
 void ScriptController::finalizeGame()
 {
-    if (_callbacks[FINALIZE])
+	std::string finalizeCallback;
+	if (_callbacks[FINALIZE])
+		finalizeCallback = _callbacks[FINALIZE]->c_str();
+
+	// Remove any registered callbacks so they don't get called after shutdown
+	for (unsigned int i = 0; i < CALLBACK_COUNT; i++)
     {
-        executeFunction<void>(_callbacks[FINALIZE]->c_str());
+        SAFE_DELETE(_callbacks[i]);
+    }
+
+	// Fire script finalize callback
+    if (!finalizeCallback.empty())
+	{
+        executeFunction<void>(finalizeCallback.c_str());
     }
 
     // Perform a full garbage collection cycle.
+	// Note that this does NOT free any global variables declared in scripts, since 
+	// they are stored in the global state and are still referenced. Only after 
+	// closing the state (lua_close) will those variables be released.
     lua_gc(_lua, LUA_GCCOLLECT, 0);
 }
 
@@ -665,6 +714,9 @@ void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 
 void ScriptController::executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list)
 {
+	if (!_lua)
+		return; // handles calling this method after script is finalized
+
     if (func == NULL)
     {
         GP_ERROR("Lua function name must be non-null.");

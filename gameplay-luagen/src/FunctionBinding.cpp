@@ -7,14 +7,14 @@ static inline void outputLuaTypeCheckInstance(ostream& o);
 static inline void outputLuaTypeCheck(ostream& o, int index, const FunctionBinding::Param& p = 
     FunctionBinding::Param(FunctionBinding::Param::TYPE_OBJECT, FunctionBinding::Param::KIND_POINTER));
 static inline void indent(ostream& o, int indentLevel);
-static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel);
-static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex = false);
-static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel);
+static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings);
+static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex, int numBindings);
+static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings);
 static inline void outputReturnValue(ostream& o, const FunctionBinding& b, int indentLevel);
 static inline std::string getTypeName(const FunctionBinding::Param& param);
 
 FunctionBinding::Param::Param(FunctionBinding::Param::Type type, Kind kind, const string& info) : 
-    type(type), kind(kind), info(info), hasDefaultValue(false)
+    type(type), kind(kind), info(info), hasDefaultValue(false), levelsOfIndirection(0)
 {
 }
 
@@ -76,6 +76,11 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
 {
     GP_ASSERT(bindings.size() > 0);
 
+    if (bindings[0].getFunctionName() == "lua_AudioListener_static_getInstance")
+    {
+        int i = 0;
+    }
+
     // Print the function signature.
     o << "int " << bindings[0].getFunctionName() << "(lua_State* state)\n";
     o << "{\n";
@@ -94,7 +99,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         o << "    " << bindings[0].classname << "* instance = getInstance(state);\n";
         o << "    if (lua_gettop(state) == 2)\n";
         o << "    {\n";
-        outputGetParam(o, bindings[0].returnParam, 1, 2);
+        outputGetParam(o, bindings[0].returnParam, 1, 2, false, 1);
 
         if (bindings[0].returnParam.kind == FunctionBinding::Param::KIND_POINTER &&
             bindings[0].returnParam.type != FunctionBinding::Param::TYPE_OBJECT &&
@@ -161,7 +166,7 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
         // Get or set the static variable depending on the number of parameters.
         o << "    if (lua_gettop(state) == 1)\n";
         o << "    {\n";
-        outputGetParam(o, bindings[0].returnParam, 0, 2);
+        outputGetParam(o, bindings[0].returnParam, 0, 2, false, 1);
 
         if (bindings[0].returnParam.kind == FunctionBinding::Param::KIND_POINTER &&
             bindings[0].returnParam.type != FunctionBinding::Param::TYPE_OBJECT &&
@@ -359,27 +364,17 @@ void FunctionBinding::write(ostream& o, const vector<FunctionBinding>& bindings)
                 if (iter->first > 0)
                     indent(o, 3);
 
-                if (i > 0)
-                {                    
-                    o << "else ";
-                }
-                outputMatchedBinding(o, *(iter->second[i]), iter->first, 3);
+                outputMatchedBinding(o, *(iter->second[i]), iter->first, 3, bindings.size());
             }
 
             // Only print an else clause with error report if there are parameters.
             if (iter->first > 0)
             {
                 indent(o, 3);
-                o << "else\n";
-                indent(o, 3);
-                o << "{\n";
-                indent(o, 4);
                 o << "lua_pushstring(state, \"" << bindings[0].getFunctionName();
                 o << " - Failed to match the given parameters to a valid function signature.\");\n";
-                indent(o, 4);
-                o << "lua_error(state);\n";
                 indent(o, 3);
-                o << "}\n";
+                o << "lua_error(state);\n";
             }
             
             o << "            break;\n";
@@ -501,7 +496,10 @@ ostream& operator<<(ostream& o, const FunctionBinding::Param& param)
     o << getTypeName(param);
 
     if (param.kind == FunctionBinding::Param::KIND_POINTER)
-        o << "*";
+    {
+        for (int i = 0; i < param.levelsOfIndirection; ++i)
+            o << "*";
+    }
 
     return o;
 }
@@ -575,14 +573,14 @@ static inline void indent(ostream& o, int indentLevel)
         o << "    ";
 }
 
-static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel)
+static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings)
 {
-    bool isNormalMember = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
+    bool isNonStatic = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
 
     // Get the passed in parameters.
-    for (unsigned int i = 0, count = paramCount - (isNormalMember ? 1 : 0); i < count; i++)
+    for (unsigned int i = 0, count = paramCount - (isNonStatic ? 1 : 0); i < count; i++)
     {
-        outputGetParam(o, b.paramTypes[i], i, indentLevel, isNormalMember);
+        outputGetParam(o, b.paramTypes[i], i, indentLevel, isNonStatic, numBindings);
     }
 
     // Get the instance for member functions.
@@ -680,7 +678,7 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
         }
 
         // Pass the arguments.
-        for (unsigned int i = 0, count = paramCount - ((isNormalMember) ? 1 : 0); i < count; i++)
+        for (unsigned int i = 0, count = paramCount - ((isNonStatic) ? 1 : 0); i < count; i++)
         {
             if (b.paramTypes[i].type == FunctionBinding::Param::TYPE_OBJECT && b.paramTypes[i].kind != FunctionBinding::Param::KIND_POINTER)
                 o << "*";
@@ -700,125 +698,158 @@ static inline void outputBindingInvocation(ostream& o, const FunctionBinding& b,
     outputReturnValue(o, b, indentLevel);
 }
 
-static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex)
+void writeObjectTemplateType(ostream& o, const FunctionBinding::Param& p)
+{
+    o << getTypeName(p);
+    for (int i = 0; i < p.levelsOfIndirection-1; ++i)
+        o << "*";
+}
+
+void writePointerParameter(ostream& o, const char* primitiveType, const FunctionBinding::Param& p, int paramNum, int luaParamIndex, int indentLevel)
+{
+    o << "ScriptUtil::LuaArray<";
+    writeObjectTemplateType(o, p);
+    //o << "> param" << paramNum << "Pointer = ScriptUtil::get" << primitiveType << "Pointer(" << luaParamIndex << ");\n";
+    o << "> param" << paramNum << " = ScriptUtil::get" << primitiveType << "Pointer(" << luaParamIndex << ");\n";
+    //indent(o, indentLevel);
+    //o << p << " param" << paramNum << " = (" << p << ")param" << paramNum << "Pointer;\n";
+}
+
+static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, int i, int indentLevel, bool offsetIndex, int numBindings)
 {
     indent(o, indentLevel);
     o << "// Get parameter " << i + 1 << " off the stack.\n";
 
-    switch (p.type)
-    {
-    case FunctionBinding::Param::TYPE_UNRECOGNIZED:
-        indent(o, indentLevel);
-        o << "GP_WARN(\"Attempting to get parameter " << i + 1 << " with unrecognized type " << p.info << " as an unsigned integer.\");\n";
-    case FunctionBinding::Param::TYPE_BOOL:
-    case FunctionBinding::Param::TYPE_CHAR:
-    case FunctionBinding::Param::TYPE_SHORT:
-    case FunctionBinding::Param::TYPE_INT:
-    case FunctionBinding::Param::TYPE_LONG:
-    case FunctionBinding::Param::TYPE_UCHAR:
-    case FunctionBinding::Param::TYPE_USHORT:
-    case FunctionBinding::Param::TYPE_UINT:
-    case FunctionBinding::Param::TYPE_ULONG:
-    case FunctionBinding::Param::TYPE_FLOAT:
-    case FunctionBinding::Param::TYPE_DOUBLE:
-    case FunctionBinding::Param::TYPE_STRING:
-    case FunctionBinding::Param::TYPE_ENUM:
-        indent(o, indentLevel);
-        if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::LuaArray<" << getTypeName(p) << ">";
-        else
-            o << p;
-        o << " param" << i + 1 << " = ";
-        break;
-    default:
-        // Ignore these cases.
-        break;
-    }
-
     int paramIndex = (offsetIndex) ? i + 2 : i + 1;
+
     switch (p.type)
     {
     case FunctionBinding::Param::TYPE_BOOL:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getBoolPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "Bool", p, i+1, paramIndex, indentLevel);
         else
-            o << "ScriptUtil::luaCheckBool(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = ScriptUtil::luaCheckBool(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_CHAR:
-        o << "(char)luaL_checkint(state, " << paramIndex << ");\n";
+        indent(o, indentLevel);
+        o << p << " param" << i+1 << " = (char)luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_SHORT:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getShortPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "Short", p, i+1, paramIndex, indentLevel);
         else
-            o << "(short)luaL_checkint(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (short)luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_INT:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getIntPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "Int", p, i+1, paramIndex, indentLevel);
         else
-            o << "(int)luaL_checkint(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (int)luaL_checkint(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_LONG:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getLongPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "Long", p, i+1, paramIndex, indentLevel);
         else
-            o << "(long)luaL_checklong(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (long)luaL_checklong(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_UCHAR:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getUnsignedCharPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "UnsignedChar", p, i+1, paramIndex, indentLevel);
         else
-            o << "(unsigned char)luaL_checkunsigned(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (unsigned char)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_USHORT:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getUnsignedShortPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "UnsignedShort", p, i+1, paramIndex, indentLevel);
         else
-            o << "(unsigned short)luaL_checkunsigned(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (unsigned short)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_UINT:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getUnsignedIntPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "UnsignedInt", p, i+1, paramIndex, indentLevel);
         else
-            o << "(unsigned int)luaL_checkunsigned(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (unsigned int)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_ULONG:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getUnsignedLongPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "UnsignedLong", p, i+1, paramIndex, indentLevel);
         else
-            o << "(unsigned long)luaL_checkunsigned(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (unsigned long)luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_FLOAT:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getFloatPointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "Float", p, i+1, paramIndex, indentLevel);
         else
-            o << "(float)luaL_checknumber(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (float)luaL_checknumber(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_DOUBLE:
+        indent(o, indentLevel);
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
-            o << "ScriptUtil::getDoublePointer(" << paramIndex << ");\n";
+            writePointerParameter(o, "Double", p, i+1, paramIndex, indentLevel);
         else
-            o << "(double)luaL_checknumber(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = (double)luaL_checknumber(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_STRING:
-        o << "ScriptUtil::getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
+        indent(o, indentLevel);
+        o << p << " param" << i+1 << " = ScriptUtil::getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
-        o << "(" << p << ")lua_enumFromString_" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "(luaL_checkstring(state, " << paramIndex << "));\n";
+        indent(o, indentLevel);
+        o << p << " param" << i+1 << " = (" << p << ")lua_enumFromString_" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "(luaL_checkstring(state, " << paramIndex << "));\n";
         break;
     case FunctionBinding::Param::TYPE_UNRECOGNIZED:
         // Attempt to retrieve the unrecognized type as an unsigned integer.
-        o << "(" << p.info << ")luaL_checkunsigned(state, " << paramIndex << ");\n";
+        indent(o, indentLevel);
+        o << "GP_WARN(\"Attempting to get parameter " << i + 1 << " with unrecognized type " << p.info << " as an unsigned integer.\");\n";
+        indent(o, indentLevel);
+        o << p << " param" << i+1 << " = (" << p.info << ")luaL_checkunsigned(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_OBJECT:
-        indent(o, indentLevel);
-        o << "ScriptUtil::LuaArray<" << getTypeName(p) << ">";
-        o << " param" << i + 1 << " = ";
-        o << "ScriptUtil::getObjectPointer<";
-        o << Generator::getInstance()->getIdentifier(p.info) << ">(" << paramIndex;
-        o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
-        o << ((p.kind != FunctionBinding::Param::KIND_POINTER) ? "true" : "false") << ");\n";
+        {
+            indent(o, indentLevel);
+            o << "bool param" << i + 1 << "Valid;\n";
+            indent(o, indentLevel);
+            o << "ScriptUtil::LuaArray<";
+            writeObjectTemplateType(o, p);
+            //o << "> param" << i+1 << "Pointer = ScriptUtil::getObjectPointer<";
+            o << "> param" << i+1 << " = ScriptUtil::getObjectPointer<";
+            writeObjectTemplateType(o, p);
+            o << ">(" << paramIndex;
+            o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
+            o << ((p.kind != FunctionBinding::Param::KIND_POINTER) ? "true" : "false") << ", &param" << i + 1 << "Valid);\n";
+            indent(o, indentLevel);
+            //writeObjectTemplateType(o, p);
+            //o << "* param" << i+1 << " = (";
+            //writeObjectTemplateType(o, p);
+            //o << "*)param" << i+1 << "Pointer;\n";
+            //indent(o, indentLevel);
+            o << "if (!param" << i + 1 << "Valid)\n";
+            if (numBindings > 1)
+            {
+                indent(o, indentLevel + 1);
+                o << "break;\n";
+            }
+            else
+            {
+                indent(o, indentLevel);
+                o << "{\n";
+                indent(o, indentLevel + 1);
+                o << "lua_pushstring(state, \"Failed to convert parameter " << i + 1 << " to type '" << getTypeName(p) << "'.\");\n";
+                indent(o, indentLevel + 1);
+                o << "lua_error(state);\n";
+                indent(o, indentLevel);
+                o << "}\n";
+            }
+        }
         break;
     case FunctionBinding::Param::TYPE_CONSTRUCTOR:
     case FunctionBinding::Param::TYPE_DESTRUCTOR:
@@ -831,14 +862,14 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
     o << "\n";
 }
 
-static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel)
+static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, unsigned int paramCount, unsigned int indentLevel, int numBindings)
 {
-    bool isNormalMember = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
+    bool isNonStatic = (b.type == FunctionBinding::MEMBER_FUNCTION && b.returnParam.type != FunctionBinding::Param::TYPE_CONSTRUCTOR);
 
     // If the current invocation of the function takes zero parameters, then invoke the binding.
     if (paramCount == 0)
     {
-        outputBindingInvocation(o, b, paramCount, indentLevel);
+        outputBindingInvocation(o, b, paramCount, indentLevel, numBindings);
     }
     else
     {
@@ -848,13 +879,27 @@ static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, un
         // when the user in fact wanted to call the version with more precision.
         // (this will only happen for overloaded functions).
 
+        if (numBindings > 1)
+        {
+            o << "do\n";
+            indent(o, indentLevel);
+            o << "{\n";
+            indent(o, ++indentLevel);
+        }
+
         o << "if (";
         for (unsigned int i = 0, count = paramCount; i < count; i++)
         {
-            if (isNormalMember && i == 0)
+            if (isNonStatic && i == 0)
+            {
+                // This is always the "this / self" pointer for a member function
                 outputLuaTypeCheckInstance(o);
+            }
             else
-                outputLuaTypeCheck(o, i + 1, b.paramTypes[(isNormalMember ? i - 1 : i)]);
+            {
+                // Function parameter
+                outputLuaTypeCheck(o, i + 1, b.paramTypes[(isNonStatic ? i - 1 : i)]);
+            }
 
             if (i == count - 1)
                 o << ")\n";
@@ -867,10 +912,18 @@ static inline void outputMatchedBinding(ostream& o, const FunctionBinding& b, un
         indent(o, indentLevel);
         o << "{\n";
             
-        outputBindingInvocation(o, b, paramCount, indentLevel + 1);
+        outputBindingInvocation(o, b, paramCount, indentLevel + 1, numBindings);
 
         indent(o, indentLevel);
         o << "}\n";
+
+        if (numBindings > 1)
+        {
+            indent(o, --indentLevel);
+            o << "} while (0);\n";
+        }
+
+        o << "\n";
     }
 }
 

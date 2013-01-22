@@ -4,34 +4,9 @@
 #include "FileSystem.h"
 #include "Bundle.h"
 
-// Default font vertex shader
-#define FONT_VSH \
-    "uniform mat4 u_projectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "attribute vec4 a_color;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-        "v_color = a_color;\n" \
-    "}\n"
-
-// Default font fragment shader
-#define FONT_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = v_color;\n" \
-        "gl_FragColor.a = texture2D(u_texture, v_texCoord).a;\n" \
-    "}"
+// Default font shaders
+#define FONT_VSH "res/shaders/font.vert"
+#define FONT_FSH "res/shaders/font.frag"
 
 namespace gameplay
 {
@@ -64,7 +39,7 @@ Font* Font::create(const char* path, const char* id)
     GP_ASSERT(path);
 
     // Search the font cache for a font with the given path and ID.
-    for (unsigned int i = 0, count = __fontCache.size(); i < count; ++i)
+    for (size_t i = 0, count = __fontCache.size(); i < count; ++i)
     {
         Font* f = __fontCache[i];
         GP_ASSERT(f);
@@ -124,7 +99,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
-        __fontEffect = Effect::createFromSource(FONT_VSH, FONT_FSH);
+        __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH);
         if (__fontEffect == NULL)
         {
             GP_ERROR("Failed to create effect for font.");
@@ -249,7 +224,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         }
         else
         {
-            tokenLength = strcspn(token, " \r\n\t");
+            tokenLength = (unsigned int)strcspn(token, " \r\n\t");
             tokenWidth = getTokenWidth(token, tokenLength, size, scale);
             iteration = 1;
             startIndex = 0;
@@ -272,7 +247,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         }
 
         bool draw = true;
-        if (yPos < area.y)
+        if (yPos < static_cast<int>(area.y))
         {
             // Skip drawing until line break or wrap.
             draw = false;
@@ -398,10 +373,10 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
             else
             {
                 // Skip the rest of this line.
-                unsigned int tokenLength = strcspn(token, "\n");
+                size_t tokenLength = strcspn(token, "\n");
 
                 if (tokenLength > 0)
-                {                
+                {
                     // Get first token of next line.
                     token += tokenLength;
                 }
@@ -439,8 +414,8 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
     while (!done)
     {
-        int length;
-        int startIndex;
+        size_t length;
+        size_t startIndex;
         int iteration;
         if (rightToLeft)
         {
@@ -490,7 +465,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
         GP_ASSERT(_glyphs);
         GP_ASSERT(_batch);
-        for (int i = startIndex; i < length && i >= 0; i += iteration)
+        for (size_t i = startIndex; i < length; i += (size_t)iteration)
         {
             char c = 0;
             if (rightToLeft)
@@ -606,7 +581,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
         else
         {
-            tokenLength = strcspn(token, " \r\n\t");
+            tokenLength = (unsigned int)strcspn(token, " \r\n\t");
             tokenWidth = getTokenWidth(token, tokenLength, size, scale);
             iteration = 1;
             startIndex = 0;
@@ -629,7 +604,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
 
         bool draw = true;
-        if (yPos < area.y - size)
+        if (yPos < static_cast<int>(area.y - size))
         {
             // Skip drawing until line break or wrap.
             draw = false;
@@ -728,7 +703,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
             else
             {
                 // Skip the rest of this line.
-                unsigned int tokenLength = strcspn(token, "\n");
+                size_t tokenLength = strcspn(token, "\n");
 
                 if (tokenLength > 0)
                 {                
@@ -753,7 +728,7 @@ void Font::measureText(const char* text, unsigned int size, unsigned int* width,
     GP_ASSERT(width);
     GP_ASSERT(height);
 
-    const int length = strlen(text);
+    const size_t length = strlen(text);
     if (length == 0)
     {
         *width = 0;
@@ -776,7 +751,7 @@ void Font::measureText(const char* text, unsigned int size, unsigned int* width,
             ++token;
         }
 
-        unsigned int tokenLength = strcspn(token, "\n");
+        unsigned int tokenLength = (unsigned int)strcspn(token, "\n");
         unsigned int tokenWidth = getTokenWidth(token, tokenLength, size, scale);
         if (tokenWidth > *width)
         {
@@ -895,7 +870,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
             }
 
             // Measure the next token.
-            unsigned int tokenLength = strcspn(token, " \r\n\t");
+            unsigned int tokenLength = (unsigned int)strcspn(token, " \r\n\t");
             unsigned int tokenWidth = getTokenWidth(token, tokenLength, size, scale);
 
             // Wrap if necessary.
@@ -961,7 +936,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
             }
 
             // Measure the next line.
-            unsigned int tokenLength = strcspn(token, "\n");
+            unsigned int tokenLength = (unsigned int)strcspn(token, "\n");
             lineWidth = getTokenWidth(token, tokenLength, size, scale);
             
             // Determine horizontal position and width.
@@ -1017,7 +992,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
     {
         y += vWhitespace;
     }
-
+    
     int clippedTop = 0;
     int clippedBottom = 0;
     if (!ignoreClip)
@@ -1030,7 +1005,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
             if (clippedBottom > 0)
             {
                 // Also need to crop empty lines above non-empty lines that have been clipped.
-                unsigned int emptyIndex = emptyLines.size() - clippedBottom;
+                size_t emptyIndex = emptyLines.size() - clippedBottom;
                 while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
                 {
                     height -= size;
@@ -1054,7 +1029,7 @@ void Font::measureText(const char* text, const Rectangle& clip, unsigned int siz
             }
 
             // Also need to crop empty lines below non-empty lines that have been clipped.
-            unsigned int emptyIndex = clippedTop;
+            size_t emptyIndex = clippedTop;
             while (emptyIndex < emptyLines.size() && emptyLines[emptyIndex] == true)
             {
                 y += size;
@@ -1209,7 +1184,7 @@ void Font::getMeasurementInfo(const char* text, const Rectangle& area, unsigned 
                     break;
                 }
 
-                unsigned int tokenLength = strcspn(token, " \r\n\t");
+                unsigned int tokenLength = (unsigned int)strcspn(token, " \r\n\t");
                 tokenWidth += getTokenWidth(token, tokenLength, size, scale);
 
                 // Wrap if necessary.
@@ -1271,10 +1246,10 @@ void Font::getMeasurementInfo(const char* text, const Rectangle& area, unsigned 
                     delimiter = token[0];
                 }
 
-                unsigned int tokenLength = strcspn(token, "\n");
+                unsigned int tokenLength = (unsigned int)strcspn(token, "\n");
                 if (tokenLength == 0)
                 {
-                    tokenLength = strlen(token);
+                    tokenLength = (unsigned int)strlen(token);
                 }
 
                 int lineWidth = getTokenWidth(token, tokenLength, size, scale);
@@ -1403,7 +1378,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
         }
         else
         {
-            tokenLength = strcspn(token, " \r\n\t");
+            tokenLength = (unsigned int)strcspn(token, " \r\n\t");
             tokenWidth = getTokenWidth(token, tokenLength, size, scale);
             iteration = 1;
             startIndex = 0;
@@ -1518,7 +1493,7 @@ int Font::getIndexOrLocation(const char* text, const Rectangle& area, unsigned i
             else
             {
                 // Skip the rest of this line.
-                unsigned int tokenLength = strcspn(token, "\n");
+                unsigned int tokenLength = (unsigned int)strcspn(token, "\n");
 
                 if (tokenLength > 0)
                 {                
@@ -1788,7 +1763,7 @@ Font::Justify Font::getJustify(const char* justify)
 
 Font::Text::Text(const char* text) : _text(text ? text : ""), _vertexCount(0), _vertices(NULL), _indexCount(0), _indices(NULL)
 {
-    const int length = strlen(text);
+    const size_t length = strlen(text);
     _vertices = new SpriteBatch::SpriteVertex[length * 4];
     _indices = new unsigned short[((length - 1) * 6) + 4];
 }

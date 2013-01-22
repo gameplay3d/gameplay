@@ -48,6 +48,7 @@ static float __roll;
 double getMachTimeInMilliseconds();
 
 int getKey(unichar keyCode);
+int getUnicode(int key);
 
 @interface View : UIView <UIKeyInput>
 {
@@ -482,13 +483,21 @@ int getKey(unichar keyCode);
     assert([text length] == 1);
     unichar c = [text characterAtIndex:0];
     int key = getKey(c);
-    Platform::keyEventInternal(Keyboard::KEY_PRESS, key);    
-    Platform::keyEventInternal(Keyboard::KEY_RELEASE, key);    
+    Platform::keyEventInternal(Keyboard::KEY_PRESS, key);
+
+    int character = getUnicode(key);
+    if (character)
+    {
+        Platform::keyEventInternal(Keyboard::KEY_CHAR, /*character*/c);
+    }
+    
+    Platform::keyEventInternal(Keyboard::KEY_RELEASE, key);
 }
 
 - (void)deleteBackward 
 {
     Platform::keyEventInternal(Keyboard::KEY_PRESS, Keyboard::KEY_BACKSPACE);    
+    Platform::keyEventInternal(Keyboard::KEY_CHAR, getUnicode(Keyboard::KEY_BACKSPACE));
     Platform::keyEventInternal(Keyboard::KEY_RELEASE, Keyboard::KEY_BACKSPACE);    
 }
 
@@ -561,8 +570,27 @@ int getKey(unichar keyCode);
 {
     if((evt & Gesture::GESTURE_SWIPE) == Gesture::GESTURE_SWIPE && _swipeRecognizer == NULL)
     {
+        // right swipe (default)
         _swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
         [self addGestureRecognizer:_swipeRecognizer];
+
+        // left swipe
+        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+        swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
+        [self addGestureRecognizer:swipeGesture];
+        [swipeGesture release];
+        
+        // up swipe
+        UISwipeGestureRecognizer *swipeGesture2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+        swipeGesture2.direction = UISwipeGestureRecognizerDirectionUp;
+        [self addGestureRecognizer:swipeGesture2];
+        [swipeGesture2 release];
+        
+        // down swipe
+        UISwipeGestureRecognizer *swipeGesture3 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+        swipeGesture3.direction = UISwipeGestureRecognizerDirectionDown;
+        [self addGestureRecognizer:swipeGesture3];
+        [swipeGesture3 release];
     }
     if((evt & Gesture::GESTURE_PINCH) == Gesture::GESTURE_PINCH && _pinchRecognizer == NULL)
     {
@@ -845,6 +873,11 @@ int getKey(unichar keyCode)
 {
     switch(keyCode) 
     {
+        case 0x0A:
+            return Keyboard::KEY_RETURN;
+        case 0x20:
+            return Keyboard::KEY_SPACE;
+            
         case 0x30:
             return Keyboard::KEY_ZERO;
         case 0x31:
@@ -1056,6 +1089,123 @@ int getKey(unichar keyCode)
     return Keyboard::KEY_NONE;
 }
 
+/**
+ * Returns the unicode value for the given keycode or zero if the key is not a valid printable character.
+ */
+int getUnicode(int key)
+{
+    
+    switch (key)
+    {
+        case Keyboard::KEY_BACKSPACE:
+            return 0x0008;
+        case Keyboard::KEY_TAB:
+            return 0x0009;
+        case Keyboard::KEY_RETURN:
+        case Keyboard::KEY_KP_ENTER:
+            return 0x000A;
+        case Keyboard::KEY_ESCAPE:
+            return 0x001B;
+        case Keyboard::KEY_SPACE:
+        case Keyboard::KEY_EXCLAM:
+        case Keyboard::KEY_QUOTE:
+        case Keyboard::KEY_NUMBER:
+        case Keyboard::KEY_DOLLAR:
+        case Keyboard::KEY_PERCENT:
+        case Keyboard::KEY_CIRCUMFLEX:
+        case Keyboard::KEY_AMPERSAND:
+        case Keyboard::KEY_APOSTROPHE:
+        case Keyboard::KEY_LEFT_PARENTHESIS:
+        case Keyboard::KEY_RIGHT_PARENTHESIS:
+        case Keyboard::KEY_ASTERISK:
+        case Keyboard::KEY_PLUS:
+        case Keyboard::KEY_COMMA:
+        case Keyboard::KEY_MINUS:
+        case Keyboard::KEY_PERIOD:
+        case Keyboard::KEY_SLASH:
+        case Keyboard::KEY_ZERO:
+        case Keyboard::KEY_ONE:
+        case Keyboard::KEY_TWO:
+        case Keyboard::KEY_THREE:
+        case Keyboard::KEY_FOUR:
+        case Keyboard::KEY_FIVE:
+        case Keyboard::KEY_SIX:
+        case Keyboard::KEY_SEVEN:
+        case Keyboard::KEY_EIGHT:
+        case Keyboard::KEY_NINE:
+        case Keyboard::KEY_COLON:
+        case Keyboard::KEY_SEMICOLON:
+        case Keyboard::KEY_LESS_THAN:
+        case Keyboard::KEY_EQUAL:
+        case Keyboard::KEY_GREATER_THAN:
+        case Keyboard::KEY_QUESTION:
+        case Keyboard::KEY_AT:
+        case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_CAPITAL_B:
+        case Keyboard::KEY_CAPITAL_C:
+        case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_CAPITAL_E:
+        case Keyboard::KEY_CAPITAL_F:
+        case Keyboard::KEY_CAPITAL_G:
+        case Keyboard::KEY_CAPITAL_H:
+        case Keyboard::KEY_CAPITAL_I:
+        case Keyboard::KEY_CAPITAL_J:
+        case Keyboard::KEY_CAPITAL_K:
+        case Keyboard::KEY_CAPITAL_L:
+        case Keyboard::KEY_CAPITAL_M:
+        case Keyboard::KEY_CAPITAL_N:
+        case Keyboard::KEY_CAPITAL_O:
+        case Keyboard::KEY_CAPITAL_P:
+        case Keyboard::KEY_CAPITAL_Q:
+        case Keyboard::KEY_CAPITAL_R:
+        case Keyboard::KEY_CAPITAL_S:
+        case Keyboard::KEY_CAPITAL_T:
+        case Keyboard::KEY_CAPITAL_U:
+        case Keyboard::KEY_CAPITAL_V:
+        case Keyboard::KEY_CAPITAL_W:
+        case Keyboard::KEY_CAPITAL_X:
+        case Keyboard::KEY_CAPITAL_Y:
+        case Keyboard::KEY_CAPITAL_Z:
+        case Keyboard::KEY_LEFT_BRACKET:
+        case Keyboard::KEY_BACK_SLASH:
+        case Keyboard::KEY_RIGHT_BRACKET:
+        case Keyboard::KEY_UNDERSCORE:
+        case Keyboard::KEY_GRAVE:
+        case Keyboard::KEY_A:
+        case Keyboard::KEY_B:
+        case Keyboard::KEY_C:
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_E:
+        case Keyboard::KEY_F:
+        case Keyboard::KEY_G:
+        case Keyboard::KEY_H:
+        case Keyboard::KEY_I:
+        case Keyboard::KEY_J:
+        case Keyboard::KEY_K:
+        case Keyboard::KEY_L:
+        case Keyboard::KEY_M:
+        case Keyboard::KEY_N:
+        case Keyboard::KEY_O:
+        case Keyboard::KEY_P:
+        case Keyboard::KEY_Q:
+        case Keyboard::KEY_R:
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_T:
+        case Keyboard::KEY_U:
+        case Keyboard::KEY_V:
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_X:
+        case Keyboard::KEY_Y:
+        case Keyboard::KEY_Z:
+        case Keyboard::KEY_LEFT_BRACE:
+        case Keyboard::KEY_BAR:
+        case Keyboard::KEY_RIGHT_BRACE:
+        case Keyboard::KEY_TILDE:
+            return key;
+        default:
+            return 0;
+    }
+}
 
 namespace gameplay
 {
@@ -1238,7 +1388,23 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     {
         return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
     }
-}    
+}
+
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
+{
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+}
+
+void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
+{
+    Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
+}
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
@@ -1260,64 +1426,16 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
     return [__view isGestureRegistered:evt];
 }
 
-
-unsigned int Platform::getGamepadsConnected()
-{
-    return 0;
-}
-
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
-{
-    return false;
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle)
-{
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return false;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
+void Platform::pollGamepadState(Gamepad* gamepad)
 {
 }
 
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
+bool Platform::launchURL(const char *url)
 {
-    return 0;
-}
+    if (url == NULL || *url == '\0')
+        return false;
 
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
-{
-    return 0.0f;
+    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithUTF8String: url]]];
 }
     
 }

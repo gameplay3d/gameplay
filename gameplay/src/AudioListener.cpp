@@ -13,7 +13,9 @@ AudioListener::AudioListener()
 
 AudioListener::~AudioListener()
 {
-    SAFE_RELEASE(_camera);
+	// Call setCamera() to release camera and cause transform listener
+	// to be removed.
+	setCamera(NULL);
 }
 
 AudioListener* AudioListener::getInstance()

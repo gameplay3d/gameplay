@@ -9,13 +9,14 @@ include_directories(
     /usr/include
 )
 
+add_definitions(-D_DEBUG)
 add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE)
 
 link_directories(
-    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux
-    ${CMAKE_SOURCE_DIR}/external-deps/collada-dom/lib/linux
+    ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
+    ${CMAKE_SOURCE_DIR}/external-deps/collada-dom/lib/linux/${ARCH_DIR}
     /usr/lib
 )
 

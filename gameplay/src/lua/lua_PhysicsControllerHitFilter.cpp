@@ -10,6 +10,7 @@
 #include "PhysicsRigidBody.h"
 #include "ScriptController.h"
 #include "ScriptTarget.h"
+#include "Terrain.h"
 #include "lua_PhysicsControllerListenerEventType.h"
 
 namespace gameplay
@@ -60,11 +61,9 @@ int lua_PhysicsControllerHitFilter__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsControllerHitFilter__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsControllerHitFilter__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -128,7 +127,13 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
+                    lua_error(state);
+                }
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->filter(param1);
@@ -138,11 +143,9 @@ int lua_PhysicsControllerHitFilter_filter(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsControllerHitFilter_filter - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsControllerHitFilter_filter - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -169,7 +172,13 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
                 (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param1 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true);
+                bool param1Valid;
+                ScriptUtil::LuaArray<PhysicsController::HitResult> param1 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(2, "PhysicsControllerHitResult", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsController::HitResult'.");
+                    lua_error(state);
+                }
 
                 PhysicsController::HitFilter* instance = getInstance(state);
                 bool result = instance->hit(*param1);
@@ -179,11 +188,9 @@ int lua_PhysicsControllerHitFilter_hit(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_PhysicsControllerHitFilter_hit - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_PhysicsControllerHitFilter_hit - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:

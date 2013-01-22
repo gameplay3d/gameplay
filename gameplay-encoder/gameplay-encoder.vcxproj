@@ -31,6 +31,7 @@
     <ClCompile Include="src\GPBDecoder.cpp" />
     <ClCompile Include="src\Animations.cpp" />
     <ClCompile Include="src\Heightmap.cpp" />
+    <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="src\MeshPart.cpp" />
     <ClCompile Include="src\MeshSkin.cpp" />
     <ClCompile Include="src\Node.cpp" />
+    <ClCompile Include="src\NormalMapGenerator.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\Reference.cpp" />
@@ -76,6 +78,7 @@
     <ClInclude Include="src\GPBDecoder.h" />
     <ClInclude Include="src\Animations.h" />
     <ClInclude Include="src\Heightmap.h" />
+    <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\MaterialParameter.h" />
@@ -85,6 +88,7 @@
     <ClInclude Include="src\MeshPart.h" />
     <ClInclude Include="src\MeshSkin.h" />
     <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\NormalMapGenerator.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\Reference.h" />
@@ -159,7 +163,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/windows;../external-deps/collada-dom/lib/windows;../external-deps/libpng/lib/windows;../external-deps/zlib/lib/windows</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/windows/x86;../external-deps/collada-dom/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -184,7 +188,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/windows;../external-deps/collada-dom/lib/windows;../external-deps/libpng/lib/windows;../external-deps/zlib/lib/windows</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/windows/x86;../external-deps/collada-dom/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>

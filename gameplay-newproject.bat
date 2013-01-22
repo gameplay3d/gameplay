@@ -182,6 +182,7 @@ call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_AUTHOR "%author%"
 
 copy gameplay-template\TEMPLATE_PROJECT-ios.plist "%projPath%\%projName%-ios.plist"
+copy gameplay-template\Default-568h@2x.png "%projPath%\Default-568h@2x.png"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_TITLE "%title%"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_AUTHOR "%author%"
@@ -230,6 +231,11 @@ mkdir "%projPath%\android\res\values"
 copy gameplay-template\android\res\values\template.strings.xml "%projPath%\android\res\values\strings.xml"
 call:replace "%projPath%\android\res\values\strings.xml" TEMPLATE_TITLE "%title%"
 
+mkdir "%projPath%\build"
+copy "gameplay-template\gameplay-template-CMakeLists.txt" "%projPath%\CMakeLists.txt"
+call:replace "%projPath%\CMakeLists.txt" TEMPLATE_PROJECT %projName%
+call:replace "%projPath%\CMakeLists.txt" TemplateGame %className%
+call:replace "%projPath%\CMakeLists.txt" GAMEPLAY_PATH %gpPath%
 
 REM Copy source files
 copy gameplay-template\src\TemplateGame.h "%projPath%\src\%className%.h"

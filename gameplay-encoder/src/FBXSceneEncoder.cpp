@@ -54,27 +54,30 @@ static void loadNormal(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex,
  * 
  * @param fbxMesh The mesh to load from.
  * @param vertexIndex The index of the vertex within fbxMesh.
+ * @param controlPointIndex The control point index.
  * @param vertex The vertex to copy to.
  */
-static void loadTangent(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadTangent(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex* vertex);
 
 /**
  * Loads the binormal from the mesh and adds it to the given vertex.
  * 
  * @param fbxMesh The mesh to load from.
  * @param vertexIndex The index of the vertex within fbxMesh.
+ * @param controlPointIndex The control point index.
  * @param vertex The vertex to copy to.
  */
-static void loadBinormal(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadBinormal(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex* vertex);
 
 /**
  * Loads the vertex diffuse color from the mesh and adds it to the given vertex.
  * 
  * @param fbxMesh The mesh to load from.
  * @param vertexIndex The index of the vertex within fbxMesh.
+ * @param controlPointIndex The control point index.
  * @param vertex The vertex to copy to.
  */
-static void loadVertexColor(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex);
+static void loadVertexColor(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex* vertex);
 
 /**
  * Loads the blend weight and blend indices data into the vertex.
@@ -309,8 +312,8 @@ void FBXSceneEncoder::loadScene(FbxScene* fbxScene)
 void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fbxNode, Animation* animation)
 {
     const char* name = fbxNode->GetName();
-    Node* node = _gamePlayFile.getNode(name);
-    
+    //Node* node = _gamePlayFile.getNode(name);
+
     // Determine which properties are animated on this node
     // Find the transform at each key frame
     // TODO: Ignore properties that are not animated (scale, rotation, translation)
@@ -466,6 +469,7 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
     assert(channelCount > 0);
 
     // Allocate channel list
+    int channelStart = animation->getAnimationChannelCount();
     for (unsigned int i = 0; i < channelCount; ++i)
     {
         AnimationChannel* channel = new AnimationChannel();
@@ -499,7 +503,7 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
         rotation.normalize();
 
         // Append keyframe data to all channels
-        for (unsigned int i = 0; i < channelCount; ++i)
+        for (unsigned int i = channelStart, channelEnd = channelStart + channelCount; i < channelEnd; ++i)
         {
             appendKeyFrame(fbxNode, animation->getAnimationChannel(i), time, scale, rotation, translation);
         }
@@ -517,18 +521,14 @@ void FBXSceneEncoder::loadAnimationLayer(FbxAnimLayer* fbxAnimLayer, FbxNode* fb
     bool animationGroupId = false;
     const char* name = fbxNode->GetName();
     // Check if this node's animations are supposed to be grouped
-    if (name)
+    if (name && arguments.containsGroupNodeId(name))
     {
-        std::string str = name;
-        if (arguments.containsGroupNodeId(str))
-        {
-            animationGroupId = true;
-            _groupAnimation = new Animation();
-            _groupAnimation->setId(arguments.getAnimationId(str));
-        }
+        animationGroupId = true;
+        _groupAnimation = new Animation();
+        _groupAnimation->setId(arguments.getAnimationId(name));
     }
     Animation* animation = _groupAnimation;
-    if (!_groupAnimation)
+    if (!animation)
     {
         animation = new Animation();
         animation->setId(name);
@@ -857,8 +857,7 @@ void FBXSceneEncoder::loadSkin(FbxMesh* fbxMesh, Model* model)
                 FbxCluster* cluster = fbxSkin->GetCluster(j);
                 assert(cluster);
                 FbxNode* linkedNode = cluster->GetLink();
-                assert(linkedNode);
-                if (linkedNode->GetSkeleton())
+                if (linkedNode && linkedNode->GetSkeleton())
                 {
                     const char* jointName = linkedNode->GetName();
                     assert(jointName);
@@ -946,9 +945,9 @@ Mesh* FBXSceneEncoder::loadMesh(FbxMesh* fbxMesh)
 
             // Load other data
             loadNormal(fbxMesh, vertexIndex, controlPointIndex, &vertex);
-            loadTangent(fbxMesh, vertexIndex, &vertex);
-            loadBinormal(fbxMesh, vertexIndex, &vertex);
-            loadVertexColor(fbxMesh, vertexIndex, &vertex);
+            loadTangent(fbxMesh, vertexIndex, controlPointIndex, &vertex);
+            loadBinormal(fbxMesh, vertexIndex, controlPointIndex, &vertex);
+            loadVertexColor(fbxMesh, vertexIndex, controlPointIndex, &vertex);
 
             if (hasSkin)
             {
@@ -1238,13 +1237,41 @@ void loadNormal(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex
     }
 }
 
-void loadTangent(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
+void loadTangent(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex* vertex)
 {
     if (fbxMesh->GetElementTangentCount() > 0)
     {
         // Get only the first tangent
         FbxGeometryElementTangent* tangent = fbxMesh->GetElementTangent(0);
-        if (tangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+        FbxGeometryElement::EMappingMode mappingMode = tangent->GetMappingMode();
+        if (mappingMode == FbxGeometryElement::eByControlPoint)
+        {
+            switch (tangent->GetReferenceMode())
+            {
+            case FbxGeometryElement::eDirect:
+                {
+                    FbxVector4 vec4 = tangent->GetDirectArray().GetAt(controlPointIndex);
+                    vertex->hasTangent = true;
+                    vertex->tangent.x = (float)vec4[0];
+                    vertex->tangent.y = (float)vec4[1];
+                    vertex->tangent.z = (float)vec4[2];
+                }
+                break;
+            case FbxGeometryElement::eIndexToDirect:
+                {
+                    int id = tangent->GetIndexArray().GetAt(controlPointIndex);
+                    FbxVector4 vec4 = tangent->GetDirectArray().GetAt(id);
+                    vertex->hasTangent = true;
+                    vertex->tangent.x = (float)vec4[0];
+                    vertex->tangent.y = (float)vec4[1];
+                    vertex->tangent.z = (float)vec4[2];
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        else if (mappingMode == FbxGeometryElement::eByPolygonVertex)
         {
             switch (tangent->GetReferenceMode())
             {
@@ -1274,13 +1301,42 @@ void loadTangent(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
     }
 }
 
-void loadBinormal(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
+void loadBinormal(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex* vertex)
 {
     if (fbxMesh->GetElementBinormalCount() > 0)
     {
         // Get only the first binormal.
         FbxGeometryElementBinormal* binormal = fbxMesh->GetElementBinormal(0);
-        if (binormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+        FbxGeometryElement::EMappingMode mappingMode = binormal->GetMappingMode();
+
+        if (mappingMode == FbxGeometryElement::eByControlPoint)
+        {
+            switch (binormal->GetReferenceMode())
+            {
+            case FbxGeometryElement::eDirect:
+                {
+                    FbxVector4 vec4 = binormal->GetDirectArray().GetAt(controlPointIndex);
+                    vertex->hasBinormal = true;
+                    vertex->binormal.x = (float)vec4[0];
+                    vertex->binormal.y = (float)vec4[1];
+                    vertex->binormal.z = (float)vec4[2];
+                }
+                break;
+            case FbxGeometryElement::eIndexToDirect:
+                {
+                    int id = binormal->GetIndexArray().GetAt(controlPointIndex);
+                    FbxVector4 vec4 = binormal->GetDirectArray().GetAt(id);
+                    vertex->hasBinormal = true;
+                    vertex->binormal.x = (float)vec4[0];
+                    vertex->binormal.y = (float)vec4[1];
+                    vertex->binormal.z = (float)vec4[2];
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        else if (mappingMode == FbxGeometryElement::eByPolygonVertex)
         {
             switch (binormal->GetReferenceMode())
             {
@@ -1310,13 +1366,45 @@ void loadBinormal(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
     }
 }
 
-void loadVertexColor(FbxMesh* fbxMesh, int vertexIndex, Vertex* vertex)
+void loadVertexColor(FbxMesh* fbxMesh, int vertexIndex, int controlPointIndex, Vertex* vertex)
 {
     if (fbxMesh->GetElementVertexColorCount() > 0)
     {
         // Get only the first vertex color.
         FbxGeometryElementVertexColor* vertexColor = fbxMesh->GetElementVertexColor(0);
-        if (vertexColor->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+        FbxGeometryElement::EMappingMode mappingMode = vertexColor->GetMappingMode();
+        if (mappingMode == FbxGeometryElement::eByControlPoint)
+        {
+            switch (vertexColor->GetReferenceMode())
+            {
+            case FbxGeometryElement::eDirect:
+                {
+                    FbxColor color = vertexColor->GetDirectArray().GetAt(controlPointIndex);
+
+                    vertex->hasDiffuse = true;
+                    vertex->diffuse.x = (float)color.mRed;
+                    vertex->diffuse.y = (float)color.mGreen;
+                    vertex->diffuse.z = (float)color.mBlue;
+                    vertex->diffuse.w = (float)color.mAlpha;
+                }
+                break;
+            case FbxGeometryElement::eIndexToDirect:
+                {
+                    int id = vertexColor->GetIndexArray().GetAt(controlPointIndex);
+                    FbxColor color = vertexColor->GetDirectArray().GetAt(id);
+
+                    vertex->hasDiffuse = true;
+                    vertex->diffuse.x = (float)color.mRed;
+                    vertex->diffuse.y = (float)color.mGreen;
+                    vertex->diffuse.z = (float)color.mBlue;
+                    vertex->diffuse.w = (float)color.mAlpha;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        else if (mappingMode == FbxGeometryElement::eByPolygonVertex)
         {
             switch (vertexColor->GetReferenceMode())
             {
@@ -1398,9 +1486,6 @@ bool loadBlendWeights(FbxMesh* fbxMesh, std::vector<std::vector<Vector2> >& weig
             {
                 FbxCluster* cluster = fbxSkin->GetCluster(j);
                 assert(cluster);
-                FbxNode* linkedNode = cluster->GetLink();
-                assert(linkedNode);
-
                 const int vertexIndexCount = cluster->GetControlPointIndicesCount();
                 for (int k = 0; k < vertexIndexCount; ++k)
                 {

@@ -2,6 +2,7 @@
 #define TEXTURE_H_
 
 #include "Ref.h"
+#include "Stream.h"
 
 namespace gameplay
 {
@@ -22,6 +23,7 @@ public:
      */
     enum Format
     {
+        UNKNOWN = 0,
         RGB     = GL_RGB,
         RGBA    = GL_RGBA,
         ALPHA   = GL_ALPHA
@@ -178,6 +180,33 @@ public:
     static Texture* create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps = false);
 
     /**
+     * Creates a texture object to wrap the specified pre-created native texture handle.
+     *
+     * The specified TextureHandle must represent a valid texture that has been created
+     * on the underlying renderer and it should not be referenced by any other Texture
+     * object. When the returned Texture object is destroyed, the passed in TextureHandle
+     * will also be destroyed.
+     *
+     * @param handle Native texture handle.
+     * @param width The width of the texture represented by 'handle'.
+     * @param height The height of the texture represented by 'handle'.
+     * @param format Optionally, the format of the texture represented by 'handle'.
+     *      If the format cannot be represented by any of the Texture::Format values,
+     *      use a value of UNKNOWN.
+     *
+     * @return The new texture.
+     * @script{create}
+     */
+    static Texture* create(TextureHandle handle, int width, int height, Format format = UNKNOWN);
+
+    /**
+     * Returns the path that the texture was originally loaded from (if applicable).
+     *
+     * @return The texture path, or an empty string if the texture was not loaded from file.
+     */
+    const char* getPath() const;
+
+    /**
      * Gets the format of the texture.
      *
      * @return The texture format.
@@ -264,9 +293,11 @@ private:
 
     static Texture* createCompressedDDS(const char* path);
 
-    static GLubyte* readCompressedPVRTC(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTC(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
 
-    static GLubyte* readCompressedPVRTCLegacy(const char* path, FILE* file, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+    static GLubyte* readCompressedPVRTCLegacy(const char* path, Stream* stream, GLsizei* width, GLsizei* height, GLenum* format, unsigned int* mipMapCount);
+
+    static int getMaskByteIndex(unsigned int mask);
 
     std::string _path;
     TextureHandle _handle;

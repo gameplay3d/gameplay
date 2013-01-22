@@ -71,11 +71,9 @@ int lua_Font__gc(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font__gc - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font__gc - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -105,11 +103,9 @@ int lua_Font_addRef(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_addRef - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_addRef - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -138,13 +134,25 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3);
@@ -163,11 +171,9 @@ int lua_Font_createText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
@@ -179,13 +185,25 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -207,11 +225,9 @@ int lua_Font_createText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
@@ -224,13 +240,25 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -255,11 +283,9 @@ int lua_Font_createText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
@@ -273,13 +299,25 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -307,11 +345,9 @@ int lua_Font_createText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 8:
@@ -326,13 +362,25 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -363,11 +411,9 @@ int lua_Font_createText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 9:
@@ -383,13 +429,25 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                bool param3Valid;
+                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -404,7 +462,13 @@ int lua_Font_createText(lua_State* state)
                 bool param7 = ScriptUtil::luaCheckBool(state, 8);
 
                 // Get parameter 8 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false);
+                bool param8Valid;
+                ScriptUtil::LuaArray<Rectangle> param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false, &param8Valid);
+                if (!param8Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 8 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 Font* instance = getInstance(state);
                 void* returnPtr = (void*)instance->createText(param1, *param2, *param3, param4, param5, param6, param7, param8);
@@ -423,11 +487,9 @@ int lua_Font_createText(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_createText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -450,457 +512,536 @@ int lua_Font_drawText(lua_State* state)
     {
         case 2:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<Font::Text> param1 = ScriptUtil::getObjectPointer<Font::Text>(2, "FontText", false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    ScriptUtil::LuaArray<Font::Text> param1 = ScriptUtil::getObjectPointer<Font::Text>(2, "FontText", false, &param1Valid);
+                    if (!param1Valid)
+                        break;
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, *param2, *param3);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, *param2, *param3);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
 
-                // Get parameter 3 off the stack.
-                int param3 = (int)luaL_checkint(state, 4);
+                    // Get parameter 3 off the stack.
+                    int param3 = (int)luaL_checkint(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, param2, param3, *param4);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                lua_type(state, 5) == LUA_TNUMBER)
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, param2, param3, *param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
 
-                // Get parameter 4 off the stack.
-                unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, *param2, *param3, param4);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, *param2, *param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
-                lua_type(state, 6) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
 
-                // Get parameter 3 off the stack.
-                int param3 = (int)luaL_checkint(state, 4);
+                    // Get parameter 3 off the stack.
+                    int param3 = (int)luaL_checkint(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                // Get parameter 5 off the stack.
-                unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
+                    // Get parameter 5 off the stack.
+                    unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, param2, param3, *param4, param5);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, param2, param3, *param4, param5);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
 
-                // Get parameter 4 off the stack.
-                unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, *param2, *param3, param4, param5);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, *param2, *param3, param4, param5);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
-                lua_type(state, 6) == LUA_TNUMBER &&
-                lua_type(state, 7) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL) &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
+                    lua_type(state, 7) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
 
-                // Get parameter 3 off the stack.
-                int param3 = (int)luaL_checkint(state, 4);
+                    // Get parameter 3 off the stack.
+                    int param3 = (int)luaL_checkint(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                // Get parameter 5 off the stack.
-                unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
+                    // Get parameter 5 off the stack.
+                    unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
 
-                // Get parameter 6 off the stack.
-                bool param6 = ScriptUtil::luaCheckBool(state, 7);
+                    // Get parameter 6 off the stack.
+                    bool param6 = ScriptUtil::luaCheckBool(state, 7);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, param2, param3, *param4, param5, param6);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
-                lua_type(state, 7) == LUA_TBOOLEAN)
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, param2, param3, *param4, param5, param6);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 7) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
 
-                // Get parameter 4 off the stack.
-                unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                // Get parameter 6 off the stack.
-                bool param6 = ScriptUtil::luaCheckBool(state, 7);
+                    // Get parameter 6 off the stack.
+                    bool param6 = ScriptUtil::luaCheckBool(state, 7);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, *param2, *param3, param4, param5, param6);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, *param2, *param3, param4, param5, param6);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 8:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TNUMBER &&
-                lua_type(state, 7) == LUA_TNUMBER &&
-                lua_type(state, 8) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
+                    lua_type(state, 7) == LUA_TNUMBER &&
+                    lua_type(state, 8) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
 
-                // Get parameter 3 off the stack.
-                int param3 = (int)luaL_checkint(state, 4);
+                    // Get parameter 3 off the stack.
+                    int param3 = (int)luaL_checkint(state, 4);
 
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 5);
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 5);
 
-                // Get parameter 5 off the stack.
-                float param5 = (float)luaL_checknumber(state, 6);
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 6);
 
-                // Get parameter 6 off the stack.
-                float param6 = (float)luaL_checknumber(state, 7);
+                    // Get parameter 6 off the stack.
+                    float param6 = (float)luaL_checknumber(state, 7);
 
-                // Get parameter 7 off the stack.
-                float param7 = (float)luaL_checknumber(state, 8);
+                    // Get parameter 7 off the stack.
+                    float param7 = (float)luaL_checknumber(state, 8);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, param2, param3, param4, param5, param6, param7);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
-                lua_type(state, 7) == LUA_TBOOLEAN &&
-                lua_type(state, 8) == LUA_TBOOLEAN)
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, param2, param3, param4, param5, param6, param7);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 7) == LUA_TBOOLEAN &&
+                    lua_type(state, 8) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
 
-                // Get parameter 4 off the stack.
-                unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                // Get parameter 6 off the stack.
-                bool param6 = ScriptUtil::luaCheckBool(state, 7);
+                    // Get parameter 6 off the stack.
+                    bool param6 = ScriptUtil::luaCheckBool(state, 7);
 
-                // Get parameter 7 off the stack.
-                bool param7 = ScriptUtil::luaCheckBool(state, 8);
+                    // Get parameter 7 off the stack.
+                    bool param7 = ScriptUtil::luaCheckBool(state, 8);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, *param2, *param3, param4, param5, param6, param7);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, *param2, *param3, param4, param5, param6, param7);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 9:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TNUMBER &&
-                lua_type(state, 7) == LUA_TNUMBER &&
-                lua_type(state, 8) == LUA_TNUMBER &&
-                lua_type(state, 9) == LUA_TNUMBER)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
+                    lua_type(state, 7) == LUA_TNUMBER &&
+                    lua_type(state, 8) == LUA_TNUMBER &&
+                    lua_type(state, 9) == LUA_TNUMBER)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
 
-                // Get parameter 3 off the stack.
-                int param3 = (int)luaL_checkint(state, 4);
+                    // Get parameter 3 off the stack.
+                    int param3 = (int)luaL_checkint(state, 4);
 
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 5);
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 5);
 
-                // Get parameter 5 off the stack.
-                float param5 = (float)luaL_checknumber(state, 6);
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 6);
 
-                // Get parameter 6 off the stack.
-                float param6 = (float)luaL_checknumber(state, 7);
+                    // Get parameter 6 off the stack.
+                    float param6 = (float)luaL_checknumber(state, 7);
 
-                // Get parameter 7 off the stack.
-                float param7 = (float)luaL_checknumber(state, 8);
+                    // Get parameter 7 off the stack.
+                    float param7 = (float)luaL_checknumber(state, 8);
 
-                // Get parameter 8 off the stack.
-                unsigned int param8 = (unsigned int)luaL_checkunsigned(state, 9);
+                    // Get parameter 8 off the stack.
+                    unsigned int param8 = (unsigned int)luaL_checkunsigned(state, 9);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, param2, param3, param4, param5, param6, param7, param8);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
-                lua_type(state, 7) == LUA_TBOOLEAN &&
-                lua_type(state, 8) == LUA_TBOOLEAN &&
-                (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, param2, param3, param4, param5, param6, param7, param8);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL) &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 7) == LUA_TBOOLEAN &&
+                    lua_type(state, 8) == LUA_TBOOLEAN &&
+                    (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true);
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                    if (!param3Valid)
+                        break;
 
-                // Get parameter 4 off the stack.
-                unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+                    // Get parameter 4 off the stack.
+                    unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                // Get parameter 6 off the stack.
-                bool param6 = ScriptUtil::luaCheckBool(state, 7);
+                    // Get parameter 6 off the stack.
+                    bool param6 = ScriptUtil::luaCheckBool(state, 7);
 
-                // Get parameter 7 off the stack.
-                bool param7 = ScriptUtil::luaCheckBool(state, 8);
+                    // Get parameter 7 off the stack.
+                    bool param7 = ScriptUtil::luaCheckBool(state, 8);
 
-                // Get parameter 8 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false);
+                    // Get parameter 8 off the stack.
+                    bool param8Valid;
+                    ScriptUtil::LuaArray<Rectangle> param8 = ScriptUtil::getObjectPointer<Rectangle>(9, "Rectangle", false, &param8Valid);
+                    if (!param8Valid)
+                        break;
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, *param2, *param3, param4, param5, param6, param7, param8);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, *param2, *param3, param4, param5, param6, param7, param8);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 10:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                lua_type(state, 5) == LUA_TNUMBER &&
-                lua_type(state, 6) == LUA_TNUMBER &&
-                lua_type(state, 7) == LUA_TNUMBER &&
-                lua_type(state, 8) == LUA_TNUMBER &&
-                lua_type(state, 9) == LUA_TNUMBER &&
-                lua_type(state, 10) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    lua_type(state, 5) == LUA_TNUMBER &&
+                    lua_type(state, 6) == LUA_TNUMBER &&
+                    lua_type(state, 7) == LUA_TNUMBER &&
+                    lua_type(state, 8) == LUA_TNUMBER &&
+                    lua_type(state, 9) == LUA_TNUMBER &&
+                    lua_type(state, 10) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                int param2 = (int)luaL_checkint(state, 3);
+                    // Get parameter 2 off the stack.
+                    int param2 = (int)luaL_checkint(state, 3);
 
-                // Get parameter 3 off the stack.
-                int param3 = (int)luaL_checkint(state, 4);
+                    // Get parameter 3 off the stack.
+                    int param3 = (int)luaL_checkint(state, 4);
 
-                // Get parameter 4 off the stack.
-                float param4 = (float)luaL_checknumber(state, 5);
+                    // Get parameter 4 off the stack.
+                    float param4 = (float)luaL_checknumber(state, 5);
 
-                // Get parameter 5 off the stack.
-                float param5 = (float)luaL_checknumber(state, 6);
+                    // Get parameter 5 off the stack.
+                    float param5 = (float)luaL_checknumber(state, 6);
 
-                // Get parameter 6 off the stack.
-                float param6 = (float)luaL_checknumber(state, 7);
+                    // Get parameter 6 off the stack.
+                    float param6 = (float)luaL_checknumber(state, 7);
 
-                // Get parameter 7 off the stack.
-                float param7 = (float)luaL_checknumber(state, 8);
+                    // Get parameter 7 off the stack.
+                    float param7 = (float)luaL_checknumber(state, 8);
 
-                // Get parameter 8 off the stack.
-                unsigned int param8 = (unsigned int)luaL_checkunsigned(state, 9);
+                    // Get parameter 8 off the stack.
+                    unsigned int param8 = (unsigned int)luaL_checkunsigned(state, 9);
 
-                // Get parameter 9 off the stack.
-                bool param9 = ScriptUtil::luaCheckBool(state, 10);
+                    // Get parameter 9 off the stack.
+                    bool param9 = ScriptUtil::luaCheckBool(state, 10);
 
-                Font* instance = getInstance(state);
-                instance->drawText(param1, param2, param3, param4, param5, param6, param7, param8, param9);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->drawText(param1, param2, param3, param4, param5, param6, param7, param8, param9);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_drawText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -930,11 +1071,9 @@ int lua_Font_finish(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_finish - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_finish - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -965,19 +1104,37 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                bool param5Valid;
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false, &param5Valid);
+                if (!param5Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 5 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 Font* instance = getInstance(state);
                 int result = instance->getIndexAtLocation(param1, *param2, param3, *param4, param5);
@@ -987,11 +1144,9 @@ int lua_Font_getIndexAtLocation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
@@ -1005,19 +1160,37 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                bool param5Valid;
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false, &param5Valid);
+                if (!param5Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 5 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 6 off the stack.
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
@@ -1030,11 +1203,9 @@ int lua_Font_getIndexAtLocation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 8:
@@ -1049,19 +1220,37 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                bool param5Valid;
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false, &param5Valid);
+                if (!param5Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 5 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 6 off the stack.
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
@@ -1077,11 +1266,9 @@ int lua_Font_getIndexAtLocation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 9:
@@ -1097,19 +1284,37 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", true, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false);
+                bool param5Valid;
+                ScriptUtil::LuaArray<Vector2> param5 = ScriptUtil::getObjectPointer<Vector2>(6, "Vector2", false, &param5Valid);
+                if (!param5Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 5 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 6 off the stack.
                 Font::Justify param6 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 7));
@@ -1128,11 +1333,9 @@ int lua_Font_getIndexAtLocation(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getIndexAtLocation - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1163,16 +1366,28 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1182,11 +1397,9 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
@@ -1200,16 +1413,28 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1222,11 +1447,9 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 8:
@@ -1241,16 +1464,28 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1266,11 +1501,9 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 9:
@@ -1286,16 +1519,28 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                bool param2Valid;
+                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                if (!param2Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Rectangle'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false);
+                bool param4Valid;
+                ScriptUtil::LuaArray<Vector2> param4 = ScriptUtil::getObjectPointer<Vector2>(5, "Vector2", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector2'.");
+                    lua_error(state);
+                }
 
                 // Get parameter 5 off the stack.
                 unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 6);
@@ -1314,11 +1559,9 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getLocationAtIndex - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1351,11 +1594,9 @@ int lua_Font_getRefCount(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getRefCount - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1388,11 +1629,9 @@ int lua_Font_getSize(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getSize - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1434,11 +1673,9 @@ int lua_Font_getSpriteBatch(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_getSpriteBatch - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_getSpriteBatch - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1461,177 +1698,209 @@ int lua_Font_measureText(lua_State* state)
     {
         case 5:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                lua_type(state, 3) == LUA_TNUMBER &&
-                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    lua_type(state, 3) == LUA_TNUMBER &&
+                    (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                    (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+                    // Get parameter 2 off the stack.
+                    unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
 
-                // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<unsigned int> param3 = ScriptUtil::getUnsignedIntPointer(4);
+                    // Get parameter 3 off the stack.
+                    ScriptUtil::LuaArray<unsigned int> param3 = ScriptUtil::getUnsignedIntPointer(4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
+                    // Get parameter 4 off the stack.
+                    ScriptUtil::LuaArray<unsigned int> param4 = ScriptUtil::getUnsignedIntPointer(5);
 
-                Font* instance = getInstance(state);
-                instance->measureText(param1, param2, param3, param4);
-                
-                return 0;
-            }
-            else if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
+                    Font* instance = getInstance(state);
+                    instance->measureText(param1, param2, param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                Font* instance = getInstance(state);
-                instance->measureText(param1, *param2, param3, param4);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->measureText(param1, *param2, param3, param4);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 6:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                Font* instance = getInstance(state);
-                instance->measureText(param1, *param2, param3, param4, param5);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->measureText(param1, *param2, param3, param4, param5);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 7:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
-                lua_type(state, 7) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 7) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                // Get parameter 6 off the stack.
-                bool param6 = ScriptUtil::luaCheckBool(state, 7);
+                    // Get parameter 6 off the stack.
+                    bool param6 = ScriptUtil::luaCheckBool(state, 7);
 
-                Font* instance = getInstance(state);
-                instance->measureText(param1, *param2, param3, param4, param5, param6);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->measureText(param1, *param2, param3, param4, param5, param6);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 8:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TNUMBER &&
-                (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
-                (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
-                lua_type(state, 7) == LUA_TBOOLEAN &&
-                lua_type(state, 8) == LUA_TBOOLEAN)
+            do
             {
-                // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    lua_type(state, 4) == LUA_TNUMBER &&
+                    (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL) &&
+                    (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL) &&
+                    lua_type(state, 7) == LUA_TBOOLEAN &&
+                    lua_type(state, 8) == LUA_TBOOLEAN)
+                {
+                    // Get parameter 1 off the stack.
+                    const char* param1 = ScriptUtil::getString(2, false);
 
-                // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true);
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
 
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
+                    // Get parameter 3 off the stack.
+                    unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
 
-                // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false);
+                    // Get parameter 4 off the stack.
+                    bool param4Valid;
+                    ScriptUtil::LuaArray<Rectangle> param4 = ScriptUtil::getObjectPointer<Rectangle>(5, "Rectangle", false, &param4Valid);
+                    if (!param4Valid)
+                        break;
 
-                // Get parameter 5 off the stack.
-                Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
+                    // Get parameter 5 off the stack.
+                    Font::Justify param5 = (Font::Justify)lua_enumFromString_FontJustify(luaL_checkstring(state, 6));
 
-                // Get parameter 6 off the stack.
-                bool param6 = ScriptUtil::luaCheckBool(state, 7);
+                    // Get parameter 6 off the stack.
+                    bool param6 = ScriptUtil::luaCheckBool(state, 7);
 
-                // Get parameter 7 off the stack.
-                bool param7 = ScriptUtil::luaCheckBool(state, 8);
+                    // Get parameter 7 off the stack.
+                    bool param7 = ScriptUtil::luaCheckBool(state, 8);
 
-                Font* instance = getInstance(state);
-                instance->measureText(param1, *param2, param3, param4, param5, param6, param7);
-                
-                return 0;
-            }
-            else
-            {
-                lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+                    Font* instance = getInstance(state);
+                    instance->measureText(param1, *param2, param3, param4, param5, param6, param7);
+                    
+                    return 0;
+                }
+            } while (0);
+
+            lua_pushstring(state, "lua_Font_measureText - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1661,11 +1930,9 @@ int lua_Font_release(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_release - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1695,11 +1962,9 @@ int lua_Font_start(lua_State* state)
                 
                 return 0;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_start - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_start - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1725,7 +1990,7 @@ int lua_Font_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Font::create(param1);
                 if (returnPtr)
@@ -1743,11 +2008,9 @@ int lua_Font_static_create(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         case 2:
@@ -1756,10 +2019,10 @@ int lua_Font_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Font::create(param1, param2);
                 if (returnPtr)
@@ -1777,11 +2040,9 @@ int lua_Font_static_create(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_static_create - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
@@ -1807,7 +2068,7 @@ int lua_Font_static_getJustify(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 Font::Justify result = Font::getJustify(param1);
 
@@ -1816,11 +2077,9 @@ int lua_Font_static_getJustify(lua_State* state)
 
                 return 1;
             }
-            else
-            {
-                lua_pushstring(state, "lua_Font_static_getJustify - Failed to match the given parameters to a valid function signature.");
-                lua_error(state);
-            }
+
+            lua_pushstring(state, "lua_Font_static_getJustify - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
             break;
         }
         default:
