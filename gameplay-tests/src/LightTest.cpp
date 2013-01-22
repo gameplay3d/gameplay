@@ -57,8 +57,10 @@ void LightTest::initialize()
 	Light* directionalLight = Light::createDirectional(Vector3::one());
 	_directionalLightNode = Node::create("directionalLight");
 	_directionalLightNode->setLight(directionalLight);
+    SAFE_RELEASE(directionalLight);
 	Mesh* directionalLightQuadMesh = Mesh::createQuad(-0.3f, -0.3f, 0.6f, 0.6f);
 	_directionalLightQuadModel = Model::create(directionalLightQuadMesh);
+    SAFE_RELEASE(directionalLightQuadMesh);
 	setUnlitMaterialTexture(_directionalLightQuadModel, "res/png/light-directional.png"); 
 	_directionalLightNode->setModel(_directionalLightQuadModel);
     _directionalLightNode->setTranslation(0.0f, 0.0f, 7.0f);
@@ -68,8 +70,10 @@ void LightTest::initialize()
 	Light* spotLight = Light::createSpot(Vector3::one(), 100.0f, MATH_DEG_TO_RAD(30.0f), MATH_DEG_TO_RAD(40.0f));
 	_spotLightNode = Node::create("spotLight");
 	_spotLightNode->setLight(spotLight);
+    SAFE_RELEASE(spotLight);
 	Mesh* spotLightQuadMesh = Mesh::createQuad(-0.3f, -0.3f, 0.6f, 0.6f);
 	_spotLightQuadModel = Model::create(spotLightQuadMesh);
+    SAFE_RELEASE(spotLightQuadMesh);
 	setUnlitMaterialTexture(_spotLightQuadModel, "res/png/light-spot.png");
 	_spotLightNode->setModel(_spotLightQuadModel);
 	_spotLightNode->setTranslation(0.0f, 0.0f, 8.0f);
@@ -79,8 +83,10 @@ void LightTest::initialize()
 	Light* pointLight = Light::createPoint(Vector3::one(), 16.0f);
 	_pointLightNode = Node::create("pointLight");
 	_pointLightNode->setLight(pointLight);
+    SAFE_RELEASE(pointLight);
 	Mesh* pointLightQuadMesh = Mesh::createQuad(-0.3f, -0.3f, 0.6f, 0.6f);
 	_pointLightQuadModel = Model::create(pointLightQuadMesh);
+    SAFE_RELEASE(pointLightQuadMesh);
 	setUnlitMaterialTexture(_pointLightQuadModel, "res/png/light-point.png");
 	_pointLightNode->setModel(_pointLightQuadModel);
 	_pointLightNode->setTranslation(0.0f, 0.0f, 8.0f);
@@ -137,6 +143,13 @@ void LightTest::initialize()
 
 void LightTest::finalize()
 {
+    SAFE_RELEASE(_directionalLightQuadModel);
+    SAFE_RELEASE(_directionalLightNode);
+    SAFE_RELEASE(_spotLightQuadModel);
+    SAFE_RELEASE(_spotLightNode);
+    SAFE_RELEASE(_pointLightQuadModel);
+    SAFE_RELEASE(_pointLightNode);
+    SAFE_RELEASE(_lighting);
     SAFE_RELEASE(_font);
     SAFE_RELEASE(_scene);
     SAFE_RELEASE(_form);
