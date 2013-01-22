@@ -45,7 +45,7 @@
     <category>core.games</category>
 
     <asset path="icon.png">icon.png</asset>
-    <asset path="res/arial18.gpb">res/arial18.gpb</asset>
+    <asset path="res/arial.gpb">res/arial.gpb</asset>
     <asset path="res/editor.form">res/editor.form</asset>
     <asset path="res/editor.png">res/editor.png</asset>
     <asset path="res/editor.theme">res/editor.theme</asset>
