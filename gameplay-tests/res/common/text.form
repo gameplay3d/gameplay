@@ -25,7 +25,7 @@ form textTest
         autoWidth = true
         height = 50
         consumeInputEvents = false
-        text = Font (arial14)
+        text = Font (arial18)
     }
 
     button wrapButton : fontButton

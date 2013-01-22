@@ -74,7 +74,9 @@ void InputTest::render(float elapsedTime)
     Vector4 fontColor(1.0f, 1.0f, 1.0f, 1.0f);
     unsigned int width, height;
     char buffer[50];
+
     _font->start();
+    
     if (isMouseCaptured())
     {
         // Draw crosshair at current offest w.r.t. center of screen
@@ -92,6 +94,7 @@ void InputTest::render(float elapsedTime)
             int y = it->_coord.y - (int)(height>>1);
             _font->drawText(buffer, x, y, fontColor, _font->getSize());
         }
+
         // Mouse
         sprintf(buffer, "M(%d,%d)", (int)_mousePoint.x, (int)_mousePoint.y);
         _font->measureText(buffer, _font->getSize(), &width, &height);
@@ -112,16 +115,19 @@ void InputTest::render(float elapsedTime)
             _font->drawText(buffer, x, y, fontColor, _font->getSize());
         }
     }
+
     // Pressed keys
     if (_keyboardString.length() > 0)
     {
         _font->drawText(_keyboardString.c_str(), 0, 0, fontColor, _font->getSize());
     }
+    
     // Printable symbols typed
     if (_symbolsString.length() > 0)
     {
         _font->drawText(_symbolsString.c_str(), 0, _font->getSize(), fontColor, _font->getSize());
     }
+
     // Held keys
     if (!_downKeys.empty())
     {
@@ -139,6 +145,7 @@ void InputTest::render(float elapsedTime)
             _font->drawText(displayKeys.c_str(), x, y, fontColor, _font->getSize());
         }
     }
+
     // Draw the accelerometer values in the bottom right corner.
     static float pitch, roll;
     static float accelerometerDrawRate = 1000.0f;
@@ -171,7 +178,6 @@ bool InputTest::drawScene(Node* node)
 void InputTest::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     TouchPoint* tp = NULL;
-
     // Not optimal, however we expect the list size to be very small (<10)
     for (std::list<TouchPoint>::iterator it = _touchPoints.begin(); it != _touchPoints.end(); ++it)
     {
