@@ -4,34 +4,9 @@
 #include "FileSystem.h"
 #include "Bundle.h"
 
-// Default font vertex shader
-#define FONT_VSH \
-    "uniform mat4 u_projectionMatrix;\n" \
-    "attribute vec3 a_position;\n" \
-    "attribute vec2 a_texCoord;\n" \
-    "attribute vec4 a_color;\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_Position = u_projectionMatrix * vec4(a_position, 1);\n" \
-        "v_texCoord = a_texCoord;\n" \
-        "v_color = a_color;\n" \
-    "}\n"
-
-// Default font fragment shader
-#define FONT_FSH \
-    "#ifdef OPENGL_ES\n" \
-    "precision highp float;\n" \
-    "#endif\n" \
-    "varying vec2 v_texCoord;\n" \
-    "varying vec4 v_color;\n" \
-    "uniform sampler2D u_texture;\n" \
-    "void main()\n" \
-    "{\n" \
-        "gl_FragColor = v_color;\n" \
-        "gl_FragColor.a = texture2D(u_texture, v_texCoord).a;\n" \
-    "}"
+// Default font shaders
+#define FONT_VSH "res/shaders/font.vert"
+#define FONT_FSH "res/shaders/font.frag"
 
 namespace gameplay
 {
@@ -124,7 +99,7 @@ Font* Font::create(const char* family, Style style, unsigned int size, Glyph* gl
     // Create the effect for the font's sprite batch.
     if (__fontEffect == NULL)
     {
-        __fontEffect = Effect::createFromSource(FONT_VSH, FONT_FSH);
+        __fontEffect = Effect::createFromFile(FONT_VSH, FONT_FSH);
         if (__fontEffect == NULL)
         {
             GP_ERROR("Failed to create effect for font.");
@@ -272,7 +247,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
         }
 
         bool draw = true;
-        if (yPos < area.y)
+        if (yPos < static_cast<int>(area.y))
         {
             // Skip drawing until line break or wrap.
             draw = false;
@@ -401,7 +376,7 @@ Font::Text* Font::createText(const char* text, const Rectangle& area, const Vect
                 size_t tokenLength = strcspn(token, "\n");
 
                 if (tokenLength > 0)
-                {                
+                {
                     // Get first token of next line.
                     token += tokenLength;
                 }
@@ -490,7 +465,7 @@ void Font::drawText(const char* text, int x, int y, const Vector4& color, unsign
 
         GP_ASSERT(_glyphs);
         GP_ASSERT(_batch);
-        for (size_t i = startIndex; i < length && i >= 0; i += iteration)
+        for (size_t i = startIndex; i < length; i += (size_t)iteration)
         {
             char c = 0;
             if (rightToLeft)
@@ -629,7 +604,7 @@ void Font::drawText(const char* text, const Rectangle& area, const Vector4& colo
         }
 
         bool draw = true;
-        if (yPos < area.y - size)
+        if (yPos < static_cast<int>(area.y - size))
         {
             // Skip drawing until line break or wrap.
             draw = false;

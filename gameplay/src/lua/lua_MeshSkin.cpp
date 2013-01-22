@@ -133,7 +133,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     MeshSkin* instance = getInstance(state);
                     void* returnPtr = (void*)instance->getJoint(param1);

@@ -4,6 +4,7 @@
 #include "TTFFontEncoder.h"
 #include "GPBDecoder.h"
 #include "EncoderArguments.h"
+#include "NormalMapGenerator.h"
 
 using namespace gameplay;
 
@@ -100,6 +101,23 @@ int main(int argc, const char** argv)
             std::string realpath(arguments.getFilePath());
             GPBDecoder decoder;
             decoder.readBinary(realpath);
+            break;
+        }
+    case EncoderArguments::FILEFORMAT_PNG:
+    case EncoderArguments::FILEFORMAT_RAW:
+        {
+            if (arguments.normalMapGeneration())
+            {
+                int x, y;
+                arguments.getHeightmapResolution(&x, &y);
+                NormalMapGenerator generator(arguments.getFilePath().c_str(), arguments.getOutputFilePath().c_str(), x, y, arguments.getHeightmapWorldSize());
+                generator.generate();
+            }
+            else
+            {
+                LOG(1, "Error: Nothing to do for specified file format. Did you forget an option?\n");
+                return -1;
+            }
             break;
         }
    default:

@@ -8,6 +8,11 @@ namespace gameplay
 {
 
 class Node;
+class PhysicsRigidBody;
+class PhysicsCharacter;
+class PhysicsGhostObject;
+class PhysicsVehicle;
+class PhysicsVehicleWheel;
 
 /**
  * Base class for all gameplay physics objects that support collision events.
@@ -16,6 +21,8 @@ class PhysicsCollisionObject
 {
     friend class PhysicsController;
     friend class PhysicsConstraint;
+    friend class PhysicsRigidBody;
+    friend class PhysicsGhostObject;
 
 public:
 
@@ -182,7 +189,7 @@ public:
     bool isDynamic() const;
 
     /**
-     * Check if th collision object is enabled.
+     * Check if the collision object is enabled.
      *
      * @return true if the collision object is enabled.
      */
@@ -238,8 +245,53 @@ public:
      */
     bool collidesWith(PhysicsCollisionObject* object) const;
 
+    /**
+     * Returns this collision object as a physics rigid body.
+     *
+     * If this collision object is not of type RIGID_BODY, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsRigidBody.
+     */
+    PhysicsRigidBody* asRigidBody();
+
+    /**
+     * Returns this collision object as a physics character.
+     *
+     * If this collision object is not of type CHARACTER, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsCharacter.
+     */
+    PhysicsCharacter* asCharacter();
+
+    /**
+     * Returns this collision object as a physics ghost object.
+     *
+     * If this collision object is not of type GHOST_OBJECT, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsGhostObject.
+     */
+    PhysicsGhostObject* asGhostObject();
+
+    /**
+     * Returns this collision object as a physics vehicle.
+     *
+     * If this collision object is not of type VEHICLE, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsVehicle.
+     */
+    PhysicsVehicle* asVehicle();
+
+    /**
+     * Returns this collision object as a physics vehicle wheel.
+     *
+     * If this collision object is not of type VEHICLE_WHEEL, this method returns NULL.
+     *
+     * @return This collision object cast to a PhysicsVehicleWheel.
+     */
+    PhysicsVehicleWheel* asVehicleWheel();
 
 protected:
+
     /**
      * Handles collision event callbacks to Lua script functions.
      */
@@ -263,52 +315,6 @@ protected:
     };
 
     /**
-     * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
-     * 
-     * @see btMotionState
-     */
-    class PhysicsMotionState : public btMotionState
-    {
-        friend class PhysicsConstraint;
-
-    public:
-
-        /**
-         * Creates a physics motion state for a rigid body.
-         * 
-         * @param node The node that owns the rigid body that the motion state is being created for.
-         * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
-         */
-        PhysicsMotionState(Node* node, const Vector3* centerOfMassOffset = NULL);
-
-        /**
-         * Destructor.
-         */
-        virtual ~PhysicsMotionState();
-
-        /**
-         * @see btMotionState::getWorldTransform
-         */
-        virtual void getWorldTransform(btTransform &transform) const;
-
-        /**
-         * @see btMotionState::setWorldTransform
-         */
-        virtual void setWorldTransform(const btTransform &transform);
-
-        /**
-         * Updates the motion state's world transform from the GamePlay Node object's world transform.
-         */
-        void updateTransformFromNode() const;
-
-    private:
-
-        Node* _node;
-        btTransform _centerOfMassOffset;
-        mutable btTransform _worldTransform;
-    };
-
-    /**
      * Constructor.
      */
     PhysicsCollisionObject(Node* node);
@@ -324,11 +330,6 @@ protected:
      * Pointer to Node contained by this collision object.
      */ 
     Node* _node;
-
-    /** 
-     * The PhysicsCollisionObject's motion state.
-     */
-    PhysicsMotionState* _motionState;
     
     /**
      * The PhysicsCollisionObject's collision shape.
@@ -344,6 +345,66 @@ protected:
      * The list of script listeners.
      */
     std::vector<ScriptListener*>* _scriptListeners;
+
+private:
+
+    /**
+     * Interface between GamePlay and Bullet to keep object transforms synchronized properly.
+     * 
+     * @see btMotionState
+     */
+    class PhysicsMotionState : public btMotionState
+    {
+        friend class PhysicsConstraint;
+        
+    public:
+        
+        /**
+         * Creates a physics motion state for a rigid body.
+         * 
+         * @param node The node that contains the transformation to be associated with the motion state.
+         * @param collisionObject The collision object that owns the motion state.
+         * @param centerOfMassOffset The translation offset to the center of mass of the rigid body.
+         */
+        PhysicsMotionState(Node* node, PhysicsCollisionObject* collisionObject, const Vector3* centerOfMassOffset = NULL);
+        
+        /**
+         * Destructor.
+         */
+        virtual ~PhysicsMotionState();
+        
+        /**
+         * @see btMotionState::getWorldTransform
+         */
+        virtual void getWorldTransform(btTransform &transform) const;
+        
+        /**
+         * @see btMotionState::setWorldTransform
+         */
+        virtual void setWorldTransform(const btTransform &transform);
+        
+        /**
+         * Updates the motion state's world transform from the GamePlay Node object's world transform.
+         */
+        void updateTransformFromNode() const;
+        
+        /**
+         * Sets the center of mass offset for the associated collision shape.
+         */
+        void setCenterOfMassOffset(const Vector3& centerOfMassOffset);
+        
+    private:
+        
+        Node* _node;
+        PhysicsCollisionObject* _collisionObject;
+        btTransform _centerOfMassOffset;
+        mutable btTransform _worldTransform;
+    };
+
+    /** 
+     * The PhysicsCollisionObject's motion state.
+     */
+    PhysicsMotionState* _motionState;
 };
 
 }

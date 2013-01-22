@@ -23,7 +23,7 @@ using namespace std;
 using namespace gameplay;
 
 @class View;
-@class OSXGamepad;
+@class HIDGamepad;
 
 // Default to 720p
 static int __width = 1280;
@@ -48,6 +48,7 @@ static char* __title = NULL;
 static bool __fullscreen = false;
 static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
+static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
 static bool __cursorVisible = true;
 static View* __view = NULL;
@@ -57,9 +58,9 @@ static NSMutableArray *__gamepads = NULL;
 static IOHIDManagerRef __hidManagerRef = NULL;
 
 // Gamepad Helper Function
-OSXGamepad *gamepadForLocationID(NSNumber *locationID);
-OSXGamepad *gamepadForLocationIDValue(unsigned int locationIDValue);
-OSXGamepad *gamepadForGameHandle(int gameHandle);
+HIDGamepad *gamepadForLocationID(NSNumber *locationID);
+HIDGamepad *gamepadForLocationIDValue(unsigned int locationIDValue);
+HIDGamepad *gamepadForGameHandle(int gameHandle);
 
 
 // IOHid Helper Functions
@@ -88,7 +89,7 @@ double getMachTimeInMilliseconds()
 }
 
 
-@interface OSXGamepadAxis : NSObject
+@interface HIDGamepadAxis : NSObject
 {
     IOHIDElementRef e;
     CFIndex v;
@@ -108,7 +109,7 @@ double getMachTimeInMilliseconds()
 - (CFIndex)value;
 - (void)setValue:(CFIndex)value;
 @end
-@implementation OSXGamepadAxis
+@implementation HIDGamepadAxis
 + gamepadAxisWithAxisElement:(IOHIDElementRef)element
 {
     return [[[[self class] alloc] initWithAxisElement:element] autorelease];
@@ -169,7 +170,7 @@ double getMachTimeInMilliseconds()
 }
 @end
 
-@interface OSXGamepadButton : NSObject
+@interface HIDGamepadButton : NSObject
 {
     IOHIDElementRef e;
     IOHIDElementRef te;
@@ -193,7 +194,7 @@ double getMachTimeInMilliseconds()
 - (bool)state;
 - (void)setState:(bool)state;
 @end
-@implementation OSXGamepadButton
+@implementation HIDGamepadButton
 + gamepadButtonWithButtonElement:(IOHIDElementRef)element
 {
     return [[[[self class] alloc] initWithButtonElement:element] autorelease];
@@ -262,7 +263,7 @@ double getMachTimeInMilliseconds()
 }
 - (float)calibratedStateValue
 {
-    return (float)triggerValue; // TODO: Need to figure out expected range
+    return (float)triggerValue / 255.0f;
 }
 - (bool)state
 {
@@ -274,7 +275,7 @@ double getMachTimeInMilliseconds()
 }
 @end
 
-@interface OSXGamepad : NSObject
+@interface HIDGamepad : NSObject
 {
     IOHIDDeviceRef hidDeviceRef;
     IOHIDQueueRef queueRef;
@@ -293,7 +294,7 @@ double getMachTimeInMilliseconds()
 - (NSNumber*)locationID;
 
 - (void)initializeGamepadElements;
-- (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie;
+- (HIDGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie;
 
 - (bool)startListening;
 - (void)stopListening;
@@ -309,12 +310,12 @@ double getMachTimeInMilliseconds()
 - (NSUInteger)numberOfSticks;
 - (NSUInteger)numberOfButtons;
 - (NSUInteger)numberOfTriggerButtons;
-- (OSXGamepadAxis*)axisAtIndex:(NSUInteger)index;
-- (OSXGamepadButton*)buttonAtIndex:(NSUInteger)index;
-- (OSXGamepadButton*)triggerButtonAtIndex:(NSUInteger)index;
+- (HIDGamepadAxis*)axisAtIndex:(NSUInteger)index;
+- (HIDGamepadButton*)buttonAtIndex:(NSUInteger)index;
+- (HIDGamepadButton*)triggerButtonAtIndex:(NSUInteger)index;
 @end
 
-@implementation OSXGamepad
+@implementation HIDGamepad
 
 @synthesize hidDeviceRef;
 @synthesize queueRef;
@@ -385,7 +386,7 @@ double getMachTimeInMilliseconds()
                 case kHIDUsage_GD_Ry:
                 case kHIDUsage_GD_Rz:
                 {
-                    OSXGamepadAxis *axis = [OSXGamepadAxis gamepadAxisWithAxisElement:hidElement];
+                    HIDGamepadAxis *axis = [HIDGamepadAxis gamepadAxisWithAxisElement:hidElement];
                     [[self axes] addObject:axis];
                 }
                     break;
@@ -399,11 +400,11 @@ double getMachTimeInMilliseconds()
         }
         if(type == kIOHIDElementTypeInput_Button)
         {
-            OSXGamepadButton *button = [OSXGamepadButton gamepadButtonWithButtonElement:hidElement];
+            HIDGamepadButton *button = [HIDGamepadButton gamepadButtonWithButtonElement:hidElement];
             [[self buttons] addObject:button];
         }
     }
-    // Go back and get proprietary information (e.g. triggers) and asscoaite with appropriate values
+    // Go back and get proprietary information (e.g. triggers) and associate with appropriate values
     // Example for other trigger buttons
     uint32_t vendorID = [self vendorID];
     uint32_t productID = [self productID];
@@ -419,31 +420,35 @@ double getMachTimeInMilliseconds()
         {
             if((unsigned long)cookie == 39)
             {
-                OSXGamepadButton *leftTrigger = [self buttonWithCookie:(IOHIDElementCookie)9];
-                if(leftTrigger)
+                //[self buttonAtIndex:8]; 
+                HIDGamepadButton *leftTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)9];
+                if(leftTriggerButton)
                 {
-                    [leftTrigger setTriggerElement:hidElement];
-                    [[self triggerButtons] addObject:leftTrigger];
-                    //[[self buttons] removeObject:leftTrigger]; Defer to gamepad team on this line..  not sure how they intend to tackle
+                    [leftTriggerButton setTriggerElement:hidElement];
+                    [[self triggerButtons] addObject:leftTriggerButton];
+                    // I would have thought this would work but it seems to mess things up, even after re-mapping the buttons.
+                    //[[self buttons] removeObject:leftTriggerButton];
                 }
             }
             if((unsigned long)cookie == 40)
             {
-                OSXGamepadButton *rightTrigger = [self buttonWithCookie:(IOHIDElementCookie)10];
-                if(rightTrigger)
+                //[self buttonAtIndex:9];
+                HIDGamepadButton *rightTriggerButton = [self buttonWithCookie:(IOHIDElementCookie)10];
+                if(rightTriggerButton)
                 {
-                    [rightTrigger setTriggerElement:hidElement];
-                    [[self triggerButtons] addObject:rightTrigger];
-                    //[[self buttons] removeObject:rightTrigger];
+                    [rightTriggerButton setTriggerElement:hidElement];
+                    [[self triggerButtons] addObject:rightTriggerButton];
+                    //[[self buttons] removeObject:rightTriggerButton];
                 }
             }
         }
     }
-    
 }
-- (OSXGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie {
-    for(OSXGamepadButton *b in [self buttons]) {
-        if([b cookie] == cookie) return b;
+
+- (HIDGamepadButton*)buttonWithCookie:(IOHIDElementCookie)cookie {
+    for(HIDGamepadButton *b in [self buttons]) {
+        if([b cookie] == cookie)
+            return b;
     }
     return NULL;
 }
@@ -465,6 +470,7 @@ double getMachTimeInMilliseconds()
         IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
         IOHIDQueueAddElement([self queueRef], hidElement);
     }
+    
     IOHIDQueueScheduleWithRunLoop([self queueRef], CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     
     return true;
@@ -538,9 +544,9 @@ double getMachTimeInMilliseconds()
     return [[self triggerButtons] count];
 }
 
-- (OSXGamepadButton*)triggerButtonAtIndex:(NSUInteger)index
+- (HIDGamepadButton*)triggerButtonAtIndex:(NSUInteger)index
 {
-    OSXGamepadButton *b = NULL;
+    HIDGamepadButton *b = NULL;
     if(index < [[self triggerButtons] count])
     {
         b = [[self triggerButtons] objectAtIndex:index];
@@ -548,18 +554,18 @@ double getMachTimeInMilliseconds()
     return b;
 }
 
-- (OSXGamepadAxis*)axisAtIndex:(NSUInteger)index
+- (HIDGamepadAxis*)axisAtIndex:(NSUInteger)index
 {
-    OSXGamepadAxis *a = NULL;
+    HIDGamepadAxis *a = NULL;
     if(index < [[self axes] count])
     {
         a = [[self axes] objectAtIndex:index];
     }
     return a;
 }
-- (OSXGamepadButton*)buttonAtIndex:(NSUInteger)index
+- (HIDGamepadButton*)buttonAtIndex:(NSUInteger)index
 {
-    OSXGamepadButton *b = NULL;
+    HIDGamepadButton *b = NULL;
     if(index < [[self buttons] count])
     {
         b = [[self buttons] objectAtIndex:index];
@@ -569,25 +575,30 @@ double getMachTimeInMilliseconds()
 - (NSArray*)watchedElements
 {
     NSMutableArray *r = [NSMutableArray array];
-    for(OSXGamepadButton *b in [self buttons])
+    for(HIDGamepadButton *b in [self buttons])
     {
         [r addObject:(id)[b element]];
     }
-    for(OSXGamepadAxis *a in [self axes])
+    for(HIDGamepadAxis *a in [self axes])
     {
         [r addObject:(id)[a element]];
     }
+    for(HIDGamepadButton* t in [self triggerButtons])
+    {
+        [r addObject:(id)[t triggerElement]];
+    }
     return [NSArray arrayWithArray:r];
 }
+
 - (void)hidValueAvailable:(IOHIDValueRef)value
 {
     IOHIDElementRef element = IOHIDValueGetElement(value);
-	IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
+    IOHIDElementCookie cookie = IOHIDElementGetCookie(element);
     
     if(IOHIDValueGetLength(value) > 4) return; // saftey precaution for PS3 cotroller
     CFIndex integerValue = IOHIDValueGetIntegerValue(value);
     
-    for(OSXGamepadAxis *a in [self axes])
+    for(HIDGamepadAxis *a in [self axes])
     {
         if([a cookie] == cookie)
         {
@@ -595,7 +606,7 @@ double getMachTimeInMilliseconds()
         }
     }
     
-    for(OSXGamepadButton *b in [self buttons])
+    for(HIDGamepadButton *b in [self buttons])
     {
         if([b cookie] == cookie)
         {
@@ -604,7 +615,7 @@ double getMachTimeInMilliseconds()
         }
     }
     
-    for(OSXGamepadButton *b in [self triggerButtons])
+    for(HIDGamepadButton *b in [self triggerButtons])
     {
         if([b triggerCookie] == cookie)
         {
@@ -619,6 +630,8 @@ double getMachTimeInMilliseconds()
 @end
 
 
+
+
 @interface View : NSOpenGLView <NSWindowDelegate>
 {
 @public
@@ -627,8 +640,10 @@ double getMachTimeInMilliseconds()
 
 @protected
     Game* _game;
-    unsigned int _gestureEvents;    
-}
+    unsigned int _gestureEvents;
+}    
+- (void) detectGamepads: (Game*) game;
+
 @end
 
 
@@ -653,6 +668,43 @@ double getMachTimeInMilliseconds()
     return kCVReturnSuccess;
 }
 
+- (void) detectGamepads: (Game*) game
+{
+    // Locate any newly connected devices
+    for(HIDGamepad* gamepad in __gamepads)
+    {
+        NSNumber* locationID = [gamepad locationID];
+        if([__activeGamepads objectForKey:locationID] == NULL)
+        {            
+            // Gameplay::add is friended to Platform, but we're not in Platform right now.
+            Platform::gamepadEventConnectedInternal((unsigned int)[locationID intValue],
+                                                    [gamepad numberOfButtons],
+                                                    [gamepad numberOfSticks],
+                                                    [gamepad numberOfTriggerButtons],
+                                                    [gamepad vendorID],
+                                                    [gamepad productID],
+                                                    [[gamepad manufacturerName] cStringUsingEncoding:NSASCIIStringEncoding],
+                                                    [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding]);
+
+            [__activeGamepads setObject:locationID forKey:locationID];
+        }
+    }
+    
+    // Detect any disconnected gamepads
+    NSMutableArray* deadGamepads = [NSMutableArray array];
+    for(NSNumber* locationID in __activeGamepads)
+    {
+        HIDGamepad* gamepad = gamepadForLocationID(locationID);
+        if(gamepad == NULL)
+        {
+            NSNumber* gameHandle = [__activeGamepads objectForKey:locationID];
+            Platform::gamepadEventDisconnectedInternal((unsigned int)[locationID intValue]);
+            [deadGamepads addObject:locationID];
+        }
+    }
+    [__activeGamepads removeObjectsForKeys:deadGamepads];
+}
+
 -(void) update
 {       
     [gameLock lock];
@@ -661,6 +713,8 @@ double getMachTimeInMilliseconds()
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
     if (_game)
     {
+        [self detectGamepads: _game];
+        
         _game->frame();
     }
     CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
@@ -848,8 +902,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
     
+    float y;
     if (__mouseCaptured)
     {
+        if (__mouseCapturedFirstPass)
+        {
+            // Discard the first mouseMoved event following transition into capture
+            // since it contains bogus x,y data.
+            __mouseCapturedFirstPass = false;
+            return;
+        }
+
         point.x = [event deltaX];
         point.y = [event deltaY];
 
@@ -859,15 +922,20 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         centerPoint.x = rect.origin.x + (rect.size.width / 2);
         centerPoint.y = rect.origin.y + (rect.size.height / 2);
         CGDisplayMoveCursorToPoint(CGDisplayPrimaryDisplay(NULL), centerPoint);
+        y = point.y;
+    }
+    else
+    {
+        y = __height - point.y;
     }
     
-    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
 }
 
 - (void) mouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__leftMouseDown)
+    if (__leftMouseDown && !__mouseCaptured)
     {
         [self mouse: Mouse::MOUSE_MOVE orTouchEvent: Touch::TOUCH_MOVE x: point.x y: __height - point.y s: 0];
     }
@@ -961,6 +1029,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 int getKey(unsigned short keyCode, unsigned int modifierFlags)
 {
     __shiftDown = (modifierFlags & NSShiftKeyMask);
+    unsigned int caps = (__shiftDown ? 1 : 0) ^ ((modifierFlags & NSAlphaShiftKeyMask) ? 1 : 0);
     switch(keyCode)
     {
         case 0x69:
@@ -1098,60 +1167,178 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
             return __shiftDown ? Keyboard::KEY_QUOTE : Keyboard::KEY_APOSTROPHE;
             
         case 0x00:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_A : Keyboard::KEY_A;
+            return caps ? Keyboard::KEY_CAPITAL_A : Keyboard::KEY_A;
         case 0x0B:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_B : Keyboard::KEY_B;
+            return caps ? Keyboard::KEY_CAPITAL_B : Keyboard::KEY_B;
         case 0x08:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_C : Keyboard::KEY_C;
+            return caps ? Keyboard::KEY_CAPITAL_C : Keyboard::KEY_C;
         case 0x02:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_D : Keyboard::KEY_D;
+            return caps ? Keyboard::KEY_CAPITAL_D : Keyboard::KEY_D;
         case 0x0E:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_E : Keyboard::KEY_E;
+            return caps ? Keyboard::KEY_CAPITAL_E : Keyboard::KEY_E;
         case 0x03:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_F : Keyboard::KEY_F;
+            return caps ? Keyboard::KEY_CAPITAL_F : Keyboard::KEY_F;
         case 0x05:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_G : Keyboard::KEY_G;
+            return caps ? Keyboard::KEY_CAPITAL_G : Keyboard::KEY_G;
         case 0x04:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_H : Keyboard::KEY_H;
+            return caps ? Keyboard::KEY_CAPITAL_H : Keyboard::KEY_H;
         case 0x22:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_I : Keyboard::KEY_I;
+            return caps ? Keyboard::KEY_CAPITAL_I : Keyboard::KEY_I;
         case 0x26:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_J : Keyboard::KEY_J;
+            return caps ? Keyboard::KEY_CAPITAL_J : Keyboard::KEY_J;
         case 0x28:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_K : Keyboard::KEY_K;
+            return caps ? Keyboard::KEY_CAPITAL_K : Keyboard::KEY_K;
         case 0x25:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_L : Keyboard::KEY_L;
+            return caps ? Keyboard::KEY_CAPITAL_L : Keyboard::KEY_L;
         case 0x2E:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_M : Keyboard::KEY_M;
+            return caps ? Keyboard::KEY_CAPITAL_M : Keyboard::KEY_M;
         case 0x2D:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_N : Keyboard::KEY_N;
+            return caps ? Keyboard::KEY_CAPITAL_N : Keyboard::KEY_N;
         case 0x1F:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_O : Keyboard::KEY_O;
+            return caps ? Keyboard::KEY_CAPITAL_O : Keyboard::KEY_O;
         case 0x23:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_P : Keyboard::KEY_P;
+            return caps ? Keyboard::KEY_CAPITAL_P : Keyboard::KEY_P;
         case 0x0C:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_Q : Keyboard::KEY_Q;
+            return caps ? Keyboard::KEY_CAPITAL_Q : Keyboard::KEY_Q;
         case 0x0F:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_R : Keyboard::KEY_R;
+            return caps ? Keyboard::KEY_CAPITAL_R : Keyboard::KEY_R;
         case 0x01:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_S : Keyboard::KEY_S;
+            return caps ? Keyboard::KEY_CAPITAL_S : Keyboard::KEY_S;
         case 0x11:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_T : Keyboard::KEY_T;
+            return caps ? Keyboard::KEY_CAPITAL_T : Keyboard::KEY_T;
         case 0x20:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_U : Keyboard::KEY_U;
+            return caps ? Keyboard::KEY_CAPITAL_U : Keyboard::KEY_U;
         case 0x09:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_V : Keyboard::KEY_V;
+            return caps ? Keyboard::KEY_CAPITAL_V : Keyboard::KEY_V;
         case 0x0D:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_W : Keyboard::KEY_W;
+            return caps ? Keyboard::KEY_CAPITAL_W : Keyboard::KEY_W;
         case 0x07:
-             return __shiftDown ? Keyboard::KEY_CAPITAL_X : Keyboard::KEY_X;
+            return caps ? Keyboard::KEY_CAPITAL_X : Keyboard::KEY_X;
         case 0x10:
-            return __shiftDown ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
+            return caps ? Keyboard::KEY_CAPITAL_Y : Keyboard::KEY_Y;
         case 0x06:
-            return __shiftDown ? Keyboard::KEY_CAPITAL_Z : Keyboard::KEY_Z;
+            return caps ? Keyboard::KEY_CAPITAL_Z : Keyboard::KEY_Z;
 
         default:
             return Keyboard::KEY_NONE;
+    }
+}
+
+/**
+ * Returns the unicode value for the given keycode or zero if the key is not a valid printable character.
+ */
+int getUnicode(int key)
+{
+    
+    switch (key)
+    {
+        case Keyboard::KEY_BACKSPACE:
+            return 0x0008;
+        case Keyboard::KEY_TAB:
+            return 0x0009;
+        case Keyboard::KEY_RETURN:
+        case Keyboard::KEY_KP_ENTER:
+            return 0x000A;
+        case Keyboard::KEY_ESCAPE:
+            return 0x001B;
+        case Keyboard::KEY_SPACE:
+        case Keyboard::KEY_EXCLAM:
+        case Keyboard::KEY_QUOTE:
+        case Keyboard::KEY_NUMBER:
+        case Keyboard::KEY_DOLLAR:
+        case Keyboard::KEY_PERCENT:
+        case Keyboard::KEY_CIRCUMFLEX:
+        case Keyboard::KEY_AMPERSAND:
+        case Keyboard::KEY_APOSTROPHE:
+        case Keyboard::KEY_LEFT_PARENTHESIS:
+        case Keyboard::KEY_RIGHT_PARENTHESIS:
+        case Keyboard::KEY_ASTERISK:
+        case Keyboard::KEY_PLUS:
+        case Keyboard::KEY_COMMA:
+        case Keyboard::KEY_MINUS:
+        case Keyboard::KEY_PERIOD:
+        case Keyboard::KEY_SLASH:
+        case Keyboard::KEY_ZERO:
+        case Keyboard::KEY_ONE:
+        case Keyboard::KEY_TWO:
+        case Keyboard::KEY_THREE:
+        case Keyboard::KEY_FOUR:
+        case Keyboard::KEY_FIVE:
+        case Keyboard::KEY_SIX:
+        case Keyboard::KEY_SEVEN:
+        case Keyboard::KEY_EIGHT:
+        case Keyboard::KEY_NINE:
+        case Keyboard::KEY_COLON:
+        case Keyboard::KEY_SEMICOLON:
+        case Keyboard::KEY_LESS_THAN:
+        case Keyboard::KEY_EQUAL:
+        case Keyboard::KEY_GREATER_THAN:
+        case Keyboard::KEY_QUESTION:
+        case Keyboard::KEY_AT:
+        case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_CAPITAL_B:
+        case Keyboard::KEY_CAPITAL_C:
+        case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_CAPITAL_E:
+        case Keyboard::KEY_CAPITAL_F:
+        case Keyboard::KEY_CAPITAL_G:
+        case Keyboard::KEY_CAPITAL_H:
+        case Keyboard::KEY_CAPITAL_I:
+        case Keyboard::KEY_CAPITAL_J:
+        case Keyboard::KEY_CAPITAL_K:
+        case Keyboard::KEY_CAPITAL_L:
+        case Keyboard::KEY_CAPITAL_M:
+        case Keyboard::KEY_CAPITAL_N:
+        case Keyboard::KEY_CAPITAL_O:
+        case Keyboard::KEY_CAPITAL_P:
+        case Keyboard::KEY_CAPITAL_Q:
+        case Keyboard::KEY_CAPITAL_R:
+        case Keyboard::KEY_CAPITAL_S:
+        case Keyboard::KEY_CAPITAL_T:
+        case Keyboard::KEY_CAPITAL_U:
+        case Keyboard::KEY_CAPITAL_V:
+        case Keyboard::KEY_CAPITAL_W:
+        case Keyboard::KEY_CAPITAL_X:
+        case Keyboard::KEY_CAPITAL_Y:
+        case Keyboard::KEY_CAPITAL_Z:
+        case Keyboard::KEY_LEFT_BRACKET:
+        case Keyboard::KEY_BACK_SLASH:
+        case Keyboard::KEY_RIGHT_BRACKET:
+        case Keyboard::KEY_UNDERSCORE:
+        case Keyboard::KEY_GRAVE:
+        case Keyboard::KEY_A:
+        case Keyboard::KEY_B:
+        case Keyboard::KEY_C:
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_E:
+        case Keyboard::KEY_F:
+        case Keyboard::KEY_G:
+        case Keyboard::KEY_H:
+        case Keyboard::KEY_I:
+        case Keyboard::KEY_J:
+        case Keyboard::KEY_K:
+        case Keyboard::KEY_L:
+        case Keyboard::KEY_M:
+        case Keyboard::KEY_N:
+        case Keyboard::KEY_O:
+        case Keyboard::KEY_P:
+        case Keyboard::KEY_Q:
+        case Keyboard::KEY_R:
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_T:
+        case Keyboard::KEY_U:
+        case Keyboard::KEY_V:
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_X:
+        case Keyboard::KEY_Y:
+        case Keyboard::KEY_Z:
+        case Keyboard::KEY_LEFT_BRACE:
+        case Keyboard::KEY_BAR:
+        case Keyboard::KEY_RIGHT_BRACE:
+        case Keyboard::KEY_TILDE:
+            return key;
+        default:
+            return 0;
     }
 }
 
@@ -1195,7 +1382,14 @@ int getKey(unsigned short keyCode, unsigned int modifierFlags)
 {
     if ([event isARepeat] == NO)
     {
-        gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, getKey([event keyCode], [event modifierFlags]));
+        int key = getKey([event keyCode], [event modifierFlags]);
+        gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, key);
+        
+        int character = getUnicode(key);
+        if (character)
+        {
+            gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
+        }
     }
 }
 
@@ -1335,6 +1529,12 @@ int Platform::enterMessagePump()
 
             // Read fullscreen state.
             __fullscreen = config->getBool("fullscreen");
+            if (__fullscreen && width == 0 && height == 0)
+            {
+                CGRect mainMonitor = CGDisplayBounds(CGMainDisplayID());
+                __width = CGRectGetWidth(mainMonitor);
+                __height = CGRectGetHeight(mainMonitor);
+            }
         }
     }
 
@@ -1477,6 +1677,7 @@ void Platform::setMouseCaptured(bool captured)
         if (captured)
         {
             [NSCursor hide];
+            __mouseCapturedFirstPass = true;
         }
         else
         {   
@@ -1567,6 +1768,22 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     
     return result;
 }
+    
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
+{
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+}
+
+void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
+{
+    Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
+}
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
@@ -1600,148 +1817,86 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
      return [__view isGestureRegistered:evt];
 }
 
-unsigned int Platform::getGamepadsConnected()
+void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    Game* game = Game::getInstance();
+    HIDGamepad* gp = gamepadForGameHandle(gamepad->_handle);
     
-    if(game->isInitialized())
+    if (gp)
     {
-        // Locate any newly connected devices
-        for(OSXGamepad* gamepad in __gamepads)
+        // Haven't figured out how to have the triggers not also show up in the buttons array.
+        // So for now a value of -1 means "Don't map this button."
+        static const int PS3Mapping[17] = {
+            Gamepad::BUTTON_MENU1,  // 0x0001
+            Gamepad::BUTTON_L3,     // 0x0002
+            Gamepad::BUTTON_R3,     // 0x0004
+            Gamepad::BUTTON_MENU2,  // 0x0008
+            Gamepad::BUTTON_UP,     // 0x0010
+            Gamepad::BUTTON_RIGHT,  // 0x0020
+            Gamepad::BUTTON_DOWN,   // 0x0040
+            Gamepad::BUTTON_LEFT,   // 0x0080
+            -1,                     // Gamepad::BUTTON_L2,     // 0x0100
+            -1,                     // Gamepad::BUTTON_R2,     // 0x0200
+            Gamepad::BUTTON_L1,     // 0x0400
+            Gamepad::BUTTON_R1,     // 0x0800
+            Gamepad::BUTTON_Y,      // 0x1000
+            Gamepad::BUTTON_B,      // 0x2000
+            Gamepad::BUTTON_A,      // 0x4000
+            Gamepad::BUTTON_X,      // 0x8000
+            Gamepad::BUTTON_MENU3   // 0x10000
+        };
+        
+        const int* mapping = NULL;
+        if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
+            gamepad->_productId == SONY_USB_PS3_PRODUCT_ID)
         {
-            NSNumber* locationID = [gamepad locationID];
-            if([__activeGamepads objectForKey:locationID] == NULL)
-            {
-                unsigned int handle = game->createGamepad([[gamepad identifierName] cStringUsingEncoding:NSASCIIStringEncoding],
-                                                          [locationID unsignedIntValue],
-                                                          [gamepad numberOfButtons],
-                                                          [gamepad numberOfSticks],
-                                                          [gamepad numberOfTriggerButtons]);
-                NSNumber* handleObj = [NSNumber numberWithUnsignedInt:handle];
-                [__activeGamepads setObject:handleObj forKey:locationID];
-                game->gamepadEvent(Gamepad::CONNECTED_EVENT, game->getGamepad(handle));
-            }
+            mapping = PS3Mapping;
         }
         
-        // Detect any disconnected gamepads
-        NSMutableArray* deadGamepads = [NSMutableArray array];
-        for(NSNumber* locationID in __activeGamepads)
+        gamepad->_buttons = 0;
+        
+        for (int i = 0; i < [gp numberOfButtons]; ++i)
         {
-            OSXGamepad* gamepad = gamepadForLocationID(locationID);
-            if(gamepad == NULL)
+            HIDGamepadButton* b = [gp buttonAtIndex: i];
+            if ([b state])
             {
-                NSNumber* gameHandle = [__activeGamepads objectForKey:locationID];
-                game->gamepadEvent(Gamepad::DISCONNECTED_EVENT, game->getGamepad([gameHandle unsignedIntValue]));
-                [deadGamepads addObject:locationID];
+                // This button is down.
+                if (mapping)
+                {
+                    if (mapping[i] >= 0)
+                        gamepad->_buttons |= (1 << mapping[i]);
+                }
+                else
+                {
+                    gamepad->_buttons |= (1 << i);
+                }
             }
         }
-        [__activeGamepads removeObjectsForKeys:deadGamepads];
-    }
-    return [__gamepads count];
-}
 
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    return (gamepad != NULL);
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    if(gamepad)
-    {
-        return [[gamepad productName] cStringUsingEncoding:NSASCIIStringEncoding];
-    }
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    if(gamepad)
-    {
-        return [gamepad numberOfButtons];
-    }
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadButton* button = [gamepad buttonAtIndex:buttonIndex];
-    if(button)
-    {
-        return [button state];
-    }
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    if(gamepad)
-    {
-        return [gamepad numberOfSticks];
-    }
-    return 0;
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return true;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadAxis* xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
-    return [xAxis calibratedValue];
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadAxis* yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
-    return [yAxis calibratedValue];
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
-{
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadAxis* xAxis = [gamepad axisAtIndex:(joystickIndex*2)];
-    OSXGamepadAxis* yAxis = [gamepad axisAtIndex:((joystickIndex*2)+1)];
-    if(outValue)
-    {
-        outValue->x = [xAxis calibratedValue];
-        outValue->y = [yAxis calibratedValue];
+        for (unsigned int i = 0; i < [gp numberOfSticks]; ++i)
+        {
+            float rawX = [[gp axisAtIndex: i*2] calibratedValue];
+            float rawY = -[[gp axisAtIndex: i*2 + 1] calibratedValue];
+            if (std::fabs(rawX) <= 0.07f)
+                rawX = 0;
+            if (std::fabs(rawY) <= 0.07f)
+                rawY = 0;
+            gamepad->_joysticks[i].x = rawX;
+            gamepad->_joysticks[i].y = rawY;
+        }
+        
+        for (unsigned int i = 0; i < [gp numberOfTriggerButtons]; ++i)
+        {
+            gamepad->_triggers[i] = [[gp triggerButtonAtIndex: i] calibratedStateValue];
+        }
     }
 }
 
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
-{
-    OSXGamepad *gamepad = gamepadForLocationIDValue(gamepadHandle);
-    return [gamepad numberOfTriggerButtons];
 }
 
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
+HIDGamepad* gamepadForLocationID(NSNumber* locationID)
 {
-    OSXGamepad* gamepad = gamepadForLocationIDValue(gamepadHandle);
-    OSXGamepadButton* button = [gamepad triggerButtonAtIndex:triggerIndex];
-    if(button)
-    {
-        return [button stateValue];
-    }
-    return 0.0f;
-}
-
-}
-
-
-OSXGamepad* gamepadForLocationID(NSNumber* locationID)
-{
-    OSXGamepad* fgamepad = NULL;
-    for(OSXGamepad* gamepad in __gamepads)
+    HIDGamepad* fgamepad = NULL;
+    for(HIDGamepad* gamepad in __gamepads)
     {
         if([[gamepad locationID] isEqual:locationID])
         {
@@ -1752,14 +1907,14 @@ OSXGamepad* gamepadForLocationID(NSNumber* locationID)
     return fgamepad;
 }
 
-OSXGamepad* gamepadForLocationIDValue(unsigned int locationIDValue)
+HIDGamepad* gamepadForLocationIDValue(unsigned int locationIDValue)
 {
     return gamepadForLocationID([NSNumber numberWithUnsignedInt:locationIDValue]);
 }
 
-OSXGamepad* gamepadForGameHandle(int gameHandle)
+HIDGamepad* gamepadForGameHandle(int gameHandle)
 {
-    OSXGamepad* gamepad = NULL;
+    HIDGamepad* gamepad = NULL;
     for(NSNumber* locationID in __activeGamepads)
     {
         NSNumber* handleID = [__activeGamepads objectForKey:locationID];
@@ -1816,25 +1971,25 @@ CFMutableDictionaryRef IOHIDCreateDeviceMatchingDictionary(UInt32 inUsagePage, U
 
 CFStringRef IOHIDDeviceGetStringProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return NULL;
-	}
+        return NULL;
+    }
     return (CFStringRef)typeRef;
 }
 
 int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key) 
 {
-	CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
-	if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
+    CFTypeRef typeRef = IOHIDDeviceGetProperty(deviceRef, key);
+    if (typeRef == NULL || CFGetTypeID(typeRef) != CFNumberGetTypeID()) 
     {
-		return 0;
-	}
+        return 0;
+    }
     
     int value;
-	CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
-	return value;
+    CFNumberGetValue((CFNumberRef) typeRef, kCFNumberSInt32Type, &value);
+    return value;
 }
 
 static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 
@@ -1842,7 +1997,7 @@ static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void
     CFNumberRef locID = (CFNumberRef)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDLocationIDKey));
     if(locID)
     {
-        OSXGamepad* gamepad = [[OSXGamepad alloc] initWithDevice:inIOHIDDeviceRef];
+        HIDGamepad* gamepad = [[HIDGamepad alloc] initWithDevice:inIOHIDDeviceRef];
         [__gamepads addObject:gamepad];
     }
     
@@ -1856,7 +2011,7 @@ static void hidDeviceRemovalCallback(void* inContext, IOReturn inResult, void* i
     {
         for(int i = 0; i < [__gamepads count]; i++)
         {
-            OSXGamepad* gamepad = [__gamepads objectAtIndex:i];
+            HIDGamepad* gamepad = [__gamepads objectAtIndex:i];
             if([[gamepad locationID] isEqual:locID])
             {
                 removeIndex = i;
@@ -1872,7 +2027,7 @@ static void hidDeviceRemovalCallback(void* inContext, IOReturn inResult, void* i
 
 static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult,  void* inSender)
 {
-    OSXGamepad* d = (OSXGamepad*)inContext;
+    HIDGamepad* d = (HIDGamepad*)inContext;
     do
     {
         IOHIDValueRef valueRef = IOHIDQueueCopyNextValueWithTimeout( ( IOHIDQueueRef ) inSender, 0. );
@@ -1881,4 +2036,22 @@ static void hidDeviceValueAvailableCallback(void* inContext, IOReturn inResult, 
         CFRelease(valueRef); // Don't forget to release our HID value reference
     } while (1);
 }
+
+bool Platform::launchURL(const char *url)
+{
+    if (url == NULL || *url == '\0')
+        return false;
+
+    CFURLRef urlRef = CFURLCreateWithBytes(
+        NULL,
+        (UInt8*)url,
+        strlen(url),
+        kCFStringEncodingASCII,
+        NULL
+    );
+    const OSStatus err = LSOpenCFURLRef(urlRef, 0);
+    CFRelease(urlRef);
+    return (err == noErr);
+}
+
 #endif

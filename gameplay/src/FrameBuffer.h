@@ -9,13 +9,17 @@ namespace gameplay
 {
 
 /**
- * Defines a video output off all graphics buffer containing a complete frame of data.
- * This consists of a RenderTarget and DepthStencilTarget holding the color, depth and
- * stencil data in the rendering frame. 
- * 
- * to change the default Game framebuffer call Game::setFrameBuffer(myFrameBuffer);
- * To restore back to the default call Game::setFrameBuffer(NULL).
- * This is useful for rendering shadows and other post-processing effects.
+ * Defines a frame buffer object that may contain one or more render targets and optionally
+ * a depth-stencil target.
+ *
+ * Frame buffers can be created and used for off-screen rendering, which is useful for 
+ * techniques such as shadow mapping and post-processing. Render targets within a frame
+ * buffer can be both written to and read (by calling RenderTarget::getTexture).
+ *
+ * When binding a custom frame buffer, you should always store the return value of 
+ * FrameBuffer::bind and restore it when you are finished drawing to your frame buffer.
+ *
+ * To bind the default frame buffer, call FrameBuffer::bindDefault.
  */
 class FrameBuffer : public Ref
 {
@@ -125,22 +129,27 @@ public:
     DepthStencilTarget* getDepthStencilTarget() const;
  
     /**
-     * Binds this FrameBuffer for off-screen rendering.
+     * Binds this FrameBuffer for off-screen rendering and return you the curently bound one.
+     *
+     * You should keep the return FrameBuffer and store it and call bind() when you rendering is complete.
+     *
+     * @ return The currently bound framebuffer.
      */
-    void bind();
+    FrameBuffer* bind();
 
     /**
      * Binds the default FrameBuffer for rendering to the display.
+     *
+     * @ return The default framebuffer.
      */
-    static void bindDefault(); 
+    static FrameBuffer* bindDefault(); 
      
 private:
-
 
     /**
      * Constructor.
      */
-    FrameBuffer(const char* id, unsigned int width, unsigned int height);
+    FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle);
 
     /**
      * Destructor.
@@ -154,6 +163,8 @@ private:
 
     static void initialize();
 
+    static void finalize();
+
     static bool isPowerOfTwo(unsigned int value);
 
     std::string _id;
@@ -162,6 +173,11 @@ private:
     FrameBufferHandle _handle;
     RenderTarget** _renderTargets;
     DepthStencilTarget* _depthStencilTarget;
+
+    static unsigned int _maxRenderTargets;
+    static std::vector<FrameBuffer*> _frameBuffers;
+    static FrameBuffer* _defaultFrameBuffer;
+    static FrameBuffer* _currentFrameBuffer;
 };
 
 }

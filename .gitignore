@@ -9,7 +9,9 @@ Icon?
 Thumbs.db
 /.metadata
 /169.254.0.1
+/usb
 /ipch
+/build
 /cmake
 /Debug
 /Release
@@ -45,6 +47,7 @@ Thumbs.db
 /gameplay/Device-Release
 /gameplay.xcworkspace/xcuserdata
 /gameplay/gameplay.xcodeproj/xcuserdata
+/gameplay/windows
 /gameplay/android/NUL
 /gameplay/android/proguard.cfg
 /gameplay/android/proguard-project.txt

@@ -87,7 +87,7 @@ int lua_Logger_static_log(lua_State* state)
                 Logger::Level param1 = (Logger::Level)lua_enumFromString_LoggerLevel(luaL_checkstring(state, 1));
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 Logger::log(param1, param2);
                 
@@ -125,7 +125,7 @@ int lua_Logger_static_set(lua_State* state)
                 Logger::Level param1 = (Logger::Level)lua_enumFromString_LoggerLevel(luaL_checkstring(state, 1));
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 Logger::set(param1, param2);
                 

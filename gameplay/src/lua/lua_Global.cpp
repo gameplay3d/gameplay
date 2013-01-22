@@ -74,6 +74,7 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Ref", "Font");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Form");
     ScriptUtil::setGlobalHierarchyPair("Ref", "FrameBuffer");
+    ScriptUtil::setGlobalHierarchyPair("Ref", "HeightField");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
@@ -95,6 +96,7 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Ref", "Scene");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Slider");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Technique");
+    ScriptUtil::setGlobalHierarchyPair("Ref", "Terrain");
     ScriptUtil::setGlobalHierarchyPair("Ref", "TextBox");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Texture");
     ScriptUtil::setGlobalHierarchyPair("Ref", "Texture::Sampler");
@@ -130,6 +132,7 @@ void luaRegister_lua_Global()
     ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsCharacter");
     ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsGhostObject");
     ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "PhysicsRigidBody");
+    ScriptUtil::setGlobalHierarchyPair("Transform::Listener", "Terrain");
     ScriptUtil::addStringFromEnumConversionFunction(&gameplay::lua_stringFromEnumGlobal);
 
     // Register enumeration AIMessage::ParameterType.
@@ -342,12 +345,30 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("PAUSED", "PAUSED", scopePath);
     }
 
-    // Register enumeration Gamepad::ButtonState.
+    // Register enumeration Gamepad::ButtonMapping.
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Gamepad");
-        ScriptUtil::registerConstantString("BUTTON_PRESSED", "BUTTON_PRESSED", scopePath);
-        ScriptUtil::registerConstantString("BUTTON_RELEASED", "BUTTON_RELEASED", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_A", "BUTTON_A", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_B", "BUTTON_B", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_C", "BUTTON_C", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_X", "BUTTON_X", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_Y", "BUTTON_Y", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_Z", "BUTTON_Z", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU1", "BUTTON_MENU1", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU2", "BUTTON_MENU2", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU3", "BUTTON_MENU3", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_MENU4", "BUTTON_MENU4", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_L1", "BUTTON_L1", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_L2", "BUTTON_L2", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_L3", "BUTTON_L3", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_R1", "BUTTON_R1", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_R2", "BUTTON_R2", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_R3", "BUTTON_R3", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_UP", "BUTTON_UP", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_DOWN", "BUTTON_DOWN", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_LEFT", "BUTTON_LEFT", scopePath);
+        ScriptUtil::registerConstantString("BUTTON_RIGHT", "BUTTON_RIGHT", scopePath);
     }
 
     // Register enumeration Gamepad::GamepadEvent.
@@ -651,6 +672,7 @@ void luaRegister_lua_Global()
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("PhysicsCollisionShape");
+        ScriptUtil::registerConstantString("SHAPE_NONE", "SHAPE_NONE", scopePath);
         ScriptUtil::registerConstantString("SHAPE_BOX", "SHAPE_BOX", scopePath);
         ScriptUtil::registerConstantString("SHAPE_SPHERE", "SHAPE_SPHERE", scopePath);
         ScriptUtil::registerConstantString("SHAPE_CAPSULE", "SHAPE_CAPSULE", scopePath);
@@ -696,6 +718,9 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("CAMERA_WORLD_POSITION", "CAMERA_WORLD_POSITION", scopePath);
         ScriptUtil::registerConstantString("CAMERA_VIEW_POSITION", "CAMERA_VIEW_POSITION", scopePath);
         ScriptUtil::registerConstantString("MATRIX_PALETTE", "MATRIX_PALETTE", scopePath);
+        ScriptUtil::registerConstantString("SCENE_AMBIENT_COLOR", "SCENE_AMBIENT_COLOR", scopePath);
+        ScriptUtil::registerConstantString("SCENE_LIGHT_COLOR", "SCENE_LIGHT_COLOR", scopePath);
+        ScriptUtil::registerConstantString("SCENE_LIGHT_DIRECTION", "SCENE_LIGHT_DIRECTION", scopePath);
     }
 
     // Register enumeration RenderState::Blend.
@@ -717,12 +742,35 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("BLEND_SRC_ALPHA_SATURATE", "BLEND_SRC_ALPHA_SATURATE", scopePath);
     }
 
+    // Register enumeration RenderState::DepthFunction.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("RenderState");
+        ScriptUtil::registerConstantString("DEPTH_NEVER", "DEPTH_NEVER", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_LESS", "DEPTH_LESS", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_EQUAL", "DEPTH_EQUAL", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_LEQUAL", "DEPTH_LEQUAL", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_GREATER", "DEPTH_GREATER", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_NOTEQUAL", "DEPTH_NOTEQUAL", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_GEQUAL", "DEPTH_GEQUAL", scopePath);
+        ScriptUtil::registerConstantString("DEPTH_ALWAYS", "DEPTH_ALWAYS", scopePath);
+    }
+
     // Register enumeration Scene::DebugFlags.
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("Scene");
         ScriptUtil::registerConstantString("DEBUG_BOXES", "DEBUG_BOXES", scopePath);
         ScriptUtil::registerConstantString("DEBUG_SPHERES", "DEBUG_SPHERES", scopePath);
+    }
+
+    // Register enumeration Terrain::Flags.
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("Terrain");
+        ScriptUtil::registerConstantString("DEBUG_PATCHES", "DEBUG_PATCHES", scopePath);
+        ScriptUtil::registerConstantString("FRUSTUM_CULLING", "FRUSTUM_CULLING", scopePath);
+        ScriptUtil::registerConstantString("LEVEL_OF_DETAIL", "LEVEL_OF_DETAIL", scopePath);
     }
 
     // Register enumeration Texture::Filter.
@@ -818,8 +866,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_GameClearFlags((Game::ClearFlags)value);
     if (enumname == "Game::State")
         return lua_stringFromEnum_GameState((Game::State)value);
-    if (enumname == "Gamepad::ButtonState")
-        return lua_stringFromEnum_GamepadButtonState((Gamepad::ButtonState)value);
+    if (enumname == "Gamepad::ButtonMapping")
+        return lua_stringFromEnum_GamepadButtonMapping((Gamepad::ButtonMapping)value);
     if (enumname == "Gamepad::GamepadEvent")
         return lua_stringFromEnum_GamepadGamepadEvent((Gamepad::GamepadEvent)value);
     if (enumname == "Gesture::GestureEvent")
@@ -860,8 +908,12 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_RenderStateAutoBinding((RenderState::AutoBinding)value);
     if (enumname == "RenderState::Blend")
         return lua_stringFromEnum_RenderStateBlend((RenderState::Blend)value);
+    if (enumname == "RenderState::DepthFunction")
+        return lua_stringFromEnum_RenderStateDepthFunction((RenderState::DepthFunction)value);
     if (enumname == "Scene::DebugFlags")
         return lua_stringFromEnum_SceneDebugFlags((Scene::DebugFlags)value);
+    if (enumname == "Terrain::Flags")
+        return lua_stringFromEnum_TerrainFlags((Terrain::Flags)value);
     if (enumname == "Texture::Filter")
         return lua_stringFromEnum_TextureFilter((Texture::Filter)value);
     if (enumname == "Texture::Format")

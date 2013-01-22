@@ -4,7 +4,7 @@ attribute vec3 a_normal;                            // Vertex Normal (x, y, z)
 
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;           // Matrix to transform a position to clip space.
-uniform mat4 u_inverseTransposeWorldViewMatrix;     // Matrix to transform a normal to view space.
+uniform mat4 u_inverseTransposeWorldViewMatrix;         // Matrix to transform a normal to view space.
 
 // Outputs
 varying vec3 v_normalVector;                        // Normal vector in view space.

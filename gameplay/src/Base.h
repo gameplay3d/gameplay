@@ -14,6 +14,7 @@
 #include <cstdarg>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <cstring>
 #include <vector>
@@ -21,6 +22,7 @@
 #include <set>
 #include <stack>
 #include <map>
+#include <queue>
 #include <algorithm>
 #include <limits>
 #include <functional>
@@ -186,9 +188,10 @@ using std::va_list;
 
 // Graphics (OpenGL)
 #ifdef __QNX__
-#include <EGL/egl.h>
+    #include <EGL/egl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
+    #include <screen/screen.h>
     extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
     extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
     extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
@@ -274,6 +277,15 @@ typedef GLuint TextureHandle;
 typedef GLuint FrameBufferHandle;
 /** Render buffer handle. */
 typedef GLuint RenderBufferHandle;
+
+/** Gamepad handle definitions vary by platform. */
+#if defined(__QNX__) && defined(USE_BLACKBERRY_GAMEPAD)
+    typedef screen_device_t GamepadHandle;
+#elif defined(USE_XINPUT)
+    typedef unsigned long GamepadHandle;
+#else
+    typedef unsigned int GamepadHandle;
+#endif
 }
 
 /**
