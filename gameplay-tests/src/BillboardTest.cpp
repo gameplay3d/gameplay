@@ -59,15 +59,15 @@ void BillboardTest::initialize()
 
 void BillboardTest::finalize()
 {
-    SAFE_RELEASE(_scene);
-    SAFE_RELEASE(_font);
-	SAFE_RELEASE(_ground);
 	for (std::vector<Node*>::iterator it = _billboards.begin(); it != _billboards.end(); ++it)
     {
         Node* node = *it;
 		node->release();
     }
     _billboards.clear();
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_font);
+	SAFE_RELEASE(_ground);
 }
 
 void BillboardTest::update(float elapsedTime)
@@ -296,6 +296,7 @@ void BillboardTest::loadGround()
 	_ground->setMaterial(material);
 	SAFE_RELEASE(material);
 	SAFE_RELEASE(effect)
+    SAFE_RELEASE(node);
 }
 
 void BillboardTest::loadBillboards()
@@ -312,7 +313,7 @@ void BillboardTest::loadBillboards()
 		Model* model = Model::create(mesh);
 		node->setModel(model);
 		_scene->addNode(node);
- 
+        
 		Material* material = Material::create(effect); 
 		material->getStateBlock()->setDepthTest(true);
 		material->getStateBlock()->setBlend(false);
@@ -328,7 +329,6 @@ void BillboardTest::loadBillboards()
         node->translate(tx, (BILLBOARD_HEIGHT / 2.0f), tz);
 
         _billboards.push_back(node);
-
     }
 	SAFE_RELEASE(effect);
 	SAFE_RELEASE(mesh);

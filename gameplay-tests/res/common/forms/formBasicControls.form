@@ -55,7 +55,7 @@ form basicControls
     {
         style = topLeftAlignedEntry
         position = 50, 450
-        size = 480, 80
+        size = 250, 80
         text = This is a text box.
     }
 
@@ -80,5 +80,19 @@ form basicControls
     {
         text = Radio button 3.
         position = 350, 180
+    }
+	
+	button alignedButton
+    {
+		margin
+		{
+			right = 50
+			bottom = 100
+		}
+	
+        style = buttonStyle
+        alignment = ALIGN_BOTTOM_RIGHT
+        size = 200, 100
+        text = Alignment: bottom-right. Right margin: 50. Bottom margin: 100.
     }
 }

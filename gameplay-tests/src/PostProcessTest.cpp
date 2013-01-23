@@ -7,8 +7,10 @@
 
 #define FRAMEBUFFER_WIDTH 1024
 #define FRAMEBUFFER_HEIGHT 1024
-static  Model* __model = NULL;
-static  Material* __material = NULL;
+
+Model* PostProcessTest::_quadModel = NULL;
+Material* PostProcessTest::_compositorMaterial = NULL;
+
 
 PostProcessTest::Compositor* PostProcessTest::Compositor::create(FrameBuffer* srcBuffer, FrameBuffer* dstBuffer, const char* materialPath, const char* techniqueId)
 {
@@ -18,10 +20,10 @@ PostProcessTest::Compositor* PostProcessTest::Compositor::create(FrameBuffer* sr
     Texture::Sampler* sampler = Texture::Sampler::create(srcBuffer->getRenderTarget()->getTexture());
     material->getParameter("u_texture")->setValue(sampler);
     SAFE_RELEASE(sampler);
-    if (__model == NULL)
+    if (_quadModel == NULL)
     {
         Mesh* mesh = Mesh::createQuadFullscreen();
-        __model = Model::create(mesh);
+        _quadModel = Model::create(mesh);
         SAFE_RELEASE(mesh);
     }
     
@@ -60,14 +62,14 @@ Material* PostProcessTest::Compositor::getMaterial() const
 
 void PostProcessTest::Compositor::blit(const Rectangle& dst)
 {
-    if (__material != _material)
+    if (_compositorMaterial != _material)
     {
-        __material = _material;
-        __model->setMaterial(__material);
+        _compositorMaterial = _material;
+        _quadModel->setMaterial(_compositorMaterial);
     }
-    __material->setTechnique(_techniqueId);
+    _compositorMaterial->setTechnique(_techniqueId);
 
-    __model->draw();
+    _quadModel->draw();
 }
 
 PostProcessTest::PostProcessTest()
@@ -96,8 +98,8 @@ void PostProcessTest::initialize()
     material->getParameter("u_lightDirection")->setValue(lightNode->getForwardVectorView());
 
     // Create one frame buffer for the full screen compositerss.
-    _frameBuffer = FrameBuffer::create("fb", FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
-    DepthStencilTarget* dst = DepthStencilTarget::create("", DepthStencilTarget::DEPTH_STENCIL, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    _frameBuffer = FrameBuffer::create("PostProcessTest", FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    DepthStencilTarget* dst = DepthStencilTarget::create("PostProcessTest", DepthStencilTarget::DEPTH_STENCIL, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
     _frameBuffer->setDepthStencilTarget(dst);
     SAFE_RELEASE(dst);
 
@@ -143,7 +145,7 @@ void PostProcessTest::finalize()
         delete *it;
     }
     _compositors.clear();
-    SAFE_RELEASE(__model);
+    SAFE_RELEASE(_quadModel);
     SAFE_RELEASE(_frameBuffer);
 }
 
@@ -168,7 +170,7 @@ void PostProcessTest::render(float elapsedTime)
 {
     Rectangle defaultViewport = Game::getInstance()->getViewport();
     
-    // Draw into the framebuffer (step 1)
+    // Draw into the framebuffer
     Game::getInstance()->setViewport(Rectangle(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT));
     FrameBuffer* previousFrameBuffer = _frameBuffer->bind();
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);

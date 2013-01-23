@@ -49,13 +49,13 @@ TextureTest::TextureTest()
 void TextureTest::initialize()
 {
     // Create the font for drawing the framerate.
-    _font = Font::create("res/common/arial14.gpb");
+    _font = Font::create("res/common/arial18.gpb");
 
     // Create an empty scene.
     _scene = Scene::create();
 
     // Create a camera and add it to the scene as the active camera.
-    Camera* camera = Camera::createPerspective(45.0f, getAspectRatio(), 1, 700);
+    Camera* camera = Camera::createPerspective(45.0f, getAspectRatio(), 1, 1000);
     Node* cameraNode = _scene->addNode("camera");
     cameraNode->setCamera(camera);
     _scene->setActiveCamera(camera);
@@ -72,30 +72,31 @@ void TextureTest::initialize()
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
-        node->setTranslation(-30, cubeSize, 0);
+        node->setTranslation(-25, cubeSize, 0);
         // Find the position of the node in screen space
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("Textured Quad", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        _text.push_back(_font->createText("Quad: Textured", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
+    // Textured quad points
     {
         Mesh* mesh = Mesh::createQuad(Vector3(0, cubeSize, 0), Vector3(0, 0, 0), Vector3(cubeSize, cubeSize, 0), Vector3(cubeSize, 0, 0));
         Node* node = addQuadModelAndNode(_scene, mesh);
         SAFE_RELEASE(mesh);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
-        node->setTranslation(-19, cubeSize, 0);
+        node->setTranslation(-14, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
-        _text.push_back(_font->createText("createQuad points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
+        _text.push_back(_font->createText("Quad: Points", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
-    // Texture wrap clamp test
+    // Texture clamp
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
         node->setId("clamp");
-        node->setTranslation(-8, cubeSize, 0);
+        node->setTranslation(-3, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         _text.push_back(_font->createText("Wrap: Clamp", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_TOP_HCENTER, false));
     }
-    // Texture wrap repeat test
+    // Texture wrapped+repeat
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize, -1, -1, 2, 2);
         setTextureUnlitMaterial(node->getModel(), "res/png/color-wheel.png");
@@ -105,22 +106,27 @@ void TextureTest::initialize()
         {
             sampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
         }
-        node->setTranslation(3, cubeSize, 0);
+        node->setTranslation(8, cubeSize, 0);
         _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
         _text.push_back(_font->createText("Wrap: Repeat", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
-    // mipmap test
+    // Mipmapping Off
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
         setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png", false);
         node->setId("mipmap off");
-        node->setTranslation(-10.5f, -1.5f, 0);
+        node->setTranslation(-25.5f, -2.5f, 0);
+        _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
+        _text.push_back(_font->createText("MipMap: Off", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
+    // Mipmapping On
     {
         Node* node = addQuadModelAndNode(_scene, 0, 0, cubeSize, cubeSize);
         setTextureUnlitMaterial(node->getModel(), "res/png/box-diffuse.png");
         node->setId("mipmap on");
-        node->setTranslation(0.5f, -1.5f, 0);
+        node->setTranslation(-5.5f, -2.5f, 0);
+        _scene->getActiveCamera()->project(getViewport(), node->getTranslationWorld(), &x, &y);
+        _text.push_back(_font->createText("MipMap: On", Rectangle(x, y, textWidth, fontSize), Vector4::one(), fontSize, Font::ALIGN_HCENTER, false));
     }
 }
 
@@ -140,8 +146,8 @@ void TextureTest::update(float elapsedTime)
 {
     Node* n1 = _scene->findNode("mipmap on");
     Node* n2 = _scene->findNode("mipmap off");
-    // move these nodes between 0 and -600 using a sine wave
-    float z = -(sin((getAbsoluteTime() / 1000.0L) * MATH_PI) + 1)  * 600.0f / 2.0f;
+    // move these nodes between 0 and -900 using a sine wave
+    float z = -(sin((getAbsoluteTime() / 1500.0L) * MATH_PI) + 1)  * 900.0f / 2.0f;
     n1->setTranslationZ(z);
     n2->setTranslationZ(z);
 }

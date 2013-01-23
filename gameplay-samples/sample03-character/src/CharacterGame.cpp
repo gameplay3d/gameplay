@@ -60,6 +60,8 @@ void CharacterGame::initialize()
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initializeScene);
+
+    _gamepad = getGamepad(0);
 }
 
 bool CharacterGame::initializeScene(Node* node)
@@ -498,6 +500,27 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     }
 }
 
+bool CharacterGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON)
+    {
+        kick();
+        return true;
+    }
+    return false;
+}
+
+void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+    case Gamepad::DISCONNECTED_EVENT:
+        _gamepad = getGamepad(0);
+        break;
+    }
+}
+
 void CharacterGame::adjustCamera(float elapsedTime)
 {
     static float cameraOffset = 0.0f;
@@ -636,38 +659,4 @@ void CharacterGame::releaseBall()
     
     PhysicsRigidBody* basketball = (PhysicsRigidBody*) _basketballNode->getCollisionObject();
     basketball->setEnabled(true);
-}
-
-void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
-{
-    switch(evt)
-    {
-    case Gamepad::CONNECTED_EVENT:
-        if (gamepad->isVirtual())
-        {
-            gamepad->getForm()->setConsumeInputEvents(false);
-            _virtualGamepad = gamepad;
-        }
-        else
-        {
-            _physicalGamepad = gamepad;
-        }
-
-        if (_physicalGamepad)
-        {
-            _gamepad = _physicalGamepad;
-        }
-        else
-        {
-            _gamepad = _virtualGamepad;
-        }
-
-        break;
-    case Gamepad::DISCONNECTED_EVENT:
-        if (gamepad == _physicalGamepad)
-        {
-            _gamepad = _virtualGamepad;
-        }
-        break;
-    }
 }

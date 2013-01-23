@@ -38,6 +38,11 @@ Terrain::Terrain() :
 
 Terrain::~Terrain()
 {
+    for (size_t i = 0, count = _patches.size(); i < count; ++i)
+    {
+        SAFE_DELETE(_patches[i]);
+    }
+
     if (_node)
         _node->removeListener(this);
 
@@ -104,7 +109,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
                 // Read normalized height values from heightmap image
                 heightfield = HeightField::createFromImage(heightmap, 0, 1);
             }
-            else if (ext == ".RAW")
+            else if (ext == ".RAW" || ext == ".R16")
             {
                 // Require additional properties to be specified for RAW files
                 Vector2 imageSize;
@@ -146,7 +151,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
                 // Read normalized height values from heightmap image
                 heightfield = HeightField::createFromImage(heightmap, 0, 1);
             }
-            else if (ext == ".RAW")
+            else if (ext == ".RAW" || ext == ".R16")
             {
                 GP_WARN("RAW heightmaps must be specified inside a heightmap block with width and height properties.");
                 if (!externalProperties)

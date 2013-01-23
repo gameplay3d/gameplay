@@ -187,6 +187,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3616fd8d58c48099ddc7e7f0ffa1645a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15ebb285ef4dfafbe1cc0875ca2593d2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a15ebb285ef4dfafbe1cc0875ca2593d2">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
 <tr class="separator:a15ebb285ef4dfafbe1cc0875ca2593d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f1b9a0142092d4f73bb159b93a37d7a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
+<tr class="separator:a7f1b9a0142092d4f73bb159b93a37d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e6c607105f69b400ca5e41815b43286"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a9e6c607105f69b400ca5e41815b43286">getGamepad</a> (unsigned int index, bool preferPhysical=true) const </td></tr>
+<tr class="separator:a9e6c607105f69b400ca5e41815b43286"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade96e57a1dbd20ab2dfb4203b4c0d6f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr class="separator:ade96e57a1dbd20ab2dfb4203b4c0d6f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04720fabcd25eba03eaee2f81cfcdc16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
@@ -957,6 +961,76 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Gets the current frame rate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The current frame rate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9e6c607105f69b400ca5e41815b43286"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a>* gameplay::Game::getGamepad </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>preferPhysical</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the gamepad at the specified index.</p>
+<p>The gamepad index can change when connected and disconnected so you cannot rely on this other than iterating through them all to display them or poll them.</p>
+<p>The preferPhysical will bump over virtual gamepads if physical gamepads are connected and return the request index of the first or second physcial and then return back to the first virtual after.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the gamepad to retrieve. </td></tr>
+    <tr><td class="paramname">preferPhysical</td><td>true if you prefer return a physical if exist; false if only virtual. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The gamepad at the specified index. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7f1b9a0142092d4f73bb159b93a37d7a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int gameplay::Game::getGamepadCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the current number of gamepads currently connected to the system.</p>
+<dl class="section return"><dt>Returns</dt><dd>The number of gamepads currently connected to the system. </dd></dl>
 
 </div>
 </div>
@@ -1975,7 +2049,7 @@ template&lt;class T &gt; </div>
     <tr><td class="paramname">evt</td><td>The touch event that occurred. </td></tr>
     <tr><td class="paramname">x</td><td>The x position of the touch in pixels. Left edge is zero. </td></tr>
     <tr><td class="paramname">y</td><td>The y position of the touch in pixels. Top edge is zero. </td></tr>
-    <tr><td class="paramname">contactIndex</td><td>The order of occurrence for multiple touch contacts starting at zero.</td></tr>
+    <tr><td class="paramname">contactIndex</td><td>An integer to identify this contact point within the currently active touch set.</td></tr>
   </table>
   </dd>
 </dl>
@@ -2068,7 +2142,7 @@ template&lt;class T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 16 2013 21:25:05 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 21 2013 15:52:18 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

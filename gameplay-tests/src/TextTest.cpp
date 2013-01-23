@@ -5,9 +5,10 @@
     ADD_TEST("Graphics", "Text", TextTest, 9);
 #endif
 
+#define FONT_COUNT 6
+
 std::string _fontNames[] =
 {
-    "arial14",
     "arial18",
     "dynamic",
     "pirulen",
@@ -18,7 +19,7 @@ std::string _fontNames[] =
 
 TextTest::TextTest()
     : _form(NULL), _stateBlock(NULL), _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
-      _fontsCount(7), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
+      _fontsCount(FONT_COUNT), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
 {
 }
 
@@ -94,8 +95,10 @@ void TextTest::render(float elapsedTime)
     // Draw the frame rate.
     char fps[5];
     sprintf(fps, "%u", getFrameRate());
+
     _fonts[1]->start();
-    _fonts[1]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
+
+    _fonts[1]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[0]->getSize());
     
     _form->draw();
 

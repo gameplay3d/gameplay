@@ -5,7 +5,7 @@ var searchData=
   ['camera',['Camera',['../classgameplay_1_1_camera.html',1,'gameplay']]],
   ['camera_5fview_5fposition',['CAMERA_VIEW_POSITION',['../classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017aecd0d4615dd274ac6055203f31677264',1,'gameplay::RenderState']]],
   ['camera_5fworld_5fposition',['CAMERA_WORLD_POSITION',['../classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017abc793c81555aeab2c8aa37c62e1f559a',1,'gameplay::RenderState']]],
-  ['canexit',['canExit',['../classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5',1,'gameplay::Game::canExit()'],['../classgameplay_1_1_platform.html#a423d1c68e5dc83548f6f0562efddc7a6',1,'gameplay::Platform::canExit()']]],
+  ['canexit',['canExit',['../classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5',1,'gameplay::Game']]],
   ['canread',['canRead',['../classgameplay_1_1_stream.html#a185580ff320a845015a24dff3fd9791e',1,'gameplay::Stream']]],
   ['canseek',['canSeek',['../classgameplay_1_1_stream.html#a0c8b845ffa9396df62f9f3c153b981d7',1,'gameplay::Stream']]],
   ['canwrite',['canWrite',['../classgameplay_1_1_stream.html#a922ce6e19b6c1ea8f4ecfff839d6701c',1,'gameplay::Stream']]],

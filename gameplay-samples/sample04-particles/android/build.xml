@@ -62,7 +62,7 @@
        If this is not done in place, override ${out.dex.input.absolute.dir} */
        -->
     <target name="-post-compile">
-        <copy file="../res/arial18.gpb" tofile="assets/res/arial18.gpb"/>
+        <copy file="../res/arial.gpb" tofile="assets/res/arial.gpb"/>
         <copy file="../res/editor.form" tofile="assets/res/editor.form"/>
         <copy file="../res/editor.png" tofile="assets/res/editor.png"/>
         <copy file="../res/editor.theme" tofile="assets/res/editor.theme"/>
