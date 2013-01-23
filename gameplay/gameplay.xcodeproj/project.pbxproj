@@ -3608,7 +3608,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
-				VALID_ARCHS = "armv7 armv6 i386 x86_64";
+				VALID_ARCHS = "armv7 armv7s i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -3617,7 +3617,7 @@
 			buildSettings = {
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
-				VALID_ARCHS = "armv7 armv6 i386 x86_64";
+				VALID_ARCHS = "armv7 armv7s i386 x86_64";
 			};
 			name = Release;
 		};
@@ -3744,7 +3744,7 @@
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv7s ";
 			};
 			name = Debug;
 		};
@@ -3785,7 +3785,7 @@
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv7s ";
 			};
 			name = Release;
 		};
