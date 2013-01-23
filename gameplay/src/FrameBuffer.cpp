@@ -218,10 +218,10 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
 
         // Attach the render buffer to the framebuffer
-        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_renderBuffer) );
+        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_depthBuffer) );
         if (target->getFormat() == DepthStencilTarget::DEPTH_STENCIL)
         {
-            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_renderBuffer) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_stencilBuffer) );
         }
 
         // Check the framebuffer is good to go.

@@ -81,7 +81,7 @@ LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
     Test.cpp \
     TestsGame.cpp \
     Audio3DTest.cpp \
-    BillboardTest \
+    BillboardTest.cpp \
     CreateSceneTest.cpp \
     FormsTest.cpp \
     GestureTest.cpp \
