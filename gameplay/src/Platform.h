@@ -128,6 +128,18 @@ private:
     static void sleep(long ms);
 
     /**
+     * Set if multi-sampling is enabled on the platform.
+     *
+     * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+     */
+    static void setMultiSampling(bool enabled);
+
+   /**
+    * Is multi-sampling mode enabled.
+    */
+    static bool isMultiSampling();
+
+    /**
      * Set if multi-touch is enabled on the platform.
      *
      * Note that this method does nothing on platforms that do not
