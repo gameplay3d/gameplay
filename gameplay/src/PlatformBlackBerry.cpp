@@ -41,6 +41,7 @@ static EGLSurface __eglSurface = EGL_NO_SURFACE;
 static EGLConfig __eglConfig = 0;
 static int __orientationAngle;
 static bool __multiTouch = false;
+static bool __multiSampling = false;
 static float __pitch;
 static float __roll;
 static const char* __glExtensions;
@@ -1398,6 +1399,23 @@ void Platform::swapBuffers()
 void Platform::sleep(long ms)
 {
     usleep(ms * 1000);
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
 }
 
 void Platform::setMultiTouch(bool enabled)
