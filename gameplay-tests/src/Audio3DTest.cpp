@@ -16,8 +16,6 @@ static const unsigned int MOVE_DOWN = 32;
 static const float MOVE_SPEED = 15.0f;
 static const float UP_DOWN_SPEED = 10.0f;
 
-#define BUTTON_A (_gamepad->isVirtual() ? 0 : 10)
-
 Audio3DTest::Audio3DTest()
     : _font(NULL), _scene(NULL), _cubeNode(NULL), _gamepad(NULL), _moveFlags(0), _prevX(0), _prevY(0), _buttonPressed(false)
 {
@@ -63,8 +61,10 @@ void Audio3DTest::initialize()
     _scene->setActiveCamera(_fpCamera.getCamera());
 
     _gamepad = getGamepad(0);
-    GP_ASSERT(_gamepad);
-    _gamepad->getForm()->setConsumeInputEvents(false);
+    // This is needed because the virtual gamepad is shared between all tests.
+    // TestsGame always ensures the virtual gamepad is disabled when a test is exited.
+    if (_gamepad && _gamepad->isVirtual())
+        _gamepad->getForm()->setEnabled(true);
 }
 
 void Audio3DTest::finalize()
@@ -117,10 +117,16 @@ void Audio3DTest::update(float elapsedTime)
             _fpCamera.moveDown(time * UP_DOWN_SPEED);
         }
     }
-    else if (_gamepad->isJoystickActive(0))
+    else if (_gamepad->getJoystickCount() > 0)
     {
-        _gamepad->getJoystickAxisValues(0, &move);
+        _gamepad->getJoystickValues(0, &move);
         move.x = -move.x;
+    }
+    if (_gamepad->getJoystickCount() > 1)
+    {
+        Vector2 joy2;
+        _gamepad->getJoystickValues(1, &joy2);
+        _fpCamera.rotate(MATH_DEG_TO_RAD(joy2.x * 2.0f), MATH_DEG_TO_RAD(joy2.y * 2.0f));
     }
 
     if (!move.isZero())
@@ -130,11 +136,11 @@ void Audio3DTest::update(float elapsedTime)
         _fpCamera.moveLeft(move.x);
     }
 
-    if (!_buttonPressed && _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED)
+    if (!_buttonPressed && _gamepad->isButtonDown(Gamepad::BUTTON_A))
     {
         addSound("footsteps.wav");
     }
-    _buttonPressed = _gamepad->getButtonState(BUTTON_A) == Gamepad::BUTTON_PRESSED;
+    _buttonPressed = _gamepad->isButtonDown(Gamepad::BUTTON_A);
 
     _gamepad->update(elapsedTime);
 }
@@ -312,10 +318,10 @@ void Audio3DTest::drawDebugText(int x, int y)
     _font->start();
     static const int V_SPACE = 16;
     AudioListener* audioListener = AudioListener::getInstance();
-    drawVector3("Listener Position", audioListener->getPosition(), x, y);
-    drawVector3("Listener Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
-    drawVector3("Listener Up", audioListener->getOrientationUp(), x, y+=V_SPACE);
-    drawVector3("Listener Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
+    drawVector3("Position", audioListener->getPosition(), x, y);
+    drawVector3("Forward", audioListener->getOrientationForward(), x, y+=V_SPACE);
+    drawVector3("Orientation", audioListener->getOrientationUp(), x, y+=V_SPACE);
+    drawVector3("Velocity", audioListener->getVelocity(), x, y+=V_SPACE);
     _font->finish();
 }
 
@@ -335,4 +341,19 @@ void Audio3DTest::loadGrid(Scene* scene)
     Node* node = scene->addNode("grid");
     node->setModel(gridModel);
     gridModel->release();
+}
+
+void Audio3DTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+    case Gamepad::DISCONNECTED_EVENT:
+        _gamepad = getGamepad(0);
+        // This is needed because the virtual gamepad is shared between all tests.
+        // TestsGame always ensures the virtual gamepad is disabled when a test is exited.
+        if (_gamepad && _gamepad->isVirtual())
+            _gamepad->getForm()->setEnabled(true);
+        break;
+    }
 }

@@ -616,7 +616,6 @@
     <None Include="res\common\menu.form" />
     <None Include="res\common\menu.png" />
     <None Include="res\common\menu.theme" />
-    <None Include="res\shaders\textured-alphatest.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\RacerGame.cpp" />

@@ -1,4 +1,4 @@
-// Inputs
+// Attributes
 attribute vec4 a_position;									// Vertex Position							(x, y, z, w)
 #if defined(TEXTURE_LIGHTMAP)
 attribute vec2 a_texCoord;                                  // Texture Coordinate (for lightmapping)
@@ -11,7 +11,13 @@ attribute vec4 a_blendIndices;								// Vertex blend index int u_matrixPalette	
 attribute vec3 a_color;										// Vertex Color								(r, g, b)
 #endif
 
-// Outputs
+// Uniforms
+uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space.
+#if defined(SKINNING)
+uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices as an array of floats
+#endif
+
+// Varyings
 #if defined(TEXTURE_LIGHTMAP)
 varying vec2 v_texCoord;                                    // Output Texture Coordinate
 #endif
@@ -19,20 +25,14 @@ varying vec2 v_texCoord;                                    // Output Texture Co
 varying vec3 v_color;										// Output Vertex color						(r, g, b)
 #endif
 
-// Uniforms
-uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space.
+// Skinning
 #if defined(SKINNING)
-uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices as an array of floats
-#endif
-
-// Attribute accessor
-#if defined(SKINNING)
-#include "lib/attributes-skinning.vert"
+#include "skinning.vert"
 #else
-#include "lib/attributes.vert" 
+#include "skinning-none.vert" 
 #endif
 
-// Vertex Program
+
 void main()
 {
     // Get the vertex position

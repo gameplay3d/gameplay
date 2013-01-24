@@ -6,6 +6,19 @@
 namespace gameplay
 {
 
+/**
+ * Reads the next character from the stream. Returns EOF if the end of the stream is reached.
+ */
+static signed char readChar(Stream* stream)
+{
+    if (stream->eof())
+        return EOF;
+    signed char c;
+    if (stream->read(&c, 1, 1) != 1)
+        return EOF;
+    return c;
+}
+
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */
 void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
@@ -29,13 +42,14 @@ Properties::Properties(const Properties& copy)
     rewind();
 }
 
-Properties::Properties(FILE* file)
+
+Properties::Properties(Stream* stream)
 {
-    readProperties(file);
+    readProperties(stream);
     rewind();
 }
 
-Properties::Properties(FILE* file, const char* name, const char* id, const char* parentID) : _namespace(name)
+Properties::Properties(Stream* stream, const char* name, const char* id, const char* parentID) : _namespace(name)
 {
     if (id)
     {
@@ -45,7 +59,7 @@ Properties::Properties(FILE* file, const char* name, const char* id, const char*
     {
         _parentID = parentID;
     }
-    readProperties(file);
+    readProperties(stream);
     rewind();
 }
 
@@ -63,16 +77,16 @@ Properties* Properties::create(const char* url)
     std::vector<std::string> namespacePath;
     calculateNamespacePath(urlString, fileString, namespacePath);
 
-    FILE* file = FileSystem::openFile(fileString.c_str(), "rb");
-    if (!file)
+    std::auto_ptr<Stream> stream(FileSystem::open(fileString.c_str()));
+    if (stream.get() == NULL)
     {
         GP_ERROR("Failed to open file '%s'.", fileString.c_str());
         return NULL;
     }
 
-    Properties* properties = new Properties(file);
+    Properties* properties = new Properties(stream.get());
     properties->resolveInheritance();
-    fclose(file);
+    stream->close();
 
     // Get the specified properties object.
     Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
@@ -93,9 +107,9 @@ Properties* Properties::create(const char* url)
     return p;
 }
 
-void Properties::readProperties(FILE* file)
+void Properties::readProperties(Stream* stream)
 {
-    GP_ASSERT(file);
+    GP_ASSERT(stream);
 
     char line[2048];
     int c;
@@ -108,14 +122,14 @@ void Properties::readProperties(FILE* file)
 
     while (true)
     {
-        skipWhiteSpace(file);
+        skipWhiteSpace(stream);
 
         // Stop when we have reached the end of the file.
-        if (feof(file))
+        if (stream->eof())
             break;
 
         // Read the next line.
-        rc = fgets(line, 2048, file);
+        rc = stream->readLine(line, 2048);
         if (rc == NULL)
         {
             GP_ERROR("Error reading line from file.");
@@ -213,20 +227,20 @@ void Properties::readProperties(FILE* file)
                     // If the namespace ends on this line, seek back to right before the '}' character.
                     if (rccc && rccc == lineEnd)
                     {
-                        if (fseek(file, -1, SEEK_CUR) != 0)
+                        if (stream->seek(-1, SEEK_CUR) == false)
                         {
                             GP_ERROR("Failed to seek back to before a '}' character in properties file.");
                             return;
                         }
-                        while (fgetc(file) != '}')
+                        while (readChar(stream) != '}')
                         {
-                            if (fseek(file, -2, SEEK_CUR) != 0)
+                            if (stream->seek(-2, SEEK_CUR) == false)
                             {
                                 GP_ERROR("Failed to seek back to before a '}' character in properties file.");
                                 return;
                             }
                         }
-                        if (fseek(file, -1, SEEK_CUR) != 0)
+                        if (stream->seek(-1, SEEK_CUR) == false)
                         {
                             GP_ERROR("Failed to seek back to before a '}' character in properties file.");
                             return;
@@ -234,13 +248,13 @@ void Properties::readProperties(FILE* file)
                     }
 
                     // New namespace without an ID.
-                    Properties* space = new Properties(file, name, NULL, parentID);
+                    Properties* space = new Properties(stream, name, NULL, parentID);
                     _namespaces.push_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
                     if (rccc && rccc == lineEnd)
                     {
-                        if (fseek(file, 1, SEEK_CUR) != 0)
+                        if (stream->seek(1, SEEK_CUR) == false)
                         {
                             GP_ERROR("Failed to seek to immediately after a '}' character in properties file.");
                             return;
@@ -255,20 +269,20 @@ void Properties::readProperties(FILE* file)
                         // If the namespace ends on this line, seek back to right before the '}' character.
                         if (rccc && rccc == lineEnd)
                         {
-                            if (fseek(file, -1, SEEK_CUR) != 0)
+                            if (stream->seek(-1, SEEK_CUR) == false)
                             {
                                 GP_ERROR("Failed to seek back to before a '}' character in properties file.");
                                 return;
                             }
-                            while (fgetc(file) != '}')
+                            while (readChar(stream) != '}')
                             {
-                                if (fseek(file, -2, SEEK_CUR) != 0)
+                                if (stream->seek(-2, SEEK_CUR) == false)
                                 {
                                     GP_ERROR("Failed to seek back to before a '}' character in properties file.");
                                     return;
                                 }
                             }
-                            if (fseek(file, -1, SEEK_CUR) != 0)
+                            if (stream->seek(-1, SEEK_CUR) == false)
                             {
                                 GP_ERROR("Failed to seek back to before a '}' character in properties file.");
                                 return;
@@ -276,13 +290,13 @@ void Properties::readProperties(FILE* file)
                         }
 
                         // Create new namespace.
-                        Properties* space = new Properties(file, name, value, parentID);
+                        Properties* space = new Properties(stream, name, value, parentID);
                         _namespaces.push_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
                         if (rccc && rccc == lineEnd)
                         {
-                            if (fseek(file, 1, SEEK_CUR) != 0)
+                            if (stream->seek(1, SEEK_CUR) == false)
                             {
                                 GP_ERROR("Failed to seek to immediately after a '}' character in properties file.");
                                 return;
@@ -292,18 +306,18 @@ void Properties::readProperties(FILE* file)
                     else
                     {
                         // Find out if the next line starts with "{"
-                        skipWhiteSpace(file);
-                        c = fgetc(file);
+                        skipWhiteSpace(stream);
+                        c = readChar(stream);
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new Properties(file, name, value, parentID);
+                            Properties* space = new Properties(stream, name, value, parentID);
                             _namespaces.push_back(space);
                         }
                         else
                         {
                             // Back up from fgetc()
-                            if (fseek(file, -1, SEEK_CUR) != 0)
+                            if (stream->seek(-1, SEEK_CUR) == false)
                                 GP_ERROR("Failed to seek backwards a single character after testing if the next line starts with '{'.");
 
                             // Store "name value" as a name/value pair, or even just "name".
@@ -331,20 +345,19 @@ Properties::~Properties()
     }
 }
 
-void Properties::skipWhiteSpace(FILE* file)
+void Properties::skipWhiteSpace(Stream* stream)
 {
-    int c;
-
+    signed char c;
     do
     {
-        c = fgetc(file);
-    } while (isspace(c));
+        c = readChar(stream);
+    } while (isspace(c) && c != EOF);
 
     // If we are not at the end of the file, then since we found a
     // non-whitespace character, we put the cursor back in front of it.
     if (c != EOF)
     {
-        if (fseek(file, -1, SEEK_CUR) != 0)
+        if (stream->seek(-1, SEEK_CUR) == false)
         {
             GP_ERROR("Failed to seek backwards one character after skipping whitespace.");
         }

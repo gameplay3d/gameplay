@@ -31,8 +31,6 @@ private:
 
     bool drawScene(Node* node);
 
-private:
-
     Font* _font;
     Scene* _scene;
     Node* _cubeNode;

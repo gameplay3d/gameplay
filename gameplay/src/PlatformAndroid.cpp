@@ -107,66 +107,66 @@ static EGLenum checkErrorEGL(const char* msg)
 
 static int getRotation()
 {
-	jint rotation;
+    jint rotation;
 
-	// Get the android application's activity.
-	ANativeActivity* activity = __state->activity;
-	JavaVM* jvm = __state->activity->vm;
-	JNIEnv* env = NULL;
-	jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
-	jint res = jvm->AttachCurrentThread(&env, NULL);
-	if (res == JNI_ERR)
-	{
-		GP_ERROR("Failed to retrieve JVM environment when entering message pump.");
-		return -1; 
-	}
-	GP_ASSERT(env);
+    // Get the android application's activity.
+    ANativeActivity* activity = __state->activity;
+    JavaVM* jvm = __state->activity->vm;
+    JNIEnv* env = NULL;
+    jvm->GetEnv((void **)&env, JNI_VERSION_1_6);
+    jint res = jvm->AttachCurrentThread(&env, NULL);
+    if (res == JNI_ERR)
+    {
+        GP_ERROR("Failed to retrieve JVM environment when entering message pump.");
+        return -1; 
+    }
+    GP_ASSERT(env);
 
-	jclass clsContext = env->FindClass("android/content/Context");
-	GP_ASSERT(clsContext != NULL);
-	jmethodID getSystemService = env->GetMethodID(clsContext, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
-	GP_ASSERT(getSystemService != NULL);
-	jfieldID WINDOW_SERVICE_ID = env->GetStaticFieldID(clsContext, "WINDOW_SERVICE", "Ljava/lang/String;");
-	GP_ASSERT(WINDOW_SERVICE_ID != NULL);
-	jstring WINDOW_SERVICE = (jstring) env->GetStaticObjectField(clsContext, WINDOW_SERVICE_ID);
-	GP_ASSERT(WINDOW_SERVICE != NULL);
-	jobject windowManager = env->CallObjectMethod(activity->clazz, getSystemService, WINDOW_SERVICE);
-	GP_ASSERT(windowManager != NULL);
-	jclass clsWindowManager = env->FindClass("android/view/WindowManager");
-	GP_ASSERT(clsWindowManager != NULL);
-	jmethodID getDefaultDisplay = env->GetMethodID(clsWindowManager, "getDefaultDisplay", "()Landroid/view/Display;");
-	GP_ASSERT(getDefaultDisplay != NULL);
-	jobject defaultDisplay = env->CallObjectMethod(windowManager, getDefaultDisplay);
-	GP_ASSERT(defaultDisplay != NULL);
-	jclass clsDisplay = env->FindClass("android/view/Display");
-	GP_ASSERT(clsDisplay != NULL);
-	jmethodID getRotation = env->GetMethodID(clsDisplay, "getRotation", "()I");
-	GP_ASSERT(getRotation != NULL)
-	rotation =  env->CallIntMethod(defaultDisplay, getRotation);
+    jclass clsContext = env->FindClass("android/content/Context");
+    GP_ASSERT(clsContext != NULL);
+    jmethodID getSystemService = env->GetMethodID(clsContext, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+    GP_ASSERT(getSystemService != NULL);
+    jfieldID WINDOW_SERVICE_ID = env->GetStaticFieldID(clsContext, "WINDOW_SERVICE", "Ljava/lang/String;");
+    GP_ASSERT(WINDOW_SERVICE_ID != NULL);
+    jstring WINDOW_SERVICE = (jstring) env->GetStaticObjectField(clsContext, WINDOW_SERVICE_ID);
+    GP_ASSERT(WINDOW_SERVICE != NULL);
+    jobject windowManager = env->CallObjectMethod(activity->clazz, getSystemService, WINDOW_SERVICE);
+    GP_ASSERT(windowManager != NULL);
+    jclass clsWindowManager = env->FindClass("android/view/WindowManager");
+    GP_ASSERT(clsWindowManager != NULL);
+    jmethodID getDefaultDisplay = env->GetMethodID(clsWindowManager, "getDefaultDisplay", "()Landroid/view/Display;");
+    GP_ASSERT(getDefaultDisplay != NULL);
+    jobject defaultDisplay = env->CallObjectMethod(windowManager, getDefaultDisplay);
+    GP_ASSERT(defaultDisplay != NULL);
+    jclass clsDisplay = env->FindClass("android/view/Display");
+    GP_ASSERT(clsDisplay != NULL);
+    jmethodID getRotation = env->GetMethodID(clsDisplay, "getRotation", "()I");
+    GP_ASSERT(getRotation != NULL)
+    rotation =  env->CallIntMethod(defaultDisplay, getRotation);
 
-	return rotation;
+    return rotation;
 }
 
 
 // Initialized EGL resources.
 static bool initEGL()
 {
-	int samples = 0;
-	Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
-	if (config)
-	{
-		samples = std::max(config->getInt("samples"), 0);
-	}
+    int samples = 0;
+    Properties* config = Game::getInstance()->getConfig()->getNamespace("window", true);
+    if (config)
+    {
+        samples = std::max(config->getInt("samples"), 0);
+    }
 
     // Hard-coded to 32-bit/OpenGL ES 2.0.
     // NOTE: EGL_SAMPLE_BUFFERS, EGL_SAMPLES and EGL_DEPTH_SIZE MUST remain at the beginning of the attribute list
     // since they are expected to be at indices 0-5 in config fallback code later.
-	// EGL_DEPTH_SIZE is also expected to
+    // EGL_DEPTH_SIZE is also expected to
     EGLint eglConfigAttrs[] =
     {
-		EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
-		EGL_SAMPLES,            samples,
-		EGL_DEPTH_SIZE,         24,
+        EGL_SAMPLE_BUFFERS,     samples > 0 ? 1 : 0,
+        EGL_SAMPLES,            samples,
+        EGL_DEPTH_SIZE,         24,
         EGL_RED_SIZE,           8,
         EGL_GREEN_SIZE,         8,
         EGL_BLUE_SIZE,          8,
@@ -206,51 +206,51 @@ static bool initEGL()
             goto error;
         }
 
-		// Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
-		bool validConfig = false;
-		EGLint depthSizes[] = { 24, 16 };
-		for (unsigned int i = 0; i < 2; ++i)
-		{
-			eglConfigAttrs[1] = samples > 0 ? 1 : 0;
-			eglConfigAttrs[3] = samples;
-			eglConfigAttrs[5] = depthSizes[i];
+        // Try both 24 and 16-bit depth sizes since some hardware (i.e. Tegra) does not support 24-bit depth
+        bool validConfig = false;
+        EGLint depthSizes[] = { 24, 16 };
+        for (unsigned int i = 0; i < 2; ++i)
+        {
+            eglConfigAttrs[1] = samples > 0 ? 1 : 0;
+            eglConfigAttrs[3] = samples;
+            eglConfigAttrs[5] = depthSizes[i];
 
-			if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
-			{
-				validConfig = true;
-				break;
-			}
+            if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+            {
+                validConfig = true;
+                break;
+            }
 
-			if (samples)
-			{
-				// Try lowering the MSAA sample size until we find a supported config
-				int sampleCount = samples;
-				while (sampleCount)
-				{
-					GP_WARN("No EGL config found for depth_size=%d and samples=%d. Trying samples=%d instead.", depthSizes[i], sampleCount, sampleCount / 2);
-					sampleCount /= 2;
-					eglConfigAttrs[1] = sampleCount > 0 ? 1 : 0;
-					eglConfigAttrs[3] = sampleCount;
-					if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
-					{
-						validConfig = true;
-						break;
-					}
-				}
-				if (validConfig)
-					break;
-			}
-			else
-			{
-				GP_WARN("No EGL config found for depth_size=%d.", depthSizes[i]);
-			}
-		}
+            if (samples)
+            {
+                // Try lowering the MSAA sample size until we find a supported config
+                int sampleCount = samples;
+                while (sampleCount)
+                {
+                    GP_WARN("No EGL config found for depth_size=%d and samples=%d. Trying samples=%d instead.", depthSizes[i], sampleCount, sampleCount / 2);
+                    sampleCount /= 2;
+                    eglConfigAttrs[1] = sampleCount > 0 ? 1 : 0;
+                    eglConfigAttrs[3] = sampleCount;
+                    if (eglChooseConfig(__eglDisplay, eglConfigAttrs, &__eglConfig, 1, &eglConfigCount) == EGL_TRUE && eglConfigCount > 0)
+                    {
+                        validConfig = true;
+                        break;
+                    }
+                }
+                if (validConfig)
+                    break;
+            }
+            else
+            {
+                GP_WARN("No EGL config found for depth_size=%d.", depthSizes[i]);
+            }
+        }
 
-		if (!validConfig)
-		{
-			checkErrorEGL("eglChooseConfig");
-			goto error;
-		}
+        if (!validConfig)
+        {
+            checkErrorEGL("eglChooseConfig");
+            goto error;
+        }
 
         __eglContext = eglCreateContext(__eglDisplay, __eglConfig, EGL_NO_CONTEXT, eglContextAttrs);
         if (__eglContext == EGL_NO_CONTEXT)
@@ -1164,22 +1164,22 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     // flipping the x and y to get the desired landscape mode values.
     switch (__orientationAngle)
     {
-	case 90:
+    case 90:
         tx = -__sensorEvent.acceleration.y;
         ty = __sensorEvent.acceleration.x;
-		break;
-	case 180:
-		tx = -__sensorEvent.acceleration.x;
+        break;
+    case 180:
+        tx = -__sensorEvent.acceleration.x;
         ty = -__sensorEvent.acceleration.y;
-		break;
-	case 270:
-		tx = __sensorEvent.acceleration.y;
+        break;
+    case 270:
+        tx = __sensorEvent.acceleration.y;
         ty = -__sensorEvent.acceleration.x;
-		break;
-	default:
-		tx = __sensorEvent.acceleration.x;
+        break;
+    default:
+        tx = __sensorEvent.acceleration.x;
         ty = __sensorEvent.acceleration.y;
-		break;
+        break;
     }
     tz = __sensorEvent.acceleration.z;
 
@@ -1265,6 +1265,22 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
+{
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+}
+
+void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
+{
+    Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
+}
+
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
 {
     // Pinch currently not implemented
@@ -1312,63 +1328,8 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
     return __gestureEventsProcessed.test(evt);
 }
 
-unsigned int Platform::getGamepadsConnected()
+void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    return 0;
-}
-
-bool Platform::isGamepadConnected(unsigned int gamepadHandle)
-{
-    return false;
-}
-
-const char* Platform::getGamepadId(unsigned int gamepadHandle)
-{
-    return NULL;
-}
-
-unsigned int Platform::getGamepadButtonCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::getGamepadButtonState(unsigned int gamepadHandle, unsigned int buttonIndex)
-{
-    return false;
-}
-
-unsigned int Platform::getGamepadJoystickCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-bool Platform::isGamepadJoystickActive(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return false;
-}
-
-float Platform::getGamepadJoystickAxisX(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-float Platform::getGamepadJoystickAxisY(unsigned int gamepadHandle, unsigned int joystickIndex)
-{
-    return 0.0f;
-}
-
-void Platform::getGamepadJoystickAxisValues(unsigned int gamepadHandle, unsigned int joystickIndex, Vector2* outValue)
-{
-}
-
-unsigned int Platform::getGamepadTriggerCount(unsigned int gamepadHandle)
-{
-    return 0;
-}
-
-float Platform::getGamepadTriggerValue(unsigned int gamepadHandle, unsigned int triggerIndex)
-{
-    return 0.0f;
 }
 
 bool Platform::launchURL(const char *url)

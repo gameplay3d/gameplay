@@ -591,11 +591,26 @@ public:
     bool getTextRightToLeft(State state = NORMAL) const;
 
     /**
+     * Sets the visibility of a control.
+     *
+     * This is a quick way to hide a control without having to remove it from a form.
+     *
+     * @param visible true if the control is visible and enabled; false if not-visible and disabled.
+     */
+    void setVisible(bool visible);
+
+    /**
+     * Get the visibility of a control.
+     *
+     * @return true if the control is visible; false if not visible.
+     */
+    bool isVisible() const;
+
+    /**
      * Set the opacity of this control.
      *
      * @param opacity The new opacity.
-     * @param states The states to set this property on.
-     *               One or more members of the Control::State enum, ORed together.
+     * @param states The states to set this property on. One or more members of the Control::State enum, OR'ed together.
      */
     void setOpacity(float opacity, unsigned char states = STATE_ALL);
 
@@ -607,6 +622,20 @@ public:
      * @return The opacity of this control for a given state.
      */
     float getOpacity(State state = NORMAL) const;
+
+	/**
+	 * Enables/Disables a control. 
+	 *
+	 * @param enabled true if the control is enabled; false if disabled.
+	 */
+	virtual void setEnabled(bool enabled);
+
+    /**
+     * Get whether this control is currently enabled.
+     *
+     * @return Whether this control is currently enabled.
+     */
+    bool isEnabled() const;
 
     /**
      * Get the bounds of this control, relative to its parent container, after clipping.
@@ -635,23 +664,6 @@ public:
      * @return This control's current state.
      */
     State getState() const;
-
-    /**
-     * Disable this control.
-     */
-    void disable();
-
-    /**
-     * Enable this control.
-     */
-    void enable();
-
-    /**
-     * Get whether this control is currently enabled.
-     *
-     * @return Whether this control is currently enabled.
-     */
-    bool isEnabled();
 
     /**
      * Set whether this control consumes input events,
@@ -793,7 +805,7 @@ protected:
      * @param evt The touch event that occurred.
      * @param x The x position of the touch in pixels. Left edge is zero.
      * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
+     * @param contactIndex An integer to identify this contact point within the currently active touch set.
      *
      * @return Whether the touch event was consumed by this control.
      *
@@ -854,7 +866,7 @@ protected:
     virtual void drawText(const Rectangle& clip);
 
     /**
-     * Draws a sprite batch for the specified clipping rect .
+     * Draws a sprite batch for the specified clipping rect.
      *
      * @param spriteBatch The sprite batch to use.
      * @param clip The clipping rectangle.
@@ -972,6 +984,11 @@ protected:
      * The Control's Alignment
      */
     Alignment _alignment;
+
+    /**
+     * Whether the Control's alignment has been set programmatically.
+     */
+    bool _isAlignmentSet;
     
     /**
      * Whether the Control's width is auto-sized.
@@ -992,6 +1009,11 @@ protected:
      * The Control's Theme::Style.
      */
     Theme::Style* _style;
+
+    /**
+     * The control is not visible and _state become DISABLED if false.
+     */
+    bool _visible;
 
     /**
      * The current opacity of the control.

@@ -2,12 +2,13 @@
 #include "TestsGame.h"
 
 #if defined(ADD_TEST)
-    ADD_TEST("Graphics", "Text", TextTest, 100);
+    ADD_TEST("Graphics", "Text", TextTest, 9);
 #endif
+
+#define FONT_COUNT 6
 
 std::string _fontNames[] =
 {
-    "arial14",
     "arial18",
     "dynamic",
     "pirulen",
@@ -17,8 +18,8 @@ std::string _fontNames[] =
 };
 
 TextTest::TextTest()
-    : _font(NULL), _fontIndex(0), _stateBlock(NULL), _viewport(250, 100, 512, 200), _alignment(Font::ALIGN_LEFT),  
-    _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _simple(false), _rightToLeft(false), _fontsCount(7), _form(NULL)
+    : _form(NULL), _stateBlock(NULL), _scale(1.0f), _wrap(true), _ignoreClip(false), _useViewport(true), _rightToLeft(false), _simple(false), _alignment(Font::ALIGN_LEFT),
+      _fontsCount(FONT_COUNT), _fontIndex(0), _font(NULL), _viewport(250, 100, 512, 200)
 {
 }
 
@@ -61,7 +62,7 @@ void TextTest::initialize()
                                 "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 
     // Create and listen to form.
-    _form = Form::create("res/common/textTest.form");
+    _form = Form::create("res/common/text.form");
     static_cast<Button*>(_form->getControl("fontButton"))->addListener(this, Control::Listener::CLICK);
     static_cast<Button*>(_form->getControl("wrapButton"))->addListener(this, Control::Listener::CLICK);
     static_cast<Button*>(_form->getControl("clipRectButton"))->addListener(this, Control::Listener::CLICK);
@@ -94,8 +95,10 @@ void TextTest::render(float elapsedTime)
     // Draw the frame rate.
     char fps[5];
     sprintf(fps, "%u", getFrameRate());
+
     _fonts[1]->start();
-    _fonts[1]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[1]->getSize());
+
+    _fonts[1]->drawText(fps, 245, 5, Vector4(0, 0.5f, 1, 1), _fonts[0]->getSize());
     
     _form->draw();
 

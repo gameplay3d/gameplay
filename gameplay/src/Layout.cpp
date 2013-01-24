@@ -12,6 +12,7 @@ void Layout::align(Control* control, const Container* container)
     GP_ASSERT(container);
 
     if (control->_alignment != Control::ALIGN_TOP_LEFT ||
+        control->_isAlignmentSet ||
         control->_autoWidth || control->_autoHeight)
     {
         Rectangle controlBounds = control->getBounds();
@@ -48,11 +49,15 @@ void Layout::align(Control* control, const Container* container)
         // Vertical alignment
         if ((control->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
         {
-            controlBounds.y = clipHeight - controlBounds.height;
+            controlBounds.y = clipHeight - controlBounds.height - controlMargin.bottom;
         }
         else if ((control->_alignment & Control::ALIGN_VCENTER) == Control::ALIGN_VCENTER)
         {
             controlBounds.y = clipHeight * 0.5f - controlBounds.height * 0.5f;
+        }
+        else if ((control->_alignment & Control::ALIGN_TOP) == Control::ALIGN_TOP)
+        {
+            controlBounds.y = controlMargin.top;
         }
 
         // Horizontal alignment
@@ -63,6 +68,10 @@ void Layout::align(Control* control, const Container* container)
         else if ((control->_alignment & Control::ALIGN_HCENTER) == Control::ALIGN_HCENTER)
         {
             controlBounds.x = clipWidth * 0.5f - controlBounds.width * 0.5f;
+        }
+        else if ((control->_alignment & Control::ALIGN_LEFT) == Control::ALIGN_LEFT)
+        {
+            controlBounds.x = controlMargin.left;
         }
 
         control->setBounds(controlBounds);

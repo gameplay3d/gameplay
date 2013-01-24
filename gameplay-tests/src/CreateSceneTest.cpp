@@ -107,7 +107,7 @@ void CreateSceneTest::initialize()
     // These parameters are normally set in a .material file but this example sets them programmatically.
     // Bind the uniform "u_worldViewProjectionMatrix" to use the WORLD_VIEW_PROJECTION_MATRIX from the scene's active camera and the node that the model belongs to.
     material->setParameterAutoBinding("u_worldViewProjectionMatrix", "WORLD_VIEW_PROJECTION_MATRIX");
-    material->setParameterAutoBinding("u_inverseTransposeWorldMatrix", "INVERSE_TRANSPOSE_WORLD_MATRIX");
+    material->setParameterAutoBinding("u_inverseTransposeWorldViewMatrix", "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX");
 
     // Bind the light's direction to the material.
     material->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
@@ -117,7 +117,7 @@ void CreateSceneTest::initialize()
     material->getParameter("u_ambientColor")->setValue(Vector3(1, 1, 1));
 
     // Load the texture from file.
-    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/common/box-diffuse.png", true);
+    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/box-diffuse.png", true);
     sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     material->getStateBlock()->setCullFace(true);
     material->getStateBlock()->setDepthTest(true);

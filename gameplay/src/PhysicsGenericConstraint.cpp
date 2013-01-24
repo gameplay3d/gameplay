@@ -23,11 +23,11 @@ PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, PhysicsR
     {
         GP_ASSERT(b->_body && b->getNode());
         Vector3 origin = centerOfMassMidpoint(a->getNode(), b->getNode());
-        _constraint = new btGeneric6DofConstraint(*a->_body, *b->_body, getTransformOffset(a->getNode(), origin), getTransformOffset(b->getNode(), origin), true);
+        _constraint = bullet_new<btGeneric6DofConstraint>(*a->_body, *b->_body, getTransformOffset(a->getNode(), origin), getTransformOffset(b->getNode(), origin), true);
     }
     else
     {
-        _constraint = new btGeneric6DofConstraint(*a->_body, btTransform::getIdentity(), true);
+        _constraint = bullet_new<btGeneric6DofConstraint>(*a->_body, btTransform::getIdentity(), true);
     }
 }
 
@@ -53,12 +53,12 @@ PhysicsGenericConstraint::PhysicsGenericConstraint(PhysicsRigidBody* a, const Qu
 
         btTransform frameInA(BQ(rotationOffsetA), BV(tA));
         btTransform frameInB(BQ(rotationOffsetB), BV(tB));
-        _constraint = new btGeneric6DofConstraint(*a->_body, *b->_body, frameInA, frameInB, true);
+        _constraint = bullet_new<btGeneric6DofConstraint>(*a->_body, *b->_body, frameInA, frameInB, true);
     }
     else
     {
         btTransform frameInA(BQ(rotationOffsetA), BV(tA));
-        _constraint = new btGeneric6DofConstraint(*a->_body, frameInA, true);
+        _constraint = bullet_new<btGeneric6DofConstraint>(*a->_body, frameInA, true);
     }
 }
 

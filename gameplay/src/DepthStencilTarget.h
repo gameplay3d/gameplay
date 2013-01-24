@@ -101,7 +101,8 @@ private:
 
     std::string _id;
     Format _format;
-    RenderBufferHandle _renderBuffer;
+    RenderBufferHandle _depthBuffer;
+    RenderBufferHandle _stencilBuffer;
     unsigned int _width;
     unsigned int _height;
 };

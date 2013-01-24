@@ -9,6 +9,7 @@
 #include "Ref.h"
 #include "Scene.h"
 #include "SceneLoader.h"
+#include "Terrain.h"
 
 namespace gameplay
 {
@@ -26,6 +27,8 @@ void luaRegister_Scene()
         {"getAmbientColor", lua_Scene_getAmbientColor},
         {"getFirstNode", lua_Scene_getFirstNode},
         {"getId", lua_Scene_getId},
+        {"getLightColor", lua_Scene_getLightColor},
+        {"getLightDirection", lua_Scene_getLightDirection},
         {"getNodeCount", lua_Scene_getNodeCount},
         {"getRefCount", lua_Scene_getRefCount},
         {"release", lua_Scene_release},
@@ -34,12 +37,15 @@ void luaRegister_Scene()
         {"setActiveCamera", lua_Scene_setActiveCamera},
         {"setAmbientColor", lua_Scene_setAmbientColor},
         {"setId", lua_Scene_setId},
+        {"setLightColor", lua_Scene_setLightColor},
+        {"setLightDirection", lua_Scene_setLightDirection},
         {"visit", lua_Scene_visit},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
     {
         {"create", lua_Scene_static_create},
+        {"getScene", lua_Scene_static_getScene},
         {"load", lua_Scene_static_load},
         {NULL, NULL}
     };
@@ -138,7 +144,7 @@ int lua_Scene_addNode(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     Scene* instance = getInstance(state);
                     void* returnPtr = (void*)instance->addNode(param1);
@@ -309,7 +315,7 @@ int lua_Scene_findNode(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Scene* instance = getInstance(state);
                 void* returnPtr = (void*)instance->findNode(param1);
@@ -340,7 +346,7 @@ int lua_Scene_findNode(lua_State* state)
                 lua_type(state, 3) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 3);
@@ -375,7 +381,7 @@ int lua_Scene_findNode(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2 = ScriptUtil::luaCheckBool(state, 3);
@@ -569,6 +575,94 @@ int lua_Scene_getId(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Scene_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_getLightColor(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Scene* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getLightColor());
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Scene_getLightColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_getLightDirection(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Scene* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getLightDirection());
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector3");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Scene_getLightDirection - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -858,7 +952,7 @@ int lua_Scene_setId(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Scene* instance = getInstance(state);
                 instance->setId(param1);
@@ -867,6 +961,92 @@ int lua_Scene_setId(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Scene_setId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_setLightColor(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                lua_type(state, 4) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                // Get parameter 2 off the stack.
+                float param2 = (float)luaL_checknumber(state, 3);
+
+                // Get parameter 3 off the stack.
+                float param3 = (float)luaL_checknumber(state, 4);
+
+                Scene* instance = getInstance(state);
+                instance->setLightColor(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Scene_setLightColor - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_setLightDirection(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
+
+                Scene* instance = getInstance(state);
+                instance->setLightDirection(*param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Scene_setLightDirection - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -907,9 +1087,102 @@ int lua_Scene_static_create(lua_State* state)
             return 1;
             break;
         }
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)Scene::create(param1);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Scene");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Scene_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Scene_static_getScene(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)Scene::getScene();
+            if (returnPtr)
+            {
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "Scene");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = ScriptUtil::getString(1, false);
+
+                void* returnPtr = (void*)Scene::getScene(param1);
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Scene");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Scene_static_getScene - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0 or 1).");
             lua_error(state);
             break;
         }
@@ -930,7 +1203,7 @@ int lua_Scene_static_load(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Scene::load(param1);
                 if (returnPtr)
@@ -977,7 +1250,7 @@ int lua_Scene_visit(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Scene* instance = getInstance(state);
                 instance->visit(param1);

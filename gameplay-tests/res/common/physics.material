@@ -8,7 +8,7 @@ material colored
             fragmentShader = res/shaders/colored.frag
 
             u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
-            u_inverseTransposeWorldMatrix = INVERSE_TRANSPOSE_WORLD_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
             
             renderState
             {

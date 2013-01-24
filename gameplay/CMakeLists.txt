@@ -78,6 +78,8 @@ set(GAMEPLAY_SRC
     src/gameplay-main-linux.cpp
     src/gameplay-main-windows.cpp
     src/Gesture.h
+    src/HeightField.cpp
+    src/HeightField.h
     src/Image.cpp
     src/Image.h
     src/Image.inl
@@ -193,6 +195,10 @@ set(GAMEPLAY_SRC
     src/SpriteBatch.h
     src/Technique.cpp
     src/Technique.h
+    src/Terrain.cpp
+    src/Terrain.h
+    src/TerrainPatch.cpp
+    src/TerrainPatch.h
     src/TextBox.cpp
     src/TextBox.h
     src/Texture.cpp
@@ -327,8 +333,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_GameClearFlags.h
     src/lua/lua_Gamepad.cpp
     src/lua/lua_Gamepad.h
-    src/lua/lua_GamepadButtonState.cpp
-    src/lua/lua_GamepadButtonState.h
+    src/lua/lua_GamepadButtonMapping.cpp
+    src/lua/lua_GamepadButtonMapping.h
     src/lua/lua_GamepadGamepadEvent.cpp
     src/lua/lua_GamepadGamepadEvent.h
     src/lua/lua_GameState.cpp
@@ -339,6 +345,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_GestureGestureEvent.h
     src/lua/lua_Global.cpp
     src/lua/lua_Global.h
+    src/lua/lua_HeightField.cpp
+    src/lua/lua_HeightField.h
     src/lua/lua_Image.cpp
     src/lua/lua_Image.h
     src/lua/lua_ImageFormat.cpp
@@ -479,6 +487,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderStateAutoBinding.h
     src/lua/lua_RenderStateBlend.cpp
     src/lua/lua_RenderStateBlend.h
+    src/lua/lua_RenderStateDepthFunction.cpp
+    src/lua/lua_RenderStateDepthFunction.h
     src/lua/lua_RenderStateStateBlock.cpp
     src/lua/lua_RenderStateStateBlock.h
     src/lua/lua_RenderTarget.cpp
@@ -499,6 +509,10 @@ set(GAMEPLAY_LUA
     src/lua/lua_SpriteBatch.h
     src/lua/lua_Technique.cpp
     src/lua/lua_Technique.h
+    src/lua/lua_Terrain.cpp
+    src/lua/lua_Terrain.h
+    src/lua/lua_TerrainFlags.cpp
+    src/lua/lua_TerrainFlags.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
     src/lua/lua_Texture.cpp
@@ -567,6 +581,8 @@ set(GAMEPLAY_RES_SHADERS
     res/shaders/textured-unlit.vert
     res/shaders/textured.frag
     res/shaders/textured.vert
+    res/shaders/terrain.frag
+    res/shaders/terrain.vert
 )
 
 set(GAMEPLAY_RES_SHADERS_LIB

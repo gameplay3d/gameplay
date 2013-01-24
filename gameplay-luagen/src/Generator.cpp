@@ -9,7 +9,7 @@ static bool __printOperatorWarning = false;
 
 // Utility functions (local to this file).
 static string trim(const string& str);
-static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind);
+static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind, int& levelsOfIndirection);
 static inline bool isWantedFileNormal(const string& s);
 static inline bool isNamespaceFile(const string& s);
 static inline bool isGeneratedBindingFile(const string& s);
@@ -171,13 +171,6 @@ void Generator::run(string inDir, string outDir, string* bindingNS)
     vector<string> oldBindingsFiles;
     getFileList(outDir, oldBindingsFiles, isGeneratedBindingFile);
 
-    // Delete the old bindings.
-    for (unsigned int i = 0; i < oldBindingsFiles.size(); i++)
-    {
-        remove(oldBindingsFiles[i].c_str());
-    }
-
-
     // Get a list of the Doxygen XML files that specify a namespace.
     // Note: we must do this before adding the normal files so that
     // when we process the files sequentially, we process the namespaces
@@ -278,6 +271,16 @@ void Generator::run(string inDir, string outDir, string* bindingNS)
         GP_WARN("Detected the use of variable argument lists; this feature of C++ is not supported.");
     if (__printOperatorWarning)
         GP_WARN("Detected the use of operator overloading; this feature of C++ is not supported.");
+
+    // Delete files that are no longer needed and print warnings for them
+    for (unsigned int i = 0; i < oldBindingsFiles.size(); i++)
+    {
+        if (std::find(generatedFiles.begin(), generatedFiles.end(), oldBindingsFiles[i]) == generatedFiles.end())
+        {
+            GP_WARN("Deleting unused file: %s", oldBindingsFiles[i].c_str());
+            remove(oldBindingsFiles[i].c_str());
+        }
+    }
 }
 
 Generator::Generator()
@@ -442,6 +445,11 @@ void Generator::getClass(XMLElement* classNode, const string& name)
             string parentClassName = classBinding.classname.substr(0, index);
             if (_classes.find(parentClassName) != _classes.end())
                 classBinding.include = _classes[parentClassName].include;
+        }
+        else
+        {
+            // Attempt to guess the name of the header.
+            classBinding.include = classBinding.classname + ".h";
         }
     }
 
@@ -970,6 +978,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
         // Get the type string without const or reference qualifiers (and trim whitespace).
         string refId = "";
         string typeStr = "";
+        int levelsOfIndirection = 0;
         FunctionBinding::Param::Kind kind;
         {
             // Attempt to process the type as reference (i.e. class, struct, enum, typedef, etc.) type.
@@ -989,7 +998,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
                 node = node->NextSibling();
             }
 
-            typeStr = stripTypeQualifiers(typeStr, kind);
+            typeStr = stripTypeQualifiers(typeStr, kind, levelsOfIndirection);
         }
 
         if (typeStr == "void")
@@ -1062,6 +1071,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
         {
             p = FunctionBinding::Param(FunctionBinding::Param::TYPE_UNRECOGNIZED, kind, (refId.size() > 0) ? refId : typeStr);
         }
+        p.levelsOfIndirection = levelsOfIndirection;
 
         // Check if the type is a pointer declared with square brackets (i.e. float x[4]).
         XMLElement* arrayElement = NULL;
@@ -1075,6 +1085,7 @@ FunctionBinding::Param Generator::getParam(XMLElement* e, bool isVariable, strin
             if (i != arrayString.npos && k != arrayString.npos)
             {
                 p.kind = FunctionBinding::Param::KIND_POINTER;
+                p.levelsOfIndirection = 1;
                 if (i != k - 1)
                     p.info = arrayString.substr(i + 1, k - (i + 1));
             }
@@ -1370,14 +1381,14 @@ void Generator::generateBindings(string* bindingNS)
         generatingGameplay = true;
 
     string luaAllHStr = _outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".h");
-    ofstream luaAllH(luaAllHStr.c_str());
+    ostringstream luaAllH;
     string includeGuard = string(LUA_ALL_BINDINGS_FILENAME) + string("_H_");
     transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
     luaAllH << "#ifndef " << includeGuard << "\n";
     luaAllH << "#define " << includeGuard << "\n\n";
     
     string luaAllCppStr = _outDir + string(LUA_ALL_BINDINGS_FILENAME) + string(".cpp");
-    ofstream luaAllCpp(luaAllCppStr.c_str());
+    ostringstream luaAllCpp;
     luaAllCpp << "#include \"Base.h\"\n";
     luaAllCpp << "#include \"" << string(LUA_ALL_BINDINGS_FILENAME) << ".h\"\n\n";
     if (bindingNS)
@@ -1425,7 +1436,7 @@ void Generator::generateBindings(string* bindingNS)
 
                 // Header.
                 string enumHStr = _outDir + string("lua_") + getUniqueName(iter->first) + string(".h");
-                ofstream enumH(enumHStr.c_str());
+                ostringstream enumH;
                 includeGuard = string("lua_") + getUniqueName(iter->first) + string("_H_");
                 transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
                 enumH << "#ifndef " << includeGuard << "\n";
@@ -1448,11 +1459,12 @@ void Generator::generateBindings(string* bindingNS)
                 }
 
                 enumH << "#endif\n";
-                enumH.close();
+
+                writeFile(enumHStr, enumH.str());
 
                 // Implementation.
                 string enumCppStr = _outDir + string("lua_") + getUniqueName(iter->first) + string(".cpp"); 
-                ofstream enumCpp(enumCppStr.c_str());
+                ostringstream enumCpp(enumCppStr.c_str());
                 enumCpp << "#include \"Base.h\"\n";
                 enumCpp << "#include \"lua_" << getUniqueName(iter->first) << ".h\"\n\n";
 
@@ -1534,7 +1546,8 @@ void Generator::generateBindings(string* bindingNS)
                 {
                     enumCpp << "}\n\n";
                 }
-                enumCpp.close();
+
+                writeFile(enumCppStr, enumCpp.str());
             }
         }
     }
@@ -1574,7 +1587,7 @@ void Generator::generateBindings(string* bindingNS)
         // Write out the header file.
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".h");
-            ofstream global(path.c_str());
+            ostringstream global;
             includeGuard = string(LUA_GLOBAL_FILENAME) + string("_H_");
             transform(includeGuard.begin(), includeGuard.end(), includeGuard.begin(), ::toupper);
             global << "#ifndef " << includeGuard << "\n";
@@ -1621,13 +1634,14 @@ void Generator::generateBindings(string* bindingNS)
             if (bindingNS)
                 global << "}\n\n";
             global << "#endif\n";
-            global.close();
+
+            writeFile(path, global.str());
         }
 
         // Write out the implementation.
         {
             string path = _outDir + string(LUA_GLOBAL_FILENAME) + string(".cpp");
-            ofstream global(path.c_str());            
+            ostringstream global;
             global << "#include \"ScriptController.h\"\n";
             global << "#include \"" << LUA_GLOBAL_FILENAME << ".h\"\n";
             map<string, set<string> >::iterator iter = _includes.find(string(LUA_GLOBAL_FILENAME) + string(".h"));
@@ -1742,14 +1756,16 @@ void Generator::generateBindings(string* bindingNS)
 
             if (bindingNS)
                 global << "}\n";
-            global.close();
+
+            writeFile(path, global.str());
         }
     }
 
     luaAllCpp << "}\n\n";
     if (bindingNS)
         luaAllCpp << "}\n\n";
-    luaAllCpp.close();
+
+    writeFile(luaAllCppStr, luaAllCpp.str());
 
     if (bindingNS)
     {
@@ -1760,7 +1776,8 @@ void Generator::generateBindings(string* bindingNS)
     if (bindingNS)
         luaAllH<< "}\n\n";
     luaAllH << "#endif\n";
-    luaAllH.close();
+
+    writeFile(luaAllHStr, luaAllH.str());
 }
 
 void Generator::getAllDerived(set<string>& derived, string classname)
@@ -1805,8 +1822,10 @@ static string trim(const string& str)
     return s;
 }
 
-static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind)
+static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param::Kind& kind, int& levelsOfIndirection)
 {
+    levelsOfIndirection = 0;
+
     string type = typeStr;
     kind = FunctionBinding::Param::KIND_VALUE;
 
@@ -1819,11 +1838,12 @@ static string stripTypeQualifiers(const string& typeStr, FunctionBinding::Param:
     }
 
     // Check if the type is a pointer.
-    i = type.find("*");
-    if (i != type.npos)
+    while ((i = type.find("*")) != std::string::npos)
     {
         kind = FunctionBinding::Param::KIND_POINTER;
         type.erase(type.begin() + i);
+        ++levelsOfIndirection;
+        int j = 0;
     }
 
     // Ignore const qualifiers.
@@ -1889,7 +1909,7 @@ static bool getFileList(string directory, vector<string>& files, bool (*isWanted
 
             if (isWantedFile(filename))
             {
-                filename = string(directory) + string("/") + filename;
+                filename = string(directory) + filename;
                 files.push_back(filename);
             }
         }
@@ -1920,7 +1940,7 @@ static bool getFileList(string directory, vector<string>& files, bool (*isWanted
                 string filename = dp->d_name;
                 if (isWantedFile(filename))
                 {
-                    filename = string(directory) + string("/") + filename;
+                    filename = string(directory) + filename;
                     files.push_back(filename);
                 }
             }

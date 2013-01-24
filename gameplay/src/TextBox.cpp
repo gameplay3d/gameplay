@@ -49,11 +49,6 @@ void TextBox::addListener(Control::Listener* listener, int eventFlags)
 
 bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {   
-    if (!isEnabled())
-    {
-        return false;
-    }
-
     switch (evt)
     {
     case Touch::TOUCH_PRESS: 
@@ -289,7 +284,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         // Always check that the text still fits within the clip region.
                         Rectangle textBounds;
                         font->measureText(_text.c_str(), _textBounds, fontSize, &textBounds, textAlignment, true, true);
-                        if (textBounds.x <= _textBounds.x || textBounds.y <= _textBounds.y ||
+                        if (textBounds.x < _textBounds.x || textBounds.y < _textBounds.y ||
                             textBounds.width >= _textBounds.width || textBounds.height >= _textBounds.height)
                         {
                             // If not, undo the character insertion.

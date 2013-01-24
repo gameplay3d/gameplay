@@ -9,6 +9,7 @@
 #include "PhysicsSpringConstraint.h"
 #include "PhysicsCollisionObject.h"
 #include "MeshBatch.h"
+#include "HeightField.h"
 #include "ScriptTarget.h"
 
 namespace gameplay
@@ -345,7 +346,7 @@ private:
         /**
             * Internal function used for Bullet integration (do not use or override).
             */
-        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObject* a, int partIdA, int indexA, const btCollisionObject* b, int partIdB, int indexB);    
+        btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* a, int partIdA, int indexA, const btCollisionObjectWrapper* b, int partIdB, int indexB);    
 
     private:
         PhysicsController* _pc;
@@ -430,18 +431,13 @@ private:
     PhysicsCollisionShape* createCapsule(float radius, float height, const Vector3& scale);
 
     // Creates a heightfield collision shape.
-    PhysicsCollisionShape* createHeightfield(Node* node, Image* image, Vector3* centerOfMassOffset);
+    PhysicsCollisionShape* createHeightfield(Node* node, HeightField* heightfield, Vector3* centerOfMassOffset);
 
     // Creates a triangle mesh collision shape.
     PhysicsCollisionShape* createMesh(Mesh* mesh, const Vector3& scale);
 
     // Destroys a collision shape created through PhysicsController
     void destroyShape(PhysicsCollisionShape* shape);
-
-    // Helper function for calculating heights from heightmap (image) or heightfield data.
-    // The worldMatrix and normalData arguments are ignored if normalResult is NULL.
-    static float calculateHeight(float* data, unsigned int width, unsigned int height, float x, float y,
-        const Matrix* worldMatrix = NULL, Vector3* normalData = NULL, Vector3* normalResult = NULL);
 
     // Legacy method for grayscale heightmaps: r + g + b, normalized.
     static float normalizedHeightGrayscale(float r, float g, float b);
@@ -533,8 +529,8 @@ private:
     private:
         
         int _mode;
-        const Matrix* _viewProjection;
         MeshBatch* _meshBatch;
+        int _lineCount;
     };
 
     bool _isUpdating;

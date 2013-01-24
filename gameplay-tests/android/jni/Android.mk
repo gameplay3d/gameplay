@@ -14,15 +14,15 @@
 #
 
 SAMPLE_PATH := $(call my-dir)/../../src
-LIBPNG_PATH := ../../../GamePlay/external-deps/libpng/lib/android/arm
-ZLIB_PATH := ../../../GamePlay/external-deps/zlib/lib/android/arm
-LUA_PATH := ../../../GamePlay/external-deps/lua/lib/android/arm
-BULLET_PATH := ../../../GamePlay/external-deps/bullet/lib/android/arm
-VORBIS_PATH := ../../../GamePlay/external-deps/oggvorbis/lib/android/arm
-OPENAL_PATH := ../../../GamePlay/external-deps/openal/lib/android/arm
+LIBPNG_PATH := ../../external-deps/libpng/lib/android/arm
+ZLIB_PATH := ../../external-deps/zlib/lib/android/arm
+LUA_PATH := ../../external-deps/lua/lib/android/arm
+BULLET_PATH := ../../external-deps/bullet/lib/android/arm
+VORBIS_PATH := ../../external-deps/oggvorbis/lib/android/arm
+OPENAL_PATH := ../../external-deps/openal/lib/android/arm
 
 # gameplay
-LOCAL_PATH := ../../../GamePlay/gameplay/android/obj/local/armeabi
+LOCAL_PATH := ../../gameplay/android/obj/local/armeabi
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := libgameplay.a
@@ -76,19 +76,25 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := gameplay-tests
 LOCAL_SRC_FILES := ../../../GamePlay/gameplay/src/gameplay-main-android.cpp \
-    Audio3DTest.cpp \
-    CreateSceneTest.cpp \
     FirstPersonCamera.cpp \
     Grid.cpp \
+    Test.cpp \
+    TestsGame.cpp \
+    Audio3DTest.cpp \
+    BillboardTest.cpp \
+    CreateSceneTest.cpp \
+    FormsTest.cpp \
     GestureTest.cpp \
+    GamepadTest.cpp \
     InputTest.cpp \
+    LightTest.cpp \
     LoadSceneTest.cpp \
 	MeshBatchTest.cpp \
     MeshPrimitiveTest.cpp \
-	PhysicsSceneTest.cpp \
+	PhysicsCollisionObjectTest.cpp \
+    PostProcessTest.cpp \
 	SpriteBatchTest.cpp \
-    Test.cpp \
-    TestsGame.cpp \
+	TerrainTest.cpp \
     TextTest.cpp \
     TextureTest.cpp \
 	TriangleTest.cpp
