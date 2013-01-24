@@ -32,6 +32,7 @@ static ASensorEventQueue* __sensorEventQueue;
 static ASensorEvent __sensorEvent;
 static const ASensor* __accelerometerSensor;
 static int __orientationAngle = 90;
+static bool __multiSampling = false;
 static bool __multiTouch = false;
 static int __primaryTouchId = -1;
 static bool __displayKeyboard = false;
@@ -1130,6 +1131,23 @@ void Platform::swapBuffers()
 void Platform::sleep(long ms)
 {
     usleep(ms * 1000);
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
 }
 
 void Platform::setMultiTouch(bool enabled)
