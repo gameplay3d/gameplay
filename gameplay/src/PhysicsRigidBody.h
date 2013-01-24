@@ -99,7 +99,7 @@ public:
         /**
          * Constructor.
          */
-        Parameters(float mass, float friction = 0.5f, float resititution = 0.0f,
+        Parameters(float mass, float friction = 0.5f, float restitution = 0.0f,
             float linearDamping = 0.0f, float angularDamping = 0.0f, bool kinematic = false,
             const Vector3& anisotropicFriction = Vector3::one(), const Vector3& linearFactor = Vector3::one(), 
             const Vector3& angularFactor = Vector3::one())
@@ -333,14 +333,13 @@ public:
     void setEnabled(bool enable);
 
     /**
-     * Gets the height and normal at the given point (only for rigid bodies of type HEIGHTFIELD).
+     * Gets the height at the given point (only for rigid bodies of type HEIGHTFIELD).
      * 
-     * @param x The x position.
-     * @param y The y position.
-     * @param normal If non-null, the surface normal at the given point.
+     * @param x The x position, in world space.
+     * @param z The z position, in world space.
      * @return The height at the given point, or zero if this is not a heightfield rigid body.
      */
-    float getHeight(float x, float y, Vector3* normal = NULL) const;
+    float getHeight(float x, float z) const;
 
     /**
      * Gets whether the rigid body is a static rigid body or not.

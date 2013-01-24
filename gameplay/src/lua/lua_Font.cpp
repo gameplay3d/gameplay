@@ -134,7 +134,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -185,7 +185,7 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -240,7 +240,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -299,7 +299,7 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 7) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -362,7 +362,7 @@ int lua_Font_createText(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -429,7 +429,7 @@ int lua_Font_createText(lua_State* state)
                 (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -544,7 +544,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -580,7 +580,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -610,7 +610,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 5) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -650,7 +650,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 6) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -684,7 +684,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -728,7 +728,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 7) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -766,7 +766,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 7) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -814,7 +814,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 8) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -853,7 +853,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 8) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -905,7 +905,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 9) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -948,7 +948,7 @@ int lua_Font_drawText(lua_State* state)
                     (lua_type(state, 9) == LUA_TUSERDATA || lua_type(state, 9) == LUA_TTABLE || lua_type(state, 9) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -1007,7 +1007,7 @@ int lua_Font_drawText(lua_State* state)
                     lua_type(state, 10) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -1104,7 +1104,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 (lua_type(state, 6) == LUA_TUSERDATA || lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1160,7 +1160,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1220,7 +1220,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1284,7 +1284,7 @@ int lua_Font_getIndexAtLocation(lua_State* state)
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1366,7 +1366,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 6) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1413,7 +1413,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 (lua_type(state, 7) == LUA_TSTRING || lua_type(state, 7) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1464,7 +1464,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 8) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1519,7 +1519,7 @@ int lua_Font_getLocationAtIndex(lua_State* state)
                 lua_type(state, 9) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
@@ -1707,7 +1707,7 @@ int lua_Font_measureText(lua_State* state)
                     (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -1734,7 +1734,7 @@ int lua_Font_measureText(lua_State* state)
                     (lua_type(state, 5) == LUA_TUSERDATA || lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -1774,7 +1774,7 @@ int lua_Font_measureText(lua_State* state)
                     (lua_type(state, 6) == LUA_TSTRING || lua_type(state, 6) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -1818,7 +1818,7 @@ int lua_Font_measureText(lua_State* state)
                     lua_type(state, 7) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -1866,7 +1866,7 @@ int lua_Font_measureText(lua_State* state)
                     lua_type(state, 8) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
@@ -1990,7 +1990,7 @@ int lua_Font_static_create(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)Font::create(param1);
                 if (returnPtr)
@@ -2019,10 +2019,10 @@ int lua_Font_static_create(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(2, false);
+                const char* param2 = ScriptUtil::getString(2, false);
 
                 void* returnPtr = (void*)Font::create(param1, param2);
                 if (returnPtr)
@@ -2068,7 +2068,7 @@ int lua_Font_static_getJustify(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 Font::Justify result = Font::getJustify(param1);
 

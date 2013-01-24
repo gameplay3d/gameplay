@@ -182,6 +182,7 @@ call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\%projName%-macosx.plist" TEMPLATE_AUTHOR "%author%"
 
 copy gameplay-template\TEMPLATE_PROJECT-ios.plist "%projPath%\%projName%-ios.plist"
+copy gameplay-template\Default-568h@2x.png "%projPath%\Default-568h@2x.png"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_TITLE "%title%"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_UUID "%uuid%"
 call:replace "%projPath%\%projName%-ios.plist" TEMPLATE_AUTHOR "%author%"

@@ -7,14 +7,16 @@ namespace gameplay
 // Lua bindings for Gamepad.
 int lua_Gamepad_draw(lua_State* state);
 int lua_Gamepad_getButtonCount(lua_State* state);
-int lua_Gamepad_getButtonState(lua_State* state);
 int lua_Gamepad_getForm(lua_State* state);
-int lua_Gamepad_getId(lua_State* state);
-int lua_Gamepad_getJoystickAxisValues(lua_State* state);
-int lua_Gamepad_getJoystickAxisX(lua_State* state);
-int lua_Gamepad_getJoystickAxisY(lua_State* state);
 int lua_Gamepad_getJoystickCount(lua_State* state);
-int lua_Gamepad_isJoystickActive(lua_State* state);
+int lua_Gamepad_getJoystickValues(lua_State* state);
+int lua_Gamepad_getProductId(lua_State* state);
+int lua_Gamepad_getProductString(lua_State* state);
+int lua_Gamepad_getTriggerCount(lua_State* state);
+int lua_Gamepad_getTriggerValue(lua_State* state);
+int lua_Gamepad_getVendorId(lua_State* state);
+int lua_Gamepad_getVendorString(lua_State* state);
+int lua_Gamepad_isButtonDown(lua_State* state);
 int lua_Gamepad_isVirtual(lua_State* state);
 int lua_Gamepad_update(lua_State* state);
 

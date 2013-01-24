@@ -16,10 +16,10 @@
 #Find out which OS we're on. 
 unamestr=$(uname)
 
-#Switch-on alias expansion within the script (see http://chiefsandendians.blogspot.co.uk/2010/07/linux-scripts-and-alias.html)
+# Switch-on alias expansion within the script 
 shopt -s expand_aliases
 
-#alias the sed in-place command for OSX and Linux - incompatibilities between BSD and Linux sed args
+#Alias the sed in-place command for OSX and Linux - incompatibilities between BSD and Linux sed args
 if [[ "$unamestr" == "Darwin" ]]; then
 	alias aliassedinplace='sed -i ""'
 else
@@ -43,7 +43,6 @@ if [[ "$projName" == "" ]]; then
 	exit -1;
 fi
 echo 
-
 echo
 echo "2. Enter a game title."
 echo
@@ -117,7 +116,6 @@ if [[ "$className" == "" ]]; then
 fi
 echo 
 
-
 echo
 echo "7. Enter the project path."
 echo
@@ -159,7 +157,7 @@ gpPathAbs=`pwd`
 common_path=$projPath
 back=
 while [ "${gpPathAbs#$common_path}" = "${gpPathAbs}" ]; do
-	common_path=$(dirname $common_path)
+	common_path=$(dirname "$common_path")
 	if [ -z "$back" ]; then
 		back=".."
 	else
@@ -171,12 +169,11 @@ if [[ ${gpPathAbs} == ${common_path} ]]; then
 	gpPath=${back}
 fi
 
-
 #############################################
 # Copy Microsoft Visual Studio project files
 #############################################
 cp "gameplay-template/gameplay-template.vcxproj" "$projPath/$projName.vcxproj"
-aliassedinplace "s*TEMPLATE_PROJECT*$projectName*g" "$projPath/$projName.vcxproj"
+aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/$projName.vcxproj"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/$projName.vcxproj"
 
@@ -201,6 +198,7 @@ aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-macosx.plist"
 aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-macosx.plist"
 
 cp "gameplay-template/TEMPLATE_PROJECT-ios.plist" "$projPath/$projName-ios.plist"
+cp "gameplay-template/Default-568h@2x.png" "$projPath/Default-568h@2x.png"
 aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/$projName-ios.plist"
 aliassedinplace "s*TEMPLATE_UUID*$uuid*g" "$projPath/$projName-ios.plist"
 aliassedinplace "s*TEMPLATE_AUTHOR*$author*g" "$projPath/$projName-ios.plist"
@@ -239,12 +237,10 @@ cp "gameplay-template/android/template.build.xml" "$projPath/android/build.xml"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/build.xml"
 
 cp "gameplay-template/android/jni/Application.mk" "$projPath/android/jni/Application.mk"
-
 cp "gameplay-template/android/jni/template.Android.mk" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/android/jni/Android.mk"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/android/jni/Android.mk"
-
 
 cp "gameplay-template/icon.png" "$projPath/android/res/drawable/icon.png"
 cp "gameplay-template/android/res/values/template.strings.xml" "$projPath/android/res/values/strings.xml"
@@ -258,7 +254,6 @@ cp "gameplay-template/gameplay-template-CMakeLists.txt" "$projPath/CMakeLists.tx
 aliassedinplace "s*TEMPLATE_PROJECT*$projName*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*TemplateGame*$className*g" "$projPath/CMakeLists.txt"
 aliassedinplace "s*GAMEPLAY_PATH*$gpPath*g" "$projPath/CMakeLists.txt"
-
 
 #############################################
 # Copy source files
@@ -280,9 +275,9 @@ aliassedinplace "s*TEMPLATE_TITLE*$title*g" "$projPath/game.config"
 
 # Open the new project folder, use xdg-open on Linux
 if [[ "$unamestr" == "Linux" ]]; then
-	xdg-open $projPath
+	xdg-open "$projPath"
 else
-	open $projPath
+	open "$projPath"
 fi
 
 exit 0

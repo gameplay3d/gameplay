@@ -2,8 +2,8 @@
 #define PHYSICSCOLLISIONSHAPE_H_
 
 #include "Vector3.h"
-#include "Image.h"
 #include "Mesh.h"
+#include "HeightField.h"
 
 namespace gameplay
 {
@@ -25,6 +25,7 @@ public:
      */
     enum Type
     {
+        SHAPE_NONE,
         SHAPE_BOX,
         SHAPE_SPHERE,
         SHAPE_CAPSULE,
@@ -73,6 +74,11 @@ public:
          */
         ~Definition();
 
+        /**
+         * Determines if this is an empty/undefined collision shape definition.
+         */
+        bool isEmpty() const;
+
     private:
 
         /**
@@ -82,7 +88,7 @@ public:
          * @param properties The properties object to create the PhysicsCollisionShape::Definition object from.
          * @return A PhysicsCollisionShape::Definition object.
          */
-        static Definition* create(Node* node, Properties* properties);
+        static Definition create(Node* node, Properties* properties);
 
         // Shape type.
         PhysicsCollisionShape::Type type;
@@ -101,7 +107,7 @@ public:
             /** @script{ignore} */
             CapsuleData capsule;
             /** @script{ignore} */
-            Image* heightfield;
+            HeightField* heightfield;
             /** @script{ignore} */
             Mesh* mesh;
         } data;
@@ -193,11 +199,34 @@ public:
     static PhysicsCollisionShape::Definition capsule(float radius, float height, const Vector3& center = Vector3::zero(), bool absolute = false);
 
     /**
-     * Defines a heightfield shape using the specified heightfield image.
+     * Defines a heightfield shape, using the height data of a terrain on the node that is attached to.
+     *
+     * This method only results in a valid heightfield collision object when the shape is used
+     * to create a collision object on a node that has a Terrain attached to it. If there is no
+     * Terrain attached to the node, the collision object creation will fail.
      *
      * @return Definition of a heightfield shape.
      */
-    static PhysicsCollisionShape::Definition heightfield(Image* image);
+    static PhysicsCollisionShape::Definition heightfield();
+
+    /**
+     * Defines a heightfield shape using the specified array of height values.
+     *
+     * The dimensions of the heightfield will be (width, maxHeight, height), where width and
+     * height are the dimensions of the passed in height array and maxHeight is the maximum
+     * height value in the height array.
+     *
+     * Heightfield rigid bodies are always assumed be Y-up (height value on the Y axis) and 
+     * be centered around the X and Z axes.
+     *
+     * The heightfield can be scaled once a PhysicsRigidBody has been created for it, using the
+     * PhysicsRigidBody::setLocalScaling method.
+     *
+     * @param heightfield HeightField object containing the array of height values representing the heightfield.
+     *
+     * @return Definition of a heightfield shape.
+     */
+    static PhysicsCollisionShape::Definition heightfield(HeightField* heightfield);
 
     /**
      * Defines a mesh shape using the specified mesh.
@@ -216,12 +245,11 @@ private:
 
     struct HeightfieldData
     {
-        float* heightData;
-        Vector3* normalData;
-        unsigned int width;
-        unsigned int height;
-        mutable Matrix inverse;
-        mutable bool inverseIsDirty;
+        HeightField* heightfield;
+        bool inverseIsDirty;
+        Matrix inverse;
+        float minHeight;
+        float maxHeight;
     };
 
     /**

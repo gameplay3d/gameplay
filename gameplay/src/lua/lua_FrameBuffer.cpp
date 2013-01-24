@@ -129,9 +129,21 @@ int lua_FrameBuffer_bind(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 FrameBuffer* instance = getInstance(state);
-                instance->bind();
-                
-                return 0;
+                void* returnPtr = (void*)instance->bind();
+                if (returnPtr)
+                {
+                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "FrameBuffer");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_FrameBuffer_bind - Failed to match the given parameters to a valid function signature.");
@@ -560,9 +572,21 @@ int lua_FrameBuffer_static_bindDefault(lua_State* state)
     {
         case 0:
         {
-            FrameBuffer::bindDefault();
-            
-            return 0;
+            void* returnPtr = (void*)FrameBuffer::bindDefault();
+            if (returnPtr)
+            {
+                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "FrameBuffer");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
             break;
         }
         default:
@@ -590,7 +614,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)FrameBuffer::create(param1);
                     if (returnPtr)
@@ -623,7 +647,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -676,7 +700,7 @@ int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)FrameBuffer::getFrameBuffer(param1);
                 if (returnPtr)

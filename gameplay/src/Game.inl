@@ -116,29 +116,19 @@ inline void Game::getAccelerometerValues(float* pitch, float* roll)
     Platform::getAccelerometerValues(pitch, roll);
 }
 
+inline unsigned int Game::getGamepadCount() const
+{
+    return Gamepad::getGamepadCount();
+}
+
+inline Gamepad* Game::getGamepad(unsigned int index, bool preferPhysical) const
+{
+    return Gamepad::getGamepad(index, preferPhysical);
+}
+
 inline void Game::displayKeyboard(bool display)
 {
     Platform::displayKeyboard(display);
-}
-
-inline unsigned int Game::getGamepadCount() const
-{
-    return (unsigned int)_gamepads->size();
-}
-
-inline unsigned int Game::getGamepadsConnected()
-{
-    return Platform::getGamepadsConnected();
-}
-
-inline Gamepad* Game::getGamepad(unsigned int index) const
-{
-    GP_ASSERT(index < _gamepads->size());
-
-    if (!_gamepads->empty())
-        return _gamepads->at(index);
-    else
-        return NULL;
 }
 
 inline bool Game::launchURL(const char* url) const
