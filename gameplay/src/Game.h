@@ -465,6 +465,20 @@ public:
     inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 
     /**
+	 * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
+	 *
+	 * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+	 */
+	inline void setMultiSampling(bool enabled);
+
+	/*
+	 * Is multi-sampling enabled.
+	 *
+	 * @return true if multi-sampling is enabled.
+	 */
+	inline bool isMultiSampling() const;
+
+    /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
      *
      * @param enabled true sets multi-touch is enabled, false to be disabled.
