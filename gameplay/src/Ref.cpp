@@ -1,3 +1,5 @@
+#include <typeinfo>
+
 #include "Base.h"
 #include "Ref.h"
 #include "Game.h"
