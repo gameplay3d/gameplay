@@ -16,6 +16,5 @@ var searchData=
   ['loadscript',['loadScript',['../classgameplay_1_1_script_controller.html#aeee2f3c540bc8cd3480589939ccbf64a',1,'gameplay::ScriptController']]],
   ['loadurl',['loadUrl',['../classgameplay_1_1_script_controller.html#ae478047facb082367b9d68975af84c88',1,'gameplay::ScriptController']]],
   ['log',['log',['../classgameplay_1_1_logger.html#a27bafe9c9e845004b27cfade54787125',1,'gameplay::Logger']]],
-  ['luaarray',['LuaArray',['../classgameplay_1_1_script_util_1_1_lua_array.html#abf308914d5cb39f3def2ca685d97e4e6',1,'gameplay::ScriptUtil::LuaArray::LuaArray(T *param)'],['../classgameplay_1_1_script_util_1_1_lua_array.html#add5c3e1e0c8c11e9459bf4b5851be06b',1,'gameplay::ScriptUtil::LuaArray::LuaArray(int count)'],['../classgameplay_1_1_script_util_1_1_lua_array.html#ac550e0fee8f2b2f91d8fe6d600981b68',1,'gameplay::ScriptUtil::LuaArray::LuaArray(const LuaArray&lt; T &gt; &amp;copy)']]],
-  ['luacheckbool',['luaCheckBool',['../namespacegameplay_1_1_script_util.html#a8ce33b4ccff13dbdf03980dc22233e94',1,'gameplay::ScriptUtil']]]
+  ['luaarray',['LuaArray',['../classgameplay_1_1_script_util_1_1_lua_array.html#abf308914d5cb39f3def2ca685d97e4e6',1,'gameplay::ScriptUtil::LuaArray::LuaArray(T *param)'],['../classgameplay_1_1_script_util_1_1_lua_array.html#add5c3e1e0c8c11e9459bf4b5851be06b',1,'gameplay::ScriptUtil::LuaArray::LuaArray(int count)'],['../classgameplay_1_1_script_util_1_1_lua_array.html#ac550e0fee8f2b2f91d8fe6d600981b68',1,'gameplay::ScriptUtil::LuaArray::LuaArray(const LuaArray&lt; T &gt; &amp;copy)']]]
 ];
