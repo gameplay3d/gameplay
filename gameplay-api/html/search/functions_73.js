@@ -238,6 +238,7 @@ var searchData=
   ['setzindex',['setZIndex',['../classgameplay_1_1_control.html#ac7b612312a3af38cad20e0a20a40b371',1,'gameplay::Control']]],
   ['setzoomx',['setZoomX',['../classgameplay_1_1_camera.html#adaffdd24f5a806aa3597872d2e50daf6',1,'gameplay::Camera']]],
   ['setzoomy',['setZoomY',['../classgameplay_1_1_camera.html#a314bb88707a6dbf10c48abcb5d7b958d',1,'gameplay::Camera']]],
+  ['shutdowninternal',['shutdownInternal',['../classgameplay_1_1_platform.html#a1f27f0260b230dad54f08bd5d439d4bd',1,'gameplay::Platform']]],
   ['sideregions',['SideRegions',['../structgameplay_1_1_theme_1_1_side_regions.html#a86cda14ca68219356eec8a4876c586b5',1,'gameplay::Theme::SideRegions']]],
   ['slerp',['slerp',['../classgameplay_1_1_quaternion.html#a2ba6435fdf4e8a717d1302a442cbaf4a',1,'gameplay::Quaternion']]],
   ['slider',['Slider',['../classgameplay_1_1_slider.html#a180e1a81c7c384de48cd28524873f436',1,'gameplay::Slider']]],
