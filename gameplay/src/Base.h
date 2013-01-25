@@ -27,6 +27,7 @@
 #include <limits>
 #include <functional>
 #include <bitset>
+#include <typeinfo>
 #include "Logger.h"
 
 // Bring common functions from C into global namespace

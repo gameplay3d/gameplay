@@ -556,6 +556,14 @@ static RenderState::Blend parseBlend(const char* value)
         return RenderState::BLEND_ZERO;
     else if (upper == "ONE")
         return RenderState::BLEND_ONE;
+    else if (upper == "SRC_COLOR")
+        return RenderState::BLEND_SRC_COLOR;
+    else if (upper == "ONE_MINUS_SRC_COLOR")
+        return RenderState::BLEND_ONE_MINUS_SRC_COLOR;
+    else if (upper == "DST_COLOR")
+        return RenderState::BLEND_DST_COLOR;
+    else if (upper == "ONE_MINUS_DST_COLOR")
+        return RenderState::BLEND_ONE_MINUS_DST_COLOR;
     else if (upper == "SRC_ALPHA")
         return RenderState::BLEND_SRC_ALPHA;
     else if (upper == "ONE_MINUS_SRC_ALPHA")
