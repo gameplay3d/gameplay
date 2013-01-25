@@ -1,4 +1,4 @@
-/* The standard CSS for doxygen */
+/* The standard CSS for doxygen 1.8.3.1 */
 
 body, table, div, p, dl {
 	font: 400 14px/19px Roboto,sans-serif;
@@ -763,7 +763,7 @@ table.doxtable th {
 }
 
 table.fieldtable {
-        width: 100%;
+        /*width: 100%;*/
         margin-bottom: 10px;
         border: 1px solid #A8B8D9;
         border-spacing: 0px;
@@ -786,9 +786,21 @@ table.fieldtable {
         vertical-align: top;
 }
 
+.fieldtable td.fieldname {
+        padding-top: 5px;
+}
+
 .fieldtable td.fielddoc {
         border-bottom: 1px solid #A8B8D9;
-        width: 100%;
+        /*width: 100%;*/
+}
+
+.fieldtable td.fielddoc p:first-child {
+        margin-top: 2px;
+}       
+        
+.fieldtable td.fielddoc p:last-child {
+        margin-bottom: 2px;
 }
 
 .fieldtable tr:last-child td {
