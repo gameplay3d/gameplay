@@ -746,6 +746,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
         EGL_NONE
     };
+    __multiSampling = samples > 0;
 
     const EGLint eglContextAttrs[] =
     {
@@ -929,6 +930,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 break;
             }
         }
+
+        __multiSampling = samples > 0;
 
         if (!success)
         {

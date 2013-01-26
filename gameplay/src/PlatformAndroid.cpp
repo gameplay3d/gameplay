@@ -177,6 +177,7 @@ static bool initEGL()
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
         EGL_NONE
     };
+    __multiSampling = samples > 0;
     
     EGLint eglConfigCount;
     const EGLint eglContextAttrs[] =
@@ -238,6 +239,9 @@ static bool initEGL()
                         break;
                     }
                 }
+
+                __multiSampling = sampleCount > 0;
+
                 if (validConfig)
                     break;
             }

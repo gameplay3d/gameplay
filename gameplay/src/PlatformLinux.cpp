@@ -585,6 +585,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         GLX_SAMPLES,        __samples,
         0
     };
+    __multiSampling = __samples > 0;
+
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
