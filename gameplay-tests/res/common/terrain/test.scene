@@ -28,7 +28,7 @@ scene terrainTestScene
 		camera
 		{
 			type = PERSPECTIVE
-			nearPlane = 0.25
+			nearPlane = 1.0
 			farPlane = 100000
 		}
 

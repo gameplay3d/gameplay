@@ -975,22 +975,35 @@ int Platform::enterMessagePump()
     }
     GP_ASSERT(env);
 
-    // Get the package name for this app from Java.
-    jclass clazz = env->GetObjectClass(activity->clazz);
-    jmethodID methodID = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
-    jobject result = env->CallObjectMethod(activity->clazz, methodID);
-    
-    const char* packageName;
+    /* Get external files directory on Android; this will result in a directory where all app files
+     * should be stored, like /mnt/sdcard/android/<package-name>/files/
+     */
     jboolean isCopy;
-    packageName = env->GetStringUTFChars((jstring)result, &isCopy);
+
+    jclass clazz = env->GetObjectClass(activity->clazz);
+    jmethodID methodGetExternalStorage = env->GetMethodID(clazz, "getExternalFilesDir", "(Ljava/lang/String;)Ljava/io/File;");
+
+    jclass clazzFile = env->FindClass("java/io/File");
+    jmethodID methodGetPath = env->GetMethodID(clazzFile, "getPath", "()Ljava/lang/String;");
+
+    // Now has java.io.File object pointing to directory
+    jobject objectFile  = env->CallObjectMethod(activity->clazz, methodGetExternalStorage, NULL);
+    
+    // Now has String object containing path to directory
+    jstring stringExternalPath = static_cast<jstring>(env->CallObjectMethod(objectFile, methodGetPath));
+    const char* externalPath = env->GetStringUTFChars(stringExternalPath, &isCopy);
+
+    // Set the default path to store the resources.
+    std::string assetsPath(externalPath);
+    if (externalPath[strlen(externalPath)-1] != '/')
+        assetsPath += "/";
+
+    FileSystem::setResourcePath(assetsPath.c_str());    
+
+    // Release string data
+    env->ReleaseStringUTFChars(stringExternalPath, externalPath);
     jvm->DetachCurrentThread();
     
-    // Set the default path to store the resources.
-    std::string assetsPath = "/mnt/sdcard/android/data/";
-    assetsPath += packageName;
-    assetsPath += "/";
-    FileSystem::setResourcePath(assetsPath.c_str());    
-        
     // Get the asset manager to get the resources from the .apk file.
     __assetManager = activity->assetManager; 
     
