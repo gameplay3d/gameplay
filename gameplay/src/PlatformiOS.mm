@@ -38,6 +38,29 @@ extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 static AppDelegate *__appDelegate = NULL;
 static View* __view = NULL;
 
+class TouchPointListElement
+{
+public:
+    TouchPointListElement* _next;
+    TouchPointListElement* _prev;
+    unsigned int _id; // as assigned from hash
+    unsigned int _index; // to save time during touchesBegan
+    int _x;
+    int _y;
+    
+    TouchPointListElement()
+    {
+        _next = NULL;
+        _prev = NULL;
+        _id = 0;
+        _index = 0;
+        _x = 0;
+        _y = 0;
+    }
+};
+static TouchPointListElement* __touchPointListHead = NULL;
+static TouchPointListElement* __touchPointListTail = NULL;
+
 static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
@@ -516,7 +539,29 @@ int getUnicode(int key);
         {
             touchID = [touch hash];
         }
-        Platform::touchEventInternal(Touch::TOUCH_PRESS, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
+
+        // Map hash to index
+        TouchPointListElement* elem = new TouchPointListElement();
+        if (__touchPointListTail)
+        {
+            // Insert at end of list
+            __touchPointListTail->_next = elem;
+            elem->_index = __touchPointListTail->_index + 1;
+        }
+        else
+        {
+            // Insert into empty list
+            __touchPointListHead = elem;
+            elem->_index = 0;
+        }
+
+        elem->_prev = __touchPointListTail;
+        __touchPointListTail = elem;
+        elem->_id = touchID;
+        elem->_x = touchPoint.x * WINDOW_SCALE;
+        elem->_y = touchPoint.y * WINDOW_SCALE;
+
+        Platform::touchEventInternal(Touch::TOUCH_PRESS, elem->_x, elem->_y, elem->_index);
     }
 }
 
@@ -528,7 +573,67 @@ int getUnicode(int key);
         CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             touchID = [touch hash];
-        Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
+
+        // Map hash to index
+        TouchPointListElement* elem = NULL;
+        for (TouchPointListElement* p = __touchPointListHead; p; p = p->_next)
+        {
+            if (p->_id == touchID)
+            {
+                // Remove from list
+                elem = p;
+                p = elem->_next;
+
+                if (elem->_prev)
+                {
+                    elem->_prev->_next = p;
+                }
+                else
+                {
+                    __touchPointListHead = p;
+                }
+                
+                if (p)
+                {
+                    p->_prev = elem->_prev;
+                }
+                else
+                {
+                    __touchPointListTail = elem->_prev;
+                    break;
+                }
+            }
+
+            if (elem)
+            {
+                // Release at the old index and press at the new index
+                Platform::touchEventInternal(Touch::TOUCH_RELEASE, p->_x, p->_y, p->_index);
+                p->_index--;
+                Platform::touchEventInternal(Touch::TOUCH_PRESS, p->_x, p->_y, p->_index);
+            }
+        }
+        
+        if (elem)
+        {
+            Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, elem->_index);
+            delete elem;
+        }
+        else
+        {
+            // It seems possible to receive an ID not in the list.
+            // The best we can do is clear the whole list.
+            TouchPointListElement* p = __touchPointListTail;
+            while (p)
+            {
+                TouchPointListElement* e = p;
+                p = e->_prev;
+                // Neglect p->_next since the whole list is being deleted.
+                Platform::touchEventInternal(Touch::TOUCH_RELEASE, e->_x, e->_y, e->_index);
+                delete e;
+            }
+            __touchPointListTail = NULL;
+            __touchPointListHead = NULL;
+        }
     }
 }
 
@@ -546,7 +651,18 @@ int getUnicode(int key);
         CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             touchID = [touch hash];
-        Platform::touchEventInternal(Touch::TOUCH_MOVE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
+
+        // Map hash to index
+        for (TouchPointListElement* p = __touchPointListHead; p; p = p->_next)
+        {
+            if (p->_id == touchID)
+            {
+                p->_x = touchPoint.x * WINDOW_SCALE;
+                p->_y = touchPoint.y * WINDOW_SCALE;
+                Platform::touchEventInternal(Touch::TOUCH_MOVE, p->_x, p->_y, p->_index);
+                break;
+            }
+        }
     }
 }
 
