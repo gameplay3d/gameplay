@@ -2,6 +2,7 @@
 #include "ScriptController.h"
 #include "lua_MeshBatch.h"
 #include "Base.h"
+#include "Material.h"
 #include "MeshBatch.h"
 #include "lua_MeshPrimitiveType.h"
 
@@ -12,6 +13,7 @@ void luaRegister_MeshBatch()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"add", lua_MeshBatch_add},
         {"draw", lua_MeshBatch_draw},
         {"finish", lua_MeshBatch_finish},
         {"getCapacity", lua_MeshBatch_getCapacity},
@@ -68,6 +70,102 @@ int lua_MeshBatch__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_MeshBatch_add(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                MeshBatch* instance = getInstance(state);
+                instance->add(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_MeshBatch_add - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA))
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                ScriptUtil::LuaArray<unsigned short> param3 = ScriptUtil::getUnsignedShortPointer(4);
+
+                MeshBatch* instance = getInstance(state);
+                instance->add(param1, param2, param3);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_MeshBatch_add - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        case 5:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 3) == LUA_TNUMBER &&
+                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
+                lua_type(state, 5) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                ScriptUtil::LuaArray<unsigned short> param3 = ScriptUtil::getUnsignedShortPointer(4);
+
+                // Get parameter 4 off the stack.
+                unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+
+                MeshBatch* instance = getInstance(state);
+                instance->add(param1, param2, param3, param4);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_MeshBatch_add - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3, 4 or 5).");
             lua_error(state);
             break;
         }
