@@ -598,7 +598,6 @@ AnimationClip* AnimationClip::clone(Animation* animation) const
 {
     // Don't clone the elapsed time, listeners or crossfade information.
     AnimationClip* newClip = new AnimationClip(getId(), animation, getStartTime(), getEndTime());
-    newClip->setRepeatCount(getRepeatCount());
     newClip->setSpeed(getSpeed());
     newClip->setRepeatCount(getRepeatCount());
     newClip->setBlendWeight(getBlendWeight());
