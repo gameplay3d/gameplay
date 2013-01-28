@@ -4,6 +4,8 @@
 #include "Game.h"
 #include "Node.h"
 
+#define ANIMATION_TARGET_INDEFINITE_STR "INDEFINITE"
+
 namespace gameplay
 {
 
@@ -261,6 +263,21 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         animation = createAnimation(id, propertyId, keyCount, keyTimes, keyValues, (Curve::InterpolationType) curve);
     }
 
+    const char* repeat = animationProperties->getString("repeatCount");
+    if (repeat)
+    {
+        if (strcmp(repeat, ANIMATION_TARGET_INDEFINITE_STR) == 0)
+        {
+            animation->getClip()->setRepeatCount(AnimationClip::REPEAT_INDEFINITE);
+        }
+        else
+        {
+            float value;
+            sscanf(repeat, "%f", &value);
+            animation->getClip()->setRepeatCount(value);
+        }
+    }
+    
     SAFE_DELETE_ARRAY(keyOut);
     SAFE_DELETE_ARRAY(keyIn);
     SAFE_DELETE_ARRAY(keyValues);
@@ -277,7 +294,7 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
         }
         animation->createClips(animationProperties, (unsigned int) frameCount);
     }
-
+    
     return animation;
 }
 
