@@ -27,6 +27,7 @@ static float __roll;
 static bool __mouseCaptured = false;
 static float __mouseCapturePointX = 0;
 static float __mouseCapturePointY = 0;
+static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static Display* __display;
 static Window   __window;
@@ -584,6 +585,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         GLX_SAMPLES,        __samples,
         0
     };
+    __multiSampling = __samples > 0;
+
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
@@ -997,6 +1000,23 @@ void Platform::swapBuffers()
 void Platform::sleep(long ms)
 {
     usleep(ms * 1000);
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
 }
 
 void Platform::setMultiTouch(bool enabled)

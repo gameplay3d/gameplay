@@ -280,6 +280,8 @@ int getUnicode(int key);
             samples /= 2;
         }
         
+        //todo: __multiSampling = samples > 0;
+
         // Re-bind the default framebuffer
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
         
@@ -1406,6 +1408,16 @@ bool Platform::isCursorVisible()
 {
     // not supported
     return false;
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    //todo
+}
+
+bool Platform::isMultiSampling()
+{
+    return false; //todo
 }
 
 void Platform::setMultiTouch(bool enabled) 
