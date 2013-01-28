@@ -36,6 +36,7 @@ static HDC __hdc = 0;
 static HGLRC __hrc = 0;
 static bool __mouseCaptured = false;
 static POINT __mouseCapturePoint = { 0, 0 };
+static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static unsigned int __gamepadsConnected = 0;
 
@@ -663,6 +664,8 @@ bool initializeGL(WindowCreationParams* params)
         WGL_STENCIL_BITS_ARB, DEFAULT_STENCIL_BUFFER_SIZE,
         0
     };
+    __multiSampling = params->samples > 0;
+
     UINT numFormats;
     if (!wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
     {
@@ -682,6 +685,8 @@ bool initializeGL(WindowCreationParams* params)
                     break;
                 }
             }
+
+            __multiSampling = params->samples > 0;
         }
 
         if (!valid)
@@ -1062,6 +1067,30 @@ void Platform::swapBuffers()
 void Platform::sleep(long ms)
 {
     Sleep(ms);
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    if (enabled)
+    {
+        glEnable(GL_MULTISAMPLE);
+    }
+    else
+    {
+        glDisable(GL_MULTISAMPLE);
+    }
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
 }
 
 void Platform::setMultiTouch(bool enabled)
