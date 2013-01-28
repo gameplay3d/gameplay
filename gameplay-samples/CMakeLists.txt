@@ -41,9 +41,10 @@ set(GAMEPLAY_LIBRARIES
     rt
     dl
     X11
+    pthread
 ) 
 
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL -lrt -ldl -lX11)
+add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath -lopenal -LGLEW -lGL -lrt -ldl -lX11 -lpthread)
 
 add_subdirectory(sample00-mesh)
 add_subdirectory(sample01-longboard)
