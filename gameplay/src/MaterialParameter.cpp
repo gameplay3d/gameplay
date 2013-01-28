@@ -663,6 +663,9 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
         GP_ERROR("Unsupported material parameter type(%d).", _type);
         break;
     }
+    
+    NodeCloneContext context;
+    this->AnimationTarget::cloneInto(materialParameter, context);
 }
 
 }
