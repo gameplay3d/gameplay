@@ -135,6 +135,16 @@ public:
     Node* getNode() const;
 
     /**
+     * Sets the node that is associated with this model.
+     *
+     * This method is automatically called when a model is attached to a node
+     * and therefore should not normally be called explicitly.
+     * 
+     * @param node The node that is associated with this model.
+     */
+    void setNode(Node* node);
+
+    /**
      * Draws this mesh instance.
      *
      * This method binds the vertex buffer and index buffers for the Mesh and
@@ -171,14 +181,7 @@ private:
     void setSkin(MeshSkin* skin);
 
     /**
-     * Sets the node that is associated with this model.
-     * 
-     * @param node The node that is associated with this model.
-     */
-    void setNode(Node* node);
-
-    /**
-     * Sets the specified materia's node binding to this model's node.
+     * Sets the specified material's node binding to this model's node.
      */
     void setMaterialNodeBinding(Material *m);
 

@@ -9,7 +9,7 @@ static const char* enumStringEmpty = "";
 static const char* luaEnumString_RenderStateBlend_BLEND_ZERO = "BLEND_ZERO";
 static const char* luaEnumString_RenderStateBlend_BLEND_ONE = "BLEND_ONE";
 static const char* luaEnumString_RenderStateBlend_BLEND_SRC_COLOR = "BLEND_SRC_COLOR";
-static const char* luaEnumString_RenderStateBlend_BLEN_ONE_MINUS_SRC_COLOR = "BLEN_ONE_MINUS_SRC_COLOR";
+static const char* luaEnumString_RenderStateBlend_BLEND_ONE_MINUS_SRC_COLOR = "BLEND_ONE_MINUS_SRC_COLOR";
 static const char* luaEnumString_RenderStateBlend_BLEND_DST_COLOR = "BLEND_DST_COLOR";
 static const char* luaEnumString_RenderStateBlend_BLEND_ONE_MINUS_DST_COLOR = "BLEND_ONE_MINUS_DST_COLOR";
 static const char* luaEnumString_RenderStateBlend_BLEND_SRC_ALPHA = "BLEND_SRC_ALPHA";
@@ -28,8 +28,8 @@ RenderState::Blend lua_enumFromString_RenderStateBlend(const char* s)
         return RenderState::BLEND_ONE;
     if (strcmp(s, luaEnumString_RenderStateBlend_BLEND_SRC_COLOR) == 0)
         return RenderState::BLEND_SRC_COLOR;
-    if (strcmp(s, luaEnumString_RenderStateBlend_BLEN_ONE_MINUS_SRC_COLOR) == 0)
-        return RenderState::BLEN_ONE_MINUS_SRC_COLOR;
+    if (strcmp(s, luaEnumString_RenderStateBlend_BLEND_ONE_MINUS_SRC_COLOR) == 0)
+        return RenderState::BLEND_ONE_MINUS_SRC_COLOR;
     if (strcmp(s, luaEnumString_RenderStateBlend_BLEND_DST_COLOR) == 0)
         return RenderState::BLEND_DST_COLOR;
     if (strcmp(s, luaEnumString_RenderStateBlend_BLEND_ONE_MINUS_DST_COLOR) == 0)
@@ -60,8 +60,8 @@ const char* lua_stringFromEnum_RenderStateBlend(RenderState::Blend e)
         return luaEnumString_RenderStateBlend_BLEND_ONE;
     if (e == RenderState::BLEND_SRC_COLOR)
         return luaEnumString_RenderStateBlend_BLEND_SRC_COLOR;
-    if (e == RenderState::BLEN_ONE_MINUS_SRC_COLOR)
-        return luaEnumString_RenderStateBlend_BLEN_ONE_MINUS_SRC_COLOR;
+    if (e == RenderState::BLEND_ONE_MINUS_SRC_COLOR)
+        return luaEnumString_RenderStateBlend_BLEND_ONE_MINUS_SRC_COLOR;
     if (e == RenderState::BLEND_DST_COLOR)
         return luaEnumString_RenderStateBlend_BLEND_DST_COLOR;
     if (e == RenderState::BLEND_ONE_MINUS_DST_COLOR)

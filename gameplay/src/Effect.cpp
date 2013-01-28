@@ -21,7 +21,7 @@ Effect::~Effect()
     __effectCache.erase(_id);
 
     // Free uniforms.
-    for (std::map<std::string, Uniform*>::iterator itr = _uniforms.begin(); itr != _uniforms.end(); itr++)
+    for (std::map<std::string, Uniform*>::iterator itr = _uniforms.begin(); itr != _uniforms.end(); ++itr)
     {
         SAFE_DELETE(itr->second);
     }
@@ -126,9 +126,8 @@ static void replaceIncludes(const char* filepath, const char* source, std::strin
     std::string str = source;
     size_t lastPos = 0;
     size_t headPos = 0;
-    size_t tailPos = 0;
     size_t fileLen = str.length();
-    tailPos = fileLen;
+    size_t tailPos = fileLen;
     while (headPos < fileLen)
     {
         lastPos = headPos;
@@ -200,10 +199,11 @@ static void writeShaderToErrorFile(const char* filePath, const char* source)
 {
     std::string path = filePath;
     path += ".err";
-    FILE* file = FileSystem::openFile(path.c_str(), "wb");
-    int err = ferror(file);
-    fwrite(source, 1, strlen(source), file);
-    fclose(file);
+    std::auto_ptr<Stream> stream(FileSystem::open(path.c_str(), FileSystem::WRITE));
+    if (stream.get() != NULL && stream->canWrite())
+    {
+        stream->write(source, 1, strlen(source));
+    }
 }
 
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
@@ -402,9 +402,9 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 // Query uniform info.
                 GL_ASSERT( glGetActiveUniform(program, i, length, NULL, &uniformSize, &uniformType, uniformName) );
                 uniformName[length] = '\0';  // null terminate
-                if (uniformSize > 1 && length > 3)
+                if (length > 3)
                 {
-                    // This is an array uniform. I'm stripping array indexers off it since GL does not
+                    // If this is an array uniform, strip array indexers off it since GL does not
                     // seem to be consistent across different drivers/implementations in how it returns
                     // array uniforms. On some systems it will return "u_matrixArray", while on others
                     // it will return "u_matrixArray[0]".
@@ -423,7 +423,15 @@ Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, con
                 uniform->_name = uniformName;
                 uniform->_location = uniformLocation;
                 uniform->_type = uniformType;
-                uniform->_index = uniformType == GL_SAMPLER_2D ? (samplerIndex++) : 0;
+                if (uniformType == GL_SAMPLER_2D)
+                {
+                    uniform->_index = samplerIndex;
+                    samplerIndex += uniformSize;
+                }
+                else
+                {
+                    uniform->_index = 0;
+                }
 
                 effect->_uniforms[uniformName] = uniform;
             }
@@ -454,7 +462,7 @@ Uniform* Effect::getUniform(const char* name) const
 Uniform* Effect::getUniform(unsigned int index) const
 {
     unsigned int i = 0;
-    for (std::map<std::string, Uniform*>::const_iterator itr = _uniforms.begin(); itr != _uniforms.end(); itr++, i++)
+    for (std::map<std::string, Uniform*>::const_iterator itr = _uniforms.begin(); itr != _uniforms.end(); ++itr, ++i)
     {
         if (i == index)
         {
@@ -559,6 +567,28 @@ void Effect::setValue(Uniform* uniform, const Texture::Sampler* sampler)
     const_cast<Texture::Sampler*>(sampler)->bind();
 
     GL_ASSERT( glUniform1i(uniform->_location, uniform->_index) );
+}
+
+void Effect::setValue(Uniform* uniform, const Texture::Sampler** values, unsigned int count)
+{
+    GP_ASSERT(uniform);
+    GP_ASSERT(uniform->_type == GL_SAMPLER_2D);
+    GP_ASSERT(values);
+
+    // Set samplers as active and load texture unit array
+    GLint units[32];
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        GL_ASSERT( glActiveTexture(GL_TEXTURE0 + uniform->_index + i) );
+
+        // Bind the sampler - this binds the texture and applies sampler state
+        const_cast<Texture::Sampler*>(values[i])->bind();
+
+        units[i] = uniform->_index + i;
+    }
+
+    // Pass texture unit array to GL
+    GL_ASSERT( glUniform1iv(uniform->_location, count, units) );
 }
 
 void Effect::bind()

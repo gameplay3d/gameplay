@@ -334,7 +334,7 @@ int lua_DepthStencilTarget_static_create(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 DepthStencilTarget::Format param2 = (DepthStencilTarget::Format)lua_enumFromString_DepthStencilTargetFormat(luaL_checkstring(state, 2));
@@ -389,7 +389,7 @@ int lua_DepthStencilTarget_static_getDepthStencilTarget(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(1, false);
+                const char* param1 = ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)DepthStencilTarget::getDepthStencilTarget(param1);
                 if (returnPtr)

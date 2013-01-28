@@ -47,9 +47,6 @@ void CharacterGame::initialize()
     // Initialize the physics character.
     initializeCharacter();
 
-    // Initialize the gamepad.
-    initializeGamepad();
-
     // Create a collision object for the ceiling.
     Node* ceiling = _scene->addNode("ceiling");
     ceiling->setTranslationY(14.5f);
@@ -63,6 +60,8 @@ void CharacterGame::initialize()
 
     // Initialize scene.
     _scene->visit(this, &CharacterGame::initializeScene);
+
+    _gamepad = getGamepad(0);
 }
 
 bool CharacterGame::initializeScene(Node* node)
@@ -120,11 +119,6 @@ void CharacterGame::initializeCharacter()
 
     // Start playing the idle animation when we load.
     play("idle", true);
-}
-
-void CharacterGame::initializeGamepad()
-{
-    _gamepad = getGamepad(0);
 }
 
 void CharacterGame::finalize()
@@ -194,7 +188,8 @@ void CharacterGame::jump()
 void CharacterGame::kick()
 {
     if (!_jumpClip->isPlaying())
-        play("kick", false, 1.0f);
+        play("kick", false, 1.75f);
+    _kicking = true;
 }
 
 bool CharacterGame::isOnFloor() const
@@ -215,10 +210,12 @@ void CharacterGame::update(float elapsedTime)
         _hasBall = false;
         _applyKick = false;
     }
+    if (!_kickClip->isPlaying())
+        _kicking = false;
 
     _gamepad->update(elapsedTime);
 
-    if (_gamepad->getButtonState(BUTTON_1) == Gamepad::BUTTON_PRESSED)
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
     {
         if (_buttonPressed[BUTTON_1])
         {
@@ -232,7 +229,7 @@ void CharacterGame::update(float elapsedTime)
         _buttonPressed[BUTTON_1] = true;
     }
 
-    if (_gamepad->getButtonState(BUTTON_2) == Gamepad::BUTTON_PRESSED)
+    if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
     {
         if (_buttonPressed[BUTTON_2])
         {
@@ -247,11 +244,21 @@ void CharacterGame::update(float elapsedTime)
 
     _currentDirection.set(Vector2::zero());
 
-    if (_gamepad->isJoystickActive(0))
+    if (!_kicking)
     {
-        _gamepad->getJoystickAxisValues(0, &_currentDirection);
+        if (_gamepad->getJoystickCount() > 0)
+        {
+            _gamepad->getJoystickValues(0, &_currentDirection);
+        }
     }
-    else
+    if (_gamepad->getJoystickCount() > 1)
+    {
+        Vector2 out;
+        _gamepad->getJoystickValues(1, &out);
+       _character->getNode()->rotateY(-MATH_DEG_TO_RAD(out.x * 2.0f));
+    }
+    
+    if (_currentDirection.isZero())
     {
         // Construct direction vector from keyboard input
         if (_keyFlags & NORTH)
@@ -489,6 +496,27 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         }
         break;
     default:
+        break;
+    }
+}
+
+bool CharacterGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
+{
+    if (evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON)
+    {
+        kick();
+        return true;
+    }
+    return false;
+}
+
+void CharacterGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
+    switch(evt)
+    {
+    case Gamepad::CONNECTED_EVENT:
+    case Gamepad::DISCONNECTED_EVENT:
+        _gamepad = getGamepad(0);
         break;
     }
 }

@@ -184,7 +184,7 @@ void PhysicsVehicle::initialize()
     btRigidBody* body = static_cast<btRigidBody*>(_rigidBody->getCollisionObject());
     btDynamicsWorld* dynamicsWorld = Game::getInstance()->getPhysicsController()->_world;
     _vehicleRaycaster = new VehicleNotMeRaycaster(dynamicsWorld, body);
-    _vehicle = new btRaycastVehicle(_vehicleTuning, body, _vehicleRaycaster);
+    _vehicle = bullet_new<btRaycastVehicle>(_vehicleTuning, body, _vehicleRaycaster);
     body->setActivationState(DISABLE_DEACTIVATION);
     dynamicsWorld->addVehicle(_vehicle);
     _vehicle->setCoordinateSystem(0, 1, 2);

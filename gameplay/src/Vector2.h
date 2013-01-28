@@ -245,7 +245,7 @@ public:
      *
      * @param dst The destination vector.
      */
-    void normalize(Vector2* dst);
+    void normalize(Vector2* dst) const;
 
     /**
      * Scales all elements of this vector by the specified value.

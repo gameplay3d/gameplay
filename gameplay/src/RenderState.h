@@ -84,7 +84,26 @@ public:
         /**
          * Binds the matrix palette of MeshSkin attached to a node's model.
          */
-        MATRIX_PALETTE
+        MATRIX_PALETTE,
+
+        /**
+         * Binds the current scene's ambient color (Vector3).
+         */
+        SCENE_AMBIENT_COLOR,
+
+        /**
+         * Binds the current scene's light color (Vector3).
+         *
+         * This is typically used for the main directional light in a scene, such as the Sun.
+         */
+        SCENE_LIGHT_COLOR,
+
+        /**
+         * Binds the current scene's light direction (Vector3).
+         *
+         * This is typically used for the main directional light in a scene, such as the Sun.
+         */
+        SCENE_LIGHT_DIRECTION
     };
 
     /**
@@ -92,7 +111,7 @@ public:
      *
      * Functions matching this callback signature can be registered via the 
      * RenderState::registerAutoBindingResolver method to extend or override the set
-     * of built-in material paramter auto bindings.
+     * of built-in material parameter auto bindings.
      *
      * @param autoBinding Name of the auto binding to resolve.
      * @param node Node that is bound to the material of the specified parameter.
@@ -115,7 +134,7 @@ public:
         BLEND_ZERO = GL_ZERO,
         BLEND_ONE = GL_ONE,
         BLEND_SRC_COLOR = GL_SRC_COLOR,
-        BLEN_ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+        BLEND_ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
         BLEND_DST_COLOR = GL_DST_COLOR,
         BLEND_ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
         BLEND_SRC_ALPHA = GL_SRC_ALPHA,
@@ -125,6 +144,27 @@ public:
         BLEND_CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
         BLEND_ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
         BLEND_SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE
+    };
+
+    /**
+     * Defines the supported depth compare functions.
+     *
+     * Depth compare functions specify the comparison that takes place between the
+     * incoming pixel's depth value and the depth value already in the depth buffer.
+     * If the compare function passes, the new pixel will be drawn.
+     *
+     * The intial depth compare function is DEPTH_LESS.
+     */
+    enum DepthFunction
+    {
+        DEPTH_NEVER = GL_NEVER,
+        DEPTH_LESS = GL_LESS,
+        DEPTH_EQUAL = GL_EQUAL,
+        DEPTH_LEQUAL = GL_LEQUAL,
+        DEPTH_GREATER = GL_GREATER,
+        DEPTH_NOTEQUAL = GL_NOTEQUAL,
+        DEPTH_GEQUAL = GL_GEQUAL,
+        DEPTH_ALWAYS = GL_ALWAYS
     };
 
     /**
@@ -187,6 +227,8 @@ public:
         /**
          * Toggles depth testing.
          *
+         * By default, depth testing is disabled.
+         *
          * @param enabled true to enable, false to disable.
          */
         void setDepthTest(bool enabled);
@@ -197,6 +239,16 @@ public:
          * @param enabled true to enable, false to disable.
          */
         void setDepthWrite(bool enabled);
+
+        /**
+         * Sets the depth function to use when depth testing is enabled.
+         *
+         * When not explicitly set and when depth testing is enabled, the default
+         * depth function is DEPTH_LESS.
+         *
+         * @param func The depth function.
+         */
+        void setDepthFunction(DepthFunction func);
 
         /**
          * Sets a render state from the given name and value strings.
@@ -237,6 +289,7 @@ public:
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
         bool _depthWriteEnabled;
+        DepthFunction _depthFunction;
         bool _blendEnabled;
         Blend _blendSrc;
         Blend _blendDst;
@@ -309,11 +362,11 @@ public:
     /**
      * Registers a custom auto binding resolver.
      *
-     * Implementing a custom auto binding reolver allows the set of built-in parameter auto
+     * Implementing a custom auto binding resolver allows the set of built-in parameter auto
      * bindings to be extended or overridden. Any parameter auto binding that is set on a
      * material will be forwarded to any custom auto binding resolvers, in the order in which
      * they are registered. If a registered resolver returns true (specifying that it handles
-     * the specified autoBinding), no further code will be exeucted for that autoBinding.
+     * the specified autoBinding), no further code will be executed for that autoBinding.
      * This allows auto binding resolvers to not only implement new/custom binding strings,
      * but it also lets them override existing/built-in ones. For this reason, you should
      * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
@@ -324,7 +377,7 @@ public:
      * Model that belongs to a Node. The resolver is NOT called each frame or each time
      * the RenderState is bound. Therefore, when implementing custom auto bindings for values
      * that change over time, the you should bind a method pointer onto the passed in
-     * MaterialParaemter using the MaterialParameter::bindValue mehtod. This way, the bound 
+     * MaterialParaemter using the MaterialParameter::bindValue method. This way, the bound
      * method will be called each frame to set an updated value into the MaterialParameter.
      *
      * If no registered resolvers explicitly handle an auto binding, the binding will attempt
@@ -436,7 +489,7 @@ protected:
     RenderState* _parent;
 
     /**
-     * Map of custom auto binding resolverss.
+     * Map of custom auto binding resolvers.
      */
     static std::vector<ResolveAutoBindingCallback> _customAutoBindingResolvers;
 };

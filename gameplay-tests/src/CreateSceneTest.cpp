@@ -117,7 +117,7 @@ void CreateSceneTest::initialize()
     material->getParameter("u_ambientColor")->setValue(Vector3(1, 1, 1));
 
     // Load the texture from file.
-    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/common/box-diffuse.png", true);
+    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/png/box-diffuse.png", true);
     sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
     material->getStateBlock()->setCullFace(true);
     material->getStateBlock()->setDepthTest(true);

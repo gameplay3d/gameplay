@@ -12,6 +12,7 @@ form VIRTUAL GAMEPAD
         
         joystick
         {
+            index = 0
             style = joystickStyle
             size = 256, 256
             alignment = ALIGN_VCENTER_HCENTER
@@ -31,15 +32,17 @@ form VIRTUAL GAMEPAD
             alignment = ALIGN_VCENTER_HCENTER
             consumeEvents = false
             
-            button
+            button accelerate
             {
+                mapping = BUTTON_A
                 style = buttonAStyle
                 size = 128, 128
                 alignment = ALIGN_BOTTOM_LEFT
             }
 
-            button
+            button brake
             {
+                mapping = BUTTON_B
                 style = buttonBStyle
                 size = 128, 128
                 alignment = ALIGN_TOP_RIGHT

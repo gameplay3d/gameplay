@@ -8,9 +8,11 @@
 #include "Pass.h"
 #include "Ref.h"
 #include "RenderState.h"
+#include "Scene.h"
 #include "Technique.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
+#include "lua_RenderStateDepthFunction.h"
 
 namespace gameplay
 {
@@ -242,7 +244,7 @@ int lua_Pass_getParameter(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                const char* param1 = ScriptUtil::getString(2, false);
 
                 Pass* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getParameter(param1);
@@ -448,7 +450,7 @@ int lua_Pass_setParameterAutoBinding(lua_State* state)
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     RenderState::AutoBinding param2 = (RenderState::AutoBinding)lua_enumFromString_RenderStateAutoBinding(luaL_checkstring(state, 3));
@@ -467,10 +469,10 @@ int lua_Pass_setParameterAutoBinding(lua_State* state)
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<const char> param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    ScriptUtil::LuaArray<const char> param2 = ScriptUtil::getString(3, false);
+                    const char* param2 = ScriptUtil::getString(3, false);
 
                     Pass* instance = getInstance(state);
                     instance->setParameterAutoBinding(param1, param2);

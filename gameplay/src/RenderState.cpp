@@ -4,6 +4,7 @@
 #include "Pass.h"
 #include "Technique.h"
 #include "Node.h"
+#include "Scene.h"
 
 // Render state override bits
 #define RS_BLEND 1
@@ -11,6 +12,7 @@
 #define RS_CULL_FACE 4
 #define RS_DEPTH_TEST 8
 #define RS_DEPTH_WRITE 16
+#define RS_DEPTH_FUNC 32
 
 namespace gameplay
 {
@@ -115,6 +117,15 @@ const char* autoBindingToString(RenderState::AutoBinding autoBinding)
 
     case RenderState::MATRIX_PALETTE:
         return "MATRIX_PALETTE";
+
+    case RenderState::SCENE_AMBIENT_COLOR:
+        return "SCENE_AMBIENT_COLOR";
+
+    case RenderState::SCENE_LIGHT_COLOR:
+        return "SCENE_LIGHT_COLOR";
+
+    case RenderState::SCENE_LIGHT_DIRECTION:
+        return "SCENE_LIGHT_DIRECTION";
 
     default:
         return "";
@@ -261,6 +272,24 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
             param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
         }
     }
+    else if (strcmp(autoBinding, "SCENE_AMBIENT_COLOR") == 0)
+    {
+        Scene* scene = _nodeBinding->getScene();
+        if (scene)
+            param->bindValue(scene, &Scene::getAmbientColor);
+    }
+    else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
+    {
+        Scene* scene = _nodeBinding->getScene();
+        if (scene)
+            param->bindValue(scene, &Scene::getLightColor);
+    }
+    else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
+    {
+        Scene* scene = _nodeBinding->getScene();
+        if (scene)
+            param->bindValue(scene, &Scene::getLightDirection);
+    }
     else
     {
         GP_WARN("Unsupported auto binding type (%d).", autoBinding);
@@ -354,7 +383,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 }
 
 RenderState::StateBlock::StateBlock()
-    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(false),
+    : _cullFaceEnabled(false), _depthTestEnabled(false), _depthWriteEnabled(true), _depthFunction(RenderState::DEPTH_LESS),
       _blendEnabled(false), _blendSrc(RenderState::BLEND_ONE), _blendDst(RenderState::BLEND_ZERO),
       _bits(0L)
 {
@@ -426,6 +455,11 @@ void RenderState::StateBlock::bindNoRestore()
         GL_ASSERT( glDepthMask(_depthWriteEnabled ? GL_TRUE : GL_FALSE) );
         _defaultState->_depthWriteEnabled = _depthWriteEnabled;
     }
+    if ((_bits & RS_DEPTH_FUNC) && (_depthFunction != _defaultState->_depthFunction))
+    {
+        GL_ASSERT( glDepthFunc((GLenum)_depthFunction) );
+        _defaultState->_depthFunction = _depthFunction;
+    }
 
     _defaultState->_bits |= _bits;
 }
@@ -472,6 +506,12 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         _defaultState->_bits &= ~RS_DEPTH_WRITE;
         _defaultState->_depthWriteEnabled = true;
     }
+    if (!(stateOverrideBits & RS_DEPTH_FUNC) && (_defaultState->_bits & RS_DEPTH_FUNC))
+    {
+        GL_ASSERT( glDepthFunc((GLenum)GL_LESS) );
+        _defaultState->_bits &= ~RS_DEPTH_FUNC;
+        _defaultState->_depthFunction = RenderState::DEPTH_LESS;
+    }
 }
 
 void RenderState::StateBlock::enableDepthWrite()
@@ -516,6 +556,14 @@ static RenderState::Blend parseBlend(const char* value)
         return RenderState::BLEND_ZERO;
     else if (upper == "ONE")
         return RenderState::BLEND_ONE;
+    else if (upper == "SRC_COLOR")
+        return RenderState::BLEND_SRC_COLOR;
+    else if (upper == "ONE_MINUS_SRC_COLOR")
+        return RenderState::BLEND_ONE_MINUS_SRC_COLOR;
+    else if (upper == "DST_COLOR")
+        return RenderState::BLEND_DST_COLOR;
+    else if (upper == "ONE_MINUS_DST_COLOR")
+        return RenderState::BLEND_ONE_MINUS_DST_COLOR;
     else if (upper == "SRC_ALPHA")
         return RenderState::BLEND_SRC_ALPHA;
     else if (upper == "ONE_MINUS_SRC_ALPHA")
@@ -534,6 +582,36 @@ static RenderState::Blend parseBlend(const char* value)
     {
         GP_ERROR("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)", value);
         return RenderState::BLEND_ONE;
+    }
+}
+
+static RenderState::DepthFunction parseDepthFunc(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "NEVER")
+        return RenderState::DEPTH_NEVER;
+    else if (upper == "LESS")
+        return RenderState::DEPTH_LESS;
+    else if (upper == "EQUAL")
+        return RenderState::DEPTH_EQUAL;
+    else if (upper == "LEQUAL")
+        return RenderState::DEPTH_LEQUAL;
+    else if (upper == "GREATER")
+        return RenderState::DEPTH_GREATER;
+    else if (upper == "NOTEQUAL")
+        return RenderState::DEPTH_NOTEQUAL;
+    else if (upper == "GEQUAL")
+        return RenderState::DEPTH_GEQUAL;
+    else if (upper == "ALWAYS")
+        return RenderState::DEPTH_ALWAYS;
+    else
+    {
+        GP_ERROR("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)", value);
+        return RenderState::DEPTH_LESS;
     }
 }
 
@@ -564,6 +642,10 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     else if (strcmp(name, "depthWrite") == 0)
     {
         setDepthWrite(parseBoolean(value));
+    }
+    else if (strcmp(name, "depthFunc") == 0)
+    {
+        setDepthFunction(parseDepthFunc(value));
     }
     else
     {
@@ -648,6 +730,20 @@ void RenderState::StateBlock::setDepthWrite(bool enabled)
     else
     {
         _bits |= RS_DEPTH_WRITE;
+    }
+}
+
+void RenderState::StateBlock::setDepthFunction(DepthFunction func)
+{
+    _depthFunction = func;
+    if (_depthFunction == DEPTH_LESS)
+    {
+        // Default depth function
+        _bits &= ~RS_DEPTH_FUNC;
+    }
+    else
+    {
+        _bits |= RS_DEPTH_FUNC;
     }
 }
 

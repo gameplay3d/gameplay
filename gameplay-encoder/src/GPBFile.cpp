@@ -338,7 +338,7 @@ void GPBFile::adjust()
     const std::vector<EncoderArguments::HeightmapOption>& heightmaps = EncoderArguments::getInstance()->getHeightmapOptions();
     for (unsigned int i = 0, count = heightmaps.size(); i < count; ++i)
     {
-        Heightmap::generate(heightmaps[i].nodeIds, heightmaps[i].filename.c_str(), heightmaps[i].isHighPrecision);
+        Heightmap::generate(heightmaps[i].nodeIds, heightmaps[i].width, heightmaps[i].height, heightmaps[i].filename.c_str(), heightmaps[i].isHighPrecision);
     }
 }
 

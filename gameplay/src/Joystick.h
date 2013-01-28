@@ -18,10 +18,8 @@ namespace gameplay
         size        = <width, height>           // Size of the Control, measured in pixels.
         radius      = <float>                   // The value of the left- / bottom-most point on the slider.
         consumeEvents = <bool>                  // Whether the slider propagates input events to the Game's input event handler. Default is true.
-        
     }
  @endverbatim
- *
  */
 class Joystick : public Control
 {
@@ -115,6 +113,13 @@ public:
      */
     const char* getType() const;
 
+    /**
+     * Gets the index of this joystick across all joysticks on a form.
+     *
+     * @return The index of this joystick on a form.
+     */
+    inline const unsigned int getIndex() const;
+
 protected:
     
     /**
@@ -178,6 +183,7 @@ private:
     Vector2 _displacement;
     Vector2* _innerSize;
     Vector2* _outerSize;
+    unsigned int _index;
 };
 
 }

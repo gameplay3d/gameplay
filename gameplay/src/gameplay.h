@@ -29,6 +29,7 @@
 
 // Graphics
 #include "Texture.h"
+#include "Image.h"
 #include "Mesh.h"
 #include "MeshPart.h"
 #include "Effect.h"
@@ -49,6 +50,8 @@
 #include "RenderTarget.h"
 #include "DepthStencilTarget.h"
 #include "ScreenDisplayer.h"
+#include "HeightField.h"
+#include "Terrain.h"
 
 // Audio
 #include "AudioController.h"

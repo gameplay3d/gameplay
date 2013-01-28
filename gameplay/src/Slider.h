@@ -59,7 +59,7 @@ public:
      *
      * @return The minimum value that can be set on this slider.
      */
-    float getMin();
+    float getMin() const;
 
     /**
      * Set the maximum value that can be set on this slider.
@@ -73,7 +73,7 @@ public:
      *
      * @return The maximum value that can be set on this slider.
      */
-    float getMax();
+    float getMax() const;
 
     /**
      * Set this slider's step size.  If this is greater than zero, the marker
@@ -88,7 +88,7 @@ public:
      *
      * @return This slider's step size.
      */
-    float getStep();
+    float getStep() const;
 
     /**
      * Set this slider's value.  The new value will be clamped to fit within
@@ -103,12 +103,54 @@ public:
      *
      * @return This slider's current value.
      */
-    float getValue();
+    float getValue() const;
 
     /**
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Sets if the slider value text is rendered below the control.
+     * 
+     * @param visible If the slider value text is rendered below the control. 
+     */
+    void setValueTextVisible(bool visible);
+
+    /**
+     * Gets if the slider value text is rendered below the control.
+     *
+     * @return true if the slider value text is rendered below the control, false if otherwise.
+     */
+    bool isValueTextVisible() const;
+
+    /**
+     * Sets the slider value text alignment.
+     * 
+     * @param alignment the slider value text alignment. 
+     */
+    void setValueTextAlignment(Font::Justify alignment);
+
+    /**
+     * Gets the slider value text alignment.
+     *
+     * @return The slider value text alignment. 
+     */
+    Font::Justify getValueTextAlignment() const;
+
+    /**
+     * Sets the precision, which is the number floating point digits after the decimal.
+     *
+     * @param precision The number floating point precision/digits after the decimal.
+     */
+    void setValueTextPrecision(unsigned int precision);
+
+    /**
+     * Gets the precision, which is the number floating point digits after the decimal.
+     *
+     * @return The number floating point precision/digits after the decimal.
+     */
+    unsigned int getValueTextPrecision() const;
 
     /**
      * Add a listener to be notified of specific events affecting
@@ -181,6 +223,13 @@ protected:
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     /**
+     * Draw this slider's text.
+     *
+     * @param clip The clipping rectangle of this slider's parent container.
+     */
+    void drawText(const Rectangle& clip);
+
+    /**
      * Called when a slider's properties change. Updates this slider's internal rendering
      * properties, such as its text viewport.
      *
@@ -248,6 +297,26 @@ protected:
      * The image for the slider marker.
      */
     Theme::ThemeImage* _markerImage;
+
+    /**
+     * Whether to display this slider's value.
+     */
+    bool _valueTextVisible;
+
+    /**
+     * Alignment of value text.
+     */
+    Font::Justify _valueTextAlignment;
+
+    /**
+     * Number of digits after the decimal to draw for value text.
+     */
+    unsigned int _valueTextPrecision;
+
+    /**
+     * The text displayed by this slider if set to display its value.
+     */
+    std::string _valueText;
 
 private:
 

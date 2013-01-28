@@ -90,12 +90,28 @@ protected:
      */
     const char* getType() const;
 
+    /**
+     * Gets the data binding index for this control.
+     *
+     * @return The data binding index for control. 
+     */
+    const unsigned int getDataBinding() const;
+
+    /**
+     * Sets the data binding provider for this control.
+     *
+     * @param dataBinding The data binding index for control. 
+     */
+    void setDataBinding(unsigned int dataBinding);
+
 private:
 
     /**
      * Constructor.
      */
     Button(const Button& copy);
+
+    unsigned int _dataBinding;
 
 };
 

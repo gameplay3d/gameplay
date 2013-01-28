@@ -1,20 +1,19 @@
-/**
- * FrameBuffer.cpp
- */
-
 #include "Base.h"
 #include "FrameBuffer.h"
+#include "Game.h"
+
+#define FRAMEBUFFER_ID_DEFAULT "org.gameplay3d.framebuffer.default"
 
 namespace gameplay
 {
 
-static unsigned int __maxRenderTargets = 0;
-static std::vector<FrameBuffer*> __frameBuffers;
-static FrameBufferHandle __defaultHandle = 0;
-static FrameBufferHandle __currentHandle = 0;
+unsigned int FrameBuffer::_maxRenderTargets = 0;
+std::vector<FrameBuffer*> FrameBuffer::_frameBuffers;
+FrameBuffer* FrameBuffer::_defaultFrameBuffer = NULL;
+FrameBuffer* FrameBuffer::_currentFrameBuffer = NULL;
 
-FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height) :
-    _id(id ? id : ""), _width(width), _height(height), _handle(0), 
+FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle) :
+    _id(id ? id : ""), _width(width), _height(height), _handle(handle), 
     _renderTargets(NULL), _depthStencilTarget(NULL)
 {
 }
@@ -23,7 +22,7 @@ FrameBuffer::~FrameBuffer()
 {
     if (_renderTargets)
     {
-        for (unsigned int i = 0; i < __maxRenderTargets; ++i)
+        for (unsigned int i = 0; i < _maxRenderTargets; ++i)
         {
             if (_renderTargets[i])
             {
@@ -44,10 +43,10 @@ FrameBuffer::~FrameBuffer()
     }
 
     // Remove self from vector.
-    std::vector<FrameBuffer*>::iterator it = std::find(__frameBuffers.begin(), __frameBuffers.end(), this);
-    if (it != __frameBuffers.end())
+    std::vector<FrameBuffer*>::iterator it = std::find(_frameBuffers.begin(), _frameBuffers.end(), this);
+    if (it != _frameBuffers.end())
     {
-        __frameBuffers.erase(it);
+        _frameBuffers.erase(it);
     }
 }
 
@@ -57,18 +56,23 @@ void FrameBuffer::initialize()
     // On many platforms this will simply be the zero (0) handle, but this is not always the case.
     GLint fbo;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo);
-    __defaultHandle = (FrameBufferHandle)fbo;
-    __currentHandle = __defaultHandle;
+    _defaultFrameBuffer = new FrameBuffer(FRAMEBUFFER_ID_DEFAULT, 0, 0, (FrameBufferHandle)fbo);
+    _currentFrameBuffer = _defaultFrameBuffer;
 
     // Query the max supported color attachments. This glGet operation is not supported
     // on GL ES 2.x, so if the define does not exist, assume a value of 1.
 #ifdef GL_MAX_COLOR_ATTACHMENTS
         GLint val;
         GL_ASSERT( glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &val) );
-        __maxRenderTargets = (unsigned int)std::max(1, val);
+        _maxRenderTargets = (unsigned int)std::max(1, val);
 #else
-        __maxRenderTargets = 1;
+        _maxRenderTargets = 1;
 #endif
+}
+
+void FrameBuffer::finalize()
+{
+    SAFE_RELEASE(_defaultFrameBuffer);
 }
 
 FrameBuffer* FrameBuffer::create(const char* id)
@@ -78,18 +82,9 @@ FrameBuffer* FrameBuffer::create(const char* id)
 
 FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned int height)
 {
-    // Call getMaxRenderTargets() to force __maxRenderTargets to be set
-    getMaxRenderTargets();
-
     RenderTarget* renderTarget = NULL;
     if (width > 0 && height > 0)
     {
-        if (!isPowerOfTwo(width) | !isPowerOfTwo(height))
-        {
-            GP_ERROR("Failed to create render target for frame buffer. Width and Height must be a power of 2.");
-            return NULL;
-        }
-
         // Create a default RenderTarget with same ID.
         renderTarget = RenderTarget::create(id, width, height);
         if (renderTarget == NULL)
@@ -102,12 +97,11 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
     // Create the frame buffer
     GLuint handle = 0;
     GL_ASSERT( glGenFramebuffers(1, &handle) );
-    FrameBuffer* frameBuffer = new FrameBuffer(id, width, height);
-    frameBuffer->_handle = handle;
+    FrameBuffer* frameBuffer = new FrameBuffer(id, width, height, handle);
     
     // Create the render target array for the new frame buffer
-    frameBuffer->_renderTargets = new RenderTarget*[__maxRenderTargets];
-    memset(frameBuffer->_renderTargets, 0, sizeof(RenderTarget*) * __maxRenderTargets);
+    frameBuffer->_renderTargets = new RenderTarget*[_maxRenderTargets];
+    memset(frameBuffer->_renderTargets, 0, sizeof(RenderTarget*) * _maxRenderTargets);
 
     if (renderTarget)
     {
@@ -115,7 +109,7 @@ FrameBuffer* FrameBuffer::create(const char* id, unsigned int width, unsigned in
         SAFE_RELEASE(renderTarget);
     }
 
-    __frameBuffers.push_back(frameBuffer);
+    _frameBuffers.push_back(frameBuffer);
 
     return frameBuffer;
 }
@@ -126,7 +120,7 @@ FrameBuffer* FrameBuffer::getFrameBuffer(const char* id)
 
     // Search the vector for a matching ID.
     std::vector<FrameBuffer*>::const_iterator it;
-    for (it = __frameBuffers.begin(); it < __frameBuffers.end(); it++)
+    for (it = _frameBuffers.begin(); it < _frameBuffers.end(); ++it)
     {
         FrameBuffer* fb = *it;
         GP_ASSERT(fb);
@@ -155,19 +149,17 @@ unsigned int FrameBuffer::getHeight() const
 
 unsigned int FrameBuffer::getMaxRenderTargets()
 {
-    return __maxRenderTargets;
+    return _maxRenderTargets;
 }
 
 void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
 {
-    GP_ASSERT(index < __maxRenderTargets);
+    GP_ASSERT(index < _maxRenderTargets);
     GP_ASSERT(_renderTargets);
 
+    // No change
     if (_renderTargets[index] == target)
-    {
-        // No change.
         return;
-    }
 
     // Release our reference to the current RenderTarget at this index.
     SAFE_RELEASE(_renderTargets[index]);
@@ -192,18 +184,18 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
         }
 
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentHandle) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle) );
     }
+
 }
 
 RenderTarget* FrameBuffer::getRenderTarget(unsigned int index) const
 {
     GP_ASSERT(_renderTargets);
-    if (index < __maxRenderTargets)
+    if (index < _maxRenderTargets)
     {
         return _renderTargets[index];
     }
-
     return NULL;
 }
 
@@ -226,10 +218,10 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
 
         // Attach the render buffer to the framebuffer
-        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_renderBuffer) );
+        GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_depthBuffer) );
         if (target->getFormat() == DepthStencilTarget::DEPTH_STENCIL)
         {
-            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_renderBuffer) );
+            GL_ASSERT( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthStencilTarget->_stencilBuffer) );
         }
 
         // Check the framebuffer is good to go.
@@ -240,7 +232,7 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
         }
 
         // Restore the FBO binding
-        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __currentHandle) );
+        GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _currentFrameBuffer->_handle) );
     }
 }
 
@@ -249,26 +241,19 @@ DepthStencilTarget* FrameBuffer::getDepthStencilTarget() const
     return _depthStencilTarget;
 }
 
-void FrameBuffer::bind()
+FrameBuffer* FrameBuffer::bind()
 {
-    // Bind this FrameBuffer for rendering.
     GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _handle) );
-
-    // Update the current FBO handle
-    __currentHandle = _handle;
+    FrameBuffer* previousFrameBuffer = _currentFrameBuffer;
+    _currentFrameBuffer = this;
+    return previousFrameBuffer;
 }
 
-void FrameBuffer::bindDefault()
+FrameBuffer* FrameBuffer::bindDefault()
 {
-    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, __defaultHandle) );
-
-    // Update the current FBO handle
-    __currentHandle = __defaultHandle;
-}
-
-bool FrameBuffer::isPowerOfTwo(unsigned int value)
-{
-    return (value != 0) && ((value & (value - 1)) == 0);
+    GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, _defaultFrameBuffer->_handle) );
+    _currentFrameBuffer = _defaultFrameBuffer;
+    return _defaultFrameBuffer;
 }
 
 }
