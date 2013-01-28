@@ -5,6 +5,9 @@
 #include "Properties.h"
 #include "Curve.h"
 
+#define ANIMATION_INDEFINITE_STR "INDEFINITE"
+#define ANIMATION_REPEAT_COUNT_STR "repeatCount"
+
 namespace gameplay
 {
 

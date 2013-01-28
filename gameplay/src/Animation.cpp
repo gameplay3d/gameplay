@@ -7,7 +7,6 @@
 #include "Transform.h"
 #include "Properties.h"
 
-#define ANIMATION_INDEFINITE_STR "INDEFINITE"
 #define ANIMATION_DEFAULT_CLIP 0
 #define ANIMATION_ROTATE_OFFSET 0
 #define ANIMATION_SRT_OFFSET 3
@@ -256,7 +255,7 @@ void Animation::createClips(Properties* animationProperties, unsigned int frameC
 
         AnimationClip* clip = createClip(pClip->getId(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
 
-        const char* repeat = pClip->getString("repeatCount");
+        const char* repeat = pClip->getString(ANIMATION_REPEAT_COUNT_STR);
         if (repeat)
         {
             if (strcmp(repeat, ANIMATION_INDEFINITE_STR) == 0)
@@ -453,6 +452,12 @@ Animation* Animation::clone(Channel* channel, AnimationTarget* target)
     GP_ASSERT(animation->getRefCount() == 1);
 
     // Clone the clips
+    
+    if (_defaultClip)
+    {
+        animation->_defaultClip = _defaultClip->clone(animation);
+    }
+    
     if (_clips)
     {
         for (std::vector<AnimationClip*>::iterator it = _clips->begin(); it != _clips->end(); ++it)
