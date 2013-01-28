@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Properties.h"
 
+#define ANIMATION_INDEFINITE_STR "INDEFINITE"
 #define ANIMATION_DEFAULT_CLIP 0
 #define ANIMATION_ROTATE_OFFSET 0
 #define ANIMATION_SRT_OFFSET 3
@@ -255,7 +256,7 @@ void Animation::createClips(Properties* animationProperties, unsigned int frameC
 
         AnimationClip* clip = createClip(pClip->getId(), ((float) begin / frameCount) * _duration, ((float) end / frameCount) * _duration);
 
-        const char* repeat = pClip->getString(ANIMATION_REPEAT_COUNT_STR);
+        const char* repeat = pClip->getString("repeatCount");
         if (repeat)
         {
             if (strcmp(repeat, ANIMATION_INDEFINITE_STR) == 0)
