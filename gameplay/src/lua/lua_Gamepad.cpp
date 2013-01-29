@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Game.h"
 #include "Gamepad.h"
+#include "Platform.h"
 #include "lua_GamepadButtonMapping.h"
 
 namespace gameplay

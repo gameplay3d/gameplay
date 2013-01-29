@@ -38,6 +38,27 @@ extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 static AppDelegate *__appDelegate = NULL;
 static View* __view = NULL;
 
+class TouchPoint
+{
+public:
+    unsigned int hashId;
+    int x;
+    int y;
+    bool down;
+    
+    TouchPoint()
+    {
+        hashId = 0;
+        x = 0;
+        y = 0;
+        down = false;
+    }
+};
+
+// more than we'd ever need, to be safe
+#define TOUCH_POINTS_MAX (10)
+static TouchPoint __touchPoints[TOUCH_POINTS_MAX];
+
 static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
@@ -259,6 +280,8 @@ int getUnicode(int key);
             samples /= 2;
         }
         
+        //todo: __multiSampling = samples > 0;
+
         // Re-bind the default framebuffer
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
         
@@ -516,7 +539,27 @@ int getUnicode(int key);
         {
             touchID = [touch hash];
         }
-        Platform::touchEventInternal(Touch::TOUCH_PRESS, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
+
+        // Nested loop efficiency shouldn't be a concern since both loop sizes are small (<= 10)
+        int i = 0;
+        while (i < TOUCH_POINTS_MAX && __touchPoints[i].down)
+        {
+            i++;
+        }
+
+        if (i < TOUCH_POINTS_MAX)
+        {
+            __touchPoints[i].hashId = touchID;
+            __touchPoints[i].x = touchPoint.x * WINDOW_SCALE;
+            __touchPoints[i].y = touchPoint.y * WINDOW_SCALE;
+            __touchPoints[i].down = true;
+
+            Platform::touchEventInternal(Touch::TOUCH_PRESS, __touchPoints[i].x, __touchPoints[i].y, i);
+        }
+        else
+        {
+            print("touchesBegan: unable to find free element in __touchPoints");
+        }
     }
 }
 
@@ -528,7 +571,32 @@ int getUnicode(int key);
         CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             touchID = [touch hash];
-        Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
+
+        // Nested loop efficiency shouldn't be a concern since both loop sizes are small (<= 10)
+        bool found = false;
+        for (int i = 0; !found && i < TOUCH_POINTS_MAX; i++)
+        {
+            if (__touchPoints[i].down && __touchPoints[i].hashId == touchID)
+            {
+                __touchPoints[i].down = false;
+                Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, i);
+                found = true;
+            }
+        }
+        
+        if (!found)
+        {
+            // It seems possible to receive an ID not in the array.
+            // The best we can do is clear the whole array.
+            for (int i = 0; i < TOUCH_POINTS_MAX; i++)
+            {
+                if (__touchPoints[i].down)
+                {
+                    __touchPoints[i].down = false;
+                    Platform::touchEventInternal(Touch::TOUCH_RELEASE, __touchPoints[i].x, __touchPoints[i].y, i);
+                }
+            }
+        }
     }
 }
 
@@ -546,7 +614,18 @@ int getUnicode(int key);
         CGPoint touchPoint = [touch locationInView:self];
         if(self.multipleTouchEnabled == YES) 
             touchID = [touch hash];
-        Platform::touchEventInternal(Touch::TOUCH_MOVE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, touchID);
+
+        // Nested loop efficiency shouldn't be a concern since both loop sizes are small (<= 10)
+        for (int i = 0; i < TOUCH_POINTS_MAX; i++)
+        {
+            if (__touchPoints[i].down && __touchPoints[i].hashId == touchID)
+            {
+                __touchPoints[i].x = touchPoint.x * WINDOW_SCALE;
+                __touchPoints[i].y = touchPoint.y * WINDOW_SCALE;
+                Platform::touchEventInternal(Touch::TOUCH_MOVE, __touchPoints[i].x, __touchPoints[i].y, i);
+                break;
+            }
+        }
     }
 }
 
@@ -1329,6 +1408,16 @@ bool Platform::isCursorVisible()
 {
     // not supported
     return false;
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    //todo
+}
+
+bool Platform::isMultiSampling()
+{
+    return false; //todo
 }
 
 void Platform::setMultiTouch(bool enabled) 

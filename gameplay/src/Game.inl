@@ -96,6 +96,16 @@ inline bool Game::isCursorVisible()
     return Platform::isCursorVisible();
 }
 
+inline void Game::setMultiSampling(bool enabled)
+{
+    Platform::setMultiSampling(enabled);
+}
+
+inline bool Game::isMultiSampling() const
+{
+    return Platform::isMultiSampling();
+}
+
 inline void Game::setMultiTouch(bool enabled)
 {
     Platform::setMultiTouch(enabled);
