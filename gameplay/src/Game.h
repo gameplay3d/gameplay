@@ -295,7 +295,7 @@ public:
      * @param evt The touch event that occurred.
      * @param x The x position of the touch in pixels. Left edge is zero.
      * @param y The y position of the touch in pixels. Top edge is zero.
-     * @param contactIndex An integer to identify this contact point within the currently active touch set.
+     * @param contactIndex The order of occurrence for multiple touch contacts starting at zero.
      *
      * @see Touch::TouchEvent
      */
@@ -463,6 +463,20 @@ public:
      * @return The gamepad at the specified index.
      */
     inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
+
+    /**
+	 * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
+	 *
+	 * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+	 */
+	inline void setMultiSampling(bool enabled);
+
+	/*
+	 * Is multi-sampling enabled.
+	 *
+	 * @return true if multi-sampling is enabled.
+	 */
+	inline bool isMultiSampling() const;
 
     /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
