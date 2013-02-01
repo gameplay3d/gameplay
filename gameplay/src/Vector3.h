@@ -424,6 +424,16 @@ public:
      * @return The scaled vector.
      */
     inline const Vector3 operator*(float x) const;
+    
+    /**
+     * Returns the components of this vector divided by the given constant
+     *
+     * Note: this does not modify this vector.
+     *
+     * @param x the constant to divide this vector with
+     * @return a smaller vector
+     */
+    inline const Vector3 operator/(float x) const;
 
     /**
      * Scales this vector by the given value.
