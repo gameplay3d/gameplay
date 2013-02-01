@@ -37,6 +37,13 @@ inline const Vector3 Vector3::operator-() const
     return result;
 }
 
+inline const Vector3 Vector3::operator*(const Vector3& v) const
+{
+    Vector3 result(*this);
+    result.cross(v);
+    return result;
+}
+
 inline const Vector3 Vector3::operator*(float x) const
 {
     Vector3 result(*this);
@@ -48,6 +55,11 @@ inline Vector3& Vector3::operator*=(float x)
 {
     scale(x);
     return *this;
+}
+
+inline const Vector3 Vector3::operator/(const float x) const
+{
+    return Vector3(this->x / x, this->y / x, this->z / x);
 }
 
 inline bool Vector3::operator<(const Vector3& v) const
