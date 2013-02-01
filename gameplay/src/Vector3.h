@@ -404,6 +404,16 @@ public:
      * @return The negation of this vector.
      */
     inline const Vector3 operator-() const;
+    
+    /**
+     * Returns the cross product of this vector and the given vector
+     *
+     * Note: this does not modify this vector.
+     *
+     * @param v the vector to cross against
+     * @return the cross product
+     */
+    inline const Vector3 operator*(const Vector3& v) const;
 
     /**
      * Calculates the scalar product of this vector with the given value.

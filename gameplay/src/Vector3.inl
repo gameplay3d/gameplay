@@ -37,6 +37,13 @@ inline const Vector3 Vector3::operator-() const
     return result;
 }
 
+inline const Vector3 Vector3::operator*(const Vector3& v) const
+{
+    Vector3 result(*this);
+    result.cross(v);
+    return result;
+}
+
 inline const Vector3 Vector3::operator*(float x) const
 {
     Vector3 result(*this);
