@@ -40,9 +40,10 @@ set(GAMEPLAY_LIBRARIES
     rt
     dl
     X11
+    pthread
 ) 
 
-add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath-lopenal -LGLEW -lGL -lrt -ldl -lX11)
+add_definitions(-lstdc++ -lgameplay -lm -llua -lz -lpng -lvorbis -logg -lBulletCollision -lBulletDynamics -lLinearMath -lopenal -LGLEW -lGL -lrt -ldl -lX11 -lpthread)
 
 set( GAME_NAME gameplay-tests)
 

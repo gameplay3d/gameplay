@@ -37,21 +37,25 @@ macro (append_gameplay_ext_lib listToAppend libName libDirName)
     message(STATUS "Library Found: ${libName} Path: ${FOUND_LIB_${libName}}")
 endmacro (append_gameplay_ext_lib)
 
-macro(copy_files TARGET_NAME GLOBPAT SOURCE DESTINATION)
-  file(GLOB_RECURSE COPY_FILES
-    RELATIVE ${SOURCE}
-    "${SOURCE}/${GLOBPAT}")
-  add_custom_target(${TARGET_NAME} ALL
-    COMMENT "Copying files: ${SOURCE}/${GLOBPAT}")
+macro(copy_files TARGET_NAME GLOBPAT SOURCE DESTINATION RECUR)
+    IF(${RECUR})
+        SET(RECURSE_PARAM GLOB_RECURSE)
+    ELSEIF(NOT ${RECUR})
+        SET(RECURSE_PARAM GLOB)
+    ENDIF(${RECUR})
+    file(${RECURSE_PARAM} COPY_FILES RELATIVE ${SOURCE} "${SOURCE}/${GLOBPAT}")
+
+  add_custom_target(${TARGET_NAME} ALL COMMENT "Copying files: ${SOURCE}/${GLOBPAT}")
 
   foreach(FILENAME ${COPY_FILES})
     set(SRC "${SOURCE}/${FILENAME}")
     set(DST "${DESTINATION}/${FILENAME}")
 
-    add_custom_command(
-      TARGET ${TARGET_NAME}
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SRC} ${DST}
-      )
+    IF(IS_DIRECTORY ${SRC})
+        add_custom_command(TARGET ${TARGET_NAME} COMMAND ${CMAKE_COMMAND} -E make_directory ${DST})
+    ELSE(IS_DIRECTORY ${SRC})
+        add_custom_command(TARGET ${TARGET_NAME} COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SRC} ${DST})
+    ENDIF(IS_DIRECTORY ${SRC})
   endforeach(FILENAME)
 endmacro(copy_files)
 
@@ -109,5 +113,5 @@ set_target_properties(${GAME_NAME} PROPERTIES
 #TODO: Copy res files to the bin dir, it is done that way so we can make post
 #processing to the the res files in the future like zipping or preparation to
 #per platfom format.
-copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "${GAME_OUTPUT_DIR}/res")
-copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "${GAME_OUTPUT_DIR}")
+copy_files(CopyRes * "${CMAKE_SOURCE_DIR}/res" "${GAME_OUTPUT_DIR}/res" 1)
+copy_files(CopyConfig *.config "${CMAKE_SOURCE_DIR}" "${GAME_OUTPUT_DIR}" 0)
