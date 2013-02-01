@@ -404,16 +404,6 @@ public:
      * @return The negation of this vector.
      */
     inline const Vector3 operator-() const;
-    
-    /**
-     * Returns the cross product of this vector and the given vector
-     *
-     * Note: this does not modify this vector.
-     *
-     * @param v the vector to cross against
-     * @return the cross product
-     */
-    inline const Vector3 operator*(const Vector3& v) const;
 
     /**
      * Calculates the scalar product of this vector with the given value.
@@ -424,6 +414,14 @@ public:
      * @return The scaled vector.
      */
     inline const Vector3 operator*(float x) const;
+
+    /**
+     * Scales this vector by the given value.
+     * 
+     * @param x The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline Vector3& operator*=(float x);
     
     /**
      * Returns the components of this vector divided by the given constant
@@ -434,14 +432,6 @@ public:
      * @return a smaller vector
      */
     inline const Vector3 operator/(float x) const;
-
-    /**
-     * Scales this vector by the given value.
-     * 
-     * @param x The value to scale by.
-     * @return This vector, after the scale occurs.
-     */
-    inline Vector3& operator*=(float x);
 
     /**
      * Determines if this vector is less than the given vector.
