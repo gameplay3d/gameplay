@@ -208,6 +208,8 @@ void RenderState::setNodeBinding(Node* node)
 
 void RenderState::applyAutoBinding(const char* uniformName, const char* autoBinding)
 {
+    GP_ASSERT(_nodeBinding);
+
     MaterialParameter* param = getParameter(uniformName);
     GP_ASSERT(param);
 
@@ -264,36 +266,57 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
     }
     else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
     {
-        Model* model = _nodeBinding->getModel();
-        MeshSkin* skin = model ? model->getSkin() : NULL;
-        if (skin)
-        {
-            GP_ASSERT(param);
-            param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
-        }
+        param->bindValue(this, &RenderState::autoBindingGetMatrixPalette, &RenderState::autoBindingGetMatrixPaletteSize);
     }
     else if (strcmp(autoBinding, "SCENE_AMBIENT_COLOR") == 0)
     {
-        Scene* scene = _nodeBinding->getScene();
-        if (scene)
-            param->bindValue(scene, &Scene::getAmbientColor);
+        param->bindValue(this, &RenderState::autoBindingGetAmbientColor);
     }
     else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
     {
-        Scene* scene = _nodeBinding->getScene();
-        if (scene)
-            param->bindValue(scene, &Scene::getLightColor);
+        param->bindValue(this, &RenderState::autoBindingGetLightColor);
     }
     else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
     {
-        Scene* scene = _nodeBinding->getScene();
-        if (scene)
-            param->bindValue(scene, &Scene::getLightDirection);
+        param->bindValue(this, &RenderState::autoBindingGetLightDirection);
     }
     else
     {
         GP_WARN("Unsupported auto binding type (%d).", autoBinding);
     }
+}
+
+const Vector4* RenderState::autoBindingGetMatrixPalette() const
+{
+    Model* model = _nodeBinding ? _nodeBinding->getModel() : NULL;
+    MeshSkin* skin = model ? model->getSkin() : NULL;
+    return skin ? skin->getMatrixPalette() : NULL;
+}
+
+const Vector3& RenderState::autoBindingGetAmbientColor() const
+{
+    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
+    return scene ? scene->getAmbientColor() : Vector3::zero();
+}
+
+const Vector3& RenderState::autoBindingGetLightColor() const
+{
+    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
+    return scene ? scene->getLightColor() : Vector3::one();
+}
+
+const Vector3& RenderState::autoBindingGetLightDirection() const
+{
+    static Vector3 down(0, -1, 0);
+    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
+    return scene ? scene->getLightDirection() : down;
+}
+
+unsigned int RenderState::autoBindingGetMatrixPaletteSize() const
+{
+    Model* model = _nodeBinding ? _nodeBinding->getModel() : NULL;
+    MeshSkin* skin = model ? model->getSkin() : NULL;
+    return skin ? skin->getMatrixPaletteSize() : 0;
 }
 
 void RenderState::bind(Pass* pass)
@@ -359,6 +382,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 {
     GP_ASSERT(renderState);
 
+    // Clone parameters
     for (std::map<std::string, std::string>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
     {
         renderState->setParameterAutoBinding(it->first.c_str(), it->second.c_str());
@@ -373,13 +397,18 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 
         renderState->_parameters.push_back(paramCopy);
     }
-    renderState->_parent = _parent;
+
+    // Clone our state block
     if (_state)
     {
-        renderState->setStateBlock(_state);
+        // StateBlock contains only simple primitive data, so use the default assignment
+        // operator to do a memberwise copy.
+        *renderState->getStateBlock() = *_state;
     }
-
-    // Note that _nodeBinding is not set here, it should be set by the caller.
+    
+    // Notes:
+    // 1. _nodeBinding should not be set here, it should be set by the caller.
+    // 2. _parent should not be set here, since it's set in the constructor of Technique and Pass.
 }
 
 RenderState::StateBlock::StateBlock()
