@@ -81,6 +81,13 @@ public:
     unsigned int getJoystickCount() const;
 
     /**
+     * Gets the number of joysticks axes on the gamepad.
+     *
+     * @return the number of joysticks axes on the gamepad.
+     */
+    unsigned int getJoystickAxesCount() const;
+
+    /**
      * Returns the specified joystick's value as a Vector2.
      *
      * @param joystickId The index of the joystick to get the value for.
@@ -181,13 +188,14 @@ private:
      * @param buttonCount the number of buttons on the gamepad. 
      * @param joystickCount the number of joysticks on the gamepad.
      * @param triggerCount the number of triggers on the gamepad.
+     * @param axesCount the number of axes on the gamepad.
      * @param vendorId The vendor id
      * @param productId The product id
      * @param vendorString The vendor string/name.
      * @param productString The product string/name.
      */
     Gamepad(GamepadHandle handle, 
-            unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+            unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
             unsigned int vendorId, unsigned int productId, 
             const char* vendorString, const char* productString);
 
@@ -197,7 +205,7 @@ private:
     Gamepad(const Gamepad& copy);
 
     static Gamepad* add(GamepadHandle handle, 
-                        unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+                        unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
                         unsigned int vendorId, unsigned int productId, 
                         const char* vendorString, const char* productString);
 
@@ -229,6 +237,7 @@ private:
     unsigned int _buttonCount;    // Number of buttons.
     unsigned int _joystickCount;  // Number of joysticks.
     unsigned int _triggerCount;   // Number of triggers.
+    unsigned int _axesCount;   // Number of axes.
     unsigned int _vendorId;
     unsigned int _productId;
     std::string _vendorString;

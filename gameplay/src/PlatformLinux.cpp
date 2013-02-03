@@ -13,10 +13,24 @@
 #include <sys/time.h>
 #include <GL/glxew.h>
 #include <poll.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <usb.h>
+#include <fstream>
 
 #define TOUCH_COUNT_MAX     4
+#define MAX_GAMEPADS 4
 
 using namespace std;
+
+struct ConnectedGamepadDevInfo
+{
+    dev_t deviceId;
+    gameplay::GamepadHandle fd;
+};
 
 struct timespec __timespec;
 static double __timeStart;
@@ -35,449 +49,449 @@ static int __windowSize[2];
 static GLXContext __context;
 static Window __attachToWindow;
 static Atom __atomWmDeleteWindow;
+static list<ConnectedGamepadDevInfo> __connectedGamepads;
 
-namespace gameplay
-{
 
-// Gets the Keyboard::Key enumeration constant that corresponds to the given X11 key symbol.
-static Keyboard::Key getKey(KeySym sym)
+// Gets the gameplay::Keyboard::Key enumeration constant that corresponds to the given X11 key symbol.
+static gameplay::Keyboard::Key getKey(KeySym sym)
 {
     switch (sym)
     {
     case XK_Sys_Req:
-        return Keyboard::KEY_SYSREQ;
+        return gameplay::Keyboard::KEY_SYSREQ;
     case XK_Break:
-        return Keyboard::KEY_BREAK;
+        return gameplay::Keyboard::KEY_BREAK;
     case XK_Menu :
-        return Keyboard::KEY_MENU;
+        return gameplay::Keyboard::KEY_MENU;
     case XK_KP_Enter:
-        return Keyboard::KEY_KP_ENTER;
+        return gameplay::Keyboard::KEY_KP_ENTER;
     case XK_Pause:
-        return Keyboard::KEY_PAUSE;
+        return gameplay::Keyboard::KEY_PAUSE;
     case XK_Scroll_Lock:
-        return Keyboard::KEY_SCROLL_LOCK;
+        return gameplay::Keyboard::KEY_SCROLL_LOCK;
     case XK_Print:
-        return Keyboard::KEY_PRINT;
+        return gameplay::Keyboard::KEY_PRINT;
     case XK_Escape:
-        return Keyboard::KEY_ESCAPE;
+        return gameplay::Keyboard::KEY_ESCAPE;
     case XK_BackSpace:
-        return Keyboard::KEY_BACKSPACE;
+        return gameplay::Keyboard::KEY_BACKSPACE;
     case XK_Tab:
-        return Keyboard::KEY_TAB;
+        return gameplay::Keyboard::KEY_TAB;
     case XK_Return:
-        return Keyboard::KEY_RETURN;
+        return gameplay::Keyboard::KEY_RETURN;
     case XK_Caps_Lock:
-        return Keyboard::KEY_CAPS_LOCK;
+        return gameplay::Keyboard::KEY_CAPS_LOCK;
     case XK_Shift_L:
     case XK_Shift_R:
-        return Keyboard::KEY_SHIFT;
+        return gameplay::Keyboard::KEY_SHIFT;
     case XK_Control_L:
     case XK_Control_R:
-        return Keyboard::KEY_CTRL;
+        return gameplay::Keyboard::KEY_CTRL;
     case XK_Alt_L:
     case XK_Alt_R:
-        return Keyboard::KEY_ALT;
+        return gameplay::Keyboard::KEY_ALT;
     case XK_Hyper_L:
     case XK_Hyper_R:
-        return Keyboard::KEY_HYPER;
+        return gameplay::Keyboard::KEY_HYPER;
     case XK_Insert:
-        return Keyboard::KEY_INSERT;
+        return gameplay::Keyboard::KEY_INSERT;
     case XK_Home:
-        return Keyboard::KEY_HOME;
+        return gameplay::Keyboard::KEY_HOME;
     case XK_Page_Up:
-        return Keyboard::KEY_PG_UP;
+        return gameplay::Keyboard::KEY_PG_UP;
     case XK_Delete:
-        return Keyboard::KEY_DELETE;
+        return gameplay::Keyboard::KEY_DELETE;
     case XK_End:
-        return Keyboard::KEY_END;
+        return gameplay::Keyboard::KEY_END;
     case XK_Page_Down:
-        return Keyboard::KEY_PG_DOWN;
+        return gameplay::Keyboard::KEY_PG_DOWN;
     case XK_Left:
-        return Keyboard::KEY_LEFT_ARROW;
+        return gameplay::Keyboard::KEY_LEFT_ARROW;
     case XK_Right:
-        return Keyboard::KEY_RIGHT_ARROW;
+        return gameplay::Keyboard::KEY_RIGHT_ARROW;
     case XK_Up:
-        return Keyboard::KEY_UP_ARROW;
+        return gameplay::Keyboard::KEY_UP_ARROW;
     case XK_Down:
-        return Keyboard::KEY_DOWN_ARROW;
+        return gameplay::Keyboard::KEY_DOWN_ARROW;
     case XK_Num_Lock:
-        return Keyboard::KEY_NUM_LOCK;
+        return gameplay::Keyboard::KEY_NUM_LOCK;
     case XK_KP_Add:
-        return Keyboard::KEY_KP_PLUS;
+        return gameplay::Keyboard::KEY_KP_PLUS;
     case XK_KP_Subtract:
-        return Keyboard::KEY_KP_MINUS;
+        return gameplay::Keyboard::KEY_KP_MINUS;
     case XK_KP_Multiply:
-        return Keyboard::KEY_KP_MULTIPLY;
+        return gameplay::Keyboard::KEY_KP_MULTIPLY;
     case XK_KP_Divide:
-        return Keyboard::KEY_KP_DIVIDE;
+        return gameplay::Keyboard::KEY_KP_DIVIDE;
     case XK_KP_Home:
-        return Keyboard::KEY_KP_HOME;
+        return gameplay::Keyboard::KEY_KP_HOME;
     case XK_KP_Up:
-        return Keyboard::KEY_KP_UP;
+        return gameplay::Keyboard::KEY_KP_UP;
     case XK_KP_Page_Up:
-        return Keyboard::KEY_KP_PG_UP;
+        return gameplay::Keyboard::KEY_KP_PG_UP;
     case XK_KP_Left:
-        return Keyboard::KEY_KP_LEFT;
+        return gameplay::Keyboard::KEY_KP_LEFT;
     case XK_KP_5:
-        return Keyboard::KEY_KP_FIVE;
+        return gameplay::Keyboard::KEY_KP_FIVE;
     case XK_KP_Right:
-        return Keyboard::KEY_KP_RIGHT;
+        return gameplay::Keyboard::KEY_KP_RIGHT;
     case XK_KP_End:
-        return Keyboard::KEY_KP_END;
+        return gameplay::Keyboard::KEY_KP_END;
     case XK_KP_Down:
-        return Keyboard::KEY_KP_DOWN;
+        return gameplay::Keyboard::KEY_KP_DOWN;
     case XK_KP_Page_Down:
-        return Keyboard::KEY_KP_PG_DOWN;
+        return gameplay::Keyboard::KEY_KP_PG_DOWN;
     case XK_KP_Insert:
-        return Keyboard::KEY_KP_INSERT;
+        return gameplay::Keyboard::KEY_KP_INSERT;
     case XK_KP_Delete:
-        return Keyboard::KEY_KP_DELETE;
+        return gameplay::Keyboard::KEY_KP_DELETE;
     case XK_F1:
-        return Keyboard::KEY_F1;
+        return gameplay::Keyboard::KEY_F1;
     case XK_F2:
-        return Keyboard::KEY_F2;
+        return gameplay::Keyboard::KEY_F2;
     case XK_F3:
-        return Keyboard::KEY_F3;
+        return gameplay::Keyboard::KEY_F3;
     case XK_F4:
-        return Keyboard::KEY_F4;
+        return gameplay::Keyboard::KEY_F4;
     case XK_F5:
-        return Keyboard::KEY_F5;
+        return gameplay::Keyboard::KEY_F5;
     case XK_F6:
-        return Keyboard::KEY_F6;
+        return gameplay::Keyboard::KEY_F6;
     case XK_F7:
-        return Keyboard::KEY_F7;
+        return gameplay::Keyboard::KEY_F7;
     case XK_F8:
-        return Keyboard::KEY_F8;
+        return gameplay::Keyboard::KEY_F8;
     case XK_F9:
-        return Keyboard::KEY_F9;
+        return gameplay::Keyboard::KEY_F9;
     case XK_F10:
-        return Keyboard::KEY_F10;
+        return gameplay::Keyboard::KEY_F10;
     case XK_F11:
-        return Keyboard::KEY_F11;
+        return gameplay::Keyboard::KEY_F11;
     case XK_F12:
-        return Keyboard::KEY_F12;
+        return gameplay::Keyboard::KEY_F12;
     case XK_KP_Space:
     case XK_space:
-        return Keyboard::KEY_SPACE;
+        return gameplay::Keyboard::KEY_SPACE;
     case XK_parenright:
-        return Keyboard::KEY_RIGHT_PARENTHESIS;
+        return gameplay::Keyboard::KEY_RIGHT_PARENTHESIS;
     case XK_0:
-        return Keyboard::KEY_ZERO;
+        return gameplay::Keyboard::KEY_ZERO;
     case XK_exclam:
-        return Keyboard::KEY_EXCLAM;
+        return gameplay::Keyboard::KEY_EXCLAM;
     case XK_1:
-        return Keyboard::KEY_ONE;
+        return gameplay::Keyboard::KEY_ONE;
     case XK_at:
-        return Keyboard::KEY_AT;
+        return gameplay::Keyboard::KEY_AT;
     case XK_2:
-        return Keyboard::KEY_TWO;
+        return gameplay::Keyboard::KEY_TWO;
     case XK_numbersign:
-        return Keyboard::KEY_NUMBER;
+        return gameplay::Keyboard::KEY_NUMBER;
     case XK_3:
-        return Keyboard::KEY_THREE;
+        return gameplay::Keyboard::KEY_THREE;
     case XK_dollar:
-        return Keyboard::KEY_DOLLAR;
+        return gameplay::Keyboard::KEY_DOLLAR;
     case XK_4:
-        return Keyboard::KEY_FOUR;
+        return gameplay::Keyboard::KEY_FOUR;
     case XK_percent:
     case XK_asciicircum :
-        return Keyboard::KEY_CIRCUMFLEX;
-        return Keyboard::KEY_PERCENT;
+        return gameplay::Keyboard::KEY_CIRCUMFLEX;
+        return gameplay::Keyboard::KEY_PERCENT;
     case XK_5:
-        return Keyboard::KEY_FIVE;
+        return gameplay::Keyboard::KEY_FIVE;
     case XK_6:
-        return Keyboard::KEY_SIX;
+        return gameplay::Keyboard::KEY_SIX;
     case XK_ampersand:
-        return Keyboard::KEY_AMPERSAND;
+        return gameplay::Keyboard::KEY_AMPERSAND;
     case XK_7:
-        return Keyboard::KEY_SEVEN;
+        return gameplay::Keyboard::KEY_SEVEN;
     case XK_asterisk:
-        return Keyboard::KEY_ASTERISK;
+        return gameplay::Keyboard::KEY_ASTERISK;
     case XK_8:
-        return Keyboard::KEY_EIGHT;
+        return gameplay::Keyboard::KEY_EIGHT;
     case XK_parenleft:
-        return Keyboard::KEY_LEFT_PARENTHESIS;
+        return gameplay::Keyboard::KEY_LEFT_PARENTHESIS;
     case XK_9:
-        return Keyboard::KEY_NINE;
+        return gameplay::Keyboard::KEY_NINE;
     case XK_equal:
-        return Keyboard::KEY_EQUAL;
+        return gameplay::Keyboard::KEY_EQUAL;
     case XK_plus:
-        return Keyboard::KEY_PLUS;
+        return gameplay::Keyboard::KEY_PLUS;
     case XK_less:
-        return Keyboard::KEY_LESS_THAN;
+        return gameplay::Keyboard::KEY_LESS_THAN;
     case XK_comma:
-        return Keyboard::KEY_COMMA;
+        return gameplay::Keyboard::KEY_COMMA;
     case XK_underscore:
-        return Keyboard::KEY_UNDERSCORE;
+        return gameplay::Keyboard::KEY_UNDERSCORE;
     case XK_minus:
-        return Keyboard::KEY_MINUS;
+        return gameplay::Keyboard::KEY_MINUS;
     case XK_greater:
-        return Keyboard::KEY_GREATER_THAN;
+        return gameplay::Keyboard::KEY_GREATER_THAN;
     case XK_period:
-        return Keyboard::KEY_PERIOD;
+        return gameplay::Keyboard::KEY_PERIOD;
     case XK_colon:
-        return Keyboard::KEY_COLON;
+        return gameplay::Keyboard::KEY_COLON;
     case XK_semicolon:
-        return Keyboard::KEY_SEMICOLON;
+        return gameplay::Keyboard::KEY_SEMICOLON;
     case XK_question:
-        return Keyboard::KEY_QUESTION;
+        return gameplay::Keyboard::KEY_QUESTION;
     case XK_slash:
-        return Keyboard::KEY_SLASH;
+        return gameplay::Keyboard::KEY_SLASH;
     case XK_grave:
-        return Keyboard::KEY_GRAVE;
+        return gameplay::Keyboard::KEY_GRAVE;
     case XK_asciitilde:
-        return Keyboard::KEY_TILDE;
+        return gameplay::Keyboard::KEY_TILDE;
     case XK_braceleft:
-        return Keyboard::KEY_LEFT_BRACE;
+        return gameplay::Keyboard::KEY_LEFT_BRACE;
     case XK_bracketleft:
-        return Keyboard::KEY_LEFT_BRACKET;
+        return gameplay::Keyboard::KEY_LEFT_BRACKET;
     case XK_bar:
-        return Keyboard::KEY_BAR;
+        return gameplay::Keyboard::KEY_BAR;
     case XK_backslash:
-        return Keyboard::KEY_BACK_SLASH;
+        return gameplay::Keyboard::KEY_BACK_SLASH;
     case XK_braceright:
-        return Keyboard::KEY_RIGHT_BRACE;
+        return gameplay::Keyboard::KEY_RIGHT_BRACE;
     case XK_bracketright:
-        return Keyboard::KEY_RIGHT_BRACKET;
+        return gameplay::Keyboard::KEY_RIGHT_BRACKET;
     case XK_quotedbl:
-        return Keyboard::KEY_QUOTE;
+        return gameplay::Keyboard::KEY_QUOTE;
     case XK_apostrophe:
-        return Keyboard::KEY_APOSTROPHE;
+        return gameplay::Keyboard::KEY_APOSTROPHE;
     case XK_EuroSign:
-        return Keyboard::KEY_EURO;
+        return gameplay::Keyboard::KEY_EURO;
     case XK_sterling:
-        return Keyboard::KEY_POUND;
+        return gameplay::Keyboard::KEY_POUND;
     case XK_yen:
-        return Keyboard::KEY_YEN;
+        return gameplay::Keyboard::KEY_YEN;
     case XK_periodcentered:
-        return Keyboard::KEY_MIDDLE_DOT;
+        return gameplay::Keyboard::KEY_MIDDLE_DOT;
     case XK_A:
-        return Keyboard::KEY_CAPITAL_A;
+        return gameplay::Keyboard::KEY_CAPITAL_A;
     case XK_a:
-        return Keyboard::KEY_A;
+        return gameplay::Keyboard::KEY_A;
     case XK_B:
-        return Keyboard::KEY_CAPITAL_B;
+        return gameplay::Keyboard::KEY_CAPITAL_B;
     case XK_b:
-        return Keyboard::KEY_B;
+        return gameplay::Keyboard::KEY_B;
     case XK_C:
-        return Keyboard::KEY_CAPITAL_C;
+        return gameplay::Keyboard::KEY_CAPITAL_C;
     case XK_c:
-        return Keyboard::KEY_C;
+        return gameplay::Keyboard::KEY_C;
     case XK_D:
-        return Keyboard::KEY_CAPITAL_D;
+        return gameplay::Keyboard::KEY_CAPITAL_D;
     case XK_d:
-        return Keyboard::KEY_D;
+        return gameplay::Keyboard::KEY_D;
     case XK_E:
-        return Keyboard::KEY_CAPITAL_E;
+        return gameplay::Keyboard::KEY_CAPITAL_E;
     case XK_e:
-        return Keyboard::KEY_E;
+        return gameplay::Keyboard::KEY_E;
     case XK_F:
-        return Keyboard::KEY_CAPITAL_F;
+        return gameplay::Keyboard::KEY_CAPITAL_F;
     case XK_f:
-        return Keyboard::KEY_F;
+        return gameplay::Keyboard::KEY_F;
     case XK_G:
-        return Keyboard::KEY_CAPITAL_G;
+        return gameplay::Keyboard::KEY_CAPITAL_G;
     case XK_g:
-        return Keyboard::KEY_G;
+        return gameplay::Keyboard::KEY_G;
     case XK_H:
-        return Keyboard::KEY_CAPITAL_H;
+        return gameplay::Keyboard::KEY_CAPITAL_H;
     case XK_h:
-        return Keyboard::KEY_H;
+        return gameplay::Keyboard::KEY_H;
     case XK_I:
-        return Keyboard::KEY_CAPITAL_I;
+        return gameplay::Keyboard::KEY_CAPITAL_I;
     case XK_i:
-        return Keyboard::KEY_I;
+        return gameplay::Keyboard::KEY_I;
     case XK_J:
-        return Keyboard::KEY_CAPITAL_J;
+        return gameplay::Keyboard::KEY_CAPITAL_J;
     case XK_j:
-        return Keyboard::KEY_J;
+        return gameplay::Keyboard::KEY_J;
     case XK_K:
-        return Keyboard::KEY_CAPITAL_K;
+        return gameplay::Keyboard::KEY_CAPITAL_K;
     case XK_k:
-        return Keyboard::KEY_K;
+        return gameplay::Keyboard::KEY_K;
     case XK_L:
-        return Keyboard::KEY_CAPITAL_L;
+        return gameplay::Keyboard::KEY_CAPITAL_L;
     case XK_l:
-        return Keyboard::KEY_L;
+        return gameplay::Keyboard::KEY_L;
     case XK_M:
-        return Keyboard::KEY_CAPITAL_M;
+        return gameplay::Keyboard::KEY_CAPITAL_M;
     case XK_m:
-        return Keyboard::KEY_M;
+        return gameplay::Keyboard::KEY_M;
     case XK_N:
-        return Keyboard::KEY_CAPITAL_N;
+        return gameplay::Keyboard::KEY_CAPITAL_N;
     case XK_n:
-        return Keyboard::KEY_N;
+        return gameplay::Keyboard::KEY_N;
     case XK_O:
-        return Keyboard::KEY_CAPITAL_O;
+        return gameplay::Keyboard::KEY_CAPITAL_O;
     case XK_o:
-        return Keyboard::KEY_O;
+        return gameplay::Keyboard::KEY_O;
     case XK_P:
-        return Keyboard::KEY_CAPITAL_P;
+        return gameplay::Keyboard::KEY_CAPITAL_P;
     case XK_p:
-        return Keyboard::KEY_P;
+        return gameplay::Keyboard::KEY_P;
     case XK_Q:
-        return Keyboard::KEY_CAPITAL_Q;
+        return gameplay::Keyboard::KEY_CAPITAL_Q;
     case XK_q:
-        return Keyboard::KEY_Q;
+        return gameplay::Keyboard::KEY_Q;
     case XK_R:
-        return Keyboard::KEY_CAPITAL_R;
+        return gameplay::Keyboard::KEY_CAPITAL_R;
     case XK_r:
-        return Keyboard::KEY_R;
+        return gameplay::Keyboard::KEY_R;
     case XK_S:
-        return Keyboard::KEY_CAPITAL_S;
+        return gameplay::Keyboard::KEY_CAPITAL_S;
     case XK_s:
-        return Keyboard::KEY_S;
+        return gameplay::Keyboard::KEY_S;
     case XK_T:
-        return Keyboard::KEY_CAPITAL_T;
+        return gameplay::Keyboard::KEY_CAPITAL_T;
     case XK_t:
-        return Keyboard::KEY_T;
+        return gameplay::Keyboard::KEY_T;
     case XK_U:
-        return Keyboard::KEY_CAPITAL_U;
+        return gameplay::Keyboard::KEY_CAPITAL_U;
     case XK_u:
-        return Keyboard::KEY_U;
+        return gameplay::Keyboard::KEY_U;
     case XK_V:
-        return Keyboard::KEY_CAPITAL_V;
+        return gameplay::Keyboard::KEY_CAPITAL_V;
     case XK_v:
-        return Keyboard::KEY_V;
+        return gameplay::Keyboard::KEY_V;
     case XK_W:
-        return Keyboard::KEY_CAPITAL_W;
+        return gameplay::Keyboard::KEY_CAPITAL_W;
     case XK_w:
-        return Keyboard::KEY_W;
+        return gameplay::Keyboard::KEY_W;
     case XK_X:
-        return Keyboard::KEY_CAPITAL_X;
+        return gameplay::Keyboard::KEY_CAPITAL_X;
     case XK_x:
-        return Keyboard::KEY_X;
+        return gameplay::Keyboard::KEY_X;
     case XK_Y:
-        return Keyboard::KEY_CAPITAL_Y;
+        return gameplay::Keyboard::KEY_CAPITAL_Y;
     case XK_y:
-        return Keyboard::KEY_Y;
+        return gameplay::Keyboard::KEY_Y;
     case XK_Z:
-        return Keyboard::KEY_CAPITAL_Z;
+        return gameplay::Keyboard::KEY_CAPITAL_Z;
     case XK_z:
-        return Keyboard::KEY_Z;
+        return gameplay::Keyboard::KEY_Z;
     default:
-        return Keyboard::KEY_NONE;
+        return gameplay::Keyboard::KEY_NONE;
     }
 }
 
 /**
  * Returns the unicode value for the given keycode or zero if the key is not a valid printable character.
  */
-static int getUnicode(Keyboard::Key key)
+static int getUnicode(gameplay::Keyboard::Key key)
 {
-
     switch (key)
     {
-    case Keyboard::KEY_BACKSPACE:
+    case gameplay::Keyboard::KEY_BACKSPACE:
         return 0x0008;
-    case Keyboard::KEY_TAB:
+    case gameplay::Keyboard::KEY_TAB:
         return 0x0009;
-    case Keyboard::KEY_RETURN:
-    case Keyboard::KEY_KP_ENTER:
+    case gameplay::Keyboard::KEY_RETURN:
+    case gameplay::Keyboard::KEY_KP_ENTER:
         return 0x000A;
-    case Keyboard::KEY_ESCAPE:
+    case gameplay::Keyboard::KEY_ESCAPE:
         return 0x001B;
-    case Keyboard::KEY_SPACE:
-    case Keyboard::KEY_EXCLAM:
-    case Keyboard::KEY_QUOTE:
-    case Keyboard::KEY_NUMBER:
-    case Keyboard::KEY_DOLLAR:
-    case Keyboard::KEY_PERCENT:
-    case Keyboard::KEY_CIRCUMFLEX:
-    case Keyboard::KEY_AMPERSAND:
-    case Keyboard::KEY_APOSTROPHE:
-    case Keyboard::KEY_LEFT_PARENTHESIS:
-    case Keyboard::KEY_RIGHT_PARENTHESIS:
-    case Keyboard::KEY_ASTERISK:
-    case Keyboard::KEY_PLUS:
-    case Keyboard::KEY_COMMA:
-    case Keyboard::KEY_MINUS:
-    case Keyboard::KEY_PERIOD:
-    case Keyboard::KEY_SLASH:
-    case Keyboard::KEY_ZERO:
-    case Keyboard::KEY_ONE:
-    case Keyboard::KEY_TWO:
-    case Keyboard::KEY_THREE:
-    case Keyboard::KEY_FOUR:
-    case Keyboard::KEY_FIVE:
-    case Keyboard::KEY_SIX:
-    case Keyboard::KEY_SEVEN:
-    case Keyboard::KEY_EIGHT:
-    case Keyboard::KEY_NINE:
-    case Keyboard::KEY_COLON:
-    case Keyboard::KEY_SEMICOLON:
-    case Keyboard::KEY_LESS_THAN:
-    case Keyboard::KEY_EQUAL:
-    case Keyboard::KEY_GREATER_THAN:
-    case Keyboard::KEY_QUESTION:
-    case Keyboard::KEY_AT:
-    case Keyboard::KEY_CAPITAL_A:
-    case Keyboard::KEY_CAPITAL_B:
-    case Keyboard::KEY_CAPITAL_C:
-    case Keyboard::KEY_CAPITAL_D:
-    case Keyboard::KEY_CAPITAL_E:
-    case Keyboard::KEY_CAPITAL_F:
-    case Keyboard::KEY_CAPITAL_G:
-    case Keyboard::KEY_CAPITAL_H:
-    case Keyboard::KEY_CAPITAL_I:
-    case Keyboard::KEY_CAPITAL_J:
-    case Keyboard::KEY_CAPITAL_K:
-    case Keyboard::KEY_CAPITAL_L:
-    case Keyboard::KEY_CAPITAL_M:
-    case Keyboard::KEY_CAPITAL_N:
-    case Keyboard::KEY_CAPITAL_O:
-    case Keyboard::KEY_CAPITAL_P:
-    case Keyboard::KEY_CAPITAL_Q:
-    case Keyboard::KEY_CAPITAL_R:
-    case Keyboard::KEY_CAPITAL_S:
-    case Keyboard::KEY_CAPITAL_T:
-    case Keyboard::KEY_CAPITAL_U:
-    case Keyboard::KEY_CAPITAL_V:
-    case Keyboard::KEY_CAPITAL_W:
-    case Keyboard::KEY_CAPITAL_X:
-    case Keyboard::KEY_CAPITAL_Y:
-    case Keyboard::KEY_CAPITAL_Z:
-    case Keyboard::KEY_LEFT_BRACKET:
-    case Keyboard::KEY_BACK_SLASH:
-    case Keyboard::KEY_RIGHT_BRACKET:
-    case Keyboard::KEY_UNDERSCORE:
-    case Keyboard::KEY_GRAVE:
-    case Keyboard::KEY_A:
-    case Keyboard::KEY_B:
-    case Keyboard::KEY_C:
-    case Keyboard::KEY_D:
-    case Keyboard::KEY_E:
-    case Keyboard::KEY_F:
-    case Keyboard::KEY_G:
-    case Keyboard::KEY_H:
-    case Keyboard::KEY_I:
-    case Keyboard::KEY_J:
-    case Keyboard::KEY_K:
-    case Keyboard::KEY_L:
-    case Keyboard::KEY_M:
-    case Keyboard::KEY_N:
-    case Keyboard::KEY_O:
-    case Keyboard::KEY_P:
-    case Keyboard::KEY_Q:
-    case Keyboard::KEY_R:
-    case Keyboard::KEY_S:
-    case Keyboard::KEY_T:
-    case Keyboard::KEY_U:
-    case Keyboard::KEY_V:
-    case Keyboard::KEY_W:
-    case Keyboard::KEY_X:
-    case Keyboard::KEY_Y:
-    case Keyboard::KEY_Z:
-    case Keyboard::KEY_LEFT_BRACE:
-    case Keyboard::KEY_BAR:
-    case Keyboard::KEY_RIGHT_BRACE:
-    case Keyboard::KEY_TILDE:
+    case gameplay::Keyboard::KEY_SPACE:
+    case gameplay::Keyboard::KEY_EXCLAM:
+    case gameplay::Keyboard::KEY_QUOTE:
+    case gameplay::Keyboard::KEY_NUMBER:
+    case gameplay::Keyboard::KEY_DOLLAR:
+    case gameplay::Keyboard::KEY_PERCENT:
+    case gameplay::Keyboard::KEY_CIRCUMFLEX:
+    case gameplay::Keyboard::KEY_AMPERSAND:
+    case gameplay::Keyboard::KEY_APOSTROPHE:
+    case gameplay::Keyboard::KEY_LEFT_PARENTHESIS:
+    case gameplay::Keyboard::KEY_RIGHT_PARENTHESIS:
+    case gameplay::Keyboard::KEY_ASTERISK:
+    case gameplay::Keyboard::KEY_PLUS:
+    case gameplay::Keyboard::KEY_COMMA:
+    case gameplay::Keyboard::KEY_MINUS:
+    case gameplay::Keyboard::KEY_PERIOD:
+    case gameplay::Keyboard::KEY_SLASH:
+    case gameplay::Keyboard::KEY_ZERO:
+    case gameplay::Keyboard::KEY_ONE:
+    case gameplay::Keyboard::KEY_TWO:
+    case gameplay::Keyboard::KEY_THREE:
+    case gameplay::Keyboard::KEY_FOUR:
+    case gameplay::Keyboard::KEY_FIVE:
+    case gameplay::Keyboard::KEY_SIX:
+    case gameplay::Keyboard::KEY_SEVEN:
+    case gameplay::Keyboard::KEY_EIGHT:
+    case gameplay::Keyboard::KEY_NINE:
+    case gameplay::Keyboard::KEY_COLON:
+    case gameplay::Keyboard::KEY_SEMICOLON:
+    case gameplay::Keyboard::KEY_LESS_THAN:
+    case gameplay::Keyboard::KEY_EQUAL:
+    case gameplay::Keyboard::KEY_GREATER_THAN:
+    case gameplay::Keyboard::KEY_QUESTION:
+    case gameplay::Keyboard::KEY_AT:
+    case gameplay::Keyboard::KEY_CAPITAL_A:
+    case gameplay::Keyboard::KEY_CAPITAL_B:
+    case gameplay::Keyboard::KEY_CAPITAL_C:
+    case gameplay::Keyboard::KEY_CAPITAL_D:
+    case gameplay::Keyboard::KEY_CAPITAL_E:
+    case gameplay::Keyboard::KEY_CAPITAL_F:
+    case gameplay::Keyboard::KEY_CAPITAL_G:
+    case gameplay::Keyboard::KEY_CAPITAL_H:
+    case gameplay::Keyboard::KEY_CAPITAL_I:
+    case gameplay::Keyboard::KEY_CAPITAL_J:
+    case gameplay::Keyboard::KEY_CAPITAL_K:
+    case gameplay::Keyboard::KEY_CAPITAL_L:
+    case gameplay::Keyboard::KEY_CAPITAL_M:
+    case gameplay::Keyboard::KEY_CAPITAL_N:
+    case gameplay::Keyboard::KEY_CAPITAL_O:
+    case gameplay::Keyboard::KEY_CAPITAL_P:
+    case gameplay::Keyboard::KEY_CAPITAL_Q:
+    case gameplay::Keyboard::KEY_CAPITAL_R:
+    case gameplay::Keyboard::KEY_CAPITAL_S:
+    case gameplay::Keyboard::KEY_CAPITAL_T:
+    case gameplay::Keyboard::KEY_CAPITAL_U:
+    case gameplay::Keyboard::KEY_CAPITAL_V:
+    case gameplay::Keyboard::KEY_CAPITAL_W:
+    case gameplay::Keyboard::KEY_CAPITAL_X:
+    case gameplay::Keyboard::KEY_CAPITAL_Y:
+    case gameplay::Keyboard::KEY_CAPITAL_Z:
+    case gameplay::Keyboard::KEY_LEFT_BRACKET:
+    case gameplay::Keyboard::KEY_BACK_SLASH:
+    case gameplay::Keyboard::KEY_RIGHT_BRACKET:
+    case gameplay::Keyboard::KEY_UNDERSCORE:
+    case gameplay::Keyboard::KEY_GRAVE:
+    case gameplay::Keyboard::KEY_A:
+    case gameplay::Keyboard::KEY_B:
+    case gameplay::Keyboard::KEY_C:
+    case gameplay::Keyboard::KEY_D:
+    case gameplay::Keyboard::KEY_E:
+    case gameplay::Keyboard::KEY_F:
+    case gameplay::Keyboard::KEY_G:
+    case gameplay::Keyboard::KEY_H:
+    case gameplay::Keyboard::KEY_I:
+    case gameplay::Keyboard::KEY_J:
+    case gameplay::Keyboard::KEY_K:
+    case gameplay::Keyboard::KEY_L:
+    case gameplay::Keyboard::KEY_M:
+    case gameplay::Keyboard::KEY_N:
+    case gameplay::Keyboard::KEY_O:
+    case gameplay::Keyboard::KEY_P:
+    case gameplay::Keyboard::KEY_Q:
+    case gameplay::Keyboard::KEY_R:
+    case gameplay::Keyboard::KEY_S:
+    case gameplay::Keyboard::KEY_T:
+    case gameplay::Keyboard::KEY_U:
+    case gameplay::Keyboard::KEY_V:
+    case gameplay::Keyboard::KEY_W:
+    case gameplay::Keyboard::KEY_X:
+    case gameplay::Keyboard::KEY_Y:
+    case gameplay::Keyboard::KEY_Z:
+    case gameplay::Keyboard::KEY_LEFT_BRACE:
+    case gameplay::Keyboard::KEY_BAR:
+    case gameplay::Keyboard::KEY_RIGHT_BRACE:
+    case gameplay::Keyboard::KEY_TILDE:
         return key;
     default:
         return 0;
     }
 }
-
+#include <linux/joystick.h> //included here so i avoid the naming conflict between KEY_* defined in input.h and the ones defined in gameplay/Keyboard.h 
+namespace gameplay
+{
 extern void print(const char* format, ...)
 {
     GP_ASSERT(format);
@@ -709,6 +723,219 @@ void updateWindowSize()
     __windowSize[1] = windowAttrs.height;
 }
 
+
+bool isGamepadDevRegistered(dev_t devId)
+{
+    for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    {
+        if(devId == (*it).deviceId) return true;
+    }
+    return false;
+}
+
+void unregisterGamepad(GamepadHandle handle)
+{
+    for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+    {
+        if(handle == (*it).fd)
+        {
+            __connectedGamepads.erase(it);
+            return;
+        }
+    }
+}
+
+bool getGamepadMappedButton(const Gamepad* pad, unsigned long btnNumber, unsigned long* outMap)
+{
+   //FixMe: It should have a generic handling of mapping
+   const int maxButtonsCount = 16;
+   static const unsigned long mappings[maxButtonsCount] = {
+            Gamepad::BUTTON_UP,    
+            Gamepad::BUTTON_DOWN,  
+            Gamepad::BUTTON_LEFT,  
+            Gamepad::BUTTON_RIGHT, 
+            Gamepad::BUTTON_MENU2, 
+            Gamepad::BUTTON_MENU1, 
+            Gamepad::BUTTON_L3,    
+            Gamepad::BUTTON_R3,   
+            Gamepad::BUTTON_L1,   
+            Gamepad::BUTTON_R1,   
+            0,
+            0,
+            Gamepad::BUTTON_A,   
+            Gamepad::BUTTON_B,   
+            Gamepad::BUTTON_X,   
+            Gamepad::BUTTON_Y   
+   };
+   if(btnNumber >= 0 && btnNumber < maxButtonsCount)
+   {
+       *outMap = mappings[btnNumber];
+       return true;
+   }
+   GP_WARN("Unmapped gamepad button.");
+   return false;
+}
+
+
+struct GamepadJoystickInfo
+{
+    GamepadJoystickInfo(unsigned int axisIndex, unsigned int joystickIndex, bool skip, bool isDPad, bool isPositive, bool isXAxis) : isDPad(isDPad),isPositive(isPositive),isXAxis(isXAxis),joystickIndex(joystickIndex),axisIndex(axisIndex), skip(skip) {}
+    unsigned int axisIndex;
+    unsigned int joystickIndex;
+    bool skip;
+    bool isDPad;
+    bool isPositive;
+    bool isXAxis;
+};
+
+GamepadJoystickInfo getMappedJoystickInfoFromAxis(const Gamepad* pad, unsigned int axisIndex, float value)
+{
+    GP_ASSERT(pad);
+
+    unsigned int numberOfAxes = pad->getJoystickAxesCount();
+    //FixMe: gemeric mapping
+    if(axisIndex < numberOfAxes)
+    {
+        if(numberOfAxes == 7) 
+        {
+            static const GamepadJoystickInfo axesInfos[7] =
+            {
+                GamepadJoystickInfo(0,0,false,false,true,true),
+                GamepadJoystickInfo(1,0,false,false,true,false),
+                GamepadJoystickInfo(2,0,true,false,true,true),
+                GamepadJoystickInfo(3,1,false,false,true,true),
+                GamepadJoystickInfo(4,1,false,false,true,false),
+                GamepadJoystickInfo(5,2,false,true,true,true),
+                GamepadJoystickInfo(6,2,false,true,true,false)
+            };
+            return axesInfos[axisIndex];
+        }
+        else if(numberOfAxes == 6)
+        {
+            static const GamepadJoystickInfo axesInfos[6] =
+            {
+                GamepadJoystickInfo(0,0,false,false,true,true),
+                GamepadJoystickInfo(1,0,false,false,true,false),
+                GamepadJoystickInfo(2,1,false,false,true,true),
+                GamepadJoystickInfo(3,1,false,false,true,false),
+                GamepadJoystickInfo(4,2,false,true,true,true),
+                GamepadJoystickInfo(5,2,false,true,true,false)
+            };
+            return axesInfos[axisIndex];
+        }
+    }
+    return GamepadJoystickInfo(0,0,true,false,false,false);
+}
+
+unsigned int readIntegerGamepadIdPropery(const char* sysFSIdPath, const char* propertyName)
+{
+    unsigned int ret = 0;
+    try {
+        ifstream propStream;
+        propStream.open((string(sysFSIdPath) + propertyName).c_str(),ifstream::in);
+        propStream >> ret;
+        propStream.close();
+    } catch (exception e) {
+        GP_WARN("Could not read propery from SysFS for Gamepad: %s", propertyName);
+    }
+    return ret;
+}
+
+void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSIdPath)
+{
+    GP_ASSERT(devPath);
+
+    GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
+    if(handle < 0)
+    {
+        GP_WARN("Could not open Gamepad device.");
+        return;
+    }
+
+    if(!(fcntl(handle, F_GETFL) != -1 || errno != EBADF))
+        return;
+
+    unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
+    unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
+
+    char axesNum, btnsNum, name[256];
+
+    ioctl(handle, JSIOCGNAME(256), name);
+    ioctl (handle, JSIOCGAXES, &axesNum);
+    ioctl (handle, JSIOCGBUTTONS, &btnsNum);
+
+    int JSnum = (int)axesNum / 2;
+    Platform::gamepadEventConnectedInternal(handle,(int)btnsNum,JSnum,2,axesNum,vendorId,productId,"",name);
+
+    ConnectedGamepadDevInfo info; 
+    info.deviceId = devId;
+    info.fd = handle;
+    __connectedGamepads.push_back(info);
+}
+
+static float normalizeJoystickAxis(int axisValue, int deadZone)
+{
+    int absAxisValue = abs(axisValue);
+
+    if (absAxisValue < deadZone)
+    {
+        return 0.0f;
+    }
+    else
+    {
+        int value = axisValue;
+        int maxVal;
+        if (value < 0)
+        {
+            value = -1;
+            maxVal = 32768;
+        }
+        else if (value > 0)
+        {
+            value = 1;
+            maxVal = 32767;
+        }
+        else
+        {
+            return 0;
+        }
+
+        return value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
+    }
+}
+
+#if !UDEV_USED
+
+void enumGamepads()
+{
+    const int maxDevs = 16;
+    const char* devPathFormat = "/dev/input/js%u";
+    const char* sysfsPathFormat = "/sys/class/input/js%u/device/id/";
+    char curDevPath[20];
+
+    for(int i=0;i<maxDevs;i++)
+    {
+        sprintf(curDevPath,devPathFormat,i);
+        struct stat gpstat;
+        if(::stat(curDevPath,&gpstat) == 0)
+        {
+            dev_t devid = gpstat.st_rdev;
+            if(!isGamepadDevRegistered(devid))
+            {
+                char cursysFSPath[35];
+                sprintf(cursysFSPath,sysfsPathFormat,i);
+                handleConnectedGamepad(devid,curDevPath,cursysFSPath);
+            }
+        }
+    }
+}
+#endif
+
+void gamepadHandlingLoop()
+{
+    enumGamepads();
+}
+
 int Platform::enterMessagePump()
 {
     GP_ASSERT(_game);
@@ -924,6 +1151,8 @@ int Platform::enterMessagePump()
                 break;
             }
         }
+
+        gamepadHandlingLoop();
 
         if (_game)
         {
@@ -1143,10 +1372,10 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
                                              unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
+    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, axesCount, vendorId, productId, vendorString, productString);
 }
 
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
@@ -1179,6 +1408,82 @@ bool Platform::isGestureRegistered(Gesture::GestureEvent evt)
 
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
+    GP_ASSERT(gamepad);
+
+    struct js_event jevent;
+    while (read(gamepad->_handle, &jevent, sizeof(struct js_event)) > 0)
+    {
+        switch (jevent.type)
+        {
+            case JS_EVENT_BUTTON:
+            case JS_EVENT_BUTTON | JS_EVENT_INIT:
+                unsigned long curMappingIndex;
+                if(getGamepadMappedButton(gamepad, jevent.number, &curMappingIndex))
+                {
+                    if (jevent.value)
+                        gamepad->_buttons |= (1 << curMappingIndex);
+                    else
+                        gamepad->_buttons &= ~(1 << curMappingIndex);
+                }
+                break;
+
+            case JS_EVENT_AXIS:
+            case JS_EVENT_AXIS | JS_EVENT_INIT:
+                {
+                    float val = normalizeJoystickAxis(jevent.value,0);
+                    const GamepadJoystickInfo& jsInfo = getMappedJoystickInfoFromAxis(gamepad,jevent.number,val);
+
+                    if(!jsInfo.skip)
+                    {
+                        if(!jsInfo.isDPad)
+                        {
+                            if(jsInfo.isXAxis)
+                                gamepad->_joysticks[jsInfo.joystickIndex].x = val;
+                            else
+                                gamepad->_joysticks[jsInfo.joystickIndex].y = val;
+                        }
+                        else
+                        {
+                            unsigned long curMappingIndex;
+                            gamepad->_buttons &= ~(1 << Gamepad::BUTTON_LEFT);
+                            gamepad->_buttons &= ~(1 << Gamepad::BUTTON_RIGHT);
+                            gamepad->_buttons &= ~(1 << Gamepad::BUTTON_DOWN);
+                            gamepad->_buttons &= ~(1 << Gamepad::BUTTON_UP);
+                            if((jevent.value < 0 && jsInfo.isPositive) || (jevent.value > 0 && !jsInfo.isPositive))
+                            {
+                                if(jsInfo.isXAxis)
+                                    curMappingIndex = Gamepad::BUTTON_LEFT;
+                                else
+                                    curMappingIndex = Gamepad::BUTTON_DOWN;
+                            }
+                            else
+                            {
+                                if(jsInfo.isXAxis)
+                                    curMappingIndex = Gamepad::BUTTON_RIGHT;
+                                else
+                                    curMappingIndex = Gamepad::BUTTON_UP;
+                            }
+
+                            if(jevent.value != 0)
+                                gamepad->_buttons |= (1 << curMappingIndex);
+                            else
+                                gamepad->_buttons &= ~(1 << curMappingIndex);
+                        }
+                    }
+                }
+                break;
+
+            default: 
+                GP_WARN("unhandled gamepad event: %x\n", jevent.type);
+        }
+    }
+    if(errno == ENODEV)
+    {
+        ::close(gamepad->_handle);
+        unregisterGamepad(gamepad->_handle);
+        gamepadEventDisconnectedInternal(gamepad->_handle);
+    }
+
 }
 
 bool Platform::launchURL(const char* url)
