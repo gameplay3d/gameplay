@@ -136,6 +136,30 @@ unsigned int Scene::findNodes(const char* id, std::vector<Node*>& nodes, bool re
     return count;
 }
 
+void Scene::visitNode(Node* node, const char* visitMethod)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // Invoke the visit method for this node.
+    if (!sc->executeFunction<bool>(visitMethod, "<Node>", node))
+        return;
+
+    // If this node has a model with a mesh skin, visit the joint hierarchy within it
+    // since we don't add joint hierarcies directly to the scene. If joints are never
+    // visited, it's possible that nodes embedded within the joint hierarchy that contain
+    // models will never get visited (and therefore never get drawn).
+    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    {
+        visitNode(node->_model->_skin->_rootNode, visitMethod);
+    }
+
+    // Recurse for all children.
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        visitNode(child, visitMethod);
+    }
+}
+
 Node* Scene::addNode(const char* id)
 {
     Node* node = Node::create(id);
