@@ -290,7 +290,7 @@ public:
      *
      * @script{ignore}
      */
-    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
+    static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
                                               unsigned int vendorId, unsigned int productId, 
                                               const char* vendorString, const char* productString);
    /**
