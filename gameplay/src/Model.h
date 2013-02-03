@@ -20,6 +20,7 @@ class NodeCloneContext;
 class Model : public Ref
 {
     friend class Node;
+    friend class Scene;
     friend class Mesh;
     friend class Bundle;
 

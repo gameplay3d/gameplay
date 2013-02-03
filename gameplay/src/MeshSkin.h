@@ -21,6 +21,7 @@ class MeshSkin : public Transform::Listener
     friend class Model;
     friend class Joint;
     friend class Node;
+    friend class Scene;
 
 public:
 
