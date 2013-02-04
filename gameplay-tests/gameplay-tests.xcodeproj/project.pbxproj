@@ -577,18 +577,18 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					../../GamePlay/gameplay/src,
-					"../../GamePlay/external-deps/libpng/include",
-					"../../GamePlay/external-deps/bullet/include",
-					"../../GamePlay/external-deps/oggvorbis/include",
-					"../../GamePlay/external-deps/lua/include",
+					../gameplay/src,
+					"../external-deps/libpng/include",
+					"../external-deps/bullet/include",
+					"../external-deps/oggvorbis/include",
+					"../external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "gameplay-tests-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../../GamePlay/external-deps/libpng/lib/macosx\"",
-					"\"../../GamePlay/external-deps/bullet/lib/macosx\"",
-					"\"../../GamePlay/external-deps/oggvorbis/lib/macosx\"",
+					"\"../external-deps/libpng/lib/macosx\"",
+					"\"../external-deps/bullet/lib/macosx\"",
+					"\"../external-deps/oggvorbis/lib/macosx\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../external-deps/lua/lib/macosx\"",
 				);
@@ -607,18 +607,18 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
-					../../GamePlay/gameplay/src,
-					"../../GamePlay/external-deps/libpng/include",
-					"../../GamePlay/external-deps/bullet/include",
-					"../../GamePlay/external-deps/oggvorbis/include",
-					"../../GamePlay/external-deps/lua/include",
+					../gameplay/src,
+					"../external-deps/libpng/include",
+					"../external-deps/bullet/include",
+					"../external-deps/oggvorbis/include",
+					"../external-deps/lua/include",
 				);
 				INFOPLIST_FILE = "gameplay-tests-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"../../GamePlay/external-deps/libpng/lib/macosx\"",
-					"\"../../GamePlay/external-deps/bullet/lib/macosx\"",
-					"\"../../GamePlay/external-deps/oggvorbis/lib/macosx\"",
+					"\"../external-deps/libpng/lib/macosx\"",
+					"\"../external-deps/bullet/lib/macosx\"",
+					"\"../external-deps/oggvorbis/lib/macosx\"",
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/gameplay-elhktkvtauowyocpskrmoauvfhhx/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../external-deps/lua/lib/macosx\"",
 				);
