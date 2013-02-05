@@ -1,21 +1,30 @@
 #include "Base.h"
 #include "DepthStencilTarget.h"
 
+#ifndef GL_DEPTH24_STENCIL8_OES
+#define GL_DEPTH24_STENCIL8_OES 0x88F0
+#endif
+#ifndef GL_DEPTH_COMPONENT24
+#define GL_DEPTH_COMPONENT24 GL_DEPTH_COMPONENT24_OES
+#endif
+
 namespace gameplay
 {
 
 static std::vector<DepthStencilTarget*> __depthStencilTargets;
 
 DepthStencilTarget::DepthStencilTarget(const char* id, Format format, unsigned int width, unsigned int height)
-    : _id(id ? id : ""), _format(format), _renderBuffer(0), _width(width), _height(height)
+    : _id(id ? id : ""), _format(format), _depthBuffer(0), _stencilBuffer(0), _width(width), _height(height)
 {
 }
 
 DepthStencilTarget::~DepthStencilTarget()
 {
     // Destroy GL resources.
-    if (_renderBuffer)
-        GL_ASSERT( glDeleteTextures(1, &_renderBuffer) );
+    if (_depthBuffer)
+        GL_ASSERT( glDeleteRenderbuffers(1, &_depthBuffer) );
+    if (_stencilBuffer)
+        GL_ASSERT( glDeleteRenderbuffers(1, &_stencilBuffer) );
 
     // Remove from vector.
     std::vector<DepthStencilTarget*>::iterator it = std::find(__depthStencilTargets.begin(), __depthStencilTargets.end(), this);
@@ -30,11 +39,41 @@ DepthStencilTarget* DepthStencilTarget::create(const char* id, Format format, un
     // Create the depth stencil target.
     DepthStencilTarget* depthStencilTarget = new DepthStencilTarget(id, format, width, height);
 
-    // Create a render buffer for this new depth stencil target
-    GL_ASSERT( glGenRenderbuffers(1, &depthStencilTarget->_renderBuffer) );
-    GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, depthStencilTarget->_renderBuffer) );
-    GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height) );
+    // Create a render buffer for this new depth+stencil target
+    GL_ASSERT( glGenRenderbuffers(1, &depthStencilTarget->_depthBuffer) );
+    GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, depthStencilTarget->_depthBuffer) );
 
+    // First try to add storage for the most common standard GL_DEPTH24_STENCIL8 
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+
+    // Fall back to less common GLES2 extension combination for seperate depth24 + stencil8 or depth16 + stencil8
+    __gl_error_code = glGetError();
+    if ( __gl_error_code != GL_NO_ERROR)
+    {
+        const char* extString = (const char*)glGetString(GL_EXTENSIONS);
+
+        if (strstr(extString, "GL_OES_packed_depth_stencil") != 0)
+        {
+            GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height) );
+        }
+        else
+        {
+            if (strstr(extString, "GL_OES_depth24") != 0)
+            {
+                GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height) );
+            }
+            else
+            {
+                GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height) );
+            }
+            if (format == DepthStencilTarget::DEPTH_STENCIL)
+            {
+                GL_ASSERT( glGenRenderbuffers(1, &depthStencilTarget->_stencilBuffer) );
+                GL_ASSERT( glBindRenderbuffer(GL_RENDERBUFFER, depthStencilTarget->_stencilBuffer) );
+                GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height) );
+            }
+        }
+    }
     // Add it to the cache.
     __depthStencilTargets.push_back(depthStencilTarget);
 

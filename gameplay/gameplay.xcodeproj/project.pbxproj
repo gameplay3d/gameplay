@@ -836,6 +836,13 @@
 		42CD0EC8147D8FF60000361E /* VertexAttributeBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */; };
 		42CD0EC9147D8FF60000361E /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0E42147D8FF50000361E /* VertexFormat.cpp */; };
 		42CD0ECA147D8FF60000361E /* VertexFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E43147D8FF50000361E /* VertexFormat.h */; };
+		42DFAB5016AD8ECD0000F342 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB4F16AD8ECD0000F342 /* libz.dylib */; };
+		42DFAB5A16AD8F310000F342 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB5316AD8F310000F342 /* CoreMotion.framework */; };
+		42DFAB5B16AD8F310000F342 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB5416AD8F310000F342 /* Foundation.framework */; };
+		42DFAB5C16AD8F310000F342 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB5516AD8F310000F342 /* OpenAL.framework */; };
+		42DFAB5D16AD8F310000F342 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB5616AD8F310000F342 /* OpenGLES.framework */; };
+		42DFAB5E16AD8F310000F342 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB5716AD8F310000F342 /* QuartzCore.framework */; };
+		42DFAB5F16AD8F310000F342 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB5816AD8F310000F342 /* UIKit.framework */; };
 		42F4B7D715994CED00B5A78D /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42F4B7D515994CED00B5A78D /* Gamepad.cpp */; };
 		42F4B7D815994CED00B5A78D /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42F4B7D515994CED00B5A78D /* Gamepad.cpp */; };
 		42F4B7D915994CED00B5A78D /* Gamepad.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F4B7D615994CED00B5A78D /* Gamepad.h */; };
@@ -975,13 +982,6 @@
 		5B2BC7601512514500D176CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC75E1512514500D176CD /* OpenGL.framework */; };
 		5B2BC7621512514D00D176CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7611512514D00D176CD /* QuartzCore.framework */; };
 		5B2BC7641512516B00D176CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2BC7631512516B00D176CD /* libz.dylib */; };
-		5BAF2027152F2AF0003E2AC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */; };
-		5BAF2028152F2AF0003E2AC3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */; };
-		5BAF2029152F2AF0003E2AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2022152F2AF0003E2AC3 /* Foundation.framework */; };
-		5BAF202A152F2AF0003E2AC3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2023152F2AF0003E2AC3 /* OpenAL.framework */; };
-		5BAF202B152F2AF0003E2AC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2024152F2AF0003E2AC3 /* OpenGLES.framework */; };
-		5BAF202C152F2AF0003E2AC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2025152F2AF0003E2AC3 /* QuartzCore.framework */; };
-		5BAF202D152F2AF0003E2AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAF2026152F2AF0003E2AC3 /* UIKit.framework */; };
 		5BB0823D14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
 		5BB0823E14C6FEC40019975F /* Mouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB0823C14C6FEC40019975F /* Mouse.h */; };
 		5BBAD0F315F5251E004C9639 /* lua_Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */; };
@@ -1620,6 +1620,13 @@
 		42CD0E41147D8FF50000361E /* VertexAttributeBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexAttributeBinding.h; path = src/VertexAttributeBinding.h; sourceTree = SOURCE_ROOT; };
 		42CD0E42147D8FF50000361E /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexFormat.cpp; path = src/VertexFormat.cpp; sourceTree = SOURCE_ROOT; };
 		42CD0E43147D8FF50000361E /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexFormat.h; path = src/VertexFormat.h; sourceTree = SOURCE_ROOT; };
+		42DFAB4F16AD8ECD0000F342 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		42DFAB5316AD8F310000F342 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB5416AD8F310000F342 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB5516AD8F310000F342 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB5616AD8F310000F342 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB5716AD8F310000F342 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		42DFAB5816AD8F310000F342 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		42F4B7D515994CED00B5A78D /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gamepad.cpp; path = src/Gamepad.cpp; sourceTree = SOURCE_ROOT; };
 		42F4B7D615994CED00B5A78D /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gamepad.h; path = src/Gamepad.h; sourceTree = SOURCE_ROOT; };
 		5B04C5CA14BFCFE100EB0071 /* libgameplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgameplay.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1635,14 +1642,6 @@
 		5B5DB93214C25BA5007755DB /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbis.a"; sourceTree = "<group>"; };
 		5B5DB93314C25BA5007755DB /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisenc.a"; sourceTree = "<group>"; };
 		5B5DB93414C25BA5007755DB /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../external-deps/oggvorbis/lib/ios/armv7/libvorbisfile.a"; sourceTree = "<group>"; };
-		5BAF201E152F2A6D003E2AC3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
-		5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		5BAF2022152F2AF0003E2AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5BAF2023152F2AF0003E2AC3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		5BAF2024152F2AF0003E2AC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		5BAF2025152F2AF0003E2AC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		5BAF2026152F2AF0003E2AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5BB0823C14C6FEC40019975F /* Mouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mouse.h; path = src/Mouse.h; sourceTree = SOURCE_ROOT; };
 		5BBAD0EF15F5251D004C9639 /* lua_Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_Gesture.cpp; sourceTree = "<group>"; };
 		5BBAD0F015F5251D004C9639 /* lua_Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_Gesture.h; sourceTree = "<group>"; };
@@ -1728,13 +1727,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BAF2027152F2AF0003E2AC3 /* CoreGraphics.framework in Frameworks */,
-				5BAF2028152F2AF0003E2AC3 /* CoreMotion.framework in Frameworks */,
-				5BAF2029152F2AF0003E2AC3 /* Foundation.framework in Frameworks */,
-				5BAF202A152F2AF0003E2AC3 /* OpenAL.framework in Frameworks */,
-				5BAF202B152F2AF0003E2AC3 /* OpenGLES.framework in Frameworks */,
-				5BAF202C152F2AF0003E2AC3 /* QuartzCore.framework in Frameworks */,
-				5BAF202D152F2AF0003E2AC3 /* UIKit.framework in Frameworks */,
+				42DFAB5016AD8ECD0000F342 /* libz.dylib in Frameworks */,
+				42DFAB5A16AD8F310000F342 /* CoreMotion.framework in Frameworks */,
+				42DFAB5B16AD8F310000F342 /* Foundation.framework in Frameworks */,
+				42DFAB5C16AD8F310000F342 /* OpenAL.framework in Frameworks */,
+				42DFAB5D16AD8F310000F342 /* OpenGLES.framework in Frameworks */,
+				42DFAB5E16AD8F310000F342 /* QuartzCore.framework in Frameworks */,
+				42DFAB5F16AD8F310000F342 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2366,13 +2365,12 @@
 		5B04C5FD14BFE52300EB0071 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5BAF2020152F2AF0003E2AC3 /* CoreGraphics.framework */,
-				5BAF2021152F2AF0003E2AC3 /* CoreMotion.framework */,
-				5BAF2022152F2AF0003E2AC3 /* Foundation.framework */,
-				5BAF2023152F2AF0003E2AC3 /* OpenAL.framework */,
-				5BAF2024152F2AF0003E2AC3 /* OpenGLES.framework */,
-				5BAF2025152F2AF0003E2AC3 /* QuartzCore.framework */,
-				5BAF2026152F2AF0003E2AC3 /* UIKit.framework */,
+				42DFAB5316AD8F310000F342 /* CoreMotion.framework */,
+				42DFAB5416AD8F310000F342 /* Foundation.framework */,
+				42DFAB5516AD8F310000F342 /* OpenAL.framework */,
+				42DFAB5616AD8F310000F342 /* OpenGLES.framework */,
+				42DFAB5716AD8F310000F342 /* QuartzCore.framework */,
+				42DFAB5816AD8F310000F342 /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -2399,7 +2397,7 @@
 				5B5DB93314C25BA5007755DB /* libvorbisenc.a */,
 				5B5DB93414C25BA5007755DB /* libvorbisfile.a */,
 				5B5DB92F14C25B94007755DB /* libpng.a */,
-				5BAF201E152F2A6D003E2AC3 /* libz.dylib */,
+				42DFAB4F16AD8ECD0000F342 /* libz.dylib */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -3610,7 +3608,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
-				VALID_ARCHS = "armv7 armv6 i386 x86_64";
+				VALID_ARCHS = "armv7 armv7s i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -3619,7 +3617,7 @@
 			buildSettings = {
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
-				VALID_ARCHS = "armv7 armv6 i386 x86_64";
+				VALID_ARCHS = "armv7 armv7s i386 x86_64";
 			};
 			name = Release;
 		};
@@ -3650,9 +3648,9 @@
 				GCC_WARN_MISSING_PARENTHESES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/libpng/include",
-					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
 					./gameplay,
 				);
@@ -3689,9 +3687,9 @@
 				GCC_WARN_MISSING_PARENTHESES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/libpng/include",
-					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
 					./gameplay,
 				);
@@ -3730,9 +3728,9 @@
 				GCC_WARN_MISSING_PARENTHESES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/libpng/include",
-					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3746,7 +3744,7 @@
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv7s ";
 			};
 			name = Debug;
 		};
@@ -3772,9 +3770,9 @@
 				GCC_WARN_MISSING_PARENTHESES = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
 					"../external-deps/libpng/include",
-					"../external-deps/bullet/include",
 					"../external-deps/oggvorbis/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3787,7 +3785,7 @@
 				SHARED_PRECOMPS_DIR = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv7s ";
 			};
 			name = Release;
 		};

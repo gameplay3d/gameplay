@@ -502,7 +502,7 @@ void CharacterGame::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 bool CharacterGame::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    if (evt == Mouse::MouseEvent::MOUSE_PRESS_RIGHT_BUTTON)
+    if (evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON)
     {
         kick();
         return true;

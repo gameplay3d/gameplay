@@ -730,7 +730,7 @@ void luaRegister_lua_Global()
         ScriptUtil::registerConstantString("BLEND_ZERO", "BLEND_ZERO", scopePath);
         ScriptUtil::registerConstantString("BLEND_ONE", "BLEND_ONE", scopePath);
         ScriptUtil::registerConstantString("BLEND_SRC_COLOR", "BLEND_SRC_COLOR", scopePath);
-        ScriptUtil::registerConstantString("BLEN_ONE_MINUS_SRC_COLOR", "BLEN_ONE_MINUS_SRC_COLOR", scopePath);
+        ScriptUtil::registerConstantString("BLEND_ONE_MINUS_SRC_COLOR", "BLEND_ONE_MINUS_SRC_COLOR", scopePath);
         ScriptUtil::registerConstantString("BLEND_DST_COLOR", "BLEND_DST_COLOR", scopePath);
         ScriptUtil::registerConstantString("BLEND_ONE_MINUS_DST_COLOR", "BLEND_ONE_MINUS_DST_COLOR", scopePath);
         ScriptUtil::registerConstantString("BLEND_SRC_ALPHA", "BLEND_SRC_ALPHA", scopePath);

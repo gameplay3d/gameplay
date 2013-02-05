@@ -86,6 +86,9 @@ private:
     FrameBuffer* _frameBuffer;
     unsigned int _compositorIndex;
     std::vector<Compositor*> _compositors;
+    static  Model* _quadModel;
+    static  Material* _compositorMaterial;
+
 };
 
 #endif

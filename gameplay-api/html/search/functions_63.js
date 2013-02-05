@@ -1,7 +1,7 @@
 var searchData=
 [
   ['callback',['Callback',['../structgameplay_1_1_script_target_1_1_callback.html#a6b2e932e83efbe3dd4bfd8d78dadea0a',1,'gameplay::ScriptTarget::Callback']]],
-  ['canexit',['canExit',['../classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5',1,'gameplay::Game::canExit()'],['../classgameplay_1_1_platform.html#a423d1c68e5dc83548f6f0562efddc7a6',1,'gameplay::Platform::canExit()']]],
+  ['canexit',['canExit',['../classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5',1,'gameplay::Game']]],
   ['canread',['canRead',['../classgameplay_1_1_stream.html#a185580ff320a845015a24dff3fd9791e',1,'gameplay::Stream']]],
   ['canseek',['canSeek',['../classgameplay_1_1_stream.html#a0c8b845ffa9396df62f9f3c153b981d7',1,'gameplay::Stream']]],
   ['canwrite',['canWrite',['../classgameplay_1_1_stream.html#a922ce6e19b6c1ea8f4ecfff839d6701c',1,'gameplay::Stream']]],

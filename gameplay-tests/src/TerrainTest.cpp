@@ -23,13 +23,18 @@ struct TerrainHitFilter : public PhysicsController::HitFilter
 
 TerrainTest::TerrainTest()
 	: _font(NULL), _scene(NULL), _terrain(NULL), _form(NULL),  _formVisible(true), _sky(NULL),
-	  _wireframe(false), _debugPhysics(false), _snapToGround(false), _vsync(true),
+	  _wireframe(false), _debugPhysics(false), _snapToGround(true), _vsync(true),
 	  _mode(MODE_LOOK), _sphere(NULL), _box(NULL)
 {
 }
 
 TerrainTest::~TerrainTest()
 {
+    SAFE_RELEASE(_box);
+    SAFE_RELEASE(_sphere);
+    SAFE_RELEASE(_form);
+    SAFE_RELEASE(_font);
+    SAFE_RELEASE(_scene);
 }
 
 void TerrainTest::initialize()
@@ -70,7 +75,7 @@ void TerrainTest::initialize()
 
     // Use script camera for navigation
 	enableScriptCamera(true);
-    setScriptCameraSpeed(100, 1000);
+    setScriptCameraSpeed(20, 80);
 }
 
 void TerrainTest::finalize()

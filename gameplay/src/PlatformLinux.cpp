@@ -27,6 +27,7 @@ static float __roll;
 static bool __mouseCaptured = false;
 static float __mouseCapturePointX = 0;
 static float __mouseCapturePointY = 0;
+static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static Display* __display;
 static Window   __window;
@@ -513,7 +514,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
      
     // Get the window configuration values
     const char *title = NULL;
-    int __x = 0, __y = 0, __width = 1280, __height = 800;
+    int __x = 0, __y = 0, __width = 1280, __height = 800, __samples = 0;
     bool fullscreen = false;
     if (game->getConfig())
     {
@@ -528,6 +529,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             int y = config->getInt("y");
             int width = config->getInt("width");
             int height = config->getInt("height");
+            int samples = config->getInt("samples");
             fullscreen = config->getBool("fullscreen");
 
             if (fullscreen && width == 0 && height == 0)
@@ -541,6 +543,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             if (y != 0) __y = y;
             if (width != 0) __width = width;
             if (height != 0) __height = height;
+            if (samples != 0) __samples = samples;
         }
     }
 
@@ -578,8 +581,12 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         GLX_GREEN_SIZE,     8,
         GLX_BLUE_SIZE,      8,
         GLX_DOUBLEBUFFER,   True,
+        GLX_SAMPLE_BUFFERS, __samples > 0 ? 1 : 0,
+        GLX_SAMPLES,        __samples,
         0
     };
+    __multiSampling = __samples > 0;
+
     GLXFBConfig* configs;
     int configCount = 0;
     configs = glXChooseFBConfig(__display, DefaultScreen(__display), configAttribs, &configCount);
@@ -995,6 +1002,23 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     // not supported
@@ -1128,6 +1152,11 @@ void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
 }
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)
