@@ -15,9 +15,10 @@
 #import <Foundation/Foundation.h>
 
 // These should probably be moved to a platform common file
-#define SONY_USB_VENDOR_ID          0x54c
-#define SONY_USB_PS3_PRODUCT_ID     0x268
-
+#define SONY_USB_VENDOR_ID              0x54c
+#define SONY_USB_PS3_PRODUCT_ID         0x268
+#define MICROSOFT_VENDOR_ID             0x45e
+#define MICROSOFT_XBOX360_PRODUCT_ID    0x28e
 
 using namespace std;
 using namespace gameplay;
@@ -88,7 +89,6 @@ double getMachTimeInMilliseconds()
     GP_ASSERT(s_timebase_info.denom);
     return ((double)mach_absolute_time() * (double)s_timebase_info.numer) / (kOneMillion * (double)s_timebase_info.denom);
 }
-
 
 @interface HIDGamepadAxis : NSObject
 {
@@ -367,6 +367,9 @@ double getMachTimeInMilliseconds()
 
 - (void)initializeGamepadElements
 {
+    uint32_t vendorID = [self vendorID];
+    uint32_t productID = [self productID];
+    
     CFArrayRef elements = IOHIDDeviceCopyMatchingElements([self rawDevice], NULL, kIOHIDOptionsTypeNone);
     for(int i = 0; i < CFArrayGetCount(elements); i++)
     {
@@ -382,15 +385,26 @@ double getMachTimeInMilliseconds()
             {
                 case kHIDUsage_GD_X:
                 case kHIDUsage_GD_Y:
-                case kHIDUsage_GD_Z:
                 case kHIDUsage_GD_Rx:
                 case kHIDUsage_GD_Ry:
+                case kHIDUsage_GD_Z:
                 case kHIDUsage_GD_Rz:
                 {
-                    HIDGamepadAxis *axis = [HIDGamepadAxis gamepadAxisWithAxisElement:hidElement];
-                    [[self axes] addObject:axis];
-                }
+                    if (vendorID == MICROSOFT_VENDOR_ID &&
+                        productID == MICROSOFT_XBOX360_PRODUCT_ID &&
+                        (pageUsage == kHIDUsage_GD_Z || pageUsage == kHIDUsage_GD_Rz))
+                    {
+                        HIDGamepadButton* triggerButton = [HIDGamepadButton gamepadButtonWithButtonElement:hidElement];
+                        [triggerButton setTriggerElement:hidElement];
+                        [[self triggerButtons] addObject:triggerButton];
+                    }
+                    else
+                    {
+                        HIDGamepadAxis *axis = [HIDGamepadAxis gamepadAxisWithAxisElement:hidElement];
+                        [[self axes] addObject:axis];
+                    }
                     break;
+                }
                 default:
                     // Ignore the pointers
                     // Note: Some of the pointers are for the 6-axis accelerometer in a PS3 controller
@@ -407,8 +421,6 @@ double getMachTimeInMilliseconds()
     }
     // Go back and get proprietary information (e.g. triggers) and associate with appropriate values
     // Example for other trigger buttons
-    uint32_t vendorID = [self vendorID];
-    uint32_t productID = [self productID];
     for(int i = 0; i < CFArrayGetCount(elements); i++)
     {
         IOHIDElementRef hidElement = (IOHIDElementRef)CFArrayGetValueAtIndex(elements, i);
@@ -629,8 +641,6 @@ double getMachTimeInMilliseconds()
 
 
 @end
-
-
 
 
 @interface View : NSOpenGLView <NSWindowDelegate>
@@ -1477,9 +1487,21 @@ Platform::Platform(Game* game)
     IOHIDManagerRegisterDeviceMatchingCallback(__hidManagerRef, hidDeviceDiscoveredCallback, NULL);
     IOHIDManagerRegisterDeviceRemovalCallback(__hidManagerRef, hidDeviceRemovalCallback, NULL);
     
-    CFDictionaryRef matchingCFDictRef = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
-    if (matchingCFDictRef) IOHIDManagerSetDeviceMatching(__hidManagerRef, matchingCFDictRef);
-    CFRelease(matchingCFDictRef);
+    CFMutableArrayRef matching = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+    if (matching)
+    {
+        CFDictionaryRef matchingJoystick = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+        CFDictionaryRef matchingGamepad = IOHIDCreateDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
+        
+        if (matchingJoystick && matchingGamepad)
+        {
+            CFArrayAppendValue(matching, matchingJoystick);
+            CFRelease(matchingJoystick);
+            CFArrayAppendValue(matching, matchingGamepad);
+            CFRelease(matchingGamepad);
+            IOHIDManagerSetDeviceMatchingMultiple(__hidManagerRef, matching);
+        }
+    }
     
     IOHIDManagerScheduleWithRunLoop(__hidManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOReturn kr = IOHIDManagerOpen(__hidManagerRef, kIOHIDOptionsTypeNone);
@@ -1867,11 +1889,38 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             Gamepad::BUTTON_MENU3   // 0x10000
         };
         
+        static const int XBox360Mapping[20] = {
+            -1, -1, -1, -1, -1,
+            Gamepad::BUTTON_UP,
+            Gamepad::BUTTON_DOWN,
+            Gamepad::BUTTON_LEFT,
+            Gamepad::BUTTON_RIGHT,
+            Gamepad::BUTTON_MENU2,
+            Gamepad::BUTTON_MENU1,
+            Gamepad::BUTTON_L3,
+            Gamepad::BUTTON_R3,
+            Gamepad::BUTTON_L1,
+            Gamepad::BUTTON_R1,
+            Gamepad::BUTTON_MENU3,
+            Gamepad::BUTTON_A,
+            Gamepad::BUTTON_B,
+            Gamepad::BUTTON_X,
+            Gamepad::BUTTON_Y
+        };
+        
         const int* mapping = NULL;
+        float axisDeadZone = 0.0f;
         if (gamepad->_vendorId == SONY_USB_VENDOR_ID &&
             gamepad->_productId == SONY_USB_PS3_PRODUCT_ID)
         {
             mapping = PS3Mapping;
+            axisDeadZone = 0.07f;
+        }
+        else if (gamepad->_vendorId == MICROSOFT_VENDOR_ID &&
+                 gamepad->_productId == MICROSOFT_XBOX360_PRODUCT_ID)
+        {
+            mapping = XBox360Mapping;
+            axisDeadZone = 0.2f;
         }
         
         gamepad->_buttons = 0;
@@ -1893,15 +1942,16 @@ void Platform::pollGamepadState(Gamepad* gamepad)
                 }
             }
         }
-
+        
         for (unsigned int i = 0; i < [gp numberOfSticks]; ++i)
         {
             float rawX = [[gp axisAtIndex: i*2] calibratedValue];
             float rawY = -[[gp axisAtIndex: i*2 + 1] calibratedValue];
-            if (std::fabs(rawX) <= 0.07f)
+            if (std::fabs(rawX) <= axisDeadZone)
                 rawX = 0;
-            if (std::fabs(rawY) <= 0.07f)
+            if (std::fabs(rawY) <= axisDeadZone)
                 rawY = 0;
+            
             gamepad->_joysticks[i].x = rawX;
             gamepad->_joysticks[i].y = rawY;
         }
@@ -2014,15 +2064,14 @@ int IOHIDDeviceGetIntProperty(IOHIDDeviceRef deviceRef, CFStringRef key)
     return value;
 }
 
-static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 
+static void hidDeviceDiscoveredCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef device)
 {
-    CFNumberRef locID = (CFNumberRef)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDLocationIDKey));
+    CFNumberRef locID = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDLocationIDKey));
     if(locID)
     {
-        HIDGamepad* gamepad = [[HIDGamepad alloc] initWithDevice:inIOHIDDeviceRef];
+        HIDGamepad* gamepad = [[HIDGamepad alloc] initWithDevice: device];
         [__gamepads addObject:gamepad];
     }
-    
 }
 
 static void hidDeviceRemovalCallback(void* inContext, IOReturn inResult, void* inSender, IOHIDDeviceRef inIOHIDDeviceRef) 
