@@ -41,6 +41,7 @@ static EGLSurface __eglSurface = EGL_NO_SURFACE;
 static EGLConfig __eglConfig = 0;
 static int __orientationAngle;
 static bool __multiTouch = false;
+static bool __multiSampling = false;
 static float __pitch;
 static float __roll;
 static const char* __glExtensions;
@@ -745,6 +746,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
         EGL_NONE
     };
+    __multiSampling = samples > 0;
 
     const EGLint eglContextAttrs[] =
     {
@@ -928,6 +930,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 break;
             }
         }
+
+        __multiSampling = samples > 0;
 
         if (!success)
         {
@@ -1400,6 +1404,23 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1530,6 +1551,11 @@ void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
 }
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)

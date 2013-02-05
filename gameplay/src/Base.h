@@ -27,6 +27,7 @@
 #include <limits>
 #include <functional>
 #include <bitset>
+#include <typeinfo>
 #include "Logger.h"
 
 // Bring common functions from C into global namespace
@@ -279,9 +280,9 @@ typedef GLuint FrameBufferHandle;
 typedef GLuint RenderBufferHandle;
 
 /** Gamepad handle definitions vary by platform. */
-#if defined(__QNX__) && defined (USE_BLACKBERRY_GAMEPAD)
+#if defined(__QNX__) && defined(USE_BLACKBERRY_GAMEPAD)
     typedef screen_device_t GamepadHandle;
-#elif USE_XINPUT
+#elif defined(USE_XINPUT)
     typedef unsigned long GamepadHandle;
 #else
     typedef unsigned int GamepadHandle;

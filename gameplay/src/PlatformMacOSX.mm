@@ -51,6 +51,7 @@ static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
 static bool __mouseCapturedFirstPass = false;
 static CGPoint __mouseCapturePoint;
+static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static View* __view = NULL;
 
@@ -780,6 +781,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     };
     NSOpenGLPixelFormatAttribute* attrs = __fullscreen ? fullscreenAttrs : windowedAttrs;
     
+    __multiSampling = samples > 0;
+
     // Try to choose a supported pixel format
     NSOpenGLPixelFormat* pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
     if (!pf)
@@ -797,6 +800,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
                 break;
             }
         }
+
+        __multiSampling = samples > 0;
         
         if (!valid)
         {
@@ -1669,6 +1674,23 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
 }
@@ -1800,6 +1822,11 @@ void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int
 void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
 {
     Gamepad::remove(handle);
+}
+
+void Platform::shutdownInternal()
+{
+    Game::getInstance()->shutdown();
 }
 
 bool Platform::isGestureSupported(Gesture::GestureEvent evt)

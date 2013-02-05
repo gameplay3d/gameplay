@@ -2,6 +2,8 @@
 #define RENDERSTATE_H_
 
 #include "Ref.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace gameplay
 {
@@ -134,7 +136,7 @@ public:
         BLEND_ZERO = GL_ZERO,
         BLEND_ONE = GL_ONE,
         BLEND_SRC_COLOR = GL_SRC_COLOR,
-        BLEN_ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+        BLEND_ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
         BLEND_DST_COLOR = GL_DST_COLOR,
         BLEND_ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
         BLEND_SRC_ALPHA = GL_SRC_ALPHA,
@@ -460,6 +462,31 @@ private:
      * Hidden copy assignment operator.
      */
     RenderState& operator=(const RenderState&);
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector3& autoBindingGetAmbientColor() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector3& autoBindingGetLightColor() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector3& autoBindingGetLightDirection() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector4* autoBindingGetMatrixPalette() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    unsigned int autoBindingGetMatrixPaletteSize() const;
 
 protected:
 

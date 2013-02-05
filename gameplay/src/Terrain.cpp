@@ -38,6 +38,11 @@ Terrain::Terrain() :
 
 Terrain::~Terrain()
 {
+    for (size_t i = 0, count = _patches.size(); i < count; ++i)
+    {
+        SAFE_DELETE(_patches[i]);
+    }
+
     if (_node)
         _node->removeListener(this);
 

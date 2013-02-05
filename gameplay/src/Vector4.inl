@@ -50,6 +50,11 @@ inline Vector4& Vector4::operator*=(float x)
     return *this;
 }
 
+inline const Vector4 Vector4::operator/(const float x) const
+{
+    return Vector4(this->x / x, this->y / x, this->z / x, this->w / x);
+}
+
 inline bool Vector4::operator<(const Vector4& v) const
 {
     if (x == v.x)
