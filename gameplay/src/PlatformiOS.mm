@@ -38,28 +38,26 @@ extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 static AppDelegate *__appDelegate = NULL;
 static View* __view = NULL;
 
-class TouchPointListElement
+class TouchPoint
 {
 public:
-    TouchPointListElement* _next;
-    TouchPointListElement* _prev;
-    unsigned int _id; // as assigned from hash
-    unsigned int _index; // to save time during touchesBegan
-    int _x;
-    int _y;
+    unsigned int hashId;
+    int x;
+    int y;
+    bool down;
     
-    TouchPointListElement()
+    TouchPoint()
     {
-        _next = NULL;
-        _prev = NULL;
-        _id = 0;
-        _index = 0;
-        _x = 0;
-        _y = 0;
+        hashId = 0;
+        x = 0;
+        y = 0;
+        down = false;
     }
 };
-static TouchPointListElement* __touchPointListHead = NULL;
-static TouchPointListElement* __touchPointListTail = NULL;
+
+// more than we'd ever need, to be safe
+#define TOUCH_POINTS_MAX (10)
+static TouchPoint __touchPoints[TOUCH_POINTS_MAX];
 
 static double __timeStart;
 static double __timeAbsolute;
@@ -282,6 +280,8 @@ int getUnicode(int key);
             samples /= 2;
         }
         
+        //todo: __multiSampling = samples > 0;
+
         // Re-bind the default framebuffer
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
         
@@ -540,28 +540,26 @@ int getUnicode(int key);
             touchID = [touch hash];
         }
 
-        // Map hash to index
-        TouchPointListElement* elem = new TouchPointListElement();
-        if (__touchPointListTail)
+        // Nested loop efficiency shouldn't be a concern since both loop sizes are small (<= 10)
+        int i = 0;
+        while (i < TOUCH_POINTS_MAX && __touchPoints[i].down)
         {
-            // Insert at end of list
-            __touchPointListTail->_next = elem;
-            elem->_index = __touchPointListTail->_index + 1;
+            i++;
+        }
+
+        if (i < TOUCH_POINTS_MAX)
+        {
+            __touchPoints[i].hashId = touchID;
+            __touchPoints[i].x = touchPoint.x * WINDOW_SCALE;
+            __touchPoints[i].y = touchPoint.y * WINDOW_SCALE;
+            __touchPoints[i].down = true;
+
+            Platform::touchEventInternal(Touch::TOUCH_PRESS, __touchPoints[i].x, __touchPoints[i].y, i);
         }
         else
         {
-            // Insert into empty list
-            __touchPointListHead = elem;
-            elem->_index = 0;
+            print("touchesBegan: unable to find free element in __touchPoints");
         }
-
-        elem->_prev = __touchPointListTail;
-        __touchPointListTail = elem;
-        elem->_id = touchID;
-        elem->_x = touchPoint.x * WINDOW_SCALE;
-        elem->_y = touchPoint.y * WINDOW_SCALE;
-
-        Platform::touchEventInternal(Touch::TOUCH_PRESS, elem->_x, elem->_y, elem->_index);
     }
 }
 
@@ -574,65 +572,30 @@ int getUnicode(int key);
         if(self.multipleTouchEnabled == YES) 
             touchID = [touch hash];
 
-        // Map hash to index
-        TouchPointListElement* elem = NULL;
-        for (TouchPointListElement* p = __touchPointListHead; p; p = p->_next)
+        // Nested loop efficiency shouldn't be a concern since both loop sizes are small (<= 10)
+        bool found = false;
+        for (int i = 0; !found && i < TOUCH_POINTS_MAX; i++)
         {
-            if (p->_id == touchID)
+            if (__touchPoints[i].down && __touchPoints[i].hashId == touchID)
             {
-                // Remove from list
-                elem = p;
-                p = elem->_next;
-
-                if (elem->_prev)
-                {
-                    elem->_prev->_next = p;
-                }
-                else
-                {
-                    __touchPointListHead = p;
-                }
-                
-                if (p)
-                {
-                    p->_prev = elem->_prev;
-                }
-                else
-                {
-                    __touchPointListTail = elem->_prev;
-                    break;
-                }
-            }
-
-            if (elem)
-            {
-                // Release at the old index and press at the new index
-                Platform::touchEventInternal(Touch::TOUCH_RELEASE, p->_x, p->_y, p->_index);
-                p->_index--;
-                Platform::touchEventInternal(Touch::TOUCH_PRESS, p->_x, p->_y, p->_index);
+                __touchPoints[i].down = false;
+                Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, i);
+                found = true;
             }
         }
         
-        if (elem)
+        if (!found)
         {
-            Platform::touchEventInternal(Touch::TOUCH_RELEASE, touchPoint.x * WINDOW_SCALE, touchPoint.y * WINDOW_SCALE, elem->_index);
-            delete elem;
-        }
-        else
-        {
-            // It seems possible to receive an ID not in the list.
-            // The best we can do is clear the whole list.
-            TouchPointListElement* p = __touchPointListTail;
-            while (p)
+            // It seems possible to receive an ID not in the array.
+            // The best we can do is clear the whole array.
+            for (int i = 0; i < TOUCH_POINTS_MAX; i++)
             {
-                TouchPointListElement* e = p;
-                p = e->_prev;
-                // Neglect p->_next since the whole list is being deleted.
-                Platform::touchEventInternal(Touch::TOUCH_RELEASE, e->_x, e->_y, e->_index);
-                delete e;
+                if (__touchPoints[i].down)
+                {
+                    __touchPoints[i].down = false;
+                    Platform::touchEventInternal(Touch::TOUCH_RELEASE, __touchPoints[i].x, __touchPoints[i].y, i);
+                }
             }
-            __touchPointListTail = NULL;
-            __touchPointListHead = NULL;
         }
     }
 }
@@ -652,14 +615,14 @@ int getUnicode(int key);
         if(self.multipleTouchEnabled == YES) 
             touchID = [touch hash];
 
-        // Map hash to index
-        for (TouchPointListElement* p = __touchPointListHead; p; p = p->_next)
+        // Nested loop efficiency shouldn't be a concern since both loop sizes are small (<= 10)
+        for (int i = 0; i < TOUCH_POINTS_MAX; i++)
         {
-            if (p->_id == touchID)
+            if (__touchPoints[i].down && __touchPoints[i].hashId == touchID)
             {
-                p->_x = touchPoint.x * WINDOW_SCALE;
-                p->_y = touchPoint.y * WINDOW_SCALE;
-                Platform::touchEventInternal(Touch::TOUCH_MOVE, p->_x, p->_y, p->_index);
+                __touchPoints[i].x = touchPoint.x * WINDOW_SCALE;
+                __touchPoints[i].y = touchPoint.y * WINDOW_SCALE;
+                Platform::touchEventInternal(Touch::TOUCH_MOVE, __touchPoints[i].x, __touchPoints[i].y, i);
                 break;
             }
         }
@@ -1445,6 +1408,16 @@ bool Platform::isCursorVisible()
 {
     // not supported
     return false;
+}
+
+void Platform::setMultiSampling(bool enabled)
+{
+    //todo
+}
+
+bool Platform::isMultiSampling()
+{
+    return false; //todo
 }
 
 void Platform::setMultiTouch(bool enabled) 

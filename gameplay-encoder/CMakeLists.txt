@@ -77,6 +77,8 @@ set(APP_SRC
 	src/GPBFile.h
 	src/Heightmap.cpp
 	src/Heightmap.h
+	src/Image.cpp
+	src/Image.h
 	src/Light.cpp
 	src/Light.h
 	src/main.cpp
@@ -98,6 +100,8 @@ set(APP_SRC
 	src/Model.h
 	src/Node.cpp
 	src/Node.h
+	src/NormalMapGenerator.cpp
+	src/NormalMapGenerator.h
 	src/Object.cpp
 	src/Object.h
 	src/Quaternion.cpp
