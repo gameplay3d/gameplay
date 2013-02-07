@@ -750,17 +750,25 @@ namespace gameplay
         GP_AXIS_SKIP = 0x1,
         GP_AXIS_IS_DPAD = 0x2,
         GP_AXIS_IS_NEG = 0x4,
-        GP_AXIS_IS_XAXIS = 0x8
+        GP_AXIS_IS_XAXIS = 0x8,
+        GP_AXIS_IS_TRIGGER = 0x10
+    };
+
+    enum GamepadAxisInfoNormalizeFunction
+    {
+        NEG_TO_POS,
+        ZERO_TO_POS
     };
 
     struct GamepadJoystickAxisInfo
     {
-        unsigned int axisIndex;
+        int axisIndex;
         unsigned int joystickIndex;
-        const unsigned long flags;
-        const int mappedPosButton;
-        const int mappedNegButton;
+        unsigned long flags;
+        int mappedPosArg;
+        int mappedNegArg;
         float deadZone;
+        GamepadAxisInfoNormalizeFunction mapFunc;
     };
 
     struct GamepadLookupEntry
@@ -774,7 +782,7 @@ namespace gameplay
         unsigned int numberOfTriggers;
 
         GamepadJoystickAxisInfo* axes;
-        unsigned long* buttons;
+        long* buttons;
     };
 
     //Will need to be dynamic, also should be handled in Gamepad class
@@ -782,15 +790,15 @@ namespace gameplay
     {
         {0x0,0x0,"GENERIC XBOX360",2,6,12,2, 
                                              (GamepadJoystickAxisInfo[]) {
-                                                                             {0,0, GP_AXIS_IS_XAXIS,0,0,0.07},
-                                                                             {1,0,GP_AXIS_IS_NEG,0,0,0.07},
-                                                                             {2,0,GP_AXIS_SKIP,0,0,0.07},
-                                                                             {3,1,GP_AXIS_IS_XAXIS,0,0,0.07},
-                                                                             {4,1,GP_AXIS_IS_NEG,0,0,0.07},
-                                                                             {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,0.07},
-                                                                             {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,0.07}
+                                                                             {0,0, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                             {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                             {3,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                             {4,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                             {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
+                                                                             {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
+                                                                             {-1,0,0,0,0,0,NEG_TO_POS}
                                                                          },
-                                             (unsigned long[]) {
+                                             (long[]) {
                                                                           Gamepad::BUTTON_UP,    
                                                                           Gamepad::BUTTON_DOWN,  
                                                                           Gamepad::BUTTON_LEFT,  
@@ -811,31 +819,60 @@ namespace gameplay
         },
         {0x79,0x6,"DragonRise Inc. Generic USB Joystick",2,7,12,0, 
                                              (GamepadJoystickAxisInfo[]) {
-                                                                     {0,0, GP_AXIS_IS_XAXIS,0,0,0.07},
-                                                                     {1,0,GP_AXIS_IS_NEG,0,0,0.07},
-                                                                     {2,0,GP_AXIS_SKIP,0,0,0.07},
-                                                                     {3,1,GP_AXIS_IS_XAXIS,0,0,0.07},
-                                                                     {4,1,GP_AXIS_IS_NEG,0,0,0.07},
-                                                                     {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,0.07},
-                                                                     {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,0.07}
+                                                                     {0,1, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                     {1,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                     {2,0,GP_AXIS_SKIP,0,0,2240,NEG_TO_POS},
+                                                                     {3,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                     {4,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                     {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
+                                                                     {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
+                                                                     {-1,0,0,0,0,0,NEG_TO_POS}
                                                                  },
-                                             (unsigned long[]) {
-                                                                          Gamepad::BUTTON_UP,    
-                                                                          Gamepad::BUTTON_DOWN,  
-                                                                          Gamepad::BUTTON_LEFT,  
-                                                                          Gamepad::BUTTON_RIGHT, 
-                                                                          Gamepad::BUTTON_MENU2, 
+                                             (long[]) {
+                                                                          Gamepad::BUTTON_Y,    
+                                                                          Gamepad::BUTTON_B,  
+                                                                          Gamepad::BUTTON_A,  
+                                                                          Gamepad::BUTTON_X, 
+                                                                          Gamepad::BUTTON_L1, 
+                                                                          Gamepad::BUTTON_R1, 
+                                                                          Gamepad::BUTTON_L2,    
+                                                                          Gamepad::BUTTON_R2,   
+                                                                          Gamepad::BUTTON_MENU2,   
+                                                                          Gamepad::BUTTON_MENU1,   
+                                                                          Gamepad::BUTTON_L3,
+                                                                          Gamepad::BUTTON_R3,
+                                                                         }
+        },
+        {0x54c,0x268,"Sony Corp. Batoh Device / PlayStation 3 Controller",2,27,19,2, 
+                                             (GamepadJoystickAxisInfo[]) {
+                                                                     {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                     {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                     {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                     {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                     {12,1,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
+                                                                     {13,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
+                                                                     {-1,0,0,0,0,0,NEG_TO_POS}
+                                                                 },
+                                             (long[]) {
+                                                                          Gamepad::BUTTON_MENU2,    
+                                                                          Gamepad::BUTTON_L3,  
+                                                                          Gamepad::BUTTON_R3,  
                                                                           Gamepad::BUTTON_MENU1, 
-                                                                          Gamepad::BUTTON_L3,    
-                                                                          Gamepad::BUTTON_R3,   
-                                                                          Gamepad::BUTTON_L1,   
-                                                                          Gamepad::BUTTON_R1,   
-                                                                          0,
-                                                                          0,
-                                                                          Gamepad::BUTTON_A,   
-                                                                          Gamepad::BUTTON_B,   
-                                                                          Gamepad::BUTTON_X,   
-                                                                          Gamepad::BUTTON_Y   
+                                                                          Gamepad::BUTTON_UP, 
+                                                                          Gamepad::BUTTON_RIGHT, 
+                                                                          Gamepad::BUTTON_DOWN,    
+                                                                          Gamepad::BUTTON_LEFT,   
+                                                                          Gamepad::BUTTON_L2,  //Use Trigger Instead of BUTTON_L2? or both should be called
+                                                                          Gamepad::BUTTON_R2,  //Use Trigger Instead of BUTTON_R2? or both should be called                                                                        
+                                                                          Gamepad::BUTTON_L1,
+                                                                          Gamepad::BUTTON_R1,
+                                                                          Gamepad::BUTTON_Y,    
+                                                                          Gamepad::BUTTON_B,  
+                                                                          Gamepad::BUTTON_A,  
+                                                                          Gamepad::BUTTON_X, 
+                                                                          Gamepad::BUTTON_MENU3, 
+                                                                          -1,
+                                                                          -1
                                                                          }
         }
     };
@@ -875,20 +912,34 @@ namespace gameplay
     {
         if(axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
         {
-            return &gpinfo.axes[axisNumber];
+            int i = 0;
+            while(true)
+            {
+                const GamepadJoystickAxisInfo* curAxisInfo = &gpinfo.axes[i++];
+                if(curAxisInfo->axisIndex == axisNumber)
+                    return curAxisInfo;
+                else if(curAxisInfo->axisIndex < 0)
+                    return NULL;
+            }
         }
-        GP_WARN("Unmapped gamepad axis.");
         return NULL;
     }
 
-    bool tryGetGamepadMappedButton(const GamepadLookupEntry& gpinfo, unsigned long btnNumber, unsigned long& outMap)
+    bool tryGetGamepadMappedButton(const GamepadLookupEntry& gpinfo, unsigned long btnNumber, long& outMap)
     {
         if(btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
         {
-            outMap = gpinfo.buttons[btnNumber];
-            return true;
+            if(gpinfo.buttons[btnNumber] >= 0)
+            {
+                outMap = gpinfo.buttons[btnNumber];
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        GP_WARN("Unmapped gamepad button.");
+        GP_WARN("Unmapped gamepad button: %u.",btnNumber);
         return false;
     }
 
@@ -941,9 +992,13 @@ namespace gameplay
         __connectedGamepads.push_back(info);
     }
 
-    static float normalizeJoystickAxis(int axisValue, int deadZone)
+    static float normalizeJoystickAxis(int axisValue, int deadZone, bool zeroToOne)
     {
-        int absAxisValue = abs(axisValue);
+        int absAxisValue = 0;
+        if(zeroToOne)
+            absAxisValue = (axisValue + 32767) / 2.0;
+        else
+             absAxisValue = abs(axisValue);
 
         if (absAxisValue < deadZone)
         {
@@ -951,24 +1006,34 @@ namespace gameplay
         }
         else
         {
-            int value = axisValue;
-            int maxVal;
-            if (value < 0)
+            int maxVal = 0;
+            int value = 0;
+            if(!zeroToOne)
             {
-                value = -1;
-                maxVal = 32768;
+                value = axisValue;
+                if (value < 0)
+                {
+                    value = -1;
+                    maxVal = 32768;
+                }
+                else if (value > 0)
+                {
+                    value = 1;
+                    maxVal = 32767;
+                }
+                else
+                {
+                    return 0.0f;
+                }
             }
-            else if (value > 0)
+            else
             {
                 value = 1;
                 maxVal = 32767;
             }
-            else
-            {
-                return 0;
-            }
 
-            return value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
+            float ret = value * (absAxisValue - deadZone) / (float)(maxVal - deadZone);
+            return ret;
         }
     }
 
@@ -1487,16 +1552,17 @@ namespace gameplay
             {
                 case JS_EVENT_BUTTON:
                 case JS_EVENT_BUTTON | JS_EVENT_INIT:
-                    unsigned long curMappingIndex;
-                    if(tryGetGamepadMappedButton(gpInfo, jevent.number, curMappingIndex))
                     {
-                        if (jevent.value)
-                            gamepad->_buttons |= (1 << curMappingIndex);
-                        else
-                            gamepad->_buttons &= ~(1 << curMappingIndex);
+                        long curMappingIndex = -1;
+                        if(tryGetGamepadMappedButton(gpInfo, jevent.number, curMappingIndex))
+                        {
+                            if (jevent.value)
+                                gamepad->_buttons |= (1 << curMappingIndex);
+                            else
+                                gamepad->_buttons &= ~(1 << curMappingIndex);
+                        }
+                        break;
                     }
-                    break;
-
                 case JS_EVENT_AXIS:
                 case JS_EVENT_AXIS | JS_EVENT_INIT:
                     {
@@ -1505,27 +1571,36 @@ namespace gameplay
                             const GamepadJoystickAxisInfo* jsInfo = tryGetGamepadMappedAxisInfo(gpInfo,jevent.number);
                             if(jsInfo)
                             {
-                                float val = normalizeJoystickAxis(jevent.value,jsInfo->deadZone);
+                                float val = normalizeJoystickAxis(jevent.value,jsInfo->deadZone,jsInfo->mapFunc == ZERO_TO_POS);
                                 if(!(jsInfo->flags & GP_AXIS_SKIP))
                                 {
-                                    if(!(jsInfo->flags & GP_AXIS_IS_DPAD))
+                                    if((jsInfo->flags & GP_AXIS_IS_NEG))
+                                        val = -1.0f * val;
+
+                                    bool not_js_axis = false;
+                                    if((jsInfo->flags & GP_AXIS_IS_DPAD))
                                     {
-                                        if((jsInfo->flags & GP_AXIS_IS_NEG))
-                                            val = -1 * val;
+                                        if(jevent.value != 0)
+                                            gamepad->_buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosArg : jsInfo->mappedNegArg));
+                                        else
+                                        {
+                                            gamepad->_buttons &= ~(1 << jsInfo->mappedPosArg);
+                                            gamepad->_buttons &= ~(1 << jsInfo->mappedNegArg);
+                                        }
+                                        not_js_axis = true;
+                                    }
+                                    if((jsInfo->flags & GP_AXIS_IS_TRIGGER))
+                                    {
+                                        gamepad->_triggers[jsInfo->mappedPosArg] = val;
+                                        not_js_axis = true;
+                                    }
+
+                                    if(!not_js_axis)
+                                    {
                                         if(jsInfo->flags & GP_AXIS_IS_XAXIS)
                                             gamepad->_joysticks[jsInfo->joystickIndex].x = val;
                                         else
                                             gamepad->_joysticks[jsInfo->joystickIndex].y = val;
-                                    }
-                                    else
-                                    {
-                                        if(jevent.value != 0)
-                                            gamepad->_buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosButton : jsInfo->mappedNegButton));
-                                        else
-                                        {
-                                            gamepad->_buttons &= ~(1 << jsInfo->mappedPosButton);
-                                            gamepad->_buttons &= ~(1 << jsInfo->mappedNegButton);
-                                        }
                                     }
                                 }
                             }
