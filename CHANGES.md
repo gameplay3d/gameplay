@@ -1,3 +1,6 @@
+## v1.7.0
+- Adds a lua function "convert(object, className)" that will convert a gameplay userdata object to another class type by changing the metatable. (For example: This lets you convert Control to Button in lua)
+
 ## v1.6.0
 
 - Adds file Stream interface for reading/writing files instead of using fread/fwrite. 
