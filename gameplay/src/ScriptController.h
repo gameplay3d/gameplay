@@ -884,6 +884,32 @@ private:
      */
     static ScriptController::ScriptCallback toCallback(const char* name);
 
+    /**
+     * Converts a Gameplay userdata value to the type with the given class name.
+     * This function will change the metatable of the userdata value to the metatable that matches the given string.
+     * 
+     * Example:
+     * <code>
+     * local launchButton = form:getControl("launch")
+     * convert(launchButton, "Button")
+     * print("Button text: " .. launchButton:getText())
+     * </code>
+     * 
+     * <code>
+     * -- The signature of the lua function:
+     * -- param: object    A userdata object that represents a Gameplay object.
+     * -- param: className The name of the class to convert the object to. (Examples: "Button", "PhysicsRigidBody")
+     * function convert(object, className)
+     * </code>
+     * 
+     * @param state The Lua state.
+     * 
+     * @return The number of values being returned by this function.
+     * 
+     * @script{ignore}
+     */
+    static int convert(lua_State* state);
+
     // Friend functions (used by Lua script bindings).
     friend void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions);
     friend void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath);
