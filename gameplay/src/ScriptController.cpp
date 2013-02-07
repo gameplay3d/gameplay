@@ -692,6 +692,7 @@ void ScriptController::initialize()
 
 #ifndef NO_LUA_BINDINGS
     lua_RegisterAllBindings();
+    ScriptUtil::registerFunction("convert", ScriptController::convert);
 #endif
 
     // Create our own print() function that uses gameplay::print.
@@ -952,6 +953,41 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
         return ScriptController::GAMEPAD_EVENT;
     else
         return ScriptController::INVALID_CALLBACK;
+}
+
+int ScriptController::convert(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA && lua_type(state, 2) == LUA_TSTRING )
+            {
+                // Get parameter 2
+                const char* param2 = ScriptUtil::getString(2, false);
+                if (param2 != NULL)
+                {
+                    luaL_getmetatable(state, param2);
+                    lua_setmetatable(state, -3);
+                }
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_convert - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
 }
 
 // Helper macros.
