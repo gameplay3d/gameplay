@@ -766,57 +766,40 @@ namespace gameplay
     }
 
 
-    bool isGamepadDevRegistered(dev_t devId)
-    {
-        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-        {
-            if(devId == (*it).deviceId) return true;
-        }
-        return false;
-    }
-
-    void unregisterGamepad(GamepadHandle handle)
-    {
-        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
-        {
-            if(handle == (*it).fd)
-            {
-                __connectedGamepads.erase(it);
-                return;
-            }
-        }
-    }
-
     //Will need to be dynamic, also should be handled in Gamepad class
     static const GamepadInfoEntry gamepadLookupTable[] = 
     {
-        {0x0,0x0,"GENERIC XBOX360",2,6,12,2, 
+        {0x0,0x0,"GENERIC XBOX360",2,6,20,2, 
                                              (GamepadJoystickAxisInfo[]) {
-                                                                             {0,0, GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                             {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                             {3,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
-                                                                             {4,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
-                                                                             {5,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_RIGHT, Gamepad::BUTTON_LEFT,2240,NEG_TO_POS},
-                                                                             {6,2,GP_AXIS_IS_DPAD, Gamepad::BUTTON_DOWN, Gamepad::BUTTON_UP,2240,NEG_TO_POS},
-                                                                             {-1,0,0,0,0,0,NEG_TO_POS}
-                                                                         },
+                                                                     {0,0,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                     {1,0,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                     {2,1,GP_AXIS_IS_XAXIS,0,0,2240,NEG_TO_POS},
+                                                                     {3,1,GP_AXIS_IS_NEG,0,0,2240,NEG_TO_POS},
+                                                                     {4,2,GP_AXIS_IS_TRIGGER,0,0,2240,ZERO_TO_POS},
+                                                                     {5,2,GP_AXIS_IS_TRIGGER,1,0,2240,ZERO_TO_POS},
+                                                                     {-1,0,0,0,0,0,NEG_TO_POS}
+                                                                 },
                                              (long[]) {
-                                                                          Gamepad::BUTTON_UP,    
-                                                                          Gamepad::BUTTON_DOWN,  
-                                                                          Gamepad::BUTTON_LEFT,  
-                                                                          Gamepad::BUTTON_RIGHT, 
-                                                                          Gamepad::BUTTON_MENU2, 
-                                                                          Gamepad::BUTTON_MENU1, 
-                                                                          Gamepad::BUTTON_L3,    
-                                                                          Gamepad::BUTTON_R3,   
-                                                                          Gamepad::BUTTON_L1,   
-                                                                          Gamepad::BUTTON_R1,   
-                                                                          0,
-                                                                          0,
-                                                                          Gamepad::BUTTON_A,   
-                                                                          Gamepad::BUTTON_B,   
-                                                                          Gamepad::BUTTON_X,   
-                                                                          Gamepad::BUTTON_Y   
+                                                                          -1,    
+                                                                          -1,  
+                                                                          -1,  
+                                                                          -1, 
+                                                                          -1, 
+                                                                          Gamepad::BUTTON_UP,
+                                                                          Gamepad::BUTTON_DOWN,
+                                                                          Gamepad::BUTTON_LEFT,
+                                                                          Gamepad::BUTTON_RIGHT,
+                                                                          Gamepad::BUTTON_MENU2,
+                                                                          Gamepad::BUTTON_MENU1,
+                                                                          Gamepad::BUTTON_L3,
+                                                                          Gamepad::BUTTON_R3,
+                                                                          Gamepad::BUTTON_L1,
+                                                                          Gamepad::BUTTON_R1,
+                                                                          Gamepad::BUTTON_MENU3,
+                                                                          Gamepad::BUTTON_A,
+                                                                          Gamepad::BUTTON_B,
+                                                                          Gamepad::BUTTON_X,
+                                                                          Gamepad::BUTTON_Y
                                                                          }
         },
         {0x79,0x6,"DragonRise Inc. Generic USB Joystick",2,7,12,0, 
@@ -839,8 +822,8 @@ namespace gameplay
                                                                           Gamepad::BUTTON_R1, 
                                                                           Gamepad::BUTTON_L2,    
                                                                           Gamepad::BUTTON_R2,   
-                                                                          Gamepad::BUTTON_MENU2,   
                                                                           Gamepad::BUTTON_MENU1,   
+                                                                          Gamepad::BUTTON_MENU2,   
                                                                           Gamepad::BUTTON_L3,
                                                                           Gamepad::BUTTON_R3,
                                                                          }
@@ -856,10 +839,10 @@ namespace gameplay
                                                                      {-1,0,0,0,0,0,NEG_TO_POS}
                                                                  },
                                              (long[]) {
-                                                                          Gamepad::BUTTON_MENU2,    
+                                                                          Gamepad::BUTTON_MENU1,    
                                                                           Gamepad::BUTTON_L3,  
                                                                           Gamepad::BUTTON_R3,  
-                                                                          Gamepad::BUTTON_MENU1, 
+                                                                          Gamepad::BUTTON_MENU2, 
                                                                           Gamepad::BUTTON_UP, 
                                                                           Gamepad::BUTTON_RIGHT, 
                                                                           Gamepad::BUTTON_DOWN,    
@@ -878,6 +861,42 @@ namespace gameplay
                                                                          }
         }
     };
+
+    bool isGamepadDevRegistered(dev_t devId)
+    {
+        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+        {
+            if(devId == (*it).deviceId) return true;
+        }
+        return false;
+    }
+
+    void closeGamepad(const ConnectedGamepadDevInfo& gamepadDevInfo)
+    {
+        ::close(gamepadDevInfo.fd);
+    }
+
+    void unregisterGamepad(GamepadHandle handle)
+    {
+        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+        {
+            if(handle == (*it).fd)
+            {
+                closeGamepad(*it);
+                __connectedGamepads.erase(it);
+                return;
+            }
+        }
+    }
+
+    void closeAllGamepads()
+    {
+        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+        {
+            closeGamepad(*it);
+            __connectedGamepads.erase(it);
+        }
+    }
 
     const GamepadInfoEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
     {
@@ -966,9 +985,25 @@ namespace gameplay
         return ret;
     }
 
+    bool isBlackListed(unsigned int vendorId, unsigned int productId)
+    {
+        switch(vendorId)
+        {
+            case 0x0e0f: //virtual machine devices
+                if(productId == 0x0003) // Virtual Mouse
+                    return true;
+        }
+        return false;
+    }
+
     void handleConnectedGamepad(dev_t devId, const char* devPath, const char* sysFSIdPath)
     {
         GP_ASSERT(devPath);
+
+        unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
+        unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
+
+        if(isBlackListed(vendorId,productId)) return;
 
         GamepadHandle handle = ::open(devPath,O_RDONLY | O_NONBLOCK);
         if(handle < 0)
@@ -984,9 +1019,6 @@ namespace gameplay
         ioctl(handle, JSIOCGNAME(256), name);
         ioctl (handle, JSIOCGAXES, &axesNum);
         ioctl (handle, JSIOCGBUTTONS, &btnsNum);
-
-        unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
-        unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
 
         const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId,productId,(unsigned int)axesNum,(unsigned int)btnsNum);
         unsigned int numJS = gpInfo.numberOfJS;
@@ -1044,8 +1076,6 @@ namespace gameplay
         }
     }
 
-#if !UDEV_USED
-
     void enumGamepads()
     {
         const int maxDevs = 16;
@@ -1069,7 +1099,6 @@ namespace gameplay
             }
         }
     }
-#endif
 
     void gamepadHandlingLoop()
     {
@@ -1313,7 +1342,6 @@ namespace gameplay
 
     void Platform::signalShutdown()
     {
-        // nothing to do  
     }
 
     bool Platform::canExit()
@@ -1525,6 +1553,7 @@ namespace gameplay
 
     void Platform::shutdownInternal()
     {
+        closeAllGamepads();
         Game::getInstance()->shutdown();
     }
 
@@ -1621,7 +1650,6 @@ namespace gameplay
         }
         if(errno == ENODEV)
         {
-            ::close(gamepad->_handle);
             unregisterGamepad(gamepad->_handle);
             gamepadEventDisconnectedInternal(gamepad->_handle);
         }
