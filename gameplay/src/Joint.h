@@ -26,6 +26,11 @@ public:
     Node::Type getType() const;
 
     /**
+     * @see Node::getScene()
+     */
+    Scene* getScene() const;
+
+    /**
      * Returns the inverse bind pose matrix for this joint.
      * 
      * @return Inverse bind pose matrix.
@@ -86,6 +91,18 @@ protected:
 private:
 
     /**
+     * Internal structure to track mesh skins referencing a joint.
+     */
+    struct SkinReference
+    {
+        MeshSkin* skin;
+        SkinReference* next;
+
+        SkinReference();
+        ~SkinReference();
+    };
+
+    /**
      * Constructor.
      */
     Joint(const Joint& copy);
@@ -95,22 +112,24 @@ private:
      */
     Joint& operator=(const Joint&);
 
-protected:
+    void addSkin(MeshSkin* skin);
+
+    void removeSkin(MeshSkin* skin);
 
     /** 
      * The Matrix representation of the Joint's bind pose.
      */
     Matrix _bindPose;
-    
-    /** 
+
+    /**
      * Flag used to mark if the Joint's matrix is dirty.
      */
     bool _jointMatrixDirty;
-    
-    /** 
-     * The number of MeshSkin's influencing the Joint.
+
+    /**
+     * Linked list of mesh skins that are referenced by this joint.
      */
-    unsigned int _skinCount;
+    SkinReference _skin;
 };
 
 }

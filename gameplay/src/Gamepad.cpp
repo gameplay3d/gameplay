@@ -36,9 +36,17 @@ Gamepad::Gamepad(const char* formPath)
 Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                  unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
     : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
-      _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
-      _form(NULL), _buttons(0)
+      _vendorId(vendorId), _productId(productId), _form(NULL), _buttons(0)
 {
+    if (vendorString)
+    {
+        _vendorString = vendorString;
+    }
+    
+    if (productString)
+    {
+        _productString = productString;
+    }
 }
 
 Gamepad::~Gamepad()

@@ -2,6 +2,8 @@
 #define RENDERSTATE_H_
 
 #include "Ref.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace gameplay
 {
@@ -460,6 +462,31 @@ private:
      * Hidden copy assignment operator.
      */
     RenderState& operator=(const RenderState&);
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector3& autoBindingGetAmbientColor() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector3& autoBindingGetLightColor() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector3& autoBindingGetLightDirection() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    const Vector4* autoBindingGetMatrixPalette() const;
+
+    /**
+     * Internal auto binding handler.
+     */
+    unsigned int autoBindingGetMatrixPaletteSize() const;
 
 protected:
 
