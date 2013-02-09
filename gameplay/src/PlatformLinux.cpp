@@ -26,10 +26,52 @@
 
 using namespace std;
 
+enum GamepadAxisInfoFlags
+{
+    GP_AXIS_SKIP = 0x1,
+    GP_AXIS_IS_DPAD = 0x2,
+    GP_AXIS_IS_NEG = 0x4,
+    GP_AXIS_IS_XAXIS = 0x8,
+    GP_AXIS_IS_TRIGGER = 0x10
+};
+
+enum GamepadAxisInfoNormalizeFunction
+{
+    NEG_TO_POS,
+    ZERO_TO_POS
+};
+
+struct GamepadJoystickAxisInfo
+{
+    int axisIndex;
+    unsigned int joystickIndex;
+    unsigned long flags;
+    int mappedPosArg;
+    int mappedNegArg;
+    float deadZone;
+    GamepadAxisInfoNormalizeFunction mapFunc;
+};
+
+struct GamepadInfoEntry
+{
+    unsigned int vendorId;
+    unsigned int productId;
+    const char* productName;
+    unsigned int numberOfJS;
+    unsigned int numberOfAxes;
+    unsigned int numberOfButtons;
+    unsigned int numberOfTriggers;
+
+    GamepadJoystickAxisInfo* axes;
+    long* buttons;
+};
+
+
 struct ConnectedGamepadDevInfo
 {
     dev_t deviceId;
     gameplay::GamepadHandle fd;
+    const GamepadInfoEntry& gamepadInfo;
 };
 
 struct timespec __timespec;
@@ -745,48 +787,8 @@ namespace gameplay
         }
     }
 
-    enum GamepadAxisInfoFlags
-    {
-        GP_AXIS_SKIP = 0x1,
-        GP_AXIS_IS_DPAD = 0x2,
-        GP_AXIS_IS_NEG = 0x4,
-        GP_AXIS_IS_XAXIS = 0x8,
-        GP_AXIS_IS_TRIGGER = 0x10
-    };
-
-    enum GamepadAxisInfoNormalizeFunction
-    {
-        NEG_TO_POS,
-        ZERO_TO_POS
-    };
-
-    struct GamepadJoystickAxisInfo
-    {
-        int axisIndex;
-        unsigned int joystickIndex;
-        unsigned long flags;
-        int mappedPosArg;
-        int mappedNegArg;
-        float deadZone;
-        GamepadAxisInfoNormalizeFunction mapFunc;
-    };
-
-    struct GamepadLookupEntry
-    {
-        unsigned int vendorId;
-        unsigned int productId;
-        const char* productName;
-        unsigned int numberOfJS;
-        unsigned int numberOfAxes;
-        unsigned int numberOfButtons;
-        unsigned int numberOfTriggers;
-
-        GamepadJoystickAxisInfo* axes;
-        long* buttons;
-    };
-
     //Will need to be dynamic, also should be handled in Gamepad class
-    static const GamepadLookupEntry gamepadLookupTable[] = 
+    static const GamepadInfoEntry gamepadLookupTable[] = 
     {
         {0x0,0x0,"GENERIC XBOX360",2,6,12,2, 
                                              (GamepadJoystickAxisInfo[]) {
@@ -877,20 +879,20 @@ namespace gameplay
         }
     };
 
-    const GamepadLookupEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
+    const GamepadInfoEntry& getGamepadMappedInfo(unsigned int vendorId, unsigned int productId, unsigned int numberOfAxes, unsigned int numberOfButtons)
     {
-        for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadLookupEntry);i++)
+        for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
         {
-            const GamepadLookupEntry& curEntry = gamepadLookupTable[i];
+            const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
             if(curEntry.vendorId == vendorId && curEntry.productId == productId)
             {
                 return curEntry;
             }
         }
 
-        for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadLookupEntry);i++)
+        for(int i=0;i<sizeof(gamepadLookupTable)/sizeof(GamepadInfoEntry);i++)
         {
-            const GamepadLookupEntry& curEntry = gamepadLookupTable[i];
+            const GamepadInfoEntry& curEntry = gamepadLookupTable[i];
             if(curEntry.vendorId == 0 && curEntry.productId == 0 && curEntry.numberOfAxes == numberOfAxes && curEntry.numberOfButtons == numberOfButtons)
             {
                 return curEntry;
@@ -900,15 +902,22 @@ namespace gameplay
         return gamepadLookupTable[0];
     }
 
-    const GamepadLookupEntry& getGamepadMappedInfo(const Gamepad* pad)
+    const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
     {
         GP_ASSERT(pad);
 
-
-        return getGamepadMappedInfo(pad->getVendorId(),pad->getProductId(), pad->getJoystickAxesCount(), pad->getButtonCount());
+        for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
+        {
+            if(handle == (*it).fd)
+            {
+                return it->gamepadInfo;
+            }
+        }
+        GP_WARN("Gamepad not connected but yet trying to get its data. Falling back to generic one.");
+        return gamepadLookupTable[0];
     }
 
-    const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadLookupEntry& gpinfo, unsigned int axisNumber)
+    const GamepadJoystickAxisInfo* tryGetGamepadMappedAxisInfo(const GamepadInfoEntry& gpinfo, unsigned int axisNumber)
     {
         if(axisNumber >= 0 && axisNumber < gpinfo.numberOfAxes)
         {
@@ -925,7 +934,7 @@ namespace gameplay
         return NULL;
     }
 
-    bool tryGetGamepadMappedButton(const GamepadLookupEntry& gpinfo, unsigned long btnNumber, long& outMap)
+    bool tryGetGamepadMappedButton(const GamepadInfoEntry& gpinfo, unsigned long btnNumber, long& outMap)
     {
         if(btnNumber >= 0 && btnNumber < gpinfo.numberOfButtons )
         {
@@ -979,16 +988,14 @@ namespace gameplay
         unsigned int vendorId =readIntegerGamepadIdPropery(sysFSIdPath,"vendor");
         unsigned int productId =readIntegerGamepadIdPropery(sysFSIdPath,"product");
 
-        const GamepadLookupEntry& gpInfo = getGamepadMappedInfo(vendorId,productId,(unsigned int)axesNum,(unsigned int)btnsNum);
+        const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(vendorId,productId,(unsigned int)axesNum,(unsigned int)btnsNum);
         unsigned int numJS = gpInfo.numberOfJS;
         unsigned int numTR = gpInfo.numberOfTriggers;
 
 
-        Platform::gamepadEventConnectedInternal(handle,btnsNum,numJS,numTR,axesNum,vendorId,productId,"",name);
+        Platform::gamepadEventConnectedInternal(handle,btnsNum,numJS,numTR,vendorId,productId,"",name);
 
-        ConnectedGamepadDevInfo info; 
-        info.deviceId = devId;
-        info.fd = handle;
+        ConnectedGamepadDevInfo info = {devId,handle,gpInfo}; 
         __connectedGamepads.push_back(info);
     }
 
@@ -1505,10 +1512,10 @@ namespace gameplay
         }
     }
     
-        void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
+        void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                 unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
         {
-            Gamepad::add(handle, buttonCount, joystickCount, triggerCount, axesCount, vendorId, productId, vendorString, productString);
+            Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
         }
 
     void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
@@ -1544,7 +1551,7 @@ namespace gameplay
         GP_ASSERT(gamepad);
 
         struct js_event jevent;
-        const GamepadLookupEntry& gpInfo = getGamepadMappedInfo(gamepad);
+        const GamepadInfoEntry& gpInfo = getGamepadMappedInfo(gamepad->_handle);
 
         while (read(gamepad->_handle, &jevent, sizeof(struct js_event)) > 0)
         {

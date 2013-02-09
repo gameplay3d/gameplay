@@ -33,9 +33,9 @@ Gamepad::Gamepad(const char* formPath)
     bindGamepadControls(_form);
 }
 
-Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
+Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                  unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-    : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount), _axesCount(axesCount),
+    : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
       _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
       _form(NULL), _buttons(0)
 {
@@ -49,11 +49,11 @@ Gamepad::~Gamepad()
     }
 }
 
-Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int axesCount,
+Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                       unsigned int vendorId, unsigned int productId, 
                       const char* vendorString, const char* productString)
 {
-    Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, axesCount, vendorId, productId, vendorString, productString);
+    Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
 
     __gamepads.push_back(gamepad);
     Game::getInstance()->gamepadEvent(CONNECTED_EVENT, gamepad);
@@ -293,11 +293,6 @@ bool Gamepad::isButtonDown(ButtonMapping mapping) const
 unsigned int Gamepad::getJoystickCount() const
 {
     return _joystickCount;
-}
-
-unsigned int Gamepad::getJoystickAxesCount() const
-{
-    return _axesCount;
 }
 
 void Gamepad::getJoystickValues(unsigned int joystickId, Vector2* outValue) const
