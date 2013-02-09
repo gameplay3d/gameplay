@@ -163,7 +163,7 @@ public:
      * and a z-coordinate ranging from 0 to 1. To obtain the viewable area (in world space) of a scene,
      * create a BoundingFrustum and pass the combined view and projection matrix to the constructor.
      *
-     * @param fieldOfView The field of view in the y direction (in radians).
+     * @param fieldOfView The field of view in the y direction (in degrees).
      * @param aspectRatio The aspect ratio, defined as view space width divided by height.
      * @param zNearPlane The distance to the near view plane.
      * @param zFarPlane The distance to the far view plane.
