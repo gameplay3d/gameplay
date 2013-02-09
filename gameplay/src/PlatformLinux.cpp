@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <usb.h>
 #include <fstream>
 
 #define TOUCH_COUNT_MAX     4
