@@ -482,11 +482,16 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
     // Evaulate animation curve in increments of frameRate and populate channel data.
     FbxAMatrix fbxMatrix;
     Matrix matrix;
-    float increment = 1000.0f / frameRate;
-    for (float time = startTime; time <= stopTime; time += increment)
+    double increment = 1000.0 / (double)frameRate;
+    int frameCount = (int)ceil((double)(stopTime - startTime) / increment) + 1; // +1 because stop time is inclusive
+    for (int frame = 0; frame < frameCount; ++frame)
     {
-        // Clamp time to stopTime
-        time = std::min(time, stopTime);
+        double time = startTime + (frame * (double)increment);
+
+        // Note: We used to clamp time to stop time, but FBX sdk does not always produce
+        // and accurate stopTime (sometimes it is rounded down for some reason), so I'm
+        // disabling this clamping for now as it seems more accurate under normal circumstances.
+        //time = std::min(time, (double)stopTime);
 
         // Evalulate the animation at this time
         FbxTime kTime;
