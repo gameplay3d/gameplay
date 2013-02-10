@@ -404,6 +404,16 @@ public:
      * @return This vector, after the scale occurs.
      */
     inline Vector4& operator*=(float x);
+    
+    /**
+     * Returns the components of this vector divided by the given constant
+     *
+     * Note: this does not modify this vector.
+     *
+     * @param x the constant to divide this vector with
+     * @return a smaller vector
+     */
+    inline const Vector4 operator/(float x) const;
 
     /**
      * Determines if this vector is less than the given vector.

@@ -41,6 +41,92 @@
     \
     return arr
 
+#define PUSH_NESTED_VARIABLE(name, defaultValue) \
+    int top = lua_gettop(_lua); \
+    if (!getNestedVariable(_lua, (name))) \
+    { \
+        lua_settop(_lua, top); \
+        return (defaultValue); \
+    }
+
+#define POP_NESTED_VARIABLE() \
+    lua_settop(_lua, top)
+
+/**
+ * Pushes onto the stack, the value of the global 'name' or the nested table value if 'name' is a '.' separated 
+ * list of tables of the form "A.B.C.D", where A, B and C are tables and D is a variable name in the table C.
+ * 
+ * If 'name' does not contain any '.' then it is assumed to be the name of a global variable.
+ * 
+ * This function will not restore the stack if there is an error.
+ * 
+ * @param lua  The Lua state.
+ * @param name The name of a global variable or a '.' separated list of nested tables ending with a variable name.
+ *             The name value may be in the format "A.B.C.D" where A is a table and B, C are child tables.
+ *             D is any type, which will be accessed by the calling function.
+ * 
+ * @return True if the tables were pushed on the stack or the global variable was pushed. Returns false on error.
+ */
+static bool getNestedVariable(lua_State* lua, const char* name)
+{
+    if (strchr(name, '.') == NULL)
+    {
+        lua_getglobal(lua, name);
+        return true;
+    }
+    static std::string str;
+    // Copy the input string to a std::string so we can modify it because 
+    // some of the Lua functions require NULL terminated c-strings.
+    str.assign(name);
+
+    // Find the first table, which will be a global variable.
+    char* start = const_cast<char*>(str.c_str());
+    char* end = strchr(start, '.');
+    if (end == NULL)
+    {
+        return false;
+    }
+    ++end;
+    *(end - 1) = '\0';
+    lua_getglobal(lua, start);
+    *(end - 1) = '.';
+    if (!lua_istable(lua, -1))
+    {
+        return false;
+    }
+    // Push the nested tables
+    for (;;)
+    {
+        start = end;
+        end = strchr(start, '.');
+        if (end == '\0' || end == NULL)
+        {
+            // push the last variable
+            lua_pushstring(lua, start);
+            lua_gettable(lua, -2);
+            return true;
+        }
+        else
+        {
+            // Push the next table
+            *end = '\0';
+            lua_pushstring(lua, start);
+            *end = '.';
+            lua_gettable(lua, -2);
+            if (!lua_istable(lua, -1))
+            {
+                return false;
+            }
+            ++end;
+            if (*end == '.')
+            {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 namespace gameplay
 {
 
@@ -377,97 +463,97 @@ std::string ScriptController::loadUrl(const char* url)
 
 bool ScriptController::getBool(const char* name, bool defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     bool b = lua_isboolean(_lua, -1) ? ScriptUtil::luaCheckBool(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return b;
 }
 
 char ScriptController::getChar(const char* name, char defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     char c = lua_isnumber(_lua, -1) ?  (char)luaL_checkint(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return c;
 }
 
 short ScriptController::getShort(const char* name, short defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     short n = lua_isnumber(_lua, -1) ? (short)luaL_checkint(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 int ScriptController::getInt(const char* name, int defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     int n = lua_isnumber(_lua, -1) ? luaL_checkint(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 long ScriptController::getLong(const char* name, long defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     long n = lua_isnumber(_lua, -1) ? luaL_checklong(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 unsigned char ScriptController::getUnsignedChar(const char* name, unsigned char defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     unsigned char c = lua_isnumber(_lua, -1) ? (unsigned char)luaL_checkunsigned(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return c;
 }
 
 unsigned short ScriptController::getUnsignedShort(const char* name, unsigned short defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     unsigned short n = lua_isnumber(_lua, -1) ? (unsigned short)luaL_checkunsigned(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 unsigned int ScriptController::getUnsignedInt(const char* name, unsigned int defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     unsigned int n = lua_isnumber(_lua, -1) ? (unsigned int)luaL_checkunsigned(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 unsigned long ScriptController::getUnsignedLong(const char* name, unsigned long defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     unsigned long n = lua_isnumber(_lua, -1) ? (unsigned long)luaL_checkunsigned(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 float ScriptController::getFloat(const char* name, float defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     float f = lua_isnumber(_lua, -1) ? (float)luaL_checknumber(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return f;
 }
 
 double ScriptController::getDouble(const char* name, double defaultValue)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, defaultValue);
     double n = lua_isnumber(_lua, -1) ? (double)luaL_checknumber(_lua, -1) : defaultValue;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return n;
 }
 
 const char* ScriptController::getString(const char* name)
 {
-    lua_getglobal(_lua, name);
+    PUSH_NESTED_VARIABLE(name, NULL);
     const char* s = lua_isstring(_lua, -1) ? luaL_checkstring(_lua, -1) : NULL;
-    lua_pop(_lua, 1);
+    POP_NESTED_VARIABLE();
     return s;
 }
 
@@ -606,6 +692,7 @@ void ScriptController::initialize()
 
 #ifndef NO_LUA_BINDINGS
     lua_RegisterAllBindings();
+    ScriptUtil::registerFunction("convert", ScriptController::convert);
 #endif
 
     // Create our own print() function that uses gameplay::print.
@@ -723,10 +810,14 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
         return;
     }
 
-    const char* sig = args;
+    if (!getNestedVariable(_lua, func))
+    {
+        GP_WARN("Failed to call function '%s'", func);
+        return;
+    }
 
+    const char* sig = args;
     int argumentCount = 0;
-    lua_getglobal(_lua, func);
 
     // Push the arguments to the Lua stack if there are any.
     if (sig)
@@ -864,31 +955,74 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
         return ScriptController::INVALID_CALLBACK;
 }
 
+int ScriptController::convert(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if (lua_type(state, 1) == LUA_TUSERDATA && lua_type(state, 2) == LUA_TSTRING )
+            {
+                // Get parameter 2
+                const char* param2 = ScriptUtil::getString(2, false);
+                if (param2 != NULL)
+                {
+                    luaL_getmetatable(state, param2);
+                    lua_setmetatable(state, -3);
+                }
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_convert - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 // Helper macros.
 #define SCRIPT_EXECUTE_FUNCTION_NO_PARAM(type, checkfunc) \
+    int top = lua_gettop(_lua); \
     executeFunctionHelper(1, func, NULL, NULL); \
     type value = (type)checkfunc(_lua, -1); \
     lua_pop(_lua, -1); \
+    lua_settop(_lua, top); \
     return value;
 
 #define SCRIPT_EXECUTE_FUNCTION_PARAM(type, checkfunc) \
+    int top = lua_gettop(_lua); \
     va_list list; \
     va_start(list, args); \
     executeFunctionHelper(1, func, args, &list); \
     type value = (type)checkfunc(_lua, -1); \
     lua_pop(_lua, -1); \
     va_end(list); \
+    lua_settop(_lua, top); \
     return value;
 
 #define SCRIPT_EXECUTE_FUNCTION_PARAM_LIST(type, checkfunc) \
+    int top = lua_gettop(_lua); \
     executeFunctionHelper(1, func, args, list); \
     type value = (type)checkfunc(_lua, -1); \
     lua_pop(_lua, -1); \
+    lua_settop(_lua, top); \
     return value;
 
 template<> void ScriptController::executeFunction<void>(const char* func)
 {
+    int top = lua_gettop(_lua);
     executeFunctionHelper(0, func, NULL, NULL);
+    lua_settop(_lua, top);
 }
 
 template<> bool ScriptController::executeFunction<bool>(const char* func)
@@ -954,10 +1088,12 @@ template<> std::string ScriptController::executeFunction<std::string>(const char
 /** Template specialization. */
 template<> void ScriptController::executeFunction<void>(const char* func, const char* args, ...)
 {
+    int top = lua_gettop(_lua);
     va_list list;
     va_start(list, args);
     executeFunctionHelper(0, func, args, &list);
     va_end(list);
+    lua_settop(_lua, top);
 }
 
 /** Template specialization. */
