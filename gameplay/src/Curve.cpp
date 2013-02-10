@@ -178,30 +178,93 @@ void Curve::setTangent(unsigned int index, InterpolationType type, float* inValu
 
 void Curve::evaluate(float time, float* dst) const
 {
-    assert(dst && time >= 0 && time <= 1.0f);
+    assert(dst);
 
-    // Check if the point count is 1.
-    // Check if we are at or beyond the bounds of the curve.
-    if (_pointCount == 1 || time <= _points[0].time)
+    evaluate(time, 0.0f, 1.0f, 0.0f, dst);
+}
+
+void Curve::evaluate(float time, float startTime, float endTime, float loopBlendTime, float* dst) const
+{
+    assert(dst && startTime >= 0.0f && startTime <= endTime && endTime <= 1.0f && loopBlendTime >= 0.0f);
+
+    // If there's only one point on the curve, return its value.
+    if (_pointCount == 1)
     {
         memcpy(dst, _points[0].value, _componentSize);
         return;
     }
-    else if (time >= _points[_pointCount - 1].time)
+
+    unsigned int min = 0;
+    unsigned int max = _pointCount - 1;
+    float localTime = time;
+    if (startTime > 0.0f || endTime < 1.0f)
     {
-        memcpy(dst, _points[_pointCount - 1].value, _componentSize);
+        // Evaluating a sub section of the curve
+        min = determineIndex(startTime, 0, max);
+        max = determineIndex(endTime, min, max);
+
+        // Convert time to fall within the subregion
+        localTime = _points[min].time + (_points[max].time - _points[min].time) * time;
+    }
+
+    if (loopBlendTime == 0.0f)
+    {
+        // If no loop blend time is specified, clamp time to end points
+        if (localTime < _points[min].time)
+            localTime = _points[min].time;
+        else if (localTime > _points[max].time)
+            localTime = _points[max].time;
+    }
+
+    // If an exact endpoint was specified, skip interpolation and return the value directly
+    if (localTime == _points[min].time)
+    {
+        memcpy(dst, _points[min].value, _componentSize);
+        return;
+    }
+    if (localTime == _points[max].time)
+    {
+        memcpy(dst, _points[max].value, _componentSize);
         return;
     }
 
-    // Locate the points we are interpolating between using a binary search.
-    unsigned int index = determineIndex(time);
-    
-    Point* from = _points + index;
-    Point* to = _points + (index + 1);
+    Point* from;
+    Point* to;
+    float scale;
+    float t;
+    unsigned int index;
 
-    // Calculate the fractional time between the two points.
-    float scale = (to->time - from->time);
-    float t = (time - from->time) / scale;
+    if (localTime > _points[max].time)
+    {
+        // Looping forward
+        index = max;
+        from = &_points[max];
+        to = &_points[min];
+
+        // Calculate the fractional time between the two points.
+        t = (localTime - from->time) / loopBlendTime;
+    }
+    else if (localTime < _points[min].time)
+    {
+        // Looping in reverse
+        index = min;
+        from = &_points[min];
+        to = &_points[max];
+
+        // Calculate the fractional time between the two points.
+        t = (from->time - localTime) / loopBlendTime;
+    }
+    else
+    {
+        // Locate the points we are interpolating between using a binary search.
+        index = determineIndex(localTime, min, max);
+        from = &_points[index];
+        to = &_points[index == max ? index : index+1];
+
+        // Calculate the fractional time between the two points.
+        scale = (to->time - from->time);
+        t = (localTime - from->time) / scale;
+    }
 
     // Calculate the value of the curve discretely if appropriate.
     switch (from->type)
@@ -1157,11 +1220,9 @@ void Curve::interpolateQuaternion(float s, float* from, float* to, float* dst) c
         Quaternion::slerp(to[0], to[1], to[2], to[3], from[0], from[1], from[2], from[3], s, dst, dst + 1, dst + 2, dst + 3);
 }
 
-int Curve::determineIndex(float time) const
+int Curve::determineIndex(float time, unsigned int min, unsigned int max) const
 {
-    unsigned int min = 0;
-    unsigned int max = _pointCount - 1;
-    unsigned int mid = 0;
+    unsigned int mid;
 
     // Do a binary search to determine the index.
     do 

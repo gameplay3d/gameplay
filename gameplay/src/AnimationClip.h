@@ -179,6 +179,22 @@ public:
     float getBlendWeight() const;
 
     /**
+     * Sets the time (in milliseconds) to append to the clip's active duration
+     * to use for blending the end points of the clip when looping.
+     *
+     * @param loopBlendTime Time spent blending end points of clip when looping.
+     */
+    void setLoopBlendTime(float loopBlendTime);
+
+    /**
+     * Returns the amount of time (in milliseconds) spent blending the clip's 
+     * end points when looping.
+     *
+     * @return Time spent blending end points of the clip when looping.
+     */
+    float getLoopBlendTime() const;
+
+    /**
      * Checks if the AnimationClip is playing.
      *
      * @return true if the AnimationClip is playing; false if the AnimationClip is not playing.
@@ -392,6 +408,7 @@ private:
     unsigned long _duration;                            // The total duration.
     unsigned char _stateBits;                           // Bit flag used to keep track of the clip's current state.
     float _repeatCount;                                 // The clip's repeat count.
+    unsigned int _loopBlendTime;                        // Time spent blending the last frame of animation with the first frame, when looping.
     unsigned long _activeDuration;                      // The active duration of the clip.
     float _speed;                                       // The speed that the clip is playing. Default is 1.0. Negative goes in reverse.
     double _timeStarted;                                // The game time when this clip was actually started.

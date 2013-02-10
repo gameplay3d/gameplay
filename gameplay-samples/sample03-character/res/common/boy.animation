@@ -6,6 +6,7 @@ animation animations
         begin = 27
         end = 167
         repeatCount = INDEFINITE
+        loopBlendTime = 250
     }
     clip walking
     {
