@@ -376,13 +376,15 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
 
 Scene* Node::getScene() const
 {
-    // Search for a scene in our parents.
-    for (Node* n = const_cast<Node*>(this); n != NULL; n = n->getParent())
+    if (_scene)
+        return _scene;
+
+    // Search our parent for the scene
+    if (_parent)
     {
-        if (n->_scene)
-        {
-            return n->_scene;
-        }
+        Scene* scene = _parent->getScene();
+        if (scene)
+            return scene;
     }
 
     return NULL;
@@ -933,7 +935,6 @@ const BoundingSphere& Node::getBoundingSphere() const
     return _bounds;
 }
 
-
 Node* Node::clone() const
 {
     NodeCloneContext context;
@@ -1002,6 +1003,7 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     }
     node->_world = _world;
     node->_bounds = _bounds;
+    node->_userData = _userData;
     if (_tags)
     {
         node->_tags = new std::map<std::string, std::string>(_tags->begin(), _tags->end());
