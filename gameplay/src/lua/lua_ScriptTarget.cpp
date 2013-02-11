@@ -19,14 +19,14 @@ void luaRegister_ScriptTarget()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("ScriptTarget", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("ScriptTarget", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static ScriptTarget* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ScriptTarget");
     luaL_argcheck(state, userdata != NULL, 1, "'ScriptTarget' expected.");
-    return (ScriptTarget*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (ScriptTarget*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_ScriptTarget_addScriptCallback(lua_State* state)
@@ -44,10 +44,10 @@ int lua_ScriptTarget_addScriptCallback(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
+                std::string param1 = gameplay::ScriptUtil::getString(2, true);
 
                 // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
+                std::string param2 = gameplay::ScriptUtil::getString(3, true);
 
                 ScriptTarget* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
@@ -84,10 +84,10 @@ int lua_ScriptTarget_removeScriptCallback(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
+                std::string param1 = gameplay::ScriptUtil::getString(2, true);
 
                 // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
+                std::string param2 = gameplay::ScriptUtil::getString(3, true);
 
                 ScriptTarget* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);

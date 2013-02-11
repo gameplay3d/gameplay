@@ -39,14 +39,14 @@ void luaRegister_PhysicsController()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("PhysicsController", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("PhysicsController", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static PhysicsController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsController");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsController' expected.");
-    return (PhysicsController*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (PhysicsController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsController_addScriptCallback(lua_State* state)
@@ -64,10 +64,10 @@ int lua_PhysicsController_addScriptCallback(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
+                std::string param1 = gameplay::ScriptUtil::getString(2, true);
 
                 // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
+                std::string param2 = gameplay::ScriptUtil::getString(3, true);
 
                 PhysicsController* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
@@ -104,7 +104,7 @@ int lua_PhysicsController_addStatusListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsController::Listener> param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsController::Listener'.");
@@ -146,7 +146,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
@@ -157,7 +157,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
                 void* returnPtr = (void*)instance->createFixedConstraint(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsFixedConstraint");
@@ -183,7 +183,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
@@ -192,7 +192,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsRigidBody'.");
@@ -203,7 +203,7 @@ int lua_PhysicsController_createFixedConstraint(lua_State* state)
                 void* returnPtr = (void*)instance->createFixedConstraint(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsFixedConstraint");
@@ -248,7 +248,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -256,7 +256,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createGenericConstraint(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -285,13 +285,13 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -299,7 +299,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createGenericConstraint(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -329,19 +329,19 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                     if (!param3Valid)
                         break;
 
@@ -349,7 +349,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -380,25 +380,25 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
                     bool param4Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                     if (!param4Valid)
                         break;
 
@@ -406,7 +406,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -438,31 +438,31 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
                     bool param4Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                     if (!param4Valid)
                         break;
 
                     // Get parameter 5 off the stack.
                     bool param5Valid;
-                    ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param5 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
                     if (!param5Valid)
                         break;
 
@@ -470,7 +470,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -503,37 +503,37 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
                     bool param4Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                     if (!param4Valid)
                         break;
 
                     // Get parameter 5 off the stack.
                     bool param5Valid;
-                    ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param5 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
                     if (!param5Valid)
                         break;
 
                     // Get parameter 6 off the stack.
                     bool param6Valid;
-                    ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param6 = gameplay::ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
                     if (!param6Valid)
                         break;
 
@@ -541,7 +541,7 @@ int lua_PhysicsController_createGenericConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createGenericConstraint(param1, *param2, *param3, param4, *param5, *param6);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsGenericConstraint");
@@ -587,7 +587,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
@@ -596,7 +596,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
@@ -605,7 +605,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -616,7 +616,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -644,7 +644,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
@@ -653,7 +653,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
@@ -662,7 +662,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -671,7 +671,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsRigidBody'.");
@@ -682,7 +682,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -711,7 +711,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
@@ -720,7 +720,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
@@ -729,7 +729,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -738,7 +738,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsRigidBody'.");
@@ -747,7 +747,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 5 off the stack.
                 bool param5Valid;
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                gameplay::ScriptUtil::LuaArray<Quaternion> param5 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
                 if (!param5Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 5 to type 'Quaternion'.");
@@ -758,7 +758,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4, *param5);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -788,7 +788,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsRigidBody'.");
@@ -797,7 +797,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Quaternion'.");
@@ -806,7 +806,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -815,7 +815,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsRigidBody'.");
@@ -824,7 +824,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 5 off the stack.
                 bool param5Valid;
-                ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                gameplay::ScriptUtil::LuaArray<Quaternion> param5 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
                 if (!param5Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 5 to type 'Quaternion'.");
@@ -833,7 +833,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
 
                 // Get parameter 6 off the stack.
                 bool param6Valid;
-                ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param6 = gameplay::ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
                 if (!param6Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 6 to type 'Vector3'.");
@@ -844,7 +844,7 @@ int lua_PhysicsController_createHingeConstraint(lua_State* state)
                 void* returnPtr = (void*)instance->createHingeConstraint(param1, *param2, *param3, param4, *param5, *param6);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "PhysicsHingeConstraint");
@@ -889,7 +889,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -897,7 +897,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSocketConstraint(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -926,13 +926,13 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -940,7 +940,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSocketConstraint(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -963,13 +963,13 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -977,7 +977,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -1007,19 +1007,19 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false, &param3Valid);
                     if (!param3Valid)
                         break;
 
@@ -1027,7 +1027,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -1058,25 +1058,25 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param3 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(4, "PhysicsRigidBody", false, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
                     bool param4Valid;
-                    ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param4 = gameplay::ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
                     if (!param4Valid)
                         break;
 
@@ -1084,7 +1084,7 @@ int lua_PhysicsController_createSocketConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSocketConstraint(param1, *param2, param3, *param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSocketConstraint");
@@ -1131,13 +1131,13 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param2 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(3, "PhysicsRigidBody", false, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -1145,7 +1145,7 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSpringConstraint(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSpringConstraint");
@@ -1178,37 +1178,37 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param1 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(2, "PhysicsRigidBody", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Quaternion> param2 = ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param2 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(3, "Quaternion", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
                     bool param4Valid;
-                    ScriptUtil::LuaArray<PhysicsRigidBody> param4 = ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsRigidBody> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsRigidBody>(5, "PhysicsRigidBody", false, &param4Valid);
                     if (!param4Valid)
                         break;
 
                     // Get parameter 5 off the stack.
                     bool param5Valid;
-                    ScriptUtil::LuaArray<Quaternion> param5 = ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
+                    gameplay::ScriptUtil::LuaArray<Quaternion> param5 = gameplay::ScriptUtil::getObjectPointer<Quaternion>(6, "Quaternion", true, &param5Valid);
                     if (!param5Valid)
                         break;
 
                     // Get parameter 6 off the stack.
                     bool param6Valid;
-                    ScriptUtil::LuaArray<Vector3> param6 = ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param6 = gameplay::ScriptUtil::getObjectPointer<Vector3>(7, "Vector3", true, &param6Valid);
                     if (!param6Valid)
                         break;
 
@@ -1216,7 +1216,7 @@ int lua_PhysicsController_createSpringConstraint(lua_State* state)
                     void* returnPtr = (void*)instance->createSpringConstraint(param1, *param2, *param3, param4, *param5, *param6);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "PhysicsSpringConstraint");
@@ -1260,7 +1260,7 @@ int lua_PhysicsController_drawDebug(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Matrix> param1 = gameplay::ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Matrix'.");
@@ -1303,7 +1303,7 @@ int lua_PhysicsController_getGravity(lua_State* state)
                 void* returnPtr = (void*)&(instance->getGravity());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -1347,7 +1347,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Ray> param1 = gameplay::ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Ray'.");
@@ -1379,7 +1379,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Ray> param1 = gameplay::ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Ray'.");
@@ -1391,7 +1391,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
@@ -1421,7 +1421,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Ray> param1 = gameplay::ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Ray'.");
@@ -1433,7 +1433,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
@@ -1442,7 +1442,7 @@ int lua_PhysicsController_rayTest(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsController::HitFilter'.");
@@ -1487,10 +1487,10 @@ int lua_PhysicsController_removeScriptCallback(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
+                std::string param1 = gameplay::ScriptUtil::getString(2, true);
 
                 // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
+                std::string param2 = gameplay::ScriptUtil::getString(3, true);
 
                 PhysicsController* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
@@ -1527,7 +1527,7 @@ int lua_PhysicsController_removeStatusListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsController::Listener> param1 = ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::Listener>(2, "PhysicsControllerListener", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsController::Listener'.");
@@ -1569,7 +1569,7 @@ int lua_PhysicsController_setGravity(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
@@ -1612,7 +1612,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
@@ -1621,7 +1621,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -1650,7 +1650,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
@@ -1659,7 +1659,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -1668,7 +1668,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
@@ -1698,7 +1698,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsCollisionObject> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionObject>(2, "PhysicsCollisionObject", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'PhysicsCollisionObject'.");
@@ -1707,7 +1707,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -1716,7 +1716,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::HitResult> param3 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::HitResult>(4, "PhysicsControllerHitResult", false, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'PhysicsController::HitResult'.");
@@ -1725,7 +1725,7 @@ int lua_PhysicsController_sweepTest(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsController::HitFilter> param4 = gameplay::ScriptUtil::getObjectPointer<PhysicsController::HitFilter>(5, "PhysicsControllerHitFilter", false, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'PhysicsController::HitFilter'.");
