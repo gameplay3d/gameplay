@@ -86,14 +86,14 @@ void luaRegister_ParticleEmitter()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("ParticleEmitter", lua_members, NULL, lua_ParticleEmitter__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("ParticleEmitter", lua_members, NULL, lua_ParticleEmitter__gc, lua_statics, scopePath);
 }
 
 static ParticleEmitter* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ParticleEmitter");
     luaL_argcheck(state, userdata != NULL, 1, "'ParticleEmitter' expected.");
-    return (ParticleEmitter*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (ParticleEmitter*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_ParticleEmitter__gc(lua_State* state)
@@ -110,7 +110,7 @@ int lua_ParticleEmitter__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "ParticleEmitter");
                 luaL_argcheck(state, userdata != NULL, 1, "'ParticleEmitter' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     ParticleEmitter* instance = (ParticleEmitter*)object->instance;
@@ -250,7 +250,7 @@ int lua_ParticleEmitter_getAcceleration(lua_State* state)
                 void* returnPtr = (void*)&(instance->getAcceleration());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -294,7 +294,7 @@ int lua_ParticleEmitter_getAccelerationVariance(lua_State* state)
                 void* returnPtr = (void*)&(instance->getAccelerationVariance());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -338,7 +338,7 @@ int lua_ParticleEmitter_getColorEnd(lua_State* state)
                 void* returnPtr = (void*)&(instance->getColorEnd());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector4");
@@ -382,7 +382,7 @@ int lua_ParticleEmitter_getColorEndVariance(lua_State* state)
                 void* returnPtr = (void*)&(instance->getColorEndVariance());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector4");
@@ -426,7 +426,7 @@ int lua_ParticleEmitter_getColorStart(lua_State* state)
                 void* returnPtr = (void*)&(instance->getColorStart());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector4");
@@ -470,7 +470,7 @@ int lua_ParticleEmitter_getColorStartVariance(lua_State* state)
                 void* returnPtr = (void*)&(instance->getColorStartVariance());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector4");
@@ -619,7 +619,7 @@ int lua_ParticleEmitter_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -698,7 +698,7 @@ int lua_ParticleEmitter_getPosition(lua_State* state)
                 void* returnPtr = (void*)&(instance->getPosition());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -742,7 +742,7 @@ int lua_ParticleEmitter_getPositionVariance(lua_State* state)
                 void* returnPtr = (void*)&(instance->getPositionVariance());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -821,7 +821,7 @@ int lua_ParticleEmitter_getRotationAxis(lua_State* state)
                 void* returnPtr = (void*)&(instance->getRotationAxis());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -865,7 +865,7 @@ int lua_ParticleEmitter_getRotationAxisVariance(lua_State* state)
                 void* returnPtr = (void*)&(instance->getRotationAxisVariance());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -1259,7 +1259,7 @@ int lua_ParticleEmitter_getVelocity(lua_State* state)
                 void* returnPtr = (void*)&(instance->getVelocity());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -1303,7 +1303,7 @@ int lua_ParticleEmitter_getVelocityVariance(lua_State* state)
                 void* returnPtr = (void*)&(instance->getVelocityVariance());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -1554,7 +1554,7 @@ int lua_ParticleEmitter_setAcceleration(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
@@ -1563,7 +1563,7 @@ int lua_ParticleEmitter_setAcceleration(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -1608,7 +1608,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Vector4> param1 = ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Vector4> param1 = gameplay::ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector4'.");
@@ -1617,7 +1617,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector4> param2 = ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector4> param2 = gameplay::ScriptUtil::getObjectPointer<Vector4>(3, "Vector4", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector4'.");
@@ -1626,7 +1626,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector4> param3 = ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector4> param3 = gameplay::ScriptUtil::getObjectPointer<Vector4>(4, "Vector4", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector4'.");
@@ -1635,7 +1635,7 @@ int lua_ParticleEmitter_setColor(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<Vector4> param4 = ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<Vector4> param4 = gameplay::ScriptUtil::getObjectPointer<Vector4>(5, "Vector4", true, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector4'.");
@@ -1676,7 +1676,7 @@ int lua_ParticleEmitter_setEllipsoid(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setEllipsoid(param1);
@@ -1790,13 +1790,13 @@ int lua_ParticleEmitter_setOrbit(lua_State* state)
                 lua_type(state, 4) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 // Get parameter 2 off the stack.
-                bool param2 = ScriptUtil::luaCheckBool(state, 3);
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
 
                 // Get parameter 3 off the stack.
-                bool param3 = ScriptUtil::luaCheckBool(state, 4);
+                bool param3 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setOrbit(param1, param2, param3);
@@ -1834,7 +1834,7 @@ int lua_ParticleEmitter_setPosition(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
@@ -1843,7 +1843,7 @@ int lua_ParticleEmitter_setPosition(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -1894,7 +1894,7 @@ int lua_ParticleEmitter_setRotation(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -1903,7 +1903,7 @@ int lua_ParticleEmitter_setRotation(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param4 = gameplay::ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector3'.");
@@ -2032,7 +2032,7 @@ int lua_ParticleEmitter_setSpriteAnimated(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteAnimated(param1);
@@ -2075,7 +2075,7 @@ int lua_ParticleEmitter_setSpriteFrameCoords(lua_State* state)
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Rectangle> param2 = ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", false, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param2 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(3, "Rectangle", false, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -2215,7 +2215,7 @@ int lua_ParticleEmitter_setSpriteLooped(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteLooped(param1);
@@ -2255,7 +2255,7 @@ int lua_ParticleEmitter_setSpriteTexCoords(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
+                gameplay::ScriptUtil::LuaArray<float> param2 = gameplay::ScriptUtil::getFloatPointer(3);
 
                 ParticleEmitter* instance = getInstance(state);
                 instance->setSpriteTexCoords(param1, param2);
@@ -2329,7 +2329,7 @@ int lua_ParticleEmitter_setVelocity(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
@@ -2338,7 +2338,7 @@ int lua_ParticleEmitter_setVelocity(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -2412,12 +2412,12 @@ int lua_ParticleEmitter_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)ParticleEmitter::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "ParticleEmitter");
@@ -2438,14 +2438,14 @@ int lua_ParticleEmitter_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Properties> param1 = gameplay::ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)ParticleEmitter::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "ParticleEmitter");
@@ -2473,7 +2473,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
                     ParticleEmitter::TextureBlending param2 = (ParticleEmitter::TextureBlending)lua_enumFromString_ParticleEmitterTextureBlending(luaL_checkstring(state, 2));
@@ -2484,7 +2484,7 @@ int lua_ParticleEmitter_static_create(lua_State* state)
                     void* returnPtr = (void*)ParticleEmitter::create(param1, param2, param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "ParticleEmitter");
@@ -2526,7 +2526,7 @@ int lua_ParticleEmitter_static_getTextureBlendingFromString(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 ParticleEmitter::TextureBlending result = ParticleEmitter::getTextureBlendingFromString(param1);
 

@@ -19,14 +19,14 @@ void luaRegister_AudioController()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AudioController", lua_members, NULL, lua_AudioController__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AudioController", lua_members, NULL, lua_AudioController__gc, lua_statics, scopePath);
 }
 
 static AudioController* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AudioController");
     luaL_argcheck(state, userdata != NULL, 1, "'AudioController' expected.");
-    return (AudioController*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AudioController*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AudioController__gc(lua_State* state)
@@ -43,7 +43,7 @@ int lua_AudioController__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AudioController");
                 luaL_argcheck(state, userdata != NULL, 1, "'AudioController' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AudioController* instance = (AudioController*)object->instance;

@@ -1671,7 +1671,7 @@ void Generator::generateBindings(string* bindingNS)
                 for (map<string, vector<FunctionBinding> >::iterator iter = _functions.begin(); iter != _functions.end(); iter++)
                 {
                     if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(iter->second[0].name) == _namespaces["gameplay"].end()))
-                        global << "    ScriptUtil::registerFunction(\"" << iter->second[0].name << "\", " << iter->second[0].getFunctionName() << ");\n";
+                        global << "    gameplay::ScriptUtil::registerFunction(\"" << iter->second[0].name << "\", " << iter->second[0].getFunctionName() << ");\n";
                 }
             }
 
@@ -1685,7 +1685,7 @@ void Generator::generateBindings(string* bindingNS)
                     for (set<string>::iterator iter = derived.begin(); iter != derived.end(); iter++)
                     {
                         if (generatingGameplay || (!generatingGameplay &&  _namespaces["gameplay"].find(*iter) == _namespaces["gameplay"].end()))
-                            global << "    ScriptUtil::setGlobalHierarchyPair(\"" << baseClasses[i] << "\", \"" << *iter << "\");\n";
+                            global << "    gameplay::ScriptUtil::setGlobalHierarchyPair(\"" << baseClasses[i] << "\", \"" << *iter << "\");\n";
                     }
                 }
             }
@@ -1693,7 +1693,7 @@ void Generator::generateBindings(string* bindingNS)
             // Register all enums.
             if (generateEnumBindings)
             {
-                global << "    ScriptUtil::addStringFromEnumConversionFunction(&";
+                global << "    gameplay::ScriptUtil::addStringFromEnumConversionFunction(&";
                 if (bindingNS)
                     global << *bindingNS << "::";
                 global << "lua_stringFromEnumGlobal);\n";
@@ -1714,7 +1714,7 @@ void Generator::generateBindings(string* bindingNS)
                         vector<string>::iterator enumIter = iter->second.values.begin();
                         for (; enumIter != iter->second.values.end(); enumIter++)
                         {
-                            global << "        ScriptUtil::registerConstantString(\"" << *enumIter << "\", \"" << *enumIter << "\", scopePath);\n";
+                            global << "        gameplay::ScriptUtil::registerConstantString(\"" << *enumIter << "\", \"" << *enumIter << "\", scopePath);\n";
                         }
 
                         global << "    }\n";

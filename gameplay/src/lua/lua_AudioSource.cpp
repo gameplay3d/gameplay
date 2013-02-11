@@ -50,14 +50,14 @@ void luaRegister_AudioSource()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AudioSource", lua_members, NULL, lua_AudioSource__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AudioSource", lua_members, NULL, lua_AudioSource__gc, lua_statics, scopePath);
 }
 
 static AudioSource* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AudioSource");
     luaL_argcheck(state, userdata != NULL, 1, "'AudioSource' expected.");
-    return (AudioSource*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AudioSource*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AudioSource__gc(lua_State* state)
@@ -74,7 +74,7 @@ int lua_AudioSource__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AudioSource");
                 luaL_argcheck(state, userdata != NULL, 1, "'AudioSource' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AudioSource* instance = (AudioSource*)object->instance;
@@ -181,7 +181,7 @@ int lua_AudioSource_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -330,7 +330,7 @@ int lua_AudioSource_getVelocity(lua_State* state)
                 void* returnPtr = (void*)&(instance->getVelocity());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector3");
@@ -603,7 +603,7 @@ int lua_AudioSource_setLooped(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 AudioSource* instance = getInstance(state);
                 instance->setLooped(param1);
@@ -678,7 +678,7 @@ int lua_AudioSource_setVelocity(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -747,12 +747,12 @@ int lua_AudioSource_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)AudioSource::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "AudioSource");
@@ -773,14 +773,14 @@ int lua_AudioSource_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Properties> param1 = gameplay::ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)AudioSource::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "AudioSource");

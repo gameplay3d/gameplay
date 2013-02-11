@@ -26,14 +26,14 @@ void luaRegister_PhysicsCollisionShapeDefinition()
     std::vector<std::string> scopePath;
     scopePath.push_back("PhysicsCollisionShape");
 
-    ScriptUtil::registerClass("PhysicsCollisionShapeDefinition", lua_members, lua_PhysicsCollisionShapeDefinition__init, lua_PhysicsCollisionShapeDefinition__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("PhysicsCollisionShapeDefinition", lua_members, lua_PhysicsCollisionShapeDefinition__init, lua_PhysicsCollisionShapeDefinition__gc, lua_statics, scopePath);
 }
 
 static PhysicsCollisionShape::Definition* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShapeDefinition");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionShapeDefinition' expected.");
-    return (PhysicsCollisionShape::Definition*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (PhysicsCollisionShape::Definition*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsCollisionShapeDefinition__gc(lua_State* state)
@@ -50,7 +50,7 @@ int lua_PhysicsCollisionShapeDefinition__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionShapeDefinition");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionShapeDefinition' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     PhysicsCollisionShape::Definition* instance = (PhysicsCollisionShape::Definition*)object->instance;
@@ -87,7 +87,7 @@ int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
             void* returnPtr = (void*)new PhysicsCollisionShape::Definition();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");
@@ -109,14 +109,14 @@ int lua_PhysicsCollisionShapeDefinition__init(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param1 = ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(1, "PhysicsCollisionShapeDefinition", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<PhysicsCollisionShape::Definition> param1 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionShape::Definition>(1, "PhysicsCollisionShapeDefinition", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)new PhysicsCollisionShape::Definition(*param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "PhysicsCollisionShapeDefinition");

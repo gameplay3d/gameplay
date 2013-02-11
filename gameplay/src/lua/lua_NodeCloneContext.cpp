@@ -39,14 +39,14 @@ void luaRegister_NodeCloneContext()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("NodeCloneContext", lua_members, lua_NodeCloneContext__init, lua_NodeCloneContext__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("NodeCloneContext", lua_members, lua_NodeCloneContext__init, lua_NodeCloneContext__gc, lua_statics, scopePath);
 }
 
 static NodeCloneContext* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "NodeCloneContext");
     luaL_argcheck(state, userdata != NULL, 1, "'NodeCloneContext' expected.");
-    return (NodeCloneContext*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (NodeCloneContext*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_NodeCloneContext__gc(lua_State* state)
@@ -63,7 +63,7 @@ int lua_NodeCloneContext__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "NodeCloneContext");
                 luaL_argcheck(state, userdata != NULL, 1, "'NodeCloneContext' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     NodeCloneContext* instance = (NodeCloneContext*)object->instance;
@@ -100,7 +100,7 @@ int lua_NodeCloneContext__init(lua_State* state)
             void* returnPtr = (void*)new NodeCloneContext();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "NodeCloneContext");
@@ -139,7 +139,7 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Animation> param1 = gameplay::ScriptUtil::getObjectPointer<Animation>(2, "Animation", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Animation'.");
@@ -150,7 +150,7 @@ int lua_NodeCloneContext_findClonedAnimation(lua_State* state)
                 void* returnPtr = (void*)instance->findClonedAnimation(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -193,7 +193,7 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
@@ -204,7 +204,7 @@ int lua_NodeCloneContext_findClonedNode(lua_State* state)
                 void* returnPtr = (void*)instance->findClonedNode(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -248,7 +248,7 @@ int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Animation> param1 = ScriptUtil::getObjectPointer<Animation>(2, "Animation", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Animation> param1 = gameplay::ScriptUtil::getObjectPointer<Animation>(2, "Animation", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Animation'.");
@@ -257,7 +257,7 @@ int lua_NodeCloneContext_registerClonedAnimation(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Animation> param2 = ScriptUtil::getObjectPointer<Animation>(3, "Animation", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Animation> param2 = gameplay::ScriptUtil::getObjectPointer<Animation>(3, "Animation", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Animation'.");
@@ -300,7 +300,7 @@ int lua_NodeCloneContext_registerClonedNode(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
@@ -309,7 +309,7 @@ int lua_NodeCloneContext_registerClonedNode(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Node> param2 = ScriptUtil::getObjectPointer<Node>(3, "Node", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Node> param2 = gameplay::ScriptUtil::getObjectPointer<Node>(3, "Node", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Node'.");

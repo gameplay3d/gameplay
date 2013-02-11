@@ -30,14 +30,14 @@ void luaRegister_ControlListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("Control");
 
-    ScriptUtil::registerClass("ControlListener", lua_members, NULL, lua_ControlListener__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("ControlListener", lua_members, NULL, lua_ControlListener__gc, lua_statics, scopePath);
 }
 
 static Control::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ControlListener");
     luaL_argcheck(state, userdata != NULL, 1, "'ControlListener' expected.");
-    return (Control::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Control::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_ControlListener__gc(lua_State* state)
@@ -54,7 +54,7 @@ int lua_ControlListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "ControlListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'ControlListener' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Control::Listener* instance = (Control::Listener*)object->instance;
@@ -94,7 +94,7 @@ int lua_ControlListener_controlEvent(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Control> param1 = ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Control> param1 = gameplay::ScriptUtil::getObjectPointer<Control>(2, "Control", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Control'.");

@@ -13,7 +13,7 @@ using namespace std;
 
 #define LUA_GLOBAL_FILENAME "lua_Global"
 #define LUA_ALL_BINDINGS_FILENAME "lua_all_bindings"
-#define LUA_OBJECT "ScriptUtil::LuaObject"
+#define LUA_OBJECT "gameplay::ScriptUtil::LuaObject"
 #define SCOPE_REPLACEMENT ""
 #define SCOPE_REPLACEMENT_SIZE strlen(SCOPE_REPLACEMENT)
 #define REF_CLASS_NAME "Ref"

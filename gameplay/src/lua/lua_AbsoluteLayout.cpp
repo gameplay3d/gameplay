@@ -26,14 +26,14 @@ void luaRegister_AbsoluteLayout()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AbsoluteLayout", lua_members, NULL, lua_AbsoluteLayout__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AbsoluteLayout", lua_members, NULL, lua_AbsoluteLayout__gc, lua_statics, scopePath);
 }
 
 static AbsoluteLayout* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AbsoluteLayout");
     luaL_argcheck(state, userdata != NULL, 1, "'AbsoluteLayout' expected.");
-    return (AbsoluteLayout*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AbsoluteLayout*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AbsoluteLayout__gc(lua_State* state)
@@ -50,7 +50,7 @@ int lua_AbsoluteLayout__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AbsoluteLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'AbsoluteLayout' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AbsoluteLayout* instance = (AbsoluteLayout*)object->instance;
