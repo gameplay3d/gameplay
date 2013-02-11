@@ -28,14 +28,14 @@ void luaRegister_VerticalLayout()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("VerticalLayout", lua_members, NULL, lua_VerticalLayout__gc, lua_statics, scopePath);
 }
 
 static VerticalLayout* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VerticalLayout");
     luaL_argcheck(state, userdata != NULL, 1, "'VerticalLayout' expected.");
-    return (VerticalLayout*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (VerticalLayout*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_VerticalLayout__gc(lua_State* state)
@@ -52,7 +52,7 @@ int lua_VerticalLayout__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "VerticalLayout");
                 luaL_argcheck(state, userdata != NULL, 1, "'VerticalLayout' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     VerticalLayout* instance = (VerticalLayout*)object->instance;
@@ -259,7 +259,7 @@ int lua_VerticalLayout_setBottomToTop(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 VerticalLayout* instance = getInstance(state);
                 instance->setBottomToTop(param1);

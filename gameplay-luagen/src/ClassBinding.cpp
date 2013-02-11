@@ -270,7 +270,7 @@ void ClassBinding::write(string dir, const set<string>& includes, string* bindin
         }
 
         // Register the class (its member and static functions and constructor and destructor).
-        o << "\n    ScriptUtil::registerClass(\"" << uniquename << "\", lua_members, ";
+        o << "\n    gameplay::ScriptUtil::registerClass(\"" << uniquename << "\", lua_members, ";
         o << ((constructorUniqueName) ? *constructorUniqueName : "NULL") << ", ";
         o << ((destructorUniqueName) ? *destructorUniqueName : "NULL") << ", ";
         o << "lua_statics, scopePath);\n";

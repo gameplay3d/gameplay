@@ -36,14 +36,14 @@ void luaRegister_FrameBuffer()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("FrameBuffer", lua_members, NULL, lua_FrameBuffer__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("FrameBuffer", lua_members, NULL, lua_FrameBuffer__gc, lua_statics, scopePath);
 }
 
 static FrameBuffer* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "FrameBuffer");
     luaL_argcheck(state, userdata != NULL, 1, "'FrameBuffer' expected.");
-    return (FrameBuffer*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (FrameBuffer*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_FrameBuffer__gc(lua_State* state)
@@ -60,7 +60,7 @@ int lua_FrameBuffer__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "FrameBuffer");
                 luaL_argcheck(state, userdata != NULL, 1, "'FrameBuffer' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     FrameBuffer* instance = (FrameBuffer*)object->instance;
@@ -132,7 +132,7 @@ int lua_FrameBuffer_bind(lua_State* state)
                 void* returnPtr = (void*)instance->bind();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "FrameBuffer");
@@ -176,7 +176,7 @@ int lua_FrameBuffer_getDepthStencilTarget(lua_State* state)
                 void* returnPtr = (void*)instance->getDepthStencilTarget();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "DepthStencilTarget");
@@ -325,7 +325,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
                 void* returnPtr = (void*)instance->getRenderTarget();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "RenderTarget");
@@ -355,7 +355,7 @@ int lua_FrameBuffer_getRenderTarget(lua_State* state)
                 void* returnPtr = (void*)instance->getRenderTarget(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "RenderTarget");
@@ -465,7 +465,7 @@ int lua_FrameBuffer_setDepthStencilTarget(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<DepthStencilTarget> param1 = ScriptUtil::getObjectPointer<DepthStencilTarget>(2, "DepthStencilTarget", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<DepthStencilTarget> param1 = gameplay::ScriptUtil::getObjectPointer<DepthStencilTarget>(2, "DepthStencilTarget", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'DepthStencilTarget'.");
@@ -507,7 +507,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<RenderTarget> param1 = ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'RenderTarget'.");
@@ -532,7 +532,7 @@ int lua_FrameBuffer_setRenderTarget(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<RenderTarget> param1 = ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<RenderTarget> param1 = gameplay::ScriptUtil::getObjectPointer<RenderTarget>(2, "RenderTarget", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'RenderTarget'.");
@@ -575,7 +575,7 @@ int lua_FrameBuffer_static_bindDefault(lua_State* state)
             void* returnPtr = (void*)FrameBuffer::bindDefault();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "FrameBuffer");
@@ -614,12 +614,12 @@ int lua_FrameBuffer_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)FrameBuffer::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "FrameBuffer");
@@ -647,7 +647,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
                     unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -658,7 +658,7 @@ int lua_FrameBuffer_static_create(lua_State* state)
                     void* returnPtr = (void*)FrameBuffer::create(param1, param2, param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "FrameBuffer");
@@ -700,12 +700,12 @@ int lua_FrameBuffer_static_getFrameBuffer(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)FrameBuffer::getFrameBuffer(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "FrameBuffer");
