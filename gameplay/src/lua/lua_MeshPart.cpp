@@ -24,14 +24,14 @@ void luaRegister_MeshPart()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("MeshPart", lua_members, NULL, lua_MeshPart__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("MeshPart", lua_members, NULL, lua_MeshPart__gc, lua_statics, scopePath);
 }
 
 static MeshPart* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MeshPart");
     luaL_argcheck(state, userdata != NULL, 1, "'MeshPart' expected.");
-    return (MeshPart*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (MeshPart*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MeshPart__gc(lua_State* state)
@@ -48,7 +48,7 @@ int lua_MeshPart__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "MeshPart");
                 luaL_argcheck(state, userdata != NULL, 1, "'MeshPart' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     MeshPart* instance = (MeshPart*)object->instance;
@@ -88,7 +88,7 @@ int lua_MeshPart_getIndexBuffer(lua_State* state)
                 void* returnPtr = (void*)new GLuint(instance->getIndexBuffer());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "GLuint");

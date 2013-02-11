@@ -30,14 +30,14 @@ void luaRegister_PhysicsCollisionObjectCollisionListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("PhysicsCollisionObject");
 
-    ScriptUtil::registerClass("PhysicsCollisionObjectCollisionListener", lua_members, NULL, lua_PhysicsCollisionObjectCollisionListener__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("PhysicsCollisionObjectCollisionListener", lua_members, NULL, lua_PhysicsCollisionObjectCollisionListener__gc, lua_statics, scopePath);
 }
 
 static PhysicsCollisionObject::CollisionListener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
     luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionListener' expected.");
-    return (PhysicsCollisionObject::CollisionListener*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (PhysicsCollisionObject::CollisionListener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
@@ -54,7 +54,7 @@ int lua_PhysicsCollisionObjectCollisionListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "PhysicsCollisionObjectCollisionListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'PhysicsCollisionObjectCollisionListener' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     PhysicsCollisionObject::CollisionListener* instance = (PhysicsCollisionObject::CollisionListener*)object->instance;
@@ -97,7 +97,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject::CollisionPair'.");
@@ -126,7 +126,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject::CollisionPair'.");
@@ -135,7 +135,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -165,7 +165,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<PhysicsCollisionObject::CollisionPair> param2 = gameplay::ScriptUtil::getObjectPointer<PhysicsCollisionObject::CollisionPair>(3, "PhysicsCollisionObjectCollisionPair", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'PhysicsCollisionObject::CollisionPair'.");
@@ -174,7 +174,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 
                 // Get parameter 3 off the stack.
                 bool param3Valid;
-                ScriptUtil::LuaArray<Vector3> param3 = ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", true, &param3Valid);
                 if (!param3Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 3 to type 'Vector3'.");
@@ -183,7 +183,7 @@ int lua_PhysicsCollisionObjectCollisionListener_collisionEvent(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<Vector3> param4 = ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param4 = gameplay::ScriptUtil::getObjectPointer<Vector3>(5, "Vector3", true, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'Vector3'.");
