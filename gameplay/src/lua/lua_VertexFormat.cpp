@@ -24,14 +24,14 @@ void luaRegister_VertexFormat()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("VertexFormat", lua_members, lua_VertexFormat__init, lua_VertexFormat__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("VertexFormat", lua_members, lua_VertexFormat__init, lua_VertexFormat__gc, lua_statics, scopePath);
 }
 
 static VertexFormat* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VertexFormat");
     luaL_argcheck(state, userdata != NULL, 1, "'VertexFormat' expected.");
-    return (VertexFormat*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (VertexFormat*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_VertexFormat__gc(lua_State* state)
@@ -48,7 +48,7 @@ int lua_VertexFormat__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "VertexFormat");
                 luaL_argcheck(state, userdata != NULL, 1, "'VertexFormat' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     VertexFormat* instance = (VertexFormat*)object->instance;
@@ -87,7 +87,7 @@ int lua_VertexFormat__init(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<VertexFormat::Element> param1 = ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<VertexFormat::Element> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat::Element>(1, "VertexFormatElement", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'VertexFormat::Element'.");
@@ -100,7 +100,7 @@ int lua_VertexFormat__init(lua_State* state)
                 void* returnPtr = (void*)new VertexFormat(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "VertexFormat");
@@ -148,7 +148,7 @@ int lua_VertexFormat_getElement(lua_State* state)
                 void* returnPtr = (void*)&(instance->getElement(param1));
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "VertexFormatElement");

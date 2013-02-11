@@ -25,14 +25,14 @@ void luaRegister_AnimationClipListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("AnimationClip");
 
-    ScriptUtil::registerClass("AnimationClipListener", lua_members, NULL, lua_AnimationClipListener__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AnimationClipListener", lua_members, NULL, lua_AnimationClipListener__gc, lua_statics, scopePath);
 }
 
 static AnimationClip::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationClipListener");
     luaL_argcheck(state, userdata != NULL, 1, "'AnimationClipListener' expected.");
-    return (AnimationClip::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AnimationClip::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AnimationClipListener__gc(lua_State* state)
@@ -49,7 +49,7 @@ int lua_AnimationClipListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AnimationClipListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'AnimationClipListener' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AnimationClip::Listener* instance = (AnimationClip::Listener*)object->instance;
@@ -89,7 +89,7 @@ int lua_AnimationClipListener_animationEvent(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AnimationClip> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AnimationClip'.");

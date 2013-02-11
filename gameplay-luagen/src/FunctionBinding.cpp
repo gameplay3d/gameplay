@@ -707,10 +707,10 @@ void writeObjectTemplateType(ostream& o, const FunctionBinding::Param& p)
 
 void writePointerParameter(ostream& o, const char* primitiveType, const FunctionBinding::Param& p, int paramNum, int luaParamIndex, int indentLevel)
 {
-    o << "ScriptUtil::LuaArray<";
+    o << "gameplay::ScriptUtil::LuaArray<";
     writeObjectTemplateType(o, p);
-    //o << "> param" << paramNum << "Pointer = ScriptUtil::get" << primitiveType << "Pointer(" << luaParamIndex << ");\n";
-    o << "> param" << paramNum << " = ScriptUtil::get" << primitiveType << "Pointer(" << luaParamIndex << ");\n";
+    //o << "> param" << paramNum << "Pointer = gameplay::ScriptUtil::get" << primitiveType << "Pointer(" << luaParamIndex << ");\n";
+    o << "> param" << paramNum << " = gameplay::ScriptUtil::get" << primitiveType << "Pointer(" << luaParamIndex << ");\n";
     //indent(o, indentLevel);
     //o << p << " param" << paramNum << " = (" << p << ")param" << paramNum << "Pointer;\n";
 }
@@ -729,7 +729,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         if (p.kind == FunctionBinding::Param::KIND_POINTER)
             writePointerParameter(o, "Bool", p, i+1, paramIndex, indentLevel);
         else
-            o << p << " param" << i+1 << " = ScriptUtil::luaCheckBool(state, " << paramIndex << ");\n";
+            o << p << " param" << i+1 << " = gameplay::ScriptUtil::luaCheckBool(state, " << paramIndex << ");\n";
         break;
     case FunctionBinding::Param::TYPE_CHAR:
         indent(o, indentLevel);
@@ -800,7 +800,7 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
         break;
     case FunctionBinding::Param::TYPE_STRING:
         indent(o, indentLevel);
-        o << p << " param" << i+1 << " = ScriptUtil::getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
+        o << p << " param" << i+1 << " = gameplay::ScriptUtil::getString(" << paramIndex << ", " << ((p.info == "string") ? "true" : "false") << ");\n";
         break;
     case FunctionBinding::Param::TYPE_ENUM:
         indent(o, indentLevel);
@@ -818,10 +818,10 @@ static inline void outputGetParam(ostream& o, const FunctionBinding::Param& p, i
             indent(o, indentLevel);
             o << "bool param" << i + 1 << "Valid;\n";
             indent(o, indentLevel);
-            o << "ScriptUtil::LuaArray<";
+            o << "gameplay::ScriptUtil::LuaArray<";
             writeObjectTemplateType(o, p);
-            //o << "> param" << i+1 << "Pointer = ScriptUtil::getObjectPointer<";
-            o << "> param" << i+1 << " = ScriptUtil::getObjectPointer<";
+            //o << "> param" << i+1 << "Pointer = gameplay::ScriptUtil::getObjectPointer<";
+            o << "> param" << i+1 << " = gameplay::ScriptUtil::getObjectPointer<";
             writeObjectTemplateType(o, p);
             o << ">(" << paramIndex;
             o << ", \"" << Generator::getInstance()->getUniqueNameFromRef(p.info) << "\", ";
