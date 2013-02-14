@@ -29,14 +29,14 @@ void luaRegister_MeshBatch()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("MeshBatch", lua_members, NULL, lua_MeshBatch__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("MeshBatch", lua_members, NULL, lua_MeshBatch__gc, lua_statics, scopePath);
 }
 
 static MeshBatch* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MeshBatch");
     luaL_argcheck(state, userdata != NULL, 1, "'MeshBatch' expected.");
-    return (MeshBatch*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (MeshBatch*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MeshBatch__gc(lua_State* state)
@@ -53,7 +53,7 @@ int lua_MeshBatch__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "MeshBatch");
                 luaL_argcheck(state, userdata != NULL, 1, "'MeshBatch' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     MeshBatch* instance = (MeshBatch*)object->instance;
@@ -92,7 +92,7 @@ int lua_MeshBatch_add(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
@@ -115,13 +115,13 @@ int lua_MeshBatch_add(lua_State* state)
                 (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<unsigned short> param3 = ScriptUtil::getUnsignedShortPointer(4);
+                gameplay::ScriptUtil::LuaArray<unsigned short> param3 = gameplay::ScriptUtil::getUnsignedShortPointer(4);
 
                 MeshBatch* instance = getInstance(state);
                 instance->add(param1, param2, param3);
@@ -142,13 +142,13 @@ int lua_MeshBatch_add(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(2);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<unsigned short> param3 = ScriptUtil::getUnsignedShortPointer(4);
+                gameplay::ScriptUtil::LuaArray<unsigned short> param3 = gameplay::ScriptUtil::getUnsignedShortPointer(4);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -288,7 +288,7 @@ int lua_MeshBatch_getMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->getMaterial();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -403,7 +403,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<VertexFormat> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -411,15 +411,15 @@ int lua_MeshBatch_static_create(lua_State* state)
                     Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
-                    const char* param3 = ScriptUtil::getString(3, false);
+                    const char* param3 = gameplay::ScriptUtil::getString(3, false);
 
                     // Get parameter 4 off the stack.
-                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+                    bool param4 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                     void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "MeshBatch");
@@ -443,7 +443,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<VertexFormat> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -452,17 +452,17 @@ int lua_MeshBatch_static_create(lua_State* state)
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Material> param3 = gameplay::ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
-                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+                    bool param4 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                     void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "MeshBatch");
@@ -493,7 +493,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<VertexFormat> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -501,10 +501,10 @@ int lua_MeshBatch_static_create(lua_State* state)
                     Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
-                    const char* param3 = ScriptUtil::getString(3, false);
+                    const char* param3 = gameplay::ScriptUtil::getString(3, false);
 
                     // Get parameter 4 off the stack.
-                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+                    bool param4 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                     // Get parameter 5 off the stack.
                     unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -512,7 +512,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "MeshBatch");
@@ -537,7 +537,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<VertexFormat> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -546,12 +546,12 @@ int lua_MeshBatch_static_create(lua_State* state)
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Material> param3 = gameplay::ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
-                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+                    bool param4 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                     // Get parameter 5 off the stack.
                     unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -559,7 +559,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "MeshBatch");
@@ -591,7 +591,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<VertexFormat> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -599,10 +599,10 @@ int lua_MeshBatch_static_create(lua_State* state)
                     Mesh::PrimitiveType param2 = (Mesh::PrimitiveType)lua_enumFromString_MeshPrimitiveType(luaL_checkstring(state, 2));
 
                     // Get parameter 3 off the stack.
-                    const char* param3 = ScriptUtil::getString(3, false);
+                    const char* param3 = gameplay::ScriptUtil::getString(3, false);
 
                     // Get parameter 4 off the stack.
-                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+                    bool param4 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                     // Get parameter 5 off the stack.
                     unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -613,7 +613,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "MeshBatch");
@@ -639,7 +639,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<VertexFormat> param1 = ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<VertexFormat> param1 = gameplay::ScriptUtil::getObjectPointer<VertexFormat>(1, "VertexFormat", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -648,12 +648,12 @@ int lua_MeshBatch_static_create(lua_State* state)
 
                     // Get parameter 3 off the stack.
                     bool param3Valid;
-                    ScriptUtil::LuaArray<Material> param3 = ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
+                    gameplay::ScriptUtil::LuaArray<Material> param3 = gameplay::ScriptUtil::getObjectPointer<Material>(3, "Material", false, &param3Valid);
                     if (!param3Valid)
                         break;
 
                     // Get parameter 4 off the stack.
-                    bool param4 = ScriptUtil::luaCheckBool(state, 4);
+                    bool param4 = gameplay::ScriptUtil::luaCheckBool(state, 4);
 
                     // Get parameter 5 off the stack.
                     unsigned int param5 = (unsigned int)luaL_checkunsigned(state, 5);
@@ -664,7 +664,7 @@ int lua_MeshBatch_static_create(lua_State* state)
                     void* returnPtr = (void*)MeshBatch::create(*param1, param2, param3, param4, param5, param6);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "MeshBatch");

@@ -28,14 +28,14 @@ void luaRegister_BoundingSphere()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("BoundingSphere", lua_members, lua_BoundingSphere__init, lua_BoundingSphere__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("BoundingSphere", lua_members, lua_BoundingSphere__init, lua_BoundingSphere__gc, lua_statics, scopePath);
 }
 
 static BoundingSphere* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "BoundingSphere");
     luaL_argcheck(state, userdata != NULL, 1, "'BoundingSphere' expected.");
-    return (BoundingSphere*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (BoundingSphere*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_BoundingSphere__gc(lua_State* state)
@@ -52,7 +52,7 @@ int lua_BoundingSphere__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "BoundingSphere");
                 luaL_argcheck(state, userdata != NULL, 1, "'BoundingSphere' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     BoundingSphere* instance = (BoundingSphere*)object->instance;
@@ -89,7 +89,7 @@ int lua_BoundingSphere__init(lua_State* state)
             void* returnPtr = (void*)new BoundingSphere();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "BoundingSphere");
@@ -111,14 +111,14 @@ int lua_BoundingSphere__init(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(1, "BoundingSphere", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingSphere> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingSphere>(1, "BoundingSphere", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)new BoundingSphere(*param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "BoundingSphere");
@@ -146,7 +146,7 @@ int lua_BoundingSphere__init(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(1, "Vector3", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -156,7 +156,7 @@ int lua_BoundingSphere__init(lua_State* state)
                     void* returnPtr = (void*)new BoundingSphere(*param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "BoundingSphere");
@@ -199,7 +199,7 @@ int lua_BoundingSphere_center(lua_State* state)
     {
         // Get parameter 2 off the stack.
         bool param2Valid;
-        ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+        gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
         if (!param2Valid)
         {
             lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -214,7 +214,7 @@ int lua_BoundingSphere_center(lua_State* state)
         void* returnPtr = (void*)new Vector3(instance->center);
         if (returnPtr)
         {
-            ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+            gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
             object->instance = returnPtr;
             object->owns = true;
             luaL_getmetatable(state, "Vector3");
@@ -246,7 +246,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingSphere> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -267,7 +267,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingBox> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -288,7 +288,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Frustum> param1 = ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Frustum> param1 = gameplay::ScriptUtil::getObjectPointer<Frustum>(2, "Frustum", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -309,7 +309,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Plane> param1 = ScriptUtil::getObjectPointer<Plane>(2, "Plane", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Plane> param1 = gameplay::ScriptUtil::getObjectPointer<Plane>(2, "Plane", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -330,7 +330,7 @@ int lua_BoundingSphere_intersects(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Ray> param1 = ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Ray> param1 = gameplay::ScriptUtil::getObjectPointer<Ray>(2, "Ray", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -410,7 +410,7 @@ int lua_BoundingSphere_merge(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingSphere> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -428,7 +428,7 @@ int lua_BoundingSphere_merge(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingBox> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -499,7 +499,7 @@ int lua_BoundingSphere_set(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingSphere> param1 = ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingSphere> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingSphere>(2, "BoundingSphere", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -517,7 +517,7 @@ int lua_BoundingSphere_set(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<BoundingBox> param1 = ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<BoundingBox> param1 = gameplay::ScriptUtil::getObjectPointer<BoundingBox>(2, "BoundingBox", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -542,7 +542,7 @@ int lua_BoundingSphere_set(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Vector3> param1 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -583,7 +583,7 @@ int lua_BoundingSphere_static_empty(lua_State* state)
             void* returnPtr = (void*)&(BoundingSphere::empty());
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = false;
                 luaL_getmetatable(state, "BoundingSphere");
@@ -622,7 +622,7 @@ int lua_BoundingSphere_transform(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Matrix> param1 = ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Matrix> param1 = gameplay::ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Matrix'.");

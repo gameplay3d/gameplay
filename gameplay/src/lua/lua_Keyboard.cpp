@@ -15,14 +15,14 @@ void luaRegister_Keyboard()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Keyboard", lua_members, NULL, lua_Keyboard__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Keyboard", lua_members, NULL, lua_Keyboard__gc, lua_statics, scopePath);
 }
 
 static Keyboard* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Keyboard");
     luaL_argcheck(state, userdata != NULL, 1, "'Keyboard' expected.");
-    return (Keyboard*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Keyboard*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Keyboard__gc(lua_State* state)
@@ -39,7 +39,7 @@ int lua_Keyboard__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Keyboard");
                 luaL_argcheck(state, userdata != NULL, 1, "'Keyboard' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Keyboard* instance = (Keyboard*)object->instance;

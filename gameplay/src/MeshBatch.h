@@ -91,7 +91,7 @@ public:
      * @param indexCount Number of indices (should be zero for non-indexed batches).
      */
     template <class T>
-    void add(T* vertices, unsigned int vertexCount, unsigned short* indices = NULL, unsigned int indexCount = 0);
+    void add(const T* vertices, unsigned int vertexCount, const unsigned short* indices = NULL, unsigned int indexCount = 0);
 
     /**
      * Adds a group of primitives to the batch.
@@ -112,7 +112,7 @@ public:
      * @param indices Array of indices into the vertex array (should be NULL for non-indexed batches).
      * @param indexCount Number of indices (should be zero for non-indexed batches).
      */
-    void add(float* vertices, unsigned int vertexCount, unsigned short* indices = NULL, unsigned int indexCount = 0);
+    void add(const float* vertices, unsigned int vertexCount, const unsigned short* indices = NULL, unsigned int indexCount = 0);
 
     /**
      * Starts batching.
@@ -153,7 +153,7 @@ private:
      */
     MeshBatch& operator=(const MeshBatch&);
 
-    void add(void* vertices, size_t size, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount);
+    void add(const void* vertices, size_t size, unsigned int vertexCount, const unsigned short* indices, unsigned int indexCount);
 
     void updateVertexAttributeBinding();
 
