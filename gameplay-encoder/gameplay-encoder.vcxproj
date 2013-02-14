@@ -148,15 +148,15 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.2/include;../external-deps/freetype2/include;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include;../external-deps/freetype2/include;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>
       </DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.2/lib/vs2010/x86;../external-deps/freetype2/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fbxsdk-2013.2-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86;../external-deps/freetype2/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fbxsdk-2013.3-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
@@ -173,15 +173,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.2/include;../external-deps/freetype2/include;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include;../external-deps/freetype2/include;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>fbxsdk-2013.2-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.2/lib/vs2010/x86;../external-deps/freetype2/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fbxsdk-2013.3-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86;../external-deps/freetype2/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
