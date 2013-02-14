@@ -25,14 +25,14 @@ void luaRegister_AIStateMachine()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AIStateMachine", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AIStateMachine", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AIStateMachine* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIStateMachine");
     luaL_argcheck(state, userdata != NULL, 1, "'AIStateMachine' expected.");
-    return (AIStateMachine*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AIStateMachine*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AIStateMachine_addState(lua_State* state)
@@ -51,13 +51,13 @@ int lua_AIStateMachine_addState(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     AIStateMachine* instance = getInstance(state);
                     void* returnPtr = (void*)instance->addState(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "AIState");
@@ -79,7 +79,7 @@ int lua_AIStateMachine_addState(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<AIState> param1 = gameplay::ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -120,7 +120,7 @@ int lua_AIStateMachine_getActiveState(lua_State* state)
                 void* returnPtr = (void*)instance->getActiveState();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AIState");
@@ -164,7 +164,7 @@ int lua_AIStateMachine_getAgent(lua_State* state)
                 void* returnPtr = (void*)instance->getAgent();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AIAgent");
@@ -206,13 +206,13 @@ int lua_AIStateMachine_getState(lua_State* state)
                 (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 AIStateMachine* instance = getInstance(state);
                 void* returnPtr = (void*)instance->getState(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AIState");
@@ -255,7 +255,7 @@ int lua_AIStateMachine_removeState(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AIState> param1 = gameplay::ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AIState'.");
@@ -298,13 +298,13 @@ int lua_AIStateMachine_setState(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     AIStateMachine* instance = getInstance(state);
                     void* returnPtr = (void*)instance->setState(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "AIState");
@@ -326,7 +326,7 @@ int lua_AIStateMachine_setState(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<AIState> param1 = ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<AIState> param1 = gameplay::ScriptUtil::getObjectPointer<AIState>(2, "AIState", false, &param1Valid);
                     if (!param1Valid)
                         break;
 

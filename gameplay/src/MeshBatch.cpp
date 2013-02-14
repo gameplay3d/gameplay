@@ -43,7 +43,7 @@ MeshBatch* MeshBatch::create(const VertexFormat& vertexFormat, Mesh::PrimitiveTy
     return batch;
 }
 
-void MeshBatch::add(void* vertices, size_t size, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
+void MeshBatch::add(const void* vertices, size_t size, unsigned int vertexCount, const unsigned short* indices, unsigned int indexCount)
 {
     GP_ASSERT(vertices);
     
@@ -217,7 +217,7 @@ bool MeshBatch::resize(unsigned int capacity)
     return true;
 }
 
-void MeshBatch::add(float* vertices, unsigned int vertexCount, unsigned short* indices, unsigned int indexCount)
+void MeshBatch::add(const float* vertices, unsigned int vertexCount, const unsigned short* indices, unsigned int indexCount)
 {
     add(vertices, sizeof(float), vertexCount, indices, indexCount);
 }

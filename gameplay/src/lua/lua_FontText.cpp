@@ -23,14 +23,14 @@ void luaRegister_FontText()
     std::vector<std::string> scopePath;
     scopePath.push_back("Font");
 
-    ScriptUtil::registerClass("FontText", lua_members, lua_FontText__init, lua_FontText__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("FontText", lua_members, lua_FontText__init, lua_FontText__gc, lua_statics, scopePath);
 }
 
 static Font::Text* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "FontText");
     luaL_argcheck(state, userdata != NULL, 1, "'FontText' expected.");
-    return (Font::Text*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Font::Text*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_FontText__gc(lua_State* state)
@@ -47,7 +47,7 @@ int lua_FontText__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "FontText");
                 luaL_argcheck(state, userdata != NULL, 1, "'FontText' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Font::Text* instance = (Font::Text*)object->instance;
@@ -84,12 +84,12 @@ int lua_FontText__init(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)new Font::Text(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "FontText");

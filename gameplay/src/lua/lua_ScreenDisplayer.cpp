@@ -21,14 +21,14 @@ void luaRegister_ScreenDisplayer()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("ScreenDisplayer", lua_members, lua_ScreenDisplayer__init, lua_ScreenDisplayer__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("ScreenDisplayer", lua_members, lua_ScreenDisplayer__init, lua_ScreenDisplayer__gc, lua_statics, scopePath);
 }
 
 static ScreenDisplayer* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "ScreenDisplayer");
     luaL_argcheck(state, userdata != NULL, 1, "'ScreenDisplayer' expected.");
-    return (ScreenDisplayer*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (ScreenDisplayer*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_ScreenDisplayer__gc(lua_State* state)
@@ -45,7 +45,7 @@ int lua_ScreenDisplayer__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "ScreenDisplayer");
                 luaL_argcheck(state, userdata != NULL, 1, "'ScreenDisplayer' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     ScreenDisplayer* instance = (ScreenDisplayer*)object->instance;
@@ -82,7 +82,7 @@ int lua_ScreenDisplayer__init(lua_State* state)
             void* returnPtr = (void*)new ScreenDisplayer();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "ScreenDisplayer");
@@ -145,7 +145,7 @@ int lua_ScreenDisplayer_static_start(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 2);
