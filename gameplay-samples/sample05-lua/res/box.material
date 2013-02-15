@@ -24,7 +24,7 @@ material box
                 mipmap = true
                 wrapS = CLAMP
                 wrapT = CLAMP
-                minFilter = NEAREST_MIPMAP_LINEAR
+                minFilter = LINEAR_MIPMAP_LINEAR
                 magFilter = LINEAR
             }
 

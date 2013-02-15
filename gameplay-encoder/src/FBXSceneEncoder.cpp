@@ -174,6 +174,11 @@ bool isGroupAnimationPossible(FbxScene* fbxScene);
 bool isGroupAnimationPossible(FbxNode* fbxNode);
 bool isGroupAnimationPossible(FbxMesh* fbxMesh);
 
+/**
+ * Recursively generates the tangents and binormals for all nodes that were specified in the command line arguments.
+ */
+void generateTangentsAndBinormals(FbxNode* fbxNode, const EncoderArguments& arguments);
+
 FbxAnimCurve* getCurve(FbxPropertyT<FbxDouble3>& prop, FbxAnimLayer* animLayer, const char* pChannel)
 {
 #if FBXSDK_VERSION_MAJOR == 2013 && FBXSDK_VERSION_MINOR == 1
@@ -224,6 +229,9 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
             _autoGroupAnimations = true;
         }
     }
+
+    if (arguments.tangentBinormalIdCount() > 0)
+        generateTangentsAndBinormals(fbxScene->GetRootNode(), arguments);
 
     print("Loading Scene.");
     loadScene(fbxScene);
@@ -1797,6 +1805,27 @@ bool isGroupAnimationPossible(FbxMesh* fbxMesh)
         }
     }
     return false;
+}
+
+void generateTangentsAndBinormals(FbxNode* fbxNode, const EncoderArguments& arguments)
+{
+    if (!fbxNode)
+        return;
+    const char* name = fbxNode->GetName();
+    if (name && strlen(name) > 0)
+    {
+        FbxMesh* fbxMesh = fbxNode->GetMesh();
+        if (fbxMesh && arguments.isGenerateTangentBinormalId(std::string(name)))
+        {
+            fbxMesh->GenerateTangentsDataForAllUVSets();
+        }
+    }
+    // visit child nodes
+    const int childCount = fbxNode->GetChildCount();
+    for (int i = 0; i < childCount; ++i)
+    {
+        generateTangentsAndBinormals(fbxNode->GetChild(i), arguments);
+    }
 }
 
 #endif

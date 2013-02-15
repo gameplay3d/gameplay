@@ -1,7 +1,7 @@
 @echo off
 
-REM This script converts spaceship.dae to a gameplay binary format (.gpb).
+REM This script converts spaceship.fbx to a gameplay binary format (.gpb).
 
-"..\..\..\bin\windows\gameplay-encoder.exe" spaceship.dae
+"..\..\..\bin\windows\gameplay-encoder.exe" spaceship.fbx
 
 pause
