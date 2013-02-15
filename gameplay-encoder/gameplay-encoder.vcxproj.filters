@@ -19,18 +19,6 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\DAEChannelTarget.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DAEOptimizer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DAESceneEncoder.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DAEUtil.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Effect.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -157,18 +145,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DAEChannelTarget.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DAEOptimizer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DAESceneEncoder.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DAEUtil.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Effect.h">
