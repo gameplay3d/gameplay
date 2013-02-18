@@ -872,7 +872,7 @@
 		5B04C54614BFCFE100EB0071 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE6147D8FF50000361E /* Light.cpp */; };
 		5B04C54714BFCFE100EB0071 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DE8147D8FF50000361E /* Material.cpp */; };
 		5B04C54814BFCFE100EB0071 /* MaterialParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DEA147D8FF50000361E /* MaterialParameter.cpp */; };
-		5B04C54914BFCFE100EB0071 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DEC147D8FF50000361E /* Matrix.cpp */; };
+		5B04C54914BFCFE100EB0071 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DEC147D8FF50000361E /* Matrix.cpp */; settings = {COMPILER_FLAGS = "-O1"; }; };
 		5B04C54A14BFCFE100EB0071 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DEF147D8FF50000361E /* Mesh.cpp */; };
 		5B04C54B14BFCFE100EB0071 /* MeshPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF1147D8FF50000361E /* MeshPart.cpp */; };
 		5B04C54C14BFCFE100EB0071 /* MeshSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42CD0DF3147D8FF50000361E /* MeshSkin.cpp */; };
