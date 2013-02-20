@@ -767,9 +767,16 @@ void FBXSceneEncoder::loadLight(FbxNode* fbxNode, Node* node)
         switch (decayType)
         {
         case FbxLight::eNone:
-            // No decay. Can assume we have an ambient light, because ambient lights in the scene are 
-            // converted to point lights with no decay when exporting to FBX.
-            light->setAmbientLight();
+            // FBX does not support ambients lights so ambient lights are converted 
+            // to point lights with no decay and visibility set to false.
+            if (fbxNode->GetVisibility())
+            {
+                light->setPointLight();
+            }
+            else
+            {
+                light->setAmbientLight();
+            }
             break;
         case FbxLight::eLinear:
             light->setPointLight();
