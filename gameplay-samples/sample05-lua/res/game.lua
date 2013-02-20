@@ -11,8 +11,7 @@ function initialize()
     _font = Font.create("res/arial40.gpb")
 
     -- Load mesh/scene from file
-    local bundle = Bundle.create("res/box.gpb")
-    _scene = bundle:loadScene()
+    _scene = Scene.load("res/box.gpb")
 
     -- Get the box node
     _modelNode = _scene:findNode("box")

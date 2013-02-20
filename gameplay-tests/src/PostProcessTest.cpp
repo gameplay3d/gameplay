@@ -82,9 +82,7 @@ void PostProcessTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
 
     // Load game scene from file
-    Bundle* bundle = Bundle::create("res/common/duck.gpb");
-    _scene = bundle->loadScene();
-    SAFE_RELEASE(bundle);
+    _scene = Scene::load("res/common/duck.gpb");
 
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight1");

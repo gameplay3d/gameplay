@@ -46,8 +46,7 @@ void LightTest::initialize()
     _font = Font::create("res/common/arial18.gpb");
 
 	// Load the scene
-	Bundle* bundle = Bundle::create("res/common/lightBrickWall.gpb");
-	_scene = bundle->loadScene();
+	_scene = Scene::load("res/common/lightBrickWall.gpb");
 
 	// Get the wall model node
 	_modelNode = _scene->findNode("wall"); 
@@ -137,8 +136,6 @@ void LightTest::initialize()
 	initializePointTechnique("pointSpecularBumped");
 
 	setSpecularValue(_specularSlider->getValue());
-
-	SAFE_RELEASE(bundle);
 }
 
 void LightTest::finalize()
