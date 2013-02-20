@@ -85,9 +85,7 @@ void SpaceshipGame::initialize()
     _stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
     // Load our scene from file
-    Bundle* bundle = Bundle::create("res/spaceship.gpb");
-    _scene = bundle->loadScene();
-    SAFE_RELEASE(bundle);
+    _scene = Scene::load("res/spaceship.gpb");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
     _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
