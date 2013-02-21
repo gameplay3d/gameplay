@@ -5,12 +5,59 @@
 #include "MeshSkin.h"
 #include "Joint.h"
 #include "Terrain.h"
+#include "Bundle.h"
 
 namespace gameplay
 {
 
 // Global list of active scenes
 static std::vector<Scene*> __sceneList;
+
+static inline char lowercase(char c)
+{
+    if (c >= 'A' && c <='Z')
+    {
+        c |= 0x20;
+    }
+    return c;
+}
+
+// Returns true if 'str' ends with 'suffix'; false otherwise.
+static bool endsWith(const char* str, const char* suffix, bool ignoreCase)
+{
+    if (str == NULL || suffix == NULL)
+        return false;
+    size_t length = strlen(str);
+    size_t suffixLength = strlen(suffix);
+
+    if (suffixLength > length)
+    {
+        return false;
+    }
+
+    size_t offset = length - suffixLength;
+
+    const char* p = str + offset;
+    while (*p != '\0' && *suffix != '\0')
+    {
+        if (ignoreCase)
+        {
+            if (lowercase(*p) != lowercase(*suffix))
+            {
+                return false;
+            }
+        }
+        else if (*p != *suffix)
+        {
+            return false;
+        }
+        
+        ++p;
+        ++suffix;
+    }
+    return true;
+}
+
 
 Scene::Scene(const char* id)
     : _id(id ? id : ""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), 
@@ -50,6 +97,17 @@ Scene* Scene::create(const char* id)
 
 Scene* Scene::load(const char* filePath)
 {
+    if (endsWith(filePath, ".gpb", true))
+    {
+        Scene* scene = NULL;
+        Bundle* bundle = Bundle::create(filePath);
+        if (bundle)
+        {
+            scene = bundle->loadScene();
+            SAFE_RELEASE(bundle);
+        }
+        return scene;
+    }
     return SceneLoader::load(filePath);
 }
 
