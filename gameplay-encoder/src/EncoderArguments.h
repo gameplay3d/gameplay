@@ -1,6 +1,7 @@
 #ifndef ENCODERARGUMENTS_H_
 #define ENCODERARGUMENTS_H_
 
+#include <set>
 #include "Vector3.h"
 
 namespace gameplay
@@ -71,11 +72,6 @@ public:
     const char* getFilePathPointer() const;
 
     /**
-     * Returns the path to where the DAE output should be written to.
-     */
-    const std::string& getDAEOutputPath() const;
-
-    /**
      * Returns the output path/folder.
      * Example: "C:/dir"
      */
@@ -99,6 +95,16 @@ public:
     const std::string getAnimationId(const std::string& nodeId) const;
 
     const std::vector<HeightmapOption>& getHeightmapOptions() const;
+
+    /**
+     * Returns the number of node IDs that were marked as needing to compute tangents and binormals.
+     */
+    unsigned int tangentBinormalIdCount() const;
+    
+    /**
+     * Returns true if the given node ID was marked as needing to generate tangents and binormals.
+     */
+    bool isGenerateTangentBinormalId(const std::string& id) const;
 
     /**
      * Returns true if normal map generation is turned on.
@@ -138,7 +144,6 @@ public:
 
     bool fontPreviewEnabled() const;
     bool textOutputEnabled() const;
-    bool DAEOutputEnabled() const;
     bool optimizeAnimationsEnabled() const;
 
     const char* getNodeId() const;
@@ -176,7 +181,6 @@ private:
     std::string _filePath;
     std::string _fileOutputPath;
     std::string _nodeId;
-    std::string _daeOutputPath;
 
     unsigned int _fontSize;
 
@@ -187,12 +191,12 @@ private:
     bool _parseError;
     bool _fontPreview;
     bool _textOutput;
-    bool _daeOutput;
     bool _optimizeAnimations;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
     std::vector<HeightmapOption> _heightmaps;
+    std::set<std::string> _tangentBinormalId;
 
 };
 

@@ -3,35 +3,31 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/include
     ${CMAKE_SOURCE_DIR}/external-deps/libpng/include
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/include
-    ${CMAKE_SOURCE_DIR}/external-deps/collada-dom/include
-    ${CMAKE_SOURCE_DIR}/external-deps/collada-dom/include/1.4
-    /usr/include/libxml2
+    /usr/include/fbxsdk
     /usr/include
 )
 
 add_definitions(-D_DEBUG)
-add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE)
+add_definitions(-D__linux__ -DNO_BOOST -DNO_ZAE -DUSE_FBX)
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/external-deps/zlib/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/libpng/lib/linux/${ARCH_DIR}
     ${CMAKE_SOURCE_DIR}/external-deps/freetype2/lib/linux/${ARCH_DIR}
-    ${CMAKE_SOURCE_DIR}/external-deps/collada-dom/lib/linux/${ARCH_DIR}
+    /usr/lib/gcc4/${ARCH_DIR}
     /usr/lib
 )
 
 set(APP_LIBRARIES
-    collada14dom
-    pcre
-    pcrecpp
-    xml2
+    dl
+    fbxsdk-2013.3-static
     png
     z   
     freetype
     pthread
 ) 
 
-add_definitions(-lstdc++ -lcollada14dom -lpcre -lpcrecpp -lxml2 -lpng -lz -lfreetype -lpthread)
+add_definitions(-lstdc++ -ldl -lfbxsdk-2013.3-static -lpng -lz -lfreetype -lpthread)
 
 set( APP_NAME gameplay-encoder )
 
@@ -51,14 +47,6 @@ set(APP_SRC
 	src/Curve.cpp
 	src/Curve.h
 	src/Curve.inl
-	src/DAEChannelTarget.cpp
-	src/DAEChannelTarget.h
-	src/DAEOptimizer.cpp
-	src/DAEOptimizer.h
-	src/DAESceneEncoder.cpp
-	src/DAESceneEncoder.h
-	src/DAEUtil.cpp
-	src/DAEUtil.h
 	src/Effect.cpp
 	src/Effect.h
 	src/EncoderArguments.cpp
@@ -139,7 +127,11 @@ add_executable(${APP_NAME}
     ${APP_SRC}
 )
 
-target_link_libraries(${APP_NAME} ${APP_LIBRARIES})
+target_link_libraries(
+    ${APP_NAME}
+    ${APP_LIBRARIES}
+    ${CMAKE_DL_LIBS}
+)
 
 set_target_properties(${APP_NAME} PROPERTIES
     OUTPUT_NAME "${APP_NAME}"
