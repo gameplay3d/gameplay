@@ -316,6 +316,17 @@ public:
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
     
+    /**
+     * Called when the game window has been resized.
+     *
+     * This method is called once the game window is created with its initial size
+     * and then again any time the game window changes size.
+     *
+     * @param width The new game window width.
+     * @param height The new game window height.
+     */
+    virtual void resized(unsigned int width, unsigned int height);
+
     /** 
      * Gets whether the current platform supports mouse input.
      *

@@ -502,6 +502,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_KILLFOCUS:
         break;
+
+    case WM_SIZE:
+        // Window was resized.
+        gameplay::Platform::resizeEventInternal((unsigned int)(short)LOWORD(lParam), (unsigned int)(short)HIWORD(lParam));
+        break;
     }
     
     return DefWindowProc(hwnd, msg, wParam, lParam); 
@@ -516,6 +521,7 @@ struct WindowCreationParams
     RECT rect;
     std::wstring windowName;
     bool fullscreen;
+    bool resizable;
     int samples;
 };
 
@@ -552,6 +558,7 @@ Platform::~Platform()
 bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
 {
     bool fullscreen = false;
+    bool resizable = false;
     RECT rect = { CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT };
     std::wstring windowName;
     if (params)
@@ -559,11 +566,25 @@ bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
         windowName = params->windowName;
         memcpy(&rect, &params->rect, sizeof(RECT));
         fullscreen = params->fullscreen;
+        resizable = params->resizable;
     }
 
     // Set the window style.
-    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+    DWORD style, styleEx;
+    if (fullscreen)
+    {
+        style = WS_POPUP;
+        styleEx = WS_EX_APPWINDOW;
+    }
+    else
+    {
+        if (resizable)
+            style = WS_OVERLAPPEDWINDOW;
+        else
+            style = WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU;
+        styleEx = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+    }
+    style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
     // Adjust the window rectangle so the client size is the requested size.
     AdjustWindowRectEx(&rect, style, FALSE, styleEx);
@@ -766,6 +787,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     // Read window settings from config.
     WindowCreationParams params;
     params.fullscreen = false;
+    params.resizable = false;
     params.rect.left = 0;
     params.rect.top = 0;
     params.rect.right = 0;
@@ -789,6 +811,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             // Read fullscreen state.
             params.fullscreen = config->getBool("fullscreen");
+            // Read resizable state.
+            params.resizable = config->getBool("resizable");
             // Read multisampling state.
             params.samples = config->getInt("samples");
 
@@ -1275,51 +1299,6 @@ void Platform::pollGamepadState(Gamepad* gamepad)
     // TODO: Support generic HID gamepads (including XBox controllers) without requiring XInput.
 }
 #endif
-
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
-        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
-    }
-}
-
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    if (!Form::keyEventInternal(evt, key))
-    {
-        Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
-    }
-}
-
-bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else
-    {
-        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
-    }
-}
-
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
-}
-
-void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
-{
-    Gamepad::remove(handle);
-}
 
 void Platform::shutdownInternal()
 {
