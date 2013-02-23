@@ -156,6 +156,7 @@ set(GAMEPLAY_SRC
     src/Plane.h
     src/Plane.inl
     src/Platform.h
+    src/Platform.cpp
     src/PlatformAndroid.cpp
     src/PlatformBlackBerry.cpp
     src/PlatformLinux.cpp

@@ -86,6 +86,7 @@ int Game::run()
         shutdown();
         return -2;
     }
+
     return 0;
 }
 
@@ -286,9 +287,13 @@ void Game::frame()
 {
     if (!_initialized)
     {
+        // Perform lazy first time initialization
         initialize();
         _scriptController->initializeGame();
         _initialized = true;
+
+        // Fire first game resize event
+        resized(_width, _height);
     }
 
 	static double lastFrameTime = Game::getGameTime();
@@ -462,6 +467,10 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
+}
+
+void Game::resized(unsigned int width, unsigned int height)
+{
 }
 
 bool Game::isGestureSupported(Gesture::GestureEvent evt)

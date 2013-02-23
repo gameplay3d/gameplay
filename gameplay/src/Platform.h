@@ -285,6 +285,13 @@ public:
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void resizeEventInternal(unsigned int width, unsigned int height);
+
    /**
      * Internal method used only from static code in various platform implementation.
      *
