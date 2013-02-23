@@ -23,7 +23,6 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
-    _daeOutput(false),
     _optimizeAnimations(false)
 {
     __instance = this;
@@ -134,11 +133,6 @@ std::string EncoderArguments::getOutputFilePath() const
     }
 }
 
-const std::string& EncoderArguments::getDAEOutputPath() const
-{
-    return _daeOutputPath;
-}
-
 const std::vector<std::string>& EncoderArguments::getGroupAnimationNodeId() const
 {
     return _groupAnimationNodeId;
@@ -169,6 +163,16 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
 const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeightmapOptions() const
 {
     return _heightmaps;
+}
+
+unsigned int EncoderArguments::tangentBinormalIdCount() const
+{
+    return _tangentBinormalId.size();
+}
+
+bool EncoderArguments::isGenerateTangentBinormalId(const std::string& id) const
+{
+    return _tangentBinormalId.find(id) != _tangentBinormalId.end();
 }
 
 bool EncoderArguments::normalMapGeneration() const
@@ -224,18 +228,19 @@ void EncoderArguments::printUsage() const
 {
     LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
     LOG(1, "Supported file extensions:\n");
-    LOG(1, "  .dae\t(COLLADA)\n");
     LOG(1, "  .fbx\t(FBX)\n");
     LOG(1, "  .ttf\t(TrueType Font)\n");
     LOG(1, "\n");
     LOG(1, "General Options:\n");
     LOG(1, "  -v <verbosity>\tVerbosity level (0-4).\n");
     LOG(1, "\n");
-    LOG(1, "COLLADA and FBX file options:\n");
+    LOG(1, "FBX file options:\n");
     LOG(1, "  -i <id>\tFilter by node ID.\n");
     LOG(1, "  -t\t\tWrite text/xml.\n");
     LOG(1, "  -g <node id> <animation id>\n" \
         "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
+    LOG(1, "  -tb <node id>\n" \
+        "\t\tGenerates tangents and binormals for the given node.\n");
     LOG(1, "  -oa\n" \
         "\t\tOptimizes animations by analyzing animation channel data and\n" \
         "\t\tremoving any channels that contain default/identity values\n" \
@@ -278,11 +283,6 @@ bool EncoderArguments::fontPreviewEnabled() const
 bool EncoderArguments::textOutputEnabled() const
 {
     return _textOutput;
-}
-
-bool EncoderArguments::DAEOutputEnabled() const
-{
-    return _daeOutput;
 }
 
 bool EncoderArguments::optimizeAnimationsEnabled() const
@@ -358,21 +358,6 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     }
     switch (str[1])
     {
-    case 'd':
-        if (str.compare("-dae") == 0)
-        {
-            // read one string, make sure not to go out of bounds
-            if ((*index + 1) >= options.size())
-            {
-                LOG(1, "Error: -dae requires 1 argument.\n");
-                _parseError = true;
-                return;
-            }
-            (*index)++;
-            _daeOutputPath = options[*index];
-            _daeOutput = true;
-        }
-        break;
     case 'g':
         if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
         {
@@ -564,7 +549,25 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         break;
     case 't':
-        _textOutput = true;
+        if (str.compare("-t") == 0)
+        {
+            _textOutput = true;
+        }
+        else if (str.compare("-tb") == 0)
+        {
+            if ((*index + 1) >= options.size())
+            {
+                LOG(1, "Error: -tb requires 1 argument.\n");
+                _parseError = true;
+                return;
+            }
+            (*index)++;
+            std::string nodeId = options[*index];
+            if (nodeId.length() > 0)
+            {
+                _tangentBinormalId.insert(nodeId);
+            }
+        }
         break;
     case 'v':
         (*index)++;
@@ -655,25 +658,25 @@ void unittestsEncoderArguments()
     exePath.append("/gameplay-encoder.exe");
     const char* exe = exePath.c_str();
     {
-        const char* argv[] = {exe, "-g", "root", "movements", "C:\\Git\\gaming\\GamePlay\\gameplay-encoder\\res\\seymour.dae"};
+        const char* argv[] = {exe, "-g", "root", "movements", "C:\\Git\\gaming\\GamePlay\\gameplay-encoder\\res\\duck.fbx"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
         assert(equals(args.getAnimationId("root"), ("movements")));
         assert(equals(args.getGroupAnimationNodeId()[0], ("root")));
-        assert(equals(args.getOutputFilePath(), "C:/Git/gaming/GamePlay/gameplay-encoder/res/seymour.gpb"));
+        assert(equals(args.getOutputFilePath(), "C:/Git/gaming/GamePlay/gameplay-encoder/res/duck.gpb"));
     }
     {
         // Test with only input file name (relative)
-        const char* argv[] = {exe, "input.dae"};
+        const char* argv[] = {exe, "input.fbx"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
-        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
         assert(equals(args.getOutputFilePath(), concat(dir, "/input.gpb")));
         equals(args.getOutputDirPath(), dir);
     }
     {
         // Test specifying a relative output path
-        const char* argv[] = {exe, "input.dae", "output.gpb"};
+        const char* argv[] = {exe, "input.fbx", "output.gpb"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
-        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
         assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
     }
     {
@@ -685,32 +688,31 @@ void unittestsEncoderArguments()
     }
     {
         // Test specifying a relative output path to a directory
-        const char* argv[] = {exe, "input.dae", "stuff/output.gpb"};
+        const char* argv[] = {exe, "input.fbx", "stuff/output.gpb"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
-        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
         assert(equals(args.getOutputFilePath(), concat(dir, "/stuff/output.gpb")));
     }
     {
         // Test parsing some arguments
-        const char* argv[] = {exe, "-dae", "collada.dae", "-t", "input.dae", "output.gpb"};
+        const char* argv[] = {exe, "test.fbx", "-t", "input.fbx", "output.gpb"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
-        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
         assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
         assert(args.textOutputEnabled());
-        //assert(equals(args.getDAEOutputPath(), concat(dir, "/collada.dae")));
     }
     {
         // Test output file with no file extension
-        const char* argv[] = {exe, "input.dae", "output"};
+        const char* argv[] = {exe, "input.fbx", "output"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
-        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
         assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
     }
     {
         // Test output file with wrong file extension
-        const char* argv[] = {exe, "input.dae", "output.dae"};
+        const char* argv[] = {exe, "input.fbx", "output.fbx"};
         EncoderArguments args(sizeof(argv) / sizeof(char*), (const char**)argv);
-        assert(equals(args.getFilePath(), concat(dir, "/input.dae")));
+        assert(equals(args.getFilePath(), concat(dir, "/input.fbx")));
         assert(equals(args.getOutputFilePath(), concat(dir, "/output.gpb")));
     }
 }

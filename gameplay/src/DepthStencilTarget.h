@@ -82,6 +82,13 @@ public:
      */
     unsigned int getHeight() const;
 
+    /**
+     * Returns true if depth and stencil buffer are packed.
+     *
+     * @return The packed state.
+     */
+    bool isPacked() const;
+
 private:
 
     /**
@@ -105,6 +112,7 @@ private:
     RenderBufferHandle _stencilBuffer;
     unsigned int _width;
     unsigned int _height;
+    bool _packed;
 };
 
 }

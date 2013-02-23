@@ -10,7 +10,6 @@
 		4228A3FF1620A5A300955433 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A3FE1620A5A300955433 /* Cocoa.framework */; };
 		4228A4011620A5EC00955433 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A4001620A5EC00955433 /* SystemConfiguration.framework */; };
 		4228A4031620A63F00955433 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4228A4021620A63F00955433 /* libiconv.dylib */; };
-		42475D7C14720ECE00610A6A /* libdom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42475D7B14720ECE00610A6A /* libdom.a */; };
 		4251B12C152D044B002F6199 /* Curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4251B128152D044B002F6199 /* Curve.cpp */; };
 		42783423148D6F7500A6E27F /* FBXSceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4278341E148D6F7500A6E27F /* FBXSceneEncoder.cpp */; };
 		4283905914896E6C00E2B2F5 /* BoundingVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4283905714896E6C00E2B2F5 /* BoundingVolume.cpp */; };
@@ -19,10 +18,6 @@
 		42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBB14724CD700E43619 /* Animations.cpp */; };
 		42C8EE0D14724CD700E43619 /* Base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBD14724CD700E43619 /* Base.cpp */; };
 		42C8EE0E14724CD700E43619 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDBF14724CD700E43619 /* Camera.cpp */; };
-		42C8EE1014724CD700E43619 /* DAEChannelTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */; };
-		42C8EE1114724CD700E43619 /* DAEOptimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */; };
-		42C8EE1214724CD700E43619 /* DAESceneEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC714724CD700E43619 /* DAESceneEncoder.cpp */; };
-		42C8EE1314724CD700E43619 /* DAEUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDC914724CD700E43619 /* DAEUtil.cpp */; };
 		42C8EE1414724CD700E43619 /* Effect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDCB14724CD700E43619 /* Effect.cpp */; };
 		42C8EE1514724CD700E43619 /* EncoderArguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDCD14724CD700E43619 /* EncoderArguments.cpp */; };
 		42C8EE1614724CD700E43619 /* FileIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C8EDCF14724CD700E43619 /* FileIO.cpp */; };
@@ -61,6 +56,7 @@
 		42D277591472EFA700D867A4 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277571472EFA700D867A4 /* libpcre.a */; };
 		42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D277581472EFA700D867A4 /* libpcrecpp.a */; };
 		5BCD0643152CFC3C0071FAB5 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCD0642152CFC3C0071FAB5 /* libpng.a */; };
+		9F92DB1016CB0F29003B2974 /* libfbxsdk-2013.3-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */; };
 		B661733F16A61CE40083A307 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661733D16A61CE40083A307 /* Image.cpp */; };
 		B661734316A61CFA0083A307 /* NormalMapGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */; };
 		F18DCD0615D554B800DB35DB /* Heightmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F18DCD0315D554B800DB35DB /* Heightmap.cpp */; };
@@ -105,14 +101,6 @@
 		42C8EDBE14724CD700E43619 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base.h; path = src/Base.h; sourceTree = SOURCE_ROOT; };
 		42C8EDBF14724CD700E43619 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = src/Camera.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDC014724CD700E43619 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = src/Camera.h; sourceTree = SOURCE_ROOT; };
-		42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEChannelTarget.cpp; path = src/DAEChannelTarget.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDC414724CD700E43619 /* DAEChannelTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAEChannelTarget.h; path = src/DAEChannelTarget.h; sourceTree = SOURCE_ROOT; };
-		42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEOptimizer.cpp; path = src/DAEOptimizer.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDC614724CD700E43619 /* DAEOptimizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAEOptimizer.h; path = src/DAEOptimizer.h; sourceTree = SOURCE_ROOT; };
-		42C8EDC714724CD700E43619 /* DAESceneEncoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAESceneEncoder.cpp; path = src/DAESceneEncoder.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDC814724CD700E43619 /* DAESceneEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAESceneEncoder.h; path = src/DAESceneEncoder.h; sourceTree = SOURCE_ROOT; };
-		42C8EDC914724CD700E43619 /* DAEUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DAEUtil.cpp; path = src/DAEUtil.cpp; sourceTree = SOURCE_ROOT; };
-		42C8EDCA14724CD700E43619 /* DAEUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAEUtil.h; path = src/DAEUtil.h; sourceTree = SOURCE_ROOT; };
 		42C8EDCB14724CD700E43619 /* Effect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effect.cpp; path = src/Effect.cpp; sourceTree = SOURCE_ROOT; };
 		42C8EDCC14724CD700E43619 /* Effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Effect.h; path = src/Effect.h; sourceTree = SOURCE_ROOT; };
 		42C8EDCD14724CD700E43619 /* EncoderArguments.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EncoderArguments.cpp; path = src/EncoderArguments.cpp; sourceTree = SOURCE_ROOT; };
@@ -181,6 +169,7 @@
 		42D277571472EFA700D867A4 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = "../external-deps/pcre/lib/macosx/libpcre.a"; sourceTree = "<group>"; };
 		42D277581472EFA700D867A4 /* libpcrecpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrecpp.a; path = "../external-deps/pcre/lib/macosx/libpcrecpp.a"; sourceTree = "<group>"; };
 		5BCD0642152CFC3C0071FAB5 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../external-deps/libpng/lib/macosx/libpng.a"; sourceTree = "<group>"; };
+		9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfbxsdk-2013.3-static.a"; path = "../../../../../Applications/Autodesk/FBX SDK/2013.3/lib/gcc4/ub/libfbxsdk-2013.3-static.a"; sourceTree = "<group>"; };
 		B661733D16A61CE40083A307 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Image.cpp; sourceTree = SOURCE_ROOT; };
 		B661733E16A61CE40083A307 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Image.h; sourceTree = SOURCE_ROOT; };
 		B661734116A61CFA0083A307 /* NormalMapGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalMapGenerator.cpp; path = src/NormalMapGenerator.cpp; sourceTree = SOURCE_ROOT; };
@@ -195,10 +184,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F92DB1016CB0F29003B2974 /* libfbxsdk-2013.3-static.a in Frameworks */,
 				42D277591472EFA700D867A4 /* libpcre.a in Frameworks */,
 				42D2775A1472EFA700D867A4 /* libpcrecpp.a in Frameworks */,
 				42C8EE351472B60100E43619 /* libfreetype.a in Frameworks */,
-				42475D7C14720ECE00610A6A /* libdom.a in Frameworks */,
 				42C8EE3B1472DAAE00E43619 /* libbz2.dylib in Frameworks */,
 				42C8EE391472DAA300E43619 /* libz.dylib in Frameworks */,
 				42C8EE371472D7E700E43619 /* libxml2.dylib in Frameworks */,
@@ -224,6 +213,7 @@
 		42475CDB147208A000610A6A = {
 			isa = PBXGroup;
 			children = (
+				9F92DB0F16CB0F29003B2974 /* libfbxsdk-2013.3-static.a */,
 				42475CE9147208A000610A6A /* src */,
 				427D4F44147DC9080076760E /* Libraries */,
 				4228A3FD1620A58000955433 /* Frameworks */,
@@ -260,14 +250,6 @@
 				4251B128152D044B002F6199 /* Curve.cpp */,
 				4251B129152D044B002F6199 /* Curve.h */,
 				4251B12A152D044B002F6199 /* Curve.inl */,
-				42C8EDC314724CD700E43619 /* DAEChannelTarget.cpp */,
-				42C8EDC414724CD700E43619 /* DAEChannelTarget.h */,
-				42C8EDC514724CD700E43619 /* DAEOptimizer.cpp */,
-				42C8EDC614724CD700E43619 /* DAEOptimizer.h */,
-				42C8EDC714724CD700E43619 /* DAESceneEncoder.cpp */,
-				42C8EDC814724CD700E43619 /* DAESceneEncoder.h */,
-				42C8EDC914724CD700E43619 /* DAEUtil.cpp */,
-				42C8EDCA14724CD700E43619 /* DAEUtil.h */,
 				42C8EDCB14724CD700E43619 /* Effect.cpp */,
 				42C8EDCC14724CD700E43619 /* Effect.h */,
 				42C8EDCD14724CD700E43619 /* EncoderArguments.cpp */,
@@ -415,10 +397,6 @@
 				42C8EE0C14724CD700E43619 /* Animations.cpp in Sources */,
 				42C8EE0D14724CD700E43619 /* Base.cpp in Sources */,
 				42C8EE0E14724CD700E43619 /* Camera.cpp in Sources */,
-				42C8EE1014724CD700E43619 /* DAEChannelTarget.cpp in Sources */,
-				42C8EE1114724CD700E43619 /* DAEOptimizer.cpp in Sources */,
-				42C8EE1214724CD700E43619 /* DAESceneEncoder.cpp in Sources */,
-				42C8EE1314724CD700E43619 /* DAEUtil.cpp in Sources */,
 				42C8EE1414724CD700E43619 /* Effect.cpp in Sources */,
 				42C8EE1514724CD700E43619 /* EncoderArguments.cpp in Sources */,
 				42C8EE1614724CD700E43619 /* FileIO.cpp in Sources */,
@@ -477,6 +455,7 @@
 					NO_BOOST,
 					NO_ZAE,
 					"DEBUG=1",
+					USE_FBX,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -486,8 +465,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/freetype/include",
-					"../external-deps/collada-dom/include",
-					"../external-deps/collada-dom/include/1.4",
 					"../external-deps/libpng/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
@@ -496,7 +473,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ./external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/libpng/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -514,6 +491,7 @@
 					DOM_INCLUDE_LIBXML,
 					NO_BOOST,
 					NO_ZAE,
+					USE_FBX,
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -522,8 +500,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/freetype/include",
-					"../external-deps/collada-dom/include",
-					"../external-deps/collada-dom/include/1.4",
 					"../external-deps/libpng/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
@@ -531,7 +507,7 @@
 				OTHER_TEST_FLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ./external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype/include ./external-deps/libpng/include";
 				WARNING_CFLAGS = "";
 			};
 			name = Release;
@@ -550,21 +526,20 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/freetype2/include",
-					"../external-deps/collada-dom/include",
-					"../external-deps/collada-dom/include/1.4",
 					"../external-deps/libpng/include",
+					"\"/Applications/Autodesk/FBX SDK/2013.3/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macosx\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
 					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.3/lib/gcc4/ub\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ../external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/libpng/include";
 			};
 			name = Debug;
 		};
@@ -582,21 +557,20 @@
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/freetype2/include",
-					"../external-deps/collada-dom/include",
-					"../external-deps/collada-dom/include/1.4",
 					"../external-deps/libpng/include",
+					"\"/Applications/Autodesk/FBX SDK/2013.3/include\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../external-deps/freetype2/lib/macosx\"",
-					"\"$(SRCROOT)/../external-deps/collada-dom/lib/macosx\"",
 					"\"$(SRCROOT)/../external-deps/pcre/lib/macosx\"",
 					"\"$(SRCROOT)/../external-deps/libpng/lib/macosx\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SYSTEM_APPS_DIR)/Autodesk/FBX SDK/2013.3/lib/gcc4/ub\"",
 				);
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/collada-dom/include ../external-deps/collada-dom/include/1.4 ../external-deps/libpng/include";
+				USER_HEADER_SEARCH_PATHS = "../external-deps/freetype2/include ../external-deps/libpng/include";
 			};
 			name = Release;
 		};
