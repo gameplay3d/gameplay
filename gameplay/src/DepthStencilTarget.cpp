@@ -14,7 +14,7 @@ namespace gameplay
 static std::vector<DepthStencilTarget*> __depthStencilTargets;
 
 DepthStencilTarget::DepthStencilTarget(const char* id, Format format, unsigned int width, unsigned int height)
-    : _id(id ? id : ""), _format(format), _depthBuffer(0), _stencilBuffer(0), _width(width), _height(height)
+    : _id(id ? id : ""), _format(format), _depthBuffer(0), _stencilBuffer(0), _width(width), _height(height), _packed(false)
 {
 }
 
@@ -55,6 +55,7 @@ DepthStencilTarget* DepthStencilTarget::create(const char* id, Format format, un
         if (strstr(extString, "GL_OES_packed_depth_stencil") != 0)
         {
             GL_ASSERT( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height) );
+            depthStencilTarget->_packed = true;
         }
         else
         {
@@ -74,6 +75,12 @@ DepthStencilTarget* DepthStencilTarget::create(const char* id, Format format, un
             }
         }
     }
+    else
+    {
+        // Packed format GL_DEPTH24_STENCIL8 is used mark format as packed.
+        depthStencilTarget->_packed = true;
+    }
+
     // Add it to the cache.
     __depthStencilTargets.push_back(depthStencilTarget);
 
@@ -118,4 +125,8 @@ unsigned int DepthStencilTarget::getHeight() const
     return _height;
 }
 
+bool DepthStencilTarget::isPacked() const
+{
+    return _packed;
+}
 }

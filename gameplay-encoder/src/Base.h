@@ -28,17 +28,6 @@ using std::max;
 // PNG
 #include <png.h>
 
-// Collada includes
-#include <dae.h>
-#include <dom.h>
-#include <dae/daeSIDResolver.h>
-#include <dae/domAny.h>
-#include <dom/domCOLLADA.h>
-#include <dom/domConstants.h>
-#include <dom/domElements.h>
-#include <dom/domCamera.h>
-#include <dom/domProfile_COMMON.h>
-
 // Defines
 #ifndef M_1_PI        
 #define M_1_PI                      0.31830988618379067154
@@ -85,7 +74,7 @@ void fillArray(float values[], float value, size_t length);
 
 /**
  * Returns the base name of the given path.
- * Example: "c:/foo/bar/model.dae" returns "model.dae"
+ * Example: "c:/foo/bar/model.fbx" returns "model.fbx"
  * 
  * @param filepath File path.
  * 

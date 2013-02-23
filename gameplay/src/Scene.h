@@ -36,9 +36,9 @@ public:
     static Scene* create(const char* id = NULL);
 
     /**
-     * Loads a scene from the given '.scene' file.
+     * Loads a scene from the given '.scene' or '.gpb' file.
      * 
-     * @param filePath The path to the '.scene' file to load from.
+     * @param filePath The path to the '.scene' or '.gpb' file to load from.
      * @return The loaded scene or <code>NULL</code> if the scene
      *      could not be loaded from the given file.
      * @script{create}

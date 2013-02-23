@@ -10,10 +10,6 @@ most common format for fonts. The gameplay-encoder reads these fonts and binary 
 them into a texture mapped base representation using a texture atlas and 8-bit alpha
 representation.
 
-## COLLADA Scene
-COLLADA is a royalty-free XML schema that enables digital asset exchange 
-within the interactive 3D industry. Most major 3D DCC tools support export to COLLADA 1.4.
-
 ## FBX Scene
 Autodesk® FBX® asset exchange technology facilitates higher-fidelity data exchange 
 between several Autodesk content creation packages
@@ -44,8 +40,8 @@ Uncomment the root CMakeList.txt for the gameplay-encoder and run standard cmake
   * Example: C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include
 - Add the FBX lib directory to the Additional Library Directories (Linker/General)
   * Example: C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86
-- Add "fbxsdk-2013.3-mdd.lib"(Release) to the Additional Dependencies (Linker/Input)
-  * Example: fbxsdk-2013.3-mdd.lib
+- Add "fbxsdk-2013.3-md.lib"(Release) to the Additional Dependencies (Linker/Input)
+  * Example: fbxsdk-2013.3-md.lib
 - Build gameplay-encoder
 
 ### Building with FBX Support on MacOS X using XCode 4
