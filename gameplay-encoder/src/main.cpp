@@ -1,5 +1,4 @@
 #include "Base.h"
-#include "DAESceneEncoder.h"
 #include "FBXSceneEncoder.h"
 #include "TTFFontEncoder.h"
 #include "GPBDecoder.h"
@@ -39,8 +38,8 @@ static unsigned int promptUserFontSize()
  * @param argv The array of command line arguments.
  *
  * usage:   gameplay-encoder[options] <file_list>
- * example: gameplay-encoder C:/assets/seymour.dae
- * example: gameplay-encoder -i boy seymour.dae
+ * example: gameplay-encoder C:/assets/duck.fbx
+ * example: gameplay-encoder -i boy duck.fbx
  *
  * @stod: Improve argument parsing.
  */
@@ -68,10 +67,8 @@ int main(int argc, const char** argv)
     {
     case EncoderArguments::FILEFORMAT_DAE:
         {
-            std::string realpath(arguments.getFilePath());
-            DAESceneEncoder daeEncoder;
-            daeEncoder.write(realpath, arguments);
-            break;
+            LOG(1, "Error: Collada support has been removed. Convert your DAE file to FBX.\n");
+            return -1;
         }
     case EncoderArguments::FILEFORMAT_FBX:
         {

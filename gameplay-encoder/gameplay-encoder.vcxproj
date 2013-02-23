@@ -18,10 +18,6 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
-    <ClCompile Include="src\DAEChannelTarget.cpp" />
-    <ClCompile Include="src\DAEOptimizer.cpp" />
-    <ClCompile Include="src\DAESceneEncoder.cpp" />
-    <ClCompile Include="src\DAEUtil.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FBXSceneEncoder.cpp" />
     <ClCompile Include="src\FileIO.cpp" />
@@ -65,10 +61,6 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\EncoderArguments.h" />
-    <ClInclude Include="src\DAEChannelTarget.h" />
-    <ClInclude Include="src\DAEOptimizer.h" />
-    <ClInclude Include="src\DAESceneEncoder.h" />
-    <ClInclude Include="src\DAEUtil.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FBXSceneEncoder.h" />
     <ClInclude Include="src\FileIO.h" />
@@ -155,20 +147,21 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../external-deps/freetype2/include;../external-deps/collada-dom/include;../external-deps/collada-dom/include/1.4;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include;../external-deps/freetype2/include;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>
       </DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/windows/x86;../external-deps/collada-dom/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86;../external-deps/freetype2/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fbxsdk-2013.3-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)..\bin\windows\*.dll" "$(TargetDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -179,21 +172,22 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../external-deps/freetype2/include;../external-deps/collada-dom/include;../external-deps/collada-dom/include/1.4;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;USE_FBX;WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NO_BOOST;NO_ZAE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/include;../external-deps/freetype2/include;../external-deps/libpng/include;../external-deps/zlib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>freetype245.lib;libcollada14dom22-d.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../external-deps/freetype2/lib/windows/x86;../external-deps/collada-dom/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fbxsdk-2013.3-md.lib;freetype245.lib;libpng14.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/Autodesk/FBX/FBX SDK/2013.3/lib/vs2010/x86;../external-deps/freetype2/lib/windows/x86;../external-deps/libpng/lib/windows/x86;../external-deps/zlib/lib/windows/x86</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)..\bin\windows\*.dll" "$(TargetDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

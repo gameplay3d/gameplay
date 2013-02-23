@@ -21,9 +21,7 @@ void MeshGame::initialize()
     _font = Font::create("res/arial40.gpb");
 
     // Load mesh/scene from file
-    Bundle* bundle = Bundle::create("res/duck.gpb");
-    _scene = bundle->loadScene();
-    SAFE_RELEASE(bundle);
+    _scene = Scene::load("res/duck.gpb");
 
     // Get the duck node
     _modelNode = _scene->findNode("duck");

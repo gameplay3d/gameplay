@@ -26,9 +26,7 @@ void Audio3DTest::initialize()
     setMultiTouch(true);
     _font = Font::create("res/common/arial18.gpb");
     // Load game scene from file
-    Bundle* bundle = Bundle::create("res/common/box.gpb");
-    _scene = bundle->loadScene();
-    SAFE_RELEASE(bundle);
+    _scene = Scene::load("res/common/box.gpb");
 
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight1");
