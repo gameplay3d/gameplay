@@ -14,7 +14,7 @@ FrameBuffer* FrameBuffer::_currentFrameBuffer = NULL;
 
 FrameBuffer::FrameBuffer(const char* id, unsigned int width, unsigned int height, FrameBufferHandle handle) :
     _id(id ? id : ""), _width(width), _height(height), _handle(handle), 
-    _renderTargets(NULL), _depthStencilTarget(NULL)
+    _renderTargets(NULL), _renderTargetCount(0), _depthStencilTarget(NULL)
 {
 }
 
@@ -162,13 +162,19 @@ void FrameBuffer::setRenderTarget(RenderTarget* target, unsigned int index)
         return;
 
     // Release our reference to the current RenderTarget at this index.
-    SAFE_RELEASE(_renderTargets[index]);
+    if (_renderTargets[index])
+    {
+        SAFE_RELEASE(_renderTargets[index]);
+        --_renderTargetCount;
+    }
 
     _renderTargets[index] = target;
 
     if (target)
     {
         GP_ASSERT( _renderTargets[index]->getTexture() );
+
+        ++_renderTargetCount;
 
         // This FrameBuffer now references the RenderTarget.
         target->addRef();
@@ -197,6 +203,11 @@ RenderTarget* FrameBuffer::getRenderTarget(unsigned int index) const
         return _renderTargets[index];
     }
     return NULL;
+}
+
+unsigned int FrameBuffer::getRenderTargetCount() const
+{
+    return _renderTargetCount;
 }
 
 void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
@@ -243,6 +254,11 @@ void FrameBuffer::setDepthStencilTarget(DepthStencilTarget* target)
 DepthStencilTarget* FrameBuffer::getDepthStencilTarget() const
 {
     return _depthStencilTarget;
+}
+
+bool FrameBuffer::isDefault() const
+{
+    return (this == _defaultFrameBuffer);
 }
 
 FrameBuffer* FrameBuffer::bind()
