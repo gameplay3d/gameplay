@@ -473,6 +473,15 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
     std::vector<Control*>::const_iterator it;
     Rectangle boundsUnion = Rectangle::empty();
+	struct sort_visibility
+	{
+		static bool compare(const Control* c1, const Control* c2)
+		{
+			return c1->_visible == false;
+		}
+	};
+	std::sort(_controls.begin(), _controls.end(), sort_visibility::compare);
+
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* control = *it;
