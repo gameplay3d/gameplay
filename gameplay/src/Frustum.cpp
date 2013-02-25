@@ -63,16 +63,28 @@ void Frustum::getMatrix(Matrix* dst) const
 
 void Frustum::getCorners(Vector3* corners) const
 {
+    getNearCorners(corners);
+    getFarCorners(corners + 4);
+}
+
+void Frustum::getNearCorners(Vector3* corners) const
+{
     GP_ASSERT(corners);
 
     Plane::intersection(_near, _left, _top, &corners[0]);
     Plane::intersection(_near, _left, _bottom, &corners[1]);
     Plane::intersection(_near, _right, _bottom, &corners[2]);
     Plane::intersection(_near, _right, _top, &corners[3]);
-    Plane::intersection(_far, _right, _top, &corners[4]);
-    Plane::intersection(_far, _right, _bottom, &corners[5]);
-    Plane::intersection(_far, _left, _bottom, &corners[6]);
-    Plane::intersection(_far, _left, _top, &corners[7]);
+}
+
+void Frustum::getFarCorners(Vector3* corners) const
+{
+    GP_ASSERT(corners);
+
+    Plane::intersection(_far, _right, _top, &corners[0]);
+    Plane::intersection(_far, _right, _bottom, &corners[1]);
+    Plane::intersection(_far, _left, _bottom, &corners[2]);
+    Plane::intersection(_far, _left, _top, &corners[3]);
 }
 
 bool Frustum::intersects(const Vector3& point) const

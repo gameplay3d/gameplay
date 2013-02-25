@@ -874,7 +874,7 @@ const BoundingSphere& Node::getBoundingSphere() const
                 _bounds.merge(_model->getMesh()->getBoundingSphere());
             }
         }
-        else
+        if (empty)
         {
             // Empty bounding sphere, set the world translation with zero radius
             worldMatrix.getTranslation(&_bounds.center);
