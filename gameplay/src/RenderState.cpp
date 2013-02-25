@@ -77,6 +77,20 @@ MaterialParameter* RenderState::getParameter(const char* name) const
     return param;
 }
 
+void RenderState::clearParameter(const char* name)
+{
+    for (size_t i = 0, count = _parameters.size(); i < count; ++i)
+    {
+        MaterialParameter* p = _parameters[i];
+        if (p->_name == name)
+        {
+            _parameters.erase(_parameters.begin() + i);
+            SAFE_RELEASE(p);
+            break;
+        }
+    }
+}
+
 /**
  * @script{ignore}
  */
