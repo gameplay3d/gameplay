@@ -42,7 +42,7 @@ void CharacterGame::initialize()
     _scene = Scene::load("res/common/scene.scene");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution.
-    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
     
     // Initialize the physics character.
     initializeCharacter();
