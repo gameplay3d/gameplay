@@ -51,6 +51,7 @@ static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
+static bool __resizable = false;
 static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
 static bool __mouseCapturedFirstPass = false;
@@ -746,6 +747,14 @@ double getMachTimeInMilliseconds()
     _game->exit();
     [gameLock unlock];
     [[NSApplication sharedApplication] terminate:self];
+}
+
+- (void)windowDidResize:(NSNotification*)notification
+{
+    [gameLock lock];
+    NSSize size = [ [ _window contentView ] frame ].size;
+    gameplay::Platform::resizeEventInternal((unsigned int)size.width, (unsigned int)size.height);
+    [gameLock unlock];
 }
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
@@ -1673,6 +1682,9 @@ int Platform::enterMessagePump()
                 __width = CGRectGetWidth(mainMonitor);
                 __height = CGRectGetHeight(mainMonitor);
             }
+            
+            // Read resizable state.
+            __resizable = config->getBool("resizable");
         }
     }
 
@@ -1710,7 +1722,7 @@ int Platform::enterMessagePump()
     {
         window = [[NSWindow alloc]
                    initWithContentRect:centered
-                   styleMask:NSTitledWindowMask | NSClosableWindowMask
+                  styleMask:NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask
                    backing:NSBackingStoreBuffered
                    defer:NO];
     }
