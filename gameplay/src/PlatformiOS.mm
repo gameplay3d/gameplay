@@ -1387,8 +1387,10 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     
 void Platform::getArguments(int* argc, char*** argv)
 {
-    argc = __argc;
-    argv = __argv;
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
 }
 
 bool Platform::hasMouse()

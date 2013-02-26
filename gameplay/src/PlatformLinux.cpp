@@ -1441,7 +1441,7 @@ namespace gameplay
     {
         if (argc)
             *argc = __argc;
-        if (arv)
+        if (argv)
             *argv = __argv;
     }
 
