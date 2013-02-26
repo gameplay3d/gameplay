@@ -315,7 +315,7 @@
     </None>
     <None Include="game.config" />
     <None Include="icon.png" />
-    <None Include="res\box.dae" />
+    <None Include="res\box.fbx" />
     <None Include="res\box.gpb" />
     <None Include="res\box.material" />
     <None Include="res\colored.frag" />

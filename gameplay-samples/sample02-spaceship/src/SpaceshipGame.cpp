@@ -88,7 +88,7 @@ void SpaceshipGame::initialize()
     _scene = Scene::load("res/spaceship.gpb");
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
-    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // Initialize scene data
     initializeSpaceship();
