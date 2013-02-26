@@ -25,6 +25,9 @@
 
 using namespace std;
 
+int __argc = 0;
+char** __argv = 0;
+
 enum GamepadAxisInfoFlags
 {
     GP_AXIS_SKIP = 0x1,
@@ -1432,6 +1435,14 @@ namespace gameplay
 
         *pitch = __pitch;
         *roll = __roll;
+    }
+
+    void Platform::getArguments(int* argc, char*** argv)
+    {
+        if (argc)
+            *argc = __argc;
+        if (arv)
+            *argv = __argv;
     }
 
     bool Platform::hasMouse()

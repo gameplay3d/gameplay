@@ -500,6 +500,11 @@ void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
 }
 
+void Game::getArguments(int* argc, char*** argv)
+{
+    Platform::getArguments(argc, argv);
+}
+
 void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)
 {
     GP_ASSERT(_timeEvents);
