@@ -515,7 +515,7 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample02-spaceship-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
@@ -552,7 +552,7 @@
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample02-spaceship-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
