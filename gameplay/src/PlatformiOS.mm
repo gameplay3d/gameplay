@@ -32,6 +32,9 @@ extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height * [[
 extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale];
 extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 
+int __argc = 0;
+char** __argv = 0;
+
 @class AppDelegate;
 @class View;
 
@@ -1380,6 +1383,14 @@ void Platform::sleep(long ms)
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
+}
+    
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
 }
 
 bool Platform::hasMouse()

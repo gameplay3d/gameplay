@@ -10,7 +10,7 @@
 	<None Include="game.config" />
     <None Include="icon.png" />
     <None Include="bar-descriptor.xml" />
-    <None Include="res\box.dae">
+    <None Include="res\box.fbx">
       <Filter>res</Filter>
     </None>
     <None Include="res\box.gpb">

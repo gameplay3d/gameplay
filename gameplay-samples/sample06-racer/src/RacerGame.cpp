@@ -68,7 +68,7 @@ void RacerGame::initialize()
     _scene = Scene::load("res/common/game.scene");
 
     // Set the aspect ratio for the scene's camera to match the current resolution
-    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // Initialize scene
     _scene->visit(this, &RacerGame::initializeScene);
