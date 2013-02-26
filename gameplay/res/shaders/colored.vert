@@ -15,11 +15,11 @@ varying vec3 v_color;										// Output Vertex Color
 // Uniforms
 uniform mat4 u_worldViewProjectionMatrix;					// Matrix to transform a position to clip space.
 uniform mat4 u_inverseTransposeWorldViewMatrix;				// Matrix to transform a normal to view space
+uniform mat4 u_worldViewMatrix;								// Matrix to tranform a position to view space.
 #if defined(SKINNING)
 uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];		// Array of 4x3 matrices
 #endif
 #if defined(SPECULAR)
-uniform mat4 u_worldViewMatrix;								// Matrix to tranform a position to view space.
 uniform vec3 u_cameraPosition;                 				// Position of the camera in view space.
 #endif
 #if defined(POINT_LIGHT)
