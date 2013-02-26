@@ -36,7 +36,7 @@ void MeshGame::initialize()
     _modelNode->getModel()->getMaterial()->getParameter("u_lightDirection")->bindValue(lightNode, &Node::getForwardVectorView);
 
     // Update the aspect ratio for our scene's camera to match the current device resolution
-    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 
     // Create the grid and add it to the scene.
     Model* model = createGridModel();

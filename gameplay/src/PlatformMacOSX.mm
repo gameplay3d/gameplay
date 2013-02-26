@@ -30,6 +30,9 @@ using namespace gameplay;
 @class View;
 @class HIDGamepad;
 
+int __argc = 0;
+char** __argv = 0;
+
 // Default to 720p
 static int __width = 1280;
 static int __height = 720;
@@ -1789,6 +1792,14 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = __roll;
 }
 
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
+}
+    
 bool Platform::hasMouse()
 {
     return true;
