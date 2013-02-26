@@ -26,6 +26,8 @@
 
 using namespace std;
 
+int __argc = 0;
+char** __argv = 0;
 struct timespec __timespec;
 static double __timeStart;
 static double __timeAbsolute;
@@ -1470,6 +1472,14 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     default:
         break;
     }
+}
+
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
 }
 
 bool Platform::hasMouse()

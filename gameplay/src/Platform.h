@@ -207,6 +207,14 @@ private:
      * @param roll The accelerometer roll.
      */
     static void getAccelerometerValues(float* pitch, float* roll);
+
+    /**
+     * Gets the command line arguments.
+     * 
+     * @param argc The number of command line arguments.
+     * @param argv The array of command line arguments.
+     */
+    static void getArguments(int* argc, char*** argv);
     
     /**
      * Shows or hides the virtual keyboard (if supported).
