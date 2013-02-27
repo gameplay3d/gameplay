@@ -473,16 +473,33 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
     std::vector<Control*>::const_iterator it;
     Rectangle boundsUnion = Rectangle::empty();
+
+	bool _dirtyChild = false;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
         Control* control = *it;
         GP_ASSERT(control);
+
+		if(_dirtyChild == true && control->_visible == false)
+			_dirty = true;;//sort order is broken
+
+		_dirtyChild = control->_visible;
+
         if (!needsClear || control->isDirty() || control->_clearBounds.intersects(boundsUnion))
         {
             control->draw(spriteBatch, _viewportClipBounds, needsClear, cleared, targetHeight);
             Rectangle::combine(control->_clearBounds, boundsUnion, &boundsUnion);
         }
     }
+	struct sort_visibility_container
+	{
+		static bool compare(const Control* c1, const Control* c2)
+		{
+			return c1->_visible == false;
+		}
+	};
+	if(_dirty)
+		std::sort(_controls.begin(), _controls.end(), sort_visibility_container::compare);
 
     if (_scroll != SCROLL_NONE && (_scrollBarOpacity > 0.0f))
     {
