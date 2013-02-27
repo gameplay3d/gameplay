@@ -115,6 +115,28 @@ public:
     };
 
     /**
+     * Interface for various terrain-specific events that can be handled.
+     */
+    class Listener
+    {
+    public:
+
+        virtual ~Listener() { }
+
+        /**
+         * Fired when a material is updated for the terrain or a patch within it.
+         *
+         * This method can be handled to override material parameters for the terrain.
+         * Note that this method will usually be fired several times since there are
+         * normally separate materials defined per patch.
+         *
+         * @param terrain The terrain firing the event.
+         * @param material The new material.
+         */
+        virtual void materialUpdated(Terrain* terrain, Material* material) = 0;
+    };
+
+    /**
      * Loads a Terrain from the given properties file.
      *
      * The specified properties file can contain a full terrain definition, including a 
@@ -301,6 +323,55 @@ public:
      */
     void transformChanged(Transform* transform, long cookie);
 
+    /**
+     * Adds a listener to this terrain.
+     *
+     * @param listener Listener to start receiving terrain events.
+     */
+    void addListener(Terrain::Listener* listener);
+
+    /**
+     * Removes a listener from this terrain.
+     *
+     * @param listener Listener to stop receiving terrain events.
+     */
+    void removeListener(Terrain::Listener* listener);
+
+    /**
+     * Returns the world matrix of the terrain, factoring in terrain local scaling.
+     *
+     * @return The world matrix for the terrain.
+     */
+    const Matrix& getWorldMatrix() const;
+
+    /**
+     * Returns the terrain's inverse world matrix.
+     *
+     * @return The inverse world matrix for the terrain.
+     */
+    const Matrix& getInverseWorldMatrix() const;
+
+    /**
+     * Returns a matrix to be used for transforming normal vectors for the terrain.
+     *
+     * @return The matrix used for normal vector transformation for the terrain.
+     */
+    const Matrix& getNormalMatrix() const;
+
+    /**
+     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
+     *
+     * @return The world-view matrix for the terrain.
+     */
+    const Matrix& getWorldViewMatrix() const;
+
+    /**
+     * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
+     *
+     * @return The world-view-projection matrix for the terrain.
+     */
+    const Matrix& getWorldViewProjectionMatrix() const;
+
 private:
 
     /**
@@ -338,31 +409,6 @@ private:
      */
     void setNode(Node* node);
 
-    /**
-     * Returns the world matrix of the terrain, factoring in terrain local scaling.
-     */
-    const Matrix& getWorldMatrix() const;
-
-    /**
-     * Returns the terrain's inverse world matrix.
-     */
-    const Matrix& getInverseWorldMatrix() const;
-
-    /**
-     * Returns a matrix to be used for transforming normal vectors for the terrain.
-     */
-    const Matrix& getNormalMatrix() const;
-
-    /**
-     * Returns the world view matrix for the terrain, factoring in terrain local scaling.
-     */
-    const Matrix& getWorldViewMatrix() const;
-
-    /**
-     * Returns the world view projection matrix for the terrain, factoring in terrain local scaling.
-     */
-    const Matrix& getWorldViewProjectionMatrix() const;
-
     HeightField* _heightfield;
     Node* _node;
     std::vector<TerrainPatch*> _patches;
@@ -374,6 +420,7 @@ private:
     mutable Matrix _normalMatrix;
     mutable unsigned int _dirtyFlags;
     BoundingBox _boundingBox;
+    std::vector<Terrain::Listener*> _listeners;
 };
 
 }

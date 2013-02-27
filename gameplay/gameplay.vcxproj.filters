@@ -840,6 +840,9 @@
     <ClCompile Include="src\lua\lua_HeightField.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">

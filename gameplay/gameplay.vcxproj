@@ -292,6 +292,7 @@
     <ClCompile Include="src\PhysicsVehicle.cpp" />
     <ClCompile Include="src\PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\Platform.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
     <ClCompile Include="src\PlatformBlackBerry.cpp" />
     <ClCompile Include="src\PlatformLinux.cpp" />

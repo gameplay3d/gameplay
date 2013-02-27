@@ -87,6 +87,7 @@ LOCAL_SRC_FILES := \
     PhysicsVehicle.cpp \
     PhysicsVehicleWheel.cpp \
     Plane.cpp \
+    Platform.cpp \
     PlatformAndroid.cpp \
     Properties.cpp \
     Quaternion.cpp \

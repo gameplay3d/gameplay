@@ -50,12 +50,13 @@ private:
             MATERIAL = 2,
             PARTICLE = 4,
             TERRAIN = 8,
-            CAMERA = 16,
-            COLLISION_OBJECT = 32,
-            TRANSLATE = 64,
-            ROTATE = 128,
-            SCALE = 256,
-            URL = 512
+            LIGHT = 16,
+            CAMERA = 32,
+            COLLISION_OBJECT = 64,
+            TRANSLATE = 128,
+            ROTATE = 256,
+            SCALE = 512,
+            URL = 1024
         };
 
         SceneNodeProperty(Type type, const std::string& url, int index);
