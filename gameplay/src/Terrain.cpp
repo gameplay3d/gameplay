@@ -38,6 +38,8 @@ Terrain::Terrain() :
 
 Terrain::~Terrain()
 {
+    _listeners.clear();
+
     for (size_t i = 0, count = _patches.size(); i < count; ++i)
     {
         SAFE_DELETE(_patches[i]);
@@ -510,6 +512,37 @@ void Terrain::draw(bool wireframe)
 void Terrain::transformChanged(Transform* transform, long cookie)
 {
     _dirtyFlags |= TERRAIN_DIRTY_WORLD_MATRIX | TERRAIN_DIRTY_INV_WORLD_MATRIX | TERRAIN_DIRTY_NORMAL_MATRIX;
+}
+
+void Terrain::addListener(Terrain::Listener* listener)
+{
+    _listeners.push_back(listener);
+
+    // Fire initial events in case this listener may have missed them
+    for (size_t i = 0, patchCount = _patches.size(); i < patchCount; ++i)
+    {
+        TerrainPatch* patch = _patches[i];
+        for (size_t j = 0, levelCount = patch->_levels.size(); j < levelCount; ++j)
+        {
+            TerrainPatch::Level* level = patch->_levels[j];
+            Material* material = level->model ? level->model->getMaterial() : NULL;
+            if (material)
+            {
+                // Fire materialUpdated event for materials that are already active
+                for (size_t k = 0, lcount = _listeners.size(); k < lcount; ++k)
+                {
+                    _listeners[k]->materialUpdated(this, material);
+                }
+            }
+        }
+    }
+}
+
+void Terrain::removeListener(Terrain::Listener* listener)
+{
+    std::vector<Terrain::Listener*>::iterator itr = std::find(_listeners.begin(), _listeners.end(), listener);
+    if (itr != _listeners.end())
+        _listeners.erase(itr);
 }
 
 const Matrix& Terrain::getWorldMatrix() const
