@@ -434,7 +434,10 @@ void Container::update(const Control* container, const Vector2& offset)
     }
 
     // Sort controls by Z-Order.
-    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+    if (_layout->getType() == Layout::LAYOUT_ABSOLUTE)
+    {
+        std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+    }
 
     GP_ASSERT(_layout);
     if (_scroll != SCROLL_NONE)
