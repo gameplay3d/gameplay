@@ -76,7 +76,7 @@ public:
     // gamepad
     virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
     unsigned int getGamepadCount() const;
-    Gamepad* getGamepad(unsigned int index) const;
+    Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 
 protected:
 

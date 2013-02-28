@@ -236,9 +236,9 @@ unsigned int Test::getGamepadCount() const
     return Game::getInstance()->getGamepadCount();
 }
 
-Gamepad* Test::getGamepad(unsigned int index) const
+Gamepad* Test::getGamepad(unsigned int index, bool preferPhysical) const
 {
-    return Game::getInstance()->getGamepad(index);
+    return Game::getInstance()->getGamepad(index, preferPhysical);
 }
 
 void Test::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
