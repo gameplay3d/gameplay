@@ -3,8 +3,10 @@
 #include "lua_Gamepad.h"
 #include "Base.h"
 #include "Button.h"
+#include "Form.h"
 #include "Game.h"
 #include "Gamepad.h"
+#include "Joystick.h"
 #include "Platform.h"
 #include "lua_GamepadButtonMapping.h"
 

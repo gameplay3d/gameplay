@@ -377,6 +377,9 @@ void luaRegister_lua_Global()
         scopePath.push_back("Gamepad");
         gameplay::ScriptUtil::registerConstantString("CONNECTED_EVENT", "CONNECTED_EVENT", scopePath);
         gameplay::ScriptUtil::registerConstantString("DISCONNECTED_EVENT", "DISCONNECTED_EVENT", scopePath);
+        ScriptUtil::registerConstantString("BUTTONS_EVENT", "BUTTONS_EVENT", scopePath);
+        ScriptUtil::registerConstantString("JOYSTICK_EVENT", "JOYSTICK_EVENT", scopePath);
+        ScriptUtil::registerConstantString("TRIGGER_EVENT", "TRIGGER_EVENT", scopePath);
     }
 
     // Register enumeration Gesture::GestureEvent.
