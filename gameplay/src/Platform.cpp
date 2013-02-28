@@ -49,7 +49,8 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
     {
         game->_width = width;
         game->_height = height;
-        game->resized(width, height);
+        game->resizeEvent(width, height);
+        game->getScriptController()->resizeEvent(width, height);
     }
 }
 

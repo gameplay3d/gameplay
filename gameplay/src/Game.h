@@ -325,7 +325,7 @@ public:
      * @param width The new game window width.
      * @param height The new game window height.
      */
-    virtual void resized(unsigned int width, unsigned int height);
+    virtual void resizeEvent(unsigned int width, unsigned int height);
 
     /** 
      * Gets whether the current platform supports mouse input.
