@@ -740,6 +740,7 @@ private:
         UPDATE,
         RENDER,
         FINALIZE,
+        RESIZE_EVENT,
         KEY_EVENT,
         MOUSE_EVENT,
         TOUCH_EVENT,
@@ -792,6 +793,14 @@ private:
      * Renders the game using the appropriate callback script (if it was specified).
      */
     void render(float elapsedTime);
+
+    /**
+     * Script callback for game resize events.
+     *
+     * @param width The new width of the game window content area.
+     * @param height The new height of the game window content area.
+     */
+    void resizeEvent(unsigned int width, unsigned int height);
 
     /**
      * Script keyboard callback on key events.

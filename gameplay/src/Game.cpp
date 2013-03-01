@@ -293,7 +293,7 @@ void Game::frame()
         _initialized = true;
 
         // Fire first game resize event
-        resized(_width, _height);
+        Platform::resizeEventInternal(_width, _height);
     }
 
 	static double lastFrameTime = Game::getGameTime();
@@ -481,7 +481,7 @@ bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
-void Game::resized(unsigned int width, unsigned int height)
+void Game::resizeEvent(unsigned int width, unsigned int height)
 {
 }
 
