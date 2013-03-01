@@ -766,6 +766,14 @@ void ScriptController::render(float elapsedTime)
     }
 }
 
+void ScriptController::resizeEvent(unsigned int width, unsigned int height)
+{
+    if (_callbacks[RESIZE_EVENT])
+    {
+        executeFunction<void>(_callbacks[RESIZE_EVENT]->c_str(), "uiui", width, height);
+    }
+}
+
 void ScriptController::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     if (_callbacks[KEY_EVENT])
@@ -943,6 +951,8 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
         return ScriptController::RENDER;
     else if (strcmp(name, "finalize") == 0)
         return ScriptController::FINALIZE;
+    else if (strcmp(name, "resizeEvent") == 0)
+        return ScriptController::RESIZE_EVENT;
     else if (strcmp(name, "keyEvent") == 0)
         return ScriptController::KEY_EVENT;
     else if (strcmp(name, "touchEvent") == 0)
