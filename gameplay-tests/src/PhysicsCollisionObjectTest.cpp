@@ -47,7 +47,6 @@ void PhysicsCollisionObjectTest::finalize()
 
 void PhysicsCollisionObjectTest::update(float elapsedTime)
 {
-    _form->update(elapsedTime);
 }
 
 void PhysicsCollisionObjectTest::render(float elapsedTime)

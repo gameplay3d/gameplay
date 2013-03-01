@@ -91,6 +91,7 @@
     <ClCompile Include="src\gameplay-main-windows.cpp" />
     <ClCompile Include="src\HeightField.cpp" />
     <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\ImageControl.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
     <ClCompile Include="src\Label.cpp" />
@@ -367,6 +368,7 @@
     <ClInclude Include="src\Gesture.h" />
     <ClInclude Include="src\HeightField.h" />
     <ClInclude Include="src\Image.h" />
+    <ClInclude Include="src\ImageControl.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Joystick.h" />
     <ClInclude Include="src\Keyboard.h" />

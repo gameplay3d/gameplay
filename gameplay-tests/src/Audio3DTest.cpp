@@ -139,8 +139,6 @@ void Audio3DTest::update(float elapsedTime)
         addSound("footsteps.wav");
     }
     _buttonPressed = _gamepad->isButtonDown(Gamepad::BUTTON_A);
-
-    _gamepad->update(elapsedTime);
 }
 
 void Audio3DTest::render(float elapsedTime)
