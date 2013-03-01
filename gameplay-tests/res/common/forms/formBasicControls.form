@@ -17,7 +17,7 @@ form basicControls
     button testButton
     {
         style = buttonStyle
-        position = 50, 80
+        position = 20, 80
         size = 200, 100
         text = This is a button.
     }
@@ -25,7 +25,7 @@ form basicControls
     checkbox testCheckbox
     {
         style = iconNoBorder
-        position = 50, 220
+        position = 20, 220
         size = 200, 40
         text = This is a checkbox.
     }
@@ -33,7 +33,7 @@ form basicControls
     slider testSlider
     {
         style = topLeftNoBorder
-        position = 55, 315
+        position = 25, 315
         size = 190, 60
         orientation = HORIZONTAL
         min = -100
@@ -46,7 +46,7 @@ form basicControls
     label textBoxLabel
     {
         style = iconNoBorder
-        position = 55, 400
+        position = 25, 400
         size = 200, 60
         text = Label:
     }
@@ -54,7 +54,7 @@ form basicControls
     textBox testTextBox
     {
         style = topLeftAlignedEntry
-        position = 50, 450
+        position = 20, 450
         size = 250, 80
         text = This is a text box.
     }
@@ -81,6 +81,14 @@ form basicControls
         text = Radio button 3.
         position = 350, 180
     }
+	
+	image testImage
+	{
+		position = 300, 250
+		style = basic
+		size = 256, 256
+		path = res/png/box-diffuse.png
+	}
 	
 	button alignedButton
     {
