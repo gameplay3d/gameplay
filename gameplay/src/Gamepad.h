@@ -1,14 +1,16 @@
 #ifndef GAMEPAD_H_
 #define GAMEPAD_H_
 
-#include "Form.h"
-#include "Joystick.h"
+#include "Vector2.h"
 
 namespace gameplay
 {
 
-class Platform;
 class Button;
+class Container;
+class Form;
+class Joystick;
+class Platform;
 
 /**
  * Defines an interface for handling gamepad input.
@@ -17,7 +19,6 @@ class Gamepad
 {
     friend class Platform;
     friend class Game;
-    friend class Control;
     friend class Button;
 
 public:
@@ -28,7 +29,10 @@ public:
     enum GamepadEvent
     {
         CONNECTED_EVENT,
-        DISCONNECTED_EVENT
+        DISCONNECTED_EVENT,
+        BUTTONS_EVENT,
+        JOYSTICK_EVENT,
+        TRIGGER_EVENT
     };
 
     /**
@@ -196,6 +200,8 @@ private:
      */
     Gamepad(const Gamepad& copy);
 
+    static void updateInternal(float elapsedTime);
+
     static Gamepad* add(GamepadHandle handle, 
                         unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                         unsigned int vendorId, unsigned int productId, 
@@ -211,7 +217,17 @@ private:
 
     static Gamepad* getGamepad(unsigned int index, bool preferPhysical = true);
 
+    static Gamepad* getGamepad(GamepadHandle handle);
+
     static ButtonMapping getButtonMappingFromString(const char* string);
+
+    // The following setters are used by platforms when polling or handling gamepad events at the platform layer.
+    // They trigger gamepad state-changed events on forms as necessary.
+    void setButtons(unsigned int buttons);
+
+    void setJoystickValue(unsigned int index, float x, float y);
+
+    void setTriggerValue(unsigned int index, float value);
 
     /** 
      * Destructor.
@@ -222,8 +238,6 @@ private:
      * Binds the Joystick and Button Control object's from the specified container.
      */
     void bindGamepadControls(Container* container);
-
-    static unsigned int getIndexFromMapping(Gamepad::ButtonMapping mapping);
 
     GamepadHandle _handle;        // The handle of the Gamepad.
     unsigned int _buttonCount;    // Number of buttons.

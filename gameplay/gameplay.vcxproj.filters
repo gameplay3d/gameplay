@@ -843,6 +843,9 @@
     <ClCompile Include="src\Platform.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ImageControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1669,6 +1672,9 @@
     </ClInclude>
     <ClInclude Include="src\lua\lua_HeightField.h">
       <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImageControl.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
