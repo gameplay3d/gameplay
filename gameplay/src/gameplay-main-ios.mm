@@ -5,11 +5,16 @@
 
 using namespace gameplay;
 
+extern int __argc;
+extern char** __argv;
+
 /**
  * Main entry point.
  */
 int main(int argc, char** argv)
-{   
+{
+    __argc = argc;
+    __argv = argv;
     NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
     Game* game = Game::getInstance();
     Platform* platform = Platform::create(game);

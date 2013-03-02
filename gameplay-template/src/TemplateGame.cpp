@@ -11,12 +11,10 @@ TemplateGame::TemplateGame()
 void TemplateGame::initialize()
 {
     // Load game scene from file
-    Bundle* bundle = Bundle::create("res/box.gpb");
-    _scene = bundle->loadScene();
-    SAFE_RELEASE(bundle);
+    _scene = Scene::load("res/box.gpb");
 
     // Set the aspect ratio for the scene's camera to match the current resolution
-    _scene->getActiveCamera()->setAspectRatio((float)getWidth() / (float)getHeight());
+    _scene->getActiveCamera()->setAspectRatio(getAspectRatio());
     
     // Get light node
     Node* lightNode = _scene->findNode("directionalLight");
