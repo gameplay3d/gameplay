@@ -184,6 +184,23 @@ extern void print(const char* format, ...);
 // Scripting
 using std::va_list;
 #include <lua.hpp>
+typedef unsigned int lua_Unsigned;
+#define luaL_checkunsigned (lua_Unsigned) luaL_checkinteger
+#define lua_pushunsigned lua_pushinteger
+#define lua_len lua_objlen
+
+static void luaL_setfuncs (lua_State *L, const luaL_Reg *l, int nup) {
+  luaL_checkstack(L, nup, "too many upvalues");
+  for (; l->name != NULL; l++) {  /* fill the table with given functions */
+    int i;
+    for (i = 0; i < nup; i++)  /* copy upvalues to the top */
+      lua_pushvalue(L, -nup);
+    lua_pushstring(L, l->name);
+    lua_pushcclosure(L, l->func, nup);  /* closure with those upvalues */
+    lua_settable(L, -(nup + 3));
+  }
+  lua_pop(L, nup);  /* remove upvalues */
+}
 
 #define WINDOW_VSYNC        1
 
