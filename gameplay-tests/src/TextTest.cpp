@@ -84,7 +84,6 @@ void TextTest::initialize()
 
 void TextTest::update(float elapsedTime)
 {
-    _form->update(elapsedTime);
 }
 
 void TextTest::render(float elapsedTime)
