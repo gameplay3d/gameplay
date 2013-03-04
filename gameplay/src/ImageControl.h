@@ -39,21 +39,57 @@ class ImageControl : public Control
 
 public:
 
+    /**
+     * Create a new ImageControl.
+     *
+     * @param id The control's ID.
+     * @param style The control's style.
+     *
+     * @return The new ImageControl.
+     * @script{create}
+     */
     static ImageControl* create(const char* id, Theme::Style* style);
 
+    /**
+     * Set the path of the image for this ImageControl to display.
+     */
     void setImage(const char* path);
-    
-    void setImage(Image* image);
 
+    /**
+     * Set the source region of this ImageControl.  This is the region of the file,
+     * in pixels, to use when drawing.
+     *
+     * @param x The x coordinate of the source region.
+     * @param y The y coordinate of the source region.
+     * @param width The width of the source region.
+     * @param height The height of the source region.
+     */
     void setSrcRegion(float x, float y, float width, float height);
 
+    /**
+     * Get the source region of this ImageControl.
+     *
+     * @return The source region of this ImageControl.
+     */
     const Rectangle& getSrcRegion() const;
 
+    /**
+     * Sets the destination region of this ImageControl.  This is the region
+     * within the control's viewport to draw the image.
+     *
+     * @param x The x coordinate of the destination region.
+     * @param y The y coordinate of the destination region.
+     * @param width The width of the destination region.
+     * @param height The height of the destination region.
+     */
     void setDstRegion(float x, float y, float width, float height);
 
+    /**
+     * Get the destination region of this ImageControl.
+     *
+     * @return The destination region of this ImageControl.
+     */
     const Rectangle& getDstRegion() const;
-
-    Image* getImage() const;
 
 protected:
 
@@ -67,18 +103,17 @@ protected:
 
     void drawImages(SpriteBatch* spriteBatch, const Rectangle& clip);
 
-    /* Source region: Region of the file to use as a single image. */
+    // Source region.
     Rectangle _srcRegion;
-    /* Destination region: Region within the control to draw the image. */
+    // Destination region.
     Rectangle _dstRegion;
-    /* The SpriteBatch used to draw the image. */
     SpriteBatch* _batch;
     
-    /* One over texture width and height, for use when calculating UVs from a new source region. */
+    // One over texture width and height, for use when calculating UVs from a new source region.
     float _tw;
     float _th;
     
-    /* Calculated UVs. */
+    // Calculated UVs.
     Theme::UVs _uvs;
 
 private:
