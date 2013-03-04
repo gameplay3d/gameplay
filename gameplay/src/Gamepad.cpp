@@ -384,7 +384,7 @@ void Gamepad::setButtons(unsigned int buttons)
     if (buttons != _buttons)
     {
         _buttons = buttons;
-        Form::gamepadEventInternal(BUTTONS_EVENT, this, 0);
+        Form::gamepadEventInternal(BUTTON_EVENT, this, 0);
     }
 }
 
