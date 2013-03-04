@@ -83,6 +83,8 @@ set(GAMEPLAY_SRC
     src/Image.cpp
     src/Image.h
     src/Image.inl
+    src/ImageControl.cpp
+    src/ImageControl.h
     src/Joint.cpp
     src/Joint.h
     src/Joystick.cpp

@@ -30,7 +30,7 @@ public:
     {
         CONNECTED_EVENT,
         DISCONNECTED_EVENT,
-        BUTTONS_EVENT,
+        BUTTON_EVENT,
         JOYSTICK_EVENT,
         TRIGGER_EVENT
     };
@@ -168,7 +168,6 @@ public:
      */
     void draw();
 
-
 private:
 
     /**
@@ -192,20 +191,23 @@ private:
      */
     Gamepad(GamepadHandle handle, 
             unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-            unsigned int vendorId, unsigned int productId, 
-            const char* vendorString, const char* productString);
+            unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
 
     /**
      * Copy constructor.
      */
     Gamepad(const Gamepad& copy);
 
+    /** 
+     * Destructor.
+     */
+    virtual ~Gamepad();
+
     static void updateInternal(float elapsedTime);
 
     static Gamepad* add(GamepadHandle handle, 
                         unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                        unsigned int vendorId, unsigned int productId, 
-                        const char* vendorString, const char* productString);
+                        unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString);
 
     static Gamepad* add(const char* formPath);
 
@@ -221,22 +223,12 @@ private:
 
     static ButtonMapping getButtonMappingFromString(const char* string);
 
-    // The following setters are used by platforms when polling or handling gamepad events at the platform layer.
-    // They trigger gamepad state-changed events on forms as necessary.
     void setButtons(unsigned int buttons);
 
     void setJoystickValue(unsigned int index, float x, float y);
 
     void setTriggerValue(unsigned int index, float value);
-
-    /** 
-     * Destructor.
-     */
-    virtual ~Gamepad();
     
-    /** 
-     * Binds the Joystick and Button Control object's from the specified container.
-     */
     void bindGamepadControls(Container* container);
 
     GamepadHandle _handle;        // The handle of the Gamepad.
@@ -247,13 +239,9 @@ private:
     unsigned int _productId;
     std::string _vendorString;
     std::string _productString;
-    
-    // Data needed for virtual gamepads.
     Form* _form;
     Joystick* _uiJoysticks[2];
     Button* _uiButtons[20];
-
-    // Current gamepad state.
     unsigned int _buttons;
     Vector2 _joysticks[2];
     float _triggers[2];
