@@ -24,6 +24,9 @@ ImageControl* ImageControl::create(const char* id, Theme::Style* style)
         imageControl->_id = id;
     imageControl->setStyle(style);
 
+    imageControl->_consumeInputEvents = false;
+    imageControl->_focusIndex = -2;
+
     return imageControl;
 }
 
@@ -31,6 +34,10 @@ ImageControl* ImageControl::create(Theme::Style* style, Properties* properties)
 {
     ImageControl* imageControl = new ImageControl();
     imageControl->initialize(style, properties);
+
+    imageControl->_consumeInputEvents = false;
+    imageControl->_focusIndex = -2;
+
     return imageControl;
 }
 
@@ -57,16 +64,6 @@ void ImageControl::setImage(const char* path)
 {
     SAFE_DELETE(_batch);
     Texture* texture = Texture::create(path);
-    _batch = SpriteBatch::create(texture);
-    _tw = 1.0f / texture->getWidth();
-    _th = 1.0f / texture->getHeight();
-    texture->release();
-}
-
-void ImageControl::setImage(Image* image)
-{
-    SAFE_DELETE(_batch);
-    Texture* texture = Texture::create(image);
     _batch = SpriteBatch::create(texture);
     _tw = 1.0f / texture->getWidth();
     _th = 1.0f / texture->getHeight();
