@@ -546,20 +546,25 @@ void Form::draw()
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
+        
+        // By setting needsClear to true here, an optimization meant to clear and redraw only areas of the form
+        // that have changed is disabled.  Currently, repositioning controls can result in areas of the screen being cleared
+        // after another control has been drawn there.  This should probably be done in two passes -- one to clear areas where
+        // dirty controls were last frame, and another to draw them where they are now.
         Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height),
-                        _skin != NULL, false, _bounds.height);
+                        /*_skin != NULL*/ true, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
-        // restore the previous game viewport
+        // Restore the previous game viewport.
         game->setViewport(prevViewport);
         // Rebind the previous framebuffer and game viewport.
         previousFrameBuffer->bind();
     }
 
-    // Draw either with a 3D quad or sprite batch
+    // Draw either with a 3D quad or sprite batch.
     if (_node)
     {
-         // If we have the node set, then draw a 3D quad model
+         // If we have the node set, then draw a 3D quad model.
         _nodeQuad->draw();
     }
     else
@@ -579,6 +584,21 @@ void Form::draw()
 const char* Form::getType() const
 {
     return "form";
+}
+
+void Form::updateInternal(float elapsedTime)
+{
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
+    {
+        Form* form = __forms[i];
+        GP_ASSERT(form);
+
+        if (form->isEnabled() && form->isVisible())
+        {
+            form->update(elapsedTime);
+        }
+    }
 }
 
 bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -638,7 +658,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled() && form->isVisible())
+        if (form->isEnabled() && form->isVisible() && form->getState() == Control::FOCUS)
         {
             if (form->keyEvent(evt, key))
                 return true;
@@ -698,6 +718,24 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
             }
         }
     }
+    return eventConsumed;
+}
+
+bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    bool eventConsumed = false;
+
+    for (size_t i = 0; i < __forms.size(); ++i)
+    {
+        Form* form = __forms[i];
+        GP_ASSERT(form);
+
+        if (form->isEnabled() && form->isVisible())
+        {
+            eventConsumed |= form->gamepadEventInternal(evt, gamepad, analogIndex);
+        }
+    }
+
     return eventConsumed;
 }
 

@@ -213,8 +213,6 @@ void CharacterGame::update(float elapsedTime)
     if (!_kickClip->isPlaying())
         _kicking = false;
 
-    _gamepad->update(elapsedTime);
-
     if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
     {
         if (_buttonPressed[BUTTON_1])

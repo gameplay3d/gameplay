@@ -86,6 +86,7 @@ int Game::run()
         shutdown();
         return -2;
     }
+
     return 0;
 }
 
@@ -286,9 +287,13 @@ void Game::frame()
 {
     if (!_initialized)
     {
+        // Perform lazy first time initialization
         initialize();
         _scriptController->initializeGame();
         _initialized = true;
+
+        // Fire first game resize event
+        Platform::resizeEventInternal(_width, _height);
     }
 
 	static double lastFrameTime = Game::getGameTime();
@@ -317,6 +322,12 @@ void Game::frame()
         // Update AI.
         _aiController->update(elapsedTime);
 
+        // Update gamepads.
+        Gamepad::updateInternal(elapsedTime);
+
+        // Update forms.
+        Form::updateInternal(elapsedTime);
+
         // Application Update.
         update(elapsedTime);
 
@@ -343,6 +354,12 @@ void Game::frame()
     }
 	else if (_state == Game::PAUSED)
     {
+        // Update gamepads.
+        Gamepad::updateInternal(0);
+
+        // Update forms.
+        Form::updateInternal(0);
+
         // Application Update.
         update(0);
 
@@ -462,6 +479,10 @@ void Game::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactI
 bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     return false;
+}
+
+void Game::resizeEvent(unsigned int width, unsigned int height)
+{
 }
 
 bool Game::isGestureSupported(Gesture::GestureEvent evt)

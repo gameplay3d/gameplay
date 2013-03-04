@@ -60,7 +60,6 @@ void InputTest::finalize()
 
 void InputTest::update(float elapsedTime)
 {
-    _inputTestControls->update(Test::getAbsoluteTime());
 }
 
 void InputTest::render(float elapsedTime)

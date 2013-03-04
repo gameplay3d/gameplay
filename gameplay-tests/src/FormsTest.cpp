@@ -179,8 +179,6 @@ void FormsTest::createTestForm(Theme* theme)
 
 void FormsTest::update(float elapsedTime)
 {
-    _gamepad->update(elapsedTime);
-
     float speedFactor = 0.001f * elapsedTime;
     bool aDown = (_keyFlags & KEY_A_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_A);
     bool bDown = (_keyFlags & KEY_B_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_B);
@@ -218,16 +216,6 @@ void FormsTest::update(float elapsedTime)
     else
     {
         _formNodeParent->translate(0.5f * speedFactor * joyCommand.x, 0.5f * speedFactor * joyCommand.y, 0);
-    }
-
-    if (_formSelect)
-    {
-        _formSelect->update(elapsedTime);
-    }
-
-    if (_activeForm)
-    {
-        _activeForm->update(elapsedTime);
     }
 }
 

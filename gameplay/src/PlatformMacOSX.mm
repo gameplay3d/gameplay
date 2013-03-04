@@ -54,6 +54,7 @@ static bool __otherMouseDown = false;
 static bool __shiftDown = false;
 static char* __title = NULL;
 static bool __fullscreen = false;
+static bool __resizable = false;
 static void* __attachToWindow = NULL;
 static bool __mouseCaptured = false;
 static bool __mouseCapturedFirstPass = false;
@@ -751,6 +752,14 @@ double getMachTimeInMilliseconds()
     [[NSApplication sharedApplication] terminate:self];
 }
 
+- (void)windowDidResize:(NSNotification*)notification
+{
+    [gameLock lock];
+    NSSize size = [ [ _window contentView ] frame ].size;
+    gameplay::Platform::resizeEventInternal((unsigned int)size.width, (unsigned int)size.height);
+    [gameLock unlock];
+}
+
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -975,10 +984,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) mouse: (Mouse::MouseEvent) mouseEvent orTouchEvent: (Touch::TouchEvent) touchEvent x: (float) x y: (float) y s: (int) s 
 {
+    [__view->gameLock lock];
     if (!gameplay::Platform::mouseEventInternal(mouseEvent, x, y, s))
     {
         gameplay::Platform::touchEventInternal(touchEvent, x, y, 0);
     }
+    [__view->gameLock unlock];
 }
 
 - (void) mouseDown: (NSEvent*) event
@@ -1027,7 +1038,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         y = __height - point.y;
     }
     
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void) mouseDragged: (NSEvent*) event
@@ -1046,7 +1059,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __lx = point.x;
     __ly = __height - point.y;
     
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, __height - point.y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void) rightMouseUp: (NSEvent*) event
@@ -1054,7 +1069,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     __rightMouseDown = false;
     NSPoint point = [event locationInWindow];
     
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_RIGHT_BUTTON, point.x, __height - point.y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void) rightMouseDragged: (NSEvent*) event
@@ -1077,27 +1094,38 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     // In right-mouse case, whether __rightMouseDown is true or false
     // this should not matter, mouse move is still occuring
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void)otherMouseDown: (NSEvent*) event 
 {
     __otherMouseDown = true;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_MIDDLE_BUTTON, point.x, __height - point.y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void)otherMouseUp: (NSEvent*) event 
 {
     __otherMouseDown = false;
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_RELEASE_MIDDLE_BUTTON, point.x, __height - point.y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void)otherMouseDragged: (NSEvent*) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_MOVE, point.x, __height - point.y, 0);
+    [__view->gameLock unlock];
 }
 
 - (void) mouseEntered: (NSEvent*)event
@@ -1108,7 +1136,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)scrollWheel: (NSEvent*) event 
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+
+    [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_WHEEL, point.x, __height - point.y, (int)([event deltaY] * 10.0f));
+    [__view->gameLock unlock];
 }
 
 - (void) mouseExited: (NSEvent*)event
@@ -1444,6 +1475,8 @@ int getUnicode(int key)
 {
     unsigned int keyCode = [event keyCode];
     unsigned int flags = [event modifierFlags];
+
+    [__view->gameLock lock];
     switch (keyCode) 
     {
         case 0x39:
@@ -1474,6 +1507,7 @@ int getUnicode(int key)
             gameplay::Platform::keyEventInternal((flags & NSCommandKeyMask) ? Keyboard::KEY_PRESS : Keyboard::KEY_RELEASE, Keyboard::KEY_HYPER);
             break;
     }
+    [__view->gameLock unlock];
 }
 
 - (void) keyDown: (NSEvent*) event
@@ -1481,6 +1515,8 @@ int getUnicode(int key)
     if ([event isARepeat] == NO)
     {
         int key = getKey([event keyCode], [event modifierFlags]);
+
+        [__view->gameLock lock];
         gameplay::Platform::keyEventInternal(Keyboard::KEY_PRESS, key);
         
         int character = getUnicode(key);
@@ -1488,12 +1524,16 @@ int getUnicode(int key)
         {
             gameplay::Platform::keyEventInternal(Keyboard::KEY_CHAR, character);
         }
+
+        [__view->gameLock unlock];
     }
 }
 
 - (void) keyUp: (NSEvent*) event
-{    
+{
+    [__view->gameLock lock];
     gameplay::Platform::keyEventInternal(Keyboard::KEY_RELEASE, getKey([event keyCode], [event modifierFlags]));
+    [__view->gameLock unlock];
 }
 
 // Gesture support for Mac OS X Trackpads
@@ -1645,6 +1685,9 @@ int Platform::enterMessagePump()
                 __width = CGRectGetWidth(mainMonitor);
                 __height = CGRectGetHeight(mainMonitor);
             }
+            
+            // Read resizable state.
+            __resizable = config->getBool("resizable");
         }
     }
 
@@ -1682,7 +1725,7 @@ int Platform::enterMessagePump()
     {
         window = [[NSWindow alloc]
                    initWithContentRect:centered
-                   styleMask:NSTitledWindowMask | NSClosableWindowMask
+                  styleMask:NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask
                    backing:NSBackingStoreBuffered
                    defer:NO];
     }
@@ -1857,62 +1900,6 @@ bool Platform::isCursorVisible()
 void Platform::displayKeyboard(bool display)
 {
     // Do nothing.
-}
-
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    [__view->gameLock lock];
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
-        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
-    }
-    [__view->gameLock unlock];
-}
-    
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    [__view->gameLock lock];
-    if (!Form::keyEventInternal(evt, key))
-    {
-        Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
-    }
-    [__view->gameLock unlock];
-}
-
-bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    [__view->gameLock lock];
-    
-    bool result;
-    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
-    {
-        result = true;
-    }
-    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
-    {
-        result = true;
-    }
-    else
-    {
-        result = Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
-    }
-    
-    [__view->gameLock unlock];
-    
-    return result;
-}
-    
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
-}
-
-void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
-{
-    Gamepad::remove(handle);
 }
 
 void Platform::shutdownInternal()

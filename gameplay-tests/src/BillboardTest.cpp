@@ -74,7 +74,6 @@ void BillboardTest::update(float elapsedTime)
 {
     float time = (float)elapsedTime / 1000.0f;
 
-    _gamepad->update(elapsedTime);
     if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
         _moveFlags |= MOVE_DOWN;
     else

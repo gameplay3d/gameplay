@@ -89,8 +89,6 @@ void TerrainTest::finalize()
 
 void TerrainTest::update(float elapsedTime)
 {
-    _form->update(elapsedTime);
-
     Node* camera = _scene->getActiveCamera()->getNode();
 
 	if (_snapToGround)
