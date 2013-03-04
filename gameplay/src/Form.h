@@ -9,6 +9,7 @@
 #include "Touch.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Gamepad.h"
 
 namespace gameplay
 {

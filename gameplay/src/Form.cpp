@@ -732,7 +732,7 @@ bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
 
         if (form->isEnabled() && form->isVisible())
         {
-            eventConsumed |= form->gamepadEvent(evt, gamepad, analogIndex);
+            eventConsumed |= form->gamepadEventInternal(evt, gamepad, analogIndex);
         }
     }
 
