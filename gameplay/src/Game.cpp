@@ -521,7 +521,7 @@ void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
 }
 
-void Game::getArguments(int* argc, char*** argv)
+void Game::getArguments(int* argc, char*** argv) const
 {
     Platform::getArguments(argc, argv);
 }
