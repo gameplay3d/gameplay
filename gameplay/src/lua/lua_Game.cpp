@@ -62,6 +62,7 @@ void luaRegister_Game()
         {"mouseEvent", lua_Game_mouseEvent},
         {"pause", lua_Game_pause},
         {"registerGesture", lua_Game_registerGesture},
+        {"resizeEvent", lua_Game_resizeEvent},
         {"resume", lua_Game_resume},
         {"run", lua_Game_run},
         {"schedule", lua_Game_schedule},
@@ -1736,6 +1737,46 @@ int lua_Game_registerGesture(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_resizeEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+                // Get parameter 2 off the stack.
+                unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                Game* instance = getInstance(state);
+                instance->resizeEvent(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Game_resizeEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

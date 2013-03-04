@@ -16,9 +16,11 @@ void luaRegister_Frustum()
         {"getBottom", lua_Frustum_getBottom},
         {"getCorners", lua_Frustum_getCorners},
         {"getFar", lua_Frustum_getFar},
+        {"getFarCorners", lua_Frustum_getFarCorners},
         {"getLeft", lua_Frustum_getLeft},
         {"getMatrix", lua_Frustum_getMatrix},
         {"getNear", lua_Frustum_getNear},
+        {"getNearCorners", lua_Frustum_getNearCorners},
         {"getRight", lua_Frustum_getRight},
         {"getTop", lua_Frustum_getTop},
         {"intersects", lua_Frustum_intersects},
@@ -305,6 +307,48 @@ int lua_Frustum_getFar(lua_State* state)
     return 0;
 }
 
+int lua_Frustum_getFarCorners(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
+
+                Frustum* instance = getInstance(state);
+                instance->getFarCorners(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Frustum_getFarCorners - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Frustum_getLeft(lua_State* state)
 {
     // Get the number of parameters.
@@ -428,6 +472,48 @@ int lua_Frustum_getNear(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Frustum_getNearCorners(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Vector3> param1 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Vector3'.");
+                    lua_error(state);
+                }
+
+                Frustum* instance = getInstance(state);
+                instance->getNearCorners(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Frustum_getNearCorners - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
