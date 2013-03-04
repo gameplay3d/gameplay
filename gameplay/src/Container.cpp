@@ -10,6 +10,7 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
+#include "ImageControl.h"
 #include "Joystick.h"
 #include "Game.h"
 
@@ -164,6 +165,10 @@ void Container::addControls(Theme* theme, Properties* properties)
         else if (controlName == "JOYSTICK")
         {
             control = Joystick::create(controlStyle, controlSpace);
+        }
+        else if (controlName == "IMAGE")
+        {
+            control = ImageControl::create(controlStyle, controlSpace);
         }
         else
         {
@@ -434,7 +439,10 @@ void Container::update(const Control* container, const Vector2& offset)
     }
 
     // Sort controls by Z-Order.
-    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+    if (_layout->getType() == Layout::LAYOUT_ABSOLUTE)
+    {
+        std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+    }
 
     GP_ASSERT(_layout);
     if (_scroll != SCROLL_NONE)

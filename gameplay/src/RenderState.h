@@ -306,11 +306,24 @@ public:
      * The returned MaterialParameter can be used to set values for the specified
      * parameter name.
      *
+     * Note that this method causes a new MaterialParameter to be created if one
+     * does not already exist for the given parameter name.
+     *
      * @param name Material parameter (uniform) name.
      * 
      * @return A MaterialParameter for the specified name.
      */
     MaterialParameter* getParameter(const char* name) const;
+
+    /**
+     * Clears the MaterialParameter with the given name.
+     *
+     * If a material parameter exists for the given name, it is destroyed and
+     * removed from this RenderState.
+     *
+     * @param name Material parameter (uniform) name.
+     */
+    void clearParameter(const char* name);
 
     /**
      * Sets a material parameter auto-binding.
