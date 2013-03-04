@@ -14,6 +14,7 @@ uniform float u_specularExponent;				// Specular exponent
 #if defined(SPOT_LIGHT)
 uniform float u_spotLightInnerAngleCos;			// The bright spot [0.0 - 1.0]
 uniform float u_spotLightOuterAngleCos;			// The soft outer part [0.0 - 1.0]
+uniform vec3 u_spotLightDirection;              // Direction of a spot light source
 #endif
 #if defined(MODULATE_COLOR)
 uniform vec4 u_modulateColor;					// Modulation color
