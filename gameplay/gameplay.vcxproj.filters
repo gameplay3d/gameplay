@@ -843,6 +843,12 @@
     <ClCompile Include="src\ImageControl.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\lua\lua_ImageControl.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_TerrainListener.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1672,6 +1678,12 @@
     </ClInclude>
     <ClInclude Include="src\ImageControl.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ImageControl.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TerrainListener.h">
+      <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
