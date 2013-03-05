@@ -23,6 +23,7 @@ void luaRegister_ThemeUVs()
     const luaL_Reg lua_statics[] = 
     {
         {"empty", lua_ThemeUVs_static_empty},
+        {"full", lua_ThemeUVs_static_full},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -167,6 +168,43 @@ int lua_ThemeUVs_static_empty(lua_State* state)
         case 0:
         {
             void* returnPtr = (void*)&(Theme::UVs::empty());
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "ThemeUVs");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_ThemeUVs_static_full(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)&(Theme::UVs::full());
             if (returnPtr)
             {
                 gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));

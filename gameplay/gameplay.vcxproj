@@ -159,6 +159,7 @@
     <ClCompile Include="src\lua\lua_Global.cpp" />
     <ClCompile Include="src\lua\lua_HeightField.cpp" />
     <ClCompile Include="src\lua\lua_Image.cpp" />
+    <ClCompile Include="src\lua\lua_ImageControl.cpp" />
     <ClCompile Include="src\lua\lua_ImageFormat.cpp" />
     <ClCompile Include="src\lua\lua_Joint.cpp" />
     <ClCompile Include="src\lua\lua_Joystick.cpp" />
@@ -241,6 +242,7 @@
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
     <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
+    <ClCompile Include="src\lua\lua_TerrainListener.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
@@ -437,6 +439,7 @@
     <ClInclude Include="src\lua\lua_Global.h" />
     <ClInclude Include="src\lua\lua_HeightField.h" />
     <ClInclude Include="src\lua\lua_Image.h" />
+    <ClInclude Include="src\lua\lua_ImageControl.h" />
     <ClInclude Include="src\lua\lua_ImageFormat.h" />
     <ClInclude Include="src\lua\lua_Joint.h" />
     <ClInclude Include="src\lua\lua_Joystick.h" />
@@ -519,6 +522,7 @@
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
+    <ClInclude Include="src\lua\lua_TerrainListener.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />

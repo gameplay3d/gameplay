@@ -3,6 +3,7 @@
 #include "lua_Scene.h"
 #include "AudioListener.h"
 #include "Base.h"
+#include "Bundle.h"
 #include "Game.h"
 #include "Joint.h"
 #include "MeshSkin.h"

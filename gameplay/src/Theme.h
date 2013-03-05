@@ -170,9 +170,14 @@ public:
         UVs(float u1, float v1, float u2, float v2);
 
         /**
-         * Get's an empty UVs.
+         * Gets an empty UVs struct (0, 0, 0, 0).
          */
         static const UVs& empty();
+
+        /**
+         * Gets UVs covering an entire texture (0, 0, 1, 1).
+         */
+        static const UVs& full();
 
         /**
          * u component of the first UV coordinate.
