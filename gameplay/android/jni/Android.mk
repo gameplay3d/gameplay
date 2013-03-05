@@ -54,6 +54,7 @@ LOCAL_SRC_FILES := \
     Gamepad.cpp \
     HeightField.cpp \
     Image.cpp \
+	ImageControl.cpp \
     Joint.cpp \
     Joystick.cpp \
     Label.cpp \
