@@ -64,14 +64,22 @@ public:
      * @param width The width of the source region.
      * @param height The height of the source region.
      */
-    void setSrcRegion(float x, float y, float width, float height);
+    void setRegionSrc(float x, float y, float width, float height);
+
+    /**
+     * Set the source region of this ImageControl.  This is the region of the file,
+     * in pixels, to use when drawing.
+     *
+     * @param region The new source region.
+     */
+    void setRegionSrc(const Rectangle& region);
 
     /**
      * Get the source region of this ImageControl.
      *
      * @return The source region of this ImageControl.
      */
-    const Rectangle& getSrcRegion() const;
+    const Rectangle& getRegionSrc() const;
 
     /**
      * Sets the destination region of this ImageControl.  This is the region
@@ -82,14 +90,22 @@ public:
      * @param width The width of the destination region.
      * @param height The height of the destination region.
      */
-    void setDstRegion(float x, float y, float width, float height);
+    void setRegionDst(float x, float y, float width, float height);
+    
+    /**
+     * Sets the destination region of this ImageControl.  This is the region
+     * within the control's viewport to draw the image.
+     *
+     * @param region The new destination region.
+     */
+    void setRegionDst(const Rectangle& region);
 
     /**
      * Get the destination region of this ImageControl.
      *
      * @return The destination region of this ImageControl.
      */
-    const Rectangle& getDstRegion() const;
+    const Rectangle& getRegionDst() const;
 
 protected:
 
