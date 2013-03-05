@@ -45,6 +45,7 @@ int lua_Game_menuEvent(lua_State* state);
 int lua_Game_mouseEvent(lua_State* state);
 int lua_Game_pause(lua_State* state);
 int lua_Game_registerGesture(lua_State* state);
+int lua_Game_resizeEvent(lua_State* state);
 int lua_Game_resume(lua_State* state);
 int lua_Game_run(lua_State* state);
 int lua_Game_schedule(lua_State* state);
