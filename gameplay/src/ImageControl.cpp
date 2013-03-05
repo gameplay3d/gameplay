@@ -55,9 +55,9 @@ void ImageControl::initialize(Theme::Style* style, Properties* properties)
 
     Vector4 region;
     properties->getVector4("srcRegion", &region);
-    setSrcRegion(region.x, region.y, region.z, region.w);
+    setRegionSrc(region.x, region.y, region.z, region.w);
     properties->getVector4("dstRegion", &region);
-    setDstRegion(region.x, region.y, region.z, region.w);
+    setRegionDst(region.x, region.y, region.z, region.w);
 }
 
 void ImageControl::setImage(const char* path)
@@ -70,7 +70,7 @@ void ImageControl::setImage(const char* path)
     texture->release();
 }
 
-void ImageControl::setSrcRegion(float x, float y, float width, float height)
+void ImageControl::setRegionSrc(float x, float y, float width, float height)
 {
     _srcRegion.set(x, y, width, height);
 
@@ -80,17 +80,27 @@ void ImageControl::setSrcRegion(float x, float y, float width, float height)
     _uvs.v2 = 1.0f - ((y + height) * _tw);
 }
 
-const Rectangle& ImageControl::getSrcRegion() const
+void ImageControl::setRegionSrc(const Rectangle& region)
+{
+    setRegionSrc(region.x, region.y, region.width, region.height);
+}
+
+const Rectangle& ImageControl::getRegionSrc() const
 {
     return _srcRegion;
 }
 
-void ImageControl::setDstRegion(float x, float y, float width, float height)
+void ImageControl::setRegionDst(float x, float y, float width, float height)
 {
     _dstRegion.set(x, y, width, height);
 }
 
-const Rectangle& ImageControl::getDstRegion() const
+void ImageControl::setRegionDst(const Rectangle& region)
+{
+    setRegionDst(region.x, region.y, region.width, region.height);
+}
+
+const Rectangle& ImageControl::getRegionDst() const
 {
     return _dstRegion;
 }
