@@ -794,7 +794,7 @@ bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheel
 {
     if (_callbacks[MOUSE_EVENT])
     {
-        return executeFunction<bool>(_callbacks[MOUSE_EVENT]->c_str(), "[Mouse::MouseEvent]iiii", evt, x, y, wheelDelta);
+        return executeFunction<bool>(_callbacks[MOUSE_EVENT]->c_str(), "[Mouse::MouseEvent]iii", evt, x, y, wheelDelta);
     }
     return false;
 }
