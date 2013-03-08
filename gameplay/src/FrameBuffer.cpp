@@ -276,4 +276,9 @@ FrameBuffer* FrameBuffer::bindDefault()
     return _defaultFrameBuffer;
 }
 
+FrameBuffer* FrameBuffer::getCurrent()
+{
+    return _currentFrameBuffer;
+}
+
 }
