@@ -157,6 +157,13 @@ public:
      * @ return The default framebuffer.
      */
     static FrameBuffer* bindDefault(); 
+
+    /**
+     * Gets the currently bound FrameBuffer.
+     *
+     * @return The currently bound FrameBuffer.
+     */
+    static FrameBuffer* getCurrent();
      
 private:
 
