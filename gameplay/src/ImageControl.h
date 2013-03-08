@@ -16,7 +16,7 @@ namespace gameplay
  * The following properties are available for image controls:
 
  @verbatim
-     imageControl <control ID>
+     image <control ID>
      {
          style          = <styleID>
          alignment      = <Control::Alignment constant> // Note: 'position' will be ignored.
