@@ -586,6 +586,21 @@ const char* Form::getType() const
     return "form";
 }
 
+void Form::updateInternal(float elapsedTime)
+{
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
+    {
+        Form* form = __forms[i];
+        GP_ASSERT(form);
+
+        if (form->isEnabled() && form->isVisible())
+        {
+            form->update(elapsedTime);
+        }
+    }
+}
+
 bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     // Check for a collision with each Form in __forms.
@@ -643,7 +658,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled() && form->isVisible())
+        if (form->isEnabled() && form->isVisible() && form->getState() == Control::FOCUS)
         {
             if (form->keyEvent(evt, key))
                 return true;
@@ -703,6 +718,24 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
             }
         }
     }
+    return eventConsumed;
+}
+
+bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    bool eventConsumed = false;
+
+    for (size_t i = 0; i < __forms.size(); ++i)
+    {
+        Form* form = __forms[i];
+        GP_ASSERT(form);
+
+        if (form->isEnabled() && form->isVisible())
+        {
+            eventConsumed |= form->gamepadEventInternal(evt, gamepad, analogIndex);
+        }
+    }
+
     return eventConsumed;
 }
 

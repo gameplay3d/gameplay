@@ -11,6 +11,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Container");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Control");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Form");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Joystick");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Label");
@@ -27,6 +28,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "CheckBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Container");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Form");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Joystick");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Label");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "RadioButton");
@@ -76,6 +78,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "FrameBuffer");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "HeightField");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Image");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Joystick");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Ref", "Label");
@@ -114,6 +117,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Container");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Control");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Form");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joint");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Joystick");
     gameplay::ScriptUtil::setGlobalHierarchyPair("ScriptTarget", "Label");
@@ -377,6 +381,9 @@ void luaRegister_lua_Global()
         scopePath.push_back("Gamepad");
         gameplay::ScriptUtil::registerConstantString("CONNECTED_EVENT", "CONNECTED_EVENT", scopePath);
         gameplay::ScriptUtil::registerConstantString("DISCONNECTED_EVENT", "DISCONNECTED_EVENT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("BUTTON_EVENT", "BUTTON_EVENT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("JOYSTICK_EVENT", "JOYSTICK_EVENT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("TRIGGER_EVENT", "TRIGGER_EVENT", scopePath);
     }
 
     // Register enumeration Gesture::GestureEvent.

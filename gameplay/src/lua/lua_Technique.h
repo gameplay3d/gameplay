@@ -7,6 +7,7 @@ namespace gameplay
 // Lua bindings for Technique.
 int lua_Technique__gc(lua_State* state);
 int lua_Technique_addRef(lua_State* state);
+int lua_Technique_clearParameter(lua_State* state);
 int lua_Technique_getId(lua_State* state);
 int lua_Technique_getParameter(lua_State* state);
 int lua_Technique_getPass(lua_State* state);

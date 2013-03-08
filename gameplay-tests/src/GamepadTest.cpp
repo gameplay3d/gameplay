@@ -30,8 +30,6 @@ void GamepadTest::initialize()
 void GamepadTest::updateGamepad(float elapsedTime, Gamepad* gamepad, unsigned int player)
 {
     char s[128];
-    gamepad->update(elapsedTime);
-
     sprintf(s, "Player: %d - VendorID: %d, %s, Product ID: %d, %s\nButtons: ", 
                 player, 
                 gamepad->getVendorId(), gamepad->getVendorString(),

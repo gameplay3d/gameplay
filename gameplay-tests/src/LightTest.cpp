@@ -154,10 +154,6 @@ void LightTest::finalize()
 
 void LightTest::update(float elapsedTime)
 {	
-	if (_form)
-    {
-        _form->update(elapsedTime);
-    }
 }
 
 void LightTest::render(float elapsedTime)

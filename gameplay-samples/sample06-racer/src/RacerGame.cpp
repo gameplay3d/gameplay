@@ -140,11 +140,6 @@ void RacerGame::finalize()
 
 void RacerGame::update(float elapsedTime)
 {   
-    _gamepad->update(elapsedTime);
-
-    _menu->update(Game::getAbsoluteTime());
-    _overlay->update(Game::getAbsoluteTime());
-
     // The "Start" button is mapped to MENU2.
     if (!__showMenu && !__menuFlag && _gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
     {
