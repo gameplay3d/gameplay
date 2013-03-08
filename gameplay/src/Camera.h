@@ -192,6 +192,26 @@ public:
     const Matrix& getProjectionMatrix() const;
 
     /**
+     * Sets a custom projection matrix to be used by the camera.
+     *
+     * Setting a custom projection matrix results in the internally 
+     * computed projection matrix being completely overriden until
+     * the resetProjectionMatrix method is called. A custom projection
+     * matrix is normally not neccessary, but can be used for special
+     * projection effects, such as setting an oblique view frustum
+     * for near plane clipping.
+     *
+     * @param matrix Custom projection matrix.
+     */
+    void setProjectionMatrix(const Matrix& matrix);
+
+    /**
+     * Resets the camera to use the internally computed projection matrix
+     * instead of any previously specified user-defined matrix.
+     */
+    void resetProjectionMatrix();
+
+    /**
      * Gets the camera's view * projection matrix.
      *
      * @return The camera view * projection matrix.
@@ -299,7 +319,7 @@ private:
     mutable Matrix _inverseView;
     mutable Matrix _inverseViewProjection;
     mutable Frustum _bounds;
-    mutable int _dirtyBits;
+    mutable int _bits;
     Node* _node;
 };
 
