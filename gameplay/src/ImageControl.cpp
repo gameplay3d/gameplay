@@ -53,11 +53,19 @@ void ImageControl::initialize(Theme::Style* style, Properties* properties)
         setImage(path);
     }
 
-    Vector4 region;
-    properties->getVector4("srcRegion", &region);
-    setRegionSrc(region.x, region.y, region.z, region.w);
-    properties->getVector4("dstRegion", &region);
-    setRegionDst(region.x, region.y, region.z, region.w);
+    if (properties->exists("srcRegion"))
+    {
+        Vector4 region;
+        properties->getVector4("srcRegion", &region);
+        setRegionSrc(region.x, region.y, region.z, region.w);
+    }
+
+    if (properties->exists("dstRegion"))
+    {
+        Vector4 region;
+        properties->getVector4("dstRegion", &region);
+        setRegionDst(region.x, region.y, region.z, region.w);
+    }
 }
 
 void ImageControl::setImage(const char* path)
