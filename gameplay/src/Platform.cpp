@@ -3,6 +3,7 @@
 #include "Platform.h"
 #include "Game.h"
 #include "ScriptController.h"
+#include "Form.h"
 
 namespace gameplay
 {

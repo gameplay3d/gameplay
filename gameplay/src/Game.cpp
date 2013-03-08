@@ -322,6 +322,12 @@ void Game::frame()
         // Update AI.
         _aiController->update(elapsedTime);
 
+        // Update gamepads.
+        Gamepad::updateInternal(elapsedTime);
+
+        // Update forms.
+        Form::updateInternal(elapsedTime);
+
         // Application Update.
         update(elapsedTime);
 
@@ -348,6 +354,12 @@ void Game::frame()
     }
 	else if (_state == Game::PAUSED)
     {
+        // Update gamepads.
+        Gamepad::updateInternal(0);
+
+        // Update forms.
+        Form::updateInternal(0);
+
         // Application Update.
         update(0);
 
@@ -509,7 +521,7 @@ void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
 }
 
-void Game::getArguments(int* argc, char*** argv)
+void Game::getArguments(int* argc, char*** argv) const
 {
     Platform::getArguments(argc, argv);
 }
