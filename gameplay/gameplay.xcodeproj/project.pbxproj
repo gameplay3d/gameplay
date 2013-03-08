@@ -82,6 +82,18 @@
 		42789FDF15B0E83700866F5B /* AIStateMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42789FCB15B0E83700866F5B /* AIStateMachine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		428390991489D6E800E2B2F5 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 428390971489D6E800E2B2F5 /* SceneLoader.cpp */; };
 		4283909A1489D6E800E2B2F5 /* SceneLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 428390981489D6E800E2B2F5 /* SceneLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42A5031116E8F06500F0246C /* ImageControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A5030F16E8F06500F0246C /* ImageControl.cpp */; };
+		42A5031216E8F06500F0246C /* ImageControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A5030F16E8F06500F0246C /* ImageControl.cpp */; };
+		42A5031316E8F06500F0246C /* ImageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A5031016E8F06500F0246C /* ImageControl.h */; };
+		42A5031416E8F06500F0246C /* ImageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A5031016E8F06500F0246C /* ImageControl.h */; };
+		42A5031716E8F08900F0246C /* lua_ImageControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A5031516E8F08900F0246C /* lua_ImageControl.cpp */; };
+		42A5031816E8F08900F0246C /* lua_ImageControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A5031516E8F08900F0246C /* lua_ImageControl.cpp */; };
+		42A5031916E8F08900F0246C /* lua_ImageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A5031616E8F08900F0246C /* lua_ImageControl.h */; };
+		42A5031A16E8F08900F0246C /* lua_ImageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A5031616E8F08900F0246C /* lua_ImageControl.h */; };
+		42A5031D16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A5031B16E8F0B800F0246C /* lua_TerrainListener.cpp */; };
+		42A5031E16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A5031B16E8F0B800F0246C /* lua_TerrainListener.cpp */; };
+		42A5031F16E8F0B800F0246C /* lua_TerrainListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A5031C16E8F0B800F0246C /* lua_TerrainListener.h */; };
+		42A5032016E8F0B800F0246C /* lua_TerrainListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A5031C16E8F0B800F0246C /* lua_TerrainListener.h */; };
 		42B7FAE315B08049002BB8C3 /* ScreenDisplayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7FADD15B08049002BB8C3 /* ScreenDisplayer.cpp */; };
 		42B7FAE415B08049002BB8C3 /* ScreenDisplayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7FADD15B08049002BB8C3 /* ScreenDisplayer.cpp */; };
 		42B7FAE515B08049002BB8C3 /* ScriptController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7FADE15B08049002BB8C3 /* ScriptController.cpp */; };
@@ -1202,6 +1214,12 @@
 		42789FCB15B0E83700866F5B /* AIStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIStateMachine.h; path = src/AIStateMachine.h; sourceTree = SOURCE_ROOT; };
 		428390971489D6E800E2B2F5 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLoader.cpp; path = src/SceneLoader.cpp; sourceTree = SOURCE_ROOT; };
 		428390981489D6E800E2B2F5 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneLoader.h; path = src/SceneLoader.h; sourceTree = SOURCE_ROOT; };
+		42A5030F16E8F06500F0246C /* ImageControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageControl.cpp; path = src/ImageControl.cpp; sourceTree = SOURCE_ROOT; };
+		42A5031016E8F06500F0246C /* ImageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageControl.h; path = src/ImageControl.h; sourceTree = SOURCE_ROOT; };
+		42A5031516E8F08900F0246C /* lua_ImageControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_ImageControl.cpp; sourceTree = "<group>"; };
+		42A5031616E8F08900F0246C /* lua_ImageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_ImageControl.h; sourceTree = "<group>"; };
+		42A5031B16E8F0B800F0246C /* lua_TerrainListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_TerrainListener.cpp; sourceTree = "<group>"; };
+		42A5031C16E8F0B800F0246C /* lua_TerrainListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_TerrainListener.h; sourceTree = "<group>"; };
 		42B701F615B08177002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
 		42B701F815B081B6002BB8C3 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../external-deps/lua/lib/ios/armv7/liblua.a"; sourceTree = "<group>"; };
 		42B7FADD15B08049002BB8C3 /* ScreenDisplayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScreenDisplayer.cpp; path = src/ScreenDisplayer.cpp; sourceTree = SOURCE_ROOT; };
@@ -1890,6 +1908,8 @@
 				4208DEE614A4079F00D3C511 /* Image.cpp */,
 				4208DEE714A4079F00D3C511 /* Image.h */,
 				4208DEE814A4079F00D3C511 /* Image.inl */,
+				42A5030F16E8F06500F0246C /* ImageControl.cpp */,
+				42A5031016E8F06500F0246C /* ImageControl.h */,
 				42CD0DE4147D8FF50000361E /* Joint.cpp */,
 				42CD0DE5147D8FF50000361E /* Joint.h */,
 				4239DDE9157545A1005EA3F6 /* Joystick.cpp */,
@@ -2181,6 +2201,8 @@
 				B661730A16A619A60083A307 /* lua_HeightField.h */,
 				42BCD39115EFD0F300C0E076 /* lua_Image.cpp */,
 				42BCD39215EFD0F300C0E076 /* lua_Image.h */,
+				42A5031516E8F08900F0246C /* lua_ImageControl.cpp */,
+				42A5031616E8F08900F0246C /* lua_ImageControl.h */,
 				42BCD39315EFD0F300C0E076 /* lua_ImageFormat.cpp */,
 				42BCD39415EFD0F300C0E076 /* lua_ImageFormat.h */,
 				42BCD39515EFD0F300C0E076 /* lua_Joint.cpp */,
@@ -2345,6 +2367,8 @@
 				B661731016A619D30083A307 /* lua_Terrain.h */,
 				B661731116A619D30083A307 /* lua_TerrainFlags.cpp */,
 				B661731216A619D30083A307 /* lua_TerrainFlags.h */,
+				42A5031B16E8F0B800F0246C /* lua_TerrainListener.cpp */,
+				42A5031C16E8F0B800F0246C /* lua_TerrainListener.h */,
 				42BCD42915EFD0F300C0E076 /* lua_TextBox.cpp */,
 				42BCD42A15EFD0F300C0E076 /* lua_TextBox.h */,
 				42BCD42B15EFD0F300C0E076 /* lua_Texture.cpp */,
@@ -2765,6 +2789,9 @@
 				BD26373616CF865B00CFE15F /* Vector2.inl in Headers */,
 				BD26373716CF865B00CFE15F /* Vector3.inl in Headers */,
 				BD26373816CF865B00CFE15F /* Vector4.inl in Headers */,
+				42A5031316E8F06500F0246C /* ImageControl.h in Headers */,
+				42A5031916E8F08900F0246C /* lua_ImageControl.h in Headers */,
+				42A5031F16E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3068,6 +3095,9 @@
 				BD26371316CF779100CFE15F /* PhysicsSpringConstraint.inl in Headers */,
 				BD26371416CF779100CFE15F /* ScriptController.inl in Headers */,
 				BD26371516CF787600CFE15F /* TimeListener.h in Headers */,
+				42A5031416E8F06500F0246C /* ImageControl.h in Headers */,
+				42A5031A16E8F08900F0246C /* lua_ImageControl.h in Headers */,
+				42A5032016E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3440,6 +3470,9 @@
 				B661732F16A61A4B0083A307 /* lua_RenderStateDepthFunction.cpp in Sources */,
 				B661733516A61B430083A307 /* lua_GamepadButtonMapping.cpp in Sources */,
 				DD1FF47216DBD8F9000B42EF /* Platform.cpp in Sources */,
+				42A5031116E8F06500F0246C /* ImageControl.cpp in Sources */,
+				42A5031716E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
+				42A5031D16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3717,6 +3750,9 @@
 				B661733016A61A4B0083A307 /* lua_RenderStateDepthFunction.cpp in Sources */,
 				B661733616A61B430083A307 /* lua_GamepadButtonMapping.cpp in Sources */,
 				DD1FF47316DBD8F9000B42EF /* Platform.cpp in Sources */,
+				42A5031216E8F06500F0246C /* ImageControl.cpp in Sources */,
+				42A5031816E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
+				42A5031E16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
