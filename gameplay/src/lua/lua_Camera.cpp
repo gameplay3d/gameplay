@@ -41,10 +41,12 @@ void luaRegister_Camera()
         {"pickRay", lua_Camera_pickRay},
         {"project", lua_Camera_project},
         {"release", lua_Camera_release},
+        {"resetProjectionMatrix", lua_Camera_resetProjectionMatrix},
         {"setAspectRatio", lua_Camera_setAspectRatio},
         {"setFarPlane", lua_Camera_setFarPlane},
         {"setFieldOfView", lua_Camera_setFieldOfView},
         {"setNearPlane", lua_Camera_setNearPlane},
+        {"setProjectionMatrix", lua_Camera_setProjectionMatrix},
         {"setZoomX", lua_Camera_setZoomX},
         {"setZoomY", lua_Camera_setZoomY},
         {"unproject", lua_Camera_unproject},
@@ -925,6 +927,38 @@ int lua_Camera_release(lua_State* state)
     return 0;
 }
 
+int lua_Camera_resetProjectionMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Camera* instance = getInstance(state);
+                instance->resetProjectionMatrix();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Camera_resetProjectionMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Camera_setAspectRatio(lua_State* state)
 {
     // Get the number of parameters.
@@ -1056,6 +1090,48 @@ int lua_Camera_setNearPlane(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Camera_setNearPlane - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Camera_setProjectionMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Matrix> param1 = gameplay::ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Matrix'.");
+                    lua_error(state);
+                }
+
+                Camera* instance = getInstance(state);
+                instance->setProjectionMatrix(*param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Camera_setProjectionMatrix - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

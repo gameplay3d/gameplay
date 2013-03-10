@@ -641,15 +641,10 @@ void ScriptController::print(const char* str1, const char* str2)
 
 ScriptController::ScriptController() : _lua(NULL)
 {
-    memset(_callbacks, 0, sizeof(std::string*) * CALLBACK_COUNT);
 }
 
 ScriptController::~ScriptController()
 {
-    for (unsigned int i = 0; i < CALLBACK_COUNT; i++)
-    {
-        SAFE_DELETE(_callbacks[i]);
-    }
 }
 
 static const char* lua_print_function = 
@@ -710,10 +705,9 @@ void ScriptController::initialize()
 
 void ScriptController::initializeGame()
 {
-    if (_callbacks[INITIALIZE])
-    {
-        executeFunction<void>(_callbacks[INITIALIZE]->c_str());
-    }
+    std::vector<std::string>& list = _callbacks[INITIALIZE];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str());
 }
 
 void ScriptController::finalize()
@@ -727,21 +721,15 @@ void ScriptController::finalize()
 
 void ScriptController::finalizeGame()
 {
-	std::string finalizeCallback;
-	if (_callbacks[FINALIZE])
-		finalizeCallback = _callbacks[FINALIZE]->c_str();
+    std::vector<std::string> finalizeCallbacks = _callbacks[FINALIZE]; // no & : makes a copy of the vector
 
 	// Remove any registered callbacks so they don't get called after shutdown
 	for (unsigned int i = 0; i < CALLBACK_COUNT; i++)
-    {
-        SAFE_DELETE(_callbacks[i]);
-    }
+        _callbacks[i].clear();
 
-	// Fire script finalize callback
-    if (!finalizeCallback.empty())
-	{
-        executeFunction<void>(finalizeCallback.c_str());
-    }
+	// Fire script finalize callbacks
+    for (size_t i = 0, count = finalizeCallbacks.size(); i < count; ++i)
+        executeFunction<void>(finalizeCallbacks[i].c_str());
 
     // Perform a full garbage collection cycle.
 	// Note that this does NOT free any global variables declared in scripts, since 
@@ -752,59 +740,55 @@ void ScriptController::finalizeGame()
 
 void ScriptController::update(float elapsedTime)
 {
-    if (_callbacks[UPDATE])
-    {
-        executeFunction<void>(_callbacks[UPDATE]->c_str(), "f", elapsedTime);
-    }
+    std::vector<std::string>& list = _callbacks[UPDATE];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str(), "f", elapsedTime);
 }
 
 void ScriptController::render(float elapsedTime)
 {
-    if (_callbacks[RENDER])
-    {
-        executeFunction<void>(_callbacks[RENDER]->c_str(), "f", elapsedTime);
-    }
+    std::vector<std::string>& list = _callbacks[RENDER];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str(), "f", elapsedTime);
 }
 
 void ScriptController::resizeEvent(unsigned int width, unsigned int height)
 {
-    if (_callbacks[RESIZE_EVENT])
-    {
-        executeFunction<void>(_callbacks[RESIZE_EVENT]->c_str(), "uiui", width, height);
-    }
+    std::vector<std::string>& list = _callbacks[RESIZE_EVENT];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str(), "uiui", width, height);
 }
 
 void ScriptController::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    if (_callbacks[KEY_EVENT])
-    {
-        executeFunction<void>(_callbacks[KEY_EVENT]->c_str(), "[Keyboard::KeyEvent][Keyboard::Key]", evt, key);
-    }
+    std::vector<std::string>& list = _callbacks[KEY_EVENT];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str(), "[Keyboard::KeyEvent][Keyboard::Key]", evt, key);
 }
 
 void ScriptController::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
-    if (_callbacks[TOUCH_EVENT])
-    {
-        executeFunction<void>(_callbacks[TOUCH_EVENT]->c_str(), "[Touch::TouchEvent]iiui", evt, x, y, contactIndex);
-    }
+    std::vector<std::string>& list = _callbacks[TOUCH_EVENT];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str(), "[Touch::TouchEvent]iiui", evt, x, y, contactIndex);
 }
 
 bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    if (_callbacks[MOUSE_EVENT])
+    std::vector<std::string>& list = _callbacks[MOUSE_EVENT];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
     {
-        return executeFunction<bool>(_callbacks[MOUSE_EVENT]->c_str(), "[Mouse::MouseEvent]iii", evt, x, y, wheelDelta);
+        if (executeFunction<bool>(list[i].c_str(), "[Mouse::MouseEvent]iii", evt, x, y, wheelDelta))
+            return true;
     }
     return false;
 }
 
 void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
-    if (_callbacks[GAMEPAD_EVENT])
-    {
-        executeFunction<void>(_callbacks[GAMEPAD_EVENT]->c_str(), "[Gamepad::GamepadEvent]<Gamepad>", evt, gamepad);
-    }
+    std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];
+    for (size_t i = 0, count = list.size(); i < count; ++i)
+        executeFunction<void>(list[i].c_str(), "[Gamepad::GamepadEvent]<Gamepad>", evt, gamepad);
 }
 
 void ScriptController::executeFunctionHelper(int resultCount, const char* func, const char* args, va_list* list)
@@ -935,10 +919,33 @@ void ScriptController::executeFunctionHelper(int resultCount, const char* func, 
         GP_WARN("Failed to call function '%s' with error '%s'.", func, lua_tostring(_lua, -1));
 }
 
-void ScriptController::registerCallback(ScriptCallback callback, const std::string& function)
+void ScriptController::registerCallback(const char* callback, const char* function)
 {
-    SAFE_DELETE(_callbacks[callback]);
-    _callbacks[callback] = new std::string(function);
+    ScriptCallback scb = toCallback(callback);
+    if (scb < INVALID_CALLBACK)
+    {
+        _callbacks[scb].push_back(function);
+    }
+    else
+    {
+        GP_WARN("Invalid script callback function specified: %s", callback);
+    }
+}
+
+void ScriptController::unregisterCallback(const char* callback, const char* function)
+{
+    ScriptCallback scb = toCallback(callback);
+    if (scb < INVALID_CALLBACK)
+    {
+        std::vector<std::string>& list = _callbacks[scb];
+        std::vector<std::string>::iterator itr = std::find(list.begin(), list.end(), std::string(function));
+        if (itr != list.end())
+            list.erase(itr);
+    }
+    else
+    {
+        GP_WARN("Invalid script callback function specified: %s", callback);
+    }
 }
 
 ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
