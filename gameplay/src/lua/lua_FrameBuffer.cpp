@@ -32,6 +32,7 @@ void luaRegister_FrameBuffer()
     {
         {"bindDefault", lua_FrameBuffer_static_bindDefault},
         {"create", lua_FrameBuffer_static_create},
+        {"getCurrent", lua_FrameBuffer_static_getCurrent},
         {"getFrameBuffer", lua_FrameBuffer_static_getFrameBuffer},
         {"getMaxRenderTargets", lua_FrameBuffer_static_getMaxRenderTargets},
         {NULL, NULL}
@@ -752,6 +753,43 @@ int lua_FrameBuffer_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_FrameBuffer_static_getCurrent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            void* returnPtr = (void*)FrameBuffer::getCurrent();
+            if (returnPtr)
+            {
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                object->instance = returnPtr;
+                object->owns = false;
+                luaL_getmetatable(state, "FrameBuffer");
+                lua_setmetatable(state, -2);
+            }
+            else
+            {
+                lua_pushnil(state);
+            }
+
+            return 1;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }
