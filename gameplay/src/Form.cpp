@@ -760,9 +760,7 @@ bool Form::projectPoint(int x, int y, Vector3* point)
 
         // To get the plane's distance from the origin, we'll find the distance from the plane defined
         // by the quad's forward vector and one of its points to the plane defined by the same vector and the origin.
-        const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
-        const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-        const float distance = fabs(d);
+        const float distance = fabs(Vector3::dot(min, normal));
         Plane plane(normal, -distance);
 
         // Check for collision with plane.
