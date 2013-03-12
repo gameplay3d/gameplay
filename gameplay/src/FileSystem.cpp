@@ -280,30 +280,54 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
         path.append(dirPath);
     }
     path.append("/.");
+    bool result = false;
+
     struct dirent* dp;
     DIR* dir = opendir(path.c_str());
-    if (!dir)
+    if (dir != NULL)
     {
-        return false;
-    }
-    while ((dp = readdir(dir)) != NULL)
-    {
-        std::string filepath(path);
-        filepath.append("/");
-        filepath.append(dp->d_name);
-
-        struct stat buf;
-        if (!stat(filepath.c_str(), &buf))
+        while ((dp = readdir(dir)) != NULL)
         {
-            // Add to the list if this is not a directory
-            if (!S_ISDIR(buf.st_mode))
+            std::string filepath(path);
+            filepath.append("/");
+            filepath.append(dp->d_name);
+
+            struct stat buf;
+            if (!stat(filepath.c_str(), &buf))
             {
-                files.push_back(dp->d_name);
+                // Add to the list if this is not a directory
+                if (!S_ISDIR(buf.st_mode))
+                {
+                    files.push_back(dp->d_name);
+                }
             }
         }
+        closedir(dir);
+        result = true;
     }
-    closedir(dir);
-    return true;
+
+#ifdef __ANDROID__
+    // List the files that are in the android APK at this path
+    AAssetDir* assetDir = AAssetManager_openDir(__assetManager, dirPath);
+    if (assetDir != NULL)
+    {
+        AAssetDir_rewind(assetDir);
+        const char* file = NULL;
+        while ((file = AAssetDir_getNextFileName(assetDir)) != NULL)
+        {
+            std::string filename(file);
+            // Check if this file was already added to the list because it was copied to the SD card.
+            if (find(files.begin(), files.end(), filename) == files.end())
+            {
+                files.push_back(filename);
+            }
+        }
+        AAssetDir_close(assetDir);
+        result = true;
+    }
+#endif
+
+    return result;
 #endif
 }
 
