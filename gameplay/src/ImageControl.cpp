@@ -85,7 +85,7 @@ void ImageControl::setRegionSrc(float x, float y, float width, float height)
     _uvs.u1 = x * _tw;
     _uvs.u2 = (x + width) * _tw;
     _uvs.v1 = 1.0f - (y * _th);
-    _uvs.v2 = 1.0f - ((y + height) * _tw);
+    _uvs.v2 = 1.0f - ((y + height) * _th);
 }
 
 void ImageControl::setRegionSrc(const Rectangle& region)
@@ -120,17 +120,20 @@ void ImageControl::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
     // An ImageControl is not part of the texture atlas but should use the same projection matrix.
     _batch->setProjectionMatrix(spriteBatch->getProjectionMatrix());
 
+    Vector4 color = Vector4::one();
+    color.w *= _opacity;
+
     _batch->start();
     if (_dstRegion.isEmpty())
     {
         _batch->draw(_viewportBounds.x, _viewportBounds.y, _viewportBounds.width, _viewportBounds.height,
-            _uvs.u1, _uvs.v1, _uvs.u2, _uvs.v2, Vector4::one(), _viewportClipBounds);
+            _uvs.u1, _uvs.v1, _uvs.u2, _uvs.v2, color, _viewportClipBounds);
     }
     else
     {
         _batch->draw(_viewportBounds.x + _dstRegion.x, _viewportBounds.y + _dstRegion.y,
             _dstRegion.width, _dstRegion.height,
-            _uvs.u1, _uvs.v1, _uvs.u2, _uvs.v2, Vector4::one(), _viewportClipBounds);
+            _uvs.u1, _uvs.v1, _uvs.u2, _uvs.v2, color, _viewportClipBounds);
     }
     _batch->finish();
 
