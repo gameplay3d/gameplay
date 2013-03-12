@@ -180,6 +180,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Global.cpp \
     lua/lua_HeightField.cpp \
     lua/lua_Image.cpp \
+    lua/lua_ImageControl.cpp \
     lua/lua_ImageFormat.cpp \
     lua/lua_Joint.cpp \
     lua/lua_Joystick.cpp \
@@ -262,6 +263,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Technique.cpp \
     lua/lua_Terrain.cpp \
     lua/lua_TerrainFlags.cpp \
+    lua/lua_TerrainListener.cpp \
     lua/lua_TextBox.cpp \
     lua/lua_Texture.cpp \
     lua/lua_TextureFilter.cpp \
