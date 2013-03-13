@@ -1011,9 +1011,11 @@ void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
             spriteBatch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
         if (border.left)
             spriteBatch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
-        if (border.left && border.right && border.top && border.bottom)
-            spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
-                center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+        
+        // Always draw the background.
+        spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
+            center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+
         if (border.right)
             spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
         if (border.bottom && border.left)
