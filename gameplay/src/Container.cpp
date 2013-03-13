@@ -799,7 +799,7 @@ void Container::updateScroll()
         _scrollBarOpacity = 0.99f;
         if (!_scrollBarOpacityClip)
         {
-            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
+            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_SCROLLBAR_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
             _scrollBarOpacityClip = animation->getClip();
         }
         _scrollBarOpacityClip->play();
@@ -1188,7 +1188,7 @@ unsigned int Container::getAnimationPropertyComponentCount(int propertyId) const
 {
     switch(propertyId)
     {
-    case ANIMATE_OPACITY:
+    case ANIMATE_SCROLLBAR_OPACITY:
         return 1;
     default:
         return Control::getAnimationPropertyComponentCount(propertyId);
@@ -1201,7 +1201,7 @@ void Container::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 
     switch(propertyId)
     {
-    case ANIMATE_OPACITY:
+    case ANIMATE_SCROLLBAR_OPACITY:
         value->setFloat(0, _scrollBarOpacity);
         break;
     default:
@@ -1216,7 +1216,7 @@ void Container::setAnimationPropertyValue(int propertyId, AnimationValue* value,
 
     switch(propertyId)
     {
-    case ANIMATE_OPACITY:
+    case ANIMATE_SCROLLBAR_OPACITY:
         _scrollBarOpacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
         _dirty = true;
         break;
