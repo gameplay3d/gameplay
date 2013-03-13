@@ -509,7 +509,7 @@ const Theme::UVs& Theme::UVs::empty()
 
 const Theme::UVs& Theme::UVs::full()
 {
-    static UVs full(0, 0, 1, 1);
+    static UVs full(0, 1, 1, 0);
     return full;
 }
 
