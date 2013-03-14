@@ -314,6 +314,7 @@
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\ScriptTarget.cpp" />
     <ClCompile Include="src\Slider.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
@@ -591,6 +592,7 @@
     <ClInclude Include="src\ScriptController.h" />
     <ClInclude Include="src\ScriptTarget.h" />
     <ClInclude Include="src\Slider.h" />
+    <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\SpriteBatch.h" />
     <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Technique.h" />

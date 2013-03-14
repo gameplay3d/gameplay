@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
+#include "Sprite.h"
 #include "Form.h"
 #include "ParticleEmitter.h"
 #include "PhysicsRigidBody.h"
@@ -425,6 +426,23 @@ public:
      */
     void setModel(Model* model);
 
+	/**
+     * Returns the pointer to this node's sprite.
+     * 
+     * @return The pointer to this node's sprite or NULL.
+     */
+    Sprite* getSprite() const;
+
+    /**
+     * Assigns a sprite to this node.
+     * 
+     * This will increase the reference count of the new sprite and decrease
+     * the reference count of the old sprite.
+     *
+     * @param model The new sprite. May be NULL.
+     */
+    void setSprite(Sprite* sprite);
+
     /**
      * Returns the pointer to this node's terrain.
      *
@@ -785,6 +803,11 @@ protected:
      * Pointer to the Model attached to the Node.
      */
     Model* _model;
+
+	/**
+	 * Pointer to the Sprite attached to the Node.
+	 */
+	Sprite* _sprite;
 
     /**
      * Pointer to the Terrain attached to the Node.

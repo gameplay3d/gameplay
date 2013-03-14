@@ -38,6 +38,7 @@
 #include "VertexFormat.h"
 #include "VertexAttributeBinding.h"
 #include "Model.h"
+#include "Sprite.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Scene.h"

@@ -21,7 +21,7 @@ namespace gameplay
 
 Node::Node(const char* id)
     : _scene(NULL), _firstChild(NULL), _nextSibling(NULL), _prevSibling(NULL), _parent(NULL), _childCount(0),
-    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
+    _tags(NULL), _camera(NULL), _light(NULL), _model(NULL), _sprite(NULL), _terrain(NULL), _form(NULL), _audioSource(NULL), _particleEmitter(NULL),
     _collisionObject(NULL), _agent(NULL), _dirtyBits(NODE_DIRTY_ALL), _notifyHierarchyChanged(true), _userData(NULL)
 {
     if (id)
@@ -36,6 +36,8 @@ Node::~Node()
 
     if (_model)
         _model->setNode(NULL);
+	if (_sprite)
+		_sprite->setNode(NULL);
     if (_audioSource)
         _audioSource->setNode(NULL);
     if (_particleEmitter)
@@ -46,6 +48,7 @@ Node::~Node()
     SAFE_RELEASE(_camera);
     SAFE_RELEASE(_light);
     SAFE_RELEASE(_model);
+	SAFE_RELEASE(_sprite);
     SAFE_RELEASE(_terrain);
     SAFE_RELEASE(_audioSource);
     SAFE_RELEASE(_particleEmitter);
@@ -792,6 +795,31 @@ void Node::setModel(Model* model)
         {
             _model->addRef();
             _model->setNode(this);
+        }
+    }
+}
+
+Sprite* Node::getSprite() const
+{
+    return _sprite;
+}
+
+void Node::setSprite(Sprite* sprite)
+{
+	if (_sprite != sprite)
+    {
+        if (_sprite)
+        {
+            _sprite->setNode(NULL);
+            SAFE_RELEASE(_sprite);
+        }
+
+        _sprite = sprite;
+
+        if (_sprite)
+        {
+            _sprite->addRef();
+            _sprite->setNode(this);
         }
     }
 }
