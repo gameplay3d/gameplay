@@ -131,6 +131,8 @@ protected:
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
     /**
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.

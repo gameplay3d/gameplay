@@ -69,7 +69,7 @@ public:
      */
     void controlEvent(Control* control, EventType evt);
 
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
     /**
      * Adds a test.

@@ -556,6 +556,8 @@ bool AnimationClip::update(float elapsedTime)
 
 void AnimationClip::onBegin()
 {
+    addRef();
+
     // Initialize animation to play.
     setClipStateBit(CLIP_IS_STARTED_BIT);
     if (_speed >= 0)
@@ -584,10 +586,14 @@ void AnimationClip::onBegin()
             listener++;
         }
     }
+
+    release();
 }
 
 void AnimationClip::onEnd()
 {
+    addRef();
+
     _blendWeight = 1.0f;
     resetClipStateBit(CLIP_ALL_BITS);
 
@@ -602,6 +608,8 @@ void AnimationClip::onEnd()
             listener++;
         }
     }
+
+    release();
 }
 
 bool AnimationClip::isClipStateBitSet(unsigned char bit) const

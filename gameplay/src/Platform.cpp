@@ -55,6 +55,15 @@ void Platform::resizeEventInternal(unsigned int width, unsigned int height)
     }
 }
 
+void Platform::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    if (!Form::gamepadEventInternal(evt, gamepad, analogIndex))
+    {
+        Game::getInstance()->gamepadEvent(evt, gamepad, analogIndex);
+        Game::getInstance()->getScriptController()->gamepadEvent(evt, gamepad, analogIndex);
+    }
+}
+
 void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                                              unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
 {

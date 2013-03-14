@@ -136,6 +136,7 @@ void luaRegister_Form()
         {"setVisible", lua_Form_setVisible},
         {"setWidth", lua_Form_setWidth},
         {"setZIndex", lua_Form_setZIndex},
+        {"timeEvent", lua_Form_timeEvent},
         {"update", lua_Form_update},
         {NULL, NULL}
     };
@@ -5196,6 +5197,46 @@ int lua_Form_static_getForm(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_timeEvent(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER &&
+                lua_type(state, 3) == LUA_TNONE)
+            {
+                // Get parameter 1 off the stack.
+                long param1 = (long)luaL_checklong(state, 2);
+
+                // Get parameter 2 off the stack.
+                void* param2 = (void*)luaL_checkint(state, 3);
+
+                Form* instance = getInstance(state);
+                instance->timeEvent(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_timeEvent - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

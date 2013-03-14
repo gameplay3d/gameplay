@@ -799,7 +799,7 @@ bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheel
     return false;
 }
 
-void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     if (_callbacks[GAMEPAD_EVENT])
     {

@@ -10,8 +10,8 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
-#include "ImageControl.h"
 #include "Joystick.h"
+#include "ImageControl.h"
 #include "Game.h"
 
 namespace gameplay
@@ -23,6 +23,12 @@ static const long SCROLL_INERTIA_DELAY = 100L;
 static const float SCROLL_FRICTION_FACTOR = 5.0f;
 // Distance that must be scrolled before isScrolling() will return true, used e.g. to cancel button-click events.
 static const float SCROLL_THRESHOLD = 10.0f;
+// Distance a joystick must be pushed in order to trigger focus-change and/or scrolling.
+static const float JOYSTICK_THRESHOLD = 0.75f;
+// Scroll speed when using a DPad -- max scroll speed when using a joystick.
+static const float GAMEPAD_SCROLL_SPEED = 500.0f;
+// If the DPad or joystick is held down, this is the initial delay in milliseconds between focus change events.
+static const float FOCUS_CHANGE_REPEAT_DELAY = 300.0f;
 
 /**
  * Sort function for use with _controls.sort(), based on Z-Order.
@@ -43,7 +49,10 @@ Container::Container()
       _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
-      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0), _totalWidth(0), _totalHeight(0),
+      _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0),
+      _focusPressed(0), _selectButtonDown(false),
+      _lastFrameTime(0), _focusChangeStartTime(0), _focusChangeRepeatDelay(FOCUS_CHANGE_REPEAT_DELAY), _focusChangeCount(0),
+      _totalWidth(0), _totalHeight(0),
       _contactIndices(0), _initializedWithScroll(false)
 {
 }
@@ -182,20 +191,6 @@ void Container::addControls(Theme* theme, Properties* properties)
         {
             addControl(control);
             control->release();
-
-            if (control->getZIndex() == -1)
-            {
-                control->setZIndex(_zIndexDefault++);
-            }
-
-            if (control->getFocusIndex() == -1)
-            {
-                control->setFocusIndex(_focusIndexDefault++);
-            }
-
-            int focusIndex = control->getFocusIndex();
-            if (focusIndex > _focusIndexMax)
-                _focusIndexMax = focusIndex;
         }
 
         // Get the next control.
@@ -203,7 +198,7 @@ void Container::addControls(Theme* theme, Properties* properties)
     }
 
     // Sort controls by Z-Order.
-    std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+    sortControls();
 }
 
 Layout* Container::getLayout()
@@ -220,11 +215,26 @@ unsigned int Container::addControl(Control* control)
         control->_parent->removeControl(control);
     }
 
+    if (control->getZIndex() == -1)
+    {
+        control->setZIndex(_zIndexDefault++);
+    }
+
+    if (control->getFocusIndex() == -1)
+    {
+        control->setFocusIndex(_focusIndexDefault++);
+    }
+
+    int focusIndex = control->getFocusIndex();
+    if (focusIndex > _focusIndexMax)
+        _focusIndexMax = focusIndex;
+
     if (control->_parent != this)
     {
         _controls.push_back(control);
         control->addRef();
         control->_parent = this;
+        sortControls();
         return (unsigned int)(_controls.size() - 1);
     }
     else
@@ -438,12 +448,6 @@ void Container::update(const Control* container, const Vector2& offset)
         _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 
-    // Sort controls by Z-Order.
-    if (_layout->getType() == Layout::LAYOUT_ABSOLUTE)
-    {
-        std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
-    }
-
     GP_ASSERT(_layout);
     if (_scroll != SCROLL_NONE)
     {
@@ -623,40 +627,504 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             continue;
         }
 
-        if (control->getState() == Control::FOCUS)
+        if (control->getState() == Control::FOCUS && control->keyEvent(evt, key))
         {
-            if (control->keyEvent(evt, key))
-            {
-                release();
-                return true;
-            }
-            else if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
-            {
-                // Shift focus to next control.
-                int focusIndex = control->getFocusIndex() + 1; // Index to search for.
-                if (focusIndex > _focusIndexMax)
-                {
-                    focusIndex = 0;
-                }
-                control->setState(Control::NORMAL);
-
-                std::vector<Control*>::const_iterator itt;
-                for (itt = _controls.begin(); itt < _controls.end(); itt++)
-                {
-                    Control* nextControl = *itt;
-                    if (nextControl->getFocusIndex() == focusIndex)
-                    {
-                        nextControl->setState(Control::FOCUS);
-                        release();
-                        return _consumeInputEvents;
-                    }
-                }
-            }
+            release();
+            return true;
         }
+    }
+
+    // If we made it this far, no control handled the event.
+    if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
+    {
+        moveFocus(NEXT);
+        return _consumeInputEvents;
     }
 
     release();
     return false;
+}
+
+bool Container::moveFocus(Direction direction, Control* outsideControl)
+{
+    Control* start = outsideControl;
+    if (!start)
+    {
+        std::vector<Control*>::const_iterator it;
+        for (it = _controls.begin(); it < _controls.end(); it++)
+        {
+            Control* control = *it;
+            GP_ASSERT(control);
+            if (control->getState() == Control::FOCUS)
+            {
+                control->setState(Control::NORMAL);
+                start = control;
+                break;
+            }
+        }
+    }
+
+    int focusIndex = 0;
+    Control* next = NULL;
+    if (start)
+    {
+        const Rectangle& startBounds = start->getAbsoluteBounds();
+        Vector2 vStart, vNext;
+        float distance = FLT_MAX;
+
+        switch(direction)
+        {
+        case UP:
+            vStart.set(startBounds.x + startBounds.width * 0.5f,
+                        startBounds.y);
+            break;
+        case DOWN:
+            vStart.set(startBounds.x + startBounds.width * 0.5f,
+                        startBounds.bottom());
+            break;
+        case LEFT:
+            vStart.set(startBounds.x,
+                        startBounds.y + startBounds.height * 0.5f);
+            break;
+        case RIGHT:
+            vStart.set(startBounds.right(),
+                        startBounds.y + startBounds.height * 0.5f);
+            break;
+        }
+
+        if (direction != NEXT)
+        {
+            std::vector<Control*>::const_iterator itt;
+            for (itt = _controls.begin(); itt < _controls.end(); itt++)
+            {
+                Control* nextControl = *itt;
+
+                if (nextControl == start || nextControl->getFocusIndex() < 0)
+                {
+                    // Control is not focusable.
+                    continue;
+                }
+
+                const Rectangle& nextBounds = nextControl->getAbsoluteBounds();
+                switch(direction)
+                {
+                case UP:
+                    vNext.set(nextBounds.x + nextBounds.width * 0.5f,
+                              nextBounds.bottom());
+                    if (vNext.y > vStart.y) continue;
+                    break;
+                case DOWN:
+                    vNext.set(nextBounds.x + nextBounds.width * 0.5f,
+                              nextBounds.y);
+                    if (vNext.y < vStart.y) continue;
+                    break;
+                case LEFT:
+                    vNext.set(nextBounds.right(),
+                              nextBounds.y + nextBounds.height * 0.5f);
+                    if (vNext.x > vStart.x) continue;
+                    break;
+                case RIGHT:
+                    vNext.set(nextBounds.x,
+                              nextBounds.y + nextBounds.height * 0.5f);
+                    if (vNext.x < vStart.x) continue;
+                    break;
+                }
+
+                float nextDistance = vStart.distance(vNext);
+                if (abs(nextDistance) < distance)
+                {
+                    distance = nextDistance;
+                    next = nextControl;
+                }
+            }
+        }
+
+        if (!next)
+        {
+            // Check for controls in the given direction in our parent container.
+            if (!outsideControl && _parent && _parent->moveFocus(direction, start))
+            {
+                setState(NORMAL);
+                _focusPressed = 0;
+                return true;
+            }
+            
+            // No control is in the given direction.  Move to the next control in the focus order.
+            int focusDelta;
+            switch(direction)
+            {
+            case UP:
+            case LEFT:
+                focusDelta = -1;
+                break;
+            case DOWN:
+            case RIGHT:
+            case NEXT:
+                focusDelta = 1;
+                break;
+            }
+
+            // Find the index to search for.
+            if (outsideControl)
+            {
+                focusIndex = outsideControl->_parent->getFocusIndex() + focusDelta;
+            }
+            else
+            {
+                focusIndex = start->getFocusIndex() + focusDelta;
+            }
+
+            if (focusIndex > _focusIndexMax)
+            {
+                focusIndex = 0;
+            }
+            else if (focusIndex < 0)
+            {
+                focusIndex = _focusIndexMax;
+            }
+        }
+    }
+
+    if (!next)
+    {
+        std::vector<Control*>::const_iterator itt;
+        for (itt = _controls.begin(); itt < _controls.end(); itt++)
+        {
+            Control* nextControl = *itt;
+            if (nextControl->getFocusIndex() == focusIndex)
+            {
+                next = nextControl;
+            }
+        }
+    }
+
+    // If we haven't found next by now, then there are no focusable controls in this container.
+    if (next)
+    {
+        next->setState(Control::FOCUS);
+        _dirty = true;
+
+        if (next->isContainer())
+        {
+            if (((Container*)next)->moveFocus(direction, start))
+            {
+                _focusChangeStartTime = 0;
+                return true;
+            }
+        }
+
+        // If the next control is not fully visible, scroll the container so that it is.
+        const Rectangle& bounds = next->getBounds();
+        if (bounds.x < _scrollPosition.x)
+        {
+            // Control is to the left of the scrolled viewport.
+            _scrollPosition.x = -bounds.x;
+        }
+        else if (bounds.x + bounds.width > _scrollPosition.x + _viewportBounds.width)
+        {
+            // Control is off to the right.
+            _scrollPosition.x = -(bounds.x + bounds.width - _viewportBounds.width);
+        }
+
+        if (bounds.y < _viewportBounds.y - _scrollPosition.y)
+        {
+            // Control is above the viewport.
+            _scrollPosition.y = -bounds.y;
+        }
+        else if (bounds.y + bounds.height > _viewportBounds.height - _scrollPosition.y)
+        {
+            // Control is below the viewport.
+            _scrollPosition.y = -(bounds.y + bounds.height - _viewportBounds.height);
+        }    
+
+        _focusChangeStartTime = Game::getAbsoluteTime();
+        if (outsideControl && outsideControl->_parent)
+        {
+            _focusPressed = direction;
+            _focusChangeCount = outsideControl->_parent->_focusChangeCount;
+            _focusChangeRepeatDelay = outsideControl->_parent->_focusChangeRepeatDelay;
+        }
+        addRef();
+        Game::getInstance()->schedule(_focusChangeRepeatDelay, this);
+
+        return true;
+    }
+
+    return false;
+}
+
+void Container::timeEvent(long timeDiff, void* cookie)
+{
+    double time = Game::getAbsoluteTime();
+    if (_focusPressed && abs(time - timeDiff - _focusChangeRepeatDelay - _focusChangeStartTime) < 50)
+    {
+        ++_focusChangeCount;
+        if (_focusChangeCount == 5)
+        {
+            _focusChangeRepeatDelay *= 0.5;
+        }
+
+        moveFocus((Direction)_focusPressed);
+    }
+    else
+    {
+        _focusChangeCount = 0;
+        _focusChangeRepeatDelay = FOCUS_CHANGE_REPEAT_DELAY;
+    }
+
+    release();
+}
+
+void Container::startScrolling(float x, float y, bool resetTime)
+{
+    _scrollingVelocity.set(-x, y);
+    _scrolling = true;
+    _scrollBarOpacity = 1.0f;
+    _dirty = true;
+
+    if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+    {
+        _scrollBarOpacityClip->stop();
+        _scrollBarOpacityClip = NULL;
+    }
+
+    if (resetTime)
+    {
+        _lastFrameTime = Game::getGameTime();
+    }
+}
+
+void Container::stopScrolling()
+{
+    _scrollingVelocity.set(0, 0);
+    _scrolling = false;
+    _dirty = true;
+}
+
+bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    addRef();
+
+    // Pass the event to any control that is active or in focus.
+    std::vector<Control*>::const_iterator it;
+    for (it = _controls.begin(); it < _controls.end(); it++)
+    {
+        Control* control = *it;
+        GP_ASSERT(control);
+        if (control->getState() == Control::FOCUS || control->getState() == Control::ACTIVE)
+        {
+            if (control->gamepadEvent(evt, gamepad, analogIndex))
+            {
+                release();
+                return true;
+            }
+        }
+    }
+
+    // First check if a selection button is down.
+    if (!_selectButtonDown)
+    {
+        if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
+            gamepad->isButtonDown(Gamepad::BUTTON_X))
+        {
+            _selectButtonDown = true;
+        }
+    }
+    else
+    {
+        if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
+            !gamepad->isButtonDown(Gamepad::BUTTON_X))
+        {
+            _selectButtonDown = false;
+        }
+    }
+
+    bool eventConsumed = false;
+
+    // Don't allow focus changes or scrolling while a selection button is down.
+    if (!_selectButtonDown)
+    {
+        switch (evt)
+        {
+            case Gamepad::BUTTON_EVENT:
+            {
+                // Shift focus forward or backward when the DPad is used.
+                if (!(_focusPressed & DOWN) &&
+                    gamepad->isButtonDown(Gamepad::BUTTON_DOWN))
+                {
+                    _focusPressed |= DOWN;
+                    if (!moveFocus(DOWN))
+                    {
+                        startScrolling(0, -GAMEPAD_SCROLL_SPEED);
+                    }
+                    eventConsumed |= _consumeInputEvents;
+                }
+                else if ((_focusPressed & DOWN) &&
+                            !gamepad->isButtonDown(Gamepad::BUTTON_DOWN))
+                {
+                    _focusPressed &= ~DOWN;
+                    eventConsumed |= _consumeInputEvents;
+                }
+                    
+                if (!(_focusPressed & RIGHT) &&
+                    gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
+                {
+                    _focusPressed |= RIGHT;
+                    if (!moveFocus(RIGHT))
+                    {
+                        startScrolling(GAMEPAD_SCROLL_SPEED, 0);
+                    }
+                    eventConsumed |= _consumeInputEvents;
+                }
+                else if ((_focusPressed & RIGHT) &&
+                    !gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
+                {
+                    _focusPressed &= ~RIGHT;
+                    eventConsumed |= _consumeInputEvents;
+                }
+
+                if (!(_focusPressed & UP) &&
+                    gamepad->isButtonDown(Gamepad::BUTTON_UP))
+                {
+                    _focusPressed |= UP;
+                    if (!moveFocus(UP))
+                    {
+                        startScrolling(0, GAMEPAD_SCROLL_SPEED);
+                    }
+                    eventConsumed |= _consumeInputEvents;
+                }
+                else if ((_focusPressed & UP) &&
+                    !gamepad->isButtonDown(Gamepad::BUTTON_UP))
+                {
+                    _focusPressed &= ~UP;
+                    eventConsumed |= _consumeInputEvents;
+                }
+
+                if (!(_focusPressed & LEFT) &&
+                    gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
+                {
+                    _focusPressed |= LEFT;
+                    if (!moveFocus(LEFT))
+                    {
+                        startScrolling(-GAMEPAD_SCROLL_SPEED, 0);
+                    }
+                    eventConsumed |= _consumeInputEvents;
+                }
+                else if ((_focusPressed & LEFT) &&
+                    !gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
+                {
+                    _focusPressed &= ~LEFT;
+                    eventConsumed |= _consumeInputEvents;
+                }
+                break;
+            }
+            case Gamepad::JOYSTICK_EVENT:
+            {
+                Vector2 joystick;
+                gamepad->getJoystickValues(analogIndex, &joystick);
+
+                switch (analogIndex)
+                {
+                case 0:
+                    // The left analog stick can be used in the same way as the DPad.
+                    if (!(_focusPressed & RIGHT) &&
+                        joystick.x > JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed |= RIGHT;
+                        if (!moveFocus(RIGHT))
+                        {
+                            startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, 0);
+                        }
+                    }
+                    else if (_focusPressed & RIGHT &&
+                        joystick.x < JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed &= ~RIGHT;
+                    }
+
+                    if (!(_focusPressed & DOWN) &&
+                        joystick.y < -JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed |= DOWN;
+                        if (!moveFocus(DOWN))
+                        {
+                            startScrolling(0, GAMEPAD_SCROLL_SPEED * joystick.y);
+                        }
+                    }
+                    else if (_focusPressed & DOWN &&
+                                joystick.y > -JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed &= ~DOWN;
+                    }
+
+                    if (!(_focusPressed & LEFT) &&
+                        joystick.x < -JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed |= LEFT;
+                        if (!moveFocus(LEFT))
+                        {
+                            startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, 0);
+                        }
+                    }
+                    else if (_focusPressed & LEFT &&
+                                joystick.x > -JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed &= ~LEFT;
+                    }
+                        
+                    if (!(_focusPressed & UP) &&
+                        joystick.y > JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed |= UP;
+                        if (!moveFocus(UP))
+                        {
+                            startScrolling(0, GAMEPAD_SCROLL_SPEED * joystick.y);
+                        }
+                    }
+                    else if (_focusPressed & UP &&
+                                joystick.y < JOYSTICK_THRESHOLD)
+                    {
+                        _focusPressed &= ~UP;
+                    }
+                    eventConsumed |= _consumeInputEvents;
+                    break;
+
+                case 1:
+                    // The right analog stick can be used to scroll.
+                    if (_scrolling)
+                    {
+                        if (joystick.isZero())
+                        {
+                            stopScrolling();
+                        }
+                        else
+                        {
+                            startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, GAMEPAD_SCROLL_SPEED * joystick.y, false);
+                        }
+                    }
+                    else
+                    {
+                        startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, GAMEPAD_SCROLL_SPEED * joystick.y);
+                    }
+                    release();
+                    return _consumeInputEvents;
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        eventConsumed |= _consumeInputEvents;
+    }
+
+    if (!_focusPressed && _scrolling)
+    {
+        stopScrolling();
+    }
+
+    release();
+    return eventConsumed;
 }
 
 bool Container::isContainer() const
@@ -700,11 +1168,14 @@ void Container::updateScroll()
         _layout->update(this, _scrollPosition);
     }
 
-    // Update Time.
-    static double lastFrameTime = Game::getGameTime();
+    // Update time.
+    if (!_lastFrameTime)
+    {
+        _lastFrameTime = Game::getGameTime();
+    }
     double frameTime = Game::getGameTime();
-    float elapsedTime = (float)(frameTime - lastFrameTime);
-    lastFrameTime = frameTime;
+    float elapsedTime = (float)(frameTime - _lastFrameTime);
+    _lastFrameTime = frameTime;
 
     const Theme::Border& containerBorder = getBorder(_state);
     const Theme::Padding& containerPadding = getPadding();
@@ -737,7 +1208,7 @@ void Container::updateScroll()
     float clipHeight = _bounds.height - containerBorder.top - containerBorder.bottom - containerPadding.top - containerPadding.bottom - hHeight;
 
     // Apply and dampen inertia.
-    if (!_scrolling && !_scrollingVelocity.isZero())
+    if (!_scrollingVelocity.isZero())
     {
         // Calculate the time passed since last update.
         float elapsedSecs = (float)elapsedTime * 0.001f;
@@ -745,14 +1216,17 @@ void Container::updateScroll()
         _scrollPosition.x += _scrollingVelocity.x * elapsedSecs;
         _scrollPosition.y += _scrollingVelocity.y * elapsedSecs;
 
-        float dampening = 1.0f - _scrollingFriction * SCROLL_FRICTION_FACTOR * elapsedSecs;
-        _scrollingVelocity.x *= dampening;
-        _scrollingVelocity.y *= dampening;
+        if (!_scrolling)
+        {
+            float dampening = 1.0f - _scrollingFriction * SCROLL_FRICTION_FACTOR * elapsedSecs;
+            _scrollingVelocity.x *= dampening;
+            _scrollingVelocity.y *= dampening;
 
-        if (fabs(_scrollingVelocity.x) < 100.0f)
-            _scrollingVelocity.x = 0.0f;
-        if (fabs(_scrollingVelocity.y) < 100.0f)
-            _scrollingVelocity.y = 0.0f;
+            if (fabs(_scrollingVelocity.x) < 100.0f)
+                _scrollingVelocity.x = 0.0f;
+            if (fabs(_scrollingVelocity.y) < 100.0f)
+                _scrollingVelocity.y = 0.0f;
+        }
     }
 
     // Stop scrolling when the far edge is reached.
@@ -799,7 +1273,7 @@ void Container::updateScroll()
         _scrollBarOpacity = 0.99f;
         if (!_scrollBarOpacityClip)
         {
-            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
+            Animation* animation = createAnimationFromTo("scrollbar-fade-out", ANIMATE_SCROLLBAR_OPACITY, &_scrollBarOpacity, &to, Curve::QUADRATIC_IN_OUT, 500L);
             _scrollBarOpacityClip = animation->getClip();
         }
         _scrollBarOpacityClip->play();
@@ -807,6 +1281,14 @@ void Container::updateScroll()
 
     // Position controls within scroll area.
     _layout->update(this, _scrollPosition);
+}
+
+void Container::sortControls()
+{
+    if (_layout->getType() == Layout::LAYOUT_ABSOLUTE)
+    {
+        std::sort(_controls.begin(), _controls.end(), &sortControlsByZOrder);
+    }
 }
 
 bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
@@ -1188,7 +1670,7 @@ unsigned int Container::getAnimationPropertyComponentCount(int propertyId) const
 {
     switch(propertyId)
     {
-    case ANIMATE_OPACITY:
+    case ANIMATE_SCROLLBAR_OPACITY:
         return 1;
     default:
         return Control::getAnimationPropertyComponentCount(propertyId);
@@ -1201,7 +1683,7 @@ void Container::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 
     switch(propertyId)
     {
-    case ANIMATE_OPACITY:
+    case ANIMATE_SCROLLBAR_OPACITY:
         value->setFloat(0, _scrollBarOpacity);
         break;
     default:
@@ -1216,7 +1698,7 @@ void Container::setAnimationPropertyValue(int propertyId, AnimationValue* value,
 
     switch(propertyId)
     {
-    case ANIMATE_OPACITY:
+    case ANIMATE_SCROLLBAR_OPACITY:
         _scrollBarOpacity = Curve::lerp(blendWeight, _opacity, value->getFloat(0));
         _dirty = true;
         break;
