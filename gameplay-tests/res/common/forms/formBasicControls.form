@@ -39,6 +39,7 @@ form basicControls
         min = -100
         max = 100
         value = 0
+		//step = 5
         text = This is a slider.
         valueTextVisible = true
     }
@@ -59,28 +60,36 @@ form basicControls
         text = This is a text box.
     }
 
-    radioButton choice1
-    {
-        style = iconNoBorder
-        text = Radio button 1.
-        group = testRadio
-        position = 350, 80
-        size = 180, 40
-        selected = true
-    }
+	container radioButtonContainer
+	{
+		layout = LAYOUT_VERTICAL
+		style = basic
+		position = 330, 100
+		size = 200, 140
+		
+		radioButton choice1
+		{
+			style = iconNoBorder
+			text = Radio button 1.
+			group = testRadio
+			//position = 350, 80
+			size = 180, 40
+			selected = true
+		}
 
-    radioButton choice2 : choice1
-    {
-        text = Radio button 2.
-        position = 350, 130
-        selected = false
-    }
+		radioButton choice2 : choice1
+		{
+			text = Radio button 2.
+			//position = 350, 130
+			selected = false
+		}
 
-    radioButton choice3 : choice2
-    {
-        text = Radio button 3.
-        position = 350, 180
-    }
+		radioButton choice3 : choice2
+		{
+			text = Radio button 3.
+			//position = 350, 180
+		}
+	}
 	
 	image testImage
 	{
@@ -88,8 +97,8 @@ form basicControls
 		style = basic
 		size = 256, 256
 		path = res/png/box-diffuse.png
-		srcRegion = 20, 20, 100, 100
-		dstRegion = 20, 20, 100, 100
+		//srcRegion = 20, 20, 100, 100
+		//dstRegion = 20, 20, 100, 100
 	}
 	
 	button alignedButton

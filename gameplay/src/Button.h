@@ -85,6 +85,8 @@ protected:
      */
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
     /**
      * @see Control::getType
      */

@@ -273,7 +273,7 @@ void LightTest::controlEvent(Control* control, EventType evt)
 	
 	switch(evt)
     {
-	case Listener::VALUE_CHANGED:
+	case Control::Listener::VALUE_CHANGED:
 		if ((control == _redSlider) || (control == _greenSlider) || (control == _blueSlider))
         {
 			Vector3 color(_redSlider->getValue(), _greenSlider->getValue(), _blueSlider->getValue());

@@ -34,8 +34,8 @@ void InputTest::initialize()
     // Create input test controls
     _keyboardState = false;
     _inputTestControls = Form::create("res/common/inputs.form");
-    static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->addListener(this, Listener::CLICK);
-    static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->addListener(this, Listener::CLICK);
+    static_cast<Button*>(_inputTestControls->getControl("showKeyboardButton"))->addListener(this, Control::Listener::CLICK);
+    static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->addListener(this, Control::Listener::CLICK);
     if (!hasMouse())
     {
         static_cast<Button*>(_inputTestControls->getControl("captureMouseButton"))->setVisible(false);
