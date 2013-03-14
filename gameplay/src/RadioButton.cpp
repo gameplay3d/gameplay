@@ -81,7 +81,7 @@ const Vector2& RadioButton::getImageSize() const
 
 void RadioButton::addListener(Control::Listener* listener, int eventFlags)
 {
-    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
         GP_ERROR("TEXT_CHANGED event is not applicable to RadioButton.");
     }
@@ -105,7 +105,7 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
                     {
                         RadioButton::clearSelected(_groupId);
                         _selected = true;
-                        notifyListeners(Listener::VALUE_CHANGED);
+                        notifyListeners(Control::Listener::VALUE_CHANGED);
                     }
                 }
             }
@@ -114,6 +114,27 @@ bool RadioButton::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int c
     }
 
     return Button::touchEvent(evt, x, y, contactIndex);
+}
+
+bool RadioButton::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    switch (evt)
+    {
+    case Gamepad::BUTTON_EVENT:
+        if (_state == Control::ACTIVE)
+        {
+            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
+                !gamepad->isButtonDown(Gamepad::BUTTON_X))
+            {
+                RadioButton::clearSelected(_groupId);
+                _selected = true;
+                notifyListeners(Control::Listener::VALUE_CHANGED);
+            }
+        }
+        break;
+    }
+
+    return Button::gamepadEvent(evt, gamepad, analogIndex);
 }
 
 void RadioButton::clearSelected(const std::string& groupId)
@@ -127,7 +148,7 @@ void RadioButton::clearSelected(const std::string& groupId)
         {
             radioButton->_selected = false;
             radioButton->_dirty = true;
-            radioButton->notifyListeners(Listener::VALUE_CHANGED);
+            radioButton->notifyListeners(Control::Listener::VALUE_CHANGED);
         }
     }
 }
