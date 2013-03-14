@@ -123,30 +123,22 @@ bool Game::startup()
         Properties* scripts = _properties->getNamespace("scripts", true);
         if (scripts)
         {
-            const char* name;
-            while ((name = scripts->getNextProperty()) != NULL)
+            const char* callback;
+            while ((callback = scripts->getNextProperty()) != NULL)
             {
-                ScriptController::ScriptCallback callback = ScriptController::toCallback(name);
-                if (callback != ScriptController::INVALID_CALLBACK)
-                {
-                    std::string url = scripts->getString();
-                    std::string file;
-                    std::string id;
-                    splitURL(url, &file, &id);
+                std::string url = scripts->getString();
+                std::string file;
+                std::string id;
+                splitURL(url, &file, &id);
 
-                    if (file.size() <= 0 || id.size() <= 0)
-                    {
-                        GP_ERROR("Invalid %s script callback function '%s'.", name, url.c_str());
-                    }
-                    else
-                    {
-                        _scriptController->loadScript(file.c_str());
-                        _scriptController->registerCallback(callback, id);
-                    }
+                if (file.size() <= 0 || id.size() <= 0)
+                {
+                    GP_ERROR("Invalid %s script callback function '%s'.", callback, url.c_str());
                 }
                 else
                 {
-                    // Ignore everything else.
+                    _scriptController->loadScript(file.c_str());
+                    _scriptController->registerCallback(callback, id.c_str());
                 }
             }
         }
