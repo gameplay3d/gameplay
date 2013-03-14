@@ -3,7 +3,8 @@
 
 #include "Base.h"
 #include "Game.h"
-#include "Gamepad.h"
+//#include "Gamepad.h"
+#include "Control.h"
 
 namespace gameplay
 {
@@ -847,7 +848,7 @@ private:
      * @param evt The gamepad event that occurred.
      * @param gamepad the gamepad the event occurred on
      */
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
     /**
      * Calls the specified Lua function using the given parameters.

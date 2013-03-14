@@ -111,6 +111,7 @@ int lua_Form_static_ANIMATE_SIZE_HEIGHT(lua_State* state);
 int lua_Form_static_ANIMATE_SIZE_WIDTH(lua_State* state);
 int lua_Form_static_create(lua_State* state);
 int lua_Form_static_getForm(lua_State* state);
+int lua_Form_timeEvent(lua_State* state);
 int lua_Form_update(lua_State* state);
 
 void luaRegister_Form();

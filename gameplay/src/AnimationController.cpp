@@ -106,6 +106,7 @@ void AnimationController::update(float elapsedTime)
     {
         AnimationClip* clip = (*clipIter);
         GP_ASSERT(clip);
+        clip->addRef();
         if (clip->isClipStateBitSet(AnimationClip::CLIP_IS_RESTARTED_BIT))
         {   // If the CLIP_IS_RESTARTED_BIT is set, we should end the clip and 
             // move it from where it is in the running clips list to the back.
@@ -116,13 +117,14 @@ void AnimationController::update(float elapsedTime)
         }
         else if (clip->update(elapsedTime))
         {
-            SAFE_RELEASE(clip);
+            clip->release();
             clipIter = _runningClips.erase(clipIter);
         }
         else
         {
             clipIter++;
         }
+        clip->release();
     }
 
     Transform::resumeTransformChanged();

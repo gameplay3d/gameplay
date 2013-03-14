@@ -3,6 +3,7 @@
 
 #include "Control.h"
 #include "Layout.h"
+#include "TimeListener.h"
 
 namespace gameplay
 {
@@ -44,7 +45,7 @@ namespace gameplay
     }
  @endverbatim
  */
-class Container : public Control
+class Container : public Control, TimeListener
 {
 
 public:
@@ -212,6 +213,8 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
+    void timeEvent(long timeDiff, void* cookie);
+
 protected:
 
     /**
@@ -295,6 +298,8 @@ protected:
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
     /**
      * Gets a Layout::Type enum from a matching string.
      *
@@ -333,6 +338,13 @@ protected:
      * Update scroll position and velocity.
      */
     void updateScroll();
+
+    /**
+     * Sorts controls by Z-Order (for absolute layouts only).
+     * This method is used by controls to notify their parent container when
+     * their Z-Index changes.
+     */
+    void sortControls();
 
     /**
      * Applies touch events to scroll state.
@@ -513,16 +525,40 @@ private:
      */
     Container(const Container& copy);
 
+    enum Direction
+    {
+        UP = 0x01,
+        DOWN = 0x02,
+        LEFT = 0x04,
+        RIGHT = 0x08,
+        NEXT = 0x10
+    };
+
+    // Returns true on success; false if there are no controls to focus on,
+    // in which case scrolling can be initiated.
+    bool moveFocus(Direction direction, Control* outsideControl = NULL);
+
+    // Starts scrolling at the given horizontal and vertical speeds.
+    void startScrolling(float x, float y, bool resetTime = true);
+
+    void stopScrolling();
+
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
     int _focusIndexDefault;
     int _focusIndexMax;
+    unsigned int _focusPressed;
+    bool _selectButtonDown;
+    double _lastFrameTime;
+
+    // Timing information for repeating focus changes.
+    double _focusChangeStartTime;
+    double _focusChangeRepeatDelay;
+    unsigned int _focusChangeCount;
 
     float _totalWidth;
     float _totalHeight;
-
     int _contactIndices;
-
     bool _initializedWithScroll;
 };
 

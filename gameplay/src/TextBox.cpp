@@ -39,7 +39,7 @@ int TextBox::getLastKeypress()
 
 void TextBox::addListener(Control::Listener* listener, int eventFlags)
 {
-    if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
+    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
     {
         GP_ERROR("VALUE_CHANGED event is not applicable to TextBox.");
     }
@@ -142,7 +142,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                         font->getLocationAtIndex(_text.c_str(), _textBounds, fontSize, &_caretLocation, textIndex,
                             textAlignment, true, rightToLeft);
                         _dirty = true;
-                        notifyListeners(Listener::TEXT_CHANGED);
+                        notifyListeners(Control::Listener::TEXT_CHANGED);
                         break;
                     }
                     case Keyboard::KEY_LEFT_ARROW:
@@ -255,6 +255,8 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     case Keyboard::KEY_ESCAPE:
                         break;
                     case Keyboard::KEY_TAB:
+                        // Allow tab to move the focus forward.
+                        return false;
                         break;
                     default:
                     {
@@ -303,7 +305,7 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     break;
                 }
 
-                notifyListeners(Listener::TEXT_CHANGED);
+                notifyListeners(Control::Listener::TEXT_CHANGED);
                 break;
             }
         }
