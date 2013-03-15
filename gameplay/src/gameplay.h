@@ -30,6 +30,7 @@
 // Graphics
 #include "Texture.h"
 #include "Image.h"
+#include "TileSheet.h"
 #include "Mesh.h"
 #include "MeshPart.h"
 #include "Effect.h"

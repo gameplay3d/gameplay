@@ -330,6 +330,7 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\VerticalLayout.cpp" />
+    <ClCompile Include="src\TileSheet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
@@ -602,6 +603,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
     <ClInclude Include="src\ThemeStyle.h" />
+    <ClInclude Include="src\TileSheet.h" />
     <ClInclude Include="src\TimeListener.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />

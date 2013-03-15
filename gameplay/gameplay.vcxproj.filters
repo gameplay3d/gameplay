@@ -852,6 +852,9 @@
     <ClCompile Include="src\Sprite.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\TileSheet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h">
@@ -1689,6 +1692,9 @@
       <Filter>src\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\Sprite.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TileSheet.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
