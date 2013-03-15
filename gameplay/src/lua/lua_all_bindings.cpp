@@ -120,6 +120,7 @@ void lua_RegisterAllBindings()
     luaRegister_ThemeStyle();
     luaRegister_ThemeThemeImage();
     luaRegister_ThemeUVs();
+	luaRegister_TileSheet();
     luaRegister_Touch();
     luaRegister_Transform();
     luaRegister_TransformListener();

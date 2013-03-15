@@ -115,6 +115,7 @@
 #include "lua_ThemeStyle.h"
 #include "lua_ThemeThemeImage.h"
 #include "lua_ThemeUVs.h"
+#include "lua_TileSheet.h"
 #include "lua_Touch.h"
 #include "lua_Transform.h"
 #include "lua_TransformListener.h"

@@ -51,6 +51,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\lua\lua_TileSheet.cpp" />
     <ClCompile Include="src\AbsoluteLayout.cpp" />
     <ClCompile Include="src\AIAgent.cpp" />
     <ClCompile Include="src\AIController.cpp" />
@@ -538,6 +539,7 @@
     <ClInclude Include="src\lua\lua_ThemeStyle.h" />
     <ClInclude Include="src\lua\lua_ThemeThemeImage.h" />
     <ClInclude Include="src\lua\lua_ThemeUVs.h" />
+    <ClInclude Include="src\lua\lua_TileSheet.h" />
     <ClInclude Include="src\lua\lua_Touch.h" />
     <ClInclude Include="src\lua\lua_TouchTouchEvent.h" />
     <ClInclude Include="src\lua\lua_Transform.h" />
