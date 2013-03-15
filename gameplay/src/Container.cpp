@@ -657,7 +657,6 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             GP_ASSERT(control);
             if (control->getState() == Control::FOCUS)
             {
-                control->setState(Control::NORMAL);
                 start = control;
                 break;
             }
@@ -671,6 +670,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         const Rectangle& startBounds = start->getAbsoluteBounds();
         Vector2 vStart, vNext;
         float distance = FLT_MAX;
+        start->setState(Control::NORMAL);
 
         switch(direction)
         {
@@ -699,7 +699,8 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             {
                 Control* nextControl = *itt;
 
-                if (nextControl == start || nextControl->getFocusIndex() < 0)
+                if (nextControl == start || nextControl->getFocusIndex() < 0 ||
+                    !nextControl->isEnabled() || !nextControl->isVisible())
                 {
                     // Control is not focusable.
                     continue;
@@ -808,7 +809,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         {
             if (((Container*)next)->moveFocus(direction, start))
             {
-                _focusChangeStartTime = 0;
+                _focusPressed = 0;
                 return true;
             }
         }
@@ -835,7 +836,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         {
             // Control is below the viewport.
             _scrollPosition.y = -(bounds.y + bounds.height - _viewportBounds.height);
-        }    
+        }
 
         _focusChangeStartTime = Game::getAbsoluteTime();
         if (outsideControl && outsideControl->_parent)
@@ -844,6 +845,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             _focusChangeCount = outsideControl->_parent->_focusChangeCount;
             _focusChangeRepeatDelay = outsideControl->_parent->_focusChangeRepeatDelay;
         }
+
         addRef();
         Game::getInstance()->schedule(_focusChangeRepeatDelay, this);
 
@@ -856,14 +858,14 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
 void Container::timeEvent(long timeDiff, void* cookie)
 {
     double time = Game::getAbsoluteTime();
-    if (_focusPressed && abs(time - timeDiff - _focusChangeRepeatDelay - _focusChangeStartTime) < 50)
+    if (_state == FOCUS && _focusPressed &&
+        abs(time - timeDiff - _focusChangeRepeatDelay - _focusChangeStartTime) < 50)
     {
         ++_focusChangeCount;
         if (_focusChangeCount == 5)
         {
             _focusChangeRepeatDelay *= 0.5;
         }
-
         moveFocus((Direction)_focusPressed);
     }
     else
@@ -905,6 +907,8 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
 {
     addRef();
 
+    bool eventConsumed = false;
+
     // Pass the event to any control that is active or in focus.
     std::vector<Control*>::const_iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
@@ -913,11 +917,12 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
         GP_ASSERT(control);
         if (control->getState() == Control::FOCUS || control->getState() == Control::ACTIVE)
         {
-            if (control->gamepadEvent(evt, gamepad, analogIndex))
+            eventConsumed |= control->gamepadEvent(evt, gamepad, analogIndex);
+            if (eventConsumed && !control->isContainer())
             {
-                release();
-                return true;
+                _focusPressed = 0;
             }
+            break;
         }
     }
 
@@ -928,6 +933,8 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
             gamepad->isButtonDown(Gamepad::BUTTON_X))
         {
             _selectButtonDown = true;
+            _focusPressed = 0;
+            eventConsumed |= _consumeInputEvents;
         }
     }
     else
@@ -939,10 +946,11 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
         }
     }
 
-    bool eventConsumed = false;
+    Vector2 joystick;
+    gamepad->getJoystickValues(analogIndex, &joystick);
 
     // Don't allow focus changes or scrolling while a selection button is down.
-    if (!_selectButtonDown)
+    if (!_selectButtonDown && !eventConsumed)
     {
         switch (evt)
         {
@@ -953,140 +961,93 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                     gamepad->isButtonDown(Gamepad::BUTTON_DOWN))
                 {
                     _focusPressed |= DOWN;
-                    if (!moveFocus(DOWN))
-                    {
+                    eventConsumed |= _consumeInputEvents;
+                    if (moveFocus(DOWN))
+                        break;
+                    else
                         startScrolling(0, -GAMEPAD_SCROLL_SPEED);
-                    }
-                    eventConsumed |= _consumeInputEvents;
-                }
-                else if ((_focusPressed & DOWN) &&
-                            !gamepad->isButtonDown(Gamepad::BUTTON_DOWN))
-                {
-                    _focusPressed &= ~DOWN;
-                    eventConsumed |= _consumeInputEvents;
                 }
                     
                 if (!(_focusPressed & RIGHT) &&
                     gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
                 {
                     _focusPressed |= RIGHT;
-                    if (!moveFocus(RIGHT))
-                    {
+                    eventConsumed |= _consumeInputEvents;
+                    if (moveFocus(RIGHT))
+                        break;
+                    else
                         startScrolling(GAMEPAD_SCROLL_SPEED, 0);
-                    }
-                    eventConsumed |= _consumeInputEvents;
-                }
-                else if ((_focusPressed & RIGHT) &&
-                    !gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
-                {
-                    _focusPressed &= ~RIGHT;
-                    eventConsumed |= _consumeInputEvents;
                 }
 
                 if (!(_focusPressed & UP) &&
                     gamepad->isButtonDown(Gamepad::BUTTON_UP))
                 {
                     _focusPressed |= UP;
-                    if (!moveFocus(UP))
-                    {
+                    eventConsumed |= _consumeInputEvents;
+                    if (moveFocus(UP))
+                        break;
+                    else
                         startScrolling(0, GAMEPAD_SCROLL_SPEED);
-                    }
-                    eventConsumed |= _consumeInputEvents;
-                }
-                else if ((_focusPressed & UP) &&
-                    !gamepad->isButtonDown(Gamepad::BUTTON_UP))
-                {
-                    _focusPressed &= ~UP;
-                    eventConsumed |= _consumeInputEvents;
                 }
 
                 if (!(_focusPressed & LEFT) &&
                     gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
                 {
                     _focusPressed |= LEFT;
-                    if (!moveFocus(LEFT))
-                    {
+                    eventConsumed |= _consumeInputEvents;
+                    if (moveFocus(LEFT))
+                        break;
+                    else
                         startScrolling(-GAMEPAD_SCROLL_SPEED, 0);
-                    }
-                    eventConsumed |= _consumeInputEvents;
-                }
-                else if ((_focusPressed & LEFT) &&
-                    !gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
-                {
-                    _focusPressed &= ~LEFT;
-                    eventConsumed |= _consumeInputEvents;
                 }
                 break;
             }
             case Gamepad::JOYSTICK_EVENT:
             {
-                Vector2 joystick;
-                gamepad->getJoystickValues(analogIndex, &joystick);
-
                 switch (analogIndex)
                 {
                 case 0:
                     // The left analog stick can be used in the same way as the DPad.
+                    eventConsumed |= _consumeInputEvents;
                     if (!(_focusPressed & RIGHT) &&
                         joystick.x > JOYSTICK_THRESHOLD)
                     {
                         _focusPressed |= RIGHT;
-                        if (!moveFocus(RIGHT))
-                        {
+                        if (moveFocus(RIGHT))
+                            break;
+                        else
                             startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, 0);
-                        }
-                    }
-                    else if (_focusPressed & RIGHT &&
-                        joystick.x < JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed &= ~RIGHT;
                     }
 
                     if (!(_focusPressed & DOWN) &&
                         joystick.y < -JOYSTICK_THRESHOLD)
                     {
                         _focusPressed |= DOWN;
-                        if (!moveFocus(DOWN))
-                        {
+                        if (moveFocus(DOWN))
+                            break;
+                        else
                             startScrolling(0, GAMEPAD_SCROLL_SPEED * joystick.y);
-                        }
-                    }
-                    else if (_focusPressed & DOWN &&
-                                joystick.y > -JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed &= ~DOWN;
                     }
 
                     if (!(_focusPressed & LEFT) &&
                         joystick.x < -JOYSTICK_THRESHOLD)
                     {
                         _focusPressed |= LEFT;
-                        if (!moveFocus(LEFT))
-                        {
+                        if (moveFocus(LEFT))
+                            break;
+                        else
                             startScrolling(GAMEPAD_SCROLL_SPEED * joystick.x, 0);
-                        }
-                    }
-                    else if (_focusPressed & LEFT &&
-                                joystick.x > -JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed &= ~LEFT;
                     }
                         
                     if (!(_focusPressed & UP) &&
                         joystick.y > JOYSTICK_THRESHOLD)
                     {
                         _focusPressed |= UP;
-                        if (!moveFocus(UP))
-                        {
+                        if (moveFocus(UP))
+                            break;
+                        else
                             startScrolling(0, GAMEPAD_SCROLL_SPEED * joystick.y);
-                        }
                     }
-                    else if (_focusPressed & UP &&
-                                joystick.y < JOYSTICK_THRESHOLD)
-                    {
-                        _focusPressed &= ~UP;
-                    }
-                    eventConsumed |= _consumeInputEvents;
                     break;
 
                 case 1:
@@ -1108,13 +1069,40 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                     }
                     release();
                     return _consumeInputEvents;
-                    break;
                 }
             }
         }
     }
-    else
+
+    if ((_focusPressed & DOWN) &&
+        !gamepad->isButtonDown(Gamepad::BUTTON_DOWN) &&
+        joystick.y > -JOYSTICK_THRESHOLD)
     {
+        _focusPressed &= ~DOWN;
+        eventConsumed |= _consumeInputEvents;
+    }
+
+    if ((_focusPressed & RIGHT) &&
+        !gamepad->isButtonDown(Gamepad::BUTTON_RIGHT) &&
+        joystick.x < JOYSTICK_THRESHOLD)
+    {
+        _focusPressed &= ~RIGHT;
+        eventConsumed |= _consumeInputEvents;
+    }
+    
+    if ((_focusPressed & UP) &&
+        !gamepad->isButtonDown(Gamepad::BUTTON_UP) &&
+        joystick.y < JOYSTICK_THRESHOLD)
+    {
+        _focusPressed &= ~UP;
+        eventConsumed |= _consumeInputEvents;
+    }
+
+    if ((_focusPressed & LEFT) &&
+        !gamepad->isButtonDown(Gamepad::BUTTON_LEFT) &&
+        joystick.x > -JOYSTICK_THRESHOLD)
+    {
+        _focusPressed &= ~LEFT;
         eventConsumed |= _consumeInputEvents;
     }
 
