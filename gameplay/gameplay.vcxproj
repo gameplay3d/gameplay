@@ -238,6 +238,7 @@
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp" />
     <ClCompile Include="src\lua\lua_Slider.cpp" />
+    <ClCompile Include="src\lua\lua_Sprite.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
@@ -520,6 +521,7 @@
     <ClInclude Include="src\lua\lua_ScriptController.h" />
     <ClInclude Include="src\lua\lua_ScriptTarget.h" />
     <ClInclude Include="src\lua\lua_Slider.h" />
+    <ClInclude Include="src\lua\lua_Sprite.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />

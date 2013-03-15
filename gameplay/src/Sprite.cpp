@@ -2,8 +2,6 @@
 #include "Sprite.h"
 #include "Node.h"
 
-//TODO: Need to create Lua binding
-
 namespace gameplay
 {
 
