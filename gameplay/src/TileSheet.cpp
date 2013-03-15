@@ -48,7 +48,7 @@ TileSheet* TileSheet::getTileSheet(const char* id)
     {
         TileSheet* ts = *it;
         GP_ASSERT(ts);
-        if (strcmp(id, ts->getId()) == 0)
+		if (ts->_id == id)
         {
             return ts;
         }

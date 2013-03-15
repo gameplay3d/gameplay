@@ -1,8 +1,7 @@
 #ifndef SPRITE_H_
 #define SPRITE_H_
 
-#include "Ref.h"
-#include "AnimationTarget.h"
+#include "TileSheet.h"
 
 namespace gameplay
 {
@@ -14,10 +13,20 @@ class Node;
  */
 class Sprite : public AnimationTarget, public Ref
 {
+	friend class Node;
 
 public:
 
-	//TODO
+	/**
+	 * Creates a new Sprite for drawing.
+	 * 
+	 * @param id The ID for the new Sprite.
+	 * @param tileSheet The TileSheet that represents this Sprite.
+	 * 
+	 * @return A new Sprite for drawing.
+	 * @script{create}
+	 */
+	static Sprite* create(const char* id, TileSheet* tileSheet);
 
 	/**
      * Gets the identifier for the sprite.
@@ -42,6 +51,28 @@ public:
 	 */
 	void setNode(Node* node);
 
+	/**
+     * Gets the tile sheet that the spritec draws.
+     *
+     * @return The sprite's tile sheet.
+     */
+	TileSheet* getTileSheet();
+
+	/**
+     * @see AnimationTarget::getAnimationPropertyComponentCount
+     */
+    unsigned int getAnimationPropertyComponentCount(int propertyId) const;
+
+    /**
+     * @see AnimationTarget::getAnimationProperty
+     */
+    void getAnimationPropertyValue(int propertyId, AnimationValue* value);
+
+    /**
+     * @see AnimationTarget::setAnimationProperty
+     */
+    void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
+
 protected:
 
 	/**
@@ -53,6 +84,22 @@ protected:
      * Destructor.
      */
     virtual ~Sprite();
+
+	/**
+     * Clones the sprite and returns a new sprite.
+     * 
+     * @param context The clone context.
+     * @return The new cloned sprite.
+     */
+    virtual Sprite* clone(NodeCloneContext &context);
+
+	/**
+     * Copies the data from this Sprite into the given sprite.
+     * 
+     * @param sprite The sprite to copy the data to.
+     * @param context The clone context.
+     */
+    void cloneInto(Sprite* sprite, NodeCloneContext &context) const;
 
 	//TODO
 
@@ -79,6 +126,11 @@ protected:
 	 * The Sprite's Node that it uses to position itself.
 	 */
 	Node* _node;
+
+	/**
+	 * The Sprite's TileSheet that represents what will be drawn.
+	 */
+	TileSheet* _tileSheet;
 
 	//TODO
 };

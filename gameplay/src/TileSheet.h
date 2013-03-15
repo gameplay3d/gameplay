@@ -47,7 +47,7 @@ public:
 
 	//TODO
 
-protected:
+private:
 
     TileSheet(const char* id);
 

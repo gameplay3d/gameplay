@@ -1029,6 +1029,12 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
         node->setModel(modelClone);
         modelClone->release();
     }
+	if (Sprite* sprite = getSprite())
+    {
+        Sprite* spriteClone = sprite->clone(context);
+        node->setSprite(spriteClone);
+        spriteClone->release();
+    }
     node->_world = _world;
     node->_bounds = _bounds;
     node->_userData = _userData;
