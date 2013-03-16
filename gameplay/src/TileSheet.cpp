@@ -1,8 +1,6 @@
 #include "Base.h"
 #include "TileSheet.h"
 
-//TODO: Need to create Lua binding
-
 namespace gameplay
 {
 
@@ -10,7 +8,7 @@ namespace gameplay
 static std::vector<TileSheet*> _tileSheets;
 
 TileSheet::TileSheet(const char* id)
-	: _id(id ? id : ""), _batch(NULL)
+	: _id(id ? id : ""), _batch(NULL), _strips()
 {
 }
 
@@ -56,11 +54,120 @@ TileSheet* TileSheet::getTileSheet(const char* id)
     return NULL;
 }
 
-//TODO
-
 const char* TileSheet::getId() const
 {
     return _id.c_str();
+}
+
+SpriteBatch* TileSheet::getSpriteBatch() const
+{
+	return _batch;
+}
+
+unsigned int TileSheet::getStripCount() const
+{
+	return _strips.size();
+}
+
+const char* TileSheet::getStripId(unsigned int stripIndex) const
+{
+	return _strips[stripIndex]._id.c_str();
+}
+
+int TileSheet::getStrip(const char* id) const
+{
+	GP_ASSERT(id);
+
+	std::vector<TileSheet::FrameStrip>::const_iterator it;
+	int index;
+	for (it = _strips.begin(), index = 0; it != _strips.end(); ++it, ++index)
+    {
+		if ((*it)._id == id)
+        {
+            return index;
+        }
+    }
+    return -1;
+}
+
+unsigned int TileSheet::getStripFrameCount(const char* id) const
+{
+	int index = getStrip(id);
+	if(index < 0)
+	{
+		return 0;
+	}
+	return getStripFrameCount(index);
+}
+
+unsigned int TileSheet::getStripFrameCount(unsigned int index) const
+{
+	return _strips[index]._frames.size();
+}
+
+void TileSheet::addStrip(const char* id, unsigned int frameCount)
+{
+	GP_ASSERT(frameCount > 0);
+
+	_strips.push_back(TileSheet::FrameStrip(id, frameCount));
+}
+
+bool TileSheet::removeStrip(unsigned int index)
+{
+	if(index < _strips.size())
+	{
+		_strips.erase(_strips.begin() + index);
+	}
+	return false;
+}
+
+bool TileSheet::removeStrip(const char* id)
+{
+	int index = getStrip(id);
+	if(index < 0)
+	{
+		return false;
+	}
+	return removeStrip(index);
+}
+
+const Rectangle& TileSheet::getStripFrame(unsigned int stripIndex, unsigned int frameIndex) const
+{
+	return _strips[stripIndex]._frames[frameIndex];
+}
+
+const Rectangle& TileSheet::getStripFrame(const char* id, unsigned int frameIndex) const
+{
+	int index = getStrip(id);
+	if(index < 0)
+	{
+		return Rectangle::empty();
+	}
+	return getStripFrame(index, frameIndex);
+}
+
+void TileSheet::setStripFrame(unsigned int stripIndex, unsigned int frameIndex, const Rectangle& frame)
+{
+	_strips[stripIndex]._frames[frameIndex] = frame;
+}
+
+void TileSheet::setStripFrame(const char* id, unsigned int frameIndex, const Rectangle& frame)
+{
+	int index = getStrip(id);
+	if(index >= 0)
+	{
+		_strips[index]._frames[frameIndex] = frame;
+	}
+}
+
+//FrameStrip
+TileSheet::FrameStrip::FrameStrip(const char* id, unsigned int frameCount)
+	: _id(id ? id : ""), _frames(frameCount), _frameCount(frameCount)
+{
+}
+
+TileSheet::FrameStrip::~FrameStrip()
+{
 }
 
 }
