@@ -17,22 +17,27 @@ void luaRegister_Sprite()
 		{"createAnimationFromBy", lua_Sprite_createAnimationFromBy},
 		{"createAnimationFromTo", lua_Sprite_createAnimationFromTo},
 		{"destroyAnimation", lua_Sprite_destroyAnimation},
+		{"draw", lua_Sprite_draw},
 		{"getAnimation", lua_Sprite_getAnimation},
 		{"getAnimationPropertyComponentCount", lua_Sprite_getAnimationPropertyComponentCount},
 		{"getAnimationPropertyValue", lua_Sprite_getAnimationPropertyValue},
         {"getRefCount", lua_Sprite_getRefCount},
+		{"getFlip", lua_Sprite_getFlip},
 		{"getId", lua_Sprite_getId},
 		{"getNode", lua_Sprite_getNode},
 		{"getTileSheet", lua_Sprite_getTileSheet},
         {"release", lua_Sprite_release},
 		{"setAnimationPropertyValue", lua_Sprite_setAnimationPropertyValue},
+		{"setFlip", lua_Sprite_setFlip},
 		{"setNode", lua_Sprite_setNode},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
     {
-        //{"ANIMATE_ROTATE", lua_Node_static_ANIMATE_ROTATE}, //For reference purposes for static values
         {"create", lua_Sprite_static_create},
+		{"FLIP_HORZ", lua_Sprite_static_FLIP_HORZ},
+		{"FLIP_NONE", lua_Sprite_static_FLIP_NONE},
+		{"FLIP_VERT", lua_Sprite_static_FLIP_VERT},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -506,6 +511,38 @@ int lua_Sprite_destroyAnimation(lua_State* state)
     return 0;
 }
 
+int lua_Sprite_draw(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+	// Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				instance->draw();
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_draw - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Sprite_getAnimation(lua_State* state)
 {
     // Get the number of parameters.
@@ -687,6 +724,41 @@ int lua_Sprite_getRefCount(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Sprite_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getFlip(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				int result = instance->getFlip();
+
+                // Push the return value onto the stack.
+				lua_pushinteger(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getFlip - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -933,6 +1005,42 @@ int lua_Sprite_setAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
+int lua_Sprite_setFlip(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				int param1 = (int)luaL_checkint(state, 2);
+
+                Sprite* instance = getInstance(state);
+				instance->setFlip(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Sprite_setFlip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Sprite_setNode(lua_State* state)
 {
     // Get the number of parameters.
@@ -1029,6 +1137,57 @@ int lua_Sprite_static_create(lua_State* state)
         }
     }
     return 0;
+}
+
+int lua_Sprite_static_FLIP_HORZ(lua_State* state)
+{
+	// Validate the number of parameters.
+    if (lua_gettop(state) > 0)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0).");
+        lua_error(state);
+    }
+
+	int result = Sprite::FLIP_HORZ;
+
+    // Push the return value onto the stack.
+    lua_pushinteger(state, result);
+
+    return 1;
+}
+
+int lua_Sprite_static_FLIP_NONE(lua_State* state)
+{
+	// Validate the number of parameters.
+    if (lua_gettop(state) > 0)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0).");
+        lua_error(state);
+    }
+
+	int result = Sprite::FLIP_NONE;
+
+    // Push the return value onto the stack.
+    lua_pushinteger(state, result);
+
+    return 1;
+}
+
+int lua_Sprite_static_FLIP_VERT(lua_State* state)
+{
+	// Validate the number of parameters.
+    if (lua_gettop(state) > 0)
+    {
+        lua_pushstring(state, "Invalid number of parameters (expected 0).");
+        lua_error(state);
+    }
+
+	int result = Sprite::FLIP_VERT;
+
+    // Push the return value onto the stack.
+    lua_pushinteger(state, result);
+
+    return 1;
 }
 
 }

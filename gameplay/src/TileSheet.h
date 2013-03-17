@@ -12,6 +12,8 @@ namespace gameplay
  */
 class TileSheet : public Ref
 {
+	friend class Sprite;
+	friend class SpriteMap;
 
 public:
 

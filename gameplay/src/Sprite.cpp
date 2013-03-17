@@ -6,7 +6,7 @@ namespace gameplay
 {
 
 Sprite::Sprite(const char* id)
-	: _node(NULL), _tileSheet(NULL)
+	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE)
 {
 	if (id)
     {
@@ -34,6 +34,16 @@ const char* Sprite::getId() const
     return _id.c_str();
 }
 
+int Sprite::getFlip() const
+{
+	return _flip;
+}
+
+void Sprite::setFlip(int flip)
+{
+	_flip = flip & (FLIP_HORZ | FLIP_VERT);
+}
+
 Node* Sprite::getNode() const
 {
 	return _node;
@@ -47,6 +57,11 @@ void Sprite::setNode(Node* node)
 TileSheet* Sprite::getTileSheet()
 {
 	return _tileSheet;
+}
+
+void Sprite::draw()
+{
+	//TODO
 }
 
 unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const

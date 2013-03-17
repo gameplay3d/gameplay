@@ -18,6 +18,21 @@ class Sprite : public AnimationTarget, public Ref
 public:
 
 	/**
+     * The Sprite should not be flipped.
+     */
+    static const int FLIP_NONE = 0;
+
+	/**
+     * The Sprite should be flipped horizontally.
+     */
+    static const int FLIP_HORZ = 1;
+
+	/**
+     * The Sprite should be flipped vertically.
+     */
+    static const int FLIP_VERT = 2;
+
+	/**
 	 * Creates a new Sprite for drawing.
 	 * 
 	 * @param id The ID for the new Sprite.
@@ -34,6 +49,20 @@ public:
      * @return The sprite identifier.
      */
     const char* getId() const;
+
+	/**
+     * Gets the orientation of the sprite.
+     *
+     * @return The sprite's orientation.
+     */
+	int getFlip() const;
+
+	/**
+	 * Sets the orientation of the sprite.
+	 * 
+	 * @param flip The sprite orientation.
+	 */
+	void setFlip(int flip);
 
 	//TODO
 
@@ -57,6 +86,11 @@ public:
      * @return The sprite's tile sheet.
      */
 	TileSheet* getTileSheet();
+
+	/**
+	 * Draw the sprite.
+	 */
+	virtual void draw();
 
 	/**
      * @see AnimationTarget::getAnimationPropertyComponentCount
@@ -131,6 +165,11 @@ protected:
 	 * The Sprite's TileSheet that represents what will be drawn.
 	 */
 	TileSheet* _tileSheet;
+
+	/**
+	 * Bitwise definition of any "flip" the Sprite has.
+	 */
+	int _flip;
 
 	//TODO
 };
