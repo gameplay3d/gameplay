@@ -64,7 +64,114 @@ public:
 	 */
 	void setFlip(int flip);
 
-	//TODO
+	/**
+     * Gets the untransformed size the sprite will be drawn at.
+     *
+     * @return The sprite's untransformed size.
+     */
+	Vector2 getSpriteSize() const;
+
+	/**
+     * Gets the untransformed width the sprite will be drawn at.
+     *
+     * @return The sprite's untransformed width.
+     */
+	float getSpriteWidth() const;
+
+	/**
+     * Gets the untransformed height the sprite will be drawn at.
+     *
+     * @return The sprite's untransformed height.
+     */
+	float getSpriteHeight() const;
+
+	/**
+	 * Sets the untransformed size the sprite will be drawn at.
+	 * 
+	 * @param size The untransformed size the sprite will be drawn at.
+	 */
+	void setSpriteSize(const Vector2& size);
+
+	/**
+	 * Sets the untransformed size the sprite will be drawn at.
+	 * 
+	 * @param width The untransformed width the sprite will be drawn at.
+	 * @param height The untransformed height the sprite will be drawn at.
+	 */
+	void setSpriteSize(float width, float height);
+
+	/**
+     * Gets the untransformed offset from the world origin the sprite will be drawn at.
+	 *
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+     *
+     * @return The sprite's untransformed offset.
+     */
+	Vector2 getSpriteOffset() const;
+
+	/**
+     * Gets the untransformed X offset from the world origin the sprite will be drawn at.
+     *
+     * @return The sprite's untransformed X offset.
+	 * 
+	 * @see Sprite::getSpriteOffset
+     */
+	float getSpriteOffsetX() const;
+
+	/**
+     * Gets the untransformed Y offset from the world origin the sprite will be drawn at.
+     *
+     * @return The sprite's untransformed Y offset.
+	 * 
+	 * @see Sprite::getSpriteOffset
+     */
+	float getSpriteOffsetY() const;
+
+	/**
+	 * Sets the untransformed offset from the world origin the sprite will be drawn at.
+	 * 
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+	 * 
+	 * @param size The sprite's untransformed offset.
+	 */
+	void setSpriteOffset(const Vector2& size);
+
+	/**
+	 * Sets the untransformed offset from the world origin the sprite will be drawn at.
+	 * 
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+	 * 
+	 * @param x The sprite's untransformed X offset.
+	 * @param y The sprite's untransformed Y offset.
+	 */
+	void setSpriteOffset(float x, float y);
+
+	/**
+	 * Sets the untransformed X offset from the world origin the sprite will be drawn at.
+	 * 
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+	 * 
+	 * @param value The sprite's untransformed X offset.
+	 */
+	void setSpriteOffsetX(float value);
+
+	/**
+	 * Sets the untransformed Y offset from the world origin the sprite will be drawn at.
+	 * 
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+	 * 
+	 * @param value The sprite's untransformed Y offset.
+	 */
+	void setSpriteOffsetY(float value);
+
+	//TODO: parallax effect (so layers don't always move when at different depths) //Only needed if camera is not orthographic
+
+	//TODO: scaling based on depth (so layers, even when they are the same size, aren't rendered at different sizes because of different depths) //Only needed if camera is not orthographic
 
 	/**
      * Gets the Node that holds the Sprite.

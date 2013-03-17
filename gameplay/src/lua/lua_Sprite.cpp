@@ -21,15 +21,25 @@ void luaRegister_Sprite()
 		{"getAnimation", lua_Sprite_getAnimation},
 		{"getAnimationPropertyComponentCount", lua_Sprite_getAnimationPropertyComponentCount},
 		{"getAnimationPropertyValue", lua_Sprite_getAnimationPropertyValue},
-        {"getRefCount", lua_Sprite_getRefCount},
 		{"getFlip", lua_Sprite_getFlip},
 		{"getId", lua_Sprite_getId},
 		{"getNode", lua_Sprite_getNode},
+		{"getRefCount", lua_Sprite_getRefCount},
+		{"getSpriteHeight", lua_Sprite_getSpriteHeight},
+		{"getSpriteOffset", lua_Sprite_getSpriteOffset},
+		{"getSpriteOffsetX", lua_Sprite_getSpriteOffsetX},
+		{"getSpriteOffsetY", lua_Sprite_getSpriteOffsetY},
+		{"getSpriteSize", lua_Sprite_getSpriteSize},
+		{"getSpriteWidth", lua_Sprite_getSpriteWidth},
 		{"getTileSheet", lua_Sprite_getTileSheet},
         {"release", lua_Sprite_release},
 		{"setAnimationPropertyValue", lua_Sprite_setAnimationPropertyValue},
 		{"setFlip", lua_Sprite_setFlip},
 		{"setNode", lua_Sprite_setNode},
+		{"setSpriteOffset", lua_Sprite_setSpriteOffset},
+		{"setSpriteOffsetX", lua_Sprite_setSpriteOffsetX},
+		{"setSpriteOffsetY", lua_Sprite_setSpriteOffsetY},
+		{"setSpriteSize", lua_Sprite_setSpriteSize},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -526,7 +536,7 @@ int lua_Sprite_draw(lua_State* state)
                 Sprite* instance = getInstance(state);
 				instance->draw();
 
-                return 1;
+                return 0;
             }
 
             lua_pushstring(state, "lua_Sprite_draw - Failed to match the given parameters to a valid function signature.");
@@ -702,41 +712,6 @@ int lua_Sprite_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_getRefCount(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Sprite* instance = getInstance(state);
-                unsigned int result = instance->getRefCount();
-
-                // Push the return value onto the stack.
-                lua_pushunsigned(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Sprite_getRefCount - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Sprite_getFlip(lua_State* state)
 {
 	// Get the number of parameters.
@@ -838,6 +813,269 @@ int lua_Sprite_getNode(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Sprite_getNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getRefCount(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+                unsigned int result = instance->getRefCount();
+
+                // Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getRefCount - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getSpriteHeight(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				float result = instance->getSpriteHeight();
+
+                // Push the return value onto the stack.
+				lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getSpriteHeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getSpriteOffset(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				void* returnPtr = (void*)new Vector2(instance->getSpriteOffset());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getSpriteOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getSpriteOffsetX(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				float result = instance->getSpriteOffsetX();
+
+                // Push the return value onto the stack.
+				lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getSpriteOffsetX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getSpriteOffsetY(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				float result = instance->getSpriteOffsetY();
+
+                // Push the return value onto the stack.
+				lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getSpriteOffsetY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getSpriteSize(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				void* returnPtr = (void*)new Vector2(instance->getSpriteSize());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "Vector2");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getSpriteSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_getSpriteWidth(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				float result = instance->getSpriteWidth();
+
+                // Push the return value onto the stack.
+				lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getSpriteWidth - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1076,6 +1314,206 @@ int lua_Sprite_setNode(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_setSpriteOffset(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					(lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+				{
+					// Get parameter 1 off the stack.
+					bool param1Valid;
+					gameplay::ScriptUtil::LuaArray<Vector2> param1 = gameplay::ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true, &param1Valid);
+					if (!param1Valid)
+						break;
+
+					Sprite* instance = getInstance(state);
+					instance->setSpriteOffset(*param1);
+                
+					return 0;
+				}
+			} while (0);
+
+            lua_pushstring(state, "lua_Sprite_setSpriteOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+		case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER &&
+				lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				float param1 = (float)luaL_checknumber(state, 2);
+
+				// Get parameter 2 off the stack.
+				float param2 = (float)luaL_checknumber(state, 3);
+
+                Sprite* instance = getInstance(state);
+				instance->setSpriteOffset(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Sprite_setSpriteOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_setSpriteOffsetX(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				float param1 = (float)luaL_checknumber(state, 2);
+
+                Sprite* instance = getInstance(state);
+				instance->setSpriteOffsetX(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Sprite_setSpriteOffsetX - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_setSpriteOffsetY(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				float param1 = (float)luaL_checknumber(state, 2);
+
+                Sprite* instance = getInstance(state);
+				instance->setSpriteOffsetY(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Sprite_setSpriteOffsetY - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_setSpriteSize(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					(lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+				{
+					// Get parameter 1 off the stack.
+					bool param1Valid;
+					gameplay::ScriptUtil::LuaArray<Vector2> param1 = gameplay::ScriptUtil::getObjectPointer<Vector2>(2, "Vector2", true, &param1Valid);
+					if (!param1Valid)
+						break;
+
+					Sprite* instance = getInstance(state);
+					instance->setSpriteSize(*param1);
+                
+					return 0;
+				}
+			} while (0);
+
+            lua_pushstring(state, "lua_Sprite_setSpriteSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+		case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER &&
+				lua_type(state, 3) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				float param1 = (float)luaL_checknumber(state, 2);
+
+				// Get parameter 2 off the stack.
+				float param2 = (float)luaL_checknumber(state, 3);
+
+                Sprite* instance = getInstance(state);
+				instance->setSpriteSize(param1, param2);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Sprite_setSpriteSize - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
             lua_error(state);
             break;
         }
