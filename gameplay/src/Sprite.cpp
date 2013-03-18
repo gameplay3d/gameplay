@@ -6,8 +6,10 @@
 namespace gameplay
 {
 
+static Vector2 _defaultOffset = Vector2::zero();
+
 Sprite::Sprite(const char* id)
-	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE), _defaultTile(), _width(0), _height(0), _x(0), _y(0), _frame(), _defaultTileInUse(true)
+	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE), _defaultTile(), _width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y), _frame(), _defaultTileInUse(true)
 {
 	if (id)
     {
@@ -18,6 +20,16 @@ Sprite::Sprite(const char* id)
 Sprite::~Sprite()
 {
 	SAFE_RELEASE(_tileSheet);
+}
+
+const Vector2& Sprite::getDefaultSpriteOffset()
+{
+	return _defaultOffset;
+}
+
+void Sprite::setDefaultSpriteOffset(const Vector2& offset)
+{
+	_defaultOffset = offset;
 }
 
 Sprite* Sprite::create(const char* id, TileSheet* tileSheet)
@@ -66,64 +78,64 @@ void Sprite::setDefaultTile(const Rectangle& tile)
 	}
 }
 
-Vector2 Sprite::getSpriteSize() const
+Vector2 Sprite::getSize() const
 {
 	return Vector2(_width, _height);
 }
 
-float Sprite::getSpriteWidth() const
+float Sprite::getWidth() const
 {
 	return _width;
 }
 
-float Sprite::getSpriteHeight() const
+float Sprite::getHeight() const
 {
 	return _height;
 }
 
-void Sprite::setSpriteSize(const Vector2& size)
+void Sprite::setSize(const Vector2& size)
 {
-	setSpriteSize(size.x, size.y);
+	setSize(size.x, size.y);
 }
 
-void Sprite::setSpriteSize(float width, float height)
+void Sprite::setSize(float width, float height)
 {
 	_width = width;
 	_height = height;
 }
 
-Vector2 Sprite::getSpriteOffset() const
+Vector2 Sprite::getOffset() const
 {
 	return Vector2(_x, _y);
 }
 
-float Sprite::getSpriteOffsetX() const
+float Sprite::getOffsetX() const
 {
 	return _x;
 }
 
-float Sprite::getSpriteOffsetY() const
+float Sprite::getOffsetY() const
 {
 	return _y;
 }
 
-void Sprite::setSpriteOffset(const Vector2& offset)
+void Sprite::setOffset(const Vector2& offset)
 {
-	setSpriteOffset(offset.x, offset.y);
+	setOffset(offset.x, offset.y);
 }
 
-void Sprite::setSpriteOffset(float x, float y)
+void Sprite::setOffset(float x, float y)
 {
-	setSpriteOffsetX(x);
-	setSpriteOffsetY(y);
+	setOffsetX(x);
+	setOffsetY(y);
 }
 
-void Sprite::setSpriteOffsetX(float value)
+void Sprite::setOffsetX(float value)
 {
 	_x = value;
 }
 
-void Sprite::setSpriteOffsetY(float value)
+void Sprite::setOffsetY(float value)
 {
 	_y = value;
 }

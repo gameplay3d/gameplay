@@ -33,6 +33,28 @@ public:
     static const int FLIP_VERT = 2;
 
 	/**
+     * Gets the default untransformed offset from the world origin that sprites will be drawn at.
+	 *
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+     *
+     * @return The untransformed offset.
+     */
+	static const Vector2& getDefaultSpriteOffset();
+
+	/**
+	 * Sets the default untransformed offset from the world origin that sprites will be drawn at.
+	 * 
+	 * The world origin is the center of the game window. If the offset is set to be the 
+	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
+	 *
+	 * This will affect any classes based off Sprite.
+	 * 
+	 * @param offset The untransformed offset.
+	 */
+	static void setDefaultSpriteOffset(const Vector2& offset);
+
+	/**
 	 * Creates a new Sprite for drawing.
 	 * 
 	 * @param id The ID for the new Sprite.
@@ -85,28 +107,28 @@ public:
      *
      * @return The sprite's untransformed size.
      */
-	Vector2 getSpriteSize() const;
+	Vector2 getSize() const;
 
 	/**
      * Gets the untransformed width the sprite will be drawn at.
      *
      * @return The sprite's untransformed width.
      */
-	float getSpriteWidth() const;
+	float getWidth() const;
 
 	/**
      * Gets the untransformed height the sprite will be drawn at.
      *
      * @return The sprite's untransformed height.
      */
-	float getSpriteHeight() const;
+	float getHeight() const;
 
 	/**
 	 * Sets the untransformed size the sprite will be drawn at.
 	 * 
 	 * @param size The untransformed size the sprite will be drawn at.
 	 */
-	void setSpriteSize(const Vector2& size);
+	void setSize(const Vector2& size);
 
 	/**
 	 * Sets the untransformed size the sprite will be drawn at.
@@ -114,7 +136,7 @@ public:
 	 * @param width The untransformed width the sprite will be drawn at.
 	 * @param height The untransformed height the sprite will be drawn at.
 	 */
-	void setSpriteSize(float width, float height);
+	void setSize(float width, float height);
 
 	/**
      * Gets the untransformed offset from the world origin the sprite will be drawn at.
@@ -124,7 +146,7 @@ public:
      *
      * @return The sprite's untransformed offset.
      */
-	Vector2 getSpriteOffset() const;
+	Vector2 getOffset() const;
 
 	/**
      * Gets the untransformed X offset from the world origin the sprite will be drawn at.
@@ -133,7 +155,7 @@ public:
 	 * 
 	 * @see Sprite::getSpriteOffset
      */
-	float getSpriteOffsetX() const;
+	float getOffsetX() const;
 
 	/**
      * Gets the untransformed Y offset from the world origin the sprite will be drawn at.
@@ -142,7 +164,7 @@ public:
 	 * 
 	 * @see Sprite::getSpriteOffset
      */
-	float getSpriteOffsetY() const;
+	float getOffsetY() const;
 
 	/**
 	 * Sets the untransformed offset from the world origin the sprite will be drawn at.
@@ -152,7 +174,7 @@ public:
 	 * 
 	 * @param offset The sprite's untransformed offset.
 	 */
-	void setSpriteOffset(const Vector2& offset);
+	void setOffset(const Vector2& offset);
 
 	/**
 	 * Sets the untransformed offset from the world origin the sprite will be drawn at.
@@ -163,7 +185,7 @@ public:
 	 * @param x The sprite's untransformed X offset.
 	 * @param y The sprite's untransformed Y offset.
 	 */
-	void setSpriteOffset(float x, float y);
+	void setOffset(float x, float y);
 
 	/**
 	 * Sets the untransformed X offset from the world origin the sprite will be drawn at.
@@ -173,7 +195,7 @@ public:
 	 * 
 	 * @param value The sprite's untransformed X offset.
 	 */
-	void setSpriteOffsetX(float value);
+	void setOffsetX(float value);
 
 	/**
 	 * Sets the untransformed Y offset from the world origin the sprite will be drawn at.
@@ -183,7 +205,7 @@ public:
 	 * 
 	 * @param value The sprite's untransformed Y offset.
 	 */
-	void setSpriteOffsetY(float value);
+	void setOffsetY(float value);
 
 	//TODO: tint
 
