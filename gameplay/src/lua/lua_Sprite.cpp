@@ -21,6 +21,7 @@ void luaRegister_Sprite()
 		{"getAnimation", lua_Sprite_getAnimation},
 		{"getAnimationPropertyComponentCount", lua_Sprite_getAnimationPropertyComponentCount},
 		{"getAnimationPropertyValue", lua_Sprite_getAnimationPropertyValue},
+		{"getDefaultTile", lua_Sprite_getDefaultTile},
 		{"getFlip", lua_Sprite_getFlip},
 		{"getId", lua_Sprite_getId},
 		{"getNode", lua_Sprite_getNode},
@@ -34,6 +35,7 @@ void luaRegister_Sprite()
 		{"getTileSheet", lua_Sprite_getTileSheet},
         {"release", lua_Sprite_release},
 		{"setAnimationPropertyValue", lua_Sprite_setAnimationPropertyValue},
+		{"setDefaultTile", lua_Sprite_setDefaultTile},
 		{"setFlip", lua_Sprite_setFlip},
 		{"setNode", lua_Sprite_setNode},
 		{"setSpriteOffset", lua_Sprite_setSpriteOffset},
@@ -712,6 +714,50 @@ int lua_Sprite_getAnimationPropertyValue(lua_State* state)
     return 0;
 }
 
+int lua_Sprite_getDefaultTile(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				void* returnPtr = (void*)&(instance->getDefaultTile());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getDefaultTile - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Sprite_getFlip(lua_State* state)
 {
 	// Get the number of parameters.
@@ -1236,6 +1282,48 @@ int lua_Sprite_setAnimationPropertyValue(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_setDefaultTile(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					(lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+				{
+					// Get parameter 1 off the stack.
+					bool param1Valid;
+					gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+					if (!param1Valid)
+						break;
+
+					Sprite* instance = getInstance(state);
+					instance->setDefaultTile(*param1);
+                
+					return 0;
+				}
+			} while (0);
+
+            lua_pushstring(state, "lua_Sprite_setDefaultTile - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

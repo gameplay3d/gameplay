@@ -6,7 +6,7 @@ namespace gameplay
 {
 
 Sprite::Sprite(const char* id)
-	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE)
+	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE), _defaultTile(), _width(0), _height(0), _x(0), _y(0)
 {
 	if (id)
     {
@@ -26,6 +26,11 @@ Sprite* Sprite::create(const char* id, TileSheet* tileSheet)
 
 	Sprite* sprite = new Sprite(id);
 	sprite->_tileSheet = tileSheet;
+	
+	Texture* tex = tileSheet->getSpriteBatch()->getSampler()->getTexture();
+	sprite->_defaultTile.width = sprite->_width = tex->getWidth();
+	sprite->_defaultTile.height = sprite->_height = tex->getHeight();
+
 	return sprite;
 }
 
@@ -44,70 +49,76 @@ void Sprite::setFlip(int flip)
 	_flip = flip & (FLIP_HORZ | FLIP_VERT);
 }
 
+const Rectangle& Sprite::getDefaultTile() const
+{
+	return _defaultTile;
+}
+
+void Sprite::setDefaultTile(const Rectangle& tile)
+{
+	_defaultTile = tile;
+}
+
 Vector2 Sprite::getSpriteSize() const
 {
-	//TODO
-	return Vector2::zero();
+	return Vector2(_width, _height);
 }
 
 float Sprite::getSpriteWidth() const
 {
-	//TODO
-	return 0;
+	return _width;
 }
 
 float Sprite::getSpriteHeight() const
 {
-	//TODO
-	return 0;
+	return _height;
 }
 
 void Sprite::setSpriteSize(const Vector2& size)
 {
-	//TODO
+	setSpriteSize(size.x, size.y);
 }
 
 void Sprite::setSpriteSize(float width, float height)
 {
-	//TODO
+	_width = width;
+	_height = height;
 }
 
 Vector2 Sprite::getSpriteOffset() const
 {
-	//TODO
-	return Vector2::zero();
+	return Vector2(_x, _y);
 }
 
 float Sprite::getSpriteOffsetX() const
 {
-	//TODO
-	return 0;
+	return _x;
 }
 
 float Sprite::getSpriteOffsetY() const
 {
-	//TODO
-	return 0;
+	return _y;
 }
 
-void Sprite::setSpriteOffset(const Vector2& size)
+void Sprite::setSpriteOffset(const Vector2& offset)
 {
-	//TODO
+	setSpriteOffset(offset.x, offset.y);
 }
 
 void Sprite::setSpriteOffset(float x, float y)
 {
-	//TODO
+	setSpriteOffsetX(x);
+	setSpriteOffsetY(y);
 }
 
 void Sprite::setSpriteOffsetX(float value)
 {
-	//TODO
+	_x = value;
 }
 
 void Sprite::setSpriteOffsetY(float value)
 {
-	//TODO
+	_y = value;
 }
 
 Node* Sprite::getNode() const
@@ -127,6 +138,7 @@ TileSheet* Sprite::getTileSheet()
 
 void Sprite::draw()
 {
+	SpriteBatch* batch = _tileSheet->getSpriteBatch();
 	//TODO
 }
 
@@ -155,7 +167,20 @@ Sprite* Sprite::clone(NodeCloneContext &context)
 
 void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
 {
-	//TODO
+	if (Node* node = getNode())
+    {
+        Node* clonedNode = context.findClonedNode(node);
+        if (clonedNode)
+        {
+            sprite->setNode(clonedNode);
+        }
+    }
+
+	sprite->_flip = _flip;
+	sprite->_width = _width;
+	sprite->_height = _height;
+	sprite->_x = _x;
+	sprite->_y = _y;
 }
 
 }

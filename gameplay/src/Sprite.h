@@ -43,6 +43,8 @@ public:
 	 */
 	static Sprite* create(const char* id, TileSheet* tileSheet);
 
+	//TODO: create from properties so animations can be loaded
+
 	/**
      * Gets the identifier for the sprite.
      *
@@ -63,6 +65,20 @@ public:
 	 * @param flip The sprite orientation.
 	 */
 	void setFlip(int flip);
+
+	/**
+     * Gets the default tile that the sprite will use.
+     *
+     * @return The sprite's default tile.
+     */
+	const Rectangle& getDefaultTile() const;
+
+	/**
+	 * Sets the default tile that the sprite will use.
+	 * 
+	 * @param tile The sprite's default tile.
+	 */
+	void setDefaultTile(const Rectangle& tile);
 
 	/**
      * Gets the untransformed size the sprite will be drawn at.
@@ -134,9 +150,9 @@ public:
 	 * The world origin is the center of the game window. If the offset is set to be the 
 	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
 	 * 
-	 * @param size The sprite's untransformed offset.
+	 * @param offset The sprite's untransformed offset.
 	 */
-	void setSpriteOffset(const Vector2& size);
+	void setSpriteOffset(const Vector2& offset);
 
 	/**
 	 * Sets the untransformed offset from the world origin the sprite will be drawn at.
@@ -168,6 +184,8 @@ public:
 	 * @param value The sprite's untransformed Y offset.
 	 */
 	void setSpriteOffsetY(float value);
+
+	//TODO: tint
 
 	//TODO: parallax effect (so layers don't always move when at different depths) //Only needed if camera is not orthographic
 
@@ -277,6 +295,31 @@ protected:
 	 * Bitwise definition of any "flip" the Sprite has.
 	 */
 	int _flip;
+
+	/**
+	 * The default tile the sprite will use.
+	 */
+	Rectangle _defaultTile;
+
+	/**
+	 * The untransformed width of the sprite.
+	 */
+	float _width;
+
+	/**
+	 * The untransformed height of the sprite.
+	 */
+	float _height;
+
+	/**
+	 * The untransformed X offset of the sprite.
+	 */
+	float _x;
+
+	/**
+	 * The untransformed Y offset of the sprite.
+	 */
+	float _y;
 
 	//TODO
 };
