@@ -214,8 +214,12 @@ public:
 
 	/**
 	 * Draw the sprite.
+	 *
+	 * @param isolateDraw If each draw call is unique and can't be batched. Batched calls 
+	 *  have to be controlled by developer and are not handled internally. Technically, if 
+	 *  this is true, this just calls start and finish on the TileSheet's SpriteBatch.
 	 */
-	virtual void draw();
+	virtual void draw(bool isolateDraw = true);
 
 	/**
      * @see AnimationTarget::getAnimationPropertyComponentCount
@@ -243,6 +247,13 @@ protected:
      * Destructor.
      */
     virtual ~Sprite();
+
+	/**
+     * Gets the current animation frame that will be displayed.
+     *
+     * @return The actual source rectangle of what will be drawn for that sprite.
+     */
+	const Rectangle& getCurrentAnimationFrame() const;
 
 	/**
      * Clones the sprite and returns a new sprite.
@@ -320,6 +331,16 @@ protected:
 	 * The untransformed Y offset of the sprite.
 	 */
 	float _y;
+
+	/**
+	 * The actual source Rectangle of the TileSheet that will be drawn.
+	 */
+	Rectangle _frame;
+
+	/**
+	 * Use the default tile instead of animation (usually means that animation is not in use)
+	 */
+	bool _defaultTileInUse;
 
 	//TODO
 };

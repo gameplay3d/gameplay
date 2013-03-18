@@ -1,12 +1,13 @@
 #include "Base.h"
 #include "Sprite.h"
 #include "Node.h"
+#include "Scene.h"
 
 namespace gameplay
 {
 
 Sprite::Sprite(const char* id)
-	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE), _defaultTile(), _width(0), _height(0), _x(0), _y(0)
+	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE), _defaultTile(), _width(0), _height(0), _x(0), _y(0), _frame(), _defaultTileInUse(true)
 {
 	if (id)
     {
@@ -30,6 +31,8 @@ Sprite* Sprite::create(const char* id, TileSheet* tileSheet)
 	Texture* tex = tileSheet->getSpriteBatch()->getSampler()->getTexture();
 	sprite->_defaultTile.width = sprite->_width = tex->getWidth();
 	sprite->_defaultTile.height = sprite->_height = tex->getHeight();
+
+	sprite->_frame = sprite->_defaultTile;
 
 	return sprite;
 }
@@ -57,6 +60,10 @@ const Rectangle& Sprite::getDefaultTile() const
 void Sprite::setDefaultTile(const Rectangle& tile)
 {
 	_defaultTile = tile;
+	if(_defaultTileInUse)
+	{
+		_frame = tile;
+	}
 }
 
 Vector2 Sprite::getSpriteSize() const
@@ -136,10 +143,62 @@ TileSheet* Sprite::getTileSheet()
 	return _tileSheet;
 }
 
-void Sprite::draw()
+const Rectangle& Sprite::getCurrentAnimationFrame() const
+{
+	return _frame;
+}
+
+void Sprite::draw(bool isolateDraw)
 {
 	SpriteBatch* batch = _tileSheet->getSpriteBatch();
-	//TODO
+
+	static Vector2 rotationPoint = Vector2::one() * 0.5f;
+
+	Vector3 pos;
+	Vector2 size = Vector2(_width, _height);
+	float angle = 0.0f;
+
+	//Adjust values that rely on Node
+	if(Node* node = getNode())
+	{
+		pos = node->getTranslationWorld();
+
+		angle = (2.0f * acos(node->getRotation().w)); //XXX Rotation is still iffy
+
+		//Scale the size
+		size.x *= node->getScaleX();
+		size.y *= node->getScaleY();
+
+		if(isolateDraw)
+		{
+			//Adjust projection matrix if this draw is specific to this Sprite
+			if(Camera* activeCamera = node->getScene()->getActiveCamera())
+			{
+				batch->setProjectionMatrix(activeCamera->getViewProjectionMatrix());
+			}
+		}
+	}
+	else
+	{
+		pos = Vector3::zero();
+	}
+
+	//Offset position
+	pos.x += _x;
+	pos.y += _y;
+
+	if(isolateDraw)
+	{
+		batch->start();
+	}
+
+	//The actual draw call
+	batch->draw(pos, _frame, size, Vector4::one(), rotationPoint, angle);
+
+	if(isolateDraw)
+	{
+		batch->finish();
+	}
 }
 
 unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const
@@ -177,10 +236,13 @@ void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
     }
 
 	sprite->_flip = _flip;
+	sprite->_defaultTile = _defaultTile;
 	sprite->_width = _width;
 	sprite->_height = _height;
 	sprite->_x = _x;
 	sprite->_y = _y;
+	sprite->_frame = _frame;
+	sprite->_defaultTileInUse = _defaultTileInUse;
 }
 
 }
