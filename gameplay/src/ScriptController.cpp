@@ -429,12 +429,15 @@ void ScriptController::loadScript(const char* path, bool forceReload)
     std::set<std::string>::iterator iter = _loadedScripts.find(path);
     if (iter == _loadedScripts.end() || forceReload)
     {
+#ifdef __ANDROID__
         const char* scriptContents = FileSystem::readAll(path);
         if (luaL_dostring(_lua, scriptContents))
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
-
         SAFE_DELETE_ARRAY(scriptContents);
-
+#else
+        if (luaL_dofile(_lua, path))
+            GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+#endif
         if (iter == _loadedScripts.end())
             _loadedScripts.insert(path);
     }
