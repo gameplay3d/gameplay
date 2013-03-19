@@ -153,7 +153,6 @@ void FormsTest::formChanged()
     _formNodeParent->setTranslation(0, 0, -1.5f);
     _formNode->setTranslation(-0.5f, -0.5f, 0);
     _formNode->setForm(_activeForm);
-
 }
 
 void FormsTest::createTestForm(Theme* theme)
