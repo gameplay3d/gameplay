@@ -33,6 +33,53 @@ public:
     static const int FLIP_VERT = 2;
 
 	/**
+     * Sprite size animation property. Data=w,h
+     */
+	static const int ANIMATE_SIZE = 0;
+
+	/**
+     * Sprite offset animation property. Data=x,y
+     */
+	static const int ANIMATE_OFFSET = 1;
+
+	/**
+     * Sprite source frame animation property. Data=b,si,fi
+	 *
+	 * b >=0 - move the animation frame between the source and destination
+	 * b < 0 - change the animation frame between the source and destination without moving the frame over the TileSheet.
+	 * si - Strip index
+	 * fi - Frame index
+	 *
+	 * If the frame is not valid, then the default tile is used.
+     */
+	static const int ANIMATE_FRAME_INDEX = 2;
+
+	/**
+     * Sprite source frame animation property. Data=b,x,y,w,h
+	 *
+	 * b >=0 - move the animation frame between the source and destination
+	 * b < 0 - change the animation frame between the source and destination without moving the frame over the TileSheet.
+	 *
+	 * If the frame is not valid, then the default tile is used.
+     */
+	static const int ANIMATE_FRAME_SPECIFIC = 3;
+
+	/**
+     * Sprite blending animation property, the blending between different frames. Data=?
+     */
+	static const int ANIMATE_FRAME_BLENDING = 4;
+
+	/**
+     * Sprite blending animation property, the blending between different animations. Data=?
+     */
+	static const int ANIMATE_FRAME_TRANSITIONS = 5;
+
+	/**
+     * Sprite tint animation property. Data=r,g,b,a
+     */
+	static const int ANIMATE_TINT = 6;
+
+	/**
      * Gets the default untransformed offset from the world origin that sprites will be drawn at.
 	 *
 	 * The world origin is the center of the game window. If the offset is set to be the 

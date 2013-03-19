@@ -713,6 +713,15 @@ Animation* Node::getAnimation(const char* id) const
             return animation;
     }
 
+	// look through sprite for animations
+	Sprite* sprite = this->getSprite();
+	if (sprite)
+	{
+		animation = sprite->getAnimation(id);
+		if (animation)
+			return animation;
+	}
+
     // Look through this node's children for an animation with the specified ID.
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {

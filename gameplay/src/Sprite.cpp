@@ -173,9 +173,12 @@ void Sprite::draw(bool isolateDraw)
 	//Adjust values that rely on Node
 	if(Node* node = getNode())
 	{
+		//Position
 		pos = node->getTranslationWorld();
 
-		angle = (2.0f * acos(node->getRotation().w)); //XXX Rotation is still iffy
+		//Rotation
+		const Quaternion& rot = node->getRotation();
+		angle = atan2f(2.0f * rot.x * rot.y + 2.0f * rot.z * rot.w, 1.0f - 2.0f * ((rot.y * rot.y) + (rot.z * rot.z)));
 
 		//Scale the size
 		size.x *= node->getScaleX();
@@ -215,18 +218,47 @@ void Sprite::draw(bool isolateDraw)
 
 unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const
 {
-	//TODO
-	return 0;
+	switch (propertyId)
+	{
+		case ANIMATE_SIZE:
+		case ANIMATE_OFFSET:
+			return 2;
+		case ANIMATE_FRAME_INDEX:
+			return 3;
+		case ANIMATE_TINT:
+			return 4;
+		case ANIMATE_FRAME_SPECIFIC:
+			return 5;
+		case ANIMATE_FRAME_BLENDING: //TODO
+		case ANIMATE_FRAME_TRANSITIONS: //TODO
+		default:
+			return -1;
+	}
 }
 
 void Sprite::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
-	//TODO
+	GP_ASSERT(value);
+
+    switch (propertyId)
+	{
+		//TODO
+		default:
+			break;
+	}
 }
 
 void Sprite::setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight)
 {
-	//TODO
+	GP_ASSERT(value);
+    GP_ASSERT(blendWeight >= 0.0f && blendWeight <= 1.0f);
+
+    switch (propertyId)
+	{
+		//TODO
+		default:
+			break;
+	}
 }
 
 Sprite* Sprite::clone(NodeCloneContext &context)
