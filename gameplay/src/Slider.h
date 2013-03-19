@@ -214,6 +214,11 @@ protected:
      */
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
     bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
