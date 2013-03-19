@@ -46,6 +46,7 @@ void luaRegister_Container()
         {"createAnimationFromBy", lua_Container_createAnimationFromBy},
         {"createAnimationFromTo", lua_Container_createAnimationFromTo},
         {"destroyAnimation", lua_Container_destroyAnimation},
+        {"getAbsoluteBounds", lua_Container_getAbsoluteBounds},
         {"getAlignment", lua_Container_getAlignment},
         {"getAnimation", lua_Container_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Container_getAnimationPropertyComponentCount},
@@ -130,7 +131,6 @@ void luaRegister_Container()
         {"setVisible", lua_Container_setVisible},
         {"setWidth", lua_Container_setWidth},
         {"setZIndex", lua_Container_setZIndex},
-        {"timeEvent", lua_Container_timeEvent},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -741,6 +741,50 @@ int lua_Container_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_getAbsoluteBounds(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getAbsoluteBounds());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getAbsoluteBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -4994,46 +5038,6 @@ int lua_Container_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Container_timeEvent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNONE)
-            {
-                // Get parameter 1 off the stack.
-                long param1 = (long)luaL_checklong(state, 2);
-
-                // Get parameter 2 off the stack.
-                void* param2 = (void*)luaL_checkint(state, 3);
-
-                Container* instance = getInstance(state);
-                instance->timeEvent(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Container_timeEvent - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

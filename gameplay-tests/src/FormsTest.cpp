@@ -183,13 +183,18 @@ void FormsTest::createTestForm(Theme* theme)
 void FormsTest::update(float elapsedTime)
 {
     float speedFactor = 0.001f * elapsedTime;
-    bool aDown = (_keyFlags & KEY_A_MASK);// || _gamepad->isButtonDown(Gamepad::BUTTON_A);
-    bool bDown = (_keyFlags & KEY_B_MASK);// || _gamepad->isButtonDown(Gamepad::BUTTON_B);
+    bool aDown = (_keyFlags & KEY_A_MASK);
+    bool bDown = (_keyFlags & KEY_B_MASK);
 
     if (_gamepad->isVirtual())
     {
         aDown |= _gamepad->isButtonDown(Gamepad::BUTTON_A);
         bDown |= _gamepad->isButtonDown(Gamepad::BUTTON_B);
+        _gamepad->getJoystickValues(0, &_joysticks[0]);
+    }
+
+    if (!_joysticks[0].isZero())
+    {
         _gamepad->getJoystickValues(0, &_joysticks[0]);
     }
 
@@ -395,11 +400,22 @@ void FormsTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
         else
             _keyFlags &= ~KEY_B_MASK;
 
-        // We'll use a physical gamepad's Y button as the "back" button.
-        if (_gamepad->isButtonDown(Gamepad::BUTTON_Y))
+        // We'll use a physical gamepad's MENU1 button as the "back" button.
+        if (_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
         {
-            _activeForm->setState(Control::NORMAL);
-            _formSelect->setState(Control::FOCUS);
+            if (_formSelect->getState() == Control::FOCUS)
+            {
+                _formSelect->setState(Control::NORMAL);
+            }
+            else if (_activeForm->getState() == Control::FOCUS)
+            {
+                _activeForm->setState(Control::NORMAL);
+                _formSelect->setState(Control::FOCUS);
+            }
+            else
+            {
+                _formSelect->setState(Control::FOCUS);
+            }
         }
         break;
     case Gamepad::JOYSTICK_EVENT:

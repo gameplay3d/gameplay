@@ -222,7 +222,15 @@ void TestsGame::controlEvent(Control* control, EventType evt)
 void TestsGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     if (_activeTest)
+    {
+        if (evt == Gamepad::BUTTON_EVENT && gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+        {
+            exitActiveTest();
+            return;
+        }
+
         _activeTest->gamepadEvent(evt, gamepad, analogIndex);
+    }
 }
 
 void TestsGame::runTest(void* func)
@@ -250,6 +258,7 @@ void TestsGame::exitActiveTest()
         SAFE_DELETE(_activeTest);
 
         _testSelectForm->setEnabled(true);
+        _testSelectForm->setState(Control::FOCUS);
     }
 
     // Reset some game options
