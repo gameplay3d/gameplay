@@ -299,10 +299,15 @@ protected:
      *
      * @return True if the mouse event is consumed or false if it is not consumed.
      *
-     * @see Mouse::MouseEvent
+     * @see Mouse::mouseEvent
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
     virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
