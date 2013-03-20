@@ -28,7 +28,6 @@
 		420D546E15FE430D00AD0B91 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545015FE430D00AD0B91 /* Sample.cpp */; };
 		420D546F15FE430D00AD0B91 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545015FE430D00AD0B91 /* Sample.cpp */; };
 		420D547015FE430D00AD0B91 /* TextSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* TextSample.cpp */; };
-		420D547015FE430D00AD0B91 /* TextSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* TextSample.cpp */; };
 		420D547115FE430D00AD0B91 /* TextSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545215FE430D00AD0B91 /* TextSample.cpp */; };
 		420D547215FE430D00AD0B91 /* TextureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545415FE430D00AD0B91 /* TextureSample.cpp */; };
 		420D547315FE430D00AD0B91 /* TextureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420D545415FE430D00AD0B91 /* TextureSample.cpp */; };
@@ -425,7 +424,7 @@
 		42C932B31491A0DB0098216A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 42C932B61491A0DB0098216A /* Build configuration list for PBXProject "sample-browser" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -481,7 +480,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 		5B61612414CCC24C0073B857 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -494,7 +493,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -rf ${SRCROOT}/../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
+			shellScript = "cp -rf ${SRCROOT}/../../gameplay/res/shaders ${SRCROOT}/res\ncp -rf ${SRCROOT}/../../gameplay/res/logo_powered_white.png ${SRCROOT}/res\ntouch -cm ${SRCROOT}/res";
 		};
 /* End PBXShellScriptBuildPhase section */
 

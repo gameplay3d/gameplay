@@ -1,4 +1,4 @@
-f// !$*UTF8*$!
+// !$*UTF8*$!
 {
 	archiveVersion = 1;
 	classes = {
@@ -291,7 +291,7 @@ f// !$*UTF8*$!
 		42CCD50D146EBF3600353661 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 42CCD510146EBF3600353661 /* Build configuration list for PBXProject "sample-spaceship" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -515,7 +515,7 @@ f// !$*UTF8*$!
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample-spaceship-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
@@ -538,7 +538,7 @@ f// !$*UTF8*$!
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -552,7 +552,7 @@ f// !$*UTF8*$!
 					"../../external-deps/oggvorbis/include",
 				);
 				INFOPLIST_FILE = "sample-spaceship-ios.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"../../external-deps/bullet/lib/ios/$(CURRENT_ARCH)\"",
