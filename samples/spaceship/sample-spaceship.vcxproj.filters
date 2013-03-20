@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="res">
+      <UniqueIdentifier>{174b782f-abfa-4a6e-99f3-ef7c67fb4798}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{03dcd1a4-e2c1-4dc6-ac81-3e6538d8e747}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bar-descriptor.xml" />
+    <None Include="icon.png" />
+    <None Include="res\airstrip.ttf">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\airstrip28.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\background.ogg">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\background.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\propulsion_glow.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.dae">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.mb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\spaceship.wav">
+      <Filter>res</Filter>
+    </None>
+    <None Include="..\..\gameplay\res\logo_powered_white.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="game.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\SpaceshipGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\SpaceshipGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
