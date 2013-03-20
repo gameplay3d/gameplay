@@ -796,7 +796,7 @@ bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheel
     return false;
 }
 
-void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];
     for (size_t i = 0, count = list.size(); i < count; ++i)
