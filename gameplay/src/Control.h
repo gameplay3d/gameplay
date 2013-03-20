@@ -11,6 +11,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "ScriptTarget.h"
+#include "Gamepad.h"
 
 namespace gameplay
 {
@@ -86,12 +87,6 @@ public:
     };
 
     /**
-     * @script{ignore}
-     * A constant used for setting themed attributes on all control states simultaneously.
-     */
-    static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
-
-    /**
      * Implement Control::Listener and call Control::addListener()
      * in order to listen for events on controls.
      */
@@ -155,6 +150,12 @@ public:
          */
         virtual void controlEvent(Control* control, EventType evt) = 0;
     };
+
+    /**
+     * @script{ignore}
+     * A constant used for setting themed attributes on all control states simultaneously.
+     */
+    static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
 
     /**
      * Position animation property. Data = x, y
@@ -243,6 +244,14 @@ public:
      * @return The bounds of this control.
      */
     const Rectangle& getBounds() const;
+
+    /**
+     * Get the absolute bounds of this control, in pixels, including border and padding,
+     * before clipping.
+     *
+     * @return The absolute bounds of this control.
+     */
+    const Rectangle& getAbsoluteBounds() const;
 
     /**
      * Get the x coordinate of this control's bounds.
@@ -842,6 +851,15 @@ protected:
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
+     * Gamepad callback on gamepad events.
+     *
+     * @param gamepad The gamepad whose state changed.
+     * @param evt The gamepad event that occurred.
+     * @param analogIndex If evt is JOYSTICK_EVENT or TRIGGER_EVENT, this will be the index of the corresponding control.
+     */
+    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
+    /**
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *
@@ -849,6 +867,14 @@ protected:
      * @param offset Positioning offset to add to the control's position.
      */
     virtual void update(const Control* container, const Vector2& offset);
+
+    /**
+     * Draws the themed border and background of a control.
+     *
+     * @param spriteBatch The sprite batch containing this control's border images.
+     * @param clip The clipping rectangle of this control's parent container.
+     */
+    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
 
     /**
      * Draw the images associated with this control.
@@ -915,7 +941,8 @@ protected:
      *
      * @param eventType The event to trigger.
      */
-    void notifyListeners(Listener::EventType eventType);
+    //void notifyListeners(Listener::EventType eventType);
+    void notifyListeners(Control::Listener::EventType eventType);
 
     /**
      * Gets the Alignment by string.
@@ -1003,7 +1030,8 @@ protected:
     /**
      * Listeners map of EventType's to a list of Listeners.
      */
-    std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
+    //std::map<Listener::EventType, std::list<Listener*>*>* _listeners;
+    std::map<Control::Listener::EventType, std::list<Control::Listener*>*>* _listeners;
     
     /**
      * The Control's Theme::Style.
@@ -1063,15 +1091,7 @@ private:
 
     Theme::Skin* getSkin(State state);
 
-    void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
-    
-    /**
-     * Draws the themed border and background of a control.
-     *
-     * @param spriteBatch The sprite batch containing this control's border images.
-     * @param clip The clipping rectangle of this control's parent container.
-     */
-    virtual void drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip);
+    void addSpecificListener(Control::Listener* listener, Control::Listener::EventType eventType);
     
     bool _styleOverridden;
     Theme::Skin* _skin;

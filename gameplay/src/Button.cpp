@@ -50,11 +50,8 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
                 _contactIndex = (int) contactIndex;
-
                 setState(Control::ACTIVE);
-
-                notifyListeners(Listener::PRESS);
-
+                notifyListeners(Control::Listener::PRESS);
                 return _consumeInputEvents;
             }
             else
@@ -68,14 +65,13 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         if (_contactIndex == (int) contactIndex)
         {
             _contactIndex = INVALID_CONTACT_INDEX;
-            notifyListeners(Listener::RELEASE);
+            notifyListeners(Control::Listener::RELEASE);
             if (!_parent->isScrolling() &&
                 x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
                 setState(Control::FOCUS);
-
-                notifyListeners(Listener::CLICK);
+                notifyListeners(Control::Listener::CLICK);
             }
             else
             {
@@ -87,6 +83,40 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     case Touch::TOUCH_MOVE:
         if (_contactIndex == (int) contactIndex)
             return _consumeInputEvents;
+        break;
+    }
+
+    return false;
+}
+
+bool Button::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    switch (evt)
+    {
+    case Gamepad::BUTTON_EVENT:
+        if (_state == Control::FOCUS)
+        {
+            if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
+                gamepad->isButtonDown(Gamepad::BUTTON_X))
+            {
+                notifyListeners(Control::Listener::PRESS);
+                setState(Control::ACTIVE);
+                return _consumeInputEvents;
+            }
+        }
+        else if (_state == Control::ACTIVE)
+        {
+            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
+                !gamepad->isButtonDown(Gamepad::BUTTON_X))
+            {
+                notifyListeners(Control::Listener::RELEASE);
+                notifyListeners(Control::Listener::CLICK);
+                setState(Control::FOCUS);
+                return _consumeInputEvents;
+            }
+        }
+        break;
+    default:
         break;
     }
 

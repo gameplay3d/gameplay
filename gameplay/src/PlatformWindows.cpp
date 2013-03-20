@@ -44,9 +44,7 @@ static unsigned int __gamepadsConnected = 0;
 static const unsigned int XINPUT_BUTTON_COUNT = 14;
 static const unsigned int XINPUT_JOYSTICK_COUNT = 2;
 static const unsigned int XINPUT_TRIGGER_COUNT = 2;
-#endif
 
-#ifdef USE_XINPUT
 static XINPUT_STATE __xInputState;
 static bool __connectedXInput[4];
 
@@ -947,7 +945,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
                 __connectedXInput[i] = true;
             }
-
         }
     }
 #endif
@@ -1245,13 +1242,15 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         };
 
         const unsigned int *mapping = xInputMapping;
-        for (gamepad->_buttons = 0; buttons; buttons >>= 1, mapping++)
+        unsigned int mappedButtons;
+        for (mappedButtons = 0; buttons; buttons >>= 1, mapping++)
         {
             if (buttons & 1)
             {
-                gamepad->_buttons |= (1 << *mapping);
+                mappedButtons |= (1 << *mapping);
             }
         }
+        gamepad->setButtons(mappedButtons);
 
         unsigned int i;
         for (i = 0; i < gamepad->_joystickCount; ++i)
@@ -1272,7 +1271,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
                 break;
             }
 
-            gamepad->_joysticks[i].set(x, y);
+            gamepad->setJoystickValue(i, x, y);
         }
 
         for (i = 0; i < gamepad->_triggerCount; ++i)
@@ -1292,20 +1291,17 @@ void Platform::pollGamepadState(Gamepad* gamepad)
 
             if (trigger < XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
             {
-                gamepad->_triggers[i] = 0.0f;
+                gamepad->setTriggerValue(i, 0.0f);
             }
             else
             {
-                gamepad->_triggers[i] = (float)trigger / 255.0f;
+                gamepad->setTriggerValue(i, (float)trigger / 255.0f);
             }
         }
     }
 }
 #else
-void Platform::pollGamepadState(Gamepad* gamepad)
-{
-    // TODO: Support generic HID gamepads (including XBox controllers) without requiring XInput.
-}
+void Platform::pollGamepadState(Gamepad* gamepad) { }
 #endif
 
 void Platform::shutdownInternal()

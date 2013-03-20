@@ -42,7 +42,7 @@ void VerticalLayout::update(const Container* container, const Vector2& offset)
 
     float yPosition = 0;
 
-    std::vector<Control*> controls = container->getControls();
+    const std::vector<Control*>& controls = container->getControls();
 
     int i, end, iter;
     if (_bottomToTop)
