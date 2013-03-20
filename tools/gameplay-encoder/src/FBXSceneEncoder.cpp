@@ -224,8 +224,8 @@ void FBXSceneEncoder::write(const std::string& filepath, const EncoderArguments&
     // Determine if animations should be grouped.
     if (arguments.getGroupAnimationAnimationId().empty() && isGroupAnimationPossible(fbxScene))
     {
-		if (arguments.getAutoGrouping()==EncoderArguments::AUTOGROUP_YES || 
-			(arguments.getAutoGrouping()==EncoderArguments::AUTOGROUP_NOTSET && promptUserGroupAnimations()))
+        if ( arguments.getAutoGrouping()==EncoderArguments::AUTOGROUP_YES || 
+            (arguments.getAutoGrouping()==EncoderArguments::AUTOGROUP_NOTSET && promptUserGroupAnimations()))
         {
             _autoGroupAnimations = true;
         }
