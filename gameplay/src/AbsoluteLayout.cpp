@@ -41,7 +41,7 @@ void AbsoluteLayout::update(const Container* container, const Vector2& offset)
     GP_ASSERT(container);
 
     // An AbsoluteLayout does nothing to modify the layout of Controls.
-    std::vector<Control*> controls = container->getControls();
+    const std::vector<Control*>& controls = container->getControls();
     for (size_t i = 0, count = controls.size(); i < count; i++)
     {
         Control* control = controls[i];

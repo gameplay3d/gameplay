@@ -125,6 +125,11 @@ theme particleEditor
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
+        stateFocus
+        {
+            textColor = #ff0000ff
+        }
+
         stateActive
         {
             imageList = activeImages
@@ -168,6 +173,11 @@ theme particleEditor
             textColor = #ffffffff
             fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateFocus
+        {
+            textColor = #ff0000ff
         }
 
         stateActive

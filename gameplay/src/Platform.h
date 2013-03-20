@@ -300,7 +300,14 @@ public:
      */
     static void resizeEventInternal(unsigned int width, unsigned int height);
 
-   /**
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
@@ -308,7 +315,8 @@ public:
     static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                                               unsigned int vendorId, unsigned int productId, 
                                               const char* vendorString, const char* productString);
-   /**
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}

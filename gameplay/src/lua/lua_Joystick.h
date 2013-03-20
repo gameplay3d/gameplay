@@ -13,6 +13,7 @@ int lua_Joystick_createAnimation(lua_State* state);
 int lua_Joystick_createAnimationFromBy(lua_State* state);
 int lua_Joystick_createAnimationFromTo(lua_State* state);
 int lua_Joystick_destroyAnimation(lua_State* state);
+int lua_Joystick_getAbsoluteBounds(lua_State* state);
 int lua_Joystick_getAlignment(lua_State* state);
 int lua_Joystick_getAnimation(lua_State* state);
 int lua_Joystick_getAnimationPropertyComponentCount(lua_State* state);

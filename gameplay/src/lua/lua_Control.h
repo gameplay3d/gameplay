@@ -13,6 +13,7 @@ int lua_Control_createAnimation(lua_State* state);
 int lua_Control_createAnimationFromBy(lua_State* state);
 int lua_Control_createAnimationFromTo(lua_State* state);
 int lua_Control_destroyAnimation(lua_State* state);
+int lua_Control_getAbsoluteBounds(lua_State* state);
 int lua_Control_getAlignment(lua_State* state);
 int lua_Control_getAnimation(lua_State* state);
 int lua_Control_getAnimationPropertyComponentCount(lua_State* state);

@@ -13,6 +13,7 @@ int lua_RadioButton_createAnimation(lua_State* state);
 int lua_RadioButton_createAnimationFromBy(lua_State* state);
 int lua_RadioButton_createAnimationFromTo(lua_State* state);
 int lua_RadioButton_destroyAnimation(lua_State* state);
+int lua_RadioButton_getAbsoluteBounds(lua_State* state);
 int lua_RadioButton_getAlignment(lua_State* state);
 int lua_RadioButton_getAnimation(lua_State* state);
 int lua_RadioButton_getAnimationPropertyComponentCount(lua_State* state);

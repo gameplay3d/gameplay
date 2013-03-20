@@ -86,6 +86,13 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
+    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
+    /**
      * @see Control::getType
      */
     const char* getType() const;
