@@ -2046,7 +2046,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             }
         }
         
-        gamepad->_buttons = 0;
+        unsigned int buttons = 0;
         for (int i = 0; i < [gp numberOfButtons]; ++i)
         {
             HIDGamepadButton* b = [gp buttonAtIndex: i];
@@ -2056,11 +2056,11 @@ void Platform::pollGamepadState(Gamepad* gamepad)
                 if (mapping)
                 {
                     if (mapping[i] >= 0)
-                        gamepad->_buttons |= (1 << mapping[i]);
+                        buttons |= (1 << mapping[i]);
                 }
                 else
                 {
-                    gamepad->_buttons |= (1 << i);
+                    buttons |= (1 << i);
                 }
             }
         }
@@ -2074,31 +2074,33 @@ void Platform::pollGamepadState(Gamepad* gamepad)
                 case -1:
                     break;
                 case 0:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_UP);
+                    buttons |= (1 << Gamepad::BUTTON_UP);
                     break;
                 case 1:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_UP) | (1 << Gamepad::BUTTON_RIGHT);
+                    buttons |= (1 << Gamepad::BUTTON_UP) | (1 << Gamepad::BUTTON_RIGHT);
                     break;
                 case 2:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_RIGHT);
+                    buttons |= (1 << Gamepad::BUTTON_RIGHT);
                     break;
                 case 3:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_RIGHT) | (1 << Gamepad::BUTTON_DOWN);
+                    buttons |= (1 << Gamepad::BUTTON_RIGHT) | (1 << Gamepad::BUTTON_DOWN);
                     break;
                 case 4:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_DOWN);
+                    buttons |= (1 << Gamepad::BUTTON_DOWN);
                     break;
                 case 5:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_DOWN) | (1 << Gamepad::BUTTON_LEFT);
+                    buttons |= (1 << Gamepad::BUTTON_DOWN) | (1 << Gamepad::BUTTON_LEFT);
                     break;
                 case 6:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_LEFT);
+                    buttons |= (1 << Gamepad::BUTTON_LEFT);
                     break;
                 case 7:
-                    gamepad->_buttons |= (1 << Gamepad::BUTTON_LEFT) | (1 << Gamepad::BUTTON_UP);
+                    buttons |= (1 << Gamepad::BUTTON_LEFT) | (1 << Gamepad::BUTTON_UP);
                     break;
             }
         }
+        
+        gamepad->setButtons(buttons);
         
         for (unsigned int i = 0; i < [gp numberOfSticks]; ++i)
         {
@@ -2109,13 +2111,12 @@ void Platform::pollGamepadState(Gamepad* gamepad)
             if (std::fabs(rawY) <= axisDeadZone)
                 rawY = 0;
             
-            gamepad->_joysticks[i].x = rawX;
-            gamepad->_joysticks[i].y = rawY;
+            gamepad->setJoystickValue(i, rawX, rawY);
         }
         
         for (unsigned int i = 0; i < [gp numberOfTriggerButtons]; ++i)
         {
-            gamepad->_triggers[i] = [[gp triggerButtonAtIndex: i] calibratedStateValue];
+            gamepad->setTriggerValue(i, [[gp triggerButtonAtIndex: i] calibratedStateValue]);
         }
     }
 }

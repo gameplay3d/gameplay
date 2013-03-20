@@ -349,11 +349,11 @@ void Game::frame()
         // Update gamepads.
         Gamepad::updateInternal(0);
 
-        // Update forms.
-        Form::updateInternal(0);
-
         // Application Update.
         update(0);
+
+        // Update forms.
+        Form::updateInternal(0);
 
         // Script update.
         _scriptController->update(0);

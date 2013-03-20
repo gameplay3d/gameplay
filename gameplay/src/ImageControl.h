@@ -52,6 +52,8 @@ public:
 
     /**
      * Set the path of the image for this ImageControl to display.
+     *
+     * @param path The path to the image.
      */
     void setImage(const char* path);
 

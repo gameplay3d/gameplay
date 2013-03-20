@@ -213,6 +213,11 @@ public:
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
 
+    /**
+     * @see TimeListener::timeEvent
+     *
+     * @script{ignore}
+     */
     void timeEvent(long timeDiff, void* cookie);
 
 protected:
@@ -294,10 +299,15 @@ protected:
      *
      * @return True if the mouse event is consumed or false if it is not consumed.
      *
-     * @see Mouse::MouseEvent
+     * @see Mouse::mouseEvent
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
     virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
@@ -538,6 +548,8 @@ private:
     // in which case scrolling can be initiated.
     bool moveFocus(Direction direction, Control* outsideControl = NULL);
 
+    void guaranteeFocus(Control* inFocus);
+
     // Starts scrolling at the given horizontal and vertical speeds.
     void startScrolling(float x, float y, bool resetTime = true);
 
@@ -552,9 +564,11 @@ private:
     double _lastFrameTime;
 
     // Timing information for repeating focus changes.
+    bool _focusChangeRepeat;
     double _focusChangeStartTime;
     double _focusChangeRepeatDelay;
     unsigned int _focusChangeCount;
+    Direction _direction;
 
     float _totalWidth;
     float _totalHeight;
