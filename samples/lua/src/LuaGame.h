@@ -1,5 +1,5 @@
-#ifndef LUAMESHGAME_H_
-#define LUAMESHGAME_H_
+#ifndef LUAGAME_H_
+#define LUAGAME_H_
 
 #include "gameplay.h"
 
@@ -10,14 +10,14 @@ using namespace gameplay;
  *
  * This game has all the implementation code done in lua.
  */
-class LuaMeshGame: public Game
+class LuaGame: public Game
 {
 public:
 
     /**
      * Constructor.
      */
-    LuaMeshGame();
+    LuaGame();
 
 protected:
 
