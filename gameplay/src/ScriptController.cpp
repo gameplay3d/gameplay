@@ -426,20 +426,33 @@ bool ScriptUtil::luaCheckBool(lua_State* state, int n)
 
 void ScriptController::loadScript(const char* path, bool forceReload)
 {
+    GP_ASSERT(path);
     std::set<std::string>::iterator iter = _loadedScripts.find(path);
     if (iter == _loadedScripts.end() || forceReload)
     {
 #ifdef __ANDROID__
         const char* scriptContents = FileSystem::readAll(path);
         if (luaL_dostring(_lua, scriptContents))
+        {
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+        }
         SAFE_DELETE_ARRAY(scriptContents);
 #else
-        if (luaL_dofile(_lua, path))
+        std::string fullPath;
+        if (!FileSystem::isAbsolutePath(path))
+        {
+            fullPath.append(FileSystem::getResourcePath());
+        }
+        fullPath.append(path);
+        if (luaL_dofile(_lua, fullPath.c_str()))
+        {
             GP_WARN("Failed to run Lua script with error: '%s'.", lua_tostring(_lua, -1));
+        }
 #endif
         if (iter == _loadedScripts.end())
+        {
             _loadedScripts.insert(path);
+        }
     }
 }
 
