@@ -9,7 +9,11 @@ namespace gameplay
 static Vector2 _defaultOffset = Vector2::zero();
 
 Sprite::Sprite(const char* id)
-	: _node(NULL), _tileSheet(NULL), _flip(FLIP_NONE), _defaultTile(), _width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y), _frame(), _defaultTileInUse(true)
+	: _node(NULL), 
+	_tileSheet(NULL), _tint(Vector4::one()),
+	_flip(FLIP_NONE), _defaultTile(), 
+	_width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y), 
+	_frame(), _defaultTileInUse(true)
 {
 	if (id)
     {
@@ -140,6 +144,16 @@ void Sprite::setOffsetY(float value)
 	_y = value;
 }
 
+const Vector4& Sprite::getTint() const
+{
+	return _tint;
+}
+
+void Sprite::setTint(const Vector4& tint)
+{
+	_tint = tint;
+}
+
 Node* Sprite::getNode() const
 {
 	return _node;
@@ -171,7 +185,7 @@ void Sprite::draw(bool isolateDraw)
 	float angle = 0.0f;
 
 	//Adjust values that rely on Node
-	if(Node* node = getNode())
+	if (Node* node = getNode())
 	{
 		//Position
 		pos = node->getTranslationWorld();
@@ -184,7 +198,7 @@ void Sprite::draw(bool isolateDraw)
 		size.x *= node->getScaleX();
 		size.y *= node->getScaleY();
 
-		if(isolateDraw)
+		if (isolateDraw)
 		{
 			//Adjust projection matrix if this draw is specific to this Sprite
 			if(Camera* activeCamera = node->getScene()->getActiveCamera())
@@ -202,15 +216,28 @@ void Sprite::draw(bool isolateDraw)
 	pos.x += _x;
 	pos.y += _y;
 
-	if(isolateDraw)
+	//Handle flip
+	if ((_flip & FLIP_HORZ) == FLIP_HORZ)
+	{
+		pos.x -= size.x;
+		size.x = -size.x;
+	}
+	if ((_flip & FLIP_VERT) == FLIP_VERT)
+	{
+		pos.y -= size.y;
+		size.y = -size.y;
+	}
+
+	//Draw
+	if (isolateDraw)
 	{
 		batch->start();
 	}
 
 	//The actual draw call
-	batch->draw(pos, _frame, size, Vector4::one(), rotationPoint, angle);
+	batch->draw(pos, _frame, size, _tint, rotationPoint, angle);
 
-	if(isolateDraw)
+	if (isolateDraw)
 	{
 		batch->finish();
 	}
@@ -242,7 +269,29 @@ void Sprite::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 
     switch (propertyId)
 	{
-		//TODO
+		case ANIMATE_SIZE:
+			value->setFloat(0, _width);
+			value->setFloat(1, _height);
+			break;
+		case ANIMATE_OFFSET:
+			value->setFloat(0, _x);
+			value->setFloat(1, _y);
+			break;
+		case ANIMATE_FRAME_INDEX:
+			//TODO
+			break;
+		case ANIMATE_FRAME_SPECIFIC:
+			//TODO
+			break;
+		case ANIMATE_FRAME_BLENDING:
+			//TODO
+			break;
+		case ANIMATE_FRAME_TRANSITIONS:
+			//TODO
+			break;
+		case ANIMATE_TINT:
+			value->setFloats(0, &_tint.x, 4);
+			break;
 		default:
 			break;
 	}
@@ -255,7 +304,41 @@ void Sprite::setAnimationPropertyValue(int propertyId, AnimationValue* value, fl
 
     switch (propertyId)
 	{
-		//TODO
+		case ANIMATE_SIZE:
+		{
+			setSize(Curve::lerp(blendWeight, _width, value->getFloat(0)), Curve::lerp(blendWeight, _height, value->getFloat(1)));
+			break;
+		}
+		case ANIMATE_OFFSET:
+		{
+			setOffset(Curve::lerp(blendWeight, _x, value->getFloat(0)), Curve::lerp(blendWeight, _y, value->getFloat(1)));
+			break;
+		}
+		case ANIMATE_FRAME_INDEX:
+		{
+			//TODO
+			break;
+		}
+		case ANIMATE_FRAME_SPECIFIC:
+		{
+			//TODO
+			break;
+		}
+		case ANIMATE_FRAME_BLENDING:
+		{
+			//TODO
+			break;
+		}
+		case ANIMATE_FRAME_TRANSITIONS:
+		{
+			//TODO
+			break;
+		}
+		case ANIMATE_TINT:
+        {
+			setTint(Vector4(Curve::lerp(blendWeight, _tint.x, value->getFloat(0)), Curve::lerp(blendWeight, _tint.y, value->getFloat(1)), Curve::lerp(blendWeight, _tint.z, value->getFloat(2)), Curve::lerp(blendWeight, _tint.w, value->getFloat(3))));
+            break;
+        }
 		default:
 			break;
 	}

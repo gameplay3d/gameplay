@@ -33,6 +33,7 @@ void luaRegister_Sprite()
 		{"getSize", lua_Sprite_getSize},
 		{"getWidth", lua_Sprite_getWidth},
 		{"getTileSheet", lua_Sprite_getTileSheet},
+		{"getTint", lua_Sprite_getTint},
         {"release", lua_Sprite_release},
 		{"setAnimationPropertyValue", lua_Sprite_setAnimationPropertyValue},
 		{"setDefaultTile", lua_Sprite_setDefaultTile},
@@ -42,6 +43,7 @@ void luaRegister_Sprite()
 		{"setOffsetX", lua_Sprite_setOffsetX},
 		{"setOffsetY", lua_Sprite_setOffsetY},
 		{"setSize", lua_Sprite_setSize},
+		{"setTint", lua_Sprite_setTint},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -1206,6 +1208,50 @@ int lua_Sprite_getTileSheet(lua_State* state)
     return 0;
 }
 
+int lua_Sprite_getTint(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Sprite* instance = getInstance(state);
+				void* returnPtr = (void*)&(instance->getTint());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Vector4");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Sprite_getTint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Sprite_release(lua_State* state)
 {
     // Get the number of parameters.
@@ -1629,6 +1675,48 @@ int lua_Sprite_setSize(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Sprite_setTint(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					(lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+				{
+					// Get parameter 1 off the stack.
+					bool param1Valid;
+					gameplay::ScriptUtil::LuaArray<Vector4> param1 = gameplay::ScriptUtil::getObjectPointer<Vector4>(2, "Vector4", true, &param1Valid);
+					if (!param1Valid)
+						break;
+
+					Sprite* instance = getInstance(state);
+					instance->setTint(*param1);
+                
+					return 0;
+				}
+			} while (0);
+
+            lua_pushstring(state, "lua_Sprite_setTint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }

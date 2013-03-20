@@ -254,7 +254,19 @@ public:
 	 */
 	void setOffsetY(float value);
 
-	//TODO: tint
+	/**
+     * Gets the sprite tint.
+     *
+     * @return The sprite's tint.
+     */
+	const Vector4& getTint() const;
+
+	/**
+	 * Sets the sprite's tint.
+	 * 
+	 * @param tint The sprite's tint.
+	 */
+	void setTint(const Vector4& tint);
 
 	//TODO: parallax effect (so layers don't always move when at different depths) //Only needed if camera is not orthographic
 
@@ -370,6 +382,11 @@ protected:
 	 * The Sprite's TileSheet that represents what will be drawn.
 	 */
 	TileSheet* _tileSheet;
+
+	/**
+	 * The sprite's tint.
+	 */
+	Vector4 _tint;
 
 	/**
 	 * Bitwise definition of any "flip" the Sprite has.
