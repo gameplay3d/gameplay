@@ -11,7 +11,7 @@ public:
     
     FormsSample();
 
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
 protected:
 
@@ -48,6 +48,8 @@ private:
     unsigned int _formIndex;
     std::vector<const char*> _formFiles;
     std::string _sampleString;
+    Vector2 _joysticks[2];
+
 };
 
 #endif

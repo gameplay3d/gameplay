@@ -36,6 +36,7 @@ void InputSample::initialize()
     _inputSampleControls = Form::create("res/common/inputs.form");
     static_cast<Button*>(_inputSampleControls->getControl("showKeyboardButton"))->addListener(this, Listener::CLICK);
     static_cast<Button*>(_inputSampleControls->getControl("captureMouseButton"))->addListener(this, Listener::CLICK);
+
     if (!hasMouse())
     {
         static_cast<Button*>(_inputSampleControls->getControl("captureMouseButton"))->setVisible(false);

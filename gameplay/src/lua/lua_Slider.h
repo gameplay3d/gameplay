@@ -13,6 +13,7 @@ int lua_Slider_createAnimation(lua_State* state);
 int lua_Slider_createAnimationFromBy(lua_State* state);
 int lua_Slider_createAnimationFromTo(lua_State* state);
 int lua_Slider_destroyAnimation(lua_State* state);
+int lua_Slider_getAbsoluteBounds(lua_State* state);
 int lua_Slider_getAlignment(lua_State* state);
 int lua_Slider_getAnimation(lua_State* state);
 int lua_Slider_getAnimationPropertyComponentCount(lua_State* state);

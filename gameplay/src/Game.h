@@ -443,13 +443,15 @@ public:
     virtual void gestureTapEvent(int x, int y);
 
     /**
-     * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
-     * and Gamepad::DISCONNECTED_EVENT.
+     * Gamepad callback on gamepad events.  Override to receive Gamepad::CONNECTED_EVENT 
+     * and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from update().
+     * Or, handle all gamepad input through BUTTON, JOYSTICK and TRIGGER events.
      *
      * @param evt The gamepad event that occurred.
-     * @param gamepad the gamepad the event occurred on
+     * @param gamepad The gamepad that generated the event.
+     * @param analogIndex If this is a JOYSTICK_EVENT or TRIGGER_EVENT, the index of the joystick or trigger whose value changed.
      */
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
     /**
      * Gets the current number of gamepads currently connected to the system.
