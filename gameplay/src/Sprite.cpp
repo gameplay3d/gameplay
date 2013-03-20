@@ -219,12 +219,12 @@ void Sprite::draw(bool isolateDraw)
 	//Handle flip
 	if ((_flip & FLIP_HORZ) == FLIP_HORZ)
 	{
-		pos.x -= size.x;
+		pos.x += size.x;
 		size.x = -size.x;
 	}
 	if ((_flip & FLIP_VERT) == FLIP_VERT)
 	{
-		pos.y -= size.y;
+		pos.y += size.y;
 		size.y = -size.y;
 	}
 
