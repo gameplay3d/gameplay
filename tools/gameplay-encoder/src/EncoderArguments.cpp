@@ -23,7 +23,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
-    _optimizeAnimations(false)
+    _optimizeAnimations(false),
+	_autogroup(AUTOGROUP_NOTSET)
 {
     __instance = this;
 
@@ -160,6 +161,11 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
     return "";
 }
 
+EncoderArguments::AutoGroupOption EncoderArguments::getAutoGrouping() const
+{
+	return _autogroup;
+}
+
 const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeightmapOptions() const
 {
     return _heightmaps;
@@ -237,6 +243,8 @@ void EncoderArguments::printUsage() const
     LOG(1, "FBX file options:\n");
     LOG(1, "  -i <id>\tFilter by node ID.\n");
     LOG(1, "  -t\t\tWrite text/xml.\n");
+	LOG(1, "  -autogroup\tAutomatically group animation channels into a new animation.\n");
+	LOG(1, "  -noautogroup\tDo not prompt to group animations.\n");
     LOG(1, "  -g <node id> <animation id>\n" \
         "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
     LOG(1, "  -tb <node id>\n" \
@@ -358,6 +366,12 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     }
     switch (str[1])
     {
+	case 'a':
+		if (str.compare("-autogroup") == 0)
+		{
+			_autogroup = AUTOGROUP_YES;
+		}
+		break;
     case 'g':
         if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
         {
@@ -463,7 +477,14 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         break;
     case 'n':
-        _normalMap = true;
+		if (str.compare("-noautogroup") == 0)
+		{
+			_autogroup = AUTOGROUP_NO;
+		}
+		else
+		{
+			_normalMap = true;
+		}
         break;
     case 'w':
         {
