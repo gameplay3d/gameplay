@@ -38,8 +38,6 @@ RacerGame::RacerGame()
 
 void RacerGame::initialize()
 {
-    //setVsync(false);
-
     setMultiTouch(true);
 
     _font = Font::create("res/common/arial40.gpb");
@@ -536,6 +534,7 @@ void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
                 _virtualGamepadClip->play();
             }
             _gamepad = _physicalGamepad;
+            _virtualGamepad->getForm()->setEnabled(false);
         }
         else if (_virtualGamepad)
         {
@@ -545,6 +544,7 @@ void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
                 _virtualGamepadClip->play();
             }
             _gamepad = _virtualGamepad;
+            _virtualGamepad->getForm()->setEnabled(true);
         }
 
         break;
@@ -556,6 +556,7 @@ void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 
             _virtualGamepadClip->setSpeed(-1.0f);
             _virtualGamepadClip->play();
+            _virtualGamepad->getForm()->setEnabled(true);
         }
         break;
     }
@@ -570,6 +571,7 @@ void RacerGame::menuEvent()
         static_cast<Button*>(_overlay->getControl("menuButton"))->setText("Resume");
         pause();
         _menu->setEnabled(true);
+        _menu->setState(Control::FOCUS);
     }
     else
     {

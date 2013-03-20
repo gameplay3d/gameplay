@@ -316,7 +316,7 @@ bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
                 }
 
                 // A slider consumes all button events until it is no longer active.
-                eventConsumed |= _consumeInputEvents;
+                eventConsumed = true;
                 _dirty = true;
                 break;
             }
@@ -330,7 +330,7 @@ bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
                     _gamepadValue = _value;
                     _delta = joy.x;
                     _dirty = true;
-                    eventConsumed |= _consumeInputEvents;
+                    eventConsumed = true;
                 }
                 break;
             }

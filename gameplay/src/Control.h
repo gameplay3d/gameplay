@@ -245,6 +245,12 @@ public:
      */
     const Rectangle& getBounds() const;
 
+    /**
+     * Get the absolute bounds of this control, in pixels, including border and padding,
+     * before clipping.
+     *
+     * @return The absolute bounds of this control.
+     */
     const Rectangle& getAbsoluteBounds() const;
 
     /**
@@ -749,7 +755,6 @@ public:
      * @param listener The listener to add.
      * @param eventFlags The events to listen for.
      */
-    //virtual void addListener(Control::Listener* listener, int eventFlags);
     virtual void addListener(Control::Listener* listener, int eventFlags);
 
     /**
@@ -1086,7 +1091,6 @@ private:
 
     Theme::Skin* getSkin(State state);
 
-    //void addSpecificListener(Control::Listener* listener, Listener::EventType eventType);
     void addSpecificListener(Control::Listener* listener, Control::Listener::EventType eventType);
     
     bool _styleOverridden;

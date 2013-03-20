@@ -50,6 +50,7 @@ void luaRegister_Form()
         {"createAnimationFromTo", lua_Form_createAnimationFromTo},
         {"destroyAnimation", lua_Form_destroyAnimation},
         {"draw", lua_Form_draw},
+        {"getAbsoluteBounds", lua_Form_getAbsoluteBounds},
         {"getAlignment", lua_Form_getAlignment},
         {"getAnimation", lua_Form_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Form_getAnimationPropertyComponentCount},
@@ -136,7 +137,6 @@ void luaRegister_Form()
         {"setVisible", lua_Form_setVisible},
         {"setWidth", lua_Form_setWidth},
         {"setZIndex", lua_Form_setZIndex},
-        {"timeEvent", lua_Form_timeEvent},
         {"update", lua_Form_update},
         {NULL, NULL}
     };
@@ -775,6 +775,50 @@ int lua_Form_draw(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_draw - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_getAbsoluteBounds(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getAbsoluteBounds());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_getAbsoluteBounds - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -5197,46 +5241,6 @@ int lua_Form_static_getForm(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Form_timeEvent(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                lua_type(state, 2) == LUA_TNUMBER &&
-                lua_type(state, 3) == LUA_TNONE)
-            {
-                // Get parameter 1 off the stack.
-                long param1 = (long)luaL_checklong(state, 2);
-
-                // Get parameter 2 off the stack.
-                void* param2 = (void*)luaL_checkint(state, 3);
-
-                Form* instance = getInstance(state);
-                instance->timeEvent(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Form_timeEvent - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
