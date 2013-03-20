@@ -9,11 +9,11 @@ namespace gameplay
 static Vector2 _defaultOffset = Vector2::zero();
 
 Sprite::Sprite(const char* id)
-	: _node(NULL), 
+	: _defaultTileInUse(true), _node(NULL),
 	_tileSheet(NULL), _tint(Vector4::one()),
 	_flip(FLIP_NONE), _defaultTile(), 
 	_width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y), 
-	_frame(), _defaultTileInUse(true)
+	_frame()
 {
 	if (id)
     {
@@ -235,7 +235,7 @@ void Sprite::draw(bool isolateDraw)
 	}
 
 	//The actual draw call
-	batch->draw(pos, _frame, size, _tint, rotationPoint, angle);
+	batch->draw(pos, _defaultTileInUse ? _defaultTile : _frame, size, _tint, rotationPoint, angle);
 
 	if (isolateDraw)
 	{

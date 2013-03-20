@@ -356,21 +356,16 @@ protected:
 
 private:
 
-	/**
-     * Hidden copy constructor.
-     */
     Sprite(const Sprite& copy);
-
-    /**
-     * Hidden copy assignment operator.
-     */
     Sprite& operator=(const Sprite&);
+
+	bool _defaultTileInUse;
 
 protected:
 
 	/**
      * The Sprite's ID.
-     */ 
+     */
     std::string _id;
 
 	/**
@@ -422,11 +417,6 @@ protected:
 	 * The actual source Rectangle of the TileSheet that will be drawn.
 	 */
 	Rectangle _frame;
-
-	/**
-	 * Use the default tile instead of animation (usually means that animation is not in use)
-	 */
-	bool _defaultTileInUse;
 
 	//TODO
 };
