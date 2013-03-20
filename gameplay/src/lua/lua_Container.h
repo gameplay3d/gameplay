@@ -14,6 +14,7 @@ int lua_Container_createAnimation(lua_State* state);
 int lua_Container_createAnimationFromBy(lua_State* state);
 int lua_Container_createAnimationFromTo(lua_State* state);
 int lua_Container_destroyAnimation(lua_State* state);
+int lua_Container_getAbsoluteBounds(lua_State* state);
 int lua_Container_getAlignment(lua_State* state);
 int lua_Container_getAnimation(lua_State* state);
 int lua_Container_getAnimationPropertyComponentCount(lua_State* state);

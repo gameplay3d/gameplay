@@ -218,7 +218,7 @@ void SamplesGame::controlEvent(Control* control, EventType evt)
     }
 }
 
-void SamplesGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void SamplesGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     if (_activeSample)
         _activeSample->gamepadEvent(evt, gamepad);

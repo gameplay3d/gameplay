@@ -121,6 +121,11 @@ theme mainMenu
         region = 1, 1, 74, 74
         color = #4A8799ff
     }
+	
+	skin mainFocus : mainNormal
+	{
+		color = #ff0000ff
+	}
 
     skin mainActive : mainNormal
     {
@@ -235,6 +240,11 @@ theme mainMenu
             textAlignment = ALIGN_VCENTER_HCENTER
         }
 
+		stateFocus
+		{
+			skin = mainFocus
+		}
+		
         stateActive
         {
             imageList = activeImages
@@ -268,6 +278,11 @@ theme mainMenu
             font = res/common/arial18.gpb
             fontSize = 20
         }
+		
+		stateFocus
+		{
+			textColor = #00ff00ff
+		}
 
         stateActive
         {
@@ -285,6 +300,11 @@ theme mainMenu
             fontSize = 14
             textAlignment = ALIGN_VCENTER_HCENTER
         }
+		
+		stateFocus
+		{
+			textColor = #00ff00ff
+		}
 
         stateActive
         {
@@ -301,6 +321,11 @@ theme mainMenu
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
+		
+		stateFocus
+		{
+			textColor = #00ff00ff
+		}
 
         stateActive
         {

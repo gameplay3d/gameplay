@@ -13,6 +13,7 @@ int lua_TextBox_createAnimation(lua_State* state);
 int lua_TextBox_createAnimationFromBy(lua_State* state);
 int lua_TextBox_createAnimationFromTo(lua_State* state);
 int lua_TextBox_destroyAnimation(lua_State* state);
+int lua_TextBox_getAbsoluteBounds(lua_State* state);
 int lua_TextBox_getAlignment(lua_State* state);
 int lua_TextBox_getAnimation(lua_State* state);
 int lua_TextBox_getAnimationPropertyComponentCount(lua_State* state);

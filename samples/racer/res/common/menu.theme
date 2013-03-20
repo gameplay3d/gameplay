@@ -145,6 +145,11 @@ theme menuTheme
             fontSize = 20
         }
 
+        stateFocus
+        {
+            textColor = #ff0000ff
+        }
+
         stateActive
         {
             skin = mainActive
@@ -160,6 +165,11 @@ theme menuTheme
             textColor = #ffffffff
             fontSize = 14
             textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateFocus
+        {
+            textColor = #ff0000ff
         }
 
         stateActive

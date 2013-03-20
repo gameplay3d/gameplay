@@ -78,6 +78,7 @@ void FormsSample::initialize()
     
     RadioButton* form0Button = static_cast<RadioButton*>(_formSelect->getControl("form0"));
     form0Button->addListener(this, Control::Listener::CLICK);
+    form0Button->setState(Control::FOCUS);
 
     RadioButton* form1Button = static_cast<RadioButton*>(_formSelect->getControl("form1"));
     form1Button->addListener(this, Control::Listener::CLICK);
@@ -105,7 +106,7 @@ void FormsSample::initialize()
     createSampleForm(_forms[0]->getTheme());
 
     Button* button = static_cast<Button*>(_forms[0]->getControl("testButton"));
-    button->addListener(this, Control::Listener::CLICK);
+    button->setState(Control::FOCUS);
 
     // Create a scene with a camera node.
     Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 100.0f);
@@ -133,6 +134,8 @@ void FormsSample::formChanged()
         _activeForm->setEnabled(false);
     _activeForm = _forms[_formIndex];
     _activeForm->setEnabled(true);
+    _activeForm->setState(Control::FOCUS);
+    _formSelect->setState(Control::NORMAL);
 
     // Add the form to a node to allow it to be placed in 3D space.
     const Rectangle& bounds = _activeForm->getBounds();
@@ -150,7 +153,6 @@ void FormsSample::formChanged()
     _formNodeParent->setTranslation(0, 0, -1.5f);
     _formNode->setTranslation(-0.5f, -0.5f, 0);
     _formNode->setForm(_activeForm);
-
 }
 
 void FormsSample::createSampleForm(Theme* theme)
@@ -180,23 +182,29 @@ void FormsSample::createSampleForm(Theme* theme)
 void FormsSample::update(float elapsedTime)
 {
     float speedFactor = 0.001f * elapsedTime;
-    bool aDown = (_keyFlags & KEY_A_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_A);
-    bool bDown = (_keyFlags & KEY_B_MASK) || _gamepad->isButtonDown(Gamepad::BUTTON_B);
-    Vector2 joyCommand;
-    if (_gamepad->getJoystickCount() > 0)
+    bool aDown = (_keyFlags & KEY_A_MASK);
+    bool bDown = (_keyFlags & KEY_B_MASK);
+
+    if (_gamepad->isVirtual())
     {
-        _gamepad->getJoystickValues(0, &joyCommand);
+        aDown |= _gamepad->isButtonDown(Gamepad::BUTTON_A);
+        bDown |= _gamepad->isButtonDown(Gamepad::BUTTON_B);
+        _gamepad->getJoystickValues(0, &_joysticks[0]);
     }
-    if (_gamepad->getJoystickCount() > 1)
+
+    if (!_joysticks[0].isZero())
     {
-        Vector2 joy2;
-        _gamepad->getJoystickValues(1, &joy2);
+        _gamepad->getJoystickValues(0, &_joysticks[0]);
+    }
+
+    if (!_joysticks[1].isZero())
+    {
         Matrix m;
         _formNodeParent->getWorldMatrix().transpose(&m);
         Vector3 yaw;
         m.getUpVector(&yaw);
-        _formNodeParent->rotate(yaw, speedFactor * joy2.x * 2.0f);
-        _formNodeParent->rotateX(-speedFactor * joy2.y * 2.0f);
+        _formNodeParent->rotate(yaw, speedFactor * _joysticks[1].x * 2.0f);
+        _formNodeParent->rotateX(-speedFactor * _joysticks[1].y * 2.0f);
     }
 
     if (bDown)
@@ -210,12 +218,12 @@ void FormsSample::update(float elapsedTime)
         _formNodeParent->getWorldMatrix().transpose(&m);
         Vector3 yaw;
         m.getUpVector(&yaw);
-        _formNodeParent->rotate(yaw, speedFactor * joyCommand.x);
-        _formNodeParent->rotateX(-speedFactor * joyCommand.y);
+        _formNodeParent->rotate(yaw, speedFactor * _joysticks[0].x);
+        _formNodeParent->rotateX(-speedFactor * _joysticks[0].y);
     }
     else
     {
-        _formNodeParent->translate(0.5f * speedFactor * joyCommand.x, 0.5f * speedFactor * joyCommand.y, 0);
+        _formNodeParent->translate(0.5f * speedFactor * _joysticks[0].x, 0.5f * speedFactor * _joysticks[0].y, 0);
     }
 }
 
@@ -368,7 +376,7 @@ void FormsSample::controlEvent(Control* control, EventType evt)
     }
 }
 
-void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     switch(evt)
     {
@@ -379,6 +387,38 @@ void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
         // SamplesGame always ensures the virtual gamepad is disabled when a sample is exited.
         if (_gamepad && _gamepad->isVirtual())
             _gamepad->getForm()->setEnabled(true);
+        break;
+    case Gamepad::BUTTON_EVENT:
+        if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
+            _keyFlags |= KEY_A_MASK;
+        else
+            _keyFlags &= ~KEY_A_MASK;
+
+        if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
+            _keyFlags |= KEY_B_MASK;
+        else
+            _keyFlags &= ~KEY_B_MASK;
+
+        // We'll use a physical gamepad's MENU1 button as the "back" button.
+        if (_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
+        {
+            if (_formSelect->getState() == Control::FOCUS)
+            {
+                _formSelect->setState(Control::NORMAL);
+            }
+            else if (_activeForm->getState() == Control::FOCUS)
+            {
+                _activeForm->setState(Control::NORMAL);
+                _formSelect->setState(Control::FOCUS);
+            }
+            else
+            {
+                _formSelect->setState(Control::FOCUS);
+            }
+        }
+        break;
+    case Gamepad::JOYSTICK_EVENT:
+        gamepad->getJoystickValues(analogIndex, &_joysticks[analogIndex]);
         break;
     }
 }
