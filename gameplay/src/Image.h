@@ -66,7 +66,7 @@ private:
      * Constructor.
      */
     Image();
-        
+
     /**
      * Destructor.
      */

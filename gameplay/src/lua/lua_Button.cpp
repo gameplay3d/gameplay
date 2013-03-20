@@ -33,6 +33,7 @@ void luaRegister_Button()
         {"createAnimationFromBy", lua_Button_createAnimationFromBy},
         {"createAnimationFromTo", lua_Button_createAnimationFromTo},
         {"destroyAnimation", lua_Button_destroyAnimation},
+        {"getAbsoluteBounds", lua_Button_getAbsoluteBounds},
         {"getAlignment", lua_Button_getAlignment},
         {"getAnimation", lua_Button_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Button_getAnimationPropertyComponentCount},
@@ -673,6 +674,50 @@ int lua_Button_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Button_getAbsoluteBounds(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getAbsoluteBounds());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_getAbsoluteBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

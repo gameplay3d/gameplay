@@ -15,6 +15,7 @@ int lua_Form_createAnimationFromBy(lua_State* state);
 int lua_Form_createAnimationFromTo(lua_State* state);
 int lua_Form_destroyAnimation(lua_State* state);
 int lua_Form_draw(lua_State* state);
+int lua_Form_getAbsoluteBounds(lua_State* state);
 int lua_Form_getAlignment(lua_State* state);
 int lua_Form_getAnimation(lua_State* state);
 int lua_Form_getAnimationPropertyComponentCount(lua_State* state);
