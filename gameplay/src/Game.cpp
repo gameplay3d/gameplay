@@ -317,11 +317,11 @@ void Game::frame()
         // Update gamepads.
         Gamepad::updateInternal(elapsedTime);
 
-        // Update forms.
-        Form::updateInternal(elapsedTime);
-
         // Application Update.
         update(elapsedTime);
+
+        // Update forms.
+        Form::updateInternal(elapsedTime);
 
         // Run script update.
         _scriptController->update(elapsedTime);
@@ -349,11 +349,11 @@ void Game::frame()
         // Update gamepads.
         Gamepad::updateInternal(0);
 
-        // Update forms.
-        Form::updateInternal(0);
-
         // Application Update.
         update(0);
+
+        // Update forms.
+        Form::updateInternal(0);
 
         // Script update.
         _scriptController->update(0);
@@ -509,7 +509,7 @@ void Game::gestureTapEvent(int x, int y)
 {
 }
 
-void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
 }
 

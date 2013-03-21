@@ -55,6 +55,7 @@ void ParticlesGame::initialize()
     // Load the form for editing ParticleEmitters.
     _form = Form::create("res/editor.form");
     _form->setConsumeInputEvents(false);
+    _form->setState(Control::FOCUS);
 
     // Store pointers to UI controls we care about.
     _startRed = (Slider*)_form->getControl("startRed");

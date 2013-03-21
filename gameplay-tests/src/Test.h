@@ -74,7 +74,7 @@ public:
     virtual void gestureTapEvent(int x, int y);
 
     // gamepad
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
     unsigned int getGamepadCount() const;
     Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
 

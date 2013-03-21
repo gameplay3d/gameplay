@@ -36,6 +36,7 @@ void TestsGame::initialize()
     _testSelectForm = Form::create("testSelect", formStyle, Layout::LAYOUT_VERTICAL);
     theme->release();   // So we can release it once we're done creating forms with it.
 
+    _testSelectForm->setState(Control::FOCUS);  // So that gamepads can act on the form.
     _testSelectForm->setAutoHeight(true);
     _testSelectForm->setWidth(200.0f);
     _testSelectForm->setScroll(Container::SCROLL_VERTICAL);
@@ -102,7 +103,7 @@ void TestsGame::update(float elapsedTime)
         return;
     }
 
-    _testSelectForm->update(elapsedTime);
+    //_testSelectForm->update(elapsedTime);
 }
 
 void TestsGame::render(float elapsedTime)
@@ -218,10 +219,18 @@ void TestsGame::controlEvent(Control* control, EventType evt)
     }
 }
 
-void TestsGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+void TestsGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     if (_activeTest)
-        _activeTest->gamepadEvent(evt, gamepad);
+    {
+        if (evt == Gamepad::BUTTON_EVENT && gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+        {
+            exitActiveTest();
+            return;
+        }
+
+        _activeTest->gamepadEvent(evt, gamepad, analogIndex);
+    }
 }
 
 void TestsGame::runTest(void* func)
@@ -249,6 +258,7 @@ void TestsGame::exitActiveTest()
         SAFE_DELETE(_activeTest);
 
         _testSelectForm->setEnabled(true);
+        _testSelectForm->setState(Control::FOCUS);
     }
 
     // Reset some game options

@@ -13,6 +13,7 @@ int lua_Label_createAnimation(lua_State* state);
 int lua_Label_createAnimationFromBy(lua_State* state);
 int lua_Label_createAnimationFromTo(lua_State* state);
 int lua_Label_destroyAnimation(lua_State* state);
+int lua_Label_getAbsoluteBounds(lua_State* state);
 int lua_Label_getAlignment(lua_State* state);
 int lua_Label_getAnimation(lua_State* state);
 int lua_Label_getAnimationPropertyComponentCount(lua_State* state);

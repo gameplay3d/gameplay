@@ -1,7 +1,7 @@
 #ifndef IMAGECONTROL_H_
 #define IMAGECONTROL_H_
 
-#include "Control.h"
+#include "Button.h"
 #include "Theme.h"
 #include "Image.h"
 #include "SpriteBatch.h"
@@ -33,7 +33,7 @@ namespace gameplay
      }
  @endverbatim
  */
-class ImageControl : public Control
+class ImageControl : public Button
 {
     friend class Container;
 
@@ -52,6 +52,8 @@ public:
 
     /**
      * Set the path of the image for this ImageControl to display.
+     *
+     * @param path The path to the image.
      */
     void setImage(const char* path);
 
@@ -106,6 +108,8 @@ public:
      * @return The destination region of this ImageControl.
      */
     const Rectangle& getRegionDst() const;
+
+    const char* getType() const;
 
 protected:
 
