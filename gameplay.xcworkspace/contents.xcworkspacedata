@@ -5,27 +5,27 @@
       location = "group:gameplay/gameplay.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-tests/gameplay-tests.xcodeproj">
+      location = "group:samples/browser/sample-browser.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-samples/sample00-mesh/sample00-mesh.xcodeproj">
+      location = "group:samples/character/sample-character.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-samples/sample01-longboard/sample01-longboard.xcodeproj">
+      location = "group:samples/longboard/sample-longboard.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-samples/sample02-spaceship/sample02-spaceship.xcodeproj">
+      location = "group:samples/lua/sample-lua.xcodeproj">
+   </FileRef>  
+   <FileRef
+      location = "group:samples/mesh/sample-mesh.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-samples/sample03-character/sample03-character.xcodeproj">
+      location = "group:samples/particles/sample-particles.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-samples/sample04-particles/sample04-particles.xcodeproj">
+      location = "group:samples/racer/sample-racer.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:gameplay-samples/sample05-lua/sample05-lua.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:gameplay-samples/sample06-racer/sample06-racer.xcodeproj">
+      location = "group:samples/spaceship/sample-spaceship.xcodeproj">
    </FileRef>
 </Workspace>

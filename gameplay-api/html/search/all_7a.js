@@ -1,5 +1,0 @@
-var searchData=
-[
-  ['z',['z',['../structgameplay_1_1_physics_controller_1_1_debug_drawer_1_1_debug_vertex.html#a5a23e5aa2ffd66417b961995cba48f47',1,'gameplay::PhysicsController::DebugDrawer::DebugVertex::z()'],['../classgameplay_1_1_quaternion.html#a22b3cb659769e4968fc9c5805f467e25',1,'gameplay::Quaternion::z()'],['../classgameplay_1_1_vector3.html#a96d911649b741a512152cfb0fc6dff6d',1,'gameplay::Vector3::z()'],['../classgameplay_1_1_vector4.html#a9375064d851d5cb3ee8ae0e97a92f169',1,'gameplay::Vector4::z()']]],
-  ['zero',['zero',['../classgameplay_1_1_matrix.html#ab05ca6a54e4e8c2d9cca7b465cbf98e4',1,'gameplay::Matrix::zero()'],['../classgameplay_1_1_quaternion.html#aab0939fdc7ad7b771a584638db1fd69b',1,'gameplay::Quaternion::zero()'],['../classgameplay_1_1_vector2.html#a81b580e5839f5d5e692e1f636f32af99',1,'gameplay::Vector2::zero()'],['../classgameplay_1_1_vector3.html#abe4fe277a0b7db6709dd43ec54493a55',1,'gameplay::Vector3::zero()'],['../classgameplay_1_1_vector4.html#ae959da4136f532d0dd3e4161da5d0d96',1,'gameplay::Vector4::zero()']]]
-];
