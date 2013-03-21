@@ -43,10 +43,8 @@ public:
 	static const int ANIMATE_OFFSET = 1;
 
 	/**
-     * Sprite source frame animation property. Data=b,si,fi
+     * Sprite source frame animation property. Data=si,fi
 	 *
-	 * b >=0 - move the animation frame between the source and destination
-	 * b < 0 - change the animation frame between the source and destination without moving the frame over the TileSheet.
 	 * si - Strip index
 	 * fi - Frame index
 	 *
@@ -55,10 +53,7 @@ public:
 	static const int ANIMATE_FRAME_INDEX = 2;
 
 	/**
-     * Sprite source frame animation property. Data=b,x,y,w,h
-	 *
-	 * b >=0 - move the animation frame between the source and destination
-	 * b < 0 - change the animation frame between the source and destination without moving the frame over the TileSheet.
+     * Sprite source frame animation property. Data=x,y,w,h
 	 *
 	 * If the frame is not valid, then the default tile is used.
      */
@@ -351,13 +346,6 @@ private:
 	unsigned int _stripFrame;
 
 protected:
-
-	/**
-	 * A flag indicating what type of animation is using. If this is true, then each frame is used discretely and explictly without any 
-	 * change in frame position over the tile sheet. If this is false then the frame is moved over the tile sheet to the next frame 
-	 * position from it's current position.
-	 */
-	bool _discreteAnimation;
 
 	/**
 	 * A boolean flag indicating if the default tile will be used to draw or if frame should be used to draw. Manually changing this can screw up animation.

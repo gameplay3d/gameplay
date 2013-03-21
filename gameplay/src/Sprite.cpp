@@ -9,7 +9,7 @@ namespace gameplay
 static Vector2 _defaultOffset = Vector2::zero();
 
 Sprite::Sprite(const char* id)
-	: _stripIndex(0), _stripFrame(0), _discreteAnimation(false), _defaultTileInUse(true), _frame(),
+	: _stripIndex(0), _stripFrame(0), _defaultTileInUse(true), _frame(),
 	_node(NULL),
 	_tileSheet(NULL), _tint(Vector4::one()),
 	_flip(FLIP_NONE), _defaultTile(), 
@@ -252,13 +252,11 @@ unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const
 	{
 		case ANIMATE_SIZE:
 		case ANIMATE_OFFSET:
-			return 2;
 		case ANIMATE_FRAME_INDEX:
-			return 3;
+			return 2;
 		case ANIMATE_TINT:
-			return 4;
 		case ANIMATE_FRAME_SPECIFIC:
-			return 5;
+			return 4;
 		default:
 			return -1;
 	}
@@ -279,13 +277,11 @@ void Sprite::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 			value->setFloat(1, _y);
 			break;
 		case ANIMATE_FRAME_INDEX:
-			value->setFloat(0, _discreteAnimation ? -1.0f : 1.0f);
-			value->setFloat(1, (float)_stripIndex);
-			value->setFloat(2, (float)_stripFrame);
+			value->setFloat(0, (float)_stripIndex);
+			value->setFloat(1, (float)_stripFrame);
 			break;
 		case ANIMATE_FRAME_SPECIFIC:
-			value->setFloat(0, _discreteAnimation ? -1.0f : 1.0f);
-			value->setFloats(1, &_frame.x, 4);
+			value->setFloats(0, &_frame.x, 4);
 			break;
 		case ANIMATE_TINT:
 			value->setFloats(0, &_tint.x, 4);
@@ -317,22 +313,20 @@ void Sprite::setAnimationPropertyValue(int propertyId, AnimationValue* value, fl
 			_defaultTileInUse = true; //Assume it didn't work
 
 			//Get the values
-			float indices[3];
-			value->getFloats(0, indices, 3);
-
-			_discreteAnimation = indices[0] < 0.0f;
+			float indices[2];
+			value->getFloats(0, indices, 2);
 
 			//Make sure the values are within range
-			if(indices[1] >= 0 && indices[2] >= 0)
+			if(indices[0] >= 0 && indices[1] >= 0)
 			{
 				//Get the strip
-				unsigned int index = (unsigned int)floorf(indices[1]);
+				unsigned int index = (unsigned int)floorf(indices[0]);
 				if(index < _tileSheet->_strips.size())
 				{
 					TileSheet::FrameStrip& strip = _tileSheet->_strips[_stripIndex = index];
 
 					//Get the frame
-					index = (unsigned int)floorf(indices[2]);
+					index = (unsigned int)floorf(indices[1]);
 					if(index < strip._frameCount)
 					{
 						Rectangle& frame = strip._frames[_stripFrame = index];
@@ -340,17 +334,10 @@ void Sprite::setAnimationPropertyValue(int propertyId, AnimationValue* value, fl
 						_defaultTileInUse = false; //We have a valid frame
 
 						//Setup frame
-						if(_discreteAnimation)
-						{
-							_frame = frame;
-						}
-						else
-						{
-							_frame.x = Curve::lerp(blendWeight, _frame.x, frame.x);
-							_frame.y = Curve::lerp(blendWeight, _frame.y, frame.y);
-							_frame.width = Curve::lerp(blendWeight, _frame.width, frame.width);
-							_frame.height = Curve::lerp(blendWeight, _frame.height, frame.height);
-						}
+						_frame.x = Curve::lerp(blendWeight, _frame.x, frame.x);
+						_frame.y = Curve::lerp(blendWeight, _frame.y, frame.y);
+						_frame.width = Curve::lerp(blendWeight, _frame.width, frame.width);
+						_frame.height = Curve::lerp(blendWeight, _frame.height, frame.height);
 					}
 				}
 			}
@@ -359,18 +346,10 @@ void Sprite::setAnimationPropertyValue(int propertyId, AnimationValue* value, fl
 		case ANIMATE_FRAME_SPECIFIC:
 		{
 			_defaultTileInUse = false; //Indicate to use it since we are handling an animation
-			_discreteAnimation = value->getFloat(0) < 0.0f;
-			if(_discreteAnimation)
-			{
-				value->getFloats(1, &_frame.x, 4);
-			}
-			else
-			{
-				_frame.x = Curve::lerp(blendWeight, _frame.x, value->getFloat(1));
-				_frame.y = Curve::lerp(blendWeight, _frame.y, value->getFloat(2));
-				_frame.width = Curve::lerp(blendWeight, _frame.width, value->getFloat(3));
-				_frame.height = Curve::lerp(blendWeight, _frame.height, value->getFloat(4));
-			}
+			_frame.x = Curve::lerp(blendWeight, _frame.x, value->getFloat(0));
+			_frame.y = Curve::lerp(blendWeight, _frame.y, value->getFloat(1));
+			_frame.width = Curve::lerp(blendWeight, _frame.width, value->getFloat(2));
+			_frame.height = Curve::lerp(blendWeight, _frame.height, value->getFloat(3));
 			break;
 		}
 		case ANIMATE_TINT:
@@ -419,7 +398,6 @@ void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
 	//Clone animation info
 	sprite->_frame = _frame;
 	sprite->_defaultTileInUse = _defaultTileInUse;
-	sprite->_discreteAnimation = _discreteAnimation;
 	sprite->_stripIndex = _stripIndex;
 	sprite->_stripFrame = _stripFrame;
 }
