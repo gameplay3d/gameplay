@@ -243,8 +243,8 @@ void EncoderArguments::printUsage() const
     LOG(1, "FBX file options:\n");
     LOG(1, "  -i <id>\tFilter by node ID.\n");
     LOG(1, "  -t\t\tWrite text/xml.\n");
-    LOG(1, "  -autogroup\tAutomatically group animation channels into a new animation.\n");
-    LOG(1, "  -noautogroup\tDo not prompt to group animations.\n");
+    LOG(1, "  -g:auto\tAutomatically group animation channels into a new animation.\n");
+    LOG(1, "  -g:none\tDo not prompt to group animations.\n");
     LOG(1, "  -g <node id> <animation id>\n" \
         "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
     LOG(1, "  -tb <node id>\n" \
@@ -366,14 +366,16 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     }
     switch (str[1])
     {
-    case 'a':
-        if (str.compare("-autogroup") == 0)
+    case 'g':
+        if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
         {
             _autogroup = AUTOGROUP_YES;
         }
-        break;
-    case 'g':
-        if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
+        else if (str.compare("-groupAnimations:off") == 0 || str.compare("-g:off") == 0)
+        {
+            _autogroup = AUTOGROUP_NO;
+        }
+        else if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
         {
             // read two strings, make sure not to go out of bounds
             if ((*index + 2) >= options.size())
@@ -477,14 +479,7 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
         }
         break;
     case 'n':
-        if (str.compare("-noautogroup") == 0)
-        {
-            _autogroup = AUTOGROUP_NO;
-        }
-        else
-        {
-            _normalMap = true;
-        }
+        _normalMap = true;
         break;
     case 'w':
         {
