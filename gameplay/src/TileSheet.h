@@ -167,7 +167,7 @@ private:
 
     TileSheet(const char* id);
 
-    virtual ~TileSheet();
+    ~TileSheet();
 
 	int getStrip(const char* id) const;
 

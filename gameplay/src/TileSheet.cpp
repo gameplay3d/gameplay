@@ -102,7 +102,7 @@ unsigned int TileSheet::getStripFrameCount(const char* id) const
 
 unsigned int TileSheet::getStripFrameCount(unsigned int index) const
 {
-	return _strips[index]._frames.size();
+	return _strips[index]._frameCount;
 }
 
 void TileSheet::addStrip(const char* id, unsigned int frameCount)

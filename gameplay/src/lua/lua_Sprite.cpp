@@ -48,10 +48,8 @@ void luaRegister_Sprite()
     };
     const luaL_Reg lua_statics[] = 
     {
-		{"ANIMATE_FRAME_BLENDING", lua_Sprite_static_ANIMATE_FRAME_BLENDING},
 		{"ANIMATE_FRAME_INDEX", lua_Sprite_static_ANIMATE_FRAME_INDEX},
 		{"ANIMATE_FRAME_SPECIFIC", lua_Sprite_static_ANIMATE_FRAME_SPECIFIC},
-		{"ANIMATE_FRAME_TRANSITIONS", lua_Sprite_static_ANIMATE_FRAME_TRANSITIONS},
 		{"ANIMATE_OFFSET", lua_Sprite_static_ANIMATE_OFFSET},
         {"ANIMATE_SIZE", lua_Sprite_static_ANIMATE_SIZE},
 		{"ANIMATE_TINT", lua_Sprite_static_ANIMATE_TINT},
@@ -1724,23 +1722,6 @@ int lua_Sprite_setTint(lua_State* state)
     return 0;
 }
 
-int lua_Sprite_static_ANIMATE_FRAME_BLENDING(lua_State* state)
-{
-	// Validate the number of parameters.
-    if (lua_gettop(state) > 0)
-    {
-        lua_pushstring(state, "Invalid number of parameters (expected 0).");
-        lua_error(state);
-    }
-
-	int result = Sprite::ANIMATE_FRAME_BLENDING;
-
-    // Push the return value onto the stack.
-    lua_pushinteger(state, result);
-
-    return 1;
-}
-
 int lua_Sprite_static_ANIMATE_FRAME_INDEX(lua_State* state)
 {
 	// Validate the number of parameters.
@@ -1768,23 +1749,6 @@ int lua_Sprite_static_ANIMATE_FRAME_SPECIFIC(lua_State* state)
     }
 
 	int result = Sprite::ANIMATE_FRAME_SPECIFIC;
-
-    // Push the return value onto the stack.
-    lua_pushinteger(state, result);
-
-    return 1;
-}
-
-int lua_Sprite_static_ANIMATE_FRAME_TRANSITIONS(lua_State* state)
-{
-	// Validate the number of parameters.
-    if (lua_gettop(state) > 0)
-    {
-        lua_pushstring(state, "Invalid number of parameters (expected 0).");
-        lua_error(state);
-    }
-
-	int result = Sprite::ANIMATE_FRAME_TRANSITIONS;
 
     // Push the return value onto the stack.
     lua_pushinteger(state, result);

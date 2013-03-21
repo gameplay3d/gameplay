@@ -9,11 +9,11 @@ namespace gameplay
 static Vector2 _defaultOffset = Vector2::zero();
 
 Sprite::Sprite(const char* id)
-	: _defaultTileInUse(true), _node(NULL),
+	: _stripIndex(0), _stripFrame(0), _discreteAnimation(false), _defaultTileInUse(true), _frame(),
+	_node(NULL),
 	_tileSheet(NULL), _tint(Vector4::one()),
 	_flip(FLIP_NONE), _defaultTile(), 
-	_width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y), 
-	_frame()
+	_width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y)
 {
 	if (id)
     {
@@ -192,7 +192,10 @@ void Sprite::draw(bool isolateDraw)
 
 		//Rotation
 		const Quaternion& rot = node->getRotation();
-		angle = atan2f(2.0f * rot.x * rot.y + 2.0f * rot.z * rot.w, 1.0f - 2.0f * ((rot.y * rot.y) + (rot.z * rot.z)));
+		if (rot.x != 0.0f || rot.y != 0.0f || rot.z != 0.0f) //We only want to check these values to determine if we need to calculate rotation.
+		{
+			angle = atan2f(2.0f * rot.x * rot.y + 2.0f * rot.z * rot.w, 1.0f - 2.0f * ((rot.y * rot.y) + (rot.z * rot.z)));
+		}
 
 		//Scale the size
 		size.x *= node->getScaleX();
@@ -256,8 +259,6 @@ unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const
 			return 4;
 		case ANIMATE_FRAME_SPECIFIC:
 			return 5;
-		case ANIMATE_FRAME_BLENDING: //TODO
-		case ANIMATE_FRAME_TRANSITIONS: //TODO
 		default:
 			return -1;
 	}
@@ -278,16 +279,13 @@ void Sprite::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 			value->setFloat(1, _y);
 			break;
 		case ANIMATE_FRAME_INDEX:
-			//TODO
+			value->setFloat(0, _discreteAnimation ? -1.0f : 1.0f);
+			value->setFloat(1, (float)_stripIndex);
+			value->setFloat(2, (float)_stripFrame);
 			break;
 		case ANIMATE_FRAME_SPECIFIC:
-			//TODO
-			break;
-		case ANIMATE_FRAME_BLENDING:
-			//TODO
-			break;
-		case ANIMATE_FRAME_TRANSITIONS:
-			//TODO
+			value->setFloat(0, _discreteAnimation ? -1.0f : 1.0f);
+			value->setFloats(1, &_frame.x, 4);
 			break;
 		case ANIMATE_TINT:
 			value->setFloats(0, &_tint.x, 4);
@@ -316,22 +314,63 @@ void Sprite::setAnimationPropertyValue(int propertyId, AnimationValue* value, fl
 		}
 		case ANIMATE_FRAME_INDEX:
 		{
-			//TODO
+			_defaultTileInUse = true; //Assume it didn't work
+
+			//Get the values
+			float indices[3];
+			value->getFloats(0, indices, 3);
+
+			_discreteAnimation = indices[0] < 0.0f;
+
+			//Make sure the values are within range
+			if(indices[1] >= 0 && indices[2] >= 0)
+			{
+				//Get the strip
+				unsigned int index = (unsigned int)floorf(indices[1]);
+				if(index < _tileSheet->_strips.size())
+				{
+					TileSheet::FrameStrip& strip = _tileSheet->_strips[_stripIndex = index];
+
+					//Get the frame
+					index = (unsigned int)floorf(indices[2]);
+					if(index < strip._frameCount)
+					{
+						Rectangle& frame = strip._frames[_stripFrame = index];
+
+						_defaultTileInUse = false; //We have a valid frame
+
+						//Setup frame
+						if(_discreteAnimation)
+						{
+							_frame = frame;
+						}
+						else
+						{
+							_frame.x = Curve::lerp(blendWeight, _frame.x, frame.x);
+							_frame.y = Curve::lerp(blendWeight, _frame.y, frame.y);
+							_frame.width = Curve::lerp(blendWeight, _frame.width, frame.width);
+							_frame.height = Curve::lerp(blendWeight, _frame.height, frame.height);
+						}
+					}
+				}
+			}
 			break;
 		}
 		case ANIMATE_FRAME_SPECIFIC:
 		{
-			//TODO
-			break;
-		}
-		case ANIMATE_FRAME_BLENDING:
-		{
-			//TODO
-			break;
-		}
-		case ANIMATE_FRAME_TRANSITIONS:
-		{
-			//TODO
+			_defaultTileInUse = false; //Indicate to use it since we are handling an animation
+			_discreteAnimation = value->getFloat(0) < 0.0f;
+			if(_discreteAnimation)
+			{
+				value->getFloats(1, &_frame.x, 4);
+			}
+			else
+			{
+				_frame.x = Curve::lerp(blendWeight, _frame.x, value->getFloat(1));
+				_frame.y = Curve::lerp(blendWeight, _frame.y, value->getFloat(2));
+				_frame.width = Curve::lerp(blendWeight, _frame.width, value->getFloat(3));
+				_frame.height = Curve::lerp(blendWeight, _frame.height, value->getFloat(4));
+			}
 			break;
 		}
 		case ANIMATE_TINT:
@@ -353,6 +392,12 @@ Sprite* Sprite::clone(NodeCloneContext &context)
 
 void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
 {
+	GP_ASSERT(sprite);
+
+	//Clone animation
+	AnimationTarget::cloneInto(static_cast<AnimationTarget*>(sprite), context);
+
+	//Get copied node if it exists
 	if (Node* node = getNode())
     {
         Node* clonedNode = context.findClonedNode(node);
@@ -362,14 +407,21 @@ void Sprite::cloneInto(Sprite* sprite, NodeCloneContext &context) const
         }
     }
 
+	//Clone settings
 	sprite->_flip = _flip;
 	sprite->_defaultTile = _defaultTile;
 	sprite->_width = _width;
 	sprite->_height = _height;
 	sprite->_x = _x;
 	sprite->_y = _y;
+	sprite->_tint = _tint;
+
+	//Clone animation info
 	sprite->_frame = _frame;
 	sprite->_defaultTileInUse = _defaultTileInUse;
+	sprite->_discreteAnimation = _discreteAnimation;
+	sprite->_stripIndex = _stripIndex;
+	sprite->_stripFrame = _stripFrame;
 }
 
 }

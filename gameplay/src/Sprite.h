@@ -65,19 +65,9 @@ public:
 	static const int ANIMATE_FRAME_SPECIFIC = 3;
 
 	/**
-     * Sprite blending animation property, the blending between different frames. Data=?
-     */
-	static const int ANIMATE_FRAME_BLENDING = 4;
-
-	/**
-     * Sprite blending animation property, the blending between different animations. Data=?
-     */
-	static const int ANIMATE_FRAME_TRANSITIONS = 5;
-
-	/**
      * Sprite tint animation property. Data=r,g,b,a
      */
-	static const int ANIMATE_TINT = 6;
+	static const int ANIMATE_TINT = 4;
 
 	/**
      * Gets the default untransformed offset from the world origin that sprites will be drawn at.
@@ -352,16 +342,32 @@ protected:
      */
     void cloneInto(Sprite* sprite, NodeCloneContext &context) const;
 
-	//TODO
-
 private:
 
     Sprite(const Sprite& copy);
     Sprite& operator=(const Sprite&);
 
-	bool _defaultTileInUse;
+	unsigned int _stripIndex;
+	unsigned int _stripFrame;
 
 protected:
+
+	/**
+	 * A flag indicating what type of animation is using. If this is true, then each frame is used discretely and explictly without any 
+	 * change in frame position over the tile sheet. If this is false then the frame is moved over the tile sheet to the next frame 
+	 * position from it's current position.
+	 */
+	bool _discreteAnimation;
+
+	/**
+	 * A boolean flag indicating if the default tile will be used to draw or if frame should be used to draw. Manually changing this can screw up animation.
+	 */
+	bool _defaultTileInUse;
+
+	/**
+	 * The source Rectangle of the TileSheet that will be drawn if _defaultTileInUse is false.
+	 */
+	Rectangle _frame;
 
 	/**
      * The Sprite's ID.
@@ -412,13 +418,6 @@ protected:
 	 * The untransformed Y offset of the sprite.
 	 */
 	float _y;
-
-	/**
-	 * The actual source Rectangle of the TileSheet that will be drawn.
-	 */
-	Rectangle _frame;
-
-	//TODO
 };
 
 }
