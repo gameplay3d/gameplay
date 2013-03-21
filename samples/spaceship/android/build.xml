@@ -41,8 +41,7 @@
 
     <!-- quick check on sdk.dir -->
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var"
-          unless="sdk.dir"
-    />
+          unless="sdk.dir" />
 
 
 <!-- extension targets. Uncomment the ones where you want to do custom work
