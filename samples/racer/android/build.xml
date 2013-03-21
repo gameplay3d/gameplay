@@ -41,8 +41,7 @@
 
     <!-- quick check on sdk.dir -->
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var"
-          unless="sdk.dir"
-    />
+          unless="sdk.dir" />
 
 
 <!-- extension targets. Uncomment the ones where you want to do custom work
@@ -72,10 +71,10 @@
         </copy>
 		
 		<copy todir="assets/res/shaders">
-            <fileset dir="../../../../gameplay/res/shaders"/>
+            <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
 		
-		<copy file="../../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
+		<copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
     </target>
 
     <!-- Import the actual build file.

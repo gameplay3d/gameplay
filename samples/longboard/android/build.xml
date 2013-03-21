@@ -41,8 +41,7 @@
 
     <!-- quick check on sdk.dir -->
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var"
-          unless="sdk.dir"
-    />
+          unless="sdk.dir" />
 
 
 <!-- extension targets. Uncomment the ones where you want to do custom work
@@ -65,9 +64,9 @@
         <copy file="../res/longboard.wav" tofile="assets/res/longboard.wav"/>
         <copy file="../res/longboard_wheels.png" tofile="assets/res/longboard_wheels.png"/>
         <copy file="../res/overlay_gradient.png" tofile="assets/res/overlay_gradient.png"/>
-        <copy file="../../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
+        <copy file="../../../gameplay/res/logo_powered_white.png" tofile="assets/res/logo_powered_white.png"/>
         <copy todir="assets/res/shaders">
-            <fileset dir="../../../../gameplay/res/shaders"/>
+            <fileset dir="../../../gameplay/res/shaders"/>
         </copy>
     </target>
 

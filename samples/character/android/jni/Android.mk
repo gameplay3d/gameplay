@@ -1,14 +1,15 @@
-# external-deps
 SAMPLE_PATH := $(call my-dir)/../../src
-LIBPNG_PATH := $(call my-dir)/../../../../../../external-deps/libpng/lib/android/arm
-ZLIB_PATH := $(call my-dir)/../../../../../../external-deps/zlib/lib/android/arm
-LUA_PATH := $(call my-dir)/../../../../../../external-deps/lua/lib/android/arm
-BULLET_PATH := $(call my-dir)/../../../../../../external-deps/bullet/lib/android/arm
-VORBIS_PATH := $(call my-dir)/../../../../../../external-deps/oggvorbis/lib/android/arm
-OPENAL_PATH := $(call my-dir)/../../../../../../external-deps/openal/lib/android/arm
+
+# external-deps
+LIBPNG_PATH := $(call my-dir)/../../../../external-deps/libpng/lib/android/arm
+ZLIB_PATH := $(call my-dir)/../../../../external-deps/zlib/lib/android/arm
+LUA_PATH := $(call my-dir)/../../../../external-deps/lua/lib/android/arm
+BULLET_PATH := $(call my-dir)/../../../../external-deps/bullet/lib/android/arm
+VORBIS_PATH := $(call my-dir)/../../../../external-deps/oggvorbis/lib/android/arm
+OPENAL_PATH := $(call my-dir)/../../../../external-deps/openal/lib/android/arm
 
 # gameplay
-LOCAL_PATH := $(call my-dir)/../../../../../gameplay/android/obj/local/armeabi
+LOCAL_PATH := $(call my-dir)/../../../../gameplay/android/obj/local/armeabi
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libgameplay
 LOCAL_SRC_FILES := libgameplay.a
@@ -61,11 +62,10 @@ LOCAL_PATH := $(SAMPLE_PATH)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := sample-character
-LOCAL_SRC_FILES := ../../../../gameplay/src/gameplay-main-android.cpp CharacterGame.cpp
+LOCAL_SRC_FILES := ../../../gameplay/src/gameplay-main-android.cpp CharacterGame.cpp
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lOpenSLES
-LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../../../external-deps/lua/include" -I"../../../../../external-deps/bullet/include" -I"../../../../../external-deps/libpng/include" -I"../../../../../external-deps/oggvorbis/include" -I"../../../../../external-deps/openal/include" -I"../../../../gameplay/src"
-
+LOCAL_CFLAGS    := -D__ANDROID__ -Wno-psabi -I"../../../external-deps/lua/include" -I"../../../external-deps/bullet/include" -I"../../../external-deps/libpng/include" -I"../../../external-deps/oggvorbis/include" -I"../../../external-deps/openal/include" -I"../../../gameplay/src"
 LOCAL_STATIC_LIBRARIES := android_native_app_glue libgameplay libpng libzlib liblua libbullet libvorbis libOpenAL
 
 include $(BUILD_SHARED_LIBRARY)
