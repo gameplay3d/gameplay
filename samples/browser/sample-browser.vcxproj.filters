@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{c35d9ec0-a966-49e8-af48-14cbcb2d6818}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game.config" />
+    <None Include="icon.png" />
+    <None Include="bar-descriptor.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\MeshPrimitiveSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CreateSceneSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio3DSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadSceneSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteBatchSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Grid.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FirstPersonCamera.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SamplesGame.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sample.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshBatchSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TriangleSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GestureSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BillboardSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FormsSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LightSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PostProcessSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GamepadSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsCollisionObjectSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainSample.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\MeshPrimitiveSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CreateSceneSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Audio3DSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoadSceneSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteBatchSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Grid.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FirstPersonCamera.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sample.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamplesGame.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshBatchSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TriangleSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GestureSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BillboardSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FormsSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PostProcessSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GamepadSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsCollisionObjectSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainSample.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
