@@ -24,7 +24,7 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontPreview(false),
     _textOutput(false),
     _optimizeAnimations(false),
-    _autogroup(AUTOGROUP_NOTSET)
+    _animationGrouping(ANIMATIONGROUP_PROMPT)
 {
     __instance = this;
 
@@ -161,9 +161,9 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
     return "";
 }
 
-EncoderArguments::AutoGroupOption EncoderArguments::getAutoGrouping() const
+EncoderArguments::AnimationGroupOption EncoderArguments::getAnimationGrouping() const
 {
-    return _autogroup;
+    return _animationGrouping;
 }
 
 const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeightmapOptions() const
@@ -369,11 +369,11 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     case 'g':
         if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
         {
-            _autogroup = AUTOGROUP_YES;
+            _animationGrouping = ANIMATIONGROUP_AUTO;
         }
         else if (str.compare("-groupAnimations:off") == 0 || str.compare("-g:off") == 0)
         {
-            _autogroup = AUTOGROUP_NO;
+            _animationGrouping = ANIMATIONGROUP_OFF;
         }
         else if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
         {

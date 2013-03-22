@@ -41,11 +41,11 @@ public:
         Vector3 worldSize;
     };
 
-    enum AutoGroupOption
+    enum AnimationGroupOption
     {
-        AUTOGROUP_NOTSET,
-        AUTOGROUP_YES,
-        AUTOGROUP_NO
+        ANIMATIONGROUP_PROMPT,
+        ANIMATIONGROUP_AUTO,
+        ANIMATIONGROUP_OFF
     };
     
     /**
@@ -101,7 +101,7 @@ public:
     bool containsGroupNodeId(const std::string& nodeId) const;
     const std::string getAnimationId(const std::string& nodeId) const;
 
-    AutoGroupOption getAutoGrouping() const;
+    AnimationGroupOption getAnimationGrouping() const;
 
     const std::vector<HeightmapOption>& getHeightmapOptions() const;
 
@@ -201,7 +201,7 @@ private:
     bool _fontPreview;
     bool _textOutput;
     bool _optimizeAnimations;
-    AutoGroupOption _autogroup;
+    AnimationGroupOption _animationGrouping;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;
