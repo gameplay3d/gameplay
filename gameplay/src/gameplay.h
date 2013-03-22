@@ -40,6 +40,7 @@
 #include "VertexAttributeBinding.h"
 #include "Model.h"
 #include "Sprite.h"
+#include "SpriteMap.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Scene.h"

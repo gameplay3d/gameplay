@@ -51,6 +51,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\lua\lua_SpriteMap.cpp" />
     <ClCompile Include="src\lua\lua_TileSheet.cpp" />
     <ClCompile Include="src\AbsoluteLayout.cpp" />
     <ClCompile Include="src\AIAgent.cpp" />
@@ -318,6 +319,7 @@
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
+    <ClCompile Include="src\SpriteMap.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
     <ClCompile Include="src\TerrainPatch.cpp" />
@@ -524,6 +526,7 @@
     <ClInclude Include="src\lua\lua_Slider.h" />
     <ClInclude Include="src\lua\lua_Sprite.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
+    <ClInclude Include="src\lua\lua_SpriteMap.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
@@ -599,6 +602,7 @@
     <ClInclude Include="src\Slider.h" />
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\SpriteBatch.h" />
+    <ClInclude Include="src\SpriteMap.h" />
     <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Terrain.h" />

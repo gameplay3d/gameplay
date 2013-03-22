@@ -104,6 +104,7 @@
 #include "lua_Slider.h"
 #include "lua_Sprite.h"
 #include "lua_SpriteBatch.h"
+#include "lua_SpriteMap.h"
 #include "lua_Technique.h"
 #include "lua_Terrain.h"
 #include "lua_TerrainListener.h"
