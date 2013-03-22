@@ -113,6 +113,11 @@ const Rectangle& ImageControl::getRegionDst() const
     return _dstRegion;
 }
 
+const char* ImageControl::getType() const
+{
+    return "image";
+}
+
 void ImageControl::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     spriteBatch->finish();

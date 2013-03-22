@@ -1557,10 +1557,12 @@ namespace gameplay
                         long curMappingIndex = -1;
                         if(tryGetGamepadMappedButton(gpInfo, jevent.number, curMappingIndex))
                         {
+                            unsigned int buttons = 0;
                             if (jevent.value)
-                                gamepad->_buttons |= (1 << curMappingIndex);
+                                buttons |= (1 << curMappingIndex);
                             else
-                                gamepad->_buttons &= ~(1 << curMappingIndex);
+                                buttons &= ~(1 << curMappingIndex);
+                            gamepad->setButtons(buttons);
                         }
                         break;
                     }
@@ -1581,27 +1583,32 @@ namespace gameplay
                                     bool not_js_axis = false;
                                     if((jsInfo->flags & GP_AXIS_IS_DPAD))
                                     {
+                                        unsigned int buttons = 0;
                                         if(jevent.value != 0)
-                                            gamepad->_buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosArg : jsInfo->mappedNegArg));
+                                            buttons |= (1 << (jevent.value > 0 ? jsInfo->mappedPosArg : jsInfo->mappedNegArg));
                                         else
                                         {
-                                            gamepad->_buttons &= ~(1 << jsInfo->mappedPosArg);
-                                            gamepad->_buttons &= ~(1 << jsInfo->mappedNegArg);
+                                            buttons &= ~(1 << jsInfo->mappedPosArg);
+                                            buttons &= ~(1 << jsInfo->mappedNegArg);
                                         }
+                                        gamepad->setButtons(buttons);
                                         not_js_axis = true;
                                     }
                                     if((jsInfo->flags & GP_AXIS_IS_TRIGGER))
                                     {
-                                        gamepad->_triggers[jsInfo->mappedPosArg] = val;
+                                        gamepad->setTriggerValue(jsInfo->mappedPosArg, val);
                                         not_js_axis = true;
                                     }
 
                                     if(!not_js_axis)
                                     {
+                                        Vector2 jsVals;
+                                        gamepad->getJoystickValues(jsInfo->joystickIndex,&jsVals);
                                         if(jsInfo->flags & GP_AXIS_IS_XAXIS)
-                                            gamepad->_joysticks[jsInfo->joystickIndex].x = val;
+                                            jsVals.x = val;
                                         else
-                                            gamepad->_joysticks[jsInfo->joystickIndex].y = val;
+                                            jsVals.y = val;
+                                        gamepad->setJoystickValue(jsInfo->joystickIndex,jsVals.x,jsVals.y);
                                     }
                                 }
                             }

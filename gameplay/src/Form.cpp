@@ -748,21 +748,19 @@ bool Form::projectPoint(int x, int y, Vector3* point)
     {
         // Get info about the form's position.
         Matrix m = _node->getWorldMatrix();
-        Vector3 min(0, 0, 0);
-        m.transformPoint(&min);
+        Vector3 pointOnPlane(0, 0, 0);
+        m.transformPoint(&pointOnPlane);
 
         // Unproject point into world space.
         Ray ray;
         camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
 
         // Find the quad's plane.  We know its normal is the quad's forward vector.
-        Vector3 normal = _node->getForwardVectorWorld();
+        Vector3 normal = _node->getForwardVectorWorld().normalize();
 
-        // To get the plane's distance from the origin, we'll find the distance from the plane defined
-        // by the quad's forward vector and one of its points to the plane defined by the same vector and the origin.
-        const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
-        const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-        const float distance = fabs(d) /  sqrt(a*a + b*b + c*c);
+        // To get the plane's distance from the origin, we project a point on the
+        // plane onto the plane's normal vector.
+        const float distance = fabs(Vector3::dot(pointOnPlane, normal));
         Plane plane(normal, -distance);
 
         // Check for collision with plane.
