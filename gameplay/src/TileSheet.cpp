@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "TileSheet.h"
+#include "Camera.h"
 
 namespace gameplay
 {
@@ -92,24 +93,23 @@ int TileSheet::getStrip(const char* id) const
 
 unsigned int TileSheet::getStripFrameCount(const char* id) const
 {
-	int index = getStrip(id);
-	if(index < 0)
-	{
-		return 0;
-	}
-	return getStripFrameCount(index);
+	return getStripFrameCount((unsigned int)getStrip(id));
 }
 
 unsigned int TileSheet::getStripFrameCount(unsigned int index) const
 {
+	GP_ASSERT(index < _strips.size());
+
 	return _strips[index]._frameCount;
 }
 
-void TileSheet::addStrip(const char* id, unsigned int frameCount)
+unsigned int TileSheet::addStrip(const char* id, unsigned int frameCount)
 {
-	GP_ASSERT(frameCount > 0);
+	GP_ASSERT(id && frameCount > 0);
 
 	_strips.push_back(TileSheet::FrameStrip(id, frameCount));
+
+	return _strips.size() - 1;
 }
 
 bool TileSheet::removeStrip(unsigned int index)
@@ -117,47 +117,81 @@ bool TileSheet::removeStrip(unsigned int index)
 	if(index < _strips.size())
 	{
 		_strips.erase(_strips.begin() + index);
+		return true;
 	}
 	return false;
 }
 
 bool TileSheet::removeStrip(const char* id)
 {
-	int index = getStrip(id);
-	if(index < 0)
-	{
-		return false;
-	}
-	return removeStrip(index);
+	return removeStrip((unsigned int)getStrip(id));
 }
 
 const Rectangle& TileSheet::getStripFrame(unsigned int stripIndex, unsigned int frameIndex) const
 {
+	GP_ASSERT(stripIndex < _strips.size() && frameIndex < _strips[stripIndex]._frameCount);
+
 	return _strips[stripIndex]._frames[frameIndex];
 }
 
 const Rectangle& TileSheet::getStripFrame(const char* id, unsigned int frameIndex) const
 {
-	int index = getStrip(id);
-	if(index < 0)
-	{
-		return Rectangle::empty();
-	}
-	return getStripFrame(index, frameIndex);
+	return getStripFrame((unsigned int)getStrip(id), frameIndex);
+}
+
+void TileSheet::getStripFrames(unsigned int stripIndex, unsigned int frameIndex, Rectangle* frames, unsigned int frameCount) const
+{
+	GP_ASSERT(stripIndex < _strips.size() && frameIndex < _strips[stripIndex]._frameCount && frames && (frameIndex + frameCount) <= _strips[stripIndex]._frameCount);
+
+	const FrameStrip& strip = _strips[stripIndex];
+
+	std::copy(strip._frames.begin() + frameIndex, strip._frames.begin() + (frameIndex + frameCount), frames);
+}
+
+void TileSheet::getStripFrames(const char* id, unsigned int frameIndex, Rectangle* frames, unsigned int frameCount) const
+{
+	getStripFrames((unsigned int)getStrip(id), frameIndex, frames, frameCount);
 }
 
 void TileSheet::setStripFrame(unsigned int stripIndex, unsigned int frameIndex, const Rectangle& frame)
 {
+	GP_ASSERT(stripIndex < _strips.size() && frameIndex < _strips[stripIndex]._frameCount);
+
 	_strips[stripIndex]._frames[frameIndex] = frame;
 }
 
 void TileSheet::setStripFrame(const char* id, unsigned int frameIndex, const Rectangle& frame)
 {
-	int index = getStrip(id);
-	if(index >= 0)
+	setStripFrame((unsigned int)getStrip(id), frameIndex, frame);
+}
+
+void TileSheet::setStripFrames(unsigned int stripIndex, unsigned int frameIndex, const Rectangle* frames, unsigned int frameCount)
+{
+	GP_ASSERT(stripIndex < _strips.size() && frameIndex < _strips[stripIndex]._frameCount && frames && (frameIndex + frameCount) <= _strips[stripIndex]._frameCount);
+
+	FrameStrip& strip = _strips[stripIndex];
+
+	std::copy(frames, frames + frameCount, strip._frames.begin() + frameIndex);
+}
+
+void TileSheet::setStripFrames(const char* id, unsigned int frameIndex, const Rectangle* frames, unsigned int frameCount)
+{
+	setStripFrames((unsigned int)getStrip(id), frameIndex, frames, frameCount);
+}
+
+void TileSheet::startBatch(const Camera* camera, bool viewProjection)
+{
+	_batch->start();
+
+	if(camera)
 	{
-		_strips[index]._frames[frameIndex] = frame;
+		_batch->setProjectionMatrix(viewProjection ? camera->getViewProjectionMatrix() : camera->getProjectionMatrix());
 	}
+}
+
+void TileSheet::finishBatch()
+{
+	_batch->finish();
 }
 
 //FrameStrip

@@ -6,6 +6,8 @@
 namespace gameplay
 {
 
+class Camera;
+
 /**
  * Defines a collection of images that can be used indepentently of each other or 
  * together to form animations or large scenes.
@@ -93,8 +95,10 @@ public:
 	 * 
 	 * @param id The ID of the new strip.
 	 * @param frameCount The number of frames in the new strip. Must be greater then zero.
+	 * 
+	 * @return The index of the strip.
 	 */
-	void addStrip(const char* id, unsigned int frameCount);
+	unsigned int addStrip(const char* id, unsigned int frameCount);
 
 	/**
 	 * Removes a strip from the tile sheet.
@@ -135,6 +139,26 @@ public:
 	const Rectangle& getStripFrame(const char* id, unsigned int frameIndex) const;
 
 	/**
+	 * Gets a sequence of frames from a strip.
+	 * 
+	 * @param stripIndex The index of a strip within the tile sheet.
+	 * @param frameIndex The first frame to retrieve.
+	 * @oaram frames The array to store the frames in.
+	 * @oaram frameCount The number of frames to get.
+	 */
+	void getStripFrames(unsigned int stripIndex, unsigned int frameIndex, Rectangle* frames, unsigned int frameCount) const;
+
+	/**
+	 * Gets a sequence of frames from a strip.
+	 * 
+	 * @param id The ID of the strip.
+	 * @param frameIndex The first frame to retrieve.
+	 * @oaram frames The array to store the frames in.
+	 * @oaram frameCount The number of frames to get.
+	 */
+	void getStripFrames(const char* id, unsigned int frameIndex, Rectangle* frames, unsigned int frameCount) const;
+
+	/**
 	 * Sets a frame within a strip.
 	 * 
 	 * @param stripIndex The index of a strip within the tile sheet.
@@ -151,6 +175,39 @@ public:
 	 * @param frame The frame to use.
 	 */
 	void setStripFrame(const char* id, unsigned int frameIndex, const Rectangle& frame);
+
+	/**
+	 * Sets an array of frames within a strip.
+	 * 
+	 * @param stripIndex The index of a strip within the tile sheet.
+	 * @param frameIndex The first frame to set.
+	 * @param frames The frames to use.
+	 * @param frameCount The number of frames to copy.
+	 */
+	void setStripFrames(unsigned int stripIndex, unsigned int frameIndex, const Rectangle* frames, unsigned int frameCount);
+
+	/**
+	 * Sets an array of frames within a strip.
+	 * 
+	 * @param id The ID of the strip.
+	 * @param frameIndex The first frame to set.
+	 * @param frames The frames to use.
+	 * @param frameCount The number of frames to copy.
+	 */
+	void setStripFrames(const char* id, unsigned int frameIndex, const Rectangle* frames, unsigned int frameCount);
+
+	/**
+	 * Helper function to start using the internal SpriteBatch.
+	 *
+	 * @param camera Optional camera where the matrix will be used to adjust the drawn Sprites.
+	 * @param viewProjection A boolean value determining if the camera's View-Projection matrix is used, or just the Projection matrix.
+	 */
+	void startBatch(const Camera* camera = NULL, bool viewProjection = false);
+
+	/**
+	 * Helper function to finish using the internal SpriteBatch.
+	 */
+	void finishBatch();
 
 private:
 

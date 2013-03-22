@@ -2,6 +2,7 @@
 #include "ScriptController.h"
 #include "lua_TileSheet.h"
 #include "TileSheet.h"
+#include "Camera.h"
 
 namespace gameplay
 {
@@ -12,16 +13,20 @@ void luaRegister_TileSheet()
     {
         {"addRef", lua_TileSheet_addRef},
 		{"addStrip", lua_TileSheet_addStrip},
+		{"finishBatch", lua_TileSheet_finishBatch},
         {"getRefCount", lua_TileSheet_getRefCount},
 		{"getId", lua_TileSheet_getId},
 		{"getSpriteBatch", lua_TileSheet_getSpriteBatch},
 		{"getStripCount", lua_TileSheet_getStripCount},
 		{"getStripFrame", lua_TileSheet_getStripFrame},
+		{"getStripFrames", lua_TileSheet_getStripFrames},
 		{"getStripFrameCount", lua_TileSheet_getStripFrameCount},
 		{"getStripId", lua_TileSheet_getStripId},
         {"release", lua_TileSheet_release},
 		{"removeStrip", lua_TileSheet_removeStrip},
 		{"setStripFrame", lua_TileSheet_setStripFrame},
+		{"setStripFrames", lua_TileSheet_setStripFrames},
+		{"startBatch", lua_TileSheet_startBatch},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -132,9 +137,12 @@ int lua_TileSheet_addStrip(lua_State* state)
 				unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
 
                 TileSheet* instance = getInstance(state);
-				instance->addStrip(param1, param2);
-                
-                return 0;
+				unsigned int result = instance->addStrip(param1, param2);
+
+				// Push the return value onto the stack.
+                lua_pushunsigned(state, result);
+
+                return 1;
             }
 
             lua_pushstring(state, "lua_TileSheet_addStrip - Failed to match the given parameters to a valid function signature.");
@@ -144,6 +152,38 @@ int lua_TileSheet_addStrip(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TileSheet_finishBatch(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TileSheet* instance = getInstance(state);
+				instance->finishBatch();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_TileSheet_finishBatch - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }
@@ -386,6 +426,98 @@ int lua_TileSheet_getStripFrame(lua_State* state)
     return 0;
 }
 
+int lua_TileSheet_getStripFrames(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 5:
+        {
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					(lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+					lua_type(state, 3) == LUA_TNUMBER &&
+					(lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+					lua_type(state, 5) == LUA_TNUMBER)
+				{
+					// Get parameter 1 off the stack.
+					const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+					// Get parameter 2 off the stack.
+					unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+					// Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param3 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(4, "Rectangle", false, &param3Valid);
+                    if (!param3Valid)
+					{
+						lua_pushstring(state, "Failed to convert parameter 3 to type 'Rectangle'.");
+						lua_error(state);
+                        break;
+					}
+
+					// Get parameter 4 off the stack.
+					unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+
+					TileSheet* instance = getInstance(state);
+					instance->getStripFrames(param1, param2, param3, param4);
+                
+					return 0;
+				}
+			} while (0);
+
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					lua_type(state, 2) == LUA_TNUMBER &&
+					lua_type(state, 3) == LUA_TNUMBER &&
+					(lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+					lua_type(state, 5) == LUA_TNUMBER)
+				{
+					// Get parameter 1 off the stack.
+					unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+					// Get parameter 2 off the stack.
+					unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+					// Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param3 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(4, "Rectangle", false, &param3Valid);
+                    if (!param3Valid)
+					{
+						lua_pushstring(state, "Failed to convert parameter 3 to type 'Rectangle'.");
+						lua_error(state);
+                        break;
+					}
+
+					// Get parameter 4 off the stack.
+					unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+
+					TileSheet* instance = getInstance(state);
+					instance->getStripFrames(param1, param2, param3, param4);
+                
+					return 0;
+				}
+			} while (0);
+
+            lua_pushstring(state, "lua_TileSheet_getStripFrames - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_TileSheet_getStripFrameCount(lua_State* state)
 {
 	// Get the number of parameters.
@@ -609,7 +741,7 @@ int lua_TileSheet_setStripFrame(lua_State* state)
 					TileSheet* instance = getInstance(state);
 					instance->setStripFrame(param1, param2, *param3);
                 
-					return 1;
+					return 0;
 				}
 			} while (0);
 
@@ -635,7 +767,7 @@ int lua_TileSheet_setStripFrame(lua_State* state)
 					TileSheet* instance = getInstance(state);
 					instance->setStripFrame(param1, param2, *param3);
                 
-					return 1;
+					return 0;
 				}
 			} while (0);
 
@@ -646,6 +778,182 @@ int lua_TileSheet_setStripFrame(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TileSheet_setStripFrames(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 5:
+        {
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					(lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
+					lua_type(state, 3) == LUA_TNUMBER &&
+					(lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+					lua_type(state, 5) == LUA_TNUMBER)
+				{
+					// Get parameter 1 off the stack.
+					const char* param1 = gameplay::ScriptUtil::getString(2, false);
+
+					// Get parameter 2 off the stack.
+					unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+					// Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param3 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(4, "Rectangle", false, &param3Valid);
+                    if (!param3Valid)
+					{
+						lua_pushstring(state, "Failed to convert parameter 3 to type 'Rectangle'.");
+						lua_error(state);
+                        break;
+					}
+
+					// Get parameter 4 off the stack.
+					unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+
+					TileSheet* instance = getInstance(state);
+					instance->setStripFrames(param1, param2, param3, param4);
+                
+					return 0;
+				}
+			} while (0);
+
+			do
+			{
+				if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+					lua_type(state, 2) == LUA_TNUMBER &&
+					lua_type(state, 3) == LUA_TNUMBER &&
+					(lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL) &&
+					lua_type(state, 5) == LUA_TNUMBER)
+				{
+					// Get parameter 1 off the stack.
+					unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+					// Get parameter 2 off the stack.
+					unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+					// Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param3 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(4, "Rectangle", false, &param3Valid);
+                    if (!param3Valid)
+					{
+						lua_pushstring(state, "Failed to convert parameter 3 to type 'Rectangle'.");
+						lua_error(state);
+                        break;
+					}
+
+					// Get parameter 4 off the stack.
+					unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 5);
+
+					TileSheet* instance = getInstance(state);
+					instance->setStripFrames(param1, param2, param3, param4);
+                
+					return 0;
+				}
+			} while (0);
+
+            lua_pushstring(state, "lua_TileSheet_setStripFrames - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 5).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TileSheet_startBatch(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+			if ((lua_type(state, 1) == LUA_TUSERDATA))
+			{
+				TileSheet* instance = getInstance(state);
+				instance->startBatch();
+                
+				return 0;
+			}
+
+            lua_pushstring(state, "lua_TileSheet_startBatch - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+		case 2:
+        {
+			if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				(lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+			{
+				// Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Camera> param1 = gameplay::ScriptUtil::getObjectPointer<Camera>(2, "Camera", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Camera'.");
+                    lua_error(state);
+                }
+
+				TileSheet* instance = getInstance(state);
+				instance->startBatch(param1);
+                
+				return 0;
+			}
+
+            lua_pushstring(state, "lua_TileSheet_startBatch - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+		case 3:
+        {
+			if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				(lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL) &&
+				(lua_type(state, 3) == LUA_TBOOLEAN))
+			{
+				// Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Camera> param1 = gameplay::ScriptUtil::getObjectPointer<Camera>(2, "Camera", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Camera'.");
+                    lua_error(state);
+                }
+
+				// Get parameter 2 off the stack.
+				bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
+
+				TileSheet* instance = getInstance(state);
+				instance->startBatch(param1, param2);
+                
+				return 0;
+			}
+
+            lua_pushstring(state, "lua_TileSheet_startBatch - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1 or 2 or 3).");
             lua_error(state);
             break;
         }
