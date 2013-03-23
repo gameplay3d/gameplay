@@ -252,6 +252,9 @@ void Light::setRange(float range)
         GP_ERROR("Unsupported light type (%d).", _type);
         break;
     }
+
+    if (_node)
+        _node->setBoundsDirty();
 }
 
 float Light::getRangeInverse() const
@@ -300,6 +303,9 @@ void Light::setOuterAngle(float outerAngle)
 
     _spot->outerAngle = outerAngle;
     _spot->outerAngleCos = cos(outerAngle);
+
+    if (_node)
+        _node->setBoundsDirty();
 }
     
 float Light::getInnerAngleCos()  const
