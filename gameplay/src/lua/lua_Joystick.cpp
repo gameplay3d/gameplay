@@ -31,6 +31,7 @@ void luaRegister_Joystick()
         {"createAnimationFromBy", lua_Joystick_createAnimationFromBy},
         {"createAnimationFromTo", lua_Joystick_createAnimationFromTo},
         {"destroyAnimation", lua_Joystick_destroyAnimation},
+        {"getAbsoluteBounds", lua_Joystick_getAbsoluteBounds},
         {"getAlignment", lua_Joystick_getAlignment},
         {"getAnimation", lua_Joystick_getAnimation},
         {"getAnimationPropertyComponentCount", lua_Joystick_getAnimationPropertyComponentCount},
@@ -678,6 +679,50 @@ int lua_Joystick_destroyAnimation(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1 or 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Joystick_getAbsoluteBounds(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Joystick* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getAbsoluteBounds());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Rectangle");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Joystick_getAbsoluteBounds - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

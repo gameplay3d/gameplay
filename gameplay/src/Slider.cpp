@@ -1,17 +1,21 @@
 #include "Slider.h"
+#include "Game.h"
 
 namespace gameplay
 {
 
 // Fraction of slider to scroll when mouse scrollwheel is used.
-static const float SCROLL_FRACTION = 0.1f;
+static const float SCROLLWHEEL_FRACTION = 0.1f;
+// Fraction of slider to scroll for a delta of 1.0f when a gamepad is used.
+static const float GAMEPAD_FRACTION = 0.005f;
 // Distance that a slider must be moved before it starts consuming input events,
 // e.g. to prevent its parent container from scrolling at the same time.
 static const float SLIDER_THRESHOLD = 5.0f;
 
-Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _minImage(NULL),
+Slider::Slider() : _min(0.0f), _max(0.0f), _step(0.0f), _value(0.0f), _delta(0.0f), _minImage(NULL),
     _maxImage(NULL), _trackImage(NULL), _markerImage(NULL), _valueTextVisible(false),
-    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText("")
+    _valueTextAlignment(Font::ALIGN_BOTTOM_HCENTER), _valueTextPrecision(0), _valueText(""),
+    _selectButtonDown(false), _directionButtonDown(false), _gamepadValue(0.0f)
 {
 }
 
@@ -125,7 +129,7 @@ unsigned int Slider::getValueTextPrecision() const
 
 void Slider::addListener(Control::Listener* listener, int eventFlags)
 {
-    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
         GP_ERROR("TEXT_CHANGED event is not applicable to Slider.");
     }
@@ -168,7 +172,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             _value = _originalValue;
             if (_value != oldValue)
             {
-                notifyListeners(Listener::VALUE_CHANGED);
+                notifyListeners(Control::Listener::VALUE_CHANGED);
             }
 
             _dirty = true;
@@ -204,9 +208,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             float oldValue = _value;
             _value = (markerPosition * (_max - _min)) + _min;
             if (_step > 0.0f)
-            {
-                float stepDistance = _step / (_max - _min);
-            
+            {            
                 int numSteps = round(_value / _step);
                 _value = _step * numSteps;
             }
@@ -214,7 +216,7 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
             // Call the callback if our value changed.
             if (_value != oldValue)
             {
-                notifyListeners(Listener::VALUE_CHANGED);
+                notifyListeners(Control::Listener::VALUE_CHANGED);
             }
             _dirty = true;
         }
@@ -255,7 +257,7 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
             {
                 float total = _max - _min;
                 float oldValue = _value;
-                _value += (total * SCROLL_FRACTION) * wheelDelta;
+                _value += (total * SCROLLWHEEL_FRACTION) * wheelDelta;
             
                 if (_value > _max)
                     _value = _max;
@@ -264,7 +266,7 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
                 if (_value != oldValue)
                 {
-                    notifyListeners(Listener::VALUE_CHANGED);
+                    notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
                 _dirty = true;
@@ -280,6 +282,87 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
+bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    bool eventConsumed = false;
+
+    if (_state == ACTIVE)
+    {
+        switch (evt)
+        {
+            case Gamepad::BUTTON_EVENT:
+            {
+                if (gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
+                {
+                    _delta = -1.0f;
+                    _directionButtonDown = true;
+                }
+                else if (gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
+                {
+                    _delta = 1.0f;
+                    _directionButtonDown = true;
+                }
+                else if (_delta != 0.0f && _directionButtonDown)
+                {
+                    _delta = 0.0f;
+                    _directionButtonDown = false;
+                }
+
+                if (_step > 0.0f && _delta != 0.0f)
+                {
+                    _value += _step * _delta;
+                    _gamepadValue = _value - (_step * _delta * 0.49f);
+                    _delta *= 0.2f;
+                }
+
+                // A slider consumes all button events until it is no longer active.
+                eventConsumed = true;
+                _dirty = true;
+                break;
+            }
+            case Gamepad::JOYSTICK_EVENT:
+            {
+                // The left analog stick can be used to change a slider's value.
+                if (analogIndex == 0)
+                {
+                    Vector2 joy;
+                    gamepad->getJoystickValues(analogIndex, &joy);
+                    _gamepadValue = _value;
+                    _delta = joy.x;
+                    _dirty = true;
+                    eventConsumed = true;
+                }
+                break;
+            }
+        }
+    }
+
+    if (evt == Gamepad::BUTTON_EVENT && _delta == 0.0f)
+    {
+        if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
+            gamepad->isButtonDown(Gamepad::BUTTON_X))
+        {
+            _selectButtonDown = true;
+            eventConsumed |= _consumeInputEvents;
+        }
+        else if (_selectButtonDown && 
+                 !gamepad->isButtonDown(Gamepad::BUTTON_A) &&
+                 !gamepad->isButtonDown(Gamepad::BUTTON_X))
+        {
+            _selectButtonDown = false;
+
+            if (_state == FOCUS)
+                setState(ACTIVE);
+            else if (_state == ACTIVE)
+                setState(FOCUS);
+
+            eventConsumed |= _consumeInputEvents;
+        }
+    }    
+
+    return eventConsumed;
+}
+
 void Slider::update(const Control* container, const Vector2& offset)
 {
     Label::update(container, offset);
@@ -292,6 +375,58 @@ void Slider::update(const Control* container, const Vector2& offset)
     char s[32];
     sprintf(s, "%.*f", _valueTextPrecision, _value);
     _valueText = s;
+
+    if (_delta != 0.0f)
+    {
+        float oldValue = _value;
+        float total = _max - _min;
+
+        if (_step > 0.0f)
+        {
+            _gamepadValue += (total * GAMEPAD_FRACTION) * _delta;
+            int numSteps = round(_gamepadValue / _step);
+            _value = _step * numSteps;
+        }
+        else
+        {
+            _value += (total * GAMEPAD_FRACTION) * _delta;
+        }
+            
+        if (_value > _max)
+            _value = _max;
+        else if (_value < _min)
+            _value = _min;
+
+        if (_value != oldValue)
+        {
+            notifyListeners(Control::Listener::VALUE_CHANGED);
+        }
+    }
+}
+
+void Slider::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight)
+{
+    if (needsClear)
+    {
+        GL_ASSERT( glEnable(GL_SCISSOR_TEST) );
+        GL_ASSERT( glScissor(_clearBounds.x, targetHeight - _clearBounds.y - _clearBounds.height, _clearBounds.width, _clearBounds.height) );
+        Game::getInstance()->clear(Game::CLEAR_COLOR, Vector4::zero(), 1.0f, 0);
+        GL_ASSERT( glDisable(GL_SCISSOR_TEST) );
+    }
+
+    if (!_visible)
+        return;
+
+    spriteBatch->start();
+    drawBorder(spriteBatch, clip);
+    drawImages(spriteBatch, clip);
+    spriteBatch->finish();
+
+    drawText(clip);
+    if (_delta == 0.0f)
+    {
+        _dirty = false;
+    }
 }
 
 void Slider::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)

@@ -575,7 +575,9 @@ void queryGamepad(GamepadHandle handle, int* buttonCount, int* joystickCount, in
 
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_BUTTONS, (int*)&gamepad->_buttons);
+	unsigned int buttons;
+    screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_BUTTONS, (int*)&buttons);
+	gamepad->setButtons(buttons);
 
     unsigned int i;
     for (i = 0; i < gamepad->_joystickCount; ++i)
@@ -604,7 +606,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         x *= (x < 0) ? 0.0078125f : 0.0078740157480315f;
         y *= (y > 0) ? 0.0078125f : 0.0078740157480315f;
 
-        gamepad->_joysticks[i].set(x, y);        
+		gamepad->setJoystickValue(i, x, y);
     }
 
     for (i = 0; i < gamepad->_triggerCount; ++i)
@@ -623,7 +625,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         }
 
         float value = (float)analog[2] * 0.0078125f;
-        gamepad->_triggers[i] = value;
+		gamepad->setTriggerValue(i, value);
     }
 }
 #else
