@@ -29,6 +29,7 @@ class Node : public Transform, public Ref
     friend class Scene;
     friend class Bundle;
     friend class MeshSkin;
+    friend class Light;
 
 public:
 
