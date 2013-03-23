@@ -43,12 +43,13 @@ int lua_SpriteMap_static_ANIMATE_FRAME_SPECIFIC(lua_State* state);
 int lua_SpriteMap_static_ANIMATE_OFFSET(lua_State* state);
 int lua_SpriteMap_static_ANIMATE_SIZE(lua_State* state);
 int lua_SpriteMap_static_ANIMATE_TINT(lua_State* state);
-//TODO: create
+int lua_SpriteMap_static_create(lua_State* state);
 int lua_SpriteMap_static_FLIP_HORZ(lua_State* state);
 int lua_SpriteMap_static_FLIP_NONE(lua_State* state);
 int lua_SpriteMap_static_FLIP_VERT(lua_State* state);
 int lua_SpriteMap_static_getDefaultSpriteOffset(lua_State* state);
 int lua_SpriteMap_static_setDefaultSpriteOffset(lua_State* state);
+int lua_SpriteMap_static_getSpriteMap(lua_State* state);
 
 void luaRegister_SpriteMap();
 

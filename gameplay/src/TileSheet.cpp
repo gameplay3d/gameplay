@@ -5,7 +5,7 @@
 namespace gameplay
 {
 
-// Global list of active scenes
+// Global list of active sheets
 static std::vector<TileSheet*> _tileSheets;
 
 TileSheet::TileSheet(const char* id)

@@ -32,6 +32,7 @@ void luaRegister_TileSheet()
     const luaL_Reg lua_statics[] = 
     {
         {"create", lua_TileSheet_static_create},
+		{"getTileSheet", lua_TileSheet_static_getTileSheet},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -1052,6 +1053,52 @@ int lua_TileSheet_static_create(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 2 or 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TileSheet_static_getTileSheet(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+				void* returnPtr = (void*)TileSheet::getTileSheet(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "TileSheet");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TileSheet_static_getTileSheet - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
             lua_error(state);
             break;
         }

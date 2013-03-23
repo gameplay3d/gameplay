@@ -23,6 +23,7 @@ int lua_TileSheet_setStripFrame(lua_State* state);
 int lua_TileSheet_setStripFrames(lua_State* state);
 int lua_TileSheet_startBatch(lua_State* state);
 int lua_TileSheet_static_create(lua_State* state);
+int lua_TileSheet_static_getTileSheet(lua_State* state);
 
 void luaRegister_TileSheet();
 

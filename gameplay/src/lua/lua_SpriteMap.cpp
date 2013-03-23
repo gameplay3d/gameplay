@@ -53,12 +53,13 @@ void luaRegister_SpriteMap()
 		{"ANIMATE_OFFSET", lua_SpriteMap_static_ANIMATE_OFFSET},
         {"ANIMATE_SIZE", lua_SpriteMap_static_ANIMATE_SIZE},
 		{"ANIMATE_TINT", lua_SpriteMap_static_ANIMATE_TINT},
-		//TODO: create
+		{"create", lua_SpriteMap_static_create},
 		{"FLIP_HORZ", lua_SpriteMap_static_FLIP_HORZ},
 		{"FLIP_NONE", lua_SpriteMap_static_FLIP_NONE},
 		{"FLIP_VERT", lua_SpriteMap_static_FLIP_VERT},
 		{"getDefaultSpriteOffset", lua_SpriteMap_static_getDefaultSpriteOffset},
 		{"setDefaultSpriteOffset", lua_SpriteMap_static_setDefaultSpriteOffset},
+		{"getSpriteMap", lua_SpriteMap_static_getSpriteMap},
         {NULL, NULL}
     };
     std::vector<std::string> scopePath;
@@ -1807,7 +1808,69 @@ int lua_SpriteMap_static_ANIMATE_TINT(lua_State* state)
     return 1;
 }
 
-//TODO: create
+int lua_SpriteMap_static_create(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL) &&
+				lua_type(state, 2) == LUA_TNUMBER &&
+				lua_type(state, 3) == LUA_TNUMBER &&
+				(lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+				// Get parameter 2 off the stack.
+				unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
+
+				// Get parameter 3 off the stack.
+				unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
+
+				// Get parameter 4 off the stack.
+                bool param4Valid;
+                gameplay::ScriptUtil::LuaArray<TileSheet> param4 = gameplay::ScriptUtil::getObjectPointer<TileSheet>(4, "TileSheet", false, &param4Valid);
+                if (!param4Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 4 to type 'TileSheet'.");
+                    lua_error(state);
+                }
+
+				void* returnPtr = (void*)SpriteMap::create(param1, param2, param3, param4);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = true;
+                    luaL_getmetatable(state, "SpriteMap");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteMap_static_create - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
 
 int lua_SpriteMap_static_FLIP_HORZ(lua_State* state)
 {
@@ -1914,6 +1977,52 @@ int lua_SpriteMap_static_setDefaultSpriteOffset(lua_State* state)
 			} while (0);
 
             lua_pushstring(state, "lua_SpriteMap_static_setDefaultSpriteOffset - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteMap_static_getSpriteMap(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
+
+				void* returnPtr = (void*)SpriteMap::getSpriteMap(param1);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "SpriteMap");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteMap_static_getSpriteMap - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
