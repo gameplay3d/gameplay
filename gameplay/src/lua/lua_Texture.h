@@ -17,8 +17,6 @@ int lua_Texture_getWidth(lua_State* state);
 int lua_Texture_isCompressed(lua_State* state);
 int lua_Texture_isMipmapped(lua_State* state);
 int lua_Texture_release(lua_State* state);
-int lua_Texture_setFilterMode(lua_State* state);
-int lua_Texture_setWrapMode(lua_State* state);
 int lua_Texture_static_create(lua_State* state);
 
 void luaRegister_Texture();
