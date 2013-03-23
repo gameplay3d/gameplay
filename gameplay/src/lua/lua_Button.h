@@ -13,6 +13,7 @@ int lua_Button_createAnimation(lua_State* state);
 int lua_Button_createAnimationFromBy(lua_State* state);
 int lua_Button_createAnimationFromTo(lua_State* state);
 int lua_Button_destroyAnimation(lua_State* state);
+int lua_Button_getAbsoluteBounds(lua_State* state);
 int lua_Button_getAlignment(lua_State* state);
 int lua_Button_getAnimation(lua_State* state);
 int lua_Button_getAnimationPropertyComponentCount(lua_State* state);

@@ -1,0 +1,229 @@
+theme particleEditor
+{
+    texture = res/editor.png
+
+    imageList normalImages
+    {
+        color = #4A8799ff
+
+        image unchecked
+        {
+            region = 78, 1, 46, 46
+        }
+
+        image checked
+        {
+            region = 78, 46, 46, 46
+        }
+
+        image unselected
+        {
+            region = 127, 1, 46, 46
+        }
+
+        image selected
+        {
+            region = 127, 46, 46, 46
+        }
+
+        image minCap
+        {
+            region = 3, 99, 8, 24
+        }
+
+        image maxCap
+        {
+            region = 3, 99, 8, 24
+        }
+
+        image marker
+        {
+            region = 16, 113, 18, 18
+        }
+
+        image track
+        {
+            region = 39, 119, 32, 6
+        }
+
+        image textCaret
+        {
+            region = 5, 149, 11, 25
+            color = #C3D9BFff
+        }
+
+        image scrollBarTopCap
+        {
+            region = 0, 99, 19, 5
+        }
+
+        image verticalScrollBar
+        {
+            region = 0, 104, 19, 19
+        }
+
+        image scrollBarBottomCap
+        {
+            region = 0, 138, 19, 5
+        }
+    }
+
+    imageList activeImages : normalImages
+    {
+        color = #C3D9BFff
+
+        image unchecked
+        {
+            region = 78, 91, 46, 46
+        }
+
+        image checked
+        {
+            region = 78, 91, 46, 46
+        }
+
+        image unselected
+        {
+            region = 127, 91, 46, 46
+        }
+
+        image selected
+        {
+            region = 127, 91, 46, 46
+        }
+    }
+
+    skin mainNormal
+    {
+        border
+        {
+            left = 10
+            right = 10
+            top = 10
+            bottom = 10
+        }
+        
+        region = 1, 1, 74, 74
+        color = #4A8799ff
+    }
+
+    skin mainActive : mainNormal
+    {
+        color = #C3D9BFff
+    }
+
+    style basic
+    {
+        stateNormal
+        {
+            skin = mainNormal
+            imageList = normalImages
+
+            font = res/arial.gpb
+            textColor = #ffffffff
+            fontSize = 20
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateFocus
+        {
+            textColor = #ff0000ff
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+        }
+    }
+
+    style particleProps : basic
+    {
+        padding
+        {
+            left = 10
+        }
+    }
+
+    style buttonStyle : basic
+    {
+        padding
+        {
+            top = -10
+            bottom = -10
+        }
+
+        stateNormal
+        {
+            font = res/arial.gpb
+            fontSize = 20
+        }
+
+        stateActive
+        {
+            skin = mainActive
+        }
+    }
+
+    style noBorder
+    {
+        stateNormal
+        {
+            imageList = normalImages
+            font = res/arial.gpb
+            textColor = #ffffffff
+            fontSize = 18
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
+
+        stateFocus
+        {
+            textColor = #ff0000ff
+        }
+
+        stateActive
+        {
+            imageList = activeImages
+            textAlignment = ALIGN_VCENTER_HCENTER
+        }
+    }
+
+    style iconNoBorder : noBorder
+    {
+        stateNormal
+        {
+            font = res/arial.gpb
+            fontSize = 20
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
+
+        stateActive
+        {
+            font = res/arial.gpb
+            fontSize = 20
+            textAlignment = ALIGN_VCENTER_LEFT
+        }
+    }
+
+    style title
+    {
+        padding
+        {
+            top = 2
+            left = 5
+            right = -5
+        }
+
+        stateNormal
+        {
+            textColor = #ffffffff
+            font = res/arial.gpb
+            fontSize = 24
+            textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateActive
+        {
+            textColor = #C3D9BFff
+        }
+    }
+}

@@ -21,6 +21,12 @@ Label* Label::create(const char* id, Theme::Style* style)
         label->_id = id;
     label->setStyle(style);
 
+    // Labels don't consume input events by default like other controls.
+    label->_consumeInputEvents = false;
+
+    // Ensure that labels cannot receive focus.
+    label->_focusIndex = -2;
+
     return label;
 }
 
@@ -28,9 +34,8 @@ Label* Label::create(Theme::Style* style, Properties* properties)
 {
     Label* label = new Label();
     label->initialize(style, properties);
+
     label->_consumeInputEvents = false;
-    
-    // Ensure that labels cannot receive focus.
     label->_focusIndex = -2;
 
     return label;
@@ -41,7 +46,6 @@ void Label::initialize(Theme::Style* style, Properties* properties)
     GP_ASSERT(properties);
 
     Control::initialize(style, properties);
-
     const char* text = properties->getString("text");
     if (text)
     {
@@ -51,11 +55,11 @@ void Label::initialize(Theme::Style* style, Properties* properties)
 
 void Label::addListener(Control::Listener* listener, int eventFlags)
 {
-    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
         GP_ERROR("TEXT_CHANGED event is not applicable to this control.");
     }
-    if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
+    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
     {
         GP_ERROR("VALUE_CHANGED event is not applicable to this control.");
     }
@@ -102,8 +106,6 @@ void Label::drawText(const Rectangle& clip)
         _font->drawText(_text.c_str(), _textBounds, _textColor, getFontSize(_state), getTextAlignment(_state), true, getTextRightToLeft(_state), &_viewportClipBounds);
         _font->finish();
     }
-
-    _dirty = false;
 }
 
 const char* Label::getType() const

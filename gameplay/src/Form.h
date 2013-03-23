@@ -219,6 +219,13 @@ private:
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
+    /**
+     * Propagate gamepad events to enabled forms.
+     *
+     * @return True if the gamepad event is consumed, false otherwise.
+     *
+     * @see Control::gamepadEvent
+     */
     static bool gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
