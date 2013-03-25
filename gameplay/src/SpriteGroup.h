@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 /**
- * Defines a 2D group of Sprites.
+ * Defines a group of Sprites arranged in a 2D grid.
  */
 class SpriteGroup : public Sprite
 {
@@ -60,6 +60,11 @@ protected:
      * Destructor.
      */
     virtual ~SpriteGroup();
+
+	/**
+     * @see Sprite::clone
+     */
+    virtual Sprite* clone(NodeCloneContext &context);
 
 private:
 

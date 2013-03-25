@@ -51,4 +51,16 @@ void SpriteGroup::draw(bool isolateDraw)
 	Sprite::draw(isolateDraw); //Temp
 }
 
+Sprite* SpriteGroup::clone(NodeCloneContext &context)
+{
+	//SpriteGroup* copy = create(getId(), getGroupWidth(), getGroupHeight(), getTileSheet());
+	SpriteGroup* copy = NULL;
+
+	//Sprite::cloneInto(static_cast<Sprite*>(copy), context);
+
+	//TODO: values, nodes (be careful, we don't want to duplicate Sprites and Nodes), and uncomment code
+
+	return static_cast<Sprite*>(copy);
+}
+
 }
