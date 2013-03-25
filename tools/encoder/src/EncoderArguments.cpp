@@ -23,7 +23,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _parseError(false),
     _fontPreview(false),
     _textOutput(false),
-    _optimizeAnimations(false)
+    _optimizeAnimations(false),
+    _animationGrouping(ANIMATIONGROUP_PROMPT)
 {
     __instance = this;
 
@@ -160,6 +161,11 @@ const std::string EncoderArguments::getAnimationId(const std::string& nodeId) co
     return "";
 }
 
+EncoderArguments::AnimationGroupOption EncoderArguments::getAnimationGrouping() const
+{
+    return _animationGrouping;
+}
+
 const std::vector<EncoderArguments::HeightmapOption>& EncoderArguments::getHeightmapOptions() const
 {
     return _heightmaps;
@@ -237,6 +243,8 @@ void EncoderArguments::printUsage() const
     LOG(1, "FBX file options:\n");
     LOG(1, "  -i <id>\tFilter by node ID.\n");
     LOG(1, "  -t\t\tWrite text/xml.\n");
+    LOG(1, "  -g:auto\tAutomatically group animation channels into a new animation.\n");
+    LOG(1, "  -g:none\tDo not prompt to group animations.\n");
     LOG(1, "  -g <node id> <animation id>\n" \
         "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
     LOG(1, "  -tb <node id>\n" \
@@ -359,7 +367,15 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
     switch (str[1])
     {
     case 'g':
-        if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
+        if (str.compare("-groupAnimations:auto") == 0 || str.compare("-g:auto") == 0)
+        {
+            _animationGrouping = ANIMATIONGROUP_AUTO;
+        }
+        else if (str.compare("-groupAnimations:off") == 0 || str.compare("-g:off") == 0)
+        {
+            _animationGrouping = ANIMATIONGROUP_OFF;
+        }
+        else if (str.compare("-groupAnimations") == 0 || str.compare("-g") == 0)
         {
             // read two strings, make sure not to go out of bounds
             if ((*index + 2) >= options.size())
