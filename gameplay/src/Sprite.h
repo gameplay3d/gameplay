@@ -80,7 +80,7 @@ public:
 	 * The world origin is the center of the game window. If the offset is set to be the 
 	 * negative half-screen size, then the sprite shows up in the lower-left of the screen.
 	 *
-	 * This will affect any classes based off Sprite.
+	 * This will affect any classes based off Sprite such as SpriteGroup.
 	 * 
 	 * @param offset The untransformed offset.
 	 */

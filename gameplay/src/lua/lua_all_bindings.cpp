@@ -109,7 +109,7 @@ void lua_RegisterAllBindings()
     luaRegister_Slider();
 	luaRegister_Sprite();
     luaRegister_SpriteBatch();
-	luaRegister_SpriteMap();
+	luaRegister_SpriteGroup();
     luaRegister_Technique();
     luaRegister_Terrain();
     luaRegister_TerrainListener();

@@ -861,10 +861,10 @@
     <ClCompile Include="src\lua\lua_TileSheet.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpriteMap.cpp">
+    <ClCompile Include="src\SpriteGroup.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\lua\lua_SpriteMap.cpp">
+    <ClCompile Include="src\lua\lua_SpriteGroup.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1715,10 +1715,10 @@
     <ClInclude Include="src\lua\lua_TileSheet.h">
       <Filter>src\lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\SpriteMap.h">
+    <ClInclude Include="src\SpriteGroup.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua\lua_SpriteMap.h">
+    <ClInclude Include="src\lua\lua_SpriteGroup.h">
       <Filter>src\lua</Filter>
     </ClInclude>
   </ItemGroup>

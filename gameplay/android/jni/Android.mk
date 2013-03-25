@@ -93,7 +93,7 @@ LOCAL_SRC_FILES := \
     Slider.cpp \
     Sprite.cpp \
     SpriteBatch.cpp \
-    SpriteMap.cpp \
+    SpriteGroup.cpp \
     Technique.cpp \
     Terrain.cpp \
     TerrainPatch.cpp \
@@ -251,7 +251,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Slider.cpp \
     lua/lua_Sprite.cpp \
     lua/lua_SpriteBatch.cpp \
-    lua/lua_SpriteMap.cpp \
+    lua/lua_SpriteGroup.cpp \
     lua/lua_Technique.cpp \
     lua/lua_Terrain.cpp \
     lua/lua_TerrainFlags.cpp \

@@ -198,8 +198,8 @@ set(GAMEPLAY_SRC
     src/Sprite.h
     src/SpriteBatch.cpp
     src/SpriteBatch.h
-    src/SpriteMap.cpp
-    src/SpriteMap.h
+    src/SpriteGroup.cpp
+    src/SpriteGroup.h
     src/Technique.cpp
     src/Technique.h
     src/Terrain.cpp
@@ -520,8 +520,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Sprite.h
     src/lua/lua_SpriteBatch.cpp
     src/lua/lua_SpriteBatch.h
-    src/lua/lua_SpriteMap.cpp
-    src/lua/lua_SpriteMap.h
+    src/lua/lua_SpriteGroup.cpp
+    src/lua/lua_SpriteGroup.h
     src/lua/lua_Technique.cpp
     src/lua/lua_Technique.h
     src/lua/lua_Terrain.cpp

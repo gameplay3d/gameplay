@@ -15,7 +15,7 @@ class Camera;
 class TileSheet : public Ref
 {
 	friend class Sprite;
-	friend class SpriteMap;
+	friend class SpriteGroup;
 
 public:
 
