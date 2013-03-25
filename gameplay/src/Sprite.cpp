@@ -262,6 +262,37 @@ unsigned int Sprite::getAnimationPropertyComponentCount(int propertyId) const
 	}
 }
 
+int Sprite::getPropertyId(const char* propertyIdStr)
+{
+	GP_ASSERT(propertyIdStr);
+
+	if (_targetType == AnimationTarget::TRANSFORM)
+    {
+        if (strcmp(propertyIdStr, "ANIMATE_SIZE") == 0)
+        {
+            return Sprite::ANIMATE_SIZE;
+        }
+		else if (strcmp(propertyIdStr, "ANIMATE_OFFSET") == 0)
+        {
+            return Sprite::ANIMATE_OFFSET;
+        }
+		else if (strcmp(propertyIdStr, "ANIMATE_FRAME_INDEX") == 0)
+        {
+            return Sprite::ANIMATE_FRAME_INDEX;
+        }
+		else if (strcmp(propertyIdStr, "ANIMATE_FRAME_SPECIFIC") == 0)
+        {
+            return Sprite::ANIMATE_FRAME_SPECIFIC;
+        }
+		else if (strcmp(propertyIdStr, "ANIMATE_TINT") == 0)
+        {
+            return Sprite::ANIMATE_TINT;
+        }
+	}
+
+	return AnimationTarget::getPropertyId(propertyIdStr);
+}
+
 void Sprite::getAnimationPropertyValue(int propertyId, AnimationValue* value)
 {
 	GP_ASSERT(value);

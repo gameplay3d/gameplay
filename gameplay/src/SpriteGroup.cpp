@@ -8,7 +8,7 @@ namespace gameplay
 static std::vector<SpriteGroup*> _spriteGroups;
 
 SpriteGroup::SpriteGroup(const char* id)
-	: Sprite(id)
+	: Sprite(id), _groupWidth(0), _groupHeight(0)
 {
 }
 
@@ -23,6 +23,12 @@ SpriteGroup::~SpriteGroup()
 }
 
 SpriteGroup* SpriteGroup::create(const char* id, unsigned int width, unsigned int height, TileSheet* tileSheet)
+{
+	//TODO
+	return NULL;
+}
+
+SpriteGroup* SpriteGroup::createFrom(const char* id, unsigned int width, unsigned int height, Sprite* sprite)
 {
 	//TODO
 	return NULL;
@@ -46,6 +52,16 @@ SpriteGroup* SpriteGroup::getSpriteGroup(const char* id)
     return NULL;
 }
 
+unsigned int SpriteGroup::getGroupWidth() const
+{
+	return _groupWidth;
+}
+
+unsigned int SpriteGroup::getGroupHeight() const
+{
+	return _groupHeight;
+}
+
 void SpriteGroup::draw(bool isolateDraw)
 {
 	Sprite::draw(isolateDraw); //Temp
@@ -53,12 +69,16 @@ void SpriteGroup::draw(bool isolateDraw)
 
 Sprite* SpriteGroup::clone(NodeCloneContext &context)
 {
-	//SpriteGroup* copy = create(getId(), getGroupWidth(), getGroupHeight(), getTileSheet());
-	SpriteGroup* copy = NULL;
+	SpriteGroup* copy = create(getId(), getGroupWidth(), getGroupHeight(), getTileSheet());
 
-	//Sprite::cloneInto(static_cast<Sprite*>(copy), context);
+	//Copy Sprite values
+	Sprite::cloneInto(static_cast<Sprite*>(copy), context);
 
-	//TODO: values, nodes (be careful, we don't want to duplicate Sprites and Nodes), and uncomment code
+	//Copy values
+	copy->_groupWidth = _groupWidth;
+	copy->_groupHeight = _groupHeight;
+
+	//TODO: values, nodes (be careful, we don't want to duplicate Sprites and Nodes)
 
 	return static_cast<Sprite*>(copy);
 }

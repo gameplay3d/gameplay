@@ -322,6 +322,11 @@ protected:
 	const Rectangle& getCurrentAnimationFrame() const;
 
 	/**
+     * @see AnimationTarget::getPropertyId
+     */
+	virtual int getPropertyId(const char* propertyIdStr);
+
+	/**
      * Clones the sprite and returns a new sprite.
      * 
      * @param context The clone context.

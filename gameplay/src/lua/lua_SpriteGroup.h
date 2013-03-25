@@ -20,6 +20,8 @@ int lua_SpriteGroup_getFlip(lua_State* state);
 int lua_SpriteGroup_getId(lua_State* state);
 int lua_SpriteGroup_getNode(lua_State* state);
 int lua_SpriteGroup_getRefCount(lua_State* state);
+int lua_SpriteGroup_getGroupHeight(lua_State* state);
+int lua_SpriteGroup_getGroupWidth(lua_State* state);
 int lua_SpriteGroup_getHeight(lua_State* state);
 int lua_SpriteGroup_getOffset(lua_State* state);
 int lua_SpriteGroup_getOffsetX(lua_State* state);
@@ -44,12 +46,16 @@ int lua_SpriteGroup_static_ANIMATE_OFFSET(lua_State* state);
 int lua_SpriteGroup_static_ANIMATE_SIZE(lua_State* state);
 int lua_SpriteGroup_static_ANIMATE_TINT(lua_State* state);
 int lua_SpriteGroup_static_create(lua_State* state);
+int lua_SpriteGroup_static_createFrom(lua_State* state);
 int lua_SpriteGroup_static_FLIP_HORZ(lua_State* state);
 int lua_SpriteGroup_static_FLIP_NONE(lua_State* state);
 int lua_SpriteGroup_static_FLIP_VERT(lua_State* state);
 int lua_SpriteGroup_static_getDefaultSpriteOffset(lua_State* state);
 int lua_SpriteGroup_static_setDefaultSpriteOffset(lua_State* state);
 int lua_SpriteGroup_static_getSpriteGroup(lua_State* state);
+int lua_SpriteGroup_static_TYPE_CHILD(lua_State* state);
+int lua_SpriteGroup_static_TYPE_DEFAULT(lua_State* state);
+int lua_SpriteGroup_static_TYPE_TRANSPARENT(lua_State* state);
 
 void luaRegister_SpriteGroup();
 

@@ -15,6 +15,21 @@ class SpriteGroup : public Sprite
 public:
 
 	/**
+     * The Sprite is transparent.
+     */
+    static const int TYPE_TRANSPARENT = 0;
+
+	/**
+     * The Sprite is the default Sprite defined by the SpriteGroup.
+     */
+    static const int TYPE_DEFAULT = 1;
+
+	/**
+     * The Sprite is child Sprite of this SpriteGroup.
+     */
+    static const int TYPE_CHILD = 2;
+
+	/**
 	 * Creates a new SpriteGroup for drawing.
 	 * 
 	 * @param id The ID for the new SpriteGroup.
@@ -30,6 +45,19 @@ public:
 	//TODO: create function for using a Properties (takes a url to the properties)
 
 	/**
+	 * Creates a new SpriteGroup for drawing.
+	 * 
+	 * @param id The ID for the new SpriteGroup.
+	 * @param width The width (in number of sprites wide) of the SpriteGroup.
+	 * @param height The height (in number of sprites tall) of the SpriteGroup.
+	 * @param sprite A Sprite to copy for use as the default sprite for the 
+	 *  SpriteGroup. Note: This does not use the Sprite, it mearly copies it.
+	 * 
+	 * @return A new SpriteGroup for drawing.
+	 */
+	static SpriteGroup* createFrom(const char* id, unsigned int width, unsigned int height, Sprite* sprite);
+
+	/**
      * Get a named SpriteGroup from its ID.
      *
      * @param id The ID of the SpriteGroup to search for.
@@ -37,6 +65,20 @@ public:
      * @return The SpriteGroup with the specified ID, or NULL if one was not found.
      */
 	static SpriteGroup* getSpriteGroup(const char* id);
+
+	/**
+     * Get the width of the the grid of the SpriteGroup.
+     *
+     * @return The SpriteGroup width.
+     */
+	unsigned int getGroupWidth() const;
+
+	/**
+     * Get the height of the the grid of the SpriteGroup.
+     *
+     * @return The SpriteGroup height.
+     */
+	unsigned int getGroupHeight() const;
 
 	//TODO
 
@@ -72,6 +114,18 @@ private:
     SpriteGroup& operator=(const SpriteGroup&);
 
 	//TODO
+
+protected:
+
+	/**
+	 * The SpriteGroup width.
+	 */
+	unsigned int _groupWidth;
+
+	/**
+	 * The SpriteGroup height.
+	 */
+	unsigned int _groupHeight;
 };
 
 }
