@@ -187,6 +187,15 @@ protected:
      */
     Animation::Channel* getChannel(const char* id) const;
 
+	/**
+     * Gets the TargetType's property ID value for the specified property ID string.
+     *
+     * @param propertyIdStr The property ID string.
+     * @return The property ID value for the property ID string; -1 if the propertyIdStr does not exist
+     *    for the TargetType.
+     */
+    virtual int getPropertyId(const char* propertyIdStr);
+
     /**
      * Copies data from this animation target into the given target for the purpose of cloning.
      *
