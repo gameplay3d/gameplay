@@ -107,7 +107,9 @@ void lua_RegisterAllBindings()
     luaRegister_ScriptController();
     luaRegister_ScriptTarget();
     luaRegister_Slider();
+	luaRegister_Sprite();
     luaRegister_SpriteBatch();
+	luaRegister_SpriteGroup();
     luaRegister_Technique();
     luaRegister_Terrain();
     luaRegister_TerrainListener();
@@ -119,6 +121,7 @@ void lua_RegisterAllBindings()
     luaRegister_ThemeStyle();
     luaRegister_ThemeThemeImage();
     luaRegister_ThemeUVs();
+	luaRegister_TileSheet();
     luaRegister_Touch();
     luaRegister_Transform();
     luaRegister_TransformListener();

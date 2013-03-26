@@ -194,8 +194,12 @@ set(GAMEPLAY_SRC
     src/ScriptTarget.h
     src/Slider.cpp
     src/Slider.h
+    src/Sprite.cpp
+    src/Sprite.h
     src/SpriteBatch.cpp
     src/SpriteBatch.h
+    src/SpriteGroup.cpp
+    src/SpriteGroup.h
     src/Technique.cpp
     src/Technique.h
     src/Terrain.cpp
@@ -210,6 +214,8 @@ set(GAMEPLAY_SRC
     src/Theme.h
     src/ThemeStyle.cpp
     src/ThemeStyle.h
+    src/TileSheet.cpp
+    src/TileSheet.h
     src/Transform.cpp
     src/Transform.h
     src/Vector2.cpp
@@ -510,8 +516,12 @@ set(GAMEPLAY_LUA
     src/lua/lua_ScriptTarget.h
     src/lua/lua_Slider.cpp
     src/lua/lua_Slider.h
+    src/lua/lua_Sprite.cpp
+    src/lua/lua_Sprite.h
     src/lua/lua_SpriteBatch.cpp
     src/lua/lua_SpriteBatch.h
+    src/lua/lua_SpriteGroup.cpp
+    src/lua/lua_SpriteGroup.h
     src/lua/lua_Technique.cpp
     src/lua/lua_Technique.h
     src/lua/lua_Terrain.cpp
@@ -542,6 +552,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_ThemeThemeImage.h
     src/lua/lua_ThemeUVs.cpp
     src/lua/lua_ThemeUVs.h
+    src/lua/lua_TileSheet.cpp
+    src/lua/lua_TileSheet.h
     src/lua/lua_Touch.cpp
     src/lua/lua_Touch.h
     src/lua/lua_TouchTouchEvent.cpp

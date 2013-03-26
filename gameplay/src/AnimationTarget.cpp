@@ -130,7 +130,9 @@ Animation* AnimationTarget::createAnimation(const char* id, Properties* animatio
     }
 
     // Get animation target property id
-    int propertyId = AnimationTarget::getPropertyId(_targetType, propertyIdStr);
+	int propertyId = getPropertyId(propertyIdStr);
+	if (propertyId == -1)
+		propertyId = AnimationTarget::getPropertyId(_targetType, propertyIdStr);
     if (propertyId == -1)
     {
         GP_ERROR("Property ID is invalid.");
@@ -337,6 +339,13 @@ Animation* AnimationTarget::getAnimation(const char* id) const
     }
 
     return NULL;
+}
+
+int AnimationTarget::getPropertyId(const char* propertyIdStr)
+{
+	GP_ASSERT(propertyIdStr);
+
+	return -1;
 }
 
 int AnimationTarget::getPropertyId(TargetType type, const char* propertyIdStr)

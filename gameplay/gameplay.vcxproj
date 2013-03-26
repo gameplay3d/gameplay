@@ -51,6 +51,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\lua\lua_SpriteGroup.cpp" />
+    <ClCompile Include="src\lua\lua_TileSheet.cpp" />
     <ClCompile Include="src\AbsoluteLayout.cpp" />
     <ClCompile Include="src\AIAgent.cpp" />
     <ClCompile Include="src\AIController.cpp" />
@@ -238,6 +240,7 @@
     <ClCompile Include="src\lua\lua_ScriptController.cpp" />
     <ClCompile Include="src\lua\lua_ScriptTarget.cpp" />
     <ClCompile Include="src\lua\lua_Slider.cpp" />
+    <ClCompile Include="src\lua\lua_Sprite.cpp" />
     <ClCompile Include="src\lua\lua_SpriteBatch.cpp" />
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
@@ -314,7 +317,9 @@
     <ClCompile Include="src\ScriptController.cpp" />
     <ClCompile Include="src\ScriptTarget.cpp" />
     <ClCompile Include="src\Slider.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\SpriteBatch.cpp" />
+    <ClCompile Include="src\SpriteGroup.cpp" />
     <ClCompile Include="src\Technique.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
     <ClCompile Include="src\TerrainPatch.cpp" />
@@ -329,6 +334,7 @@
     <ClCompile Include="src\VertexAttributeBinding.cpp" />
     <ClCompile Include="src\VertexFormat.cpp" />
     <ClCompile Include="src\VerticalLayout.cpp" />
+    <ClCompile Include="src\TileSheet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbsoluteLayout.h" />
@@ -518,7 +524,9 @@
     <ClInclude Include="src\lua\lua_ScriptController.h" />
     <ClInclude Include="src\lua\lua_ScriptTarget.h" />
     <ClInclude Include="src\lua\lua_Slider.h" />
+    <ClInclude Include="src\lua\lua_Sprite.h" />
     <ClInclude Include="src\lua\lua_SpriteBatch.h" />
+    <ClInclude Include="src\lua\lua_SpriteGroup.h" />
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
@@ -534,6 +542,7 @@
     <ClInclude Include="src\lua\lua_ThemeStyle.h" />
     <ClInclude Include="src\lua\lua_ThemeThemeImage.h" />
     <ClInclude Include="src\lua\lua_ThemeUVs.h" />
+    <ClInclude Include="src\lua\lua_TileSheet.h" />
     <ClInclude Include="src\lua\lua_Touch.h" />
     <ClInclude Include="src\lua\lua_TouchTouchEvent.h" />
     <ClInclude Include="src\lua\lua_Transform.h" />
@@ -591,7 +600,9 @@
     <ClInclude Include="src\ScriptController.h" />
     <ClInclude Include="src\ScriptTarget.h" />
     <ClInclude Include="src\Slider.h" />
+    <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\SpriteBatch.h" />
+    <ClInclude Include="src\SpriteGroup.h" />
     <ClInclude Include="src\Stream.h" />
     <ClInclude Include="src\Technique.h" />
     <ClInclude Include="src\Terrain.h" />
@@ -600,6 +611,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Theme.h" />
     <ClInclude Include="src\ThemeStyle.h" />
+    <ClInclude Include="src\TileSheet.h" />
     <ClInclude Include="src\TimeListener.h" />
     <ClInclude Include="src\Touch.h" />
     <ClInclude Include="src\Transform.h" />

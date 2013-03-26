@@ -30,6 +30,7 @@
 // Graphics
 #include "Texture.h"
 #include "Image.h"
+#include "TileSheet.h"
 #include "Mesh.h"
 #include "MeshPart.h"
 #include "Effect.h"
@@ -38,6 +39,8 @@
 #include "VertexFormat.h"
 #include "VertexAttributeBinding.h"
 #include "Model.h"
+#include "Sprite.h"
+#include "SpriteGroup.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Scene.h"
