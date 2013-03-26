@@ -9,9 +9,9 @@ namespace gameplay
 static Vector2 _defaultOffset = Vector2::zero();
 
 Sprite::Sprite(const char* id)
-	: _stripIndex(0), _stripFrame(0), _defaultTileInUse(true), _frame(),
-	_node(NULL),
-	_tileSheet(NULL), _tint(Vector4::one()),
+	: _stripIndex(0), _stripFrame(0), _node(NULL), _tileSheet(NULL),
+	_defaultTileInUse(true), _frame(),
+	_tint(Vector4::one()),
 	_flip(FLIP_NONE), _defaultTile(), 
 	_width(0), _height(0), _x(_defaultOffset.x), _y(_defaultOffset.y)
 {

@@ -8,12 +8,22 @@ namespace gameplay
 static std::vector<SpriteGroup*> _spriteGroups;
 
 SpriteGroup::SpriteGroup(const char* id)
-	: Sprite(id), _groupWidth(1), _groupHeight(1), _horzGap(0), _vertGap(0)
+	: Sprite(id), _groupWidth(1), _groupHeight(1), _children(), _horzGap(0), _vertGap(0)
 {
 }
 
 SpriteGroup::~SpriteGroup()
 {
+	//Unreference any Sprites that are used
+	for(std::map<unsigned int, Sprite*>::iterator it = _children.begin(); it != _children.end(); it++)
+	{
+		Sprite* s = it->second;
+		if(s)
+		{
+			SAFE_RELEASE(s);
+		}
+	}
+
 	// Remove self from vector.
     std::vector<SpriteGroup*>::iterator it = std::find(_spriteGroups.begin(), _spriteGroups.end(), this);
     if (it != _spriteGroups.end())
@@ -84,30 +94,100 @@ void SpriteGroup::setVertGap(float gap)
 
 int SpriteGroup::getSpriteType(unsigned int x, unsigned int y) const
 {
-	//TODO
+	if(x < _groupWidth && y < _groupHeight)
+	{
+		unsigned int index = x * _groupWidth + y;
+		std::map<unsigned int, Sprite*>::const_iterator it = _children.find(index);
+		if(it == _children.end())
+		{
+			return TYPE_DEFAULT;
+		}
+		else if(it->second == NULL)
+		{
+			return TYPE_TRANSPARENT;
+		}
+		else
+		{
+			return TYPE_CHILD;
+		}
+	}
 	return -1;
 }
 
 bool SpriteGroup::setSpriteType(unsigned int x, unsigned int y, int type)
 {
-	//TODO
+	if(x < _groupWidth && y < _groupHeight && type != TYPE_CHILD && (type == TYPE_DEFAULT || type == TYPE_TRANSPARENT))
+	{
+		unsigned int index = x * _groupWidth + y;
+		std::map<unsigned int, Sprite*>::const_iterator it = _children.find(index);
+		if(it == _children.end())
+		{
+			if(type == TYPE_TRANSPARENT)
+			{
+				_children[index] = NULL;
+			}
+			return true;
+		}
+		else if(it->second == NULL)
+		{
+			if(type == TYPE_DEFAULT)
+			{
+				_children.erase(it);
+			}
+			return true;
+		}
+	}
 	return false;
 }
 
-Sprite* SpriteGroup::getSprite(unsigned int x, unsigned int y) const
+Sprite* SpriteGroup::getSprite(unsigned int x, unsigned int y)
 {
-	//TODO
+	if(x < _groupWidth && y < _groupHeight)
+	{
+		unsigned int index = x * _groupWidth + y;
+		std::map<unsigned int, Sprite*>::const_iterator it = _children.find(index);
+		if(it == _children.end())
+		{
+			return static_cast<Sprite*>(this);
+		}
+		else
+		{
+			Sprite* s = it->second;
+			if(s != NULL)
+			{
+				return s;
+			}
+		}
+	}
 	return NULL;
 }
 
 bool SpriteGroup::setSprite(unsigned int x, unsigned int y, Sprite* sprite)
 {
-	//TODO
-	return false;
+	if(x < _groupWidth && y < _groupHeight && sprite != NULL && sprite != static_cast<Sprite*>(this))
+	{
+		unsigned int index = x * _groupWidth + y;
+		std::map<unsigned int, Sprite*>::const_iterator it = _children.find(index);
+		if(it != _children.end())
+		{
+			//Remove the Sprite if there's one there already
+			Sprite* s = it->second;
+			if(s)
+			{
+				SAFE_RELEASE(s);
+			}
+		}
+		//Set the new Sprite
+		sprite->addRef();
+		_children[index] = sprite;
+		return true;
+	}
+	return setSpriteType(x, y, sprite == NULL ? TYPE_TRANSPARENT : TYPE_DEFAULT);
 }
 
 void SpriteGroup::draw(bool isolateDraw)
 {
+	//TODO
 	Sprite::draw(isolateDraw); //Temp
 }
 
@@ -124,7 +204,31 @@ Sprite* SpriteGroup::clone(NodeCloneContext &context)
 	copy->_horzGap = _horzGap;
 	copy->_vertGap = _vertGap;
 
-	//TODO: values, nodes (be careful, we don't want to duplicate Sprites and Nodes)
+	//Copy children
+	for(std::map<unsigned int, Sprite*>::iterator it = _children.begin(); it != _children.end(); it++)
+	{
+		unsigned int index = it->first;
+		Sprite* s = it->second;
+		if(s)
+		{
+			//Complex, we don't want to bring over unrelated Nodes...
+			if(s->getNode())
+			{
+				//Search through nodes
+				//TODO
+			}
+			else
+			{
+				//Ok, dodged a bullet. We can just duplicate the Sprite
+				copy->_children[index] = s->clone(context);
+			}
+		}
+		else
+		{
+			//Easy, set a NULL
+			copy->_children[index] = NULL;
+		}
+	}
 
 	return static_cast<Sprite*>(copy);
 }

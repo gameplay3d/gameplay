@@ -135,10 +135,10 @@ public:
 	 * @param x The X position within the SpriteGroup.
 	 * @param y The Y position within the SpriteGroup.
      *
-     * @return The sprite: this SpriteGroup if TYPE_DEFAULT, the sprite if TYPE_CHILD, or 
+     * @return "this" SpriteGroup if TYPE_DEFAULT, the sprite if TYPE_CHILD, or 
 	 *  NULL if TYPE_TRANSPARENT or an error occured.
      */
-	Sprite* getSprite(unsigned int x, unsigned int y) const;
+	Sprite* getSprite(unsigned int x, unsigned int y);
 
 	/**
      * Set the sprite at the specified location within the SpriteGroup.
@@ -182,17 +182,12 @@ private:
     SpriteGroup(const SpriteGroup& copy);
     SpriteGroup& operator=(const SpriteGroup&);
 
-protected:
-
-	/**
-	 * The SpriteGroup width.
-	 */
 	unsigned int _groupWidth;
-
-	/**
-	 * The SpriteGroup height.
-	 */
 	unsigned int _groupHeight;
+
+	std::map<unsigned int, Sprite*> _children;
+
+protected:
 
 	/**
 	 * The horizontal gap between Sprites.

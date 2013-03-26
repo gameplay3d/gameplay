@@ -14,6 +14,7 @@ class Node;
 class Sprite : public AnimationTarget, public Ref
 {
 	friend class Node;
+	friend class SpriteGroup;
 
 public:
 
@@ -350,6 +351,10 @@ private:
 	unsigned int _stripIndex;
 	unsigned int _stripFrame;
 
+	std::string _id;
+	Node* _node;
+	TileSheet* _tileSheet;
+
 protected:
 
 	/**
@@ -361,21 +366,6 @@ protected:
 	 * The source Rectangle of the TileSheet that will be drawn if _defaultTileInUse is false.
 	 */
 	Rectangle _frame;
-
-	/**
-     * The Sprite's ID.
-     */
-    std::string _id;
-
-	/**
-	 * The Sprite's Node that it uses to position itself.
-	 */
-	Node* _node;
-
-	/**
-	 * The Sprite's TileSheet that represents what will be drawn.
-	 */
-	TileSheet* _tileSheet;
 
 	/**
 	 * The sprite's tint.
