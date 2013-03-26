@@ -29,23 +29,31 @@ void luaRegister_SpriteGroup()
 		{"getGroupHeight", lua_SpriteGroup_getGroupHeight},
 		{"getGroupWidth", lua_SpriteGroup_getGroupWidth},
 		{"getHeight", lua_SpriteGroup_getHeight},
+		{"getHorzGap", lua_SpriteGroup_getHorzGap},
 		{"getOffset", lua_SpriteGroup_getOffset},
 		{"getOffsetX", lua_SpriteGroup_getOffsetX},
 		{"getOffsetY", lua_SpriteGroup_getOffsetY},
 		{"getSize", lua_SpriteGroup_getSize},
+		{"getSprite", lua_SpriteGroup_getSprite},
+		{"getSpriteType", lua_SpriteGroup_getSpriteType},
 		{"getWidth", lua_SpriteGroup_getWidth},
 		{"getTileSheet", lua_SpriteGroup_getTileSheet},
 		{"getTint", lua_SpriteGroup_getTint},
+		{"getVertGap", lua_SpriteGroup_getVertGap},
         {"release", lua_SpriteGroup_release},
 		{"setAnimationPropertyValue", lua_SpriteGroup_setAnimationPropertyValue},
 		{"setDefaultTile", lua_SpriteGroup_setDefaultTile},
 		{"setFlip", lua_SpriteGroup_setFlip},
+		{"setHorzGap", lua_SpriteGroup_setHorzGap},
 		{"setNode", lua_SpriteGroup_setNode},
 		{"setOffset", lua_SpriteGroup_setOffset},
 		{"setOffsetX", lua_SpriteGroup_setOffsetX},
 		{"setOffsetY", lua_SpriteGroup_setOffsetY},
 		{"setSize", lua_SpriteGroup_setSize},
+		{"setSprite", lua_SpriteGroup_setSprite},
+		{"setSpriteType", lua_SpriteGroup_setSpriteType},
 		{"setTint", lua_SpriteGroup_setTint},
+		{"setVertGap", lua_SpriteGroup_setVertGap},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -1046,6 +1054,41 @@ int lua_SpriteGroup_getHeight(lua_State* state)
     return 0;
 }
 
+int lua_SpriteGroup_getHorzGap(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                SpriteGroup* instance = getInstance(state);
+				float result = instance->getHorzGap();
+
+                // Push the return value onto the stack.
+				lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_getHorzGap - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_SpriteGroup_getOffset(lua_State* state)
 {
     // Get the number of parameters.
@@ -1204,6 +1247,101 @@ int lua_SpriteGroup_getSize(lua_State* state)
     return 0;
 }
 
+int lua_SpriteGroup_getSprite(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				(lua_type(state, 2) == LUA_TNUMBER) &&
+				(lua_type(state, 3) == LUA_TNUMBER))
+            {
+				// Get parameter 1 off the stack.
+				unsigned int param1 = (int)luaL_checkunsigned(state, 2);
+
+				// Get parameter 2 off the stack.
+				unsigned int param2 = (int)luaL_checkunsigned(state, 3);
+
+                SpriteGroup* instance = getInstance(state);
+				void* returnPtr = (void*)instance->getSprite(param1, param2);
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Sprite");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_getSprite - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteGroup_getSpriteType(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 3:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				(lua_type(state, 2) == LUA_TNUMBER) &&
+				(lua_type(state, 3) == LUA_TNUMBER))
+            {
+				// Get parameter 1 off the stack.
+				unsigned int param1 = (int)luaL_checkunsigned(state, 2);
+
+				// Get parameter 2 off the stack.
+				unsigned int param2 = (int)luaL_checkunsigned(state, 3);
+
+                SpriteGroup* instance = getInstance(state);
+				int result = instance->getSpriteType(param1, param2);
+
+				// Push the return value onto the stack.
+				lua_pushinteger(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_getSpriteType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_SpriteGroup_getWidth(lua_State* state)
 {
 	// Get the number of parameters.
@@ -1314,6 +1452,41 @@ int lua_SpriteGroup_getTint(lua_State* state)
             }
 
             lua_pushstring(state, "lua_SpriteGroup_getTint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteGroup_getVertGap(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                SpriteGroup* instance = getInstance(state);
+				float result = instance->getVertGap();
+
+                // Push the return value onto the stack.
+				lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_getVertGap - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1502,6 +1675,42 @@ int lua_SpriteGroup_setFlip(lua_State* state)
             }
 
             lua_pushstring(state, "lua_SpriteGroup_setFlip - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteGroup_setHorzGap(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				float param1 = (float)luaL_checknumber(state, 2);
+
+                SpriteGroup* instance = getInstance(state);
+				instance->setHorzGap(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_setHorzGap - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1757,6 +1966,106 @@ int lua_SpriteGroup_setSize(lua_State* state)
     return 0;
 }
 
+int lua_SpriteGroup_setSprite(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				(lua_type(state, 2) == LUA_TNUMBER) &&
+				(lua_type(state, 3) == LUA_TNUMBER) &&
+                (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
+            {
+				// Get parameter 1 off the stack.
+				unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+				// Get parameter 2 off the stack.
+				unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+                // Get parameter 3 off the stack.
+                bool param3Valid;
+                gameplay::ScriptUtil::LuaArray<Sprite> param3 = gameplay::ScriptUtil::getObjectPointer<Sprite>(4, "Sprite", false, &param3Valid);
+                if (!param3Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 3 to type 'Sprite'.");
+                    lua_error(state);
+                }
+
+                SpriteGroup* instance = getInstance(state);
+				bool result = instance->setSprite(param1, param2, param3);
+
+				// Push the return value onto the stack.
+				lua_pushboolean(state, result);
+                
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_setSprite - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteGroup_setSpriteType(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 4:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				(lua_type(state, 2) == LUA_TNUMBER) &&
+				(lua_type(state, 3) == LUA_TNUMBER) &&
+                (lua_type(state, 4) == LUA_TNUMBER))
+            {
+				// Get parameter 1 off the stack.
+				unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
+
+				// Get parameter 2 off the stack.
+				unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 3);
+
+				// Get parameter 3 off the stack.
+				int param3 = (int)luaL_checkinteger(state, 4);
+
+                SpriteGroup* instance = getInstance(state);
+				bool result = instance->setSpriteType(param1, param2, param3);
+
+				// Push the return value onto the stack.
+				lua_pushboolean(state, result);
+                
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_setSpriteType - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_SpriteGroup_setTint(lua_State* state)
 {
 	// Get the number of parameters.
@@ -1786,6 +2095,42 @@ int lua_SpriteGroup_setTint(lua_State* state)
 			} while (0);
 
             lua_pushstring(state, "lua_SpriteGroup_setTint - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_SpriteGroup_setVertGap(lua_State* state)
+{
+	// Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+				lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+				float param1 = (float)luaL_checknumber(state, 2);
+
+                SpriteGroup* instance = getInstance(state);
+				instance->setVertGap(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_SpriteGroup_setVertGap - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

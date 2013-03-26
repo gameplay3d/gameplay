@@ -8,7 +8,7 @@ namespace gameplay
 static std::vector<SpriteGroup*> _spriteGroups;
 
 SpriteGroup::SpriteGroup(const char* id)
-	: Sprite(id), _groupWidth(0), _groupHeight(0)
+	: Sprite(id), _groupWidth(1), _groupHeight(1), _horzGap(0), _vertGap(0)
 {
 }
 
@@ -62,6 +62,50 @@ unsigned int SpriteGroup::getGroupHeight() const
 	return _groupHeight;
 }
 
+float SpriteGroup::getHorzGap() const
+{
+	return _horzGap;
+}
+
+void SpriteGroup::setHorzGap(float gap)
+{
+	_horzGap = gap;
+}
+
+float SpriteGroup::getVertGap() const
+{
+	return _vertGap;
+}
+
+void SpriteGroup::setVertGap(float gap)
+{
+	_vertGap = gap;
+}
+
+int SpriteGroup::getSpriteType(unsigned int x, unsigned int y) const
+{
+	//TODO
+	return -1;
+}
+
+bool SpriteGroup::setSpriteType(unsigned int x, unsigned int y, int type)
+{
+	//TODO
+	return false;
+}
+
+Sprite* SpriteGroup::getSprite(unsigned int x, unsigned int y) const
+{
+	//TODO
+	return NULL;
+}
+
+bool SpriteGroup::setSprite(unsigned int x, unsigned int y, Sprite* sprite)
+{
+	//TODO
+	return false;
+}
+
 void SpriteGroup::draw(bool isolateDraw)
 {
 	Sprite::draw(isolateDraw); //Temp
@@ -77,6 +121,8 @@ Sprite* SpriteGroup::clone(NodeCloneContext &context)
 	//Copy values
 	copy->_groupWidth = _groupWidth;
 	copy->_groupHeight = _groupHeight;
+	copy->_horzGap = _horzGap;
+	copy->_vertGap = _vertGap;
 
 	//TODO: values, nodes (be careful, we don't want to duplicate Sprites and Nodes)
 

@@ -80,7 +80,76 @@ public:
      */
 	unsigned int getGroupHeight() const;
 
-	//TODO
+	/**
+     * Get the horizontal gap between Sprites in this SpriteGroup.
+     *
+     * @return The horizontal gap between Sprites.
+     */
+	float getHorzGap() const;
+
+	/**
+     * Set the horizontal gap between Sprites in this SpriteGroup.
+     *
+     * @param gap The horizontal gap between Sprites.
+     */
+	void setHorzGap(float gap);
+
+	/**
+     * Get the vertical gap between Sprites in this SpriteGroup.
+     *
+     * @return The vertical gap between Sprites.
+     */
+	float getVertGap() const;
+
+	/**
+     * Set the vertical gap between Sprites in this SpriteGroup.
+     *
+     * @param gap The vertical gap between Sprites.
+     */
+	void setVertGap(float gap);
+
+	/**
+     * Get the type of sprite at the specified location within the SpriteGroup.
+	 * 
+	 * @param x The X position within the SpriteGroup.
+	 * @param y The Y position within the SpriteGroup.
+     *
+     * @return The sprite type: TYPE_TRANSPARENT, TYPE_DEFAULT, TYPE_CHILD, or -1 on error.
+     */
+	int getSpriteType(unsigned int x, unsigned int y) const;
+
+	/**
+     * Set the type of sprite at the specified location within the SpriteGroup.
+	 * 
+	 * @param x The X position within the SpriteGroup.
+	 * @param y The Y position within the SpriteGroup.
+	 * @param type Either TYPE_TRANSPARENT or TYPE_DEFAULT for the specified sprite.
+     *
+     * @return true on success, false if TYPE_CHILD or any other type of sprite is used, or an error occurs.
+     */
+	bool setSpriteType(unsigned int x, unsigned int y, int type);
+
+	/**
+     * Get the sprite at the specified location within the SpriteGroup.
+	 * 
+	 * @param x The X position within the SpriteGroup.
+	 * @param y The Y position within the SpriteGroup.
+     *
+     * @return The sprite: this SpriteGroup if TYPE_DEFAULT, the sprite if TYPE_CHILD, or 
+	 *  NULL if TYPE_TRANSPARENT or an error occured.
+     */
+	Sprite* getSprite(unsigned int x, unsigned int y) const;
+
+	/**
+     * Set the sprite at the specified location within the SpriteGroup.
+	 * 
+	 * @param x The X position within the SpriteGroup.
+	 * @param y The Y position within the SpriteGroup.
+	 * @param sprite NULL for a transparent sprite, "this" to set to default, or another Sprite to a child.
+     *
+     * @return true on success, false if an error occurs.
+     */
+	bool setSprite(unsigned int x, unsigned int y, Sprite* sprite);
 
 	/**
 	 * Draw the sprite group.
@@ -113,8 +182,6 @@ private:
     SpriteGroup(const SpriteGroup& copy);
     SpriteGroup& operator=(const SpriteGroup&);
 
-	//TODO
-
 protected:
 
 	/**
@@ -126,6 +193,16 @@ protected:
 	 * The SpriteGroup height.
 	 */
 	unsigned int _groupHeight;
+
+	/**
+	 * The horizontal gap between Sprites.
+	 */
+	float _horzGap;
+
+	/**
+	 * The vertical gap between Sprites.
+	 */
+	float _vertGap;
 };
 
 }
