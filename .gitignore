@@ -24,6 +24,8 @@ Thumbs.db
 /Device-Release
 /gameplay-internal
 /api/xml
+/bin
+/external-deps
 
 /gameplay/Debug
 /gameplay/DebugMem
