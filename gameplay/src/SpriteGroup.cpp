@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "SpriteGroup.h"
+#include "Node.h"
 
 namespace gameplay
 {
@@ -34,14 +35,40 @@ SpriteGroup::~SpriteGroup()
 
 SpriteGroup* SpriteGroup::create(const char* id, unsigned int width, unsigned int height, TileSheet* tileSheet)
 {
-	//TODO
-	return NULL;
+	GP_ASSERT(width > 0 && height > 0 && tileSheet);
+	tileSheet->addRef();
+
+	SpriteGroup* group = new SpriteGroup(id);
+	group->_tileSheet = tileSheet;
+
+	group->_groupWidth = width;
+	group->_groupHeight = height;
+
+	//Similar to creating from a Sprite, we clone a Sprite to save ourselves the trouble
+	Sprite* sp = Sprite::create(NULL, tileSheet);
+
+	NodeCloneContext fake;
+	sp->cloneInto(static_cast<Sprite*>(group), fake);
+
+	SAFE_RELEASE(sp);
+
+	//Save the SpriteGroup
+	_spriteGroups.push_back(group);
+
+	return group;
 }
 
 SpriteGroup* SpriteGroup::createFrom(const char* id, unsigned int width, unsigned int height, Sprite* sprite)
 {
-	//TODO
-	return NULL;
+	GP_ASSERT(width > 0 && height > 0 && sprite);
+
+	SpriteGroup* group = SpriteGroup::create(id, width, height, sprite->_tileSheet);
+
+	//Clone the Sprite values
+	NodeCloneContext fake;
+	sprite->cloneInto(static_cast<Sprite*>(group), fake);
+
+	return group;
 }
 
 SpriteGroup* SpriteGroup::getSpriteGroup(const char* id)
@@ -194,43 +221,56 @@ void SpriteGroup::draw(bool isolateDraw)
 Sprite* SpriteGroup::clone(NodeCloneContext &context)
 {
 	SpriteGroup* copy = create(getId(), getGroupWidth(), getGroupHeight(), getTileSheet());
+	cloneInto(copy, context);
+	return static_cast<Sprite*>(copy);
+}
 
-	//Copy Sprite values
-	Sprite::cloneInto(static_cast<Sprite*>(copy), context);
+void SpriteGroup::cloneInto(SpriteGroup* group, NodeCloneContext &context) const
+{
+	//Clone Sprite values
+	Sprite::cloneInto(static_cast<Sprite*>(group), context);
 
-	//Copy values
-	copy->_groupWidth = _groupWidth;
-	copy->_groupHeight = _groupHeight;
-	copy->_horzGap = _horzGap;
-	copy->_vertGap = _vertGap;
+	//Clone values
+	group->_groupWidth = _groupWidth;
+	group->_groupHeight = _groupHeight;
+	group->_horzGap = _horzGap;
+	group->_vertGap = _vertGap;
 
-	//Copy children
-	for(std::map<unsigned int, Sprite*>::iterator it = _children.begin(); it != _children.end(); it++)
+	//Clone children
+	for(std::map<unsigned int, Sprite*>::const_iterator it = _children.begin(); it != _children.end(); it++)
 	{
 		unsigned int index = it->first;
-		Sprite* s = it->second;
-		if(s)
+		if(Sprite* s = it->second)
 		{
 			//Complex, we don't want to bring over unrelated Nodes...
-			if(s->getNode())
+			if(Node* node = s->getNode())
 			{
 				//Search through nodes
-				//TODO
+				Node* clonedNode = context.findClonedNode(node);
+				if(Sprite* sc = clonedNode->getSprite())
+				{
+					//Found it, just reference it and move on
+					sc->addRef();
+					group->_children[index] = sc;
+				}
+				else
+				{
+					//Just clone the node to save us the trouble
+					group->_children[index] = s->clone(context);
+				}
 			}
 			else
 			{
 				//Ok, dodged a bullet. We can just duplicate the Sprite
-				copy->_children[index] = s->clone(context);
+				group->_children[index] = s->clone(context);
 			}
 		}
 		else
 		{
 			//Easy, set a NULL
-			copy->_children[index] = NULL;
+			group->_children[index] = NULL;
 		}
 	}
-
-	return static_cast<Sprite*>(copy);
 }
 
 }

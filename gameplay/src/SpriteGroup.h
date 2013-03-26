@@ -177,6 +177,14 @@ protected:
      */
     virtual Sprite* clone(NodeCloneContext &context);
 
+	/**
+     * Copies the data from this SpriteGroup into the given SpriteGroup.
+     * 
+     * @param group The SpriteGroup to copy the data to.
+     * @param context The clone context.
+     */
+    void cloneInto(SpriteGroup* group, NodeCloneContext &context) const;
+
 private:
 
     SpriteGroup(const SpriteGroup& copy);
