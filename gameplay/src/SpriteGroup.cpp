@@ -226,6 +226,8 @@ void SpriteGroup::draw(bool isolateDraw)
 	Vector3 pos;
 	Vector2 size = Vector2(_width, _height);
 	float angle = 0.0f;
+	float hGap = _horzGap;
+	float vGap = _vertGap;
 
 	const Matrix* vpMatrix = NULL;
 	Camera* activeCamera = NULL;
@@ -244,8 +246,12 @@ void SpriteGroup::draw(bool isolateDraw)
 		}
 
 		//Scale the size
-		size.x *= node->getScaleX();
-		size.y *= node->getScaleY();
+		float sx = node->getScaleX();
+		float sy = node->getScaleY();
+		size.x *= sx;
+		size.y *= sy;
+		hGap *= sx;
+		vGap *= sy;
 
 		//Get camera
 		activeCamera = node->getScene()->getActiveCamera();
@@ -291,10 +297,33 @@ void SpriteGroup::draw(bool isolateDraw)
 	for(unsigned int x = 0; x < _groupWidth; x++)
 	{
 		Vector3 sTempPos = pos;
-		sTempPos.x += x * (size.x + _horzGap);
+		sTempPos.x += x * (size.x + hGap);
 		for(unsigned int y = 0; y < _groupHeight; y++)
 		{
-			sTempPos.y += y ? (size.y + _vertGap) : 0;
+			sTempPos.y += y ? (size.y + vGap) : 0;
+
+			//"Frustum culling"
+			if(activeCamera)
+			{
+				BoundingBox bounds(sTempPos, sTempPos);
+				bounds.max.x += size.x;
+				bounds.max.y += size.y;
+				if(!activeCamera->getFrustum().intersects(bounds))
+				{
+					//Sprite isn't visible, save the resources and processing
+
+					if(!noChildren)
+					{
+						//We need to skip specific Sprites
+						unsigned int index = x * _groupWidth + y;
+						if(it->first == index)
+						{
+							noChildren = ++it == _children.end();
+						}
+					}
+					continue;
+				}
+			}
 
 			Vector3 sPos = sTempPos;
 			bool drawDefault = true;
@@ -304,7 +333,7 @@ void SpriteGroup::draw(bool isolateDraw)
 				if(it->first == index)
 				{
 					Sprite* s = it->second;
-					noChildren = ++it == _children.end();
+					noChildren = ++it == _children.end(); //Check if we can skip to just drawing default sprites
 
 					if(s)
 					{
@@ -319,7 +348,7 @@ void SpriteGroup::draw(bool isolateDraw)
 							std::vector<SpriteBatch*>::iterator bit = std::find(processedBatches.begin(), processedBatches.end(), batch);
 							if(bit == processedBatches.end())
 							{
-								//New SpriteBatch
+								//New SpriteBatch!
 								processedBatches.push_back(batch);
 								if(vpMatrix)
 								{
