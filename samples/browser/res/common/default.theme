@@ -108,6 +108,11 @@ theme mainMenu
         }
     }
 
+	imageList focusImages : normalImages
+	{
+		color = #2A6779ff
+	}
+
     skin mainNormal
     {
         border
@@ -121,23 +126,28 @@ theme mainMenu
         region = 1, 1, 74, 74
         color = #4A8799ff
     }
-	
-	skin mainFocus : mainNormal
-	{
-		color = #ff0000ff
-	}
 
     skin mainActive : mainNormal
     {
         color = #C3D9BFff
     }
 
+	skin mainFocus : mainNormal
+	{
+		color = #2A6779ff
+	}
+
     skin formEntry : mainNormal
     {
         region = 78, 1, 46, 46
-        color = #25434Cff
+        color = #35535Cff
     }
 
+	skin formFocus : formEntry
+	{
+        color = #15333Cff
+	}
+    
     skin underliner
     {
         border
@@ -212,11 +222,6 @@ theme mainMenu
             fontSize = 25
             textAlignment = ALIGN_BOTTOM_HCENTER
         }
-
-        stateFocus
-        {
-            textColor = #00ff00ff
-        }
     }
 
     style leftAlignedUnderlined : underlined
@@ -239,16 +244,17 @@ theme mainMenu
             fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
         }
-
-		stateFocus
-		{
-			skin = mainFocus
-		}
 		
         stateActive
         {
             imageList = activeImages
         }
+
+		stateFocus
+		{
+			skin = mainFocus
+			imageList = focusImages
+		}
 		
 		stateDisabled
 		{
@@ -262,6 +268,11 @@ theme mainMenu
         {
             skin = formEntry
             textAlignment = ALIGN_TOP_LEFT
+        }
+
+        stateFocus
+        {
+            skin = formFocus
         }
     }
 
@@ -278,11 +289,6 @@ theme mainMenu
             font = res/common/arial18.gpb
             fontSize = 20
         }
-		
-		stateFocus
-		{
-			textColor = #00ff00ff
-		}
 
         stateActive
         {
@@ -303,7 +309,8 @@ theme mainMenu
 		
 		stateFocus
 		{
-			textColor = #00ff00ff
+			textColor = #aaa000ff
+			imageList = focusImages
 		}
 
         stateActive
@@ -321,11 +328,6 @@ theme mainMenu
             fontSize = 20
             textAlignment = ALIGN_VCENTER_LEFT
         }
-		
-		stateFocus
-		{
-			textColor = #00ff00ff
-		}
 
         stateActive
         {
