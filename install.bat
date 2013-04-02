@@ -1,6 +1,6 @@
 @echo off
 REM
-REM gameplay-install.bat [master | next]
+REM install.bat [master | next]
 REM
 REM Download GamePlay resources from HTTP server and extract from ZIP
 REM
