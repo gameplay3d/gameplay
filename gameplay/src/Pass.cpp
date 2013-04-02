@@ -54,10 +54,10 @@ void Pass::setVertexAttributeBinding(VertexAttributeBinding* binding)
     }
 }
 
- VertexAttributeBinding* Pass::getVertexAttributeBinding() const
- {
-     return _vaBinding;
- }
+VertexAttributeBinding* Pass::getVertexAttributeBinding() const
+{
+    return _vaBinding;
+}
 
 void Pass::bind()
 {
