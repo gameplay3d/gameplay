@@ -1,6 +1,6 @@
 @echo off
 REM
-REM gameplay-install.bat [master | next]
+REM install.bat [master | next]
 REM
 REM Download GamePlay resources from HTTP server and extract from ZIP
 REM
@@ -21,6 +21,40 @@ set filename=gameplay-deps-%branchname%
 echo Downloading %filename%.zip from %prefix%
 %~d0
 cd %~dp0
+> temp.cs ECHO using System;
+>> temp.cs ECHO using System.Net;
+>> temp.cs ECHO using System.ComponentModel;
+>> temp.cs ECHO class Program
+>> temp.cs ECHO {
+>> temp.cs ECHO     static string file = "%filename%.zip";
+>> temp.cs ECHO     static string url = "%prefix%/" + file;
+>> temp.cs ECHO     static bool done = false;
+>> temp.cs ECHO     static void Main(string[] args)
+>> temp.cs ECHO     {
+>> temp.cs ECHO         try
+>> temp.cs ECHO         {
+>> temp.cs ECHO             WebClient client = new WebClient();
+>> temp.cs ECHO             client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
+>> temp.cs ECHO             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
+>> temp.cs ECHO             Console.Write("Downloading " + url + ": 0%%    ");
+>> temp.cs ECHO             client.DownloadFileAsync(new Uri(url), file);
+>> temp.cs ECHO             while (!done) System.Threading.Thread.Sleep(1000);
+>> temp.cs ECHO         }
+>> temp.cs ECHO         catch (Exception x)
+>> temp.cs ECHO         {
+>> temp.cs ECHO             Console.WriteLine("Error: " + x.Message);
+>> temp.cs ECHO         }
+>> temp.cs ECHO     }
+>> temp.cs ECHO     static void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+>> temp.cs ECHO     {
+>> temp.cs ECHO         Console.Write("\rDownloading " + url + ": " + e.ProgressPercentage + "%%    ");
+>> temp.cs ECHO     }
+>> temp.cs ECHO     static void DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+>> temp.cs ECHO     {
+>> temp.cs ECHO         Console.WriteLine("\rDownloading " + url + ": Done.    ");
+>> temp.cs ECHO         done = true;
+>> temp.cs ECHO     }
+>> temp.cs ECHO }
 > temp1.vbs ECHO Dim strFileURL, strHDLocation
 >> temp1.vbs ECHO strFileURL = WScript.Arguments(0)
 >> temp1.vbs ECHO strHDLocation = WScript.Arguments(1)
@@ -41,8 +75,17 @@ cd %~dp0
 >> temp1.vbs ECHO Set objADOStream = Nothing
 >> temp1.vbs ECHO End if
 >> temp1.vbs ECHO Set objXMLHTTP = Nothing
+
+if not exist \Windows\Microsoft.NET\Framework\v2.0.50727\NUL goto USE_VBS_AS_FALLBACK
+\Windows\Microsoft.NET\Framework\v2.0.50727\csc temp.cs
+temp.exe
+del temp.exe
+goto :EXTRACT
+
+:USE_VBS_AS_FALLBACK
 cscript temp1.vbs %prefix%/%filename%.zip %filename%.zip
 
+:EXTRACT
 echo Extracting %filename%.zip... please standby...
 %~d0
 cd %~dp0
@@ -56,6 +99,7 @@ cd %~dp0
 >> temp2.vbs ECHO objTarget.CopyHere objSource, intOptions
 cscript temp2.vbs %filename%.zip
 echo Cleaning up...
+del temp.cs
 del temp1.vbs
 del temp2.vbs
 del %filename%.zip
