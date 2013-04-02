@@ -668,4 +668,9 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
     this->AnimationTarget::cloneInto(materialParameter, context);
 }
 
+MaterialParameter::MethodBinding::MethodBinding(MaterialParameter* param) :
+    _parameter(param), _autoBinding(false)
+{
+}
+
 }
