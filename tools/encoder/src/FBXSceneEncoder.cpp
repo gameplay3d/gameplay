@@ -657,19 +657,59 @@ void FBXSceneEncoder::print(const char* str)
 void FBXSceneEncoder::transformNode(FbxNode* fbxNode, Node* node)
 {
     FbxAMatrix matrix;
+    float m[16];
+    
     if (fbxNode->GetCamera() || fbxNode->GetLight())
     {
-        // TODO: Why is this necessary for Camera and Light?
-        matrix.SetTRS(fbxNode->LclTranslation.Get(), fbxNode->LclRotation.Get(), fbxNode->LclScaling.Get());
+        FbxAMatrix rotateAdjust;
+        
+        if(fbxNode->GetLight())
+        {
+            /*
+             * according to the fbx-documentation the light's forward vector
+             * points along a node's negative Y axis.
+             * so we have to rotate it by 90° around the X-axis to correct it.
+             */
+            if(fbxNode->RotationActive.Get())
+            {
+                const FbxVector4& postRotation = fbxNode->PostRotation.Get();
+                fbxNode->SetPostRotation(FbxNode::eSourcePivot, FbxVector4(postRotation.mData[0] + 90.0,
+                                                                           postRotation.mData[1],
+                                                                           postRotation.mData[2])
+                                         );
+            }
+            else
+            {
+                // if the rotation is deactivated we have to rotate it anyway to get the correct transformation in the end
+                rotateAdjust.SetR(FbxVector4(-90.0, 0.0, 0.0));
+            }
+            
+            matrix = fbxNode->EvaluateLocalTransform() * rotateAdjust;
+        }
+        else if(fbxNode->GetCamera())
+        {
+            // TODO: use the EvaluateLocalTransform() function for the transformations for the camera
+            /*
+             * the current implementation ignores pre- and postrotation among others (usually happens with fbx-export from blender)
+             *
+             * Some info for a future implementation:
+             * according to the fbx-documentation the camera's forward vector
+             * points along a node's positive X axis.
+             * so we have to correct it if we use the EvaluateLocalTransform-function
+             * just rotating it by 90° around the Y axis (similar to above) doesn't work
+             */
+            matrix.SetTRS(fbxNode->LclTranslation.Get(), fbxNode->LclRotation.Get(), fbxNode->LclScaling.Get());
+        }
+        
+        copyMatrix(matrix, m);
+        node->setTransformMatrix(m);
     }
     else
     {
         matrix = fbxNode->EvaluateLocalTransform();
+        copyMatrix(matrix, m);
+        node->setTransformMatrix(m);
     }
-
-    float m[16];
-    copyMatrix(matrix, m);
-    node->setTransformMatrix(m);
 }
 
 void FBXSceneEncoder::loadBindShapes(FbxScene* fbxScene)
