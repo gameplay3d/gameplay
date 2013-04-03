@@ -76,8 +76,14 @@ cd %~dp0
 >> temp1.vbs ECHO End if
 >> temp1.vbs ECHO Set objXMLHTTP = Nothing
 
-if not exist %windir%\Microsoft.NET\Framework\v2.0.50727\NUL goto USE_VBS_AS_FALLBACK
-%windir%\Microsoft.NET\Framework\v2.0.50727\csc temp.cs
+if exist %windir%\Microsoft.NET\Framework\v2.0.50727\NUL (
+    %windir%\Microsoft.NET\Framework\v2.0.50727\csc temp.cs
+) else (
+if exist %windir%\Microsoft.NET\Framework\v4.0.30319\NUL (
+    %windir%\Microsoft.NET\Framework\v4.0.30319\csc temp.cs
+) else (
+    goto USE_VBS_AS_FALLBACK
+))
 temp.exe
 del temp.exe
 goto :EXTRACT
