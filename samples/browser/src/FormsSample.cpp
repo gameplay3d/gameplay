@@ -418,7 +418,8 @@ void FormsSample::controlEvent(Control* control, EventType evt)
     }
 }
 
-void FormsTest::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex){
+void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
+{
     switch(evt)
     {
     case Gamepad::CONNECTED_EVENT:
