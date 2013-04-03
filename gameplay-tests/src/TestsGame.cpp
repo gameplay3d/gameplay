@@ -100,10 +100,14 @@ void TestsGame::update(float elapsedTime)
     {
         getScriptController()->executeFunction<void>("camera_update", "f", elapsedTime);
         _activeTest->update(elapsedTime);
+
+		Gamepad* gamepad = getGamepad(0);
+		if (gamepad && gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+		{
+			exitActiveTest();
+		}
         return;
     }
-
-    //_testSelectForm->update(elapsedTime);
 }
 
 void TestsGame::render(float elapsedTime)
@@ -223,12 +227,6 @@ void TestsGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
 {
     if (_activeTest)
     {
-        if (evt == Gamepad::BUTTON_EVENT && gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
-        {
-            exitActiveTest();
-            return;
-        }
-
         _activeTest->gamepadEvent(evt, gamepad, analogIndex);
     }
 }
