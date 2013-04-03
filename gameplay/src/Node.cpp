@@ -126,6 +126,8 @@ void Node::addChild(Node* child)
 
     ++_childCount;
 
+    setBoundsDirty();
+
     if (_notifyHierarchyChanged)
     {
         hierarchyChanged();
@@ -768,6 +770,8 @@ void Node::setLight(Light* light)
             _light->addRef();
             _light->setNode(this);
         }
+
+        setBoundsDirty();
     }
 }
 
@@ -818,6 +822,8 @@ void Node::setTerrain(Terrain* terrain)
             _terrain->addRef();
             _terrain->setNode(this);
         }
+
+        setBoundsDirty();
     }
 }
 
@@ -872,6 +878,26 @@ const BoundingSphere& Node::getBoundingSphere() const
             else
             {
                 _bounds.merge(_model->getMesh()->getBoundingSphere());
+            }
+        }
+        if (_light)
+        {
+            switch (_light->getLightType())
+            {
+            case Light::POINT:
+                if (empty)
+                {
+                    _bounds.set(Vector3::zero(), _light->getRange());
+                    empty = false;
+                }
+                else
+                {
+                    _bounds.merge(BoundingSphere(Vector3::zero(), _light->getRange()));
+                }
+                break;
+            case Light::SPOT:
+                // TODO: Implement spot light bounds
+                break;
             }
         }
         if (empty)
@@ -954,11 +980,13 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
     Node* copy = cloneSingleNode(context);
     GP_ASSERT(copy);
 
+    // Find our current last child
     Node* lastChild = NULL;
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         lastChild = child;
     }
+
     // Loop through the nodes backwards because addChild adds the node to the front.
     for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
     {
@@ -967,6 +995,7 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
         copy->addChild(childCopy);
         childCopy->release();
     }
+
     return copy;
 }
 
@@ -1003,7 +1032,10 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     }
     node->_world = _world;
     node->_bounds = _bounds;
-    node->_userData = _userData;
+
+    // Note: Do not clone _userData - we can't make any assumptions about its content and how it's managed,
+    // so it's the caller's responsibility to clone user data if needed.
+
     if (_tags)
     {
         node->_tags = new std::map<std::string, std::string>(_tags->begin(), _tags->end());

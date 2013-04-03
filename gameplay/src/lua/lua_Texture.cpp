@@ -29,8 +29,6 @@ void luaRegister_Texture()
         {"isCompressed", lua_Texture_isCompressed},
         {"isMipmapped", lua_Texture_isMipmapped},
         {"release", lua_Texture_release},
-        {"setFilterMode", lua_Texture_setFilterMode},
-        {"setWrapMode", lua_Texture_setWrapMode},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -466,86 +464,6 @@ int lua_Texture_release(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Texture_setFilterMode(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Texture::Filter param1 = (Texture::Filter)lua_enumFromString_TextureFilter(luaL_checkstring(state, 2));
-
-                // Get parameter 2 off the stack.
-                Texture::Filter param2 = (Texture::Filter)lua_enumFromString_TextureFilter(luaL_checkstring(state, 3));
-
-                Texture* instance = getInstance(state);
-                instance->setFilterMode(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Texture_setFilterMode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Texture_setWrapMode(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Texture::Wrap param1 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 2));
-
-                // Get parameter 2 off the stack.
-                Texture::Wrap param2 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 3));
-
-                Texture* instance = getInstance(state);
-                instance->setWrapMode(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Texture_setWrapMode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }
