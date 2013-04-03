@@ -95,6 +95,12 @@ ScriptUtil::LuaArray<T> ScriptUtil::getObjectPointer(int index, const char* type
     *success = false;
 
     ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        LuaArray<T>((T*)NULL);
+    }
 
     // Was 'nil' passed?
     if (lua_type(sc->_lua, index) == LUA_TNIL)

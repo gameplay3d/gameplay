@@ -1730,7 +1730,13 @@ void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned 
     if (!Form::touchEventInternal(evt, x, y, contactIndex))
     {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
+        
+        ScriptController* sc = Game::getInstance()->getScriptController();
+        
+        if(sc)
+        {
+            sc->touchEvent(evt, x, y, contactIndex);
+        }
     }
     [__view->gameLock unlock];
 }
@@ -1741,7 +1747,13 @@ void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
     if (!Form::keyEventInternal(evt, key))
     {
         Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
+        
+        ScriptController* sc = Game::getInstance()->getScriptController();
+        
+        if(sc)
+        {
+            sc->keyEvent(evt, key);
+        }
     }
     [__view->gameLock unlock];
 }
@@ -1761,7 +1773,16 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
     else
     {
-        result = Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
+        ScriptController* sc = Game::getInstance()->getScriptController();
+        
+        if(sc)
+        {
+            result = sc->mouseEvent(evt, x, y, wheelDelta);
+        }
+        else
+        {
+            result = false;
+        }
     }
     
     [__view->gameLock unlock];
