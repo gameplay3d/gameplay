@@ -45,7 +45,8 @@ namespace gameplay
 static std::vector<Texture*> __textureCache;
 static TextureHandle __currentTextureId;
 
-Texture::Texture() : _handle(0), _format(UNKNOWN), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false)
+Texture::Texture() : _handle(0), _format(UNKNOWN), _width(0), _height(0), _mipmapped(false), _cached(false), _compressed(false),
+    _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT), _minFilter(Texture::NEAREST_MIPMAP_LINEAR), _magFilter(Texture::LINEAR)
 {
 }
 
@@ -164,13 +165,15 @@ Texture* Texture::create(Format format, unsigned int width, unsigned int height,
     GL_ASSERT( glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)format, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data) );
 
     // Set initial minification filter based on whether or not mipmaping was enabled.
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMipmaps ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );
+    Filter minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter) );
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
     texture->_format = format;
     texture->_width = width;
     texture->_height = height;
+    texture->_minFilter = minFilter;
     if (generateMipmaps)
     {
         texture->generateMipmaps();
@@ -273,7 +276,9 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipMapCount > 1 ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR) );
+
+    Filter minFilter = mipMapCount > 1 ? NEAREST_MIPMAP_LINEAR : LINEAR;
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter) );
 
     Texture* texture = new Texture();
     texture->_handle = textureId;
@@ -281,6 +286,7 @@ Texture* Texture::createCompressedPVRTC(const char* path)
     texture->_height = height;
     texture->_mipmapped = mipMapCount > 1;
     texture->_compressed = true;
+    texture->_minFilter = minFilter;
 
     // Load the data for each level.
     GLubyte* ptr = data;
@@ -766,7 +772,9 @@ Texture* Texture::createCompressedDDS(const char* path)
     GLuint textureId;
     GL_ASSERT( glGenTextures(1, &textureId) );
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, textureId) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, header.dwMipMapCount > 1 ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR ) );
+
+    Filter minFilter = header.dwMipMapCount > 1 ? NEAREST_MIPMAP_LINEAR : LINEAR;
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter ) );
 
     // Create gameplay texture.
     texture = new Texture();
@@ -775,6 +783,7 @@ Texture* Texture::createCompressedDDS(const char* path)
     texture->_height = header.dwHeight;
     texture->_compressed = compressed;
     texture->_mipmapped = header.dwMipMapCount > 1;
+    texture->_minFilter = minFilter;
 
     // Load texture data.
     for (unsigned int i = 0; i < header.dwMipMapCount; ++i)
@@ -824,20 +833,6 @@ TextureHandle Texture::getHandle() const
     return _handle;
 }
 
-void Texture::setWrapMode(Wrap wrapS, Wrap wrapT)
-{
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)wrapS) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)wrapT) );
-}
-
-void Texture::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
-{
-    GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _handle) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)minificationFilter) );
-    GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)magnificationFilter) );
-}
-
 void Texture::generateMipmaps()
 {
     if (!_mipmapped)
@@ -861,10 +856,11 @@ bool Texture::isCompressed() const
 }
 
 Texture::Sampler::Sampler(Texture* texture)
-    : _texture(texture), _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT), _magFilter(Texture::LINEAR)
+    : _texture(texture), _wrapS(Texture::REPEAT), _wrapT(Texture::REPEAT)
 {
     GP_ASSERT(texture);
-    _minFilter = texture->isMipmapped() ? Texture::NEAREST_MIPMAP_LINEAR : Texture::LINEAR;
+    _minFilter = texture->_minFilter;
+    _magFilter = texture->_magFilter;
 }
 
 Texture::Sampler::~Sampler()
@@ -889,14 +885,12 @@ void Texture::Sampler::setWrapMode(Wrap wrapS, Wrap wrapT)
 {
     _wrapS = wrapS;
     _wrapT = wrapT;
-    _texture->setWrapMode(wrapS, wrapT);
 }
 
 void Texture::Sampler::setFilterMode(Filter minificationFilter, Filter magnificationFilter)
 {
     _minFilter = minificationFilter;
     _magFilter = magnificationFilter;
-    _texture->setFilterMode(minificationFilter, magnificationFilter);
 }
 
 Texture* Texture::Sampler::getTexture() const
@@ -909,6 +903,30 @@ void Texture::Sampler::bind()
     GP_ASSERT(_texture);
 
     GL_ASSERT( glBindTexture(GL_TEXTURE_2D, _texture->_handle) );
+
+    if (_texture->_minFilter != _minFilter)
+    {
+        _texture->_minFilter = _minFilter;
+        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)_minFilter) );
+    }
+
+    if (_texture->_magFilter != _magFilter)
+    {
+        _texture->_magFilter = _magFilter;
+        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)_magFilter) );
+    }
+
+    if (_texture->_wrapS != _wrapS)
+    {
+        _texture->_wrapS = _wrapS;
+        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)_wrapS) );
+    }
+
+    if (_texture->_wrapT != _wrapT)
+    {
+        _texture->_wrapT = _wrapT;
+        GL_ASSERT( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)_wrapT) );
+    }
 }
 
 }

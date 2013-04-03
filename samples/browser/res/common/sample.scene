@@ -1,0 +1,47 @@
+scene
+{
+	path = res/common/sample.gpb
+	
+	node duck
+	{
+		url = res/common/duck.gpb#duck
+		material = res/common/duck.material
+		translate = 2, -1, -1
+		rotate = 0.0, 1.0, 0.0, 180
+	}
+	
+	node cube
+	{
+		material = res/common/sample.material#cube
+	}
+	
+	node cone
+	{
+		material = res/common/sample.material#cone
+	}
+	
+	node cylinder
+	{
+		material = res/common/sample.material#cylinder
+	}
+	
+	node torus
+	{
+		material = res/common/sample.material#torus
+	}
+	
+	node pipe
+	{
+		material = res/common/sample.material#red
+	}
+	
+	node sphere
+	{
+		material = res/common/sample.material#sphere
+	}
+	
+	physics
+	{
+		gravity = 0.0, -9.8, 0.0
+	}
+}

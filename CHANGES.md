@@ -1,5 +1,8 @@
 ## v1.7.0
+
 - Adds a lua function "convert(object, className)" that will convert a gameplay userdata object to another class type by changing the metatable. (For example: This lets you convert Control to Button in lua)
+- Repo directory restructure dropping gameplay- prefix on many folders and files.
+- Removed pre-compiled api/html docs to reduce repository bloat.
 
 ## v1.6.0
 

@@ -243,10 +243,19 @@ private:
      */
     class MethodBinding : public Ref
     {
+        friend class RenderState;
+
     public:
+
         virtual void setValue(Effect* effect) = 0;
 
     protected:
+
+        /**
+         * Constructor.
+         */
+        MethodBinding(MaterialParameter* param);
+
         /**
          * Destructor.
          */
@@ -256,6 +265,9 @@ private:
          * Hidden copy assignment operator.
          */
         MethodBinding& operator=(const MethodBinding&);
+
+        MaterialParameter* _parameter;
+        bool _autoBinding;
     };
 
     /**
@@ -269,7 +281,6 @@ private:
         MethodValueBinding(MaterialParameter* param, ClassType* instance, ValueMethod valueMethod);
         void setValue(Effect* effect);
     private:
-        MaterialParameter* _parameter;
         ClassType* _instance;
         ValueMethod _valueMethod;
 
@@ -287,7 +298,6 @@ private:
         MethodArrayBinding(MaterialParameter* param, ClassType* instance, ValueMethod valueMethod, CountMethod countMethod);
         void setValue(Effect* effect);
     private:
-        MaterialParameter* _parameter;
         ClassType* _instance;
         ValueMethod _valueMethod;
         CountMethod _countMethod;
@@ -363,7 +373,7 @@ void MaterialParameter::bindValue(ClassType* classInstance, ParameterType (Class
 
 template <class ClassType, class ParameterType>
 MaterialParameter::MethodValueBinding<ClassType, ParameterType>::MethodValueBinding(MaterialParameter* param, ClassType* instance, ValueMethod valueMethod) :
-    _parameter(param), _instance(instance), _valueMethod(valueMethod)
+    MethodBinding(param), _instance(instance), _valueMethod(valueMethod)
 {
 }
 
@@ -375,7 +385,7 @@ void MaterialParameter::MethodValueBinding<ClassType, ParameterType>::setValue(E
 
 template <class ClassType, class ParameterType>
 MaterialParameter::MethodArrayBinding<ClassType, ParameterType>::MethodArrayBinding(MaterialParameter* param, ClassType* instance, ValueMethod valueMethod, CountMethod countMethod) :
-    _parameter(param), _instance(instance), _valueMethod(valueMethod), _countMethod(countMethod)
+    MethodBinding(param), _instance(instance), _valueMethod(valueMethod), _countMethod(countMethod)
 {
 }
 
