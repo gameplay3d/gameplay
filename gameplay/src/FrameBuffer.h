@@ -113,6 +113,13 @@ public:
      * @return The RenderTarget attached at the specified index.
      */
     RenderTarget* getRenderTarget(unsigned int index = 0) const;
+
+    /**
+     * Returns the current number of render targets attached to this frame buffer.
+     *
+     * @return The number of render targets attached.
+     */
+    unsigned int getRenderTargetCount() const;
  
     /**
      * Set this FrameBuffer's DepthStencilTarget.
@@ -129,6 +136,13 @@ public:
     DepthStencilTarget* getDepthStencilTarget() const;
  
     /**
+     * Determines whether this is the default frame bufffer.
+     *
+     * @return true if this is the default frame buffer, false otherwise.
+     */
+    bool isDefault() const;
+
+    /**
      * Binds this FrameBuffer for off-screen rendering and return you the curently bound one.
      *
      * You should keep the return FrameBuffer and store it and call bind() when you rendering is complete.
@@ -143,6 +157,13 @@ public:
      * @ return The default framebuffer.
      */
     static FrameBuffer* bindDefault(); 
+
+    /**
+     * Gets the currently bound FrameBuffer.
+     *
+     * @return The currently bound FrameBuffer.
+     */
+    static FrameBuffer* getCurrent();
      
 private:
 
@@ -172,6 +193,7 @@ private:
     unsigned int _height;
     FrameBufferHandle _handle;
     RenderTarget** _renderTargets;
+    unsigned int _renderTargetCount;
     DepthStencilTarget* _depthStencilTarget;
 
     static unsigned int _maxRenderTargets;

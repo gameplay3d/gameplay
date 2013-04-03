@@ -39,14 +39,14 @@ void luaRegister_Model()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Model", lua_members, NULL, lua_Model__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Model", lua_members, NULL, lua_Model__gc, lua_statics, scopePath);
 }
 
 static Model* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Model");
     luaL_argcheck(state, userdata != NULL, 1, "'Model' expected.");
-    return (Model*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Model*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Model__gc(lua_State* state)
@@ -63,7 +63,7 @@ int lua_Model__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Model");
                 luaL_argcheck(state, userdata != NULL, 1, "'Model' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Model* instance = (Model*)object->instance;
@@ -147,7 +147,7 @@ int lua_Model_draw(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 Model* instance = getInstance(state);
                 instance->draw(param1);
@@ -185,7 +185,7 @@ int lua_Model_getMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->getMaterial();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -215,7 +215,7 @@ int lua_Model_getMaterial(lua_State* state)
                 void* returnPtr = (void*)instance->getMaterial(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Material");
@@ -259,7 +259,7 @@ int lua_Model_getMesh(lua_State* state)
                 void* returnPtr = (void*)instance->getMesh();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Mesh");
@@ -338,7 +338,7 @@ int lua_Model_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -417,7 +417,7 @@ int lua_Model_getSkin(lua_State* state)
                 void* returnPtr = (void*)instance->getSkin();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "MeshSkin");
@@ -533,7 +533,7 @@ int lua_Model_setMaterial(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Material> param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Material> param1 = gameplay::ScriptUtil::getObjectPointer<Material>(2, "Material", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -550,13 +550,13 @@ int lua_Model_setMaterial(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     Model* instance = getInstance(state);
                     void* returnPtr = (void*)instance->setMaterial(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Material");
@@ -585,7 +585,7 @@ int lua_Model_setMaterial(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Material> param1 = ScriptUtil::getObjectPointer<Material>(2, "Material", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Material> param1 = gameplay::ScriptUtil::getObjectPointer<Material>(2, "Material", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -606,16 +606,16 @@ int lua_Model_setMaterial(lua_State* state)
                     (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    const char* param2 = ScriptUtil::getString(3, false);
+                    const char* param2 = gameplay::ScriptUtil::getString(3, false);
 
                     Model* instance = getInstance(state);
                     void* returnPtr = (void*)instance->setMaterial(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Material");
@@ -637,7 +637,7 @@ int lua_Model_setMaterial(lua_State* state)
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     int param2 = (int)luaL_checkint(state, 3);
@@ -646,7 +646,7 @@ int lua_Model_setMaterial(lua_State* state)
                     void* returnPtr = (void*)instance->setMaterial(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Material");
@@ -675,19 +675,19 @@ int lua_Model_setMaterial(lua_State* state)
                     (lua_type(state, 4) == LUA_TSTRING || lua_type(state, 4) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    const char* param2 = ScriptUtil::getString(3, false);
+                    const char* param2 = gameplay::ScriptUtil::getString(3, false);
 
                     // Get parameter 3 off the stack.
-                    const char* param3 = ScriptUtil::getString(4, false);
+                    const char* param3 = gameplay::ScriptUtil::getString(4, false);
 
                     Model* instance = getInstance(state);
                     void* returnPtr = (void*)instance->setMaterial(param1, param2, param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Material");
@@ -717,13 +717,13 @@ int lua_Model_setMaterial(lua_State* state)
                     lua_type(state, 5) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
-                    const char* param2 = ScriptUtil::getString(3, false);
+                    const char* param2 = gameplay::ScriptUtil::getString(3, false);
 
                     // Get parameter 3 off the stack.
-                    const char* param3 = ScriptUtil::getString(4, false);
+                    const char* param3 = gameplay::ScriptUtil::getString(4, false);
 
                     // Get parameter 4 off the stack.
                     int param4 = (int)luaL_checkint(state, 5);
@@ -732,7 +732,7 @@ int lua_Model_setMaterial(lua_State* state)
                     void* returnPtr = (void*)instance->setMaterial(param1, param2, param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Material");
@@ -776,7 +776,7 @@ int lua_Model_setNode(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Node> param1 = ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Node> param1 = gameplay::ScriptUtil::getObjectPointer<Node>(2, "Node", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Node'.");
@@ -817,7 +817,7 @@ int lua_Model_static_create(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Mesh> param1 = gameplay::ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Mesh'.");
@@ -827,7 +827,7 @@ int lua_Model_static_create(lua_State* state)
                 void* returnPtr = (void*)Model::create(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "Model");

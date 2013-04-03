@@ -32,6 +32,7 @@ static ASensorEventQueue* __sensorEventQueue;
 static ASensorEvent __sensorEvent;
 static const ASensor* __accelerometerSensor;
 static int __orientationAngle = 90;
+static bool __multiSampling = false;
 static bool __multiTouch = false;
 static int __primaryTouchId = -1;
 static bool __displayKeyboard = false;
@@ -176,6 +177,7 @@ static bool initEGL()
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
         EGL_NONE
     };
+    __multiSampling = samples > 0;
     
     EGLint eglConfigCount;
     const EGLint eglContextAttrs[] =
@@ -237,6 +239,9 @@ static bool initEGL()
                         break;
                     }
                 }
+
+                __multiSampling = sampleCount > 0;
+
                 if (validConfig)
                     break;
             }
@@ -1145,6 +1150,23 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1195,6 +1217,14 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
 }
 
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = 0;
+    if (argv)
+        *argv = 0;
+}
+
 bool Platform::hasMouse()
 {
     // not supported
@@ -1229,51 +1259,6 @@ void Platform::displayKeyboard(bool display)
         __displayKeyboard = true;
     else
         __displayKeyboard = false;
-}
-
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
-        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
-    }
-}
-
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    if (!Form::keyEventInternal(evt, key))
-    {
-        Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
-    }
-}
-
-bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else
-    {
-        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
-    }
-}
-
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
-}
-
-void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
-{
-    Gamepad::remove(handle);
 }
 
 void Platform::shutdownInternal()

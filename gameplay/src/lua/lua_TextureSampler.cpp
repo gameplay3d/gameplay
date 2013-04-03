@@ -35,14 +35,14 @@ void luaRegister_TextureSampler()
     std::vector<std::string> scopePath;
     scopePath.push_back("Texture");
 
-    ScriptUtil::registerClass("TextureSampler", lua_members, NULL, lua_TextureSampler__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("TextureSampler", lua_members, NULL, lua_TextureSampler__gc, lua_statics, scopePath);
 }
 
 static Texture::Sampler* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "TextureSampler");
     luaL_argcheck(state, userdata != NULL, 1, "'TextureSampler' expected.");
-    return (Texture::Sampler*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Texture::Sampler*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_TextureSampler__gc(lua_State* state)
@@ -59,7 +59,7 @@ int lua_TextureSampler__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "TextureSampler");
                 luaL_argcheck(state, userdata != NULL, 1, "'TextureSampler' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Texture::Sampler* instance = (Texture::Sampler*)object->instance;
@@ -198,7 +198,7 @@ int lua_TextureSampler_getTexture(lua_State* state)
                 void* returnPtr = (void*)instance->getTexture();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Texture");
@@ -354,14 +354,14 @@ int lua_TextureSampler_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Texture> param1 = ScriptUtil::getObjectPointer<Texture>(1, "Texture", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Texture> param1 = gameplay::ScriptUtil::getObjectPointer<Texture>(1, "Texture", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)Texture::Sampler::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "TextureSampler");
@@ -381,12 +381,12 @@ int lua_TextureSampler_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)Texture::Sampler::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "TextureSampler");
@@ -413,15 +413,15 @@ int lua_TextureSampler_static_create(lua_State* state)
                     lua_type(state, 2) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
-                    bool param2 = ScriptUtil::luaCheckBool(state, 2);
+                    bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                     void* returnPtr = (void*)Texture::Sampler::create(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "TextureSampler");

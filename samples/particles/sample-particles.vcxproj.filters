@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{439558fd-1ebd-4284-bc2b-ab333c4a13cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ParticlesGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ParticlesGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\editor.form">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\editor.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\editor.theme">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\fire.particle">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\fire.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\smoke.particle">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\smoke.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\explosion.particle">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\explosion.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="icon.png" />
+    <None Include="game.config" />
+    <None Include="bar-descriptor.xml" />
+    <None Include="res\arial.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\arial.ttf">
+      <Filter>res</Filter>
+    </None>
+  </ItemGroup>
+</Project>

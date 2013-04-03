@@ -20,14 +20,14 @@ void luaRegister_AnimationValue()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AnimationValue", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AnimationValue", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AnimationValue* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationValue");
     luaL_argcheck(state, userdata != NULL, 1, "'AnimationValue' expected.");
-    return (AnimationValue*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AnimationValue*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AnimationValue_getFloat(lua_State* state)
@@ -88,7 +88,7 @@ int lua_AnimationValue_getFloats(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
+                gameplay::ScriptUtil::LuaArray<float> param2 = gameplay::ScriptUtil::getFloatPointer(3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -172,7 +172,7 @@ int lua_AnimationValue_setFloats(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                ScriptUtil::LuaArray<float> param2 = ScriptUtil::getFloatPointer(3);
+                gameplay::ScriptUtil::LuaArray<float> param2 = gameplay::ScriptUtil::getFloatPointer(3);
 
                 // Get parameter 3 off the stack.
                 unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);

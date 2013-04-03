@@ -39,14 +39,14 @@ void luaRegister_AIMessage()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AIMessage", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AIMessage", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static AIMessage* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIMessage");
     luaL_argcheck(state, userdata != NULL, 1, "'AIMessage' expected.");
-    return (AIMessage*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AIMessage*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AIMessage_getBoolean(lua_State* state)
@@ -480,7 +480,7 @@ int lua_AIMessage_setBoolean(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                bool param2 = ScriptUtil::luaCheckBool(state, 3);
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
 
                 AIMessage* instance = getInstance(state);
                 instance->setBoolean(param1, param2);
@@ -680,7 +680,7 @@ int lua_AIMessage_setString(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 2);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
 
                 AIMessage* instance = getInstance(state);
                 instance->setString(param1, param2);
@@ -721,10 +721,10 @@ int lua_AIMessage_static_create(lua_State* state)
                 unsigned int param1 = (unsigned int)luaL_checkunsigned(state, 1);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(2, false);
+                const char* param2 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 3 off the stack.
-                const char* param3 = ScriptUtil::getString(3, false);
+                const char* param3 = gameplay::ScriptUtil::getString(3, false);
 
                 // Get parameter 4 off the stack.
                 unsigned int param4 = (unsigned int)luaL_checkunsigned(state, 4);
@@ -732,7 +732,7 @@ int lua_AIMessage_static_create(lua_State* state)
                 void* returnPtr = (void*)AIMessage::create(param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AIMessage");
@@ -774,7 +774,7 @@ int lua_AIMessage_static_destroy(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AIMessage> param1 = ScriptUtil::getObjectPointer<AIMessage>(1, "AIMessage", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AIMessage> param1 = gameplay::ScriptUtil::getObjectPointer<AIMessage>(1, "AIMessage", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AIMessage'.");

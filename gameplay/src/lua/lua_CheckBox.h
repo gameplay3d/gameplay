@@ -13,6 +13,7 @@ int lua_CheckBox_createAnimation(lua_State* state);
 int lua_CheckBox_createAnimationFromBy(lua_State* state);
 int lua_CheckBox_createAnimationFromTo(lua_State* state);
 int lua_CheckBox_destroyAnimation(lua_State* state);
+int lua_CheckBox_getAbsoluteBounds(lua_State* state);
 int lua_CheckBox_getAlignment(lua_State* state);
 int lua_CheckBox_getAnimation(lua_State* state);
 int lua_CheckBox_getAnimationPropertyComponentCount(lua_State* state);

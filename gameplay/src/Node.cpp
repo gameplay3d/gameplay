@@ -126,6 +126,8 @@ void Node::addChild(Node* child)
 
     ++_childCount;
 
+    setBoundsDirty();
+
     if (_notifyHierarchyChanged)
     {
         hierarchyChanged();
@@ -376,13 +378,15 @@ unsigned int Node::findNodes(const char* id, std::vector<Node*>& nodes, bool rec
 
 Scene* Node::getScene() const
 {
-    // Search for a scene in our parents.
-    for (Node* n = const_cast<Node*>(this); n != NULL; n = n->getParent())
+    if (_scene)
+        return _scene;
+
+    // Search our parent for the scene
+    if (_parent)
     {
-        if (n->_scene)
-        {
-            return n->_scene;
-        }
+        Scene* scene = _parent->getScene();
+        if (scene)
+            return scene;
     }
 
     return NULL;
@@ -766,6 +770,8 @@ void Node::setLight(Light* light)
             _light->addRef();
             _light->setNode(this);
         }
+
+        setBoundsDirty();
     }
 }
 
@@ -816,6 +822,8 @@ void Node::setTerrain(Terrain* terrain)
             _terrain->addRef();
             _terrain->setNode(this);
         }
+
+        setBoundsDirty();
     }
 }
 
@@ -872,7 +880,27 @@ const BoundingSphere& Node::getBoundingSphere() const
                 _bounds.merge(_model->getMesh()->getBoundingSphere());
             }
         }
-        else
+        if (_light)
+        {
+            switch (_light->getLightType())
+            {
+            case Light::POINT:
+                if (empty)
+                {
+                    _bounds.set(Vector3::zero(), _light->getRange());
+                    empty = false;
+                }
+                else
+                {
+                    _bounds.merge(BoundingSphere(Vector3::zero(), _light->getRange()));
+                }
+                break;
+            case Light::SPOT:
+                // TODO: Implement spot light bounds
+                break;
+            }
+        }
+        if (empty)
         {
             // Empty bounding sphere, set the world translation with zero radius
             worldMatrix.getTranslation(&_bounds.center);
@@ -933,7 +961,6 @@ const BoundingSphere& Node::getBoundingSphere() const
     return _bounds;
 }
 
-
 Node* Node::clone() const
 {
     NodeCloneContext context;
@@ -953,11 +980,13 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
     Node* copy = cloneSingleNode(context);
     GP_ASSERT(copy);
 
+    // Find our current last child
     Node* lastChild = NULL;
     for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         lastChild = child;
     }
+
     // Loop through the nodes backwards because addChild adds the node to the front.
     for (Node* child = lastChild; child != NULL; child = child->getPreviousSibling())
     {
@@ -966,6 +995,7 @@ Node* Node::cloneRecursive(NodeCloneContext &context) const
         copy->addChild(childCopy);
         childCopy->release();
     }
+
     return copy;
 }
 
@@ -1002,6 +1032,10 @@ void Node::cloneInto(Node* node, NodeCloneContext &context) const
     }
     node->_world = _world;
     node->_bounds = _bounds;
+
+    // Note: Do not clone _userData - we can't make any assumptions about its content and how it's managed,
+    // so it's the caller's responsibility to clone user data if needed.
+
     if (_tags)
     {
         node->_tags = new std::map<std::string, std::string>(_tags->begin(), _tags->end());

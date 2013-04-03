@@ -8,7 +8,7 @@ namespace gameplay
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
     _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
-    _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(0), _parent(NULL), _styleOverridden(false), _skin(NULL)
+    _zIndex(-1), _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
@@ -17,9 +17,9 @@ Control::~Control()
 {
     if (_listeners)
     {
-        for (std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
+        for (std::map<Control::Listener::EventType, std::list<Control::Listener*>*>::const_iterator itr = _listeners->begin(); itr != _listeners->end(); ++itr)
         {
-            std::list<Listener*>* list = itr->second;
+            std::list<Control::Listener*>* list = itr->second;
             SAFE_DELETE(list);
         }
         SAFE_DELETE(_listeners);
@@ -185,6 +185,11 @@ void Control::setBounds(const Rectangle& bounds)
 const Rectangle& Control::getBounds() const
 {
     return _bounds;
+}
+
+const Rectangle& Control::getAbsoluteBounds() const
+{
+    return _absoluteBounds;
 }
 
 float Control::getX() const
@@ -691,29 +696,29 @@ void Control::addListener(Control::Listener* listener, int eventFlags)
 {
     GP_ASSERT(listener);
 
-    if ((eventFlags & Listener::PRESS) == Listener::PRESS)
+    if ((eventFlags & Control::Listener::PRESS) == Control::Listener::PRESS)
     {
-        addSpecificListener(listener, Listener::PRESS);
+        addSpecificListener(listener, Control::Listener::PRESS);
     }
 
-    if ((eventFlags & Listener::RELEASE) == Listener::RELEASE)
+    if ((eventFlags & Control::Listener::RELEASE) == Control::Listener::RELEASE)
     {
-        addSpecificListener(listener, Listener::RELEASE);
+        addSpecificListener(listener, Control::Listener::RELEASE);
     }
 
-    if ((eventFlags & Listener::CLICK) == Listener::CLICK)
+    if ((eventFlags & Control::Listener::CLICK) == Control::Listener::CLICK)
     {
-        addSpecificListener(listener, Listener::CLICK);
+        addSpecificListener(listener, Control::Listener::CLICK);
     }
 
-    if ((eventFlags & Listener::VALUE_CHANGED) == Listener::VALUE_CHANGED)
+    if ((eventFlags & Control::Listener::VALUE_CHANGED) == Control::Listener::VALUE_CHANGED)
     {
-        addSpecificListener(listener, Listener::VALUE_CHANGED);
+        addSpecificListener(listener, Control::Listener::VALUE_CHANGED);
     }
 
-    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
-        addSpecificListener(listener, Listener::TEXT_CHANGED);
+        addSpecificListener(listener, Control::Listener::TEXT_CHANGED);
     }
 }
 
@@ -722,13 +727,13 @@ void Control::removeListener(Control::Listener* listener)
     if (_listeners == NULL || listener == NULL)
         return;
 
-    for (std::map<Listener::EventType, std::list<Listener*>*>::iterator itr = _listeners->begin(); itr != _listeners->end();)
+    for (std::map<Control::Listener::EventType, std::list<Control::Listener*>*>::iterator itr = _listeners->begin(); itr != _listeners->end();)
     {
         itr->second->remove(listener);
 
         if(itr->second->empty())
         {
-            std::list<Listener*>* list = itr->second;
+            std::list<Control::Listener*>* list = itr->second;
             _listeners->erase(itr++);
             SAFE_DELETE(list);
         }
@@ -740,23 +745,23 @@ void Control::removeListener(Control::Listener* listener)
         SAFE_DELETE(_listeners);
 }
 
-void Control::addSpecificListener(Control::Listener* listener, Listener::EventType eventType)
+void Control::addSpecificListener(Control::Listener* listener, Control::Listener::EventType eventType)
 {
     GP_ASSERT(listener);
 
     if (!_listeners)
     {
-        _listeners = new std::map<Listener::EventType, std::list<Listener*>*>();
+        _listeners = new std::map<Control::Listener::EventType, std::list<Control::Listener*>*>();
     }
 
-    std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->find(eventType);
+    std::map<Control::Listener::EventType, std::list<Control::Listener*>*>::const_iterator itr = _listeners->find(eventType);
     if (itr == _listeners->end())
     {
-        _listeners->insert(std::make_pair(eventType, new std::list<Listener*>()));
+        _listeners->insert(std::make_pair(eventType, new std::list<Control::Listener*>()));
         itr = _listeners->find(eventType);
     }
 
-    std::list<Listener*>* listenerList = itr->second;
+    std::list<Control::Listener*>* listenerList = itr->second;
     listenerList->push_back(listener);
 }
 
@@ -773,7 +778,7 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         {
             _contactIndex = (int) contactIndex;
 
-            notifyListeners(Listener::PRESS);
+            notifyListeners(Control::Listener::PRESS);
 
             return _consumeInputEvents;
         }
@@ -789,15 +794,15 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         {
             _contactIndex = INVALID_CONTACT_INDEX;
 
-            // Always trigger Listener::RELEASE
-            notifyListeners(Listener::RELEASE);
+            // Always trigger Control::Listener::RELEASE
+            notifyListeners(Control::Listener::RELEASE);
 
-            // Only trigger Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
+            // Only trigger Control::Listener::CLICK if both PRESS and RELEASE took place within the control's bounds.
             if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
                 // Leave this control in the FOCUS state.
-                notifyListeners(Listener::CLICK);
+                notifyListeners(Control::Listener::CLICK);
             }
 
             return _consumeInputEvents;
@@ -834,7 +839,42 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
-void Control::notifyListeners(Listener::EventType eventType)
+bool Control::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    // Default behavior for gamepad events.
+    switch (evt)
+    {
+    case Gamepad::BUTTON_EVENT:
+        if (_state == Control::FOCUS)
+        {
+            if (gamepad->isButtonDown(Gamepad::BUTTON_A) ||
+                gamepad->isButtonDown(Gamepad::BUTTON_X))
+            {
+                notifyListeners(Control::Listener::PRESS);
+                return _consumeInputEvents;
+            }
+        }
+        else if (_state == Control::ACTIVE)
+        {
+            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
+                !gamepad->isButtonDown(Gamepad::BUTTON_X))
+            {
+                notifyListeners(Control::Listener::RELEASE);
+                notifyListeners(Control::Listener::CLICK);
+                return _consumeInputEvents;
+            }
+        }
+        break;
+    case Gamepad::JOYSTICK_EVENT:
+        break;
+    case Gamepad::TRIGGER_EVENT:
+        break;
+    }
+
+    return false;
+}
+
+void Control::notifyListeners(Control::Listener::EventType eventType)
 {
     // This method runs untrusted code by notifying listeners of events.
     // If the user calls exit() or otherwise releases this control, we
@@ -843,11 +883,11 @@ void Control::notifyListeners(Listener::EventType eventType)
 
     if (_listeners)
     {
-        std::map<Listener::EventType, std::list<Listener*>*>::const_iterator itr = _listeners->find(eventType);
+        std::map<Control::Listener::EventType, std::list<Control::Listener*>*>::const_iterator itr = _listeners->find(eventType);
         if (itr != _listeners->end())
         {
-            std::list<Listener*>* listenerList = itr->second;
-            for (std::list<Listener*>::iterator listenerItr = listenerList->begin(); listenerItr != listenerList->end(); ++listenerItr)
+            std::list<Control::Listener*>* listenerList = itr->second;
+            for (std::list<Control::Listener*>::iterator listenerItr = listenerList->begin(); listenerItr != listenerList->end(); ++listenerItr)
             {
                 GP_ASSERT(*listenerItr);
                 (*listenerItr)->controlEvent(this, eventType);
@@ -951,9 +991,9 @@ void Control::update(const Control* container, const Vector2& offset)
  
     _viewportClipBounds.set(x, y, width, height);
 
-    _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
-        width + border.left + padding.left + border.right + padding.right,
-        height + border.top + padding.top + border.bottom + padding.bottom);
+    width += border.left + padding.left + border.right + padding.right;
+    height += border.top + padding.top + border.bottom + padding.bottom;
+    _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top, max(width, 0.0f), max(height, 0.0f));
     if (_clearBounds.isEmpty())
     {
         _clearBounds.set(_absoluteClipBounds);
@@ -1011,9 +1051,11 @@ void Control::drawBorder(SpriteBatch* spriteBatch, const Rectangle& clip)
             spriteBatch->draw(rightX, _absoluteBounds.y, border.right, border.top, topRight.u1, topRight.v1, topRight.u2, topRight.v2, skinColor, clip);
         if (border.left)
             spriteBatch->draw(_absoluteBounds.x, midY, border.left, midHeight, left.u1, left.v1, left.u2, left.v2, skinColor, clip);
-        if (border.left && border.right && border.top && border.bottom)
-            spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
-                center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+
+        // Always draw the background.
+        spriteBatch->draw(_absoluteBounds.x + border.left, _absoluteBounds.y + border.top, _bounds.width - border.left - border.right, _bounds.height - border.top - border.bottom,
+            center.u1, center.v1, center.u2, center.v2, skinColor, clip);
+
         if (border.right)
             spriteBatch->draw(rightX, midY, border.right, midHeight, right.u1, right.v1, right.u2, right.v2, skinColor, clip);
         if (border.bottom && border.left)

@@ -99,6 +99,7 @@
 #include "TextBox.h"
 #include "RadioButton.h"
 #include "Slider.h"
+#include "ImageControl.h"
 #include "Joystick.h"
 #include "Layout.h"
 #include "AbsoluteLayout.h"

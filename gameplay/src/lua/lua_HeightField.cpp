@@ -33,14 +33,14 @@ void luaRegister_HeightField()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("HeightField", lua_members, NULL, lua_HeightField__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("HeightField", lua_members, NULL, lua_HeightField__gc, lua_statics, scopePath);
 }
 
 static HeightField* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "HeightField");
     luaL_argcheck(state, userdata != NULL, 1, "'HeightField' expected.");
-    return (HeightField*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (HeightField*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_HeightField__gc(lua_State* state)
@@ -57,7 +57,7 @@ int lua_HeightField__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "HeightField");
                 luaL_argcheck(state, userdata != NULL, 1, "'HeightField' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     HeightField* instance = (HeightField*)object->instance;
@@ -349,7 +349,7 @@ int lua_HeightField_static_create(lua_State* state)
                 void* returnPtr = (void*)HeightField::create(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");
@@ -390,12 +390,12 @@ int lua_HeightField_static_createFromImage(lua_State* state)
             if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 void* returnPtr = (void*)HeightField::createFromImage(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");
@@ -419,7 +419,7 @@ int lua_HeightField_static_createFromImage(lua_State* state)
                 lua_type(state, 2) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -427,7 +427,7 @@ int lua_HeightField_static_createFromImage(lua_State* state)
                 void* returnPtr = (void*)HeightField::createFromImage(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");
@@ -452,7 +452,7 @@ int lua_HeightField_static_createFromImage(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 float param2 = (float)luaL_checknumber(state, 2);
@@ -463,7 +463,7 @@ int lua_HeightField_static_createFromImage(lua_State* state)
                 void* returnPtr = (void*)HeightField::createFromImage(param1, param2, param3);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");
@@ -506,7 +506,7 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
                 lua_type(state, 3) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -517,7 +517,7 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
                 void* returnPtr = (void*)HeightField::createFromRAW(param1, param2, param3);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");
@@ -543,7 +543,7 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
                 lua_type(state, 4) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -557,7 +557,7 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
                 void* returnPtr = (void*)HeightField::createFromRAW(param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");
@@ -584,7 +584,7 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
                 lua_type(state, 5) == LUA_TNUMBER)
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(1, false);
+                const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                 // Get parameter 2 off the stack.
                 unsigned int param2 = (unsigned int)luaL_checkunsigned(state, 2);
@@ -601,7 +601,7 @@ int lua_HeightField_static_createFromRAW(lua_State* state)
                 void* returnPtr = (void*)HeightField::createFromRAW(param1, param2, param3, param4, param5);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "HeightField");

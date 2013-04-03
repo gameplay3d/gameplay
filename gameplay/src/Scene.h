@@ -36,9 +36,9 @@ public:
     static Scene* create(const char* id = NULL);
 
     /**
-     * Loads a scene from the given '.scene' file.
+     * Loads a scene from the given '.scene' or '.gpb' file.
      * 
-     * @param filePath The path to the '.scene' file to load from.
+     * @param filePath The path to the '.scene' or '.gpb' file to load from.
      * @return The loaded scene or <code>NULL</code> if the scene
      *      could not be loaded from the given file.
      * @script{create}
@@ -333,7 +333,7 @@ private:
     /**
      * Visits the given node and all of its children recursively.
      */
-    inline void visitNode(Node* node, const char* visitMethod);
+    void visitNode(Node* node, const char* visitMethod);
 
     std::string _id;
     Camera* _activeCamera;
@@ -355,7 +355,6 @@ void Scene::visit(T* instance, bool (T::*visitMethod)(Node*))
         visitNode(node, instance, visitMethod);
     }
 }
-
 
 template <class T, class C>
 void Scene::visit(T* instance, bool (T::*visitMethod)(Node*,C), C cookie)
@@ -381,6 +380,15 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*))
     if (!(instance->*visitMethod)(node))
         return;
 
+    // If this node has a model with a mesh skin, visit the joint hierarchy within it
+    // since we don't add joint hierarcies directly to the scene. If joints are never
+    // visited, it's possible that nodes embedded within the joint hierarchy that contain
+    // models will never get visited (and therefore never get drawn).
+    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    {
+        visitNode(node->_model->_skin->_rootNode, instance, visitMethod);
+    }
+
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
@@ -395,25 +403,19 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
     if (!(instance->*visitMethod)(node, cookie))
         return;
 
+    // If this node has a model with a mesh skin, visit the joint hierarchy within it
+    // since we don't add joint hierarcies directly to the scene. If joints are never
+    // visited, it's possible that nodes embedded within the joint hierarchy that contain
+    // models will never get visited (and therefore never get drawn).
+    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    {
+        visitNode(node->_model->_skin->_rootNode, instance, visitMethod, cookie);
+    }
+
     // Recurse for all children.
     for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
     {
         visitNode(child, instance, visitMethod, cookie);
-    }
-}
-
-inline void Scene::visitNode(Node* node, const char* visitMethod)
-{
-    ScriptController* sc = Game::getInstance()->getScriptController();
-
-    // Invoke the visit method for this node.
-    if (!sc->executeFunction<bool>(visitMethod, "<Node>", node))
-        return;
-
-    // Recurse for all children.
-    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
-    {
-        visitNode(child, visitMethod);
     }
 }
 

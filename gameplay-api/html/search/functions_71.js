@@ -1,4 +1,0 @@
-var searchData=
-[
-  ['quaternion',['Quaternion',['../classgameplay_1_1_quaternion.html#aaffcda9a0b8fbd51ee860ab704005ba3',1,'gameplay::Quaternion::Quaternion()'],['../classgameplay_1_1_quaternion.html#a7384c6a014a4687ad770f5043b1107d7',1,'gameplay::Quaternion::Quaternion(float x, float y, float z, float w)'],['../classgameplay_1_1_quaternion.html#a952f7977bec7d3f020cb4f3cf0fdf7ce',1,'gameplay::Quaternion::Quaternion(float *array)'],['../classgameplay_1_1_quaternion.html#ac20f805362106410accdbd294a3785fe',1,'gameplay::Quaternion::Quaternion(const Matrix &amp;m)'],['../classgameplay_1_1_quaternion.html#afcae9ff45daf216c769303492bcaaa3d',1,'gameplay::Quaternion::Quaternion(const Vector3 &amp;axis, float angle)'],['../classgameplay_1_1_quaternion.html#a98e360bf934f6a3a40a557d047b635cc',1,'gameplay::Quaternion::Quaternion(const Quaternion &amp;copy)']]]
-];

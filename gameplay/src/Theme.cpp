@@ -93,6 +93,7 @@ Theme* Theme::create(const char* url)
     GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
+    theme->_spriteBatch->getSampler()->setFilterMode(Texture::NEAREST, Texture::NEAREST);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();
@@ -504,6 +505,12 @@ const Theme::UVs& Theme::UVs::empty()
 {
     static UVs empty(0, 0, 0, 0);
     return empty;
+}
+
+const Theme::UVs& Theme::UVs::full()
+{
+    static UVs full(0, 1, 1, 0);
+    return full;
 }
 
 /**********************

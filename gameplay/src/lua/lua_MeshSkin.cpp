@@ -36,14 +36,14 @@ void luaRegister_MeshSkin()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("MeshSkin", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("MeshSkin", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static MeshSkin* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MeshSkin");
     luaL_argcheck(state, userdata != NULL, 1, "'MeshSkin' expected.");
-    return (MeshSkin*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (MeshSkin*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MeshSkin_getBindShape(lua_State* state)
@@ -62,7 +62,7 @@ int lua_MeshSkin_getBindShape(lua_State* state)
                 void* returnPtr = (void*)&(instance->getBindShape());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -112,7 +112,7 @@ int lua_MeshSkin_getJoint(lua_State* state)
                     void* returnPtr = (void*)instance->getJoint(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Joint");
@@ -133,13 +133,13 @@ int lua_MeshSkin_getJoint(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     MeshSkin* instance = getInstance(state);
                     void* returnPtr = (void*)instance->getJoint(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = false;
                         luaL_getmetatable(state, "Joint");
@@ -218,7 +218,7 @@ int lua_MeshSkin_getJointIndex(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Joint> param1 = ScriptUtil::getObjectPointer<Joint>(2, "Joint", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Joint> param1 = gameplay::ScriptUtil::getObjectPointer<Joint>(2, "Joint", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Joint'.");
@@ -264,7 +264,7 @@ int lua_MeshSkin_getMatrixPalette(lua_State* state)
                 void* returnPtr = (void*)instance->getMatrixPalette();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Vector4");
@@ -343,7 +343,7 @@ int lua_MeshSkin_getModel(lua_State* state)
                 void* returnPtr = (void*)instance->getModel();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Model");
@@ -387,7 +387,7 @@ int lua_MeshSkin_getRootJoint(lua_State* state)
                 void* returnPtr = (void*)instance->getRootJoint();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Joint");
@@ -429,7 +429,7 @@ int lua_MeshSkin_setBindShape(lua_State* state)
                 (lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TLIGHTUSERDATA))
             {
                 // Get parameter 1 off the stack.
-                ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(2);
+                gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(2);
 
                 MeshSkin* instance = getInstance(state);
                 instance->setBindShape(param1);
@@ -466,7 +466,7 @@ int lua_MeshSkin_setRootJoint(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Joint> param1 = ScriptUtil::getObjectPointer<Joint>(2, "Joint", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Joint> param1 = gameplay::ScriptUtil::getObjectPointer<Joint>(2, "Joint", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Joint'.");
@@ -509,7 +509,7 @@ int lua_MeshSkin_transformChanged(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Transform> param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Transform> param1 = gameplay::ScriptUtil::getObjectPointer<Transform>(2, "Transform", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Transform'.");
