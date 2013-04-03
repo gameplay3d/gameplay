@@ -620,8 +620,17 @@ AnimationClip* AnimationClip::clone(Animation* animation) const
 
 AnimationClip::ScriptListener::ScriptListener(const std::string& function)
 {
-    // Store the function name.
-    this->function = Game::getInstance()->getScriptController()->loadUrl(function.c_str());
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(sc)
+    {
+        // Store the function name.
+        this->function = sc->loadUrl(function.c_str());
+    }
+    else
+    {
+        GP_ERROR("ScriptController not initialized");
+    }
 }
 
 void AnimationClip::ScriptListener::animationEvent(AnimationClip* clip, EventType type)

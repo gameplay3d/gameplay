@@ -39,6 +39,20 @@ public:
         RUNNING,
         PAUSED
     };
+    
+    /**
+     * Define which controllers are used in constructor.
+     */
+    enum Controller
+    {
+        CONTROLLER_NONE = 0x0,
+        CONTROLLER_AI = 0x1,
+        CONTROLLER_ANIMATION = 0x2,
+        CONTROLLER_AUDIO = 0x04,
+        CONTROLLER_PHYSICS = 0x08,
+        CONTROLLER_SCRIPT = 0x10,
+        CONTROLLER_ALL = CONTROLLER_AI | CONTROLLER_ANIMATION | CONTROLLER_AUDIO | CONTROLLER_PHYSICS | CONTROLLER_SCRIPT
+    };
 
     /**
      * Flags used when clearing the active frame buffer targets.
@@ -529,8 +543,9 @@ protected:
 
     /**
      * Constructor.
+     * @param useController Specify the controllers that should be initialized. Default is CONTROLLER_ALL.
      */
-    Game();
+    Game(Controller useController = CONTROLLER_ALL);
 
     /**
      * Initialize callback that is called just before the first frame when the game starts.
@@ -684,6 +699,7 @@ private:
     std::priority_queue<TimeEvent, std::vector<TimeEvent>, std::less<TimeEvent> >* _timeEvents;     // Contains the scheduled time events.
     ScriptController* _scriptController;            // Controls the scripting engine.
     std::vector<ScriptListener*>* _scriptListeners; // Lua script listeners.
+    Controller _useController;
 
     // Note: Do not add STL object member variables on the stack; this will cause false memory leaks to be reported.
 

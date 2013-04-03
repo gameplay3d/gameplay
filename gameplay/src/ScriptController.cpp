@@ -65,8 +65,14 @@ void ScriptUtil::registerLibrary(const char* name, const luaL_Reg* functions)
 void ScriptUtil::registerConstantBool(const std::string& name, bool value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
 
-    // If the constant is within a scope, get the correct parent 
+    // If the constant is within a scope, get the correct parent
     // table on the stack before setting its value.
     if (!scopePath.empty())
     {
@@ -98,6 +104,12 @@ void ScriptUtil::registerConstantBool(const std::string& name, bool value, const
 void ScriptUtil::registerConstantNumber(const std::string& name, double value, const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
 
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
@@ -132,6 +144,12 @@ void ScriptUtil::registerConstantString(const std::string& name, const std::stri
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
 
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
+
     // If the constant is within a scope, get the correct parent 
     // table on the stack before setting its value.
     if (!scopePath.empty())
@@ -165,6 +183,12 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
     lua_CFunction deleteFunction, const luaL_Reg* statics,  const std::vector<std::string>& scopePath)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
+
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
 
     // If the type is an inner type, get the correct parent 
     // table on the stack before creating the table for the class.
@@ -249,8 +273,16 @@ void ScriptUtil::registerClass(const char* name, const luaL_Reg* members, lua_CF
 
 void ScriptUtil::registerFunction(const char* luaFunction, lua_CFunction cppFunction)
 {
-    lua_pushcfunction(Game::getInstance()->getScriptController()->_lua, cppFunction);
-    lua_setglobal(Game::getInstance()->getScriptController()->_lua, luaFunction);
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
+
+    lua_pushcfunction(sc->_lua, cppFunction);
+    lua_setglobal(sc->_lua, luaFunction);
 }
 
 void ScriptUtil::setGlobalHierarchyPair(const std::string& base, const std::string& derived)

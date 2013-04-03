@@ -291,15 +291,33 @@ void PhysicsCollisionObject::PhysicsMotionState::setCenterOfMassOffset(const Vec
 PhysicsCollisionObject::ScriptListener::ScriptListener(const char* url)
     : url(url)
 {
-    function = Game::getInstance()->getScriptController()->loadUrl(url);
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(sc)
+    {
+        function = sc->loadUrl(url);
+    }
+    else
+    {
+        GP_ERROR("ScriptController not initialized");
+    }
 }
 
 void PhysicsCollisionObject::ScriptListener::collisionEvent(PhysicsCollisionObject::CollisionListener::EventType type,
     const PhysicsCollisionObject::CollisionPair& collisionPair, const Vector3& contactPointA, const Vector3& contactPointB)
 {
-    Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), 
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(sc)
+    {
+        Game::getInstance()->getScriptController()->executeFunction<void>(function.c_str(), 
         "[PhysicsCollisionObject::CollisionListener::EventType]<PhysicsCollisionObject::CollisionPair><Vector3><Vector3>",
         type, &collisionPair, &contactPointA, &contactPointB);
+    }
+    else
+    {
+        GP_ERROR("ScriptController not initialized");
+    }
 }
 
 }
