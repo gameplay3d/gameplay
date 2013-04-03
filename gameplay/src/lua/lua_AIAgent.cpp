@@ -36,14 +36,14 @@ void luaRegister_AIAgent()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AIAgent", lua_members, NULL, lua_AIAgent__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AIAgent", lua_members, NULL, lua_AIAgent__gc, lua_statics, scopePath);
 }
 
 static AIAgent* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIAgent");
     luaL_argcheck(state, userdata != NULL, 1, "'AIAgent' expected.");
-    return (AIAgent*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AIAgent*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AIAgent__gc(lua_State* state)
@@ -60,7 +60,7 @@ int lua_AIAgent__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AIAgent");
                 luaL_argcheck(state, userdata != NULL, 1, "'AIAgent' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AIAgent* instance = (AIAgent*)object->instance;
@@ -131,10 +131,10 @@ int lua_AIAgent_addScriptCallback(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
+                std::string param1 = gameplay::ScriptUtil::getString(2, true);
 
                 // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
+                std::string param2 = gameplay::ScriptUtil::getString(3, true);
 
                 AIAgent* instance = getInstance(state);
                 instance->addScriptCallback(param1, param2);
@@ -207,7 +207,7 @@ int lua_AIAgent_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -286,7 +286,7 @@ int lua_AIAgent_getStateMachine(lua_State* state)
                 void* returnPtr = (void*)instance->getStateMachine();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "AIStateMachine");
@@ -396,10 +396,10 @@ int lua_AIAgent_removeScriptCallback(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                std::string param1 = ScriptUtil::getString(2, true);
+                std::string param1 = gameplay::ScriptUtil::getString(2, true);
 
                 // Get parameter 2 off the stack.
-                std::string param2 = ScriptUtil::getString(3, true);
+                std::string param2 = gameplay::ScriptUtil::getString(3, true);
 
                 AIAgent* instance = getInstance(state);
                 instance->removeScriptCallback(param1, param2);
@@ -435,7 +435,7 @@ int lua_AIAgent_setEnabled(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 AIAgent* instance = getInstance(state);
                 instance->setEnabled(param1);
@@ -472,7 +472,7 @@ int lua_AIAgent_setListener(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AIAgent::Listener> param1 = ScriptUtil::getObjectPointer<AIAgent::Listener>(2, "AIAgentListener", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AIAgent::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AIAgent::Listener>(2, "AIAgentListener", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent::Listener'.");
@@ -512,7 +512,7 @@ int lua_AIAgent_static_create(lua_State* state)
             void* returnPtr = (void*)AIAgent::create();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "AIAgent");

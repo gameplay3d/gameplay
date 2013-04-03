@@ -25,14 +25,14 @@ void luaRegister_TransformListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("Transform");
 
-    ScriptUtil::registerClass("TransformListener", lua_members, NULL, lua_TransformListener__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("TransformListener", lua_members, NULL, lua_TransformListener__gc, lua_statics, scopePath);
 }
 
 static Transform::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "TransformListener");
     luaL_argcheck(state, userdata != NULL, 1, "'TransformListener' expected.");
-    return (Transform::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Transform::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_TransformListener__gc(lua_State* state)
@@ -49,7 +49,7 @@ int lua_TransformListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "TransformListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'TransformListener' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Transform::Listener* instance = (Transform::Listener*)object->instance;
@@ -89,7 +89,7 @@ int lua_TransformListener_transformChanged(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Transform> param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Transform> param1 = gameplay::ScriptUtil::getObjectPointer<Transform>(2, "Transform", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Transform'.");

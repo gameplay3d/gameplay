@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{D13574C5-9904-426f-9463-B52758AD8786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{5A542532-0A08-4fb1-8F5A-94FB3D7CF3F7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" />
+    <None Include="bar-descriptor.xml" />
+    <None Include="game.config" />
+    <None Include="res\common\scene.physics">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\common\scene.scene">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\common\boy.animation">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\common\scene.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="game.dxt.config" />
+    <None Include="res\common\gamepad.form">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\common\gamepad.theme">
+      <Filter>res</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\CharacterGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CharacterGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

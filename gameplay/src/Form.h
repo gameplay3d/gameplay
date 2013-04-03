@@ -9,6 +9,7 @@
 #include "Touch.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Gamepad.h"
 
 namespace gameplay
 {
@@ -48,6 +49,8 @@ class Theme;
 class Form : public Container
 {
     friend class Platform;
+    friend class Game;
+    friend class Gamepad;
 
 public:
 
@@ -189,6 +192,11 @@ private:
     void updateBounds();
 
     /**
+     * Updates all visible, enabled forms.
+     */
+    static void updateInternal(float elapsedTime);
+
+    /**
      * Propagate touch events to enabled forms.
      *
      * @return Whether the touch event was consumed by a form.
@@ -210,6 +218,15 @@ private:
      * @see Mouse::MouseEvent
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Propagate gamepad events to enabled forms.
+     *
+     * @return True if the gamepad event is consumed, false otherwise.
+     *
+     * @see Control::gamepadEvent
+     */
+    static bool gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
      * Get the next highest power of two of an integer.  Used when creating framebuffers.

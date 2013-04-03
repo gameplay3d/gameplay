@@ -29,14 +29,14 @@ void luaRegister_VertexAttributeBinding()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("VertexAttributeBinding", lua_members, NULL, lua_VertexAttributeBinding__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("VertexAttributeBinding", lua_members, NULL, lua_VertexAttributeBinding__gc, lua_statics, scopePath);
 }
 
 static VertexAttributeBinding* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "VertexAttributeBinding");
     luaL_argcheck(state, userdata != NULL, 1, "'VertexAttributeBinding' expected.");
-    return (VertexAttributeBinding*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (VertexAttributeBinding*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_VertexAttributeBinding__gc(lua_State* state)
@@ -53,7 +53,7 @@ int lua_VertexAttributeBinding__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "VertexAttributeBinding");
                 luaL_argcheck(state, userdata != NULL, 1, "'VertexAttributeBinding' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     VertexAttributeBinding* instance = (VertexAttributeBinding*)object->instance;
@@ -223,7 +223,7 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Mesh> param1 = ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Mesh> param1 = gameplay::ScriptUtil::getObjectPointer<Mesh>(1, "Mesh", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Mesh'.");
@@ -232,7 +232,7 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Effect> param2 = ScriptUtil::getObjectPointer<Effect>(2, "Effect", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Effect> param2 = gameplay::ScriptUtil::getObjectPointer<Effect>(2, "Effect", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Effect'.");
@@ -242,7 +242,7 @@ int lua_VertexAttributeBinding_static_create(lua_State* state)
                 void* returnPtr = (void*)VertexAttributeBinding::create(param1, param2);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "VertexAttributeBinding");

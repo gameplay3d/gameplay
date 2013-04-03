@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="res">
+    </Filter>
+    <Filter Include="src">
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" />
+    <None Include="bar-descriptor.xml" />
+    <None Include="res\box.dae">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="game.config" />
+    <None Include="res\arial40.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box-diffuse.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\grid.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\arial.ttf">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\ai.lua">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\game.lua">
+      <Filter>res</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\LuaGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\LuaGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

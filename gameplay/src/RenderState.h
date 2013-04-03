@@ -2,6 +2,8 @@
 #define RENDERSTATE_H_
 
 #include "Ref.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace gameplay
 {
@@ -285,6 +287,8 @@ public:
 
         static void enableDepthWrite();
 
+        void cloneInto(StateBlock* state);
+
         // States
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
@@ -304,11 +308,24 @@ public:
      * The returned MaterialParameter can be used to set values for the specified
      * parameter name.
      *
+     * Note that this method causes a new MaterialParameter to be created if one
+     * does not already exist for the given parameter name.
+     *
      * @param name Material parameter (uniform) name.
      * 
      * @return A MaterialParameter for the specified name.
      */
     MaterialParameter* getParameter(const char* name) const;
+
+    /**
+     * Clears the MaterialParameter with the given name.
+     *
+     * If a material parameter exists for the given name, it is destroyed and
+     * removed from this RenderState.
+     *
+     * @param name Material parameter (uniform) name.
+     */
+    void clearParameter(const char* name);
 
     /**
      * Sets a material parameter auto-binding.
@@ -460,6 +477,23 @@ private:
      * Hidden copy assignment operator.
      */
     RenderState& operator=(const RenderState&);
+
+    // Internal auto binding handler methods.
+    const Matrix& autoBindingGetWorldMatrix() const;
+    const Matrix& autoBindingGetViewMatrix() const;
+    const Matrix& autoBindingGetProjectionMatrix() const;
+    const Matrix& autoBindingGetWorldViewMatrix() const;
+    const Matrix& autoBindingGetViewProjectionMatrix() const;
+    const Matrix& autoBindingGetWorldViewProjectionMatrix() const;
+    const Matrix& autoBindingGetInverseTransposeWorldMatrix() const;
+    const Matrix& autoBindingGetInverseTransposeWorldViewMatrix() const;
+    Vector3 autoBindingGetCameraWorldPosition() const;
+    Vector3 autoBindingGetCameraViewPosition() const;
+    const Vector4* autoBindingGetMatrixPalette() const;
+    unsigned int autoBindingGetMatrixPaletteSize() const;
+    const Vector3& autoBindingGetAmbientColor() const;
+    const Vector3& autoBindingGetLightColor() const;
+    const Vector3& autoBindingGetLightDirection() const;
 
 protected:
 

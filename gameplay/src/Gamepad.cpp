@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "Button.h"
 #include "Platform.h"
+#include "Form.h"
+#include "Joystick.h"
 
 namespace gameplay
 {
@@ -23,6 +25,7 @@ Gamepad::Gamepad(const char* formPath)
     for (int i = 0; i < 2; ++i)
     {
         _uiJoysticks[i] = NULL;
+        _triggers[i] = 0.0f;
     }
 
     for (int i = 0; i < 20; ++i)
@@ -36,9 +39,22 @@ Gamepad::Gamepad(const char* formPath)
 Gamepad::Gamepad(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                  unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
     : _handle(handle), _buttonCount(buttonCount), _joystickCount(joystickCount), _triggerCount(triggerCount),
-      _vendorId(vendorId), _productId(productId), _vendorString(vendorString), _productString(productString),
-      _form(NULL), _buttons(0)
+      _vendorId(vendorId), _productId(productId), _form(NULL), _buttons(0)
 {
+    if (vendorString)
+    {
+        _vendorString = vendorString;
+    }
+    
+    if (productString)
+    {
+        _productString = productString;
+    }
+
+    for (int i = 0; i < 2; ++i)
+    {
+        _triggers[i] = 0.0f;
+    }
 }
 
 Gamepad::~Gamepad()
@@ -173,6 +189,19 @@ Gamepad* Gamepad::getGamepad(unsigned int index, bool preferPhysical)
     return backupVirtual;
 }
 
+Gamepad* Gamepad::getGamepad(GamepadHandle handle)
+{
+    unsigned int count = __gamepads.size();
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        if (__gamepads[i]->_handle == handle)
+        {
+            return __gamepads[i];
+        }
+    }
+    return NULL;
+}
+
 Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
 {
     if (strcmp(string, "A") == 0 || strcmp(string, "BUTTON_A") == 0)
@@ -242,16 +271,18 @@ const char* Gamepad::getProductString() const
 
 void Gamepad::update(float elapsedTime)
 {
-    if (_form)
-    {
-        if (_form->isEnabled())
-        {
-            _form->update(elapsedTime);
-        }
-    }
-    else
+    if (!_form)
     {
         Platform::pollGamepadState(this);
+    }
+}
+
+void Gamepad::updateInternal(float elapsedTime)
+{
+    unsigned int size = __gamepads.size();
+    for (unsigned int i = 0; i < size; ++i)
+    {
+        __gamepads[i]->update(elapsedTime);
     }
 }
 
@@ -346,6 +377,33 @@ bool Gamepad::isVirtual() const
 Form* Gamepad::getForm() const
 {
     return _form;
+}
+
+void Gamepad::setButtons(unsigned int buttons)
+{
+    if (buttons != _buttons)
+    {
+        _buttons = buttons;
+        Platform::gamepadEventInternal(BUTTON_EVENT, this);
+    }
+}
+
+void Gamepad::setJoystickValue(unsigned int index, float x, float y)
+{
+    if (_joysticks[index].x != x || _joysticks[index].y != y)
+    {
+        _joysticks[index].set(x, y);
+        Platform::gamepadEventInternal(JOYSTICK_EVENT, this, index);
+    }
+}
+
+void Gamepad::setTriggerValue(unsigned int index, float value)
+{
+    if (_triggers[index] != value)
+    {
+        _triggers[index] = value;
+        Platform::gamepadEventInternal(TRIGGER_EVENT, this, index);
+    }
 }
 
 }

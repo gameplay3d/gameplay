@@ -109,9 +109,29 @@ public:
      * (N-near, F-far, L-left, R-right, B-bottom, T-top)
      * LTN, LBN, RBN, RTN, RTF, RBF, LBF, LTF.
      * 
-     * @param corners The array to store the corners in.
+     * @param corners The array (of at least size 8) to store the corners in.
      */
     void getCorners(Vector3* corners) const;
+
+    /**
+     * Gets the corners of the frustum's near plane in the specified array.
+     *
+     * The corners are stored in the following order:
+     * left-top, left-bottom, right-bottom, right-top.
+     *
+     * @param corners The array (of at least size 4) to store the corners in.
+     */
+    void getNearCorners(Vector3* corners) const;
+
+    /**
+     * Gets the corners of the frustum's far plane in the specified array.
+     *
+     * The corners are stored in the following order:
+     * right-top, right-bottom, left-bottom, left-top.
+     *
+     * @param corners The array (of at least size 4) to store the corners in.
+     */
+    void getFarCorners(Vector3* corners) const;
 
     /**
      * Tests whether this frustum intersects the specified point.

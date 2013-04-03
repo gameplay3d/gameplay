@@ -228,22 +228,6 @@ public:
     unsigned int getHeight() const;
 
     /**
-     * Sets the wrap mode for this texture.
-     *
-     * @param wrapS Horizontal wrapping mode for the texture.
-     * @param wrapT Vertical wrapping mode for the texture.
-     */
-    void setWrapMode(Wrap wrapS, Wrap wrapT);
-
-    /**
-     * Sets the minification and magnification filter modes for this texture.
-     *
-     * @param minificationFilter New texture minification filter.
-     * @param magnificationFilter New texture magnification filter.
-     */
-    void setFilterMode(Filter minificationFilter, Filter magnificationFilter);
-
-    /**
      * Generates a full mipmap chain for this texture if it isn't already mipmapped.
      */
     void generateMipmaps();
@@ -307,6 +291,10 @@ private:
     bool _mipmapped;
     bool _cached;
     bool _compressed;
+    Wrap _wrapS;
+    Wrap _wrapT;
+    Filter _minFilter;
+    Filter _magFilter;
 };
 
 }

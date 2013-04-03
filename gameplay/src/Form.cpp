@@ -390,127 +390,13 @@ void Form::setNode(Node* node)
 
 void Form::update(float elapsedTime)
 {
-    updateBounds();
-}
-
-void Form::updateBounds()
-{
     if (isDirty())
     {
-        _clearBounds.set(_absoluteClipBounds);
-
-        // Calculate the clipped bounds.
-        float x = 0;
-        float y = 0;
-        float width = _bounds.width;
-        float height = _bounds.height;
-
-        Rectangle clip(0, 0, _bounds.width, _bounds.height);
-
-        float clipX2 = clip.x + clip.width;
-        float x2 = clip.x + x + width;
-        if (x2 > clipX2)
-            width -= x2 - clipX2;
-
-        float clipY2 = clip.y + clip.height;
-        float y2 = clip.y + y + height;
-        if (y2 > clipY2)
-            height -= y2 - clipY2;
-
-        if (x < 0)
-        {
-            width += x;
-            x = -x;
-        }
-        else
-        {
-            x = 0;
-        }
-
-        if (y < 0)
-        {
-            height += y;
-            y = -y;
-        }
-        else
-        {
-            y = 0;
-        }
-
-        _clipBounds.set(x, y, width, height);
-
-        // Calculate the absolute bounds.
-        x = 0;
-        y = 0;
-        _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
-
-        // Calculate the absolute viewport bounds. Absolute bounds minus border and padding.
-        const Theme::Border& border = getBorder(_state);
-        const Theme::Padding& padding = getPadding();
-
-        x += border.left + padding.left;
-        y += border.top + padding.top;
-        width = _bounds.width - border.left - padding.left - border.right - padding.right;
-        height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
-
-        _viewportBounds.set(x, y, width, height);
-
-        // Calculate the clip area. Absolute bounds, minus border and padding, clipped to the parent container's clip area.
-        clipX2 = clip.x + clip.width;
-        x2 = x + width;
-        if (x2 > clipX2)
-            width = clipX2 - x;
-
-        clipY2 = clip.y + clip.height;
-        y2 = y + height;
-        if (y2 > clipY2)
-            height = clipY2 - y;
-
-        if (x < clip.x)
-        {
-            float dx = clip.x - x;
-            width -= dx;
-            x = clip.x;
-        }
-
-        if (y < clip.y)
-        {
-            float dy = clip.y - y;
-            height -= dy;
-            y = clip.y;
-        }
- 
-        _viewportClipBounds.set(x, y, width, height);
-        _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
-                                width + border.left + padding.left + border.right + padding.right,
-                                height + border.top + padding.top + border.bottom + padding.bottom);
-        if (_clearBounds.isEmpty())
-        {
-            _clearBounds.set(_absoluteClipBounds);
-        }
+        updateBounds();
 
         // Cache themed attributes for performance.
         _skin = getSkin(_state);
         _opacity = getOpacity(_state);
-
-        // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
-        if ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
-        {
-            _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
-            _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
-            _scrollBarRightCap = getImage("scrollBarRightCap", _state);
-
-            _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
-        }
-
-        if ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL)
-        {
-            _scrollBarTopCap = getImage("scrollBarTopCap", _state);
-            _scrollBarVertical = getImage("verticalScrollBar", _state);
-            _scrollBarBottomCap = getImage("scrollBarBottomCap", _state);
-        
-            _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
-        }
 
         GP_ASSERT(_layout);
         if (_scroll != SCROLL_NONE)
@@ -521,6 +407,120 @@ void Form::updateBounds()
         {
             _layout->update(this, Vector2::zero());
         }
+    }
+}
+
+void Form::updateBounds()
+{   
+    _clearBounds.set(_absoluteClipBounds);
+
+    // Calculate the clipped bounds.
+    float x = 0;
+    float y = 0;
+    float width = _bounds.width;
+    float height = _bounds.height;
+
+    Rectangle clip(0, 0, _bounds.width, _bounds.height);
+
+    float clipX2 = clip.x + clip.width;
+    float x2 = clip.x + x + width;
+    if (x2 > clipX2)
+        width -= x2 - clipX2;
+
+    float clipY2 = clip.y + clip.height;
+    float y2 = clip.y + y + height;
+    if (y2 > clipY2)
+        height -= y2 - clipY2;
+
+    if (x < 0)
+    {
+        width += x;
+        x = -x;
+    }
+    else
+    {
+        x = 0;
+    }
+
+    if (y < 0)
+    {
+        height += y;
+        y = -y;
+    }
+    else
+    {
+        y = 0;
+    }
+
+    _clipBounds.set(x, y, width, height);
+
+    // Calculate the absolute bounds.
+    x = 0;
+    y = 0;
+    _absoluteBounds.set(x, y, _bounds.width, _bounds.height);
+
+    // Calculate the absolute viewport bounds. Absolute bounds minus border and padding.
+    const Theme::Border& border = getBorder(_state);
+    const Theme::Padding& padding = getPadding();
+
+    x += border.left + padding.left;
+    y += border.top + padding.top;
+    width = _bounds.width - border.left - padding.left - border.right - padding.right;
+    height = _bounds.height - border.top - padding.top - border.bottom - padding.bottom;
+
+    _viewportBounds.set(x, y, width, height);
+
+    // Calculate the clip area. Absolute bounds, minus border and padding, clipped to the parent container's clip area.
+    clipX2 = clip.x + clip.width;
+    x2 = x + width;
+    if (x2 > clipX2)
+        width = clipX2 - x;
+
+    clipY2 = clip.y + clip.height;
+    y2 = y + height;
+    if (y2 > clipY2)
+        height = clipY2 - y;
+
+    if (x < clip.x)
+    {
+        float dx = clip.x - x;
+        width -= dx;
+        x = clip.x;
+    }
+
+    if (y < clip.y)
+    {
+        float dy = clip.y - y;
+        height -= dy;
+        y = clip.y;
+    }
+ 
+    _viewportClipBounds.set(x, y, width, height);
+    _absoluteClipBounds.set(x - border.left - padding.left, y - border.top - padding.top,
+                            width + border.left + padding.left + border.right + padding.right,
+                            height + border.top + padding.top + border.bottom + padding.bottom);
+    if (_clearBounds.isEmpty())
+    {
+        _clearBounds.set(_absoluteClipBounds);
+    }
+
+    // Get scrollbar images and diminish clipping bounds to make room for scrollbars.
+    if ((_scroll & SCROLL_HORIZONTAL) == SCROLL_HORIZONTAL)
+    {
+        _scrollBarLeftCap = getImage("scrollBarLeftCap", _state);
+        _scrollBarHorizontal = getImage("horizontalScrollBar", _state);
+        _scrollBarRightCap = getImage("scrollBarRightCap", _state);
+
+        _viewportClipBounds.height -= _scrollBarHorizontal->getRegion().height;
+    }
+
+    if ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL)
+    {
+        _scrollBarTopCap = getImage("scrollBarTopCap", _state);
+        _scrollBarVertical = getImage("verticalScrollBar", _state);
+        _scrollBarBottomCap = getImage("scrollBarBottomCap", _state);
+        
+        _viewportClipBounds.width -= _scrollBarVertical->getRegion().width;
     }
 }
 
@@ -546,20 +546,25 @@ void Form::draw()
 
         GP_ASSERT(_theme);
         _theme->setProjectionMatrix(_projectionMatrix);
+        
+        // By setting needsClear to true here, an optimization meant to clear and redraw only areas of the form
+        // that have changed is disabled.  Currently, repositioning controls can result in areas of the screen being cleared
+        // after another control has been drawn there.  This should probably be done in two passes -- one to clear areas where
+        // dirty controls were last frame, and another to draw them where they are now.
         Container::draw(_theme->getSpriteBatch(), Rectangle(0, 0, _bounds.width, _bounds.height),
-                        _skin != NULL, false, _bounds.height);
+                        /*_skin != NULL*/ true, false, _bounds.height);
         _theme->setProjectionMatrix(_defaultProjectionMatrix);
 
-        // restore the previous game viewport
+        // Restore the previous game viewport.
         game->setViewport(prevViewport);
         // Rebind the previous framebuffer and game viewport.
         previousFrameBuffer->bind();
     }
 
-    // Draw either with a 3D quad or sprite batch
+    // Draw either with a 3D quad or sprite batch.
     if (_node)
     {
-         // If we have the node set, then draw a 3D quad model
+         // If we have the node set, then draw a 3D quad model.
         _nodeQuad->draw();
     }
     else
@@ -581,11 +586,25 @@ const char* Form::getType() const
     return "form";
 }
 
+void Form::updateInternal(float elapsedTime)
+{
+    size_t size = __forms.size();
+    for (size_t i = 0; i < size; ++i)
+    {
+        Form* form = __forms[i];
+        GP_ASSERT(form);
+
+        if (form->isEnabled() && form->isVisible())
+        {
+            form->update(elapsedTime);
+        }
+    }
+}
+
 bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     // Check for a collision with each Form in __forms.
     // Pass the event on.
-    bool eventConsumed = false;
     size_t size = __forms.size();
     for (size_t i = 0; i < size; ++i)
     {
@@ -607,7 +626,8 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                          point.y >= bounds.y &&
                          point.y <= bounds.y + bounds.height))
                     {
-                        eventConsumed |= form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex);
+                        if (form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex))
+                            return true;
                     }
                 }
             }
@@ -623,12 +643,13 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    eventConsumed |= form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex);
+                    if (form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex))
+                        return true;
                 }
             }
         }
     }
-    return eventConsumed;
+    return false;
 }
 
 bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
@@ -638,7 +659,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled() && form->isVisible())
+        if (form->isEnabled() && form->isVisible() && form->getState() == Control::FOCUS)
         {
             if (form->keyEvent(evt, key))
                 return true;
@@ -649,8 +670,6 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 
 bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
-    bool eventConsumed = false;
-
     for (size_t i = 0; i < __forms.size(); ++i)
     {
         Form* form = __forms[i];
@@ -674,7 +693,8 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                          point.y >= bounds.y &&
                          point.y <= bounds.y + bounds.height))
                     {
-                        eventConsumed |= form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta);
+                        if (form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta))
+                            return true;
                     }
                 }
             }
@@ -693,12 +713,30 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                         y <= bounds.y + bounds.height))
                 {
                     // Pass on the event's position relative to the form.
-                    eventConsumed |= form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta);
+                    if (form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta))
+                        return true;
                 }
             }
         }
     }
-    return eventConsumed;
+    return false;
+}
+
+bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    for (size_t i = 0; i < __forms.size(); ++i)
+    {
+        Form* form = __forms[i];
+        GP_ASSERT(form);
+
+        if (form->isEnabled() && form->isVisible() && form->getState() == FOCUS)
+        {
+            if (form->gamepadEvent(evt, gamepad, analogIndex))
+                return true;
+        }
+    }
+
+    return false;
 }
 
 bool Form::projectPoint(int x, int y, Vector3* point)
@@ -710,21 +748,19 @@ bool Form::projectPoint(int x, int y, Vector3* point)
     {
         // Get info about the form's position.
         Matrix m = _node->getWorldMatrix();
-        Vector3 min(0, 0, 0);
-        m.transformPoint(&min);
+        Vector3 pointOnPlane(0, 0, 0);
+        m.transformPoint(&pointOnPlane);
 
         // Unproject point into world space.
         Ray ray;
         camera->pickRay(Game::getInstance()->getViewport(), x, y, &ray);
 
         // Find the quad's plane.  We know its normal is the quad's forward vector.
-        Vector3 normal = _node->getForwardVectorWorld();
+        Vector3 normal = _node->getForwardVectorWorld().normalize();
 
-        // To get the plane's distance from the origin, we'll find the distance from the plane defined
-        // by the quad's forward vector and one of its points to the plane defined by the same vector and the origin.
-        const float& a = normal.x; const float& b = normal.y; const float& c = normal.z;
-        const float d = -(a*min.x) - (b*min.y) - (c*min.z);
-        const float distance = fabs(d) /  sqrt(a*a + b*b + c*c);
+        // To get the plane's distance from the origin, we project a point on the
+        // plane onto the plane's normal vector.
+        const float distance = fabs(Vector3::dot(pointOnPlane, normal));
         Plane plane(normal, -distance);
 
         // Check for collision with plane.

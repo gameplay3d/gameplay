@@ -1,7 +1,11 @@
 #include "Base.h"
 #include "ScriptController.h"
 #include "lua_Platform.h"
+#include "Base.h"
+#include "Form.h"
+#include "Game.h"
 #include "Platform.h"
+#include "ScriptController.h"
 
 namespace gameplay
 {
@@ -16,14 +20,14 @@ void luaRegister_Platform()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Platform", lua_members, NULL, lua_Platform__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Platform", lua_members, NULL, lua_Platform__gc, lua_statics, scopePath);
 }
 
 static Platform* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Platform");
     luaL_argcheck(state, userdata != NULL, 1, "'Platform' expected.");
-    return (Platform*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Platform*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Platform__gc(lua_State* state)
@@ -40,7 +44,7 @@ int lua_Platform__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Platform");
                 luaL_argcheck(state, userdata != NULL, 1, "'Platform' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Platform* instance = (Platform*)object->instance;

@@ -22,6 +22,7 @@ int lua_Light_setColor(lua_State* state);
 int lua_Light_setInnerAngle(lua_State* state);
 int lua_Light_setOuterAngle(lua_State* state);
 int lua_Light_setRange(lua_State* state);
+int lua_Light_static_create(lua_State* state);
 int lua_Light_static_createDirectional(lua_State* state);
 int lua_Light_static_createPoint(lua_State* state);
 int lua_Light_static_createSpot(lua_State* state);

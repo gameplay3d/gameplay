@@ -29,6 +29,7 @@ class Node : public Transform, public Ref
     friend class Scene;
     friend class Bundle;
     friend class MeshSkin;
+    friend class Light;
 
 public:
 
@@ -223,7 +224,7 @@ public:
      *
      * @return The scene.
      */
-    Scene* getScene() const;
+    virtual Scene* getScene() const;
 
     /**
      * Gets the top level node in this node's parent hierarchy.

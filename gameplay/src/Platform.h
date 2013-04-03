@@ -128,6 +128,18 @@ private:
     static void sleep(long ms);
 
     /**
+     * Set if multi-sampling is enabled on the platform.
+     *
+     * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+     */
+    static void setMultiSampling(bool enabled);
+
+   /**
+    * Is multi-sampling mode enabled.
+    */
+    static bool isMultiSampling();
+
+    /**
      * Set if multi-touch is enabled on the platform.
      *
      * Note that this method does nothing on platforms that do not
@@ -195,6 +207,14 @@ private:
      * @param roll The accelerometer roll.
      */
     static void getAccelerometerValues(float* pitch, float* roll);
+
+    /**
+     * Gets the command line arguments.
+     * 
+     * @param argc The number of command line arguments.
+     * @param argv The array of command line arguments.
+     */
+    static void getArguments(int* argc, char*** argv);
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -273,7 +293,21 @@ public:
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
-   /**
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void resizeEventInternal(unsigned int width, unsigned int height);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
@@ -281,7 +315,8 @@ public:
     static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                                               unsigned int vendorId, unsigned int productId, 
                                               const char* vendorString, const char* productString);
-   /**
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}

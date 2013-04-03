@@ -29,8 +29,6 @@ void luaRegister_Texture()
         {"isCompressed", lua_Texture_isCompressed},
         {"isMipmapped", lua_Texture_isMipmapped},
         {"release", lua_Texture_release},
-        {"setFilterMode", lua_Texture_setFilterMode},
-        {"setWrapMode", lua_Texture_setWrapMode},
         {NULL, NULL}
     };
     const luaL_Reg lua_statics[] = 
@@ -40,14 +38,14 @@ void luaRegister_Texture()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Texture", lua_members, NULL, lua_Texture__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Texture", lua_members, NULL, lua_Texture__gc, lua_statics, scopePath);
 }
 
 static Texture* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Texture");
     luaL_argcheck(state, userdata != NULL, 1, "'Texture' expected.");
-    return (Texture*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Texture*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Texture__gc(lua_State* state)
@@ -64,7 +62,7 @@ int lua_Texture__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Texture");
                 luaL_argcheck(state, userdata != NULL, 1, "'Texture' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Texture* instance = (Texture*)object->instance;
@@ -203,7 +201,7 @@ int lua_Texture_getHandle(lua_State* state)
                 void* returnPtr = (void*)new GLuint(instance->getHandle());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = true;
                     luaL_getmetatable(state, "GLuint");
@@ -473,86 +471,6 @@ int lua_Texture_release(lua_State* state)
     return 0;
 }
 
-int lua_Texture_setFilterMode(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Texture::Filter param1 = (Texture::Filter)lua_enumFromString_TextureFilter(luaL_checkstring(state, 2));
-
-                // Get parameter 2 off the stack.
-                Texture::Filter param2 = (Texture::Filter)lua_enumFromString_TextureFilter(luaL_checkstring(state, 3));
-
-                Texture* instance = getInstance(state);
-                instance->setFilterMode(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Texture_setFilterMode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Texture_setWrapMode(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 3:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
-            {
-                // Get parameter 1 off the stack.
-                Texture::Wrap param1 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 2));
-
-                // Get parameter 2 off the stack.
-                Texture::Wrap param2 = (Texture::Wrap)lua_enumFromString_TextureWrap(luaL_checkstring(state, 3));
-
-                Texture* instance = getInstance(state);
-                instance->setWrapMode(param1, param2);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Texture_setWrapMode - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 3).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
 int lua_Texture_static_create(lua_State* state)
 {
     // Get the number of parameters.
@@ -568,12 +486,12 @@ int lua_Texture_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)Texture::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -594,14 +512,14 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Image> param1 = gameplay::ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)Texture::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -628,15 +546,15 @@ int lua_Texture_static_create(lua_State* state)
                     lua_type(state, 2) == LUA_TBOOLEAN)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     // Get parameter 2 off the stack.
-                    bool param2 = ScriptUtil::luaCheckBool(state, 2);
+                    bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                     void* returnPtr = (void*)Texture::create(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -658,17 +576,17 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Image> param1 = ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Image> param1 = gameplay::ScriptUtil::getObjectPointer<Image>(1, "Image", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
-                    bool param2 = ScriptUtil::luaCheckBool(state, 2);
+                    bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                     void* returnPtr = (void*)Texture::create(param1, param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -697,7 +615,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<GLuint> param1 = ScriptUtil::getObjectPointer<GLuint>(1, "GLuint", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<GLuint> param1 = gameplay::ScriptUtil::getObjectPointer<GLuint>(1, "GLuint", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -710,7 +628,7 @@ int lua_Texture_static_create(lua_State* state)
                     void* returnPtr = (void*)Texture::create(*param1, param2, param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -748,12 +666,12 @@ int lua_Texture_static_create(lua_State* state)
                     unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
 
                     // Get parameter 4 off the stack.
-                    ScriptUtil::LuaArray<unsigned char> param4 = ScriptUtil::getUnsignedCharPointer(4);
+                    gameplay::ScriptUtil::LuaArray<unsigned char> param4 = gameplay::ScriptUtil::getUnsignedCharPointer(4);
 
                     void* returnPtr = (void*)Texture::create(param1, param2, param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -777,7 +695,7 @@ int lua_Texture_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<GLuint> param1 = ScriptUtil::getObjectPointer<GLuint>(1, "GLuint", true, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<GLuint> param1 = gameplay::ScriptUtil::getObjectPointer<GLuint>(1, "GLuint", true, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -793,7 +711,7 @@ int lua_Texture_static_create(lua_State* state)
                     void* returnPtr = (void*)Texture::create(*param1, param2, param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");
@@ -832,15 +750,15 @@ int lua_Texture_static_create(lua_State* state)
                     unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 3);
 
                     // Get parameter 4 off the stack.
-                    ScriptUtil::LuaArray<unsigned char> param4 = ScriptUtil::getUnsignedCharPointer(4);
+                    gameplay::ScriptUtil::LuaArray<unsigned char> param4 = gameplay::ScriptUtil::getUnsignedCharPointer(4);
 
                     // Get parameter 5 off the stack.
-                    bool param5 = ScriptUtil::luaCheckBool(state, 5);
+                    bool param5 = gameplay::ScriptUtil::luaCheckBool(state, 5);
 
                     void* returnPtr = (void*)Texture::create(param1, param2, param3, param4, param5);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Texture");

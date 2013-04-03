@@ -1,0 +1,51 @@
+form VIRTUAL GAMEPAD
+{
+    theme = res/common/gamepad.theme
+    autoWidth = true
+    autoHeight = true
+
+    container left
+    {
+        alignment = ALIGN_BOTTOM_LEFT
+        size = 300, 300
+        consumeEvents = false
+        
+        joystick
+        {
+            style = joystickStyle
+            size = 256, 256
+            alignment = ALIGN_VCENTER_HCENTER
+            radius = 32
+        }
+    }
+
+    container right
+    {
+        alignment = ALIGN_BOTTOM_RIGHT
+        size = 256, 256
+		consumeEvents = false
+		
+        container inner
+        {
+            size = 230, 230
+            alignment = ALIGN_VCENTER_HCENTER
+            consumeEvents = false
+            
+            button A
+            {
+                mapping = BUTTON_A
+                style = buttonAStyle
+                size = 128, 128
+                alignment = ALIGN_BOTTOM_LEFT
+            }
+
+            button B
+            {
+                mapping = BUTTON_B
+                style = buttonBStyle
+                size = 128, 128
+                alignment = ALIGN_TOP_RIGHT
+            }
+        }
+    }
+}

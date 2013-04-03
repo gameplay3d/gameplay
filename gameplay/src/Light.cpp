@@ -72,6 +72,85 @@ Light* Light::createSpot(float red, float green, float blue, float range, float 
     return new Light(SPOT, Vector3(red, green, blue), range, innerAngle, outerAngle);
 }
 
+Light* Light::create(Properties* properties)
+{
+    GP_ASSERT(properties);
+
+    // Read light type
+    std::string typeStr;
+    if (properties->exists("type"))
+        typeStr = properties->getString("type");
+    Light::Type type;
+    if (typeStr == "DIRECTIONAL")
+    {
+        type = Light::DIRECTIONAL;
+    }
+    else if (typeStr == "POINT")
+    {
+        type = Light::POINT;
+    }
+    else if (typeStr == "SPOT")
+    {
+        type = Light::SPOT;
+    }
+    else
+    {
+        GP_ERROR("Invalid 'type' parameter for light definition.");
+        return NULL;
+    }
+
+    // Read common parameters
+    Vector3 color;
+    if (!properties->getVector3("color", &color))
+    {
+        GP_ERROR("Missing valid 'color' parameter for light definition.");
+        return NULL;
+    }
+
+    // Read light-specific parameters
+    Light* light = NULL;
+    switch (type)
+    {
+    case DIRECTIONAL:
+        light = createDirectional(color);
+        break;
+    case POINT:
+        {
+            float range = properties->getFloat("range");
+            if (range == 0.0f)
+            {
+                GP_ERROR("Missing valid 'range' parameter for point light definition.");
+                return NULL;
+            }
+            light = createPoint(color, range);
+        }
+        break;
+    case SPOT:
+            float range = properties->getFloat("range");
+            if (range == 0.0f)
+            {
+                GP_ERROR("Missing valid 'range' parameter for spot light definition.");
+                return NULL;
+            }
+            float innerAngle = properties->getFloat("innerAngle");
+            if (innerAngle == 0.0f)
+            {
+                GP_ERROR("Missing valid 'innerAngle' parameter for spot light definition.");
+                return NULL;
+            }
+            float outerAngle = properties->getFloat("outerAngle");
+            if (outerAngle == 0.0f)
+            {
+                GP_ERROR("Missing valid 'outerAngle' parameter for spot light definition.");
+                return NULL;
+            }
+            light = createSpot(color, range, innerAngle, outerAngle);
+        break;
+    }
+
+    return light;
+}
+
 Light::Type Light::getLightType() const
 {
     return _type;
@@ -173,6 +252,9 @@ void Light::setRange(float range)
         GP_ERROR("Unsupported light type (%d).", _type);
         break;
     }
+
+    if (_node)
+        _node->setBoundsDirty();
 }
 
 float Light::getRangeInverse() const
@@ -221,6 +303,9 @@ void Light::setOuterAngle(float outerAngle)
 
     _spot->outerAngle = outerAngle;
     _spot->outerAngleCos = cos(outerAngle);
+
+    if (_node)
+        _node->setBoundsDirty();
 }
     
 float Light::getInnerAngleCos()  const

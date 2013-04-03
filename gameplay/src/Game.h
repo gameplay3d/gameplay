@@ -316,6 +316,17 @@ public:
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
     
+    /**
+     * Called when the game window has been resized.
+     *
+     * This method is called once the game window is created with its initial size
+     * and then again any time the game window changes size.
+     *
+     * @param width The new game window width.
+     * @param height The new game window height.
+     */
+    virtual void resizeEvent(unsigned int width, unsigned int height);
+
     /** 
      * Gets whether the current platform supports mouse input.
      *
@@ -432,13 +443,15 @@ public:
     virtual void gestureTapEvent(int x, int y);
 
     /**
-     * Gamepad callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT 
-     * and Gamepad::DISCONNECTED_EVENT.
+     * Gamepad callback on gamepad events.  Override to receive Gamepad::CONNECTED_EVENT 
+     * and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from update().
+     * Or, handle all gamepad input through BUTTON, JOYSTICK and TRIGGER events.
      *
      * @param evt The gamepad event that occurred.
-     * @param gamepad the gamepad the event occurred on
+     * @param gamepad The gamepad that generated the event.
+     * @param analogIndex If this is a JOYSTICK_EVENT or TRIGGER_EVENT, the index of the joystick or trigger whose value changed.
      */
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
 
     /**
      * Gets the current number of gamepads currently connected to the system.
@@ -463,6 +476,20 @@ public:
      * @return The gamepad at the specified index.
      */
     inline Gamepad* getGamepad(unsigned int index, bool preferPhysical = true) const;
+
+    /**
+	 * Sets whether multi-sampling is to be enabled/disabled. Default is disabled.
+	 *
+	 * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+	 */
+	inline void setMultiSampling(bool enabled);
+
+	/*
+	 * Is multi-sampling enabled.
+	 *
+	 * @return true if multi-sampling is enabled.
+	 */
+	inline bool isMultiSampling() const;
 
     /**
      * Sets multi-touch is to be enabled/disabled. Default is disabled.
@@ -492,6 +519,15 @@ public:
      * @param roll The roll angle returned (in degrees). If NULL then not returned.
      */
     inline void getAccelerometerValues(float* pitch, float* roll);
+
+    /**
+     * Gets the command line arguments.
+     * 
+     * @param argc The number of command line arguments.
+     * @param argv The array of command line arguments.
+     * @script{ignore}
+     */
+    void getArguments(int* argc, char*** argv) const;
 
     /**
      * Schedules a time event to be sent to the given TimeListener a given number of game milliseconds from now.

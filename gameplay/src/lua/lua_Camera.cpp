@@ -41,10 +41,12 @@ void luaRegister_Camera()
         {"pickRay", lua_Camera_pickRay},
         {"project", lua_Camera_project},
         {"release", lua_Camera_release},
+        {"resetProjectionMatrix", lua_Camera_resetProjectionMatrix},
         {"setAspectRatio", lua_Camera_setAspectRatio},
         {"setFarPlane", lua_Camera_setFarPlane},
         {"setFieldOfView", lua_Camera_setFieldOfView},
         {"setNearPlane", lua_Camera_setNearPlane},
+        {"setProjectionMatrix", lua_Camera_setProjectionMatrix},
         {"setZoomX", lua_Camera_setZoomX},
         {"setZoomY", lua_Camera_setZoomY},
         {"unproject", lua_Camera_unproject},
@@ -59,14 +61,14 @@ void luaRegister_Camera()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Camera", lua_members, NULL, lua_Camera__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Camera", lua_members, NULL, lua_Camera__gc, lua_statics, scopePath);
 }
 
 static Camera* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Camera");
     luaL_argcheck(state, userdata != NULL, 1, "'Camera' expected.");
-    return (Camera*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Camera*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Camera__gc(lua_State* state)
@@ -83,7 +85,7 @@ int lua_Camera__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Camera");
                 luaL_argcheck(state, userdata != NULL, 1, "'Camera' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Camera* instance = (Camera*)object->instance;
@@ -295,7 +297,7 @@ int lua_Camera_getFrustum(lua_State* state)
                 void* returnPtr = (void*)&(instance->getFrustum());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Frustum");
@@ -339,7 +341,7 @@ int lua_Camera_getInverseViewMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseViewMatrix());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -383,7 +385,7 @@ int lua_Camera_getInverseViewProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getInverseViewProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -462,7 +464,7 @@ int lua_Camera_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -506,7 +508,7 @@ int lua_Camera_getProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -585,7 +587,7 @@ int lua_Camera_getViewMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getViewMatrix());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -629,7 +631,7 @@ int lua_Camera_getViewProjectionMatrix(lua_State* state)
                 void* returnPtr = (void*)&(instance->getViewProjectionMatrix());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Matrix");
@@ -745,7 +747,7 @@ int lua_Camera_pickRay(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
@@ -760,7 +762,7 @@ int lua_Camera_pickRay(lua_State* state)
 
                 // Get parameter 4 off the stack.
                 bool param4Valid;
-                ScriptUtil::LuaArray<Ray> param4 = ScriptUtil::getObjectPointer<Ray>(5, "Ray", false, &param4Valid);
+                gameplay::ScriptUtil::LuaArray<Ray> param4 = gameplay::ScriptUtil::getObjectPointer<Ray>(5, "Ray", false, &param4Valid);
                 if (!param4Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 4 to type 'Ray'.");
@@ -805,7 +807,7 @@ int lua_Camera_project(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
@@ -814,7 +816,7 @@ int lua_Camera_project(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -822,10 +824,10 @@ int lua_Camera_project(lua_State* state)
                 }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
+                gameplay::ScriptUtil::LuaArray<float> param3 = gameplay::ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
+                gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 Camera* instance = getInstance(state);
                 instance->project(*param1, *param2, param3, param4);
@@ -848,7 +850,7 @@ int lua_Camera_project(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
@@ -857,7 +859,7 @@ int lua_Camera_project(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
@@ -865,13 +867,13 @@ int lua_Camera_project(lua_State* state)
                 }
 
                 // Get parameter 3 off the stack.
-                ScriptUtil::LuaArray<float> param3 = ScriptUtil::getFloatPointer(4);
+                gameplay::ScriptUtil::LuaArray<float> param3 = gameplay::ScriptUtil::getFloatPointer(4);
 
                 // Get parameter 4 off the stack.
-                ScriptUtil::LuaArray<float> param4 = ScriptUtil::getFloatPointer(5);
+                gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
 
                 // Get parameter 5 off the stack.
-                ScriptUtil::LuaArray<float> param5 = ScriptUtil::getFloatPointer(6);
+                gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
 
                 Camera* instance = getInstance(state);
                 instance->project(*param1, *param2, param3, param4, param5);
@@ -912,6 +914,38 @@ int lua_Camera_release(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Camera_release - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Camera_resetProjectionMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Camera* instance = getInstance(state);
+                instance->resetProjectionMatrix();
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Camera_resetProjectionMatrix - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -1069,6 +1103,48 @@ int lua_Camera_setNearPlane(lua_State* state)
     return 0;
 }
 
+int lua_Camera_setProjectionMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Matrix> param1 = gameplay::ScriptUtil::getObjectPointer<Matrix>(2, "Matrix", true, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Matrix'.");
+                    lua_error(state);
+                }
+
+                Camera* instance = getInstance(state);
+                instance->setProjectionMatrix(*param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Camera_setProjectionMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Camera_setZoomX(lua_State* state)
 {
     // Get the number of parameters.
@@ -1155,7 +1231,7 @@ int lua_Camera_static_create(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Properties> param1 = gameplay::ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Properties'.");
@@ -1165,7 +1241,7 @@ int lua_Camera_static_create(lua_State* state)
                 void* returnPtr = (void*)Camera::create(param1);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Camera");
@@ -1227,7 +1303,7 @@ int lua_Camera_static_createOrthographic(lua_State* state)
                 void* returnPtr = (void*)Camera::createOrthographic(param1, param2, param3, param4, param5);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Camera");
@@ -1285,7 +1361,7 @@ int lua_Camera_static_createPerspective(lua_State* state)
                 void* returnPtr = (void*)Camera::createPerspective(param1, param2, param3, param4);
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Camera");
@@ -1332,7 +1408,7 @@ int lua_Camera_unproject(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Rectangle> param1 = ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
@@ -1350,7 +1426,7 @@ int lua_Camera_unproject(lua_State* state)
 
                 // Get parameter 5 off the stack.
                 bool param5Valid;
-                ScriptUtil::LuaArray<Vector3> param5 = ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false, &param5Valid);
+                gameplay::ScriptUtil::LuaArray<Vector3> param5 = gameplay::ScriptUtil::getObjectPointer<Vector3>(6, "Vector3", false, &param5Valid);
                 if (!param5Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 5 to type 'Vector3'.");
