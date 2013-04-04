@@ -5,6 +5,7 @@ form flowLayout
     style = basic
     size = 600, 600
     scroll = SCROLL_BOTH
+	consumeInputEvents = true
 
     label label1
     {
