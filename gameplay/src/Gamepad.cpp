@@ -328,7 +328,8 @@ unsigned int Gamepad::getJoystickCount() const
 
 void Gamepad::getJoystickValues(unsigned int joystickId, Vector2* outValue) const
 {
-    GP_ASSERT(joystickId < _joystickCount);
+    if (joystickId >= _joystickCount)
+        return;
 
     if (_form)
     {
@@ -356,7 +357,8 @@ unsigned int Gamepad::getTriggerCount() const
 
 float Gamepad::getTriggerValue(unsigned int triggerId) const
 {
-    GP_ASSERT(triggerId < _triggerCount);
+    if (triggerId >= _triggerCount)
+        return 0.0f;
 
     if (_form)
     {
