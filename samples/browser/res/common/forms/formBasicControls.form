@@ -4,6 +4,7 @@ form basicControls
     layout = LAYOUT_ABSOLUTE
     style = basic
     size = 600, 600
+	consumeInputEvents = true
     	
 	label title
 	{
