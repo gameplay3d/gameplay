@@ -1643,11 +1643,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     }
 
     release();
-    if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
-        return (_consumeInputEvents | eventConsumed);
-    else
-        return eventConsumed;
+    return (_consumeInputEvents | eventConsumed);
 }
 
 Container::Scroll Container::getScroll(const char* scroll)
