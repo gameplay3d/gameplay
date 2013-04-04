@@ -445,13 +445,11 @@ public:
     /**
      * Gamepad callback on gamepad events.  Override to receive Gamepad::CONNECTED_EVENT 
      * and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from update().
-     * Or, handle all gamepad input through BUTTON, JOYSTICK and TRIGGER events.
      *
      * @param evt The gamepad event that occurred.
      * @param gamepad The gamepad that generated the event.
-     * @param analogIndex If this is a JOYSTICK_EVENT or TRIGGER_EVENT, the index of the joystick or trigger whose value changed.
      */
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
      * Gets the current number of gamepads currently connected to the system.
