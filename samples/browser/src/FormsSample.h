@@ -11,7 +11,7 @@ public:
     
     FormsSample();
 
-    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
+    void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
 protected:
 
