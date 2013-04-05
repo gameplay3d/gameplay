@@ -297,6 +297,11 @@ Animations* GPBFile::getAnimations()
     return &_animations;
 }
 
+unsigned int GPBFile::getLightCount() const
+{
+    return (unsigned int)_lights.size();
+}
+
 void GPBFile::adjust()
 {
     // calculate the ambient color for each scene

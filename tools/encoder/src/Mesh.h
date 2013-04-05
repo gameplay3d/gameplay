@@ -60,6 +60,9 @@ public:
 
     unsigned int getVertexIndex(const Vertex& vertex);
 
+    bool hasNormals() const;
+    bool hasVertexColors() const;
+
     void computeBounds();
 
     Model* model;
