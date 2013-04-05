@@ -18,14 +18,13 @@ static Game* __gameInstance = NULL;
 double Game::_pausedTimeLast = 0.0;
 double Game::_pausedTimeTotal = 0.0;
 
-Game::Game(Controller useController)
+Game::Game()
     : _initialized(false), _state(UNINITIALIZED), _pausedCount(0),
       _frameLastFPS(0), _frameCount(0), _frameRate(0),
       _clearDepth(1.0f), _clearStencil(0), _properties(NULL),
       _animationController(NULL), _audioController(NULL),
       _physicsController(NULL), _aiController(NULL), _audioListener(NULL),
-      _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL),
-      _useController(useController)
+      _timeEvents(NULL), _scriptController(NULL), _scriptListeners(NULL)
 {
     GP_ASSERT(__gameInstance == NULL);
     __gameInstance = this;
@@ -98,32 +97,34 @@ bool Game::startup()
     setViewport(Rectangle(0.0f, 0.0f, (float)_width, (float)_height));
     RenderState::initialize();
     FrameBuffer::initialize();
+    
+    Properties* config = _properties->getNamespace("config", true);
 
-    if(_useController & CONTROLLER_ANIMATION)
+    if(!config || config->getBool("animation", true))
     {
         _animationController = new AnimationController();
         _animationController->initialize();
     }
 
-    if(_useController & CONTROLLER_AUDIO)
+    if(!config || config->getBool("audio", true))
     {
         _audioController = new AudioController();
         _audioController->initialize();
     }
     
-    if(_useController & CONTROLLER_PHYSICS)
+    if(!config || config->getBool("physics", true))
     {
         _physicsController = new PhysicsController();
         _physicsController->initialize();
     }
 
-    if(_useController & CONTROLLER_AI)
+    if(!config || config->getBool("ai", true))
     {
         _aiController = new AIController();
         _aiController->initialize();
     }
 
-    if(_useController & CONTROLLER_SCRIPT)
+    if(!config || config->getBool("script", true))
     {
         _scriptController = new ScriptController();
         _scriptController->initialize();
