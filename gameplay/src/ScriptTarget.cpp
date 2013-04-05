@@ -30,19 +30,26 @@ template<> void ScriptTarget::fireScriptEvent<void>(const char* eventName, ...)
     {
         ScriptController* sc = Game::getInstance()->getScriptController();
 
-        if (_events[eventName].size() > 0)
+        if(sc)
         {
-            for (unsigned int i = 0; i < iter->second->size(); i++)
+            if (_events[eventName].size() > 0)
             {
-                sc->executeFunction<void>((*iter->second)[i].function.c_str(), _events[eventName].c_str(), &list);
+                for (unsigned int i = 0; i < iter->second->size(); i++)
+                {
+                    sc->executeFunction<void>((*iter->second)[i].function.c_str(), _events[eventName].c_str(), &list);
+                }
+            }
+            else
+            {
+                for (unsigned int i = 0; i < iter->second->size(); i++)
+                {
+                    sc->executeFunction<void>((*iter->second)[i].function.c_str(), _events[eventName].c_str());
+                }
             }
         }
         else
         {
-            for (unsigned int i = 0; i < iter->second->size(); i++)
-            {
-                sc->executeFunction<void>((*iter->second)[i].function.c_str(), _events[eventName].c_str());
-            }
+            GP_ERROR("ScriptController not initialized");
         }
     }
 
@@ -59,27 +66,34 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const char* eventName, ...)
     {
         ScriptController* sc = Game::getInstance()->getScriptController();
 
-        if (_events[eventName].size() > 0)
+        if(sc)
         {
-            for (unsigned int i = 0; i < iter->second->size(); i++)
+            if (_events[eventName].size() > 0)
             {
-                if (sc->executeFunction<bool>((*iter->second)[i].function.c_str(), _events[eventName].c_str(), &list))
+                for (unsigned int i = 0; i < iter->second->size(); i++)
                 {
-                    va_end(list);
-                    return true;
+                    if (sc->executeFunction<bool>((*iter->second)[i].function.c_str(), _events[eventName].c_str(), &list))
+                    {
+                        va_end(list);
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                for (unsigned int i = 0; i < iter->second->size(); i++)
+                {
+                    if (sc->executeFunction<bool>((*iter->second)[i].function.c_str(), _events[eventName].c_str()))
+                    {
+                        va_end(list);
+                        return true;
+                    }
                 }
             }
         }
         else
         {
-            for (unsigned int i = 0; i < iter->second->size(); i++)
-            {
-                if (sc->executeFunction<bool>((*iter->second)[i].function.c_str(), _events[eventName].c_str()))
-                {
-                    va_end(list);
-                    return true;
-                }
-            }
+            GP_ERROR("ScriptController not initialized");
         }
     }
 
@@ -89,6 +103,14 @@ template<> bool ScriptTarget::fireScriptEvent<bool>(const char* eventName, ...)
 
 void ScriptTarget::addScriptCallback(const std::string& eventName, const std::string& function)
 {
+    ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
+    
     std::map<std::string, std::vector<Callback>* >::iterator iter = _callbacks.find(eventName);
     if (iter != _callbacks.end())
     {

@@ -61,7 +61,12 @@ void Logger::log(Level level, const char* message, ...)
     else if (state.logFunctionLua)
     {
         // Pass call to registered Lua log function
-        Game::getInstance()->getScriptController()->executeFunction<void>(state.logFunctionLua, "[Logger::Level]s", level, str);
+        ScriptController* sc = Game::getInstance()->getScriptController();
+        
+        if(sc)
+        {
+            sc->executeFunction<void>(state.logFunctionLua, "[Logger::Level]s", level, str);
+        }
     }
     else
     {

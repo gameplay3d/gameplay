@@ -405,6 +405,12 @@ void Scene::visitNode(Node* node, T* instance, bool (T::*visitMethod)(Node*,C), 
 inline void Scene::visitNode(Node* node, const char* visitMethod)
 {
     ScriptController* sc = Game::getInstance()->getScriptController();
+    
+    if(!sc)
+    {
+        GP_ERROR("ScriptController not initialized");
+        return;
+    }
 
     // Invoke the visit method for this node.
     if (!sc->executeFunction<bool>(visitMethod, "<Node>", node))
