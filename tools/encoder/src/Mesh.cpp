@@ -57,7 +57,7 @@ void Mesh::writeBinaryVertices(FILE* file)
     else
     {
         // No vertex data
-        write((unsigned int)0, file);
+        writeZero(file);
     }
 
     // Write bounds
@@ -164,6 +164,16 @@ unsigned int Mesh::getVertexIndex(const Vertex& vertex)
     std::map<Vertex,unsigned int>::iterator it;
     it = vertexLookupTable.find(vertex);
     return it->second;
+}
+
+bool Mesh::hasNormals() const
+{
+    return !vertices.empty() && vertices[0].hasNormal;
+}
+
+bool Mesh::hasVertexColors() const
+{
+    return !vertices.empty() && vertices[0].hasDiffuse;
 }
 
 void Mesh::computeBounds()
