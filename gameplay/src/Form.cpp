@@ -151,7 +151,7 @@ Form* Form::create(const char* url)
     }
     form->initialize(style, formProperties);
 
-    form->_consumeInputEvents = formProperties->getBool("consumeInputEvents", true);
+    form->_consumeInputEvents = formProperties->getBool("consumeInputEvents", false);
 
     // Alignment
     if ((form->_alignment & Control::ALIGN_BOTTOM) == Control::ALIGN_BOTTOM)
@@ -722,7 +722,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
     return false;
 }
 
-bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+void Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     for (size_t i = 0; i < __forms.size(); ++i)
     {
@@ -732,11 +732,9 @@ bool Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
         if (form->isEnabled() && form->isVisible() && form->getState() == FOCUS)
         {
             if (form->gamepadEvent(evt, gamepad, analogIndex))
-                return true;
+                return;
         }
     }
-
-    return false;
 }
 
 bool Form::projectPoint(int x, int y, Vector3* point)

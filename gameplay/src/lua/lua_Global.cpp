@@ -22,6 +22,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("AnimationTarget", "Transform");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "CheckBox");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Button", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Container", "Form");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "Button");
@@ -36,6 +37,7 @@ void luaRegister_lua_Global()
     gameplay::ScriptUtil::setGlobalHierarchyPair("Control", "TextBox");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Button");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "CheckBox");
+    gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "ImageControl");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "RadioButton");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "Slider");
     gameplay::ScriptUtil::setGlobalHierarchyPair("Label", "TextBox");

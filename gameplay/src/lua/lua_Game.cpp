@@ -404,41 +404,9 @@ int lua_Game_gamepadEvent(lua_State* state)
             lua_error(state);
             break;
         }
-        case 4:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TTABLE || lua_type(state, 3) == LUA_TNIL) &&
-                lua_type(state, 4) == LUA_TNUMBER)
-            {
-                // Get parameter 1 off the stack.
-                Gamepad::GamepadEvent param1 = (Gamepad::GamepadEvent)lua_enumFromString_GamepadGamepadEvent(luaL_checkstring(state, 2));
-
-                // Get parameter 2 off the stack.
-                bool param2Valid;
-                gameplay::ScriptUtil::LuaArray<Gamepad> param2 = gameplay::ScriptUtil::getObjectPointer<Gamepad>(3, "Gamepad", false, &param2Valid);
-                if (!param2Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Gamepad'.");
-                    lua_error(state);
-                }
-
-                // Get parameter 3 off the stack.
-                unsigned int param3 = (unsigned int)luaL_checkunsigned(state, 4);
-
-                Game* instance = getInstance(state);
-                instance->gamepadEvent(param1, param2, param3);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Game_gamepadEvent - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 3 or 4).");
+            lua_pushstring(state, "Invalid number of parameters (expected 3).");
             lua_error(state);
             break;
         }

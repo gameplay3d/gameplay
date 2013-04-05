@@ -7,6 +7,7 @@
 // Input bit-flags (powers of 2)
 #define KEY_A_MASK (1 << 0)
 #define KEY_B_MASK (1 << 1)
+#define KEY_SELECT_MASK (1 << 2)
 
 const static unsigned int __formsCount = 5;
 
@@ -184,6 +185,47 @@ void FormsSample::update(float elapsedTime)
     float speedFactor = 0.001f * elapsedTime;
     bool aDown = (_keyFlags & KEY_A_MASK);
     bool bDown = (_keyFlags & KEY_B_MASK);
+
+	// If no form is in focus, then we poll the gamepad for movement input.
+	if (_activeForm->getState() == Control::NORMAL &&
+        _formSelect->getState() == Control::NORMAL)
+    {
+        if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
+            _keyFlags |= KEY_A_MASK;
+        else
+            _keyFlags &= ~KEY_A_MASK;
+
+        if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
+            _keyFlags |= KEY_B_MASK;
+        else
+            _keyFlags &= ~KEY_B_MASK;
+
+        _gamepad->getJoystickValues(0, &_joysticks[0]);
+        _gamepad->getJoystickValues(1, &_joysticks[1]);
+    }
+
+    // We'll use a physical gamepad's MENU1 button as the "back" button.
+    if (!(_keyFlags & KEY_SELECT_MASK) && _gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
+    {
+        _keyFlags |= KEY_SELECT_MASK;
+        if (_formSelect->getState() == Control::FOCUS)
+        {
+            _formSelect->setState(Control::NORMAL);
+        }
+        else if (_activeForm->getState() == Control::FOCUS)
+        {
+            _activeForm->setState(Control::NORMAL);
+            _formSelect->setState(Control::FOCUS);
+        }
+        else
+        {
+            _formSelect->setState(Control::FOCUS);
+        }
+    }
+    else if ((_keyFlags & KEY_SELECT_MASK) && !_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
+    {
+        _keyFlags &= ~KEY_SELECT_MASK;  
+    }
 
     if (_gamepad->isVirtual())
     {
@@ -376,7 +418,7 @@ void FormsSample::controlEvent(Control* control, EventType evt)
     }
 }
 
-void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
     switch(evt)
     {
@@ -387,38 +429,6 @@ void FormsSample::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsi
         // SamplesGame always ensures the virtual gamepad is disabled when a sample is exited.
         if (_gamepad && _gamepad->isVirtual())
             _gamepad->getForm()->setEnabled(true);
-        break;
-    case Gamepad::BUTTON_EVENT:
-        if (_gamepad->isButtonDown(Gamepad::BUTTON_A))
-            _keyFlags |= KEY_A_MASK;
-        else
-            _keyFlags &= ~KEY_A_MASK;
-
-        if (_gamepad->isButtonDown(Gamepad::BUTTON_B))
-            _keyFlags |= KEY_B_MASK;
-        else
-            _keyFlags &= ~KEY_B_MASK;
-
-        // We'll use a physical gamepad's MENU1 button as the "back" button.
-        if (_gamepad->isButtonDown(Gamepad::BUTTON_MENU1))
-        {
-            if (_formSelect->getState() == Control::FOCUS)
-            {
-                _formSelect->setState(Control::NORMAL);
-            }
-            else if (_activeForm->getState() == Control::FOCUS)
-            {
-                _activeForm->setState(Control::NORMAL);
-                _formSelect->setState(Control::FOCUS);
-            }
-            else
-            {
-                _formSelect->setState(Control::FOCUS);
-            }
-        }
-        break;
-    case Gamepad::JOYSTICK_EVENT:
-        gamepad->getJoystickValues(analogIndex, &_joysticks[analogIndex]);
         break;
     }
 }

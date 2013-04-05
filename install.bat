@@ -55,13 +55,16 @@ cd %~dp0
 >> temp.cs ECHO         done = true;
 >> temp.cs ECHO     }
 >> temp.cs ECHO }
-> temp1.vbs ECHO Dim strFileURL, strHDLocation
+> temp1.vbs ECHO WScript.Echo "Downloading using a fallback method. This might take a few minutes."
+>> temp1.vbs ECHO Dim strFileURL, strHDLocation
 >> temp1.vbs ECHO strFileURL = WScript.Arguments(0)
 >> temp1.vbs ECHO strHDLocation = WScript.Arguments(1)
 >> temp1.vbs ECHO Set objXMLHTTP = CreateObject("MSXML2.XMLHTTP")
 >> temp1.vbs ECHO objXMLHTTP.open "GET", strFileURL, false
+>> temp1.vbs ECHO WScript.Echo "Sending request..."
 >> temp1.vbs ECHO objXMLHTTP.send()
 >> temp1.vbs ECHO If objXMLHTTP.Status = 200 Then
+>> temp1.vbs ECHO WScript.Echo "Got response. Processing body..."
 >> temp1.vbs ECHO Set objADOStream = CreateObject("ADODB.Stream")
 >> temp1.vbs ECHO objADOStream.Open
 >> temp1.vbs ECHO objADOStream.Type = 1
@@ -70,14 +73,22 @@ cd %~dp0
 >> temp1.vbs ECHO Set objFSO = Createobject("Scripting.FileSystemObject")
 >> temp1.vbs ECHO If objFSO.Fileexists(strHDLocation) Then objFSO.DeleteFile strHDLocation
 >> temp1.vbs ECHO Set objFSO = Nothing
+>> temp1.vbs ECHO WScript.Echo "Saving result to a file..."
 >> temp1.vbs ECHO objADOStream.SaveToFile strHDLocation
 >> temp1.vbs ECHO objADOStream.Close
 >> temp1.vbs ECHO Set objADOStream = Nothing
+>> temp1.vbs ECHO WScript.Echo "Success."
 >> temp1.vbs ECHO End if
 >> temp1.vbs ECHO Set objXMLHTTP = Nothing
 
-if not exist %windir%\Microsoft.NET\Framework\v2.0.50727\NUL goto USE_VBS_AS_FALLBACK
-%windir%\Microsoft.NET\Framework\v2.0.50727\csc temp.cs
+if exist %windir%\Microsoft.NET\Framework\v2.0.50727\NUL (
+    %windir%\Microsoft.NET\Framework\v2.0.50727\csc temp.cs
+) else (
+if exist %windir%\Microsoft.NET\Framework\v4.0.30319\NUL (
+    %windir%\Microsoft.NET\Framework\v4.0.30319\csc temp.cs
+) else (
+    goto USE_VBS_AS_FALLBACK
+))
 temp.exe
 del temp.exe
 goto :EXTRACT
