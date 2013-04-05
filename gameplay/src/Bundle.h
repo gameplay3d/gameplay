@@ -190,6 +190,13 @@ private:
     const char* getIdFromOffset(unsigned int offset) const;
 
     /**
+     * Gets the path to the bundle's default material file, if it exists.
+     * 
+     * @return The bundle's default material path. Returns an empty string if the default material does not exist.
+     */
+    const std::string& getMaterialPath();
+
+    /**
      * Seeks the file pointer to the object with the given ID and type
      * and returns the relevant Reference.
      *
@@ -427,6 +434,7 @@ private:
     bool skipNode();
 
     std::string _path;
+    std::string _materialPath;
     unsigned int _referenceCount;
     Reference* _references;
     Stream* _stream;
