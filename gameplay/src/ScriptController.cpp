@@ -735,7 +735,7 @@ void ScriptController::initialize()
 void ScriptController::initializeGame()
 {
     std::vector<std::string>& list = _callbacks[INITIALIZE];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str());
 }
 
@@ -757,7 +757,7 @@ void ScriptController::finalizeGame()
         _callbacks[i].clear();
 
 	// Fire script finalize callbacks
-    for (size_t i = 0, count = finalizeCallbacks.size(); i < count; ++i)
+    for (size_t i = 0; i < finalizeCallbacks.size(); ++i)
         executeFunction<void>(finalizeCallbacks[i].c_str());
 
     // Perform a full garbage collection cycle.
@@ -770,42 +770,42 @@ void ScriptController::finalizeGame()
 void ScriptController::update(float elapsedTime)
 {
     std::vector<std::string>& list = _callbacks[UPDATE];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "f", elapsedTime);
 }
 
 void ScriptController::render(float elapsedTime)
 {
     std::vector<std::string>& list = _callbacks[RENDER];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "f", elapsedTime);
 }
 
 void ScriptController::resizeEvent(unsigned int width, unsigned int height)
 {
     std::vector<std::string>& list = _callbacks[RESIZE_EVENT];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "uiui", width, height);
 }
 
 void ScriptController::keyEvent(Keyboard::KeyEvent evt, int key)
 {
     std::vector<std::string>& list = _callbacks[KEY_EVENT];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "[Keyboard::KeyEvent][Keyboard::Key]", evt, key);
 }
 
 void ScriptController::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     std::vector<std::string>& list = _callbacks[TOUCH_EVENT];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "[Touch::TouchEvent]iiui", evt, x, y, contactIndex);
 }
 
 bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     std::vector<std::string>& list = _callbacks[MOUSE_EVENT];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
     {
         if (executeFunction<bool>(list[i].c_str(), "[Mouse::MouseEvent]iii", evt, x, y, wheelDelta))
             return true;
@@ -816,7 +816,7 @@ bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheel
 void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];
-    for (size_t i = 0, count = list.size(); i < count; ++i)
+    for (size_t i = 0; i < list.size(); ++i)
         executeFunction<void>(list[i].c_str(), "[Gamepad::GamepadEvent]<Gamepad>", evt, gamepad);
 }
 
