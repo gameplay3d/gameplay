@@ -713,6 +713,23 @@ void ScriptController::initialize()
         GP_ERROR("Failed to load custom loadfile() function with error: '%s'.", lua_tostring(_lua, -1));
     if (luaL_dostring(_lua, lua_dofile_function))
         GP_ERROR("Failed to load custom dofile() function with error: '%s'.", lua_tostring(_lua, -1));
+
+    // Write game command-line arguments to a global lua "arg" table
+    std::ostringstream args;
+    int argc;
+    char** argv;
+    Game::getInstance()->getArguments(&argc, &argv);
+    args << "arg = { }\n";
+    for (int i = 0; i < argc; ++i)
+    {
+        args << "arg[" << (i) << "] = [[" << argv[i] << "]]\n";
+    }
+    std::string argsStr = args.str();
+    if (argsStr.length() > 0)
+    {
+        if (luaL_dostring(_lua, argsStr.c_str()))
+            GP_ERROR("Failed to pass command-line arguments with error: '%s'.", lua_tostring(_lua, -1));
+    }
 }
 
 void ScriptController::initializeGame()
