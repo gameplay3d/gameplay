@@ -66,7 +66,7 @@ public:
     virtual void writeText(FILE* file) = 0;
 
     /**
-     * Returns this objects id string.
+     * Returns this object's id string.
      */
     const std::string& getId() const;
 

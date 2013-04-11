@@ -412,8 +412,8 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
             }
 
             // Get the texture path.
-            const char* path = ns->getString("path");
-            if (path == NULL || strlen(path) == 0)
+            std::string path;
+            if (!ns->getPath("path", &path))
             {
                 GP_ERROR("Texture sampler '%s' is missing required image file path.", name);
                 continue;
@@ -428,7 +428,7 @@ void Material::loadRenderState(RenderState* renderState, Properties* properties)
 
             // Set the sampler parameter.
             GP_ASSERT(renderState->getParameter(name));
-            Texture::Sampler* sampler = renderState->getParameter(name)->setValue(path, mipmap);
+            Texture::Sampler* sampler = renderState->getParameter(name)->setValue(path.c_str(), mipmap);
             if (sampler)
             {
                 sampler->setWrapMode(wrapS, wrapT);

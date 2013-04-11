@@ -86,6 +86,11 @@ void MeshSkin::writeText(FILE* file)
     fprintElementEnd(file);
 }
 
+unsigned int MeshSkin::getJointCount() const
+{
+    return _joints.size();
+}
+
 void MeshSkin::setBindShape(const float data[])
 {
     for (int i = 0; i < 16; ++i)

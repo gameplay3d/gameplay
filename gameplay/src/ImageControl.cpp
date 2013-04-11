@@ -47,10 +47,10 @@ void ImageControl::initialize(Theme::Style* style, Properties* properties)
 
     Control::initialize(style, properties);
 
-    const char* path = properties->getString("path");
-    if (path)
+    std::string path;
+    if (properties->getPath("path", &path))
     {
-        setImage(path);
+        setImage(path.c_str());
     }
 
     if (properties->exists("srcRegion"))
