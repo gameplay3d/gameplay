@@ -138,6 +138,11 @@ void writeVectorBinary(const Vector4& v, FILE* file);
 void writeVectorText(const Vector4& v, FILE* file);
 
 /**
+ * Writes a number of white space indentations to the file.
+ */
+void writeIndent(unsigned int indentLevel, FILE* file);
+
+/**
  * Prompts the user if they want to group animations automatically.
  * If the user enters an invalid response, the question is asked again.
  * 

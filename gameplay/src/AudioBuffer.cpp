@@ -327,6 +327,7 @@ bool AudioBuffer::loadWav(Stream* stream, ALuint buffer)
             }
         }
     }
+    return false;
 }
 
 bool AudioBuffer::loadOgg(Stream* stream, ALuint buffer)
