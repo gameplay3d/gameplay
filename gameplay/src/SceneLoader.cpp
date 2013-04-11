@@ -44,9 +44,11 @@ Scene* SceneLoader::loadInternal(const char* url)
     }
 
     // Get the path to the main GPB.
-    const char* path = sceneProperties->getString("path");
-    if (path)
+    std::string path;
+    if (sceneProperties->getPath("path", &path))
+    {
         _gpbPath = path;
+    }
 
     // Build the node URL/property and animation reference tables and load the referenced files/store the inline properties objects.
     buildReferenceTables(sceneProperties);

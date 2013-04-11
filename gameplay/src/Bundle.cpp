@@ -286,6 +286,24 @@ const char* Bundle::getIdFromOffset(unsigned int offset) const
     return NULL;
 }
 
+const std::string& Bundle::getMaterialPath()
+{
+    if (_materialPath.empty())
+    {
+        int pos = _path.find_last_of('.');
+        if (pos > 2)
+        {
+            _materialPath = _path.substr(0, pos);
+            _materialPath.append(".material");
+            if (!FileSystem::fileExists(_materialPath.c_str()))
+            {
+                _materialPath.clear();
+            }
+        }
+    }
+    return _materialPath;
+}
+
 Bundle::Reference* Bundle::seekTo(const char* id, unsigned int type)
 {
     Reference* ref = find(id);
@@ -968,8 +986,20 @@ Model* Bundle::readModel(const char* nodeId)
             }
             if (materialCount > 0)
             {
-                // TODO: Material loading not supported yet.
-                GP_WARN("Material loading is not yet supported.");
+                for (unsigned int i = 0; i < materialCount; ++i)
+                {
+                    std::string materialName = readString(_stream);
+                    std::string materialPath = getMaterialPath();
+                    materialPath.append("#");
+                    materialPath.append(materialName);
+                    Material* material = Material::create(materialPath.c_str());
+                    if (material)
+                    {
+                        int partIndex = model->getMesh()->getPartCount() > 0 ? i : -1;
+                        model->setMaterial(material, partIndex);
+                        SAFE_RELEASE(material);
+                    }
+                }
             }
             return model;
         }
