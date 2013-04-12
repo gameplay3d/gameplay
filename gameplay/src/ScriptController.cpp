@@ -692,6 +692,26 @@ static const char* lua_dofile_function =
     "    end\n"
     "end\n";
 
+void appendLuaPath(lua_State* state, const char* path)
+{
+    lua_getglobal(state, "package");
+
+    // Get the current path string from top of stack
+    lua_getfield(state, -1, "path");
+    std::string cur_path = lua_tostring(state, -1);
+    lua_pop(state, 1);
+
+    // Append our game resource path to the path
+    cur_path += ';';
+    cur_path += path;
+    cur_path += "?.lua";
+
+    // Push the new path
+    lua_pushstring(state, cur_path.c_str());
+    lua_setfield(state, -2, "path");
+    lua_pop(state, 1);
+}
+
 void ScriptController::initialize()
 {
     _lua = luaL_newstate();
@@ -703,6 +723,9 @@ void ScriptController::initialize()
     lua_RegisterAllBindings();
     ScriptUtil::registerFunction("convert", ScriptController::convert);
 #endif
+
+    // Append to the LUA_PATH to allow scripts to be found in the resource folder on all platforms
+    appendLuaPath(_lua, FileSystem::getResourcePath());
 
     // Create our own print() function that uses gameplay::print.
     if (luaL_dostring(_lua, lua_print_function))
