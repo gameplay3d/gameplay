@@ -108,7 +108,7 @@ Properties* Properties::create(const char* url)
         p = p->clone();
         SAFE_DELETE(properties);
     }
-    p->setDirectoryPath(FileSystem::dirname(fileString.c_str()));
+    p->setDirectoryPath(FileSystem::getDirectoryName(fileString.c_str()));
     return p;
 }
 
