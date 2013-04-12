@@ -563,7 +563,7 @@ void FileSystem::createFileFromAsset(const char* path)
 #endif
 }
 
-std::string FileSystem::dirname(const char* path)
+std::string FileSystem::getDirectoryName(const char* path)
 {
     if (path == NULL || strlen(path) == 0)
     {
