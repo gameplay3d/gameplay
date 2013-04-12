@@ -47,142 +47,54 @@
     <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
     <asset path="../../gameplay/res/shaders">res/shaders</asset>
     <asset path="res/common">res/common</asset>
-    
+
+    <asset path="res/design/backboard.png">res/png/backboard.png</asset>
+    <asset path="res/design/basketball.png">res/png/basketball.png</asset>
+    <asset path="res/design/basketballnet.png">res/png/basketballnet.png</asset>
+    <asset path="res/design/book.png">res/png/book.png</asset>
+    <asset path="res/design/bookshelf.png">res/png/bookshelf.png</asset>
+    <asset path="res/design/character.png">res/png/character.png</asset>
+    <asset path="res/design/decals.png">res/png/decals.png</asset>
+    <asset path="res/design/door.png">res/png/door.png</asset>
+    <asset path="res/design/doorframe.png">res/png/doorframe.png</asset>
+    <asset path="res/design/easel.png">res/png/easel.png</asset>
+    <asset path="res/design/floor.png">res/png/floor.png</asset>
+    <asset path="res/design/floortiles.png">res/png/floortiles.png</asset>
+    <asset path="res/design/gamepad.png">res/png/gamepad.png</asset>
+    <asset path="res/design/playtable.png">res/png/playtable.png</asset>
+    <asset path="res/design/shadow.png">res/png/shadow.png</asset>
+    <asset path="res/design/storageorganizer.png">res/png/storageorganizer.png</asset>
+    <asset path="res/design/tableleg1.png">res/png/tableleg1.png</asset>
+    <asset path="res/design/tableleg2.png">res/png/tableleg2.png</asset>
+    <asset path="res/design/tableleg3.png">res/png/tableleg3.png</asset>
+    <asset path="res/design/tableleg4.png">res/png/tableleg4.png</asset>
+    <asset path="res/design/tabletop.png">res/png/tabletop.png</asset>
+    <asset path="res/design/tiles.png">res/png/tiles.png</asset>
+    <asset path="res/design/tilesn.png">res/png/tilesn.png</asset>
+    <asset path="res/design/toybox.png">res/png/toybox.png</asset>
+    <asset path="res/design/walleast.png">res/png/walleast.png</asset>
+    <asset path="res/design/wallnorth.png">res/png/wallnorth.png</asset>
+    <asset path="res/design/walloverhang.png">res/png/walloverhang.png</asset>
+    <asset path="res/design/wallsouth.png">res/png/wallsouth.png</asset>
+    <asset path="res/design/wallwest.png">res/png/wallwest.png</asset>
+    <asset path="res/design/windowledge.png">res/png/windowledge.png</asset>
+    <asset path="res/design/wood.png">res/png/wood.png</asset>
+    <asset path="res/design/woodn.png">res/png/woodn.png</asset>
+    <asset path="game.png.config">game.config</asset>
+   
     <configuration id="com.qnx.qcc.configuration.exe.debug.417937691" name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Debug/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/pvrtc">res/pvrtc</asset>
-       <asset path="game.pvrtc.config">game.config</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.release.174417925" name="Device-Release">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/pvrtc">res/pvrtc</asset>
-       <asset path="game.pvrtc.config">game.config</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.264906370" name="Device-Profile">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Profile/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/pvrtc">res/pvrtc</asset>
-       <asset path="game.pvrtc.config">game.config</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.894282514" name="Device-Coverage">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Coverage/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/pvrtc">res/pvrtc</asset>
-       <asset path="game.pvrtc.config">game.config</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.639567768" name="Simulator">
        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/design/backboard.png">res/png/backboard.png</asset>
-       <asset path="res/design/basketball.png">res/png/basketball.png</asset>
-       <asset path="res/design/basketballnet.png">res/png/basketballnet.png</asset>
-       <asset path="res/design/book.png">res/png/book.png</asset>
-       <asset path="res/design/bookshelf.png">res/png/bookshelf.png</asset>
-       <asset path="res/design/character.png">res/png/character.png</asset>
-       <asset path="res/design/decals.png">res/png/decals.png</asset>
-       <asset path="res/design/door.png">res/png/door.png</asset>
-       <asset path="res/design/doorframe.png">res/png/doorframe.png</asset>
-       <asset path="res/design/easel.png">res/png/easel.png</asset>
-       <asset path="res/design/floor.png">res/png/floor.png</asset>
-       <asset path="res/design/floortiles.png">res/png/floortiles.png</asset>
-       <asset path="res/design/gamepad.png">res/png/gamepad.png</asset>
-       <asset path="res/design/playtable.png">res/png/playtable.png</asset>
-       <asset path="res/design/shadow.png">res/png/shadow.png</asset>
-       <asset path="res/design/storageorganizer.png">res/png/storageorganizer.png</asset>
-       <asset path="res/design/tableleg1.png">res/png/tableleg1.png</asset>
-       <asset path="res/design/tableleg2.png">res/png/tableleg2.png</asset>
-       <asset path="res/design/tableleg3.png">res/png/tableleg3.png</asset>
-       <asset path="res/design/tableleg4.png">res/png/tableleg4.png</asset>
-       <asset path="res/design/tabletop.png">res/png/tabletop.png</asset>
-       <asset path="res/design/tiles.png">res/png/tiles.png</asset>
-       <asset path="res/design/tilesn.png">res/png/tilesn.png</asset>
-       <asset path="res/design/toybox.png">res/png/toybox.png</asset>
-       <asset path="res/design/walleast.png">res/png/walleast.png</asset>
-       <asset path="res/design/wallnorth.png">res/png/wallnorth.png</asset>
-       <asset path="res/design/walloverhang.png">res/png/walloverhang.png</asset>
-       <asset path="res/design/wallsouth.png">res/png/wallsouth.png</asset>
-       <asset path="res/design/wallwest.png">res/png/wallwest.png</asset>
-       <asset path="res/design/windowledge.png">res/png/windowledge.png</asset>
-       <asset path="res/design/wood.png">res/png/wood.png</asset>
-       <asset path="res/design/woodn.png">res/png/woodn.png</asset>
-       <asset path="game.png.config">game.config</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.63301548" name="Simulator-Profile">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Profile/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/design/backboard.png">res/png/backboard.png</asset>
-       <asset path="res/design/basketball.png">res/png/basketball.png</asset>
-       <asset path="res/design/basketballnet.png">res/png/basketballnet.png</asset>
-       <asset path="res/design/book.png">res/png/book.png</asset>
-       <asset path="res/design/bookshelf.png">res/png/bookshelf.png</asset>
-       <asset path="res/design/character.png">res/png/character.png</asset>
-       <asset path="res/design/decals.png">res/png/decals.png</asset>
-       <asset path="res/design/door.png">res/png/door.png</asset>
-       <asset path="res/design/doorframe.png">res/png/doorframe.png</asset>
-       <asset path="res/design/easel.png">res/png/easel.png</asset>
-       <asset path="res/design/floor.png">res/png/floor.png</asset>
-       <asset path="res/design/floortiles.png">res/png/floortiles.png</asset>
-       <asset path="res/design/gamepad.png">res/png/gamepad.png</asset>
-       <asset path="res/design/playtable.png">res/png/playtable.png</asset>
-       <asset path="res/design/shadow.png">res/png/shadow.png</asset>
-       <asset path="res/design/storageorganizer.png">res/png/storageorganizer.png</asset>
-       <asset path="res/design/tableleg1.png">res/png/tableleg1.png</asset>
-       <asset path="res/design/tableleg2.png">res/png/tableleg2.png</asset>
-       <asset path="res/design/tableleg3.png">res/png/tableleg3.png</asset>
-       <asset path="res/design/tableleg4.png">res/png/tableleg4.png</asset>
-       <asset path="res/design/tabletop.png">res/png/tabletop.png</asset>
-       <asset path="res/design/tiles.png">res/png/tiles.png</asset>
-       <asset path="res/design/tilesn.png">res/png/tilesn.png</asset>
-       <asset path="res/design/toybox.png">res/png/toybox.png</asset>
-       <asset path="res/design/walleast.png">res/png/walleast.png</asset>
-       <asset path="res/design/wallnorth.png">res/png/wallnorth.png</asset>
-       <asset path="res/design/walloverhang.png">res/png/walloverhang.png</asset>
-       <asset path="res/design/wallsouth.png">res/png/wallsouth.png</asset>
-       <asset path="res/design/wallwest.png">res/png/wallwest.png</asset>
-       <asset path="res/design/windowledge.png">res/png/windowledge.png</asset>
-       <asset path="res/design/wood.png">res/png/wood.png</asset>
-       <asset path="res/design/woodn.png">res/png/woodn.png</asset>
-       <asset path="game.png.config">game.config</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.1150431402" name="Simulator-Coverage">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Coverage/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
-       <asset path="res/design/backboard.png">res/png/backboard.png</asset>
-       <asset path="res/design/basketball.png">res/png/basketball.png</asset>
-       <asset path="res/design/basketballnet.png">res/png/basketballnet.png</asset>
-       <asset path="res/design/book.png">res/png/book.png</asset>
-       <asset path="res/design/bookshelf.png">res/png/bookshelf.png</asset>
-       <asset path="res/design/character.png">res/png/character.png</asset>
-       <asset path="res/design/decals.png">res/png/decals.png</asset>
-       <asset path="res/design/door.png">res/png/door.png</asset>
-       <asset path="res/design/doorframe.png">res/png/doorframe.png</asset>
-       <asset path="res/design/easel.png">res/png/easel.png</asset>
-       <asset path="res/design/floor.png">res/png/floor.png</asset>
-       <asset path="res/design/floortiles.png">res/png/floortiles.png</asset>
-       <asset path="res/design/gamepad.png">res/png/gamepad.png</asset>
-       <asset path="res/design/playtable.png">res/png/playtable.png</asset>
-       <asset path="res/design/shadow.png">res/png/shadow.png</asset>
-       <asset path="res/design/storageorganizer.png">res/png/storageorganizer.png</asset>
-       <asset path="res/design/tableleg1.png">res/png/tableleg1.png</asset>
-       <asset path="res/design/tableleg2.png">res/png/tableleg2.png</asset>
-       <asset path="res/design/tableleg3.png">res/png/tableleg3.png</asset>
-       <asset path="res/design/tableleg4.png">res/png/tableleg4.png</asset>
-       <asset path="res/design/tabletop.png">res/png/tabletop.png</asset>
-       <asset path="res/design/tiles.png">res/png/tiles.png</asset>
-       <asset path="res/design/tilesn.png">res/png/tilesn.png</asset>
-       <asset path="res/design/toybox.png">res/png/toybox.png</asset>
-       <asset path="res/design/walleast.png">res/png/walleast.png</asset>
-       <asset path="res/design/wallnorth.png">res/png/wallnorth.png</asset>
-       <asset path="res/design/walloverhang.png">res/png/walloverhang.png</asset>
-       <asset path="res/design/wallsouth.png">res/png/wallsouth.png</asset>
-       <asset path="res/design/wallwest.png">res/png/wallwest.png</asset>
-       <asset path="res/design/windowledge.png">res/png/windowledge.png</asset>
-       <asset path="res/design/wood.png">res/png/wood.png</asset>
-       <asset path="res/design/woodn.png">res/png/woodn.png</asset>
-       <asset path="game.png.config">game.config</asset>
-    </configuration>
+  
     
     <!-- The icon for the application, which should be 114x114. -->
     <icon>
