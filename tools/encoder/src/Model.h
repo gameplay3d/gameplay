@@ -32,12 +32,14 @@ public:
     void setMesh(Mesh* mesh);
     MeshSkin* getSkin();
     void setSkin(MeshSkin* skin);
+    void setMaterial(Material* material, int partIndex = -1);
 
 private:
 
     Mesh* _mesh;
     MeshSkin* _meshSkin;
-    std::list<Material*> _materials;
+    std::vector<Material*> _materials;
+    Material* _material;
 };
 
 }

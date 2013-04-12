@@ -16,10 +16,12 @@
     <ClCompile Include="src\Base.cpp" />
     <ClCompile Include="src\BoundingVolume.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Constants.cpp" />
     <ClCompile Include="src\Curve.cpp" />
     <ClCompile Include="src\EncoderArguments.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FBXSceneEncoder.cpp" />
+    <ClCompile Include="src\FBXUtil.cpp" />
     <ClCompile Include="src\FileIO.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GPBFile.cpp" />
@@ -34,6 +36,7 @@
     <ClCompile Include="src\MaterialParameter.cpp" />
     <ClCompile Include="src\Matrix.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\MeshSubSet.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\MeshPart.cpp" />
     <ClCompile Include="src\MeshSkin.cpp" />
@@ -43,6 +46,7 @@
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\Reference.cpp" />
     <ClCompile Include="src\ReferenceTable.cpp" />
+    <ClCompile Include="src\Sampler.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\StringUtil.cpp" />
     <ClCompile Include="src\Transform.cpp" />
@@ -59,10 +63,12 @@
     <ClInclude Include="src\Base.h" />
     <ClInclude Include="src\BoundingVolume.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\Curve.h" />
     <ClInclude Include="src\EncoderArguments.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FBXSceneEncoder.h" />
+    <ClInclude Include="src\FBXUtil.h" />
     <ClInclude Include="src\FileIO.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GPBFile.h" />
@@ -76,6 +82,7 @@
     <ClInclude Include="src\MaterialParameter.h" />
     <ClInclude Include="src\Matrix.h" />
     <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\MeshSubSet.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\MeshPart.h" />
     <ClInclude Include="src\MeshSkin.h" />
@@ -85,6 +92,7 @@
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\Reference.h" />
     <ClInclude Include="src\ReferenceTable.h" />
+    <ClInclude Include="src\Sampler.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\StringUtil.h" />
     <ClInclude Include="src\Thread.h" />

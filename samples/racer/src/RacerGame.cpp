@@ -534,7 +534,10 @@ void RacerGame::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
                 _virtualGamepadClip->play();
             }
             _gamepad = _physicalGamepad;
-            _virtualGamepad->getForm()->setEnabled(false);
+			if (_virtualGamepad)
+			{
+				_virtualGamepad->getForm()->setEnabled(false);
+			}
         }
         else if (_virtualGamepad)
         {

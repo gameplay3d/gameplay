@@ -222,11 +222,9 @@ private:
     /**
      * Propagate gamepad events to enabled forms.
      *
-     * @return True if the gamepad event is consumed, false otherwise.
-     *
      * @see Control::gamepadEvent
      */
-    static bool gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
      * Get the next highest power of two of an integer.  Used when creating framebuffers.

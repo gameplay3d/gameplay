@@ -25,7 +25,18 @@ AIStateMachine::~AIStateMachine()
     {
         (*itr)->release();
     }
-    SAFE_RELEASE(AIState::_empty);
+
+    if (AIState::_empty)
+    {
+        if (AIState::_empty->getRefCount() == 1)
+        {
+            SAFE_RELEASE(AIState::_empty);
+        }
+        else
+        {
+            AIState::_empty->release();
+        }
+    }
 }
 
 AIAgent* AIStateMachine::getAgent() const

@@ -24,7 +24,8 @@ EncoderArguments::EncoderArguments(size_t argc, const char** argv) :
     _fontPreview(false),
     _textOutput(false),
     _optimizeAnimations(false),
-    _animationGrouping(ANIMATIONGROUP_PROMPT)
+    _animationGrouping(ANIMATIONGROUP_PROMPT),
+    _outputMaterial(false)
 {
     __instance = this;
 
@@ -298,6 +299,11 @@ bool EncoderArguments::optimizeAnimationsEnabled() const
     return _optimizeAnimations;
 }
 
+bool EncoderArguments::outputMaterialEnabled() const
+{
+    return _outputMaterial;
+}
+
 const char* EncoderArguments::getNodeId() const
 {
     if (_nodeId.length() == 0)
@@ -476,6 +482,13 @@ void EncoderArguments::readOption(const std::vector<std::string>& options, size_
                     return;
                 }
             }
+        }
+        break;
+    case 'm':
+        if (str.compare("-m") == 0)
+        {
+            // generate a material file
+            _outputMaterial = true;
         }
         break;
     case 'n':
