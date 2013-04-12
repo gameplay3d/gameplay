@@ -178,6 +178,14 @@ void writeVectorText(const Vector4& v, FILE* file)
     fprintf(file, "%f %f %f %f\n", v.x, v.y, v.z, v.w);
 }
 
+void writeIndent(unsigned int indentLevel, FILE* file)
+{
+    for (unsigned int i = 0; i < indentLevel; ++i)
+    {
+        fprintf(file, "    ");
+    }
+}
+
 bool promptUserGroupAnimations()
 {
     char buffer[80];

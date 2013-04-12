@@ -111,8 +111,8 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
 
     // Load sprite properties.
     // Path to image file is required.
-    const char* texturePath = sprite->getString("path");
-    if (!texturePath || strlen(texturePath) == 0)
+    std::string texturePath;
+    if (!sprite->getPath("path", &texturePath))
     {
         GP_ERROR("Failed to load particle emitter: required image file path ('path') is missing.");
         return NULL;
@@ -184,7 +184,7 @@ ParticleEmitter* ParticleEmitter::create(Properties* properties)
     bool orbitAcceleration = properties->getBool("orbitAcceleration");
 
     // Apply all properties to a newly created ParticleEmitter.
-    ParticleEmitter* emitter = ParticleEmitter::create(texturePath, textureBlending, particleCountMax);
+    ParticleEmitter* emitter = ParticleEmitter::create(texturePath.c_str(), textureBlending, particleCountMax);
     if (!emitter)
     {
         GP_ERROR("Failed to create particle emitter.");

@@ -44,6 +44,8 @@ set(APP_SRC
 	src/BoundingVolume.h
 	src/Camera.cpp
 	src/Camera.h
+    src/Constants.cpp
+    src/Constants.h
 	src/Curve.cpp
 	src/Curve.h
 	src/Curve.inl
@@ -53,6 +55,8 @@ set(APP_SRC
 	src/EncoderArguments.h
 	src/FBXSceneEncoder.cpp
 	src/FBXSceneEncoder.h
+	src/FBXUtil.cpp
+	src/FBXUtil.h
 	src/FileIO.cpp
 	src/FileIO.h
 	src/Font.cpp
@@ -99,6 +103,8 @@ set(APP_SRC
 	src/Reference.h
 	src/ReferenceTable.cpp
 	src/ReferenceTable.h
+	src/Sampler.cpp
+	src/Sampler.h
 	src/Scene.cpp
 	src/Scene.h
 	src/StringUtil.cpp

@@ -223,8 +223,8 @@ int writeFont(const char* inFilePath, const char* outFilePath, unsigned int font
             if (penY + rowSize > (int)imageHeight)
             {
                 free(imageBuffer);
-				LOG(1, "Image size exceeded!");
-				return -1;
+                LOG(1, "Image size exceeded!");
+                return -1;
             }
         }
         
