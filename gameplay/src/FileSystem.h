@@ -196,7 +196,7 @@ public:
      * 
      * @return The directory name with the trailing '/'. Returns "" if path is NULL or the path does not contain a directory.
      */
-    static std::string dirname(const char* path);
+    static std::string getDirectoryName(const char* path);
 
     /**
      * Returns the extension of the given file path.
