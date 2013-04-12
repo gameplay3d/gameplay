@@ -10,6 +10,7 @@
 #include "RadioButton.h"
 #include "Slider.h"
 #include "TextBox.h"
+#include "PasswordTextBox.h"
 #include "Joystick.h"
 #include "ImageControl.h"
 #include "Game.h"
@@ -178,6 +179,10 @@ void Container::addControls(Theme* theme, Properties* properties)
         else if (controlName == "TEXTBOX")
         {
             control = TextBox::create(controlStyle, controlSpace);
+        }
+		else if (controlName == "PASSWORDTEXTBOX")
+        {
+            control = PasswordTextBox::create(controlStyle, controlSpace);
         }
         else if (controlName == "JOYSTICK")
         {

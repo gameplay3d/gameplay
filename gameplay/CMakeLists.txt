@@ -126,6 +126,8 @@ set(GAMEPLAY_SRC
     src/ParticleEmitter.h
     src/Pass.cpp
     src/Pass.h
+    src/PasswordTextBox.cpp
+    src/PasswordTextBox.h
     src/PhysicsCharacter.cpp
     src/PhysicsCharacter.h
     src/PhysicsCollisionObject.cpp
