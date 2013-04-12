@@ -60,25 +60,9 @@
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/sample-longboard" entry="true" type="Qnx/Elf">sample-longboard</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.1278883794" name="Device-Profile">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Profile/sample-longboard" entry="true" type="Qnx/Elf">sample-longboard</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.357266346" name="Device-Coverage">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Coverage/sample-longboard" entry="true" type="Qnx/Elf">sample-longboard</asset>
-    </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
         <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample-longboard" entry="true" type="Qnx/Elf">sample-longboard</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.400335078" name="Simulator-Profile">
-        <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Profile/sample-longboard" entry="true" type="Qnx/Elf">sample-longboard</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.48235134" name="Simulator-Coverage">
-        <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Coverage/sample-longboard" entry="true" type="Qnx/Elf">sample-longboard</asset>
     </configuration>
     
     <!-- The icon for the application, which should be 114x114. -->
