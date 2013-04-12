@@ -60,29 +60,11 @@
        <asset path="game.pvr.config">game.config</asset>
        <asset path="res/pvrtc">res/pvrtc</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.1278883794" name="Device-Profile">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Profile/sample-racer" entry="true" type="Qnx/Elf">sample-racer</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.357266346" name="Device-Coverage">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Coverage/sample-racer" entry="true" type="Qnx/Elf">sample-racer</asset>
-    </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
         <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample-racer" entry="true" type="Qnx/Elf">sample-racer</asset>
        <asset path="game.png.config">game.config</asset>
        <asset path="res/png">res/png</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.400335078" name="Simulator-Profile">
-       <platformArchitecture>x86</platformArchitecture> 
-       <asset path="Simulator-Profile/sample-racer" entry="true" type="Qnx/Elf">sample-racer</asset>
-       <asset path="game.png.config">game.config</asset>
-       <asset path="res/png">res/png</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.48235134" name="Simulator-Coverage">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Coverage/sample-racer" entry="true" type="Qnx/Elf">sample-racer</asset>
     </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.242437683.448625410" name="Device-Debug-QC">
        <platformArchitecture>armle-v7</platformArchitecture>
