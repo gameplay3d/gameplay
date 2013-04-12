@@ -96,8 +96,8 @@ Terrain* Terrain::create(const char* path, Properties* properties)
         if (pHeightmap)
         {
             // Read heightmap path
-            const char* heightmap = pHeightmap->getString("path");
-            if (strlen(heightmap) == 0)
+            std::string heightmap;
+            if (!pHeightmap->getPath("path", &heightmap))
             {
                 GP_WARN("No 'path' property supplied in heightmap section of terrain definition: %s", path);
                 if (!externalProperties)
@@ -105,11 +105,11 @@ Terrain* Terrain::create(const char* path, Properties* properties)
                 return NULL;
             }
 
-            std::string ext = FileSystem::getExtension(heightmap);
+            std::string ext = FileSystem::getExtension(heightmap.c_str());
             if (ext == ".PNG")
             {
                 // Read normalized height values from heightmap image
-                heightfield = HeightField::createFromImage(heightmap, 0, 1);
+                heightfield = HeightField::createFromImage(heightmap.c_str(), 0, 1);
             }
             else if (ext == ".RAW" || ext == ".R16")
             {
@@ -124,12 +124,12 @@ Terrain* Terrain::create(const char* path, Properties* properties)
                 }
 
                 // Read normalized height values from RAW file
-                heightfield = HeightField::createFromRAW(heightmap, (unsigned int)imageSize.x, (unsigned int)imageSize.y, 0, 1);
+                heightfield = HeightField::createFromRAW(heightmap.c_str(), (unsigned int)imageSize.x, (unsigned int)imageSize.y, 0, 1);
             }
             else
             {
                 // Unsupported heightmap format
-                GP_WARN("Unsupported heightmap format ('%s') in terrain definition: %s", heightmap, path);
+                GP_WARN("Unsupported heightmap format ('%s') in terrain definition: %s", heightmap.c_str(), path);
                 if (!externalProperties)
                     SAFE_DELETE(p);
                 return NULL;
@@ -138,8 +138,8 @@ Terrain* Terrain::create(const char* path, Properties* properties)
         else
         {
             // Try to read 'heightmap' as a simple string property
-            const char* heightmap = pTerrain->getString("heightmap");
-            if (heightmap == NULL || strlen(heightmap) == 0)
+            std::string heightmap;
+            if (!pTerrain->getPath("heightmap", &heightmap))
             {
                 GP_WARN("No 'heightmap' property supplied in terrain definition: %s", path);
                 if (!externalProperties)
@@ -147,11 +147,11 @@ Terrain* Terrain::create(const char* path, Properties* properties)
                 return NULL;
             }
 
-            std::string ext = FileSystem::getExtension(heightmap);
+            std::string ext = FileSystem::getExtension(heightmap.c_str());
             if (ext == ".PNG")
             {
                 // Read normalized height values from heightmap image
-                heightfield = HeightField::createFromImage(heightmap, 0, 1);
+                heightfield = HeightField::createFromImage(heightmap.c_str(), 0, 1);
             }
             else if (ext == ".RAW" || ext == ".R16")
             {
@@ -162,7 +162,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
             }
             else
             {
-                GP_WARN("Unsupported 'heightmap' format ('%s') in terrain definition: %s.", heightmap, path);
+                GP_WARN("Unsupported 'heightmap' format ('%s') in terrain definition: %s.", heightmap.c_str(), path);
                 if (!externalProperties)
                     SAFE_DELETE(p);
                 return NULL;
@@ -301,8 +301,10 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
                 else
                     ++index;
 
-                const char* textureMap = NULL;
-                const char* blendMap = NULL;
+                std::string textureMap;
+                const char* textureMapPtr = NULL;
+                std::string blendMap;
+                const char* blendMapPtr = NULL;
                 Vector2 textureRepeat;
                 int blendChannel = 0;
                 int row = -1, column = -1;
@@ -312,7 +314,10 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
                 Properties* t = lp->getNamespace("texture", true);
                 if (t)
                 {
-                    textureMap = t->getString("path");
+                    if (t->getPath("path", &textureMap))
+                    {
+                        textureMapPtr = textureMap.c_str();
+                    }
                     if (!t->getVector2("repeat", &textureRepeat))
                         textureRepeat.set(1,1);
                 }
@@ -320,7 +325,10 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
                 Properties* b = lp->getNamespace("blend", true);
                 if (b)
                 {
-                    blendMap = b->getString("path");
+                    if (b->getPath("path", &blendMap))
+                    {
+                        blendMapPtr = blendMap.c_str();
+                    }
                     const char* channel = b->getString("channel");
                     if (channel && strlen(channel) > 0)
                     {
@@ -342,9 +350,9 @@ Terrain* Terrain::create(HeightField* heightfield, const Vector3& scale, unsigne
                 if (lp->exists("column"))
                     column = lp->getInt("column");
 
-                if (!terrain->setLayer(index, textureMap, textureRepeat, blendMap, blendChannel, row, column))
+                if (!terrain->setLayer(index, textureMapPtr, textureRepeat, blendMapPtr, blendChannel, row, column))
                 {
-                    GP_WARN("Failed to load terrain layer: %s", textureMap);
+                    GP_WARN("Failed to load terrain layer: %s", textureMap.c_str());
                 }
             }
         }

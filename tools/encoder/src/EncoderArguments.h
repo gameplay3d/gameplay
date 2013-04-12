@@ -154,6 +154,7 @@ public:
     bool fontPreviewEnabled() const;
     bool textOutputEnabled() const;
     bool optimizeAnimationsEnabled() const;
+    bool outputMaterialEnabled() const;
 
     const char* getNodeId() const;
     unsigned int getFontSize() const;
@@ -202,6 +203,7 @@ private:
     bool _textOutput;
     bool _optimizeAnimations;
     AnimationGroupOption _animationGrouping;
+    bool _outputMaterial;
 
     std::vector<std::string> _groupAnimationNodeId;
     std::vector<std::string> _groupAnimationAnimationId;

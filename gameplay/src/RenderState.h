@@ -287,6 +287,8 @@ public:
 
         static void enableDepthWrite();
 
+        void cloneInto(StateBlock* state);
+
         // States
         bool _cullFaceEnabled;
         bool _depthTestEnabled;
@@ -476,30 +478,22 @@ private:
      */
     RenderState& operator=(const RenderState&);
 
-    /**
-     * Internal auto binding handler.
-     */
-    const Vector3& autoBindingGetAmbientColor() const;
-
-    /**
-     * Internal auto binding handler.
-     */
-    const Vector3& autoBindingGetLightColor() const;
-
-    /**
-     * Internal auto binding handler.
-     */
-    const Vector3& autoBindingGetLightDirection() const;
-
-    /**
-     * Internal auto binding handler.
-     */
+    // Internal auto binding handler methods.
+    const Matrix& autoBindingGetWorldMatrix() const;
+    const Matrix& autoBindingGetViewMatrix() const;
+    const Matrix& autoBindingGetProjectionMatrix() const;
+    const Matrix& autoBindingGetWorldViewMatrix() const;
+    const Matrix& autoBindingGetViewProjectionMatrix() const;
+    const Matrix& autoBindingGetWorldViewProjectionMatrix() const;
+    const Matrix& autoBindingGetInverseTransposeWorldMatrix() const;
+    const Matrix& autoBindingGetInverseTransposeWorldViewMatrix() const;
+    Vector3 autoBindingGetCameraWorldPosition() const;
+    Vector3 autoBindingGetCameraViewPosition() const;
     const Vector4* autoBindingGetMatrixPalette() const;
-
-    /**
-     * Internal auto binding handler.
-     */
     unsigned int autoBindingGetMatrixPaletteSize() const;
+    const Vector3& autoBindingGetAmbientColor() const;
+    const Vector3& autoBindingGetLightColor() const;
+    const Vector3& autoBindingGetLightDirection() const;
 
 protected:
 

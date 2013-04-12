@@ -7,7 +7,7 @@ namespace gameplay
 
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
-    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(true), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
+    _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(false), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
     _zIndex(-1), _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
@@ -41,7 +41,7 @@ void Control::initialize(Theme::Style* style, Properties* properties)
     _autoWidth = properties->getBool("autoWidth");
     _autoHeight = properties->getBool("autoHeight");
 
-    _consumeInputEvents = properties->getBool("consumeInputEvents", true);
+    _consumeInputEvents = properties->getBool("consumeInputEvents", false);
 
     _visible = properties->getBool("visible", true);
 

@@ -10,6 +10,7 @@ form particleEditor
         layout = LAYOUT_VERTICAL
         position = 0, 0
         size = 160, 220
+        consumeInputEvents = true
 
         label title
         {
@@ -56,6 +57,7 @@ form particleEditor
         position = 0, 220
         layout = LAYOUT_VERTICAL
         size = 160, 210
+        consumeInputEvents = true
 
         // Burst emission
         button emit
@@ -108,6 +110,7 @@ form particleEditor
         style = noBorder
         size = 160, 50
         position = 0, 430
+        consumeInputEvents = true
 
         button zoomIn
         {
@@ -132,6 +135,7 @@ form particleEditor
         layout = LAYOUT_VERTICAL
         scroll = SCROLL_VERTICAL
         scrollBarsAutoHide = false
+        consumeInputEvents = true
 
         // Particle Size
         label titleSize
@@ -155,7 +159,6 @@ form particleEditor
             valueTextVisible = true
             valueTextAlignment = ALIGN_BOTTOM_HCENTER
             valueTextPrecision = 2
-            consumeInputEvents = false
         }
 
         slider startMax : startMin

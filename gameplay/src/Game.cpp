@@ -509,7 +509,7 @@ void Game::gestureTapEvent(int x, int y)
 {
 }
 
-void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
 }
 
