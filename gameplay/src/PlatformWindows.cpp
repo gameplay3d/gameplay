@@ -619,8 +619,17 @@ bool initializeGL(WindowCreationParams* params)
     // function for querying GL extensions is a GL extension itself.
     HWND hwnd = NULL;
     HDC hdc = NULL;
-    if (!createWindow(NULL, &hwnd, &hdc))
-        return false;
+
+    if (params)
+    {
+        if (!createWindow(NULL, &hwnd, &hdc))
+            return false;
+    }
+    else
+    {
+        hwnd = __hwnd;
+        hdc = __hdc;
+    }
 
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
@@ -672,8 +681,8 @@ bool initializeGL(WindowCreationParams* params)
     // Note: Keep multisampling attributes at the start of the attribute lists since code below
     // assumes they are array elements 0 through 3.
     int attribList[] = {
-        WGL_SAMPLES_ARB, params->samples,
-        WGL_SAMPLE_BUFFERS_ARB, params->samples > 0 ? 1 : 0,
+        WGL_SAMPLES_ARB, params ? params->samples : 0,
+        WGL_SAMPLE_BUFFERS_ARB, params ? (params->samples > 0 ? 1 : 0) : 0,
         WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
         WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
         WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
@@ -683,13 +692,13 @@ bool initializeGL(WindowCreationParams* params)
         WGL_STENCIL_BITS_ARB, DEFAULT_STENCIL_BUFFER_SIZE,
         0
     };
-    __multiSampling = params->samples > 0;
+    __multiSampling = params && params->samples > 0;
 
     UINT numFormats;
-    if (!wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
+    if ( !wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
     {
         bool valid = false;
-        if (params->samples > 0)
+        if (params && params->samples > 0)
         {
             GP_WARN("Failed to choose pixel format with WGL_SAMPLES_ARB == %d. Attempting to fallback to lower samples setting.", params->samples);
             while (params->samples > 0)
@@ -717,14 +726,13 @@ bool initializeGL(WindowCreationParams* params)
         }
     }
 
-    // Destroy old window
-    DestroyWindow(hwnd);
-    hwnd = NULL;
-    hdc = NULL;
-
     // Create new/final window if needed
     if (params)
     {
+        DestroyWindow(hwnd);
+        hwnd = NULL;
+        hdc = NULL;
+
         if (!createWindow(params, &__hwnd, &__hdc))
         {
             wglDeleteContext(tempContext);
@@ -1017,7 +1025,6 @@ int Platform::enterMessagePump()
                 }
             }
 #endif
-
             _game->frame();
             SwapBuffers(__hdc);
         }

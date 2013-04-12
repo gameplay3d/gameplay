@@ -56,6 +56,11 @@ public:
      */
     int enterMessagePump();
 
+    /**
+     * Swaps the frame buffer on the device.
+     */
+    static void swapBuffers();
+
 private:
     
     /**
@@ -114,11 +119,6 @@ private:
      * @param enable true if vsync is enabled; false if not.
      */
     static void setVsync(bool enable);
-
-    /**
-     * Swaps the frame buffer on the device.
-     */
-    static void swapBuffers();
 
     /**
      * Sleeps synchronously for the given amount of time (in milliseconds).
