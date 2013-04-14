@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42049B5816ADBB61005DD1F9 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5216ADBB61005DD1F9 /* CoreMotion.framework */; };
-		42049B5916ADBB61005DD1F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5316ADBB61005DD1F9 /* Foundation.framework */; };
-		42049B5A16ADBB61005DD1F9 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5416ADBB61005DD1F9 /* OpenAL.framework */; };
-		42049B5B16ADBB61005DD1F9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5516ADBB61005DD1F9 /* OpenGLES.framework */; };
-		42049B5C16ADBB61005DD1F9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5616ADBB61005DD1F9 /* QuartzCore.framework */; };
-		42049B5D16ADBB61005DD1F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5716ADBB61005DD1F9 /* UIKit.framework */; };
-		42049B5F16ADBBF5005DD1F9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B5E16ADBBF5005DD1F9 /* libz.dylib */; };
+		1E89CB4E171B20DA00D3B4B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB4D171B20DA00D3B4B4 /* CoreMotion.framework */; };
+		1E89CB50171B20E000D3B4B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB4F171B20E000D3B4B4 /* Foundation.framework */; };
+		1E89CB52171B20E300D3B4B4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB51171B20E300D3B4B4 /* OpenAL.framework */; };
+		1E89CB54171B20EA00D3B4B4 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB53171B20EA00D3B4B4 /* OpenGLES.framework */; };
+		1E89CB56171B20EE00D3B4B4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB55171B20EE00D3B4B4 /* QuartzCore.framework */; };
+		1E89CB58171B20F200D3B4B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB57171B20F200D3B4B4 /* UIKit.framework */; };
+		1E89CB62171B219A00D3B4B4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E89CB61171B219A00D3B4B4 /* libz.dylib */; };
 		42049B6116ADBC0F005DD1F9 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B6016ADBC0F005DD1F9 /* libbullet.a */; };
 		42049B6316ADBC30005DD1F9 /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B6216ADBC30005DD1F9 /* libbullet.a */; };
 		42049B6516ADBC47005DD1F9 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42049B6416ADBC47005DD1F9 /* liblua.a */; };
@@ -47,13 +47,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		42049B5216ADBB61005DD1F9 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5316ADBB61005DD1F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5416ADBB61005DD1F9 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5516ADBB61005DD1F9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5616ADBB61005DD1F9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5716ADBB61005DD1F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		42049B5E16ADBBF5005DD1F9 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		1E89CB4D171B20DA00D3B4B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		1E89CB4F171B20E000D3B4B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		1E89CB51171B20E300D3B4B4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
+		1E89CB53171B20EA00D3B4B4 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		1E89CB55171B20EE00D3B4B4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		1E89CB57171B20F200D3B4B4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		1E89CB61171B219A00D3B4B4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		42049B6016ADBC0F005DD1F9 /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "GAMEPLAY_PATH/external-deps/bullet/lib/ios/armv7/libbullet.a"; sourceTree = "<group>"; };
 		42049B6216ADBC30005DD1F9 /* libbullet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbullet.a; path = "GAMEPLAY_PATH/external-deps/bullet/lib/macosx/libbullet.a"; sourceTree = "<group>"; };
 		42049B6416ADBC47005DD1F9 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "GAMEPLAY_PATH/external-deps/lua/lib/macosx/liblua.a"; sourceTree = "<group>"; };
@@ -124,13 +124,13 @@
 				42049B7916ADBCC3005DD1F9 /* libvorbis.a in Frameworks */,
 				42049B7A16ADBCC3005DD1F9 /* libvorbisenc.a in Frameworks */,
 				42049B7B16ADBCC3005DD1F9 /* libvorbisfile.a in Frameworks */,
-				42049B5F16ADBBF5005DD1F9 /* libz.dylib in Frameworks */,
-				42049B5816ADBB61005DD1F9 /* CoreMotion.framework in Frameworks */,
-				42049B5916ADBB61005DD1F9 /* Foundation.framework in Frameworks */,
-				42049B5A16ADBB61005DD1F9 /* OpenAL.framework in Frameworks */,
-				42049B5B16ADBB61005DD1F9 /* OpenGLES.framework in Frameworks */,
-				42049B5C16ADBB61005DD1F9 /* QuartzCore.framework in Frameworks */,
-				42049B5D16ADBB61005DD1F9 /* UIKit.framework in Frameworks */,
+				1E89CB62171B219A00D3B4B4 /* libz.dylib in Frameworks */,
+				1E89CB58171B20F200D3B4B4 /* UIKit.framework in Frameworks */,
+				1E89CB56171B20EE00D3B4B4 /* QuartzCore.framework in Frameworks */,
+				1E89CB54171B20EA00D3B4B4 /* OpenGLES.framework in Frameworks */,
+				1E89CB52171B20E300D3B4B4 /* OpenAL.framework in Frameworks */,
+				1E89CB50171B20E000D3B4B4 /* Foundation.framework in Frameworks */,
+				1E89CB4E171B20DA00D3B4B4 /* CoreMotion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,12 +193,12 @@
 		5B61613914CCC3560073B857 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				42049B5216ADBB61005DD1F9 /* CoreMotion.framework */,
-				42049B5316ADBB61005DD1F9 /* Foundation.framework */,
-				42049B5416ADBB61005DD1F9 /* OpenAL.framework */,
-				42049B5516ADBB61005DD1F9 /* OpenGLES.framework */,
-				42049B5616ADBB61005DD1F9 /* QuartzCore.framework */,
-				42049B5716ADBB61005DD1F9 /* UIKit.framework */,
+				1E89CB57171B20F200D3B4B4 /* UIKit.framework */,
+				1E89CB55171B20EE00D3B4B4 /* QuartzCore.framework */,
+				1E89CB53171B20EA00D3B4B4 /* OpenGLES.framework */,
+				1E89CB51171B20E300D3B4B4 /* OpenAL.framework */,
+				1E89CB4F171B20E000D3B4B4 /* Foundation.framework */,
+				1E89CB4D171B20DA00D3B4B4 /* CoreMotion.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -251,7 +251,7 @@
 				42049B7516ADBCC3005DD1F9 /* libvorbis.a */,
 				42049B7616ADBCC3005DD1F9 /* libvorbisenc.a */,
 				42049B7716ADBCC3005DD1F9 /* libvorbisfile.a */,
-				42049B5E16ADBBF5005DD1F9 /* libz.dylib */,
+				1E89CB61171B219A00D3B4B4 /* libz.dylib */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
