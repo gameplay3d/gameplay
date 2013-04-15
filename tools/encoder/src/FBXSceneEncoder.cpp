@@ -913,6 +913,25 @@ void FBXSceneEncoder::loadMaterials(FbxScene* fbxScene)
     }
 }
 
+// Fix bad material names
+void fixMaterialName(string& name)
+{
+    static int unnamedCount = 0;
+
+    for (string::size_type i = 0, len = name.length(); i < len; ++i)
+    {
+        if (!isalnum(name[i]))
+            name[i] = '_';
+    }
+
+    if (name.length() == 0)
+    {
+        ostringstream stream;
+        stream << "unnamed_" << (++unnamedCount);
+        name = stream.str();
+    }
+}
+
 void FBXSceneEncoder::loadMaterial(FbxNode* fbxNode)
 {
     Node* node = findNode(fbxNode);
@@ -922,7 +941,8 @@ void FBXSceneEncoder::loadMaterial(FbxNode* fbxNode)
     for (int index = 0; index < materialCount; ++index)
     {
         FbxSurfaceMaterial* fbxMaterial = fbxNode->GetMaterial(index);
-        const string materialName(fbxMaterial->GetName());
+        string materialName(fbxMaterial->GetName());
+        fixMaterialName(materialName);
         Material* material = NULL;
         map<string, Material*>::iterator it = _materials.find(materialName);
         if (it != _materials.end())
