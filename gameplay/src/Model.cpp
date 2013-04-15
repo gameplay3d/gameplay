@@ -54,17 +54,20 @@ unsigned int Model::getMeshPartCount() const
 
 Material* Model::getMaterial(int partIndex)
 {
-    GP_ASSERT(partIndex == -1 || (partIndex >= 0 && partIndex < (int)getMeshPartCount()));
+    GP_ASSERT(partIndex == -1 || partIndex >= 0);
 
     Material* m = NULL;
 
-    if (partIndex >= 0 && partIndex < (int)_partCount)
+    if (partIndex < 0)
+        return _material;
+
+    if (partIndex >= (int)_partCount)
+        return NULL;
+
+    // Look up explicitly specified part material.
+    if (_partMaterials)
     {
-        // Look up explicitly specified part material.
-        if (_partMaterials)
-        {
-            m = _partMaterials[partIndex];
-        }
+        m = _partMaterials[partIndex];
     }
 
     if (m == NULL)

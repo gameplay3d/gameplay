@@ -248,6 +248,7 @@ void EncoderArguments::printUsage() const
     LOG(1, "  -g:none\tDo not prompt to group animations.\n");
     LOG(1, "  -g <node id> <animation id>\n" \
         "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
+    LOG(1, "  -m\t\tOutput material file for scene.\n");
     LOG(1, "  -tb <node id>\n" \
         "\t\tGenerates tangents and binormals for the given node.\n");
     LOG(1, "  -oa\n" \
