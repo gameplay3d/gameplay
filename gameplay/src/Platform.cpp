@@ -8,9 +8,9 @@
 namespace gameplay
 {
 
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
+void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool actuallyMouse)
 {
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
+    if (actuallyMouse || !Form::touchEventInternal(evt, x, y, contactIndex))
     {
         Game::getInstance()->touchEvent(evt, x, y, contactIndex);
         Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
