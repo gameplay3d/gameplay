@@ -420,7 +420,7 @@ const Matrix& Node::getWorldMatrix() const
             // If we have a parent, multiply our parent world transform by our local
             // transform to obtain our final resolved world transform.
             Node* parent = getParent();
-            if (parent)
+            if (parent && (!_collisionObject || _collisionObject->isKinematic()))
             {
                 Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
             }
