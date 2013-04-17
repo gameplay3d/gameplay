@@ -76,6 +76,8 @@ void luaRegister_Container()
         {"getPadding", lua_Container_getPadding},
         {"getRefCount", lua_Container_getRefCount},
         {"getScroll", lua_Container_getScroll},
+        {"getScrollWheelSpeed", lua_Container_getScrollWheelSpeed},
+        {"getScrollingFriction", lua_Container_getScrollingFriction},
         {"getSkinColor", lua_Container_getSkinColor},
         {"getSkinRegion", lua_Container_getSkinRegion},
         {"getState", lua_Container_getState},
@@ -120,6 +122,8 @@ void luaRegister_Container()
         {"setPosition", lua_Container_setPosition},
         {"setScroll", lua_Container_setScroll},
         {"setScrollBarsAutoHide", lua_Container_setScrollBarsAutoHide},
+        {"setScrollWheelSpeed", lua_Container_setScrollWheelSpeed},
+        {"setScrollingFriction", lua_Container_setScrollingFriction},
         {"setSize", lua_Container_setSize},
         {"setSkinColor", lua_Container_setSkinColor},
         {"setSkinRegion", lua_Container_setSkinRegion},
@@ -2155,6 +2159,76 @@ int lua_Container_getScroll(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_getScroll - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_getScrollWheelSpeed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                float result = instance->getScrollWheelSpeed();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getScrollWheelSpeed - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_getScrollingFriction(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                float result = instance->getScrollingFriction();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getScrollingFriction - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4246,6 +4320,78 @@ int lua_Container_setScrollBarsAutoHide(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_setScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setScrollWheelSpeed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setScrollWheelSpeed(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setScrollWheelSpeed - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setScrollingFriction(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setScrollingFriction(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setScrollingFriction - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

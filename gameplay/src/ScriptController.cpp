@@ -692,7 +692,7 @@ static const char* lua_dofile_function =
     "    end\n"
     "end\n";
 
-void appendLuaPath(lua_State* state, const char* path)
+static void appendLuaPath(lua_State* state, const char* path)
 {
     lua_getglobal(state, "package");
 

@@ -46,7 +46,7 @@ Container::Container()
       _scrollBarsAutoHide(false), _scrollBarOpacity(1.0f), _scrolling(false),
       _scrollingVeryFirstX(0), _scrollingVeryFirstY(0), _scrollingFirstX(0), _scrollingFirstY(0), _scrollingLastX(0), _scrollingLastY(0),
       _scrollingStartTimeX(0), _scrollingStartTimeY(0), _scrollingLastTime(0),
-      _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
+      _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f), _scrollWheelSpeed(400.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0),
@@ -504,7 +504,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
         spriteBatch->start();
 
-        if (_scrollBarBounds.height > 0 &&((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
+        if (_scrollBarBounds.height > 0 && ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
@@ -1521,7 +1521,14 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             return touchEventScroll(Touch::TOUCH_RELEASE, x, y, 0);
 
         case Mouse::MOUSE_WHEEL:
-            _scrollPosition.y += (_totalHeight / 10.0f) * wheelDelta;
+            if (_scrollingVelocity.isZero())
+            {
+                _lastFrameTime = Game::getGameTime();
+            }
+            _scrolling = _scrollingMouseVertically = _scrollingMouseHorizontally = false;
+
+            _scrollingVelocity.y += _scrollWheelSpeed * wheelDelta;
+
             if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
             {
                 _scrollBarOpacityClip->stop();
@@ -1673,6 +1680,26 @@ Container::Scroll Container::getScroll(const char* scroll)
     }
 
     return Container::SCROLL_NONE;
+}
+
+float Container::getScrollingFriction() const
+{
+    return _scrollingFriction;
+}
+
+void Container::setScrollingFriction(float friction)
+{
+    _scrollingFriction = friction;
+}
+
+float Container::getScrollWheelSpeed() const
+{
+    return _scrollWheelSpeed;
+}
+
+void Container::setScrollWheelSpeed(float speed)
+{
+    _scrollWheelSpeed = speed;
 }
 
 static bool sortControlsByZOrder(Control* c1, Control* c2)

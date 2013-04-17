@@ -255,7 +255,7 @@ private:
     float _u2;
     float _v1;
     Matrix _projectionMatrix;           // Orthographic projection matrix to be set on SpriteBatch objects when rendering into the FBO.
-    Matrix _defaultProjectionMatrix;   
+    Matrix _defaultProjectionMatrix;
 };
 
 }
