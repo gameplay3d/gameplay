@@ -89,9 +89,11 @@ Thumbs.db
 /samples/character/Simulator-Coverage
 /samples/character/Simulator-Profile
 /samples/character/Device-Debug
+/samples/character/Device-Debug-QC
 /samples/character/Device-Coverage
 /samples/character/Device-Profile
 /samples/character/Device-Release
+/samples/character/Device-Release-QC
 /samples/character/game.config
 /samples/character/res/shaders
 /samples/character/res/logo_powered_white.png
@@ -214,10 +216,11 @@ Thumbs.db
 /samples/racer/Simulator-Coverage
 /samples/racer/Simulator-Profile
 /samples/racer/Device-Debug
-/samples/racer/Device-Debug-IMG
+/samples/racer/Device-Debug-QC
 /samples/racer/Device-Coverage
 /samples/racer/Device-Profile
 /samples/racer/Device-Release
+/samples/racer/Device-Release-QC
 /samples/racer/game.config
 /samples/racer/res/shaders
 /samples/racer/res/logo_powered_white.png

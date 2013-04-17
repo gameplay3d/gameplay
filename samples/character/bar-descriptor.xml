@@ -94,6 +94,14 @@
        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
     </configuration>
+    <configuration name="Device-Debug-QC">
+       <platformArchitecture>armle-v7</platformArchitecture>
+       <asset path="Device-Debug-QC/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
+    </configuration>
+    <configuration name="Device-Release-QC">
+       <platformArchitecture>armle-v7</platformArchitecture>
+       <asset path="Device-Release-QC/sample-character" entry="true" type="Qnx/Elf">sample-character</asset>
+    </configuration>
   
     
     <!-- The icon for the application, which should be 114x114. -->
