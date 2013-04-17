@@ -191,12 +191,7 @@ void Node::remove()
 
     if (parent && parent->_notifyHierarchyChanged)
     {
-        Node* group = Scene::getScene()->findNode("group1");
-        Node* node = Scene::getScene()->findNode("board");
         parent->hierarchyChanged();
-        node->getWorldMatrix();
-        node = NULL;
-        group = NULL;
     }
 }
 
