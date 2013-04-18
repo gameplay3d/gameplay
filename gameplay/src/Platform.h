@@ -201,7 +201,11 @@ private:
     static bool isCursorVisible();
 
     /**
-     * Gets the platform accelerometer values.
+     * Gets the platform accelerometer values for use as an indication of device
+     * orientation. Despite its name, implementations are at liberty to combine
+     * accelerometer data with data from other sensors as well, such as the gyros.
+     * This method is best used to obtain an indication of device orientation; it
+     * does not necessarily distinguish between acceleration and rotation rate.
      * 
      * @param pitch The accelerometer pitch.
      * @param roll The accelerometer roll.
