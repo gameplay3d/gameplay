@@ -226,6 +226,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             GP_ERROR("The referenced node data at url '%s' failed to load.", snp._url.c_str());
             return;
         }
+        p->rewind();
 
         // If the URL didn't specify a particular namespace within the file, pick the first one.
         p = (strlen(p->getNamespace()) > 0) ? p : p->getNextNamespace();
