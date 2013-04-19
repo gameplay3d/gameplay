@@ -1,8 +1,8 @@
 set( GAME_NAME sample-mesh )
 
 set(GAME_SRC
-	src/MeshGame.cpp
-	src/MeshGame.h
+    src/MeshGame.cpp
+    src/MeshGame.h
 )
 
 add_executable(${GAME_NAME}
