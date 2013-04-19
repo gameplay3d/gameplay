@@ -121,6 +121,11 @@ inline bool Game::canExit() const
     return Platform::canExit();
 }
 
+inline bool Game::hasAccelerometer() const
+{
+	return Platform::hasAccelerometer();
+}
+
 inline void Game::getAccelerometerValues(float* pitch, float* roll)
 {
     Platform::getAccelerometerValues(pitch, roll);

@@ -155,7 +155,7 @@ void InputSample::render(float elapsedTime)
         accelerometerDrawRate = 0.0f;
         getAccelerometerValues(&pitch, &roll);
     }
-    if (!_keyboardState)
+    if (hasAccelerometer() && !_keyboardState)
     {
         sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
         _font->measureText(buffer, _font->getSize(), &width, &height);
