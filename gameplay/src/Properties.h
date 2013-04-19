@@ -387,6 +387,8 @@ public:
      * @param path The string to copy the path to if the file exists.
      * 
      * @return True if the property exists and the file exists, false otherwise.
+     *
+     * @script{ignore}
      */
     bool getPath(const char* name, std::string* path) const;
 

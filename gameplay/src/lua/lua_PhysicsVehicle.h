@@ -37,6 +37,7 @@ int lua_PhysicsVehicle_getWheel(lua_State* state);
 int lua_PhysicsVehicle_isDynamic(lua_State* state);
 int lua_PhysicsVehicle_isEnabled(lua_State* state);
 int lua_PhysicsVehicle_isKinematic(lua_State* state);
+int lua_PhysicsVehicle_isStatic(lua_State* state);
 int lua_PhysicsVehicle_removeCollisionListener(lua_State* state);
 int lua_PhysicsVehicle_reset(lua_State* state);
 int lua_PhysicsVehicle_setBoost(lua_State* state);
