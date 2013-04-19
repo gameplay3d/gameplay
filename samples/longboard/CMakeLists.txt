@@ -1,8 +1,8 @@
 set( GAME_NAME sample-longboard )
 
 set(GAME_SRC
-	src/LongboardGame.cpp
-	src/LongboardGame.h
+    src/LongboardGame.cpp
+    src/LongboardGame.h
 )
 
 add_executable(${GAME_NAME}

@@ -99,7 +99,7 @@ static bool getNestedVariable(lua_State* lua, const char* name)
     {
         start = end;
         end = strchr(start, '.');
-        if (end == '\0' || end == NULL)
+        if (end == NULL || *end == '\0')
         {
             // push the last variable
             lua_pushstring(lua, start);

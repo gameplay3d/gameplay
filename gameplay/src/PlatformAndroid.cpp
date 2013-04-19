@@ -810,7 +810,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time < GESTURE_SWIPE_DURATION_MAX && 
                             (abs(deltaX) > GESTURE_SWIPE_DISTANCE_MIN || abs(deltaY) > GESTURE_SWIPE_DISTANCE_MIN) )
                         {
-                            int direction;
+                            int direction = 0;
                             if (deltaX > 0)
                                 direction |= gameplay::Gesture::SWIPE_DIRECTION_RIGHT;
                             else if (deltaX < 0)

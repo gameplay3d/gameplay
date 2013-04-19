@@ -170,8 +170,6 @@ void MeshSkin::computeBounds()
 
     LOG(2, "Computing bounds for skin of mesh: %s\n", _mesh->getId().c_str());
 
-    Node* joint;
-
     // Get the root joint
     Node* rootJoint = _joints[0];
     Node* parent = rootJoint->getParent();
@@ -210,7 +208,7 @@ void MeshSkin::computeBounds()
     LOG(3, "  0%%\r");
     for (unsigned int i = 0; i < jointCount; ++i)
     {
-        joint = _joints[i];
+        Node* joint = _joints[i];
 
         // Find all animations that target this joint
         Animations* animations = GPBFile::getInstance()->getAnimations();
