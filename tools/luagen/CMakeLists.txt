@@ -23,16 +23,16 @@ add_definitions(-lstdc++ -llua -ltinyxml2)
 set( APP_NAME gameplay-luagen )
 
 set(APP_SRC
-	src/Base.h
-	src/ClassBinding.cpp
-	src/ClassBinding.h
-	src/DebugNew.cpp
-	src/DebugNew.h
-	src/EnumBinding.h
-	src/FunctionBinding.cpp
-	src/FunctionBinding.h
-	src/Generator.cpp
-	src/Generator.h
+    src/Base.h
+    src/ClassBinding.cpp
+    src/ClassBinding.h
+    src/DebugNew.cpp
+    src/DebugNew.h
+    src/EnumBinding.h
+    src/FunctionBinding.cpp
+    src/FunctionBinding.h
+    src/Generator.cpp
+    src/Generator.h
     src/main.cpp
     src/TypedefBinding.h
 )
