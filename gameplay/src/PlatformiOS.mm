@@ -1380,6 +1380,11 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+bool Platform::hasAccelerometer()
+{
+    return true;
+}
+
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];

@@ -37,16 +37,9 @@ char** __argv = 0;
 static int __width = 1280;
 static int __height = 720;
 
-static float ACCELEROMETER_FACTOR_X = 90.0f / __width;
-static float ACCELEROMETER_FACTOR_Y = 90.0f / __height;
-
 static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
-static float __pitch;
-static float __roll;
-static int __lx;
-static int __ly;
 static bool __hasMouse = false;
 static bool __leftMouseDown = false;
 static bool __rightMouseDown = false;
@@ -1056,8 +1049,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     __rightMouseDown = true;
      NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    __lx = point.x;
-    __ly = __height - point.y;
     
     [__view->gameLock lock];
     gameplay::Platform::mouseEventInternal(Mouse::MOUSE_PRESS_RIGHT_BUTTON, point.x, __height - point.y, 0);
@@ -1077,20 +1068,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) rightMouseDragged: (NSEvent*) event
 {
     NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (__rightMouseDown)
-    {
-        // Update the pitch and roll by adding the scaled deltas.
-        __roll += (float)(point.x - __lx) * ACCELEROMETER_FACTOR_X;
-        __pitch -= -(float)(point.y - (__height - __ly)) * ACCELEROMETER_FACTOR_Y;
-    
-        // Clamp the values to the valid range.
-        __roll = max(min(__roll, 90.0f), -90.0f);
-        __pitch = max(min(__pitch, 90.0f), -90.0f);
-    
-        // Update the last X/Y values.
-        __lx = point.x;
-        __ly = (__height - point.y);
-    }
     
     // In right-mouse case, whether __rightMouseDown is true or false
     // this should not matter, mouse move is still occuring
@@ -1691,10 +1668,6 @@ int Platform::enterMessagePump()
         }
     }
 
-    // Set the scale factors for the mouse movement used to simulate the accelerometer.
-    ACCELEROMETER_FACTOR_X = 90.0f / __width;
-    ACCELEROMETER_FACTOR_Y = 90.0f / __height;
-
     NSAutoreleasePool* pool = [NSAutoreleasePool new];
     NSApplication* app = [NSApplication sharedApplication];
     NSRect screenBounds = [[NSScreen mainScreen] frame];
@@ -1825,14 +1798,19 @@ bool Platform::isMultiTouch()
 {
     return true;
 }
+
+bool Platform::hasAccelerometer()
+{
+    return false;
+}
     
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     GP_ASSERT(pitch);
     GP_ASSERT(roll);
 
-    *pitch = __pitch;
-    *roll = __roll;
+    *pitch = 0;
+    *roll = 0;
 }
 
 void Platform::getArguments(int* argc, char*** argv)
