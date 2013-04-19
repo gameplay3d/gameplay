@@ -143,6 +143,131 @@ public:
     Texture::Sampler* setValue(const char* texturePath, bool generateMipmaps);
 
     /**
+     * Stores a float value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setFloat(float value);
+
+    /**
+     * Stores an array of float values in this parameter.
+     *
+     * @param values The array of values.
+     * @param count The number of values in the array.
+     * @param copy True to make a copy of the array in the material parameter, or false
+     *      to point to the passed in array/pointer (which must be valid for the lifetime
+     *      of the MaterialParameter).
+     */
+    void setFloatArray(const float* values, unsigned int count, bool copy = false);
+
+    /**
+     * Stores an integer value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setInt(int value);
+
+    /**
+     * Stores an array of integer values in this parameter.
+     */
+    void setIntArray(const int* values, unsigned int count, bool copy = false);
+
+    /**
+     * Stores a Vector2 value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setVector2(const Vector2& value);
+
+    /**
+     * Stores an array of Vector2 values in this parameter.
+     *
+     * @param values The array of values.
+     * @param count The number of values in the array.
+     * @param copy True to make a copy of the array in the material parameter, or false
+     *      to point to the passed in array/pointer (which must be valid for the lifetime
+     *      of the MaterialParameter).
+     */
+    void setVector2Array(const Vector2* values, unsigned int count, bool copy = false);
+
+    /**
+     * Stores a Vector3 value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setVector3(const Vector3& value);
+
+    /**
+     * Stores an array of Vector3 values in this parameter.
+     */
+    void setVector3Array(const Vector3* values, unsigned int count, bool copy = false);
+
+    /**
+     * Stores a Vector4 value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setVector4(const Vector4& value);
+
+    /**
+     * Stores an array of Vector4 values in this parameter.
+     *
+     * @param values The array of values.
+     * @param count The number of values in the array.
+     * @param copy True to make a copy of the array in the material parameter, or false
+     *      to point to the passed in array/pointer (which must be valid for the lifetime
+     *      of the MaterialParameter).
+     */
+    void setVector4Array(const Vector4* values, unsigned int count, bool copy = false);
+
+    /**
+     * Stores a Matrix value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setMatrix(const Matrix& value);
+
+    /**
+     * Stores an array of Matrix values in this parameter.
+     *
+     * @param values The array of values.
+     * @param count The number of values in the array.
+     * @param copy True to make a copy of the array in the material parameter, or false
+     *      to point to the passed in array/pointer (which must be valid for the lifetime
+     *      of the MaterialParameter).
+     */
+    void setMatrixArray(const Matrix* values, unsigned int count, bool copy = false);
+
+    /**
+     * Loads a texture sampler from the specified path and sets it as the value of this parameter.
+     *
+     * @param texturePath The path to the texture to set.
+     * @param generateMipmaps True to generate a full mipmap chain for the texture, false otherwise.
+     *
+     * @return The texture sampler that was set for this material parameter.
+     */
+    Texture::Sampler* setSampler(const char* texturePath, bool generateMipmaps);
+
+    /**
+     * Stores a Sampler value in this parameter.
+     *
+     * @param value The value to set.
+     */
+    void setSampler(const Texture::Sampler* value);
+
+    /**
+     * Stores an array of Sampler values in this parameter.
+     *
+     * @param values The array of values.
+     * @param count The number of values in the array.
+     * @param copy True to make a copy of the array in the material parameter, or false
+     *      to point to the passed in array/pointer (which must be valid for the lifetime
+     *      of the MaterialParameter).
+     * @script{ignore}
+     */
+    void setSamplerArray(const Texture::Sampler** values, unsigned int count, bool copy = false);
+
+    /**
      * Binds the return value of a class method to this material parameter.
      *
      * This method enables binding of arbitrary class methods to a material

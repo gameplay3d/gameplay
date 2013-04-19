@@ -32,6 +32,7 @@ int lua_Transform_getTranslationX(lua_State* state);
 int lua_Transform_getTranslationY(lua_State* state);
 int lua_Transform_getTranslationZ(lua_State* state);
 int lua_Transform_getUpVector(lua_State* state);
+int lua_Transform_isStatic(lua_State* state);
 int lua_Transform_removeListener(lua_State* state);
 int lua_Transform_removeScriptCallback(lua_State* state);
 int lua_Transform_rotate(lua_State* state);
