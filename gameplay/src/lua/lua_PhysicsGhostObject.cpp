@@ -42,6 +42,7 @@ void luaRegister_PhysicsGhostObject()
         {"isDynamic", lua_PhysicsGhostObject_isDynamic},
         {"isEnabled", lua_PhysicsGhostObject_isEnabled},
         {"isKinematic", lua_PhysicsGhostObject_isKinematic},
+        {"isStatic", lua_PhysicsGhostObject_isStatic},
         {"removeCollisionListener", lua_PhysicsGhostObject_removeCollisionListener},
         {"setEnabled", lua_PhysicsGhostObject_setEnabled},
         {"transformChanged", lua_PhysicsGhostObject_transformChanged},
@@ -685,6 +686,41 @@ int lua_PhysicsGhostObject_isKinematic(lua_State* state)
             }
 
             lua_pushstring(state, "lua_PhysicsGhostObject_isKinematic - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsGhostObject_isStatic(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsGhostObject* instance = getInstance(state);
+                bool result = instance->isStatic();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsGhostObject_isStatic - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

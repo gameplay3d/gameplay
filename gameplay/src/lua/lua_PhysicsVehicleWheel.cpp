@@ -49,6 +49,7 @@ void luaRegister_PhysicsVehicleWheel()
         {"isDynamic", lua_PhysicsVehicleWheel_isDynamic},
         {"isEnabled", lua_PhysicsVehicleWheel_isEnabled},
         {"isKinematic", lua_PhysicsVehicleWheel_isKinematic},
+        {"isStatic", lua_PhysicsVehicleWheel_isStatic},
         {"isSteerable", lua_PhysicsVehicleWheel_isSteerable},
         {"removeCollisionListener", lua_PhysicsVehicleWheel_removeCollisionListener},
         {"setEnabled", lua_PhysicsVehicleWheel_setEnabled},
@@ -1147,6 +1148,41 @@ int lua_PhysicsVehicleWheel_isKinematic(lua_State* state)
             }
 
             lua_pushstring(state, "lua_PhysicsVehicleWheel_isKinematic - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsVehicleWheel_isStatic(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsVehicleWheel* instance = getInstance(state);
+                bool result = instance->isStatic();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsVehicleWheel_isStatic - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -31,6 +31,7 @@ int lua_PhysicsVehicleWheel_getWheelRadius(lua_State* state);
 int lua_PhysicsVehicleWheel_isDynamic(lua_State* state);
 int lua_PhysicsVehicleWheel_isEnabled(lua_State* state);
 int lua_PhysicsVehicleWheel_isKinematic(lua_State* state);
+int lua_PhysicsVehicleWheel_isStatic(lua_State* state);
 int lua_PhysicsVehicleWheel_isSteerable(lua_State* state);
 int lua_PhysicsVehicleWheel_removeCollisionListener(lua_State* state);
 int lua_PhysicsVehicleWheel_setEnabled(lua_State* state);

@@ -17,7 +17,11 @@ void luaRegister_Platform()
         {"enterMessagePump", lua_Platform_enterMessagePump},
         {NULL, NULL}
     };
-    const luaL_Reg* lua_statics = NULL;
+    const luaL_Reg lua_statics[] = 
+    {
+        {"swapBuffers", lua_Platform_static_swapBuffers},
+        {NULL, NULL}
+    };
     std::vector<std::string> scopePath;
 
     gameplay::ScriptUtil::registerClass("Platform", lua_members, NULL, lua_Platform__gc, lua_statics, scopePath);
@@ -96,6 +100,31 @@ int lua_Platform_enterMessagePump(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Platform_static_swapBuffers(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 0:
+        {
+            Platform::swapBuffers();
+            
+            return 0;
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 0).");
             lua_error(state);
             break;
         }
