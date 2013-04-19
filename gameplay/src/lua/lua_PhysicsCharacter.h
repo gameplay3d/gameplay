@@ -23,6 +23,7 @@ int lua_PhysicsCharacter_isDynamic(lua_State* state);
 int lua_PhysicsCharacter_isEnabled(lua_State* state);
 int lua_PhysicsCharacter_isKinematic(lua_State* state);
 int lua_PhysicsCharacter_isPhysicsEnabled(lua_State* state);
+int lua_PhysicsCharacter_isStatic(lua_State* state);
 int lua_PhysicsCharacter_jump(lua_State* state);
 int lua_PhysicsCharacter_removeCollisionListener(lua_State* state);
 int lua_PhysicsCharacter_rotate(lua_State* state);
