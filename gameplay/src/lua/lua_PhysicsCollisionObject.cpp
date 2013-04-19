@@ -37,6 +37,7 @@ void luaRegister_PhysicsCollisionObject()
         {"isDynamic", lua_PhysicsCollisionObject_isDynamic},
         {"isEnabled", lua_PhysicsCollisionObject_isEnabled},
         {"isKinematic", lua_PhysicsCollisionObject_isKinematic},
+        {"isStatic", lua_PhysicsCollisionObject_isStatic},
         {"removeCollisionListener", lua_PhysicsCollisionObject_removeCollisionListener},
         {"setEnabled", lua_PhysicsCollisionObject_setEnabled},
         {NULL, NULL}
@@ -717,6 +718,41 @@ int lua_PhysicsCollisionObject_isKinematic(lua_State* state)
             }
 
             lua_pushstring(state, "lua_PhysicsCollisionObject_isKinematic - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsCollisionObject_isStatic(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsCollisionObject* instance = getInstance(state);
+                bool result = instance->isStatic();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsCollisionObject_isStatic - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
