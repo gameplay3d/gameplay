@@ -511,7 +511,11 @@ public:
     inline bool canExit() const;
 
     /**
-     * Gets the current accelerometer values.
+     * Gets the current accelerometer values for use as an indication of device
+     * orientation. Despite its name, implementations are at liberty to combine
+     * accelerometer data with data from other sensors as well, such as the gyros.
+     * This method is best used to obtain an indication of device orientation; it
+     * does not necessarily distinguish between acceleration and rotation rate.
      *
      * @param pitch The pitch angle returned (in degrees). If NULL then not returned.
      * @param roll The roll angle returned (in degrees). If NULL then not returned.
