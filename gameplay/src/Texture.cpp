@@ -155,6 +155,44 @@ Texture* Texture::create(Image* image, bool generateMipmaps)
     }
 }
 
+Texture* Texture::createCubeMap(const char* path[6], bool generateMipmaps)
+{
+    // Create and load the texture.
+    GLuint textureId;
+    GL_ASSERT( glGenTextures(1, &textureId) );
+    GL_ASSERT( glBindTexture(GL_TEXTURE_CUBE_MAP, textureId) );
+    GL_ASSERT( glPixelStorei(GL_UNPACK_ALIGNMENT, 1) );
+    
+    Image* image;
+    Format format;
+    for (int f = 0; f < 6; ++f) {
+        image = Image::create(path[f]);
+        
+        if( image->getFormat() == Image::RGB )
+            format = Texture::RGB;
+        else if( image->getFormat() == Image::RGBA )
+            format = Texture::RGBA;
+        else
+            return NULL;
+        
+        GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + f;
+        glTexImage2D(face, 0, format, image->getWidth(), image->getHeight(), 0, format, GL_UNSIGNED_BYTE, image->getData());
+    }
+    Filter minFilter = generateMipmaps ? NEAREST_MIPMAP_LINEAR : LINEAR;
+    GL_ASSERT( glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, minFilter) );
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+    
+    Texture* texture = new Texture();
+    texture->_handle = textureId;
+    texture->_format = format;
+    texture->_width = image->getWidth();
+    texture->_height = image->getHeight();
+    texture->_minFilter = minFilter;
+    
+    return texture;
+}
+
+
 Texture* Texture::create(Format format, unsigned int width, unsigned int height, unsigned char* data, bool generateMipmaps)
 {
     // Create and load the texture.
