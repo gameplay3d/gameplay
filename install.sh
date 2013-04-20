@@ -8,10 +8,7 @@
 # be hosted separately.
 #
 
-# prefix=http://www.gameplay3d.org
-# prefix=http://www.jimmydev.com
-# prefix=http://jfinale.appoverdrive.com
-prefix=http://jim.clicknect.com
+prefix=http://www.gameplay3d.org
 
 branchname=$1
 if [[ "$branchname" == "" ]]; then
