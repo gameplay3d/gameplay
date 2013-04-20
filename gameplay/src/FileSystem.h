@@ -2,6 +2,7 @@
 #define FILESYSTEM_H_
 
 #include "Stream.h"
+#include <string>
 
 namespace gameplay
 {
@@ -180,6 +181,22 @@ public:
      * @param path The path to the file.
      */
     static void createFileFromAsset(const char* path);
+
+    /**
+     * Returns the directory name up to and including the trailing '/'.
+     * 
+     * This is a lexical method so it does not verify that the directory exists.
+     * Back slashes will be converted to forward slashes.
+     * 
+     * - "res/image.png" will return "res/"
+     * - "image.png" will return ""
+     * - "c:\foo\bar\image.png" will return "c:/foo/bar/"
+     * 
+     * @param The file path. May be relative or absolute, forward or back slashes. May be NULL.
+     * 
+     * @return The directory name with the trailing '/'. Returns "" if path is NULL or the path does not contain a directory.
+     */
+    static std::string getDirectoryName(const char* path);
 
     /**
      * Returns the extension of the given file path.

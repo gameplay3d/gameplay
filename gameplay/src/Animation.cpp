@@ -343,9 +343,11 @@ Animation::Channel* Animation::createChannel(AnimationTarget* target, int proper
         curve->setPoint(i, normalizedKeyTimes[i], (keyValues + pointOffset), (Curve::InterpolationType) type);
         pointOffset += propertyComponentCount;
     }
-    i = keyCount - 1;
-    normalizedKeyTimes[i] = 1.0f;
-    curve->setPoint(i, normalizedKeyTimes[i], keyValues + pointOffset, (Curve::InterpolationType) type);
+    if (keyCount > 1) {
+        i = keyCount - 1;
+        normalizedKeyTimes[i] = 1.0f;
+        curve->setPoint(i, normalizedKeyTimes[i], keyValues + pointOffset, (Curve::InterpolationType) type);
+    }
 
     SAFE_DELETE_ARRAY(normalizedKeyTimes);
 

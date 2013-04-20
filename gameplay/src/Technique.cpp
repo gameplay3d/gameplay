@@ -65,6 +65,7 @@ Technique* Technique::clone(Material* material, NodeCloneContext &context) const
         technique->_passes.push_back(passCopy);
     }
     RenderState::cloneInto(technique, context);
+    technique->_parent = material;
     return technique;
 }
 

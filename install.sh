@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# ./gameplay-install.sh [master | next]
+# ./install.sh [master | next]
 #
 # Download GamePlay resources from HTTP server and extract from ZIP
 #

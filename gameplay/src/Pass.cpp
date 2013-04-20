@@ -54,10 +54,10 @@ void Pass::setVertexAttributeBinding(VertexAttributeBinding* binding)
     }
 }
 
- VertexAttributeBinding* Pass::getVertexAttributeBinding() const
- {
-     return _vaBinding;
- }
+VertexAttributeBinding* Pass::getVertexAttributeBinding() const
+{
+    return _vaBinding;
+}
 
 void Pass::bind()
 {
@@ -92,6 +92,7 @@ Pass* Pass::clone(Technique* technique, NodeCloneContext &context) const
     effect->addRef();
     Pass* pass = new Pass(getId(), technique, effect);
     RenderState::cloneInto(pass, context);
+    pass->_parent = technique;
     return pass;
 }
 

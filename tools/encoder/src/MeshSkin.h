@@ -34,6 +34,8 @@ public:
     virtual void writeBinary(FILE* file);
     virtual void writeText(FILE* file);
 
+    unsigned int getJointCount() const;
+
     void setBindShape(const float data[]);
 
     void setVertexInfluenceCount(unsigned int count);

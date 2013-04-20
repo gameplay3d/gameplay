@@ -26,12 +26,14 @@ void calculateNamespacePath(const std::string& urlString, std::string& fileStrin
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
 
 Properties::Properties()
+    : _dirPath(NULL), _parent(NULL)
 {
 }
 
 Properties::Properties(const Properties& copy)
-    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties)
+    : _namespace(copy._namespace), _id(copy._id), _parentID(copy._parentID), _properties(copy._properties), _dirPath(NULL), _parent(copy._parent)
 {
+    setDirectoryPath(copy._dirPath);
     _namespaces = std::vector<Properties*>();
     std::vector<Properties*>::const_iterator it;
     for (it = copy._namespaces.begin(); it < copy._namespaces.end(); ++it)
@@ -44,12 +46,14 @@ Properties::Properties(const Properties& copy)
 
 
 Properties::Properties(Stream* stream)
+    : _dirPath(NULL), _parent(NULL)
 {
     readProperties(stream);
     rewind();
 }
 
-Properties::Properties(Stream* stream, const char* name, const char* id, const char* parentID) : _namespace(name)
+Properties::Properties(Stream* stream, const char* name, const char* id, const char* parentID, Properties* parent)
+    : _namespace(name), _dirPath(NULL), _parent(parent)
 {
     if (id)
     {
@@ -104,6 +108,7 @@ Properties* Properties::create(const char* url)
         p = p->clone();
         SAFE_DELETE(properties);
     }
+    p->setDirectoryPath(FileSystem::getDirectoryName(fileString.c_str()));
     return p;
 }
 
@@ -248,7 +253,7 @@ void Properties::readProperties(Stream* stream)
                     }
 
                     // New namespace without an ID.
-                    Properties* space = new Properties(stream, name, NULL, parentID);
+                    Properties* space = new Properties(stream, name, NULL, parentID, this);
                     _namespaces.push_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
@@ -290,7 +295,7 @@ void Properties::readProperties(Stream* stream)
                         }
 
                         // Create new namespace.
-                        Properties* space = new Properties(stream, name, value, parentID);
+                        Properties* space = new Properties(stream, name, value, parentID, this);
                         _namespaces.push_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
@@ -311,7 +316,7 @@ void Properties::readProperties(Stream* stream)
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new Properties(stream, name, value, parentID);
+                            Properties* space = new Properties(stream, name, value, parentID, this);
                             _namespaces.push_back(space);
                         }
                         else
@@ -339,6 +344,7 @@ void Properties::readProperties(Stream* stream)
 
 Properties::~Properties()
 {
+    SAFE_DELETE(_dirPath);
     for (size_t i = 0, count = _namespaces.size(); i < count; ++i)
     {
         SAFE_DELETE(_namespaces[i]);
@@ -961,6 +967,41 @@ bool Properties::getColor(const char* name, Vector4* out) const
     return false;
 }
 
+bool Properties::getPath(const char* name, std::string* path) const
+{
+    GP_ASSERT(name && path);
+    const char* valueString = getString(name);
+    if (valueString)
+    {
+        if (FileSystem::fileExists(valueString))
+        {
+            path->assign(valueString);
+            return true;
+        }
+        else
+        {
+            const Properties* prop = this;
+            while (prop != NULL)
+            {
+                // Search for the file path relative to the bundle file
+                const std::string* dirPath = prop->_dirPath;
+                if (dirPath != NULL && !dirPath->empty())
+                {
+                    std::string relativePath = *dirPath;
+                    relativePath.append(valueString);
+                    if (FileSystem::fileExists(relativePath.c_str()))
+                    {
+                        path->assign(relativePath);
+                        return true;
+                    }
+                }
+                prop = prop->_parent;
+            }
+        }
+    }
+    return false;
+}
+
 Properties* Properties::clone()
 {
     Properties* p = new Properties();
@@ -970,15 +1011,42 @@ Properties* Properties::clone()
     p->_parentID = _parentID;
     p->_properties = _properties;
     p->_propertiesItr = p->_properties.end();
+    p->setDirectoryPath(_dirPath);
 
     for (size_t i = 0, count = _namespaces.size(); i < count; i++)
     {
         GP_ASSERT(_namespaces[i]);
-        p->_namespaces.push_back(_namespaces[i]->clone());
+        Properties* child = _namespaces[i]->clone();
+        p->_namespaces.push_back(child);
+        child->_parent = p;
     }
     p->_namespacesItr = p->_namespaces.end();
 
     return p;
+}
+
+void Properties::setDirectoryPath(const std::string* path)
+{
+    if (path)
+    {
+        setDirectoryPath(*path);
+    }
+    else
+    {
+        SAFE_DELETE(_dirPath);
+    }
+}
+
+void Properties::setDirectoryPath(const std::string& path)
+{
+    if (_dirPath == NULL)
+    {
+        _dirPath = new std::string(path);
+    }
+    else
+    {
+        _dirPath->assign(path);
+    }
 }
 
 void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath)

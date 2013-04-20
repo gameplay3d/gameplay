@@ -124,6 +124,18 @@
     <ClCompile Include="src\NormalMapGenerator.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Constants.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FBXUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshSubSet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sampler.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\VertexElement.h">
@@ -247,6 +259,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\NormalMapGenerator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Constants.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FBXUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshSubSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sampler.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
