@@ -98,6 +98,11 @@ public:
     Animations* getAnimations();
 
     /**
+     * Returns the number of lights.
+     */
+    unsigned int getLightCount() const;
+
+    /**
      * Adjusts the game play binary file before it is written.
      */
     void adjust();

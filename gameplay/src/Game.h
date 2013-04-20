@@ -445,13 +445,11 @@ public:
     /**
      * Gamepad callback on gamepad events.  Override to receive Gamepad::CONNECTED_EVENT 
      * and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from update().
-     * Or, handle all gamepad input through BUTTON, JOYSTICK and TRIGGER events.
      *
      * @param evt The gamepad event that occurred.
      * @param gamepad The gamepad that generated the event.
-     * @param analogIndex If this is a JOYSTICK_EVENT or TRIGGER_EVENT, the index of the joystick or trigger whose value changed.
      */
-    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
+    virtual void gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad);
 
     /**
      * Gets the current number of gamepads currently connected to the system.
@@ -513,7 +511,11 @@ public:
     inline bool canExit() const;
 
     /**
-     * Gets the current accelerometer values.
+     * Gets the current accelerometer values for use as an indication of device
+     * orientation. Despite its name, implementations are at liberty to combine
+     * accelerometer data with data from other sensors as well, such as the gyros.
+     * This method is best used to obtain an indication of device orientation; it
+     * does not necessarily distinguish between acceleration and rotation rate.
      *
      * @param pitch The pitch angle returned (in degrees). If NULL then not returned.
      * @param roll The roll angle returned (in degrees). If NULL then not returned.

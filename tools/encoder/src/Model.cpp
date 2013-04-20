@@ -6,7 +6,8 @@ namespace gameplay
 
 Model::Model(void) :
     _mesh(NULL),
-    _meshSkin(NULL)
+    _meshSkin(NULL),
+    _material(NULL)
 {
 }
 
@@ -33,7 +34,7 @@ void Model::writeBinary(FILE* file)
     }
     else
     {
-        write((unsigned int)0, file);
+        writeZero(file);
     }
     // _meshSkin
     // Write one unsigned char to indicate if this model has a skin
@@ -46,9 +47,31 @@ void Model::writeBinary(FILE* file)
     {
         write((bool)false, file); // doesn't have a skin
     }
-    // materials[]
-    writeBinaryObjects(_materials, file);
-
+    // Write the list of materials or zero if there are no materials
+    if (_material && _materials.empty())
+    {
+        write((unsigned int)1, file);
+        write(_material->getId(), file);
+    }
+    else
+    {
+        write((unsigned int)_materials.size(), file);
+        if (_materials.size() > 0)
+        {
+            // Write the material names for each mesh part
+            for (unsigned int i = 0; i < _materials.size(); ++i)
+            {
+                if (Material* mat = _materials[i])
+                {
+                    write(mat->getId(), file);
+                }
+                else
+                {
+                    writeZero(file);
+                }
+            }
+        }
+    }
 }
 
 void Model::writeText(FILE* file)
@@ -63,6 +86,17 @@ void Model::writeText(FILE* file)
     if (_meshSkin != NULL)
     {
         _meshSkin->writeText(file);
+    }
+    if (_material)
+    {
+        fprintfElement(file, "material", _material->getId().c_str());
+    }
+    for (unsigned int i = 0; i < _materials.size(); ++i)
+    {
+        if (Material* mat = _materials[i])
+        {
+            fprintfElement(file, "material", mat->getId().c_str());
+        }
     }
     fprintElementEnd(file);
 }
@@ -99,6 +133,22 @@ void Model::setSkin(MeshSkin* skin)
     if (_meshSkin)
     {
         _meshSkin->_mesh = _mesh;
+    }
+}
+
+void Model::setMaterial(Material* material, int partIndex)
+{
+    if (partIndex < 0)
+    {
+        _material = material;
+    }
+    else
+    {
+        if ((int)_materials.size() < partIndex + 1)
+        {
+            _materials.resize(partIndex + 1, (Material*)NULL);
+        }
+        _materials[partIndex] = material;
     }
 }
 

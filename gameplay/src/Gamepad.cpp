@@ -140,12 +140,14 @@ void Gamepad::bindGamepadControls(Container* container)
         else if (std::strcmp("joystick", control->getType()) == 0)
         {
             Joystick* joystick = (Joystick*)control;
+            joystick->setConsumeInputEvents(true);
             _uiJoysticks[joystick->getIndex()] = joystick;
             _joystickCount++;
         }
         else if (std::strcmp("button", control->getType()) == 0)
         {
             Button* button = (Button*)control;
+            button->setConsumeInputEvents(true);
             _uiButtons[button->getDataBinding()] = button;
             _buttonCount++;
         }
@@ -328,7 +330,8 @@ unsigned int Gamepad::getJoystickCount() const
 
 void Gamepad::getJoystickValues(unsigned int joystickId, Vector2* outValue) const
 {
-    GP_ASSERT(joystickId < _joystickCount);
+    if (joystickId >= _joystickCount)
+        return;
 
     if (_form)
     {
@@ -356,7 +359,8 @@ unsigned int Gamepad::getTriggerCount() const
 
 float Gamepad::getTriggerValue(unsigned int triggerId) const
 {
-    GP_ASSERT(triggerId < _triggerCount);
+    if (triggerId >= _triggerCount)
+        return 0.0f;
 
     if (_form)
     {

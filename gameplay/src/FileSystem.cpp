@@ -10,9 +10,12 @@
     #include <windows.h>
     #include <tchar.h>
     #include <stdio.h>
+    #include <direct.h>
     #define gp_stat _stat
     #define gp_stat_struct struct stat
 #else
+    #define __EXT_POSIX2
+    #include <libgen.h>
     #include <dirent.h>
     #define gp_stat stat
     #define gp_stat_struct struct stat
@@ -557,6 +560,47 @@ void FileSystem::createFileFromAsset(const char* path)
             upToDateAssets.insert(fullPath);
         }
     }
+#endif
+}
+
+std::string FileSystem::getDirectoryName(const char* path)
+{
+    if (path == NULL || strlen(path) == 0)
+    {
+        return "";
+    }
+#ifdef WIN32
+    char drive[_MAX_DRIVE];
+    char dir[_MAX_DIR];
+    _splitpath(path, drive, dir, NULL, NULL);
+    std::string dirname;
+    size_t driveLength = strlen(drive);
+    if (driveLength > 0)
+    {
+        dirname.reserve(driveLength + strlen(dir));
+        dirname.append(drive);
+        dirname.append(dir);
+    }
+    else
+    {
+        dirname.assign(dir);
+    }
+    std::replace(dirname.begin(), dirname.end(), '\\', '/');
+    return dirname;
+#else
+    // dirname() modifies the input string so create a temp string
+    std::string dirname;
+    char* tempPath = new char[strlen(path) + 1];
+    strcpy(tempPath, path);
+    char* dir = ::dirname(tempPath);
+    if (dir && strlen(dir) > 0)
+    {
+        dirname.assign(dir);
+        // dirname() strips off the trailing '/' so add it back to be consistent with Windows
+        dirname.append("/");
+    }
+    SAFE_DELETE_ARRAY(tempPath);
+    return dirname;
 #endif
 }
 

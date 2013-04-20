@@ -44,9 +44,11 @@ Scene* SceneLoader::loadInternal(const char* url)
     }
 
     // Get the path to the main GPB.
-    const char* path = sceneProperties->getString("path");
-    if (path)
+    std::string path;
+    if (sceneProperties->getPath("path", &path))
+    {
         _gpbPath = path;
+    }
 
     // Build the node URL/property and animation reference tables and load the referenced files/store the inline properties objects.
     buildReferenceTables(sceneProperties);
@@ -224,6 +226,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             GP_ERROR("The referenced node data at url '%s' failed to load.", snp._url.c_str());
             return;
         }
+        p->rewind();
 
         // If the URL didn't specify a particular namespace within the file, pick the first one.
         p = (strlen(p->getNamespace()) > 0) ? p : p->getNextNamespace();

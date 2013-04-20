@@ -61,25 +61,9 @@
         <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="Device-Release/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>
     </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.1481263776" name="Device-Profile">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Profile/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.1388065949" name="Device-Coverage">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="Device-Coverage/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>
-    </configuration>
     <configuration id="com.qnx.qcc.configuration.exe.debug.1233004640" name="Simulator">
        <platformArchitecture>x86</platformArchitecture>
        <asset path="Simulator/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.1047868168" name="Simulator-Profile">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Profile/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>
-    </configuration>
-    <configuration id="com.qnx.qcc.configuration.exe.profile.coverage.134475205" name="Simulator-Coverage">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="Simulator-Coverage/sample-spaceship" entry="true" type="Qnx/Elf">sample-spaceship</asset>
     </configuration>
     
     <!-- The icon for the application, which should be 114x114. -->

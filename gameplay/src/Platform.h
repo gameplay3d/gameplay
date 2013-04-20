@@ -56,6 +56,11 @@ public:
      */
     int enterMessagePump();
 
+    /**
+     * Swaps the frame buffer on the device.
+     */
+    static void swapBuffers();
+
 private:
     
     /**
@@ -114,11 +119,6 @@ private:
      * @param enable true if vsync is enabled; false if not.
      */
     static void setVsync(bool enable);
-
-    /**
-     * Swaps the frame buffer on the device.
-     */
-    static void swapBuffers();
 
     /**
      * Sleeps synchronously for the given amount of time (in milliseconds).
@@ -201,7 +201,11 @@ private:
     static bool isCursorVisible();
 
     /**
-     * Gets the platform accelerometer values.
+     * Gets the platform accelerometer values for use as an indication of device
+     * orientation. Despite its name, implementations are at liberty to combine
+     * accelerometer data with data from other sensors as well, such as the gyros.
+     * This method is best used to obtain an indication of device orientation; it
+     * does not necessarily distinguish between acceleration and rotation rate.
      * 
      * @param pitch The accelerometer pitch.
      * @param roll The accelerometer roll.
