@@ -144,13 +144,22 @@ bool Slider::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
     case Touch::TOUCH_PRESS:
         if (_contactIndex != INVALID_CONTACT_INDEX)
             return false;
-        _state = Control::ACTIVE;
-        _originalX = x;
-        _originalValue = _value;
-        _originalConsumeInputEvents = _consumeInputEvents;
-        _moveCancelled = false;
-        
-        // Fall through to calculate new value.
+        else if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        {
+            _state = Control::ACTIVE;
+            _originalX = x;
+            _originalValue = _value;
+            _originalConsumeInputEvents = _consumeInputEvents;
+            _moveCancelled = false;
+            // Fall through to calculate new value.
+        }
+        else
+        {
+            _state = NORMAL;
+            _dirty = true;
+            break;
+        }
     case Touch::TOUCH_MOVE:
     
         if (evt != Touch::TOUCH_PRESS && _contactIndex != (int)contactIndex)
@@ -246,14 +255,14 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
             return touchEvent(Touch::TOUCH_PRESS, x, y, 0);
 
         case Mouse::MOUSE_MOVE:
-            return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
+            return Control::mouseEvent(evt, x, y, 0);
 
         case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
             return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
 
         case Mouse::MOUSE_WHEEL:
         {
-            if (_state == FOCUS || _state == ACTIVE)
+            if ((isInFocus() && _state == HOVER) || _state == ACTIVE)
             {
                 float total = _max - _min;
                 float oldValue = _value;
@@ -264,13 +273,19 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
                 else if (_value < _min)
                     _value = _min;
 
+                if (_step > 0.0f)
+                {            
+                    int numSteps = round(_value / _step);
+                    _value = _step * numSteps;
+                }
+
                 if (_value != oldValue)
                 {
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
                 _dirty = true;
-                return _consumeInputEvents;
+                return true;
             }
             break;
         }
@@ -351,7 +366,7 @@ bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
         {
             _selectButtonDown = false;
 
-            if (_state == FOCUS)
+            if (isInFocus())
                 setState(ACTIVE);
             else if (_state == ACTIVE)
                 setState(FOCUS);

@@ -27,7 +27,10 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
-         scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
+         scrollBarsAutoHide = <bool>        // Whether scrollbars fade out when not in use.
+         scrollingFriction = <float>        // Friction applied to inertial scrolling.
+         scrollWheelRequiresFocus = <bool>  // Whether focus or hover state handles scroll-wheel events.
+         scrollWheelSpeed = <float>         // Speed to scroll at on a scroll-wheel event.
          consumeEvents = <bool>             // Whether the container propagates input events to the Game's input event handler. Default is true.
 
          // All the nested controls within this container.
@@ -218,6 +221,21 @@ public:
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Get whether this container requires focus in order to handle scroll-wheel events.
+     */
+    bool getScrollWheelRequiresFocus() const;
+
+    /**
+     * Set whether this container requires focus in order to handle scroll-wheel events.
+     * If this property is set to true, scroll-wheel events will only be handled when the container has focus.
+     * If this property is set tofalse, scroll-wheel events will only be handled
+     * when the container is in the HOVER state.
+     *
+     * @param required Whether focus is required in order to handle scroll-wheel events.
+     */
+    void setScrollWheelRequiresFocus(bool required);
 
     /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
@@ -597,6 +615,7 @@ private:
     float _totalHeight;
     int _contactIndices;
     bool _initializedWithScroll;
+    bool _scrollWheelRequiresFocus;
 };
 
 }

@@ -81,9 +81,7 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
         }
         break;
     case Touch::TOUCH_MOVE:
-        if (_contactIndex == (int) contactIndex)
-            return _consumeInputEvents;
-        break;
+        return Control::touchEvent(evt, x, y, contactIndex);
     }
 
     return false;

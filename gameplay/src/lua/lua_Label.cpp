@@ -73,6 +73,7 @@ void luaRegister_Label()
         {"getZIndex", lua_Label_getZIndex},
         {"isContainer", lua_Label_isContainer},
         {"isEnabled", lua_Label_isEnabled},
+        {"isInFocus", lua_Label_isInFocus},
         {"isVisible", lua_Label_isVisible},
         {"release", lua_Label_release},
         {"removeListener", lua_Label_removeListener},
@@ -2623,6 +2624,41 @@ int lua_Label_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Label_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Label_isInFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Label* instance = getInstance(state);
+                bool result = instance->isInFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Label_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

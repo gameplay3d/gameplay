@@ -158,7 +158,7 @@ void FormsSample::formChanged()
 
 void FormsSample::createSampleForm(Theme* theme)
 {
-    Form* form = Form::create("testForm", theme->getStyle("buttonStyle"));
+    Form* form = Form::create("testForm", theme->getStyle("basicContainer"));
     form->setSize(600, 600);
 
     Label* label = Label::create("testLabel", theme->getStyle("iconNoBorder"));
