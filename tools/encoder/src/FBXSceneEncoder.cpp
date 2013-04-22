@@ -1,5 +1,3 @@
-#ifdef USE_FBX
-
 #include <algorithm>
 #include <string>
 #include <sstream>
@@ -13,6 +11,9 @@ using std::string;
 using std::vector;
 using std::map;
 using std::ostringstream;
+
+// Fix bad material names
+static void fixMaterialName(string& name);
 
 FBXSceneEncoder::FBXSceneEncoder()
     : _groupAnimation(NULL), _autoGroupAnimations(false)
@@ -913,25 +914,6 @@ void FBXSceneEncoder::loadMaterials(FbxScene* fbxScene)
     }
 }
 
-// Fix bad material names
-void fixMaterialName(string& name)
-{
-    static int unnamedCount = 0;
-
-    for (string::size_type i = 0, len = name.length(); i < len; ++i)
-    {
-        if (!isalnum(name[i]))
-            name[i] = '_';
-    }
-
-    if (name.length() == 0)
-    {
-        ostringstream stream;
-        stream << "unnamed_" << (++unnamedCount);
-        name = stream.str();
-    }
-}
-
 void FBXSceneEncoder::loadMaterial(FbxNode* fbxNode)
 {
     Node* node = findNode(fbxNode);
@@ -1381,4 +1363,22 @@ void FBXSceneEncoder::triangulateRecursive(FbxNode* fbxNode)
     }
 }
 
-#endif
+// Functions
+
+void fixMaterialName(string& name)
+{
+    static int unnamedCount = 0;
+
+    for (string::size_type i = 0, len = name.length(); i < len; ++i)
+    {
+        if (!isalnum(name[i]))
+            name[i] = '_';
+    }
+
+    if (name.length() == 0)
+    {
+        ostringstream stream;
+        stream << "unnamed_" << (++unnamedCount);
+        name = stream.str();
+    }
+}
