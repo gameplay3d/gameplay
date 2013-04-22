@@ -85,6 +85,19 @@ bool PhysicsCollisionObject::isKinematic() const
     }
 }
 
+bool PhysicsCollisionObject::isStatic() const
+{
+    switch (getType())
+    {
+    case GHOST_OBJECT:
+    case CHARACTER:
+        return false;
+    default:
+        GP_ASSERT(getCollisionObject());
+        return getCollisionObject()->isStaticObject();
+    }
+}
+
 bool PhysicsCollisionObject::isDynamic() const
 {
     GP_ASSERT(getCollisionObject());

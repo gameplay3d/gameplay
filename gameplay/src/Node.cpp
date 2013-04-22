@@ -402,6 +402,11 @@ Node* Node::getRootNode() const
     return n;
 }
 
+bool Node::isStatic() const
+{
+    return (_collisionObject && _collisionObject->isStatic());
+}
+
 const Matrix& Node::getWorldMatrix() const
 {
     if (_dirtyBits & NODE_DIRTY_WORLD)
@@ -410,23 +415,26 @@ const Matrix& Node::getWorldMatrix() const
         // parent calls our getWorldMatrix() method as a result of the following calculations.
         _dirtyBits &= ~NODE_DIRTY_WORLD;
 
-        // If we have a parent, multiply our parent world transform by our local
-        // transform to obtain our final resolved world transform.
-        Node* parent = getParent();
-        if (parent && (!_collisionObject || _collisionObject->isKinematic()))
+        if (!isStatic())
         {
-            Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
-        }
-        else
-        {
-            _world = getMatrix();
-        }
+            // If we have a parent, multiply our parent world transform by our local
+            // transform to obtain our final resolved world transform.
+            Node* parent = getParent();
+            if (parent && (!_collisionObject || _collisionObject->isKinematic()))
+            {
+                Matrix::multiply(parent->getWorldMatrix(), getMatrix(), &_world);
+            }
+            else
+            {
+                _world = getMatrix();
+            }
 
-        // Our world matrix was just updated, so call getWorldMatrix() on all child nodes
-        // to force their resolved world matrices to be updated.
-        for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
-        {
-            child->getWorldMatrix();
+            // Our world matrix was just updated, so call getWorldMatrix() on all child nodes
+            // to force their resolved world matrices to be updated.
+            for (Node* child = getFirstChild(); child != NULL; child = child->getNextSibling())
+            {
+                child->getWorldMatrix();
+            }
         }
     }
 

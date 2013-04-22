@@ -79,6 +79,7 @@ int lua_Joint_getWorldMatrix(lua_State* state);
 int lua_Joint_getWorldViewMatrix(lua_State* state);
 int lua_Joint_getWorldViewProjectionMatrix(lua_State* state);
 int lua_Joint_hasTag(lua_State* state);
+int lua_Joint_isStatic(lua_State* state);
 int lua_Joint_release(lua_State* state);
 int lua_Joint_removeAllChildren(lua_State* state);
 int lua_Joint_removeChild(lua_State* state);

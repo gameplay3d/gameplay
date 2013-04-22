@@ -7,7 +7,7 @@ namespace gameplay
 {
 
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape::Definition& shape, const PhysicsRigidBody::Parameters& parameters)
-    : PhysicsCollisionObject(node)
+    : PhysicsCollisionObject(node), _rigidBody(NULL), _host(NULL), _indexInHost(0)
 {
     // Note that the constructor for PhysicsRigidBody calls addCollisionObject and so
     // that is where the rigid body gets added to the dynamics world.
@@ -17,7 +17,7 @@ PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, const PhysicsCollisionShape
 }
 
 PhysicsVehicleWheel::PhysicsVehicleWheel(Node* node, PhysicsRigidBody* rigidBody)
-    : PhysicsCollisionObject(node)
+    : PhysicsCollisionObject(node), _rigidBody(NULL), _host(NULL), _indexInHost(0)
 {
     _rigidBody = rigidBody;
 

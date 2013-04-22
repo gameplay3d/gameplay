@@ -47,6 +47,7 @@ void luaRegister_PhysicsCharacter()
         {"isEnabled", lua_PhysicsCharacter_isEnabled},
         {"isKinematic", lua_PhysicsCharacter_isKinematic},
         {"isPhysicsEnabled", lua_PhysicsCharacter_isPhysicsEnabled},
+        {"isStatic", lua_PhysicsCharacter_isStatic},
         {"jump", lua_PhysicsCharacter_jump},
         {"removeCollisionListener", lua_PhysicsCharacter_removeCollisionListener},
         {"rotate", lua_PhysicsCharacter_rotate},
@@ -848,6 +849,41 @@ int lua_PhysicsCharacter_isPhysicsEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_PhysicsCharacter_isPhysicsEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_PhysicsCharacter_isStatic(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                PhysicsCharacter* instance = getInstance(state);
+                bool result = instance->isStatic();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_PhysicsCharacter_isStatic - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
