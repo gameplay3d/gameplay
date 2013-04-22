@@ -2,7 +2,7 @@ form formSelect
 {
     theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
-    style = basic
+    style = basicContainer
     alignment = ALIGN_TOP_LEFT
     width = 200
     autoHeight = true

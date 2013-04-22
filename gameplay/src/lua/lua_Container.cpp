@@ -76,6 +76,7 @@ void luaRegister_Container()
         {"getPadding", lua_Container_getPadding},
         {"getRefCount", lua_Container_getRefCount},
         {"getScroll", lua_Container_getScroll},
+        {"getScrollWheelRequiresFocus", lua_Container_getScrollWheelRequiresFocus},
         {"getScrollWheelSpeed", lua_Container_getScrollWheelSpeed},
         {"getScrollingFriction", lua_Container_getScrollingFriction},
         {"getSkinColor", lua_Container_getSkinColor},
@@ -93,6 +94,7 @@ void luaRegister_Container()
         {"insertControl", lua_Container_insertControl},
         {"isContainer", lua_Container_isContainer},
         {"isEnabled", lua_Container_isEnabled},
+        {"isInFocus", lua_Container_isInFocus},
         {"isScrollBarsAutoHide", lua_Container_isScrollBarsAutoHide},
         {"isScrolling", lua_Container_isScrolling},
         {"isVisible", lua_Container_isVisible},
@@ -122,6 +124,7 @@ void luaRegister_Container()
         {"setPosition", lua_Container_setPosition},
         {"setScroll", lua_Container_setScroll},
         {"setScrollBarsAutoHide", lua_Container_setScrollBarsAutoHide},
+        {"setScrollWheelRequiresFocus", lua_Container_setScrollWheelRequiresFocus},
         {"setScrollWheelSpeed", lua_Container_setScrollWheelSpeed},
         {"setScrollingFriction", lua_Container_setScrollingFriction},
         {"setSize", lua_Container_setSize},
@@ -2172,6 +2175,41 @@ int lua_Container_getScroll(lua_State* state)
     return 0;
 }
 
+int lua_Container_getScrollWheelRequiresFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->getScrollWheelRequiresFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_getScrollWheelRequiresFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Container_getScrollWheelSpeed(lua_State* state)
 {
     // Get the number of parameters.
@@ -2933,6 +2971,41 @@ int lua_Container_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_isInFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Container* instance = getInstance(state);
+                bool result = instance->isInFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Container_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4320,6 +4393,42 @@ int lua_Container_setScrollBarsAutoHide(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_setScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Container_setScrollWheelRequiresFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Container* instance = getInstance(state);
+                instance->setScrollWheelRequiresFocus(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Container_setScrollWheelRequiresFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -2,7 +2,7 @@ form scrolling
 {
     theme = res/common/default.theme
     layout = LAYOUT_VERTICAL
-    style = basic
+    style = basicContainer
     size = 600, 600
     scroll = SCROLL_BOTH
     scrollBarsAutoHide = true

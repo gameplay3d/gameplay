@@ -670,10 +670,11 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
 
 static bool shouldPropagateMouseEvent(Control::State state, Mouse::MouseEvent evt, const Rectangle& bounds, int x, int y)
 {
-    return (state == Control::FOCUS ||
+    return (state != Control::NORMAL ||
             ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
               evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
+              evt == Mouse::MOUSE_MOVE ||
               evt == Mouse::MOUSE_WHEEL) &&
                 x >= bounds.x &&
                 x <= bounds.x + bounds.width &&
@@ -726,7 +727,7 @@ void Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled() && form->isVisible() && form->getState() == FOCUS)
+        if (form->isEnabled() && form->isVisible() && form->isInFocus())
         {
             if (form->gamepadEvent(evt, gamepad, analogIndex))
                 return;
