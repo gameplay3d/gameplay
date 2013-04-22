@@ -233,54 +233,60 @@ void splitString(const char* str, std::vector<std::string>* tokens)
 
 void EncoderArguments::printUsage() const
 {
-    LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n");
-    LOG(1, "Supported file extensions:\n");
-    LOG(1, "  .fbx\t(FBX)\n");
-    LOG(1, "  .ttf\t(TrueType Font)\n");
-    LOG(1, "\n");
-    LOG(1, "General Options:\n");
-    LOG(1, "  -v <verbosity>\tVerbosity level (0-4).\n");
-    LOG(1, "\n");
-    LOG(1, "FBX file options:\n");
-    LOG(1, "  -i <id>\tFilter by node ID.\n");
-    LOG(1, "  -t\t\tWrite text/xml.\n");
-    LOG(1, "  -g:auto\tAutomatically group animation channels into a new animation.\n");
-    LOG(1, "  -g:none\tDo not prompt to group animations.\n");
-    LOG(1, "  -g <node id> <animation id>\n" \
-        "\t\tGroup all animation channels targeting the nodes into a new animation.\n");
-    LOG(1, "  -tb <node id>\n" \
-        "\t\tGenerates tangents and binormals for the given node.\n");
-    LOG(1, "  -oa\n" \
+    LOG(1, "Usage: gameplay-encoder [options] <input filepath> <output filepath>\n\n" \
+    "Supported file extensions:\n" \
+    "  .fbx\t(FBX)\n" \
+    "  .ttf\t(TrueType Font)\n" \
+    "\n" \
+    "General Options:\n" \
+    "  -v <verbosity>\tVerbosity level (0-4).\n" \
+    "\n" \
+    "FBX file options:\n" \
+    "  -i <id>\tFilter by node ID.\n" \
+    "  -t\t\tWrite text/xml.\n" \
+    "  -g:auto\tAutomatically group animation channels into a new animation.\n" \
+    "  -g:none\tDo not prompt to group animations.\n" \
+    "  -g <node id> <animation id>\n" \
+        "\t\tGroup all animation channels targeting the nodes into a \n" \
+        "\t\tnew animation.\n" \
+    "  -m\t\tOutput material file for scene.\n" \
+    "  -tb <node id>\n" \
+        "\t\tGenerates tangents and binormals for the given node.\n" \
+    "  -oa\n" \
         "\t\tOptimizes animations by analyzing animation channel data and\n" \
         "\t\tremoving any channels that contain default/identity values\n" \
-        "\t\tand removing any duplicate contiguous keyframes, which are common\n" \
-        "\t\twhen exporting baked animation data.\n");
-    LOG(1, "  -h <size> \"<node ids>\" <filename>\n" \
-        "\t\tGenerates a single heightmap image using meshes from the specified\n" \
-        "\t\tnodes. <size> should be two comma-separated numbers in the format\n" \
-        "\t\t\"X,Y\", indicating the dimensions of the produced heightmap image.\n" \
+        "\t\tand removing any duplicate contiguous keyframes, which are \n" \
+        "\t\tcommon when exporting baked animation data.\n" \
+    "  -h <size> \"<node ids>\" <filename>\n" \
+        "\t\tGenerates a single heightmap image using meshes from the \n" \
+        "\t\tspecified nodes. \n" \
+        "\t\t<size> is two comma-separated numbers in the format \"X,Y\", \n" \
+        "\t\tindicating the dimensions of the produced heightmap image.\n" \
         "\t\t<node ids> should be in quotes with a space between each id.\n" \
         "\t\tFilename is the name of the image (PNG) to be saved.\n" \
-        "\t\tMultiple -h arguments can be supplied to generate more than one heightmap.\n" \
-        "\t\tFor 24-bit packed height data use -hp instead of -h.\n");
-    LOG(1, "\n");
-    LOG(1, "Normal map generation options:\n" \
+        "\t\tMultiple -h arguments can be supplied to generate more than one \n" \
+        "\t\theightmap. For 24-bit packed height data use -hp instead of -h.\n" \
+    "\n" \
+    "Normal map generation options:\n" \
         "  -n\t\tGenerate normal map (requires input file of type PNG or RAW)\n" \
-        "  -s\t\tSize/resolution of the input heightmap image (requried for RAW files)\n" \
-        "  -w <size>\tSpecifies the size of an input terran heightmap file in world\n" \
-        "\t\tunits, along the X, Y and Z axes. <size> should be three comma-separated\n" \
-        "\t\tnumbers in the format \"X,Y,Z\". The Y value represents the maximum\n" \
-        "\t\tpossible height value of a full intensity heightmap pixel.\n" \
+        "  -s\t\tSize/resolution of the input heightmap image \n" \
+        "    \t\t(required for RAW files)\n" \
+        "  -w <size>\tSpecifies the size of an input terrain heightmap file in world\n" \
+        "\t\tunits, along the X, Y and Z axes. <size> should be three \n" \
+        "\t\tcomma-separated numbers in the format \"X,Y,Z\". The Y value \n" \
+        "\t\trepresents the maximum possible height value of a full \n" \
+        "\t\tintensity heightmap pixel.\n" \
         "\n" \
-        "  Normal map generation can be used to create object-space normal maps from heightmap\n" \
-        "  images. Heightmaps must be in either PNG format (where the intensity of each pixel\n" \
-        "  represents a height value), or in RAW format (8 or 16-bit), which is a common\n" \
-        "  headerless format supported by most terran generation tools.\n");
-    LOG(1, "\n");
-    LOG(1, "TTF file options:\n");
-    LOG(1, "  -s <size>\tSize of the font.\n");
-    LOG(1, "  -p\t\tOutput font preview.\n");
-    LOG(1, "\n");
+        "  Normal map generation can be used to create object-space normal maps from \n" \
+        "  heightmap images. Heightmaps must be in either PNG format (where the \n" \
+        "  intensity of each pixel represents a height value), or in RAW format \n" \
+        "  (8 or 16-bit), which is a common headerless format supported by most \n" \
+        "  terrain generation tools.\n" \
+    "\n" \
+    "TTF file options:\n" \
+    "  -s <size>\tSize of the font.\n" \
+    "  -p\t\tOutput font preview.\n" \
+    "\n");
     exit(8);
 }
 

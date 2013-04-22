@@ -1,8 +1,8 @@
 set(GAME_NAME sample-lua)
 
 set(GAME_SRC
-	src/LuaGame.cpp
-	src/LuaGame.h
+    src/LuaGame.cpp
+    src/LuaGame.h
 )
 
 add_executable(${GAME_NAME}

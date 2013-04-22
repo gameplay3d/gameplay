@@ -230,6 +230,17 @@ public:
      * Gets the top level node in this node's parent hierarchy.
      */
     Node* getRootNode() const;
+    
+    /**
+     * Returns whether the transformation of this node is static.
+     *
+     * Nodes that have static rigid bodies attached to them are considered static.
+     *
+     * @return True if the transformation of this Node is static, false otherwise.
+     *
+     * @see Transform::isStatic()
+     */
+    bool isStatic() const;
 
     /**
      * Gets the world matrix corresponding to this node.
