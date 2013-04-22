@@ -61,11 +61,8 @@ void FBXSceneEncoder::write(const string& filepath, const EncoderArguments& argu
 
     print("Loading Scene.");
     loadScene(fbxScene);
-    if (arguments.outputMaterialEnabled())
-    {
-        print("Load materials");
-        loadMaterials(fbxScene);
-    }
+    print("Load materials");
+    loadMaterials(fbxScene);
     print("Loading animations.");
     loadAnimations(fbxScene, arguments);
     sdkManager->Destroy();
@@ -934,7 +931,16 @@ void FBXSceneEncoder::loadMaterial(FbxNode* fbxNode)
         }
         else
         {
-            material = createMaterial(materialName, fbxMaterial, node);
+            if (EncoderArguments::getInstance()->outputMaterialEnabled())
+            {
+                material = createMaterial(materialName, fbxMaterial, node);
+            }
+            else
+            {
+                // If outputMaterialEnabled() is not enabled then only create the materials for the purpose of writing 
+                // the material name in the GPB file. There is no need to load uniforms and samplers for the material.
+                material = new Material(materialName);
+            }
             _materials[materialName] = material;
         }
 
