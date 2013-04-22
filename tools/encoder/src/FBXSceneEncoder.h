@@ -1,8 +1,6 @@
 #ifndef FBXSCENEEENCODER_H_
 #define FBXSCENEEENCODER_H_
 
-#ifdef USE_FBX
-
 #define FBXSDK_NEW_API
 
 #include <iostream>
@@ -294,5 +292,4 @@ private:
     bool _autoGroupAnimations;
 };
 
-#endif
 #endif
