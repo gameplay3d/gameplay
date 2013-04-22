@@ -93,7 +93,7 @@ unsigned long AnimationClip::getEndTime() const
     return _endTime;
 }
 
-float AnimationClip::getElaspedTime() const
+float AnimationClip::getElapsedTime() const
 {
     return _elapsedTime;
 }
