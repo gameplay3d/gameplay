@@ -24,7 +24,6 @@ Mesh::PrimitiveType lua_enumFromString_MeshPrimitiveType(const char* s)
         return Mesh::LINE_STRIP;
     if (strcmp(s, luaEnumString_MeshPrimitiveType_POINTS) == 0)
         return Mesh::POINTS;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Mesh::PrimitiveType.", s);
     return Mesh::TRIANGLES;
 }
 
@@ -40,7 +39,6 @@ const char* lua_stringFromEnum_MeshPrimitiveType(Mesh::PrimitiveType e)
         return luaEnumString_MeshPrimitiveType_LINE_STRIP;
     if (e == Mesh::POINTS)
         return luaEnumString_MeshPrimitiveType_POINTS;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Mesh::PrimitiveType.", e);
     return enumStringEmpty;
 }
 

@@ -1509,7 +1509,7 @@ void Generator::generateBindings(string* bindingNS)
 
                     if (i == iter->second.values.size() - 1)
                     {
-                        enumCpp << "    GP_ERROR(\"Invalid enumeration value '%s' for enumeration " << iter->first << ".\", s);\n";
+                        //enumCpp << "    GP_ERROR(\"Invalid enumeration value '%s' for enumeration " << iter->first << ".\", s);\n";
                         enumCpp << "    return ";
                         if (scope.size() > 0)
                             enumCpp << scope;
@@ -1535,7 +1535,7 @@ void Generator::generateBindings(string* bindingNS)
 
                     if (i == iter->second.values.size() - 1)
                     {
-                        enumCpp << "    GP_ERROR(\"Invalid enumeration value '%d' for enumeration " << iter->first << ".\", e);\n";
+                        //enumCpp << "    GP_ERROR(\"Invalid enumeration value '%d' for enumeration " << iter->first << ".\", e);\n";
                         enumCpp << "    return enumStringEmpty;\n";
                     }
                 }

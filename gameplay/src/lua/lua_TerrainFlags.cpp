@@ -18,7 +18,6 @@ Terrain::Flags lua_enumFromString_TerrainFlags(const char* s)
         return Terrain::FRUSTUM_CULLING;
     if (strcmp(s, luaEnumString_TerrainFlags_LEVEL_OF_DETAIL) == 0)
         return Terrain::LEVEL_OF_DETAIL;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Terrain::Flags.", s);
     return Terrain::DEBUG_PATCHES;
 }
 
@@ -30,7 +29,6 @@ const char* lua_stringFromEnum_TerrainFlags(Terrain::Flags e)
         return luaEnumString_TerrainFlags_FRUSTUM_CULLING;
     if (e == Terrain::LEVEL_OF_DETAIL)
         return luaEnumString_TerrainFlags_LEVEL_OF_DETAIL;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Terrain::Flags.", e);
     return enumStringEmpty;
 }
 

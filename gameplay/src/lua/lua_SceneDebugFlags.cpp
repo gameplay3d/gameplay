@@ -15,7 +15,6 @@ Scene::DebugFlags lua_enumFromString_SceneDebugFlags(const char* s)
         return Scene::DEBUG_BOXES;
     if (strcmp(s, luaEnumString_SceneDebugFlags_DEBUG_SPHERES) == 0)
         return Scene::DEBUG_SPHERES;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Scene::DebugFlags.", s);
     return Scene::DEBUG_BOXES;
 }
 
@@ -25,7 +24,6 @@ const char* lua_stringFromEnum_SceneDebugFlags(Scene::DebugFlags e)
         return luaEnumString_SceneDebugFlags_DEBUG_BOXES;
     if (e == Scene::DEBUG_SPHERES)
         return luaEnumString_SceneDebugFlags_DEBUG_SPHERES;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Scene::DebugFlags.", e);
     return enumStringEmpty;
 }
 

@@ -30,7 +30,6 @@ Properties::Type lua_enumFromString_PropertiesType(const char* s)
         return Properties::VECTOR4;
     if (strcmp(s, luaEnumString_PropertiesType_MATRIX) == 0)
         return Properties::MATRIX;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Properties::Type.", s);
     return Properties::NONE;
 }
 
@@ -50,7 +49,6 @@ const char* lua_stringFromEnum_PropertiesType(Properties::Type e)
         return luaEnumString_PropertiesType_VECTOR4;
     if (e == Properties::MATRIX)
         return luaEnumString_PropertiesType_MATRIX;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Properties::Type.", e);
     return enumStringEmpty;
 }
 

@@ -15,7 +15,6 @@ PhysicsController::Listener::EventType lua_enumFromString_PhysicsControllerListe
         return PhysicsController::Listener::ACTIVATED;
     if (strcmp(s, luaEnumString_PhysicsControllerListenerEventType_DEACTIVATED) == 0)
         return PhysicsController::Listener::DEACTIVATED;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration PhysicsController::Listener::EventType.", s);
     return PhysicsController::Listener::ACTIVATED;
 }
 
@@ -25,7 +24,6 @@ const char* lua_stringFromEnum_PhysicsControllerListenerEventType(PhysicsControl
         return luaEnumString_PhysicsControllerListenerEventType_ACTIVATED;
     if (e == PhysicsController::Listener::DEACTIVATED)
         return luaEnumString_PhysicsControllerListenerEventType_DEACTIVATED;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration PhysicsController::Listener::EventType.", e);
     return enumStringEmpty;
 }
 
