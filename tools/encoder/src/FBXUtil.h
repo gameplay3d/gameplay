@@ -1,8 +1,6 @@
 #ifndef FBXUTIL_H_
 #define FBXUTIL_H_
 
-#ifdef USE_FBX
-
 #define FBXSDK_NEW_API
 
 #include <iostream>
@@ -202,5 +200,4 @@ std::string toString(const FbxDouble3& fbxDouble);
 std::string toString(const FbxDouble3& fbxDouble, double d);
 std::string toString(double value);
 
-#endif
 #endif

@@ -15,7 +15,7 @@ int lua_AnimationClip_getActiveDuration(lua_State* state);
 int lua_AnimationClip_getAnimation(lua_State* state);
 int lua_AnimationClip_getBlendWeight(lua_State* state);
 int lua_AnimationClip_getDuration(lua_State* state);
-int lua_AnimationClip_getElaspedTime(lua_State* state);
+int lua_AnimationClip_getElapsedTime(lua_State* state);
 int lua_AnimationClip_getEndTime(lua_State* state);
 int lua_AnimationClip_getId(lua_State* state);
 int lua_AnimationClip_getLoopBlendTime(lua_State* state);

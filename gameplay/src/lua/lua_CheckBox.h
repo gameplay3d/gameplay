@@ -57,6 +57,7 @@ int lua_CheckBox_getZIndex(lua_State* state);
 int lua_CheckBox_isChecked(lua_State* state);
 int lua_CheckBox_isContainer(lua_State* state);
 int lua_CheckBox_isEnabled(lua_State* state);
+int lua_CheckBox_isInFocus(lua_State* state);
 int lua_CheckBox_isVisible(lua_State* state);
 int lua_CheckBox_release(lua_State* state);
 int lua_CheckBox_removeListener(lua_State* state);
