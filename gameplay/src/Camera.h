@@ -240,8 +240,28 @@ public:
      * @param x The returned viewport x coordinate.
      * @param y The returned viewport y coordinate.
      * @param depth The returned pixel depth (can be NULL).
+     *
+     * @script{ignore}
      */
     void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = NULL) const;
+
+    /**
+     * Projects the specified world position into the viewport coordinates.
+     *
+     * @param viewport The viewport rectangle to use.
+     * @param position The world space position.
+     * @param out Populated with the resulting screen-space position.
+     */
+    void project(const Rectangle& viewport, const Vector3& position, Vector2* out) const;
+
+    /**
+     * Projects the specified world position into the viewport coordinates.
+     *
+     * @param viewport The viewport rectangle to use.
+     * @param position The world space position.
+     * @param out Populated with the resulting screen-space position, with the pixel depth in the Z coordinate.
+     */
+    void project(const Rectangle& viewport, const Vector3& position, Vector3* out) const;
 
     /**
      * Converts a viewport-space coordinate to a world-space position for the given depth value.

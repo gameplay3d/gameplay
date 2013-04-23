@@ -354,6 +354,22 @@ void Camera::project(const Rectangle& viewport, const Vector3& position, float* 
     }
 }
 
+void Camera::project(const Rectangle& viewport, const Vector3& position, Vector2* out) const
+{
+    GP_ASSERT(out);
+    float x, y;
+    project(viewport, position, &x, &y);
+    out->set(x, y);
+}
+
+void Camera::project(const Rectangle& viewport, const Vector3& position, Vector3* out) const
+{
+    GP_ASSERT(out);
+    float x, y, depth;
+    project(viewport, position, &x, &y, &depth);
+    out->set(x, y, depth);
+}
+
 void Camera::unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst) const
 {
     GP_ASSERT(dst);
