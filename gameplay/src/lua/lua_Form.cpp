@@ -80,6 +80,9 @@ void luaRegister_Form()
         {"getPadding", lua_Form_getPadding},
         {"getRefCount", lua_Form_getRefCount},
         {"getScroll", lua_Form_getScroll},
+        {"getScrollWheelRequiresFocus", lua_Form_getScrollWheelRequiresFocus},
+        {"getScrollWheelSpeed", lua_Form_getScrollWheelSpeed},
+        {"getScrollingFriction", lua_Form_getScrollingFriction},
         {"getSkinColor", lua_Form_getSkinColor},
         {"getSkinRegion", lua_Form_getSkinRegion},
         {"getState", lua_Form_getState},
@@ -96,6 +99,7 @@ void luaRegister_Form()
         {"insertControl", lua_Form_insertControl},
         {"isContainer", lua_Form_isContainer},
         {"isEnabled", lua_Form_isEnabled},
+        {"isInFocus", lua_Form_isInFocus},
         {"isScrollBarsAutoHide", lua_Form_isScrollBarsAutoHide},
         {"isScrolling", lua_Form_isScrolling},
         {"isVisible", lua_Form_isVisible},
@@ -126,6 +130,9 @@ void luaRegister_Form()
         {"setPosition", lua_Form_setPosition},
         {"setScroll", lua_Form_setScroll},
         {"setScrollBarsAutoHide", lua_Form_setScrollBarsAutoHide},
+        {"setScrollWheelRequiresFocus", lua_Form_setScrollWheelRequiresFocus},
+        {"setScrollWheelSpeed", lua_Form_setScrollWheelSpeed},
+        {"setScrollingFriction", lua_Form_setScrollingFriction},
         {"setSize", lua_Form_setSize},
         {"setSkinColor", lua_Form_setSkinColor},
         {"setSkinRegion", lua_Form_setSkinRegion},
@@ -2208,6 +2215,111 @@ int lua_Form_getScroll(lua_State* state)
     return 0;
 }
 
+int lua_Form_getScrollWheelRequiresFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                bool result = instance->getScrollWheelRequiresFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_getScrollWheelRequiresFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_getScrollWheelSpeed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                float result = instance->getScrollWheelSpeed();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_getScrollWheelSpeed - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_getScrollingFriction(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                float result = instance->getScrollingFriction();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_getScrollingFriction - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Form_getSkinColor(lua_State* state)
 {
     // Get the number of parameters.
@@ -2943,6 +3055,41 @@ int lua_Form_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_isInFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Form* instance = getInstance(state);
+                bool result = instance->isInFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Form_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -4372,6 +4519,114 @@ int lua_Form_setScrollBarsAutoHide(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_setScrollBarsAutoHide - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setScrollWheelRequiresFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TBOOLEAN)
+            {
+                // Get parameter 1 off the stack.
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setScrollWheelRequiresFocus(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setScrollWheelRequiresFocus - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setScrollWheelSpeed(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setScrollWheelSpeed(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setScrollWheelSpeed - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Form_setScrollingFriction(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                Form* instance = getInstance(state);
+                instance->setScrollingFriction(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Form_setScrollingFriction - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

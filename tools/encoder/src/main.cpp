@@ -72,15 +72,10 @@ int main(int argc, const char** argv)
         }
     case EncoderArguments::FILEFORMAT_FBX:
         {
-#ifdef USE_FBX
             std::string realpath(arguments.getFilePath());
             FBXSceneEncoder fbxEncoder;
             fbxEncoder.write(realpath, arguments);
             break;
-#else
-            LOG(1, "Error: FBX not enabled. Install the FBX SDK and use the preprocessor definition USE_FBX.\n");
-            return -1;
-#endif
         }
     case EncoderArguments::FILEFORMAT_TTF:
         {

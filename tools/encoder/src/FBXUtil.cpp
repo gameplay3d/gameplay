@@ -1,5 +1,3 @@
-#ifdef USE_FBX
-
 #include <algorithm>
 #include <string>
 #include <sstream>
@@ -805,5 +803,3 @@ std::string toString(double value)
     stream << value;
     return stream.str();
 }
-
-#endif

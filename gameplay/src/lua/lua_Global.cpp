@@ -225,6 +225,8 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("TEXT_CHANGED", "TEXT_CHANGED", scopePath);
         gameplay::ScriptUtil::registerConstantString("MIDDLE_CLICK", "MIDDLE_CLICK", scopePath);
         gameplay::ScriptUtil::registerConstantString("RIGHT_CLICK", "RIGHT_CLICK", scopePath);
+        gameplay::ScriptUtil::registerConstantString("ENTER", "ENTER", scopePath);
+        gameplay::ScriptUtil::registerConstantString("LEAVE", "LEAVE", scopePath);
     }
 
     // Register enumeration Control::State.
@@ -235,6 +237,7 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("FOCUS", "FOCUS", scopePath);
         gameplay::ScriptUtil::registerConstantString("ACTIVE", "ACTIVE", scopePath);
         gameplay::ScriptUtil::registerConstantString("DISABLED", "DISABLED", scopePath);
+        gameplay::ScriptUtil::registerConstantString("HOVER", "HOVER", scopePath);
     }
 
     // Register enumeration Curve::InterpolationType.

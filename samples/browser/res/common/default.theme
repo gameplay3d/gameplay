@@ -231,10 +231,10 @@ theme mainMenu
             textAlignment = ALIGN_TOP_LEFT
         }
     }
-
-    style basic
-    {
-        stateNormal
+	
+	style basicContainer
+	{
+		stateNormal
         {
             skin = mainNormal
             imageList = normalImages
@@ -244,22 +244,26 @@ theme mainMenu
             fontSize = 18
             textAlignment = ALIGN_VCENTER_HCENTER
         }
-		
-        stateActive
-        {
-            imageList = activeImages
-        }
 
 		stateFocus
 		{
 			skin = mainFocus
 			imageList = focusImages
+			textColor = #aaa000ff
 		}
 		
 		stateDisabled
 		{
 			opacity = 0.6
 		}
+	}
+
+    style basic : basicContainer
+    {
+        stateActive
+        {
+            imageList = activeImages
+        }
     }
 
     style topLeftAlignedEntry : basic
@@ -295,6 +299,14 @@ theme mainMenu
             skin = mainActive
         }
     }
+	
+	style buttonHover : buttonStyle
+	{
+		stateHover
+		{
+			textColor = #ff0000ff
+		}
+	}
 
     style noBorder
     {

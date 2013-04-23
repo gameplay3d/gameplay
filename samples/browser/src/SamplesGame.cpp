@@ -28,7 +28,7 @@ void SamplesGame::initialize()
 
     // Construct a form for selecting which sample to run.
     Theme* theme = Theme::create("res/common/default.theme");
-    Theme::Style* formStyle = theme->getStyle("basic");
+    Theme::Style* formStyle = theme->getStyle("basicContainer");
     Theme::Style* buttonStyle = theme->getStyle("buttonStyle");
     Theme::Style* titleStyle = theme->getStyle("title");
 
@@ -39,6 +39,7 @@ void SamplesGame::initialize()
     _sampleSelectForm->setAutoHeight(true);
     _sampleSelectForm->setWidth(200.0f);
     _sampleSelectForm->setScroll(Container::SCROLL_VERTICAL);
+    _sampleSelectForm->setConsumeInputEvents(true);
 
     const size_t size = _samples->size();
     for (size_t i = 0; i < size; ++i)
@@ -97,6 +98,13 @@ void SamplesGame::update(float elapsedTime)
 {
     if (_activeSample)
     {
+        Gamepad* gamepad = getGamepad(0);
+        if (gamepad && gamepad->isButtonDown(Gamepad::BUTTON_MENU2))
+        {
+            exitActiveSample();
+            return;
+        }
+
         getScriptController()->executeFunction<void>("camera_update", "f", elapsedTime);
         _activeSample->update(elapsedTime);
         return;
@@ -249,6 +257,7 @@ void SamplesGame::exitActiveSample()
         SAFE_DELETE(_activeSample);
 
         _sampleSelectForm->setEnabled(true);
+        _sampleSelectForm->setState(Control::FOCUS);
     }
 
     // Reset some game options

@@ -281,7 +281,7 @@ public:
      *
      * @script{ignore}
      */
-    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool actuallyMouse = false);
 
     /**
      * Internal method used only from static code in various platform implementation.

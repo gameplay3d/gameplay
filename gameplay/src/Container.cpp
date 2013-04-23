@@ -46,7 +46,7 @@ Container::Container()
       _scrollBarsAutoHide(false), _scrollBarOpacity(1.0f), _scrolling(false),
       _scrollingVeryFirstX(0), _scrollingVeryFirstY(0), _scrollingFirstX(0), _scrollingFirstY(0), _scrollingLastX(0), _scrollingLastY(0),
       _scrollingStartTimeX(0), _scrollingStartTimeY(0), _scrollingLastTime(0),
-      _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f),
+      _scrollingVelocity(Vector2::zero()), _scrollingFriction(1.0f), _scrollWheelSpeed(400.0f),
       _scrollingRight(false), _scrollingDown(false),
       _scrollingMouseVertically(false), _scrollingMouseHorizontally(false),
       _scrollBarOpacityClip(NULL), _zIndexDefault(0), _focusIndexDefault(0), _focusIndexMax(0),
@@ -54,7 +54,7 @@ Container::Container()
       _lastFrameTime(0), _focusChangeRepeat(false),
       _focusChangeStartTime(0), _focusChangeRepeatDelay(FOCUS_CHANGE_REPEAT_DELAY), _focusChangeCount(0),
       _totalWidth(0), _totalHeight(0),
-      _contactIndices(0), _initializedWithScroll(false)
+      _contactIndices(0), _initializedWithScroll(false), _scrollWheelRequiresFocus(false)
 {
 }
 
@@ -114,6 +114,13 @@ Container* Container::create(Theme::Style* style, Properties* properties, Theme*
     {
         container->_scrollBarOpacity = 0.0f;
     }
+    
+    container->_scrollWheelRequiresFocus = properties->getBool("scrollWheelRequiresFocus");
+    if (properties->exists("scrollingFriction"))
+        container->_scrollingFriction = properties->getFloat("scrollingFriction");
+    if (properties->exists("scrollWheelSpeed"))
+        container->_scrollWheelSpeed = properties->getFloat("scrollWheelSpeed");
+
     container->addControls(theme, properties);
     container->_layout->update(container, container->_scrollPosition);
 
@@ -421,6 +428,16 @@ const char* Container::getType() const
     return "container";
 }
 
+bool Container::getScrollWheelRequiresFocus() const
+{
+    return _scrollWheelRequiresFocus;
+}
+
+void Container::setScrollWheelRequiresFocus(bool required)
+{
+    _scrollWheelRequiresFocus = required;
+}
+
 void Container::update(const Control* container, const Vector2& offset)
 {
     // Update this container's viewport.
@@ -504,7 +521,7 @@ void Container::draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needs
 
         spriteBatch->start();
 
-        if (_scrollBarBounds.height > 0 &&((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
+        if (_scrollBarBounds.height > 0 && ((_scroll & SCROLL_VERTICAL) == SCROLL_VERTICAL))
         {
             const Rectangle& topRegion = _scrollBarTopCap->getRegion();
             const Theme::UVs& topUVs = _scrollBarTopCap->getUVs();
@@ -628,7 +645,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             continue;
         }
 
-        if (control->getState() == Control::FOCUS && control->keyEvent(evt, key))
+        if (control->isInFocus() && control->keyEvent(evt, key))
         {
             release();
             return true;
@@ -660,7 +677,7 @@ void Container::guaranteeFocus(Control* inFocus)
         {
             ((Container*)control)->guaranteeFocus(inFocus);
         }
-        else if (control->getState() == Control::FOCUS)
+        else if (control->isInFocus())
         {
             control->setState(NORMAL);
             return;
@@ -680,7 +697,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         {
             Control* control = *it;
             GP_ASSERT(control);
-            if (control->getState() == Control::FOCUS)
+            if (control->isInFocus())
             {
                 start = control;
                 break;
@@ -887,7 +904,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
 void Container::timeEvent(long timeDiff, void* cookie)
 {
     double time = Game::getAbsoluteTime();
-    if (_focusChangeRepeat && _state == FOCUS && _focusPressed &&
+    if (_focusChangeRepeat && isInFocus() && _focusPressed &&
         abs(time - timeDiff - _focusChangeRepeatDelay - _focusChangeStartTime) < 50)
     {
         ++_focusChangeCount;
@@ -944,7 +961,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (control->getState() == Control::FOCUS || control->getState() == Control::ACTIVE)
+        if (control->isInFocus() || control->getState() == Control::ACTIVE)
         {
             eventConsumed |= control->gamepadEvent(evt, gamepad, analogIndex);
             break;
@@ -986,7 +1003,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                     gamepad->isButtonDown(Gamepad::BUTTON_DOWN))
                 {
                     _focusPressed |= DOWN;
-                    eventConsumed |= _consumeInputEvents;
+                    eventConsumed = true;
                     if (moveFocus(DOWN))
                         break;
                     else
@@ -997,7 +1014,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                     gamepad->isButtonDown(Gamepad::BUTTON_RIGHT))
                 {
                     _focusPressed |= RIGHT;
-                    eventConsumed |= _consumeInputEvents;
+                    eventConsumed = true;
                     if (moveFocus(RIGHT))
                         break;
                     else
@@ -1008,7 +1025,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                     gamepad->isButtonDown(Gamepad::BUTTON_UP))
                 {
                     _focusPressed |= UP;
-                    eventConsumed |= _consumeInputEvents;
+                    eventConsumed = true;
                     if (moveFocus(UP))
                         break;
                     else
@@ -1019,7 +1036,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                     gamepad->isButtonDown(Gamepad::BUTTON_LEFT))
                 {
                     _focusPressed |= LEFT;
-                    eventConsumed |= _consumeInputEvents;
+                    eventConsumed = true;
                     if (moveFocus(LEFT))
                         break;
                     else
@@ -1033,7 +1050,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
                 {
                 case 0:
                     // The left analog stick can be used in the same way as the DPad.
-                    eventConsumed |= _consumeInputEvents;
+                    eventConsumed = true;
                     if (!(_focusPressed & RIGHT) &&
                         joystick.x > JOYSTICK_THRESHOLD)
                     {
@@ -1111,7 +1128,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
             joystick.y > -JOYSTICK_THRESHOLD)
         {
             _focusPressed &= ~DOWN;
-            eventConsumed |= _consumeInputEvents;
+            eventConsumed = true;
         }
 
         if ((_focusPressed & RIGHT) &&
@@ -1119,7 +1136,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
             joystick.x < JOYSTICK_THRESHOLD)
         {
             _focusPressed &= ~RIGHT;
-            eventConsumed |= _consumeInputEvents;
+            eventConsumed = true;
         }
     
         if ((_focusPressed & UP) &&
@@ -1127,7 +1144,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
             joystick.y < JOYSTICK_THRESHOLD)
         {
             _focusPressed &= ~UP;
-            eventConsumed |= _consumeInputEvents;
+            eventConsumed = true;
         }
 
         if ((_focusPressed & LEFT) &&
@@ -1135,7 +1152,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
             joystick.x > -JOYSTICK_THRESHOLD)
         {
             _focusPressed &= ~LEFT;
-            eventConsumed |= _consumeInputEvents;
+            eventConsumed = true;
         }
     }
 
@@ -1521,15 +1538,27 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
             return touchEventScroll(Touch::TOUCH_RELEASE, x, y, 0);
 
         case Mouse::MOUSE_WHEEL:
-            _scrollPosition.y += (_totalHeight / 10.0f) * wheelDelta;
-            if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+            if ((_state == HOVER && (!_scrollWheelRequiresFocus || _previousState == FOCUS)) ||
+                _state == FOCUS && _scrollWheelRequiresFocus)
             {
-                _scrollBarOpacityClip->stop();
-                _scrollBarOpacityClip = NULL;
+                if (_scrollingVelocity.isZero())
+                {
+                    _lastFrameTime = Game::getGameTime();
+                }
+                _scrolling = _scrollingMouseVertically = _scrollingMouseHorizontally = false;
+
+                _scrollingVelocity.y += _scrollWheelSpeed * wheelDelta;
+
+                if (_scrollBarOpacityClip && _scrollBarOpacityClip->isPlaying())
+                {
+                    _scrollBarOpacityClip->stop();
+                    _scrollBarOpacityClip = NULL;
+                }
+                _scrollBarOpacity = 1.0f;
+                _dirty = true;
+                return _consumeInputEvents;
             }
-            _scrollBarOpacity = 1.0f;
-            _dirty = true;
-            return _consumeInputEvents;
+            break;
     }
 
     return false;
@@ -1579,12 +1608,13 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
 
         Control::State currentState = control->getState();
-        if ((control->isContainer() && currentState == Control::FOCUS) ||
-            (currentState != Control::NORMAL) ||
+        if ((currentState != Control::NORMAL) ||
             ((evt == Touch::TOUCH_PRESS ||
               evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
               evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
-              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON) &&
+              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
+              evt == Mouse::MOUSE_MOVE ||
+              evt == Mouse::MOUSE_WHEEL) &&
                 x >= xPos + boundsX &&
                 x <= xPos + boundsX + bounds.width &&
                 y >= yPos + boundsY &&
@@ -1600,18 +1630,23 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 
     if (!isEnabled() || !isVisible())
     {
+        _contactIndex = INVALID_CONTACT_INDEX;
+        _contactIndices = 0;
+        _scrolling = false;
+        _scrollingMouseVertically = _scrollingMouseHorizontally = false;
+
         release();
         return (_consumeInputEvents | eventConsumed);
     }
-    
-    bool withinClipBounds = false;
+
+    bool withinClipBounds = (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                             y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height);
     switch (evt)
     {
     case Touch::TOUCH_PRESS:
-        if (x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
-            y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+        if (withinClipBounds)
         {
-            setState(Control::FOCUS);
+            setState(Control::ACTIVE);
             withinClipBounds = true;
             if (eventConsumed)
                 _contactIndices++;
@@ -1624,16 +1659,53 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
             return false;
         }
         break;
-    case Touch::TOUCH_RELEASE:
-        if (eventConsumed)
+    case Mouse::MOUSE_MOVE:
+        if (_state != ACTIVE)
         {
-            if (_contactIndices > 0)
-                _contactIndices--;
+            if (_state != HOVER && withinClipBounds)
+            {
+                _previousState = _state;
+                setState(HOVER);
+                notifyListeners(Control::Listener::ENTER);
+            }
+            else if (_state == HOVER && !withinClipBounds)
+            {
+                setState(_previousState);
+                notifyListeners(Control::Listener::LEAVE);
+            }
+            else if (_state != HOVER)
+            {
+                release();
+                return false;
+            }
+        }
+        break;
+    case Mouse::MOUSE_WHEEL:
+        if (!withinClipBounds && !_scrollWheelRequiresFocus)
+        {
+            release();
+            return false;
+        }
+        break;
+    case Touch::TOUCH_RELEASE:
+        if (eventConsumed && _contactIndices > 0)
+        {
+            _contactIndices--;
+        }
+
+        if (_state == ACTIVE && withinClipBounds)
+        {
+            setState(FOCUS);
+        }
+        else
+        {
+            setState(NORMAL);
         }
         break;
     }
 
-    if (!eventConsumed && _scroll != SCROLL_NONE && getState() == Control::FOCUS && (evt != Touch::TOUCH_PRESS || withinClipBounds))
+    if (!eventConsumed && _scroll != SCROLL_NONE &&
+        (evt != Touch::TOUCH_PRESS || withinClipBounds))
     {
         if ((mouse && mouseEventScroll((Mouse::MouseEvent)evt, x - xPos, y - yPos, data)) ||
             (!mouse && touchEventScroll((Touch::TouchEvent)evt, x - xPos, y - yPos, (unsigned int)data)))
@@ -1673,6 +1745,26 @@ Container::Scroll Container::getScroll(const char* scroll)
     }
 
     return Container::SCROLL_NONE;
+}
+
+float Container::getScrollingFriction() const
+{
+    return _scrollingFriction;
+}
+
+void Container::setScrollingFriction(float friction)
+{
+    _scrollingFriction = friction;
+}
+
+float Container::getScrollWheelSpeed() const
+{
+    return _scrollWheelSpeed;
+}
+
+void Container::setScrollWheelSpeed(float speed)
+{
+    _scrollWheelSpeed = speed;
 }
 
 static bool sortControlsByZOrder(Control* c1, Control* c2)

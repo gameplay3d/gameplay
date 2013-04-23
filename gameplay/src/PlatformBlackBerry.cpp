@@ -1037,7 +1037,7 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
 {
     if (!gameplay::Platform::mouseEventInternal(mouseEvent, x, y, 0))
     {
-        Platform::touchEventInternal(touchEvent, x, y, 0);
+        Platform::touchEventInternal(touchEvent, x, y, 0, true);
     }
 }
 

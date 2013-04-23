@@ -27,7 +27,7 @@ void luaRegister_AnimationClip()
         {"getAnimation", lua_AnimationClip_getAnimation},
         {"getBlendWeight", lua_AnimationClip_getBlendWeight},
         {"getDuration", lua_AnimationClip_getDuration},
-        {"getElaspedTime", lua_AnimationClip_getElaspedTime},
+        {"getElapsedTime", lua_AnimationClip_getElapsedTime},
         {"getEndTime", lua_AnimationClip_getEndTime},
         {"getId", lua_AnimationClip_getId},
         {"getLoopBlendTime", lua_AnimationClip_getLoopBlendTime},
@@ -508,7 +508,7 @@ int lua_AnimationClip_getDuration(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getElaspedTime(lua_State* state)
+int lua_AnimationClip_getElapsedTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -521,7 +521,7 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
-                float result = instance->getElaspedTime();
+                float result = instance->getElapsedTime();
 
                 // Push the return value onto the stack.
                 lua_pushnumber(state, result);
@@ -529,7 +529,7 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_AnimationClip_getElaspedTime - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_AnimationClip_getElapsedTime - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

@@ -16,7 +16,7 @@ Material::Material(const std::string& id) :
 
 Material::Material(const Material& c) :
     _parent(c._parent),
-    _id(c._id),
+    _id(c._id), _lit(false),
     _vertexShader(c._vertexShader),
     _fragmentShader(c._fragmentShader),
     _defines(c._defines),

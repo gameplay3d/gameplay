@@ -1,8 +1,8 @@
 set(GAME_NAME sample-particles)
 
 set(GAME_SRC
-	src/ParticlesGame.cpp
-	src/ParticlesGame.h
+    src/ParticlesGame.cpp
+    src/ParticlesGame.h
 )
 
 add_executable(${GAME_NAME}

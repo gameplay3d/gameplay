@@ -2,7 +2,7 @@ form basicControls
 {
     theme = res/common/default.theme
     layout = LAYOUT_ABSOLUTE
-    style = basic
+    style = basicContainer
     size = 600, 600
 	consumeInputEvents = true
     	
@@ -16,10 +16,10 @@ form basicControls
 		
 	button testButton
 	{
-		style = buttonStyle
+		style = buttonHover
 		position = 20, 80
 		size = 200, 100
-		text = This is a button.
+		text = This is a button with a hover state.
 	}
 
 	checkbox testCheckbox
