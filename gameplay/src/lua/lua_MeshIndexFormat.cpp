@@ -18,7 +18,6 @@ Mesh::IndexFormat lua_enumFromString_MeshIndexFormat(const char* s)
         return Mesh::INDEX16;
     if (strcmp(s, luaEnumString_MeshIndexFormat_INDEX32) == 0)
         return Mesh::INDEX32;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Mesh::IndexFormat.", s);
     return Mesh::INDEX8;
 }
 
@@ -30,7 +29,6 @@ const char* lua_stringFromEnum_MeshIndexFormat(Mesh::IndexFormat e)
         return luaEnumString_MeshIndexFormat_INDEX16;
     if (e == Mesh::INDEX32)
         return luaEnumString_MeshIndexFormat_INDEX32;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Mesh::IndexFormat.", e);
     return enumStringEmpty;
 }
 

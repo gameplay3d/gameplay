@@ -15,7 +15,6 @@ Image::Format lua_enumFromString_ImageFormat(const char* s)
         return Image::RGB;
     if (strcmp(s, luaEnumString_ImageFormat_RGBA) == 0)
         return Image::RGBA;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Image::Format.", s);
     return Image::RGB;
 }
 
@@ -25,7 +24,6 @@ const char* lua_stringFromEnum_ImageFormat(Image::Format e)
         return luaEnumString_ImageFormat_RGB;
     if (e == Image::RGBA)
         return luaEnumString_ImageFormat_RGBA;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Image::Format.", e);
     return enumStringEmpty;
 }
 

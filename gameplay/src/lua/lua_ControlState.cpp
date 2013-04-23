@@ -21,7 +21,6 @@ Control::State lua_enumFromString_ControlState(const char* s)
         return Control::ACTIVE;
     if (strcmp(s, luaEnumString_ControlState_DISABLED) == 0)
         return Control::DISABLED;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Control::State.", s);
     return Control::NORMAL;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_ControlState(Control::State e)
         return luaEnumString_ControlState_ACTIVE;
     if (e == Control::DISABLED)
         return luaEnumString_ControlState_DISABLED;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Control::State.", e);
     return enumStringEmpty;
 }
 
