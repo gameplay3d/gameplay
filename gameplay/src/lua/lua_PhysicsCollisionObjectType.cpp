@@ -27,7 +27,6 @@ PhysicsCollisionObject::Type lua_enumFromString_PhysicsCollisionObjectType(const
         return PhysicsCollisionObject::VEHICLE_WHEEL;
     if (strcmp(s, luaEnumString_PhysicsCollisionObjectType_NONE) == 0)
         return PhysicsCollisionObject::NONE;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration PhysicsCollisionObject::Type.", s);
     return PhysicsCollisionObject::RIGID_BODY;
 }
 
@@ -45,7 +44,6 @@ const char* lua_stringFromEnum_PhysicsCollisionObjectType(PhysicsCollisionObject
         return luaEnumString_PhysicsCollisionObjectType_VEHICLE_WHEEL;
     if (e == PhysicsCollisionObject::NONE)
         return luaEnumString_PhysicsCollisionObjectType_NONE;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration PhysicsCollisionObject::Type.", e);
     return enumStringEmpty;
 }
 

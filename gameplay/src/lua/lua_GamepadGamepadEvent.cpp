@@ -24,7 +24,6 @@ Gamepad::GamepadEvent lua_enumFromString_GamepadGamepadEvent(const char* s)
         return Gamepad::JOYSTICK_EVENT;
     if (strcmp(s, luaEnumString_GamepadGamepadEvent_TRIGGER_EVENT) == 0)
         return Gamepad::TRIGGER_EVENT;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Gamepad::GamepadEvent.", s);
     return Gamepad::CONNECTED_EVENT;
 }
 
@@ -40,7 +39,6 @@ const char* lua_stringFromEnum_GamepadGamepadEvent(Gamepad::GamepadEvent e)
         return luaEnumString_GamepadGamepadEvent_JOYSTICK_EVENT;
     if (e == Gamepad::TRIGGER_EVENT)
         return luaEnumString_GamepadGamepadEvent_TRIGGER_EVENT;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Gamepad::GamepadEvent.", e);
     return enumStringEmpty;
 }
 

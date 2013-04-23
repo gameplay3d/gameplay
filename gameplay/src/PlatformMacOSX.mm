@@ -1569,7 +1569,7 @@ int getUnicode(int key)
     yavg /= [touches count];
     
     [gameLock lock];
-    _game->gesturePinchEvent((int)xavg, (int)yavg, [event magnification]);
+    gameplay::Platform::gesturePinchEventInternal((int)xavg, (int)yavg, [event magnification]);
     [gameLock unlock];
 }
 

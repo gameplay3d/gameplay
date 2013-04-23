@@ -30,7 +30,6 @@ AIMessage::ParameterType lua_enumFromString_AIMessageParameterType(const char* s
         return AIMessage::BOOLEAN;
     if (strcmp(s, luaEnumString_AIMessageParameterType_STRING) == 0)
         return AIMessage::STRING;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration AIMessage::ParameterType.", s);
     return AIMessage::UNDEFINED;
 }
 
@@ -50,7 +49,6 @@ const char* lua_stringFromEnum_AIMessageParameterType(AIMessage::ParameterType e
         return luaEnumString_AIMessageParameterType_BOOLEAN;
     if (e == AIMessage::STRING)
         return luaEnumString_AIMessageParameterType_STRING;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration AIMessage::ParameterType.", e);
     return enumStringEmpty;
 }
 

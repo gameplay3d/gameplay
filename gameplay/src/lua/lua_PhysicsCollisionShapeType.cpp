@@ -27,7 +27,6 @@ PhysicsCollisionShape::Type lua_enumFromString_PhysicsCollisionShapeType(const c
         return PhysicsCollisionShape::SHAPE_MESH;
     if (strcmp(s, luaEnumString_PhysicsCollisionShapeType_SHAPE_HEIGHTFIELD) == 0)
         return PhysicsCollisionShape::SHAPE_HEIGHTFIELD;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration PhysicsCollisionShape::Type.", s);
     return PhysicsCollisionShape::SHAPE_NONE;
 }
 
@@ -45,7 +44,6 @@ const char* lua_stringFromEnum_PhysicsCollisionShapeType(PhysicsCollisionShape::
         return luaEnumString_PhysicsCollisionShapeType_SHAPE_MESH;
     if (e == PhysicsCollisionShape::SHAPE_HEIGHTFIELD)
         return luaEnumString_PhysicsCollisionShapeType_SHAPE_HEIGHTFIELD;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration PhysicsCollisionShape::Type.", e);
     return enumStringEmpty;
 }
 

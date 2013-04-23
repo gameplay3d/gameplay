@@ -54,7 +54,6 @@ Font::Justify lua_enumFromString_FontJustify(const char* s)
         return Font::ALIGN_VCENTER_RIGHT;
     if (strcmp(s, luaEnumString_FontJustify_ALIGN_BOTTOM_RIGHT) == 0)
         return Font::ALIGN_BOTTOM_RIGHT;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Font::Justify.", s);
     return Font::ALIGN_LEFT;
 }
 
@@ -90,7 +89,6 @@ const char* lua_stringFromEnum_FontJustify(Font::Justify e)
         return luaEnumString_FontJustify_ALIGN_VCENTER_RIGHT;
     if (e == Font::ALIGN_BOTTOM_RIGHT)
         return luaEnumString_FontJustify_ALIGN_BOTTOM_RIGHT;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Font::Justify.", e);
     return enumStringEmpty;
 }
 

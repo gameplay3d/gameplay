@@ -27,7 +27,6 @@ Texture::Filter lua_enumFromString_TextureFilter(const char* s)
         return Texture::NEAREST_MIPMAP_LINEAR;
     if (strcmp(s, luaEnumString_TextureFilter_LINEAR_MIPMAP_LINEAR) == 0)
         return Texture::LINEAR_MIPMAP_LINEAR;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Texture::Filter.", s);
     return Texture::NEAREST;
 }
 
@@ -45,7 +44,6 @@ const char* lua_stringFromEnum_TextureFilter(Texture::Filter e)
         return luaEnumString_TextureFilter_NEAREST_MIPMAP_LINEAR;
     if (e == Texture::LINEAR_MIPMAP_LINEAR)
         return luaEnumString_TextureFilter_LINEAR_MIPMAP_LINEAR;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Texture::Filter.", e);
     return enumStringEmpty;
 }
 

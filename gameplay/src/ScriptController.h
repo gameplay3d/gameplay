@@ -770,6 +770,9 @@ private:
         KEY_EVENT,
         MOUSE_EVENT,
         TOUCH_EVENT,
+        GESTURE_SWIPE_EVENT,
+        GESTURE_PINCH_EVENT,
+        GESTURE_TAP_EVENT,
         GAMEPAD_EVENT,
         CALLBACK_COUNT,
         INVALID_CALLBACK = CALLBACK_COUNT
@@ -866,6 +869,37 @@ private:
      * @see Mouse::MouseEvent
      */
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Script callback for Gesture::SWIPE events.
+     *
+     * @param x The x-coordinate of the start of the swipe.
+     * @param y The y-coordinate of the start of the swipe.
+     * @param direction The direction of the swipe
+     *
+     * @see Gesture::SWIPE_DIRECTION_UP
+     * @see Gesture::SWIPE_DIRECTION_DOWN
+     * @see Gesture::SWIPE_DIRECTION_LEFT
+     * @see Gesture::SWIPE_DIRECTION_RIGHT
+     */
+    void gestureSwipeEvent(int x, int y, int direction);
+
+    /**
+     * Script callback for Gesture::PINCH events.
+     *
+     * @param x The centroid x-coordinate of the pinch.
+     * @param y The centroid y-coordinate of the pinch.
+     * @param scale The scale of the pinch.
+     */
+    void gesturePinchEvent(int x, int y, float scale);
+
+    /**
+     * Script callback for Gesture::TAP events.
+     *
+     * @param x The x-coordinate of the tap.
+     * @param y The y-coordinate of the tap.
+     */
+    void gestureTapEvent(int x, int y);
 
     /**
      * Script gamepad callback on gamepad events.
