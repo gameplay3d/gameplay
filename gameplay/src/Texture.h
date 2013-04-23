@@ -153,20 +153,6 @@ public:
     static Texture* create(const char* path, bool generateMipmaps = false);
 
     /**
-     * Creates a texture from the given image resource.
-     *
-     * Note that for textures that include mipmap data in the source data (such as most compressed textures),
-     * the generateMipmaps flags should NOT be set to true.
-     *
-     * @param The array of 6 of path The image resource path.
-     * @param generateMipmaps true to auto-generate a full mipmap chain, false otherwise.
-     *
-     * @return The new texture, or NULL if the texture could not be loaded/created.
-     * @script{create}
-     */
-    static Texture* createCubeMap(const char* path[6], bool generateMipmaps = false);
-
-    /**
      * Creates a texture from the given image.
      *
      * @param image The image containing the texture data.
