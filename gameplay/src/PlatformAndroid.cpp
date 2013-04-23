@@ -744,14 +744,14 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                                 else if (deltaY < 0)
                                     direction = gameplay::Gesture::SWIPE_DIRECTION_UP;
                             }
-                            gameplay::Game::getInstance()->gestureSwipeEvent(x, y, direction);
+                            gameplay::Platform::gestureSwipeEventInternal(x, y, direction);
                             __pointer0.pressed = false;
                             gestureDetected = true;
                         }
                         else if(__gestureEventsProcessed.test(Gesture::GESTURE_TAP) &&
                                gameplay::Game::getInstance()->getAbsoluteTime() - __pointer0.time < GESTURE_TAP_DURATION_MAX)
                         {
-                            gameplay::Game::getInstance()->gestureTapEvent(x, y);
+                            gameplay::Platform::gestureTapEventInternal(x, y);
                             __pointer0.pressed = false;
                             gestureDetected = true;
                         }
@@ -810,7 +810,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time < GESTURE_SWIPE_DURATION_MAX && 
                             (abs(deltaX) > GESTURE_SWIPE_DISTANCE_MIN || abs(deltaY) > GESTURE_SWIPE_DISTANCE_MIN) )
                         {
-                            int direction;
+                            int direction = 0;
                             if (deltaX > 0)
                                 direction |= gameplay::Gesture::SWIPE_DIRECTION_RIGHT;
                             else if (deltaX < 0)
@@ -821,14 +821,14 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
                             else if (deltaY < 0)
                                 direction |= gameplay::Gesture::SWIPE_DIRECTION_UP;
 
-                            gameplay::Game::getInstance()->gestureSwipeEvent(x, y, direction);
+                            gameplay::Platform::gestureSwipeEventInternal(x, y, direction);
                             __pointer1.pressed = false;
                             gestureDetected = true;
                         }
                         else if(__gestureEventsProcessed.test(Gesture::GESTURE_TAP) &&
                                gameplay::Game::getInstance()->getAbsoluteTime() - __pointer1.time < GESTURE_TAP_DURATION_MAX)
                         {
-                            gameplay::Game::getInstance()->gestureTapEvent(x, y);
+                            gameplay::Platform::gestureTapEventInternal(x, y);
                             __pointer1.pressed = false;
                             gestureDetected = true;
                         }
