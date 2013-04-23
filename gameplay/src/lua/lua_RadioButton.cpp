@@ -78,7 +78,6 @@ void luaRegister_RadioButton()
         {"getZIndex", lua_RadioButton_getZIndex},
         {"isContainer", lua_RadioButton_isContainer},
         {"isEnabled", lua_RadioButton_isEnabled},
-        {"isInFocus", lua_RadioButton_isInFocus},
         {"isSelected", lua_RadioButton_isSelected},
         {"isVisible", lua_RadioButton_isVisible},
         {"release", lua_RadioButton_release},
@@ -2712,41 +2711,6 @@ int lua_RadioButton_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_RadioButton_isEnabled - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_RadioButton_isInFocus(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                RadioButton* instance = getInstance(state);
-                bool result = instance->isInFocus();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_RadioButton_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

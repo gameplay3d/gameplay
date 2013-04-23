@@ -631,14 +631,6 @@ public:
     bool isVisible() const;
 
     /**
-     * Gets whether this control is in focus.
-     * Note that a control's state can be HOVER while the control is in focus.
-     * When the cursor leaves the control, it will return to the FOCUS state.
-     * This method will still return true in this case.
-     */
-    bool isInFocus() const;
-
-    /**
      * Set the opacity of this control.
      *
      * @param opacity The new opacity.
@@ -964,7 +956,6 @@ protected:
      *
      * @param eventType The event to trigger.
      */
-    //void notifyListeners(Listener::EventType eventType);
     void notifyListeners(Control::Listener::EventType eventType);
 
     /**
@@ -974,6 +965,14 @@ protected:
      * @return The Alignment enum value corresponding to the given string.
      */
     static Alignment getAlignment(const char* alignment);
+
+    /**
+     * Gets whether this control is in focus.
+     * Note that a control's state can be HOVER while the control is in focus.
+     * When the cursor leaves the control, it will return to the FOCUS state.
+     * This method will still return true in this case.
+     */
+    bool hasFocus() const;
 
     /** 
      * The Control's ID.
