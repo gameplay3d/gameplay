@@ -54,6 +54,7 @@ int lua_Button_getY(lua_State* state);
 int lua_Button_getZIndex(lua_State* state);
 int lua_Button_isContainer(lua_State* state);
 int lua_Button_isEnabled(lua_State* state);
+int lua_Button_isInFocus(lua_State* state);
 int lua_Button_isVisible(lua_State* state);
 int lua_Button_release(lua_State* state);
 int lua_Button_removeListener(lua_State* state);

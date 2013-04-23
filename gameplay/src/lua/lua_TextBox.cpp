@@ -75,6 +75,7 @@ void luaRegister_TextBox()
         {"getZIndex", lua_TextBox_getZIndex},
         {"isContainer", lua_TextBox_isContainer},
         {"isEnabled", lua_TextBox_isEnabled},
+        {"isInFocus", lua_TextBox_isInFocus},
         {"isVisible", lua_TextBox_isVisible},
         {"release", lua_TextBox_release},
         {"removeListener", lua_TextBox_removeListener},
@@ -2660,6 +2661,41 @@ int lua_TextBox_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_TextBox_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_TextBox_isInFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                TextBox* instance = getInstance(state);
+                bool result = instance->isInFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_TextBox_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

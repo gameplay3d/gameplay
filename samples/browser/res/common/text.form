@@ -6,6 +6,7 @@ form textTest
     width = 240
     layout = LAYOUT_VERTICAL
     scroll = SCROLL_VERTICAL
+	consumeInputEvents = true
 
     label topLabel
     {
