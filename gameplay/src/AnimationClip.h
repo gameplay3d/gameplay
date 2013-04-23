@@ -109,7 +109,7 @@ public:
      *
      * @return The elapsed time of the AnimationClip (in milliseconds).
      */
-    float getElaspedTime() const;
+    float getElapsedTime() const;
 
     /**
      * Sets the AnimationClip's repeat count. Overrides repeat duration.

@@ -1,7 +1,7 @@
 form zOrder
 {
     theme = res/common/default.theme
-    style = basic
+    style = basicContainer
     size = 600, 600
     scroll = SCROLL_BOTH
 	consumeInputEvents = true

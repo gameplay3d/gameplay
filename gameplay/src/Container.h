@@ -27,7 +27,10 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
-         scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
+         scrollBarsAutoHide = <bool>        // Whether scrollbars fade out when not in use.
+         scrollingFriction = <float>        // Friction applied to inertial scrolling.
+         scrollWheelRequiresFocus = <bool>  // Whether focus or hover state handles scroll-wheel events.
+         scrollWheelSpeed = <float>         // Speed to scroll at on a scroll-wheel event.
          consumeEvents = <bool>             // Whether the container propagates input events to the Game's input event handler. Default is true.
 
          // All the nested controls within this container.
@@ -184,6 +187,27 @@ public:
     bool isScrolling() const;
 
     /**
+     * Get the friction applied to scrolling velocity for this container.
+     */
+    float getScrollingFriction() const;
+
+    /**
+     * Get the friction applied to scrolling velocity for this container.
+     * A higher value will bring the viewport to a stop sooner.
+     */
+    void setScrollingFriction(float friction);
+
+    /**
+     * Get the speed added to scrolling velocity on a scroll-wheel event.
+     */
+    float getScrollWheelSpeed() const;
+
+    /**
+     * Set the speed added to scrolling velocity on a scroll-wheel event.
+     */
+    void setScrollWheelSpeed(float speed);
+
+    /**
      * @see AnimationTarget::getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
@@ -197,6 +221,21 @@ public:
      * @see Control::getType
      */
     const char* getType() const;
+
+    /**
+     * Get whether this container requires focus in order to handle scroll-wheel events.
+     */
+    bool getScrollWheelRequiresFocus() const;
+
+    /**
+     * Set whether this container requires focus in order to handle scroll-wheel events.
+     * If this property is set to true, scroll-wheel events will only be handled when the container has focus.
+     * If this property is set tofalse, scroll-wheel events will only be handled
+     * when the container is in the HOVER state.
+     *
+     * @param required Whether focus is required in order to handle scroll-wheel events.
+     */
+    void setScrollWheelRequiresFocus(bool required);
 
     /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
@@ -422,7 +461,7 @@ protected:
      */
     Theme::ThemeImage* _scrollBarTopCap;
     /**
-     * Scrollbar vertical image.
+     * Scrollbar vertical track image.
      */
     Theme::ThemeImage* _scrollBarVertical;
     /**
@@ -434,7 +473,7 @@ protected:
      */
     Theme::ThemeImage* _scrollBarLeftCap;
     /**
-     * Scrollbar horizontal image.
+     * Scrollbar horizontal track image.
      */
     Theme::ThemeImage* _scrollBarHorizontal;
     /**
@@ -446,7 +485,7 @@ protected:
      */
     Scroll _scroll;
     /** 
-     * Scroll bar bounds
+     * Scroll bar bounds.
      */
     Rectangle _scrollBarBounds;
     /** 
@@ -454,7 +493,7 @@ protected:
      */
     Vector2 _scrollPosition;
     /** 
-     * Should the scrollbars auto hide. Default is false.
+     * Whether the scrollbars should auto-hide. Default is false.
      */
     bool _scrollBarsAutoHide;
     /** 
@@ -466,11 +505,11 @@ protected:
      */
     bool _scrolling;
     /** 
-     * First scrolling touch x position
+     * First scrolling touch x position.
      */
     int _scrollingVeryFirstX;
     /**
-     * First scrolling touch y position
+     * First scrolling touch y position.
      */
     int _scrollingVeryFirstY;
     /**
@@ -482,33 +521,37 @@ protected:
      */ 
     int _scrollingFirstY;
     /** 
-     * The last y position when scrolling
+     * The last y position when scrolling.
      */ 
     int _scrollingLastX;
     /** 
-     * The last x position when scrolling
+     * The last x position when scrolling.
      */ 
     int _scrollingLastY;
     /** 
-     * Time we started scrolling in the x
+     * Time we started scrolling horizontally.
      */ 
     double _scrollingStartTimeX;
     /** 
-     * Time we started scrolling in the y
+     * Time we started scrolling vertically.
      */ 
     double _scrollingStartTimeY;
     /** 
-     * The last time we were scrolling
+     * The last time we were scrolling.
      */
     double _scrollingLastTime;
     /** 
-     * Speed to continue scrolling at after touch release.
+     * Speed to continue scrolling at after touch release or a scroll-wheel event.
      */ 
     Vector2 _scrollingVelocity;
     /** 
      * Friction dampens velocity.
      */ 
     float _scrollingFriction;
+    /**
+     * Amount to add to scrolling velocity on a scroll-wheel event;
+     */
+    float _scrollWheelSpeed;
     /** 
      * Are we scrolling to the right?
      */ 
@@ -517,12 +560,10 @@ protected:
      * Are we scrolling down?
      */ 
     bool _scrollingDown;
-
     /**
      * Locked to scrolling vertically by grabbing the scrollbar with the mouse.
      */
     bool _scrollingMouseVertically;
-
     /**
      * Locked to scrolling horizontally by grabbing the scrollbar with the mouse.
      */
@@ -574,6 +615,7 @@ private:
     float _totalHeight;
     int _contactIndices;
     bool _initializedWithScroll;
+    bool _scrollWheelRequiresFocus;
 };
 
 }

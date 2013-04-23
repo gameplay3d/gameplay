@@ -57,6 +57,11 @@ public:
          * State of a control that has been disabled.
          */
         DISABLED = 0x08,
+
+        /**
+         * When a mouse is in use, the state of a control the cursor is over.
+         */
+        HOVER = 0x10,
     };
 
     /**
@@ -135,6 +140,16 @@ public:
              * Event triggered when a control is clicked with the right mouse button.
              */
             RIGHT_CLICK     = 0x40,
+
+            /**
+             * Event triggered when a mouse cursor enters a control.
+             */
+            ENTER           = 0x80,
+
+            /**
+             * Event triggered when a mouse cursor leaves a control.
+             */
+            LEAVE           = 0x100,
         };
     
         /*
@@ -155,7 +170,7 @@ public:
      * @script{ignore}
      * A constant used for setting themed attributes on all control states simultaneously.
      */
-    static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED;
+    static const unsigned char STATE_ALL = NORMAL | FOCUS | ACTIVE | DISABLED | HOVER;
 
     /**
      * Position animation property. Data = x, y
@@ -614,6 +629,14 @@ public:
      * @return true if the control is visible; false if not visible.
      */
     bool isVisible() const;
+
+    /**
+     * Gets whether this control is in focus.
+     * Note that a control's state can be HOVER while the control is in focus.
+     * When the cursor leaves the control, it will return to the FOCUS state.
+     * This method will still return true in this case.
+     */
+    bool isInFocus() const;
 
     /**
      * Set the opacity of this control.
@@ -1095,6 +1118,7 @@ private:
     
     bool _styleOverridden;
     Theme::Skin* _skin;
+    State _previousState;
 };
 
 }

@@ -601,6 +601,16 @@ void Form::updateInternal(float elapsedTime)
     }
 }
 
+static bool shouldPropagateTouchEvent(Control::State state, Touch::TouchEvent evt, const Rectangle& bounds, int x, int y)
+{
+    return (state == Control::FOCUS ||
+            (evt == Touch::TOUCH_PRESS &&
+             x >= bounds.x &&
+             x <= bounds.x + bounds.width &&
+             y >= bounds.y &&
+             y <= bounds.y + bounds.height));
+}
+
 bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
 {
     // Check for a collision with each Form in __forms.
@@ -619,12 +629,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
                 if (form->projectPoint(x, y, &point))
                 {
                     const Rectangle& bounds = form->getBounds();
-                    if (form->getState() == Control::FOCUS ||
-                        (evt == Touch::TOUCH_PRESS &&
-                         point.x >= bounds.x &&
-                         point.x <= bounds.x + bounds.width &&
-                         point.y >= bounds.y &&
-                         point.y <= bounds.y + bounds.height))
+                    if (shouldPropagateTouchEvent(form->getState(), evt, bounds, point.x, point.y))
                     {
                         if (form->touchEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, contactIndex))
                             return true;
@@ -635,12 +640,7 @@ bool Form::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int 
             {
                 // Simply compare with the form's bounds.
                 const Rectangle& bounds = form->getBounds();
-                if (form->getState() == Control::FOCUS ||
-                    (evt == Touch::TOUCH_PRESS &&
-                        x >= bounds.x &&
-                        x <= bounds.x + bounds.width &&
-                        y >= bounds.y &&
-                        y <= bounds.y + bounds.height))
+                if (shouldPropagateTouchEvent(form->getState(), evt, bounds, x, y))
                 {
                     // Pass on the event's position relative to the form.
                     if (form->touchEvent(evt, x - bounds.x, y - bounds.y, contactIndex))
@@ -668,6 +668,20 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     return false;
 }
 
+static bool shouldPropagateMouseEvent(Control::State state, Mouse::MouseEvent evt, const Rectangle& bounds, int x, int y)
+{
+    return (state != Control::NORMAL ||
+            ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
+              evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
+              evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
+              evt == Mouse::MOUSE_MOVE ||
+              evt == Mouse::MOUSE_WHEEL) &&
+                x >= bounds.x &&
+                x <= bounds.x + bounds.width &&
+                y >= bounds.y &&
+                y <= bounds.y + bounds.height));
+}
+
 bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 {
     for (size_t i = 0; i < __forms.size(); ++i)
@@ -683,15 +697,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
                 if (form->projectPoint(x, y, &point))
                 {
                     const Rectangle& bounds = form->getBounds();
-                    if (form->getState() == Control::FOCUS ||
-                        ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
-                          evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
-                          evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
-                          evt == Mouse::MOUSE_WHEEL) &&
-                         point.x >= bounds.x &&
-                         point.x <= bounds.x + bounds.width &&
-                         point.y >= bounds.y &&
-                         point.y <= bounds.y + bounds.height))
+                    if (shouldPropagateMouseEvent(form->getState(), evt, bounds, point.x, point.y))
                     {
                         if (form->mouseEvent(evt, point.x - bounds.x, bounds.height - point.y - bounds.y, wheelDelta))
                             return true;
@@ -702,15 +708,7 @@ bool Form::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelt
             {
                 // Simply compare with the form's bounds.
                 const Rectangle& bounds = form->getBounds();
-                if (form->getState() == Control::FOCUS ||
-                    ((evt == Mouse::MOUSE_PRESS_LEFT_BUTTON ||
-                      evt == Mouse::MOUSE_PRESS_MIDDLE_BUTTON ||
-                      evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON ||
-                      evt == Mouse::MOUSE_WHEEL) &&
-                        x >= bounds.x &&
-                        x <= bounds.x + bounds.width &&
-                        y >= bounds.y &&
-                        y <= bounds.y + bounds.height))
+                if (shouldPropagateMouseEvent(form->getState(), evt, bounds, x, y))
                 {
                     // Pass on the event's position relative to the form.
                     if (form->mouseEvent(evt, x - bounds.x, y - bounds.y, wheelDelta))
@@ -729,7 +727,7 @@ void Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled() && form->isVisible() && form->getState() == FOCUS)
+        if (form->isEnabled() && form->isVisible() && form->isInFocus())
         {
             if (form->gamepadEvent(evt, gamepad, analogIndex))
                 return;
