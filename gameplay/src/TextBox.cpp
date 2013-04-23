@@ -105,7 +105,7 @@ bool TextBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
 
 bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
 {
-    if (_state == FOCUS)
+    if (isInFocus())
     {
         switch (evt)
         {
@@ -326,7 +326,7 @@ void TextBox::update(const Control* container, const Vector2& offset)
 
 void TextBox::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
-    if (_caretImage && (_state == ACTIVE || _state == FOCUS))
+    if (_caretImage && (_state == ACTIVE || isInFocus()))
     {
         // Draw the cursor at its current location.
         const Rectangle& region = _caretImage->getRegion();

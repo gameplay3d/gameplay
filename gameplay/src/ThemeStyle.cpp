@@ -8,13 +8,16 @@ namespace gameplay
  ****************/
 Theme::Style::Style(Theme* theme, const char* id, float tw, float th,
         const Theme::Margin& margin, const Theme::Padding& padding,
-        Theme::Style::Overlay* normal, Theme::Style::Overlay* focus, Theme::Style::Overlay* active, Theme::Style::Overlay* disabled)
+        Theme::Style::Overlay* normal, Theme::Style::Overlay* focus,
+        Theme::Style::Overlay* active, Theme::Style::Overlay* disabled,
+        Theme::Style::Overlay* hover)
     : _theme(theme), _id(id), _tw(tw), _th(th), _margin(margin), _padding(padding)
 {
     _overlays[OVERLAY_NORMAL] = normal;
     _overlays[OVERLAY_FOCUS] = focus;
     _overlays[OVERLAY_ACTIVE] = active;
     _overlays[OVERLAY_DISABLED] = disabled;
+    _overlays[OVERLAY_HOVER] = hover;
 }
 
 Theme::Style::Style(const Style& copy)
@@ -27,8 +30,10 @@ Theme::Style::Style(const Style& copy)
 
     for (int i = 0; i < OVERLAY_MAX; i++)
     {
-        GP_ASSERT(copy._overlays[i]);
-        _overlays[i] = new Theme::Style::Overlay(*copy._overlays[i]);
+        if (copy._overlays[i])
+            _overlays[i] = new Theme::Style::Overlay(*copy._overlays[i]);
+        else
+            _overlays[i] = NULL;
     }
 }
 

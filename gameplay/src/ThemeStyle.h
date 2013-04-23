@@ -45,6 +45,7 @@ private:
         OVERLAY_FOCUS,
         OVERLAY_ACTIVE,
         OVERLAY_DISABLED,
+        OVERLAY_HOVER,
         OVERLAY_MAX
     };
 
@@ -179,7 +180,7 @@ private:
      */
     Style(Theme* theme, const char* id, float tw, float th,
           const Theme::Margin& margin, const Theme::Padding& padding,
-          Overlay* normal, Overlay* focus, Overlay* active, Overlay* disabled);
+          Overlay* normal, Overlay* focus, Overlay* active, Overlay* disabled, Overlay* hover);
 
     /**
      * Constructor.

@@ -74,6 +74,7 @@ void luaRegister_Button()
         {"getZIndex", lua_Button_getZIndex},
         {"isContainer", lua_Button_isContainer},
         {"isEnabled", lua_Button_isEnabled},
+        {"isInFocus", lua_Button_isInFocus},
         {"isVisible", lua_Button_isVisible},
         {"release", lua_Button_release},
         {"removeListener", lua_Button_removeListener},
@@ -2589,6 +2590,41 @@ int lua_Button_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Button_isEnabled - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Button_isInFocus(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Button* instance = getInstance(state);
+                bool result = instance->isInFocus();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Button_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
