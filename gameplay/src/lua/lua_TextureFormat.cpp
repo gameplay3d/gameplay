@@ -21,7 +21,6 @@ Texture::Format lua_enumFromString_TextureFormat(const char* s)
         return Texture::RGBA;
     if (strcmp(s, luaEnumString_TextureFormat_ALPHA) == 0)
         return Texture::ALPHA;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Texture::Format.", s);
     return Texture::UNKNOWN;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_TextureFormat(Texture::Format e)
         return luaEnumString_TextureFormat_RGBA;
     if (e == Texture::ALPHA)
         return luaEnumString_TextureFormat_ALPHA;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Texture::Format.", e);
     return enumStringEmpty;
 }
 

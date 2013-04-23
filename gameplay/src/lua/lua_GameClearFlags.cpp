@@ -30,7 +30,6 @@ Game::ClearFlags lua_enumFromString_GameClearFlags(const char* s)
         return Game::CLEAR_DEPTH_STENCIL;
     if (strcmp(s, luaEnumString_GameClearFlags_CLEAR_COLOR_DEPTH_STENCIL) == 0)
         return Game::CLEAR_COLOR_DEPTH_STENCIL;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Game::ClearFlags.", s);
     return Game::CLEAR_COLOR;
 }
 
@@ -50,7 +49,6 @@ const char* lua_stringFromEnum_GameClearFlags(Game::ClearFlags e)
         return luaEnumString_GameClearFlags_CLEAR_DEPTH_STENCIL;
     if (e == Game::CLEAR_COLOR_DEPTH_STENCIL)
         return luaEnumString_GameClearFlags_CLEAR_COLOR_DEPTH_STENCIL;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Game::ClearFlags.", e);
     return enumStringEmpty;
 }
 
