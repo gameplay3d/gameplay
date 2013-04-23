@@ -76,7 +76,6 @@ void luaRegister_Joystick()
         {"getZIndex", lua_Joystick_getZIndex},
         {"isContainer", lua_Joystick_isContainer},
         {"isEnabled", lua_Joystick_isEnabled},
-        {"isInFocus", lua_Joystick_isInFocus},
         {"isRelative", lua_Joystick_isRelative},
         {"isVisible", lua_Joystick_isVisible},
         {"release", lua_Joystick_release},
@@ -2762,41 +2761,6 @@ int lua_Joystick_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Joystick_isEnabled - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Joystick_isInFocus(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Joystick* instance = getInstance(state);
-                bool result = instance->isInFocus();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Joystick_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

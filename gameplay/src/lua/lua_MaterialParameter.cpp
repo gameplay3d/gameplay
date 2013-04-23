@@ -1984,7 +1984,7 @@ int lua_MaterialParameter_setVector3Array(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setVector3Array(param1, param2);
-
+                
                 return 0;
             }
 
@@ -2016,7 +2016,7 @@ int lua_MaterialParameter_setVector3Array(lua_State* state)
 
                 MaterialParameter* instance = getInstance(state);
                 instance->setVector3Array(param1, param2, param3);
-
+                
                 return 0;
             }
 
