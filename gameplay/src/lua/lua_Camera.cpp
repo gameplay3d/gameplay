@@ -797,89 +797,71 @@ int lua_Camera_project(lua_State* state)
     // Attempt to match the parameters to a valid binding.
     switch (paramCount)
     {
-        case 5:
+        case 4:
         {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA))
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
-                if (!param1Valid)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
                 {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
-                    lua_error(state);
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<Vector2> param3 = gameplay::ScriptUtil::getObjectPointer<Vector2>(4, "Vector2", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    Camera* instance = getInstance(state);
+                    instance->project(*param1, *param2, param3);
+                    
+                    return 0;
                 }
+            } while (0);
 
-                // Get parameter 2 off the stack.
-                bool param2Valid;
-                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
-                if (!param2Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
-                    lua_error(state);
-                }
-
-                // Get parameter 3 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param3 = gameplay::ScriptUtil::getFloatPointer(4);
-
-                // Get parameter 4 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
-
-                Camera* instance = getInstance(state);
-                instance->project(*param1, *param2, param3, param4);
-                
-                return 0;
-            }
-
-            lua_pushstring(state, "lua_Camera_project - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        case 6:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
-                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
-                (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
-                (lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 5) == LUA_TTABLE || lua_type(state, 5) == LUA_TLIGHTUSERDATA) &&
-                (lua_type(state, 6) == LUA_TTABLE || lua_type(state, 6) == LUA_TLIGHTUSERDATA))
+            do
             {
-                // Get parameter 1 off the stack.
-                bool param1Valid;
-                gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
-                if (!param1Valid)
+                if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                    (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TNIL) &&
+                    (lua_type(state, 3) == LUA_TUSERDATA || lua_type(state, 3) == LUA_TNIL) &&
+                    (lua_type(state, 4) == LUA_TUSERDATA || lua_type(state, 4) == LUA_TTABLE || lua_type(state, 4) == LUA_TNIL))
                 {
-                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Rectangle'.");
-                    lua_error(state);
+                    // Get parameter 1 off the stack.
+                    bool param1Valid;
+                    gameplay::ScriptUtil::LuaArray<Rectangle> param1 = gameplay::ScriptUtil::getObjectPointer<Rectangle>(2, "Rectangle", true, &param1Valid);
+                    if (!param1Valid)
+                        break;
+
+                    // Get parameter 2 off the stack.
+                    bool param2Valid;
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
+                    if (!param2Valid)
+                        break;
+
+                    // Get parameter 3 off the stack.
+                    bool param3Valid;
+                    gameplay::ScriptUtil::LuaArray<Vector3> param3 = gameplay::ScriptUtil::getObjectPointer<Vector3>(4, "Vector3", false, &param3Valid);
+                    if (!param3Valid)
+                        break;
+
+                    Camera* instance = getInstance(state);
+                    instance->project(*param1, *param2, param3);
+                    
+                    return 0;
                 }
-
-                // Get parameter 2 off the stack.
-                bool param2Valid;
-                gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(3, "Vector3", true, &param2Valid);
-                if (!param2Valid)
-                {
-                    lua_pushstring(state, "Failed to convert parameter 2 to type 'Vector3'.");
-                    lua_error(state);
-                }
-
-                // Get parameter 3 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param3 = gameplay::ScriptUtil::getFloatPointer(4);
-
-                // Get parameter 4 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param4 = gameplay::ScriptUtil::getFloatPointer(5);
-
-                // Get parameter 5 off the stack.
-                gameplay::ScriptUtil::LuaArray<float> param5 = gameplay::ScriptUtil::getFloatPointer(6);
-
-                Camera* instance = getInstance(state);
-                instance->project(*param1, *param2, param3, param4, param5);
-                
-                return 0;
-            }
+            } while (0);
 
             lua_pushstring(state, "lua_Camera_project - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
@@ -887,7 +869,7 @@ int lua_Camera_project(lua_State* state)
         }
         default:
         {
-            lua_pushstring(state, "Invalid number of parameters (expected 5 or 6).");
+            lua_pushstring(state, "Invalid number of parameters (expected 4).");
             lua_error(state);
             break;
         }

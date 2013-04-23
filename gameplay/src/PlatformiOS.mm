@@ -711,14 +711,14 @@ int getUnicode(int key);
 - (void)handleTapGesture:(UITapGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:self];
-    game->gestureTapEvent(location.x, location.y);
+    gameplay::Platform::gestureTapEventInternal(location.x, location.y);
 }
 
 - (void)handlePinchGesture:(UIPinchGestureRecognizer*)sender
 {
     CGFloat factor = [sender scale];
     CGPoint location = [sender locationInView:self];
-    game->gesturePinchEvent(location.x, location.y, factor);
+    gameplay::Platform::gesturePinchEventInternal(location.x, location.y, factor);
 }
 
 - (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
@@ -740,7 +740,7 @@ int getUnicode(int key);
             gameplayDirection = Gesture::SWIPE_DIRECTION_DOWN;
             break;
     }
-    game->gestureSwipeEvent(location.x, location.y, gameplayDirection);
+    gameplay::Platform::gestureSwipeEventInternal(location.x, location.y, gameplayDirection);
 }
 
 @end

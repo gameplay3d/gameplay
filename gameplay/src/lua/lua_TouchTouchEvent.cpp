@@ -18,7 +18,6 @@ Touch::TouchEvent lua_enumFromString_TouchTouchEvent(const char* s)
         return Touch::TOUCH_RELEASE;
     if (strcmp(s, luaEnumString_TouchTouchEvent_TOUCH_MOVE) == 0)
         return Touch::TOUCH_MOVE;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Touch::TouchEvent.", s);
     return Touch::TOUCH_PRESS;
 }
 
@@ -30,7 +29,6 @@ const char* lua_stringFromEnum_TouchTouchEvent(Touch::TouchEvent e)
         return luaEnumString_TouchTouchEvent_TOUCH_RELEASE;
     if (e == Touch::TOUCH_MOVE)
         return luaEnumString_TouchTouchEvent_TOUCH_MOVE;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Touch::TouchEvent.", e);
     return enumStringEmpty;
 }
 

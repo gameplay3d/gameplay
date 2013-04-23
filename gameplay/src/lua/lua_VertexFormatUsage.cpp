@@ -54,7 +54,6 @@ VertexFormat::Usage lua_enumFromString_VertexFormatUsage(const char* s)
         return VertexFormat::TEXCOORD6;
     if (strcmp(s, luaEnumString_VertexFormatUsage_TEXCOORD7) == 0)
         return VertexFormat::TEXCOORD7;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration VertexFormat::Usage.", s);
     return VertexFormat::POSITION;
 }
 
@@ -90,7 +89,6 @@ const char* lua_stringFromEnum_VertexFormatUsage(VertexFormat::Usage e)
         return luaEnumString_VertexFormatUsage_TEXCOORD6;
     if (e == VertexFormat::TEXCOORD7)
         return luaEnumString_VertexFormatUsage_TEXCOORD7;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration VertexFormat::Usage.", e);
     return enumStringEmpty;
 }
 

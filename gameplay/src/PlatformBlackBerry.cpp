@@ -457,7 +457,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
                 gesture_swipe_t* swipe = (gesture_swipe_t*)gesture;
                 if (!__gestureSwipeRecognized)
                 {
-                    Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+                    Platform::gestureSwipeEventInternal(swipe->coords.x, swipe->coords.y, swipe->direction);
                     __gestureSwipeRecognized = true;
                 }
 
@@ -483,7 +483,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
             if ( __gestureEventsProcessed.test(Gesture::GESTURE_TAP) )
             {
                 gesture_tap_t* tap = (gesture_tap_t*)gesture;
-                Game::getInstance()->gestureTapEvent(tap->touch_coords.x, tap->touch_coords.y);
+                Platform::gestureTapEventInternal(tap->touch_coords.x, tap->touch_coords.y);
             }
             break;
         }

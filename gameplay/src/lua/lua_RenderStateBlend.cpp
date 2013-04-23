@@ -48,7 +48,6 @@ RenderState::Blend lua_enumFromString_RenderStateBlend(const char* s)
         return RenderState::BLEND_ONE_MINUS_CONSTANT_ALPHA;
     if (strcmp(s, luaEnumString_RenderStateBlend_BLEND_SRC_ALPHA_SATURATE) == 0)
         return RenderState::BLEND_SRC_ALPHA_SATURATE;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration RenderState::Blend.", s);
     return RenderState::BLEND_ZERO;
 }
 
@@ -80,7 +79,6 @@ const char* lua_stringFromEnum_RenderStateBlend(RenderState::Blend e)
         return luaEnumString_RenderStateBlend_BLEND_ONE_MINUS_CONSTANT_ALPHA;
     if (e == RenderState::BLEND_SRC_ALPHA_SATURATE)
         return luaEnumString_RenderStateBlend_BLEND_SRC_ALPHA_SATURATE;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration RenderState::Blend.", e);
     return enumStringEmpty;
 }
 

@@ -18,7 +18,6 @@ Logger::Level lua_enumFromString_LoggerLevel(const char* s)
         return Logger::LEVEL_WARN;
     if (strcmp(s, luaEnumString_LoggerLevel_LEVEL_ERROR) == 0)
         return Logger::LEVEL_ERROR;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Logger::Level.", s);
     return Logger::LEVEL_INFO;
 }
 
@@ -30,7 +29,6 @@ const char* lua_stringFromEnum_LoggerLevel(Logger::Level e)
         return luaEnumString_LoggerLevel_LEVEL_WARN;
     if (e == Logger::LEVEL_ERROR)
         return luaEnumString_LoggerLevel_LEVEL_ERROR;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Logger::Level.", e);
     return enumStringEmpty;
 }
 

@@ -21,7 +21,6 @@ ParticleEmitter::TextureBlending lua_enumFromString_ParticleEmitterTextureBlendi
         return ParticleEmitter::BLEND_ADDITIVE;
     if (strcmp(s, luaEnumString_ParticleEmitterTextureBlending_BLEND_MULTIPLIED) == 0)
         return ParticleEmitter::BLEND_MULTIPLIED;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration ParticleEmitter::TextureBlending.", s);
     return ParticleEmitter::BLEND_OPAQUE;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_ParticleEmitterTextureBlending(ParticleEmitter::T
         return luaEnumString_ParticleEmitterTextureBlending_BLEND_ADDITIVE;
     if (e == ParticleEmitter::BLEND_MULTIPLIED)
         return luaEnumString_ParticleEmitterTextureBlending_BLEND_MULTIPLIED;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration ParticleEmitter::TextureBlending.", e);
     return enumStringEmpty;
 }
 

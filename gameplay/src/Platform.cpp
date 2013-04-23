@@ -42,6 +42,27 @@ bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheel
     }
 }
 
+void Platform::gestureSwipeEventInternal(int x, int y, int direction)
+{
+    // TODO: Add support to Form for gestures
+    Game::getInstance()->gestureSwipeEvent(x, y, direction);
+    Game::getInstance()->getScriptController()->gestureSwipeEvent(x, y, direction);
+}
+
+void Platform::gesturePinchEventInternal(int x, int y, float scale)
+{
+    // TODO: Add support to Form for gestures
+    Game::getInstance()->gesturePinchEvent(x, y, scale);
+    Game::getInstance()->getScriptController()->gesturePinchEvent(x, y, scale);
+}
+
+void Platform::gestureTapEventInternal(int x, int y)
+{
+    // TODO: Add support to Form for gestures
+    Game::getInstance()->gestureTapEvent(x, y);
+    Game::getInstance()->getScriptController()->gestureTapEvent(x, y);
+}
+
 void Platform::resizeEventInternal(unsigned int width, unsigned int height)
 {
     // Update the width and height of the game
