@@ -8,7 +8,7 @@ namespace gameplay
 Control::Control()
     : _id(""), _state(Control::NORMAL), _bounds(Rectangle::empty()), _clipBounds(Rectangle::empty()), _viewportClipBounds(Rectangle::empty()),
     _clearBounds(Rectangle::empty()), _dirty(true), _consumeInputEvents(false), _alignment(ALIGN_TOP_LEFT), _isAlignmentSet(false), _autoWidth(false), _autoHeight(false), _listeners(NULL), _visible(true),
-    _zIndex(-1), _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL)
+    _zIndex(-1), _contactIndex(INVALID_CONTACT_INDEX), _focusIndex(-1), _parent(NULL), _styleOverridden(false), _skin(NULL), _previousState(NORMAL)
 {
     addScriptEvent("controlEvent", "<Control>[Control::Listener::EventType]");
 }
@@ -114,6 +114,10 @@ void Control::initialize(Theme::Style* style, Properties* properties)
         else if (spaceName == "STATEDISABLED")
         {
             overrideThemedProperties(innerSpace, DISABLED);
+        }
+        else if (spaceName == "STATEHOVER")
+        {
+            overrideThemedProperties(innerSpace, HOVER);
         }
         else if (spaceName == "MARGIN")
         {
@@ -269,6 +273,11 @@ void Control::setVisible(bool visible)
 bool Control::isVisible() const
 {
     return _visible;
+}
+
+bool Control::isInFocus() const
+{
+    return (_state == FOCUS || (_state == HOVER && _previousState == FOCUS));
 }
 
 void Control::setOpacity(float opacity, unsigned char states)
@@ -653,6 +662,8 @@ Theme::Style::OverlayType Control::getOverlayType() const
         return Theme::Style::OVERLAY_ACTIVE;
     case Control::DISABLED:
         return Theme::Style::OVERLAY_DISABLED;
+    case Control::HOVER:
+        return Theme::Style::OVERLAY_HOVER;
     default:
         return Theme::Style::OVERLAY_NORMAL;
     }
@@ -789,6 +800,9 @@ bool Control::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int conta
         }
         break;
             
+    case Touch::TOUCH_MOVE:
+        break;
+
     case Touch::TOUCH_RELEASE:
         if (_contactIndex == (int)contactIndex)
         {
@@ -830,6 +844,25 @@ bool Control::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
         return touchEvent(Touch::TOUCH_RELEASE, x, y, 0);
 
     case Mouse::MOUSE_MOVE:
+        if (_state != ACTIVE)
+        {
+            if (_state != HOVER &&
+                x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
+            {
+                _previousState = _state;
+                setState(HOVER);
+                notifyListeners(Control::Listener::ENTER);
+                return _consumeInputEvents;
+            }
+            else if (_state == HOVER && !(x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
+                        y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height))
+            {
+                setState(_previousState);
+                notifyListeners(Control::Listener::LEAVE);
+                return _consumeInputEvents;
+            }
+        }
         return touchEvent(Touch::TOUCH_MOVE, x, y, 0);
 
     default:
@@ -1130,6 +1163,10 @@ Control::State Control::getState(const char* state)
     {
         return DISABLED;
     }
+    else if (strcmp(state, "HOVER") == 0)
+    {
+        return HOVER;
+    }
 
     return NORMAL;
 }
@@ -1272,6 +1309,11 @@ Theme::Style::Overlay** Control::getOverlays(unsigned char overlayTypes, Theme::
         overlays[index++] = _style->getOverlay(Theme::Style::OVERLAY_DISABLED);
     }
 
+    if ((overlayTypes & HOVER) == HOVER)
+    {
+        overlays[index++] = _style->getOverlay(Theme::Style::OVERLAY_HOVER);
+    }
+
     return overlays;
 }
 
@@ -1286,9 +1328,23 @@ Theme::Style::Overlay* Control::getOverlay(State state) const
     case Control::FOCUS:
         return _style->getOverlay(Theme::Style::OVERLAY_FOCUS);
     case Control::ACTIVE:
-        return _style->getOverlay(Theme::Style::OVERLAY_ACTIVE);
+    {
+        Theme::Style::Overlay* activeOverlay = _style->getOverlay(Theme::Style::OVERLAY_ACTIVE);
+        if (activeOverlay)
+            return activeOverlay;
+        else
+            return getOverlay(_previousState);
+    }
     case Control::DISABLED:
         return _style->getOverlay(Theme::Style::OVERLAY_DISABLED);
+    case Control::HOVER:
+    {
+        Theme::Style::Overlay* hoverOverlay = _style->getOverlay(Theme::Style::OVERLAY_HOVER);
+        if (hoverOverlay)
+            return hoverOverlay;
+        else
+            return getOverlay(_previousState);
+    }
     default:
         return NULL;
     }
