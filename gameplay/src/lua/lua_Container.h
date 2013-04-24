@@ -62,7 +62,6 @@ int lua_Container_getZIndex(lua_State* state);
 int lua_Container_insertControl(lua_State* state);
 int lua_Container_isContainer(lua_State* state);
 int lua_Container_isEnabled(lua_State* state);
-int lua_Container_isInFocus(lua_State* state);
 int lua_Container_isScrollBarsAutoHide(lua_State* state);
 int lua_Container_isScrolling(lua_State* state);
 int lua_Container_isVisible(lua_State* state);

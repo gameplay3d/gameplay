@@ -262,7 +262,7 @@ bool Slider::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
 
         case Mouse::MOUSE_WHEEL:
         {
-            if ((isInFocus() && _state == HOVER) || _state == ACTIVE)
+            if ((hasFocus() && _state == HOVER) || _state == ACTIVE)
             {
                 float total = _max - _min;
                 float oldValue = _value;
@@ -366,7 +366,7 @@ bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
         {
             _selectButtonDown = false;
 
-            if (isInFocus())
+            if (hasFocus())
                 setState(ACTIVE);
             else if (_state == ACTIVE)
                 setState(FOCUS);
