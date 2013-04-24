@@ -71,7 +71,6 @@ void luaRegister_Control()
         {"getZIndex", lua_Control_getZIndex},
         {"isContainer", lua_Control_isContainer},
         {"isEnabled", lua_Control_isEnabled},
-        {"isInFocus", lua_Control_isInFocus},
         {"isVisible", lua_Control_isVisible},
         {"release", lua_Control_release},
         {"removeListener", lua_Control_removeListener},
@@ -2585,41 +2584,6 @@ int lua_Control_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Control_isEnabled - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Control_isInFocus(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Control* instance = getInstance(state);
-                bool result = instance->isInFocus();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Control_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

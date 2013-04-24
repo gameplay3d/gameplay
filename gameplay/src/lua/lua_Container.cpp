@@ -94,7 +94,6 @@ void luaRegister_Container()
         {"insertControl", lua_Container_insertControl},
         {"isContainer", lua_Container_isContainer},
         {"isEnabled", lua_Container_isEnabled},
-        {"isInFocus", lua_Container_isInFocus},
         {"isScrollBarsAutoHide", lua_Container_isScrollBarsAutoHide},
         {"isScrolling", lua_Container_isScrolling},
         {"isVisible", lua_Container_isVisible},
@@ -2971,41 +2970,6 @@ int lua_Container_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Container_isEnabled - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Container_isInFocus(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Container* instance = getInstance(state);
-                bool result = instance->isInFocus();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Container_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

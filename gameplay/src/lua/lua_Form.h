@@ -64,7 +64,6 @@ int lua_Form_getZIndex(lua_State* state);
 int lua_Form_insertControl(lua_State* state);
 int lua_Form_isContainer(lua_State* state);
 int lua_Form_isEnabled(lua_State* state);
-int lua_Form_isInFocus(lua_State* state);
 int lua_Form_isScrollBarsAutoHide(lua_State* state);
 int lua_Form_isScrolling(lua_State* state);
 int lua_Form_isVisible(lua_State* state);
