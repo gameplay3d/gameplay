@@ -61,7 +61,6 @@ int lua_Slider_getY(lua_State* state);
 int lua_Slider_getZIndex(lua_State* state);
 int lua_Slider_isContainer(lua_State* state);
 int lua_Slider_isEnabled(lua_State* state);
-int lua_Slider_isInFocus(lua_State* state);
 int lua_Slider_isValueTextVisible(lua_State* state);
 int lua_Slider_isVisible(lua_State* state);
 int lua_Slider_release(lua_State* state);

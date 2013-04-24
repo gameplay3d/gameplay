@@ -15,7 +15,6 @@ PhysicsCollisionObject::CollisionListener::EventType lua_enumFromString_PhysicsC
         return PhysicsCollisionObject::CollisionListener::COLLIDING;
     if (strcmp(s, luaEnumString_PhysicsCollisionObjectCollisionListenerEventType_NOT_COLLIDING) == 0)
         return PhysicsCollisionObject::CollisionListener::NOT_COLLIDING;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration PhysicsCollisionObject::CollisionListener::EventType.", s);
     return PhysicsCollisionObject::CollisionListener::COLLIDING;
 }
 
@@ -25,7 +24,6 @@ const char* lua_stringFromEnum_PhysicsCollisionObjectCollisionListenerEventType(
         return luaEnumString_PhysicsCollisionObjectCollisionListenerEventType_COLLIDING;
     if (e == PhysicsCollisionObject::CollisionListener::NOT_COLLIDING)
         return luaEnumString_PhysicsCollisionObjectCollisionListenerEventType_NOT_COLLIDING;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration PhysicsCollisionObject::CollisionListener::EventType.", e);
     return enumStringEmpty;
 }
 

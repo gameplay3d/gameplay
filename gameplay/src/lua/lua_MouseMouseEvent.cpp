@@ -33,7 +33,6 @@ Mouse::MouseEvent lua_enumFromString_MouseMouseEvent(const char* s)
         return Mouse::MOUSE_MOVE;
     if (strcmp(s, luaEnumString_MouseMouseEvent_MOUSE_WHEEL) == 0)
         return Mouse::MOUSE_WHEEL;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Mouse::MouseEvent.", s);
     return Mouse::MOUSE_PRESS_LEFT_BUTTON;
 }
 
@@ -55,7 +54,6 @@ const char* lua_stringFromEnum_MouseMouseEvent(Mouse::MouseEvent e)
         return luaEnumString_MouseMouseEvent_MOUSE_MOVE;
     if (e == Mouse::MOUSE_WHEEL)
         return luaEnumString_MouseMouseEvent_MOUSE_WHEEL;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Mouse::MouseEvent.", e);
     return enumStringEmpty;
 }
 

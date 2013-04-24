@@ -276,14 +276,14 @@ private:
 
 public:
 
-   /**
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
      */
     static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool actuallyMouse = false);
 
-   /**
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
@@ -296,6 +296,27 @@ public:
      * @script{ignore}
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gestureSwipeEventInternal(int x, int y, int direction);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gesturePinchEventInternal(int x, int y, float scale);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gestureTapEventInternal(int x, int y);
 
     /**
      * Internal method used only from static code in various platform implementation.

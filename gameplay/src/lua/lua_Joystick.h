@@ -58,7 +58,6 @@ int lua_Joystick_getY(lua_State* state);
 int lua_Joystick_getZIndex(lua_State* state);
 int lua_Joystick_isContainer(lua_State* state);
 int lua_Joystick_isEnabled(lua_State* state);
-int lua_Joystick_isInFocus(lua_State* state);
 int lua_Joystick_isRelative(lua_State* state);
 int lua_Joystick_isVisible(lua_State* state);
 int lua_Joystick_release(lua_State* state);

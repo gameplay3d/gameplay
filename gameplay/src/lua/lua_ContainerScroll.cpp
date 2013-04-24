@@ -21,7 +21,6 @@ Container::Scroll lua_enumFromString_ContainerScroll(const char* s)
         return Container::SCROLL_VERTICAL;
     if (strcmp(s, luaEnumString_ContainerScroll_SCROLL_BOTH) == 0)
         return Container::SCROLL_BOTH;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Container::Scroll.", s);
     return Container::SCROLL_NONE;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_ContainerScroll(Container::Scroll e)
         return luaEnumString_ContainerScroll_SCROLL_VERTICAL;
     if (e == Container::SCROLL_BOTH)
         return luaEnumString_ContainerScroll_SCROLL_BOTH;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Container::Scroll.", e);
     return enumStringEmpty;
 }
 
