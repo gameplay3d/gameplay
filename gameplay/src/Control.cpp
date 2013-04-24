@@ -275,7 +275,7 @@ bool Control::isVisible() const
     return _visible;
 }
 
-bool Control::isInFocus() const
+bool Control::hasFocus() const
 {
     return (_state == FOCUS || (_state == HOVER && _previousState == FOCUS));
 }
