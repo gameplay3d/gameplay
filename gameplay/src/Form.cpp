@@ -603,7 +603,7 @@ void Form::updateInternal(float elapsedTime)
 
 static bool shouldPropagateTouchEvent(Control::State state, Touch::TouchEvent evt, const Rectangle& bounds, int x, int y)
 {
-    return (state == Control::FOCUS ||
+    return (state != Control::NORMAL ||
             (evt == Touch::TOUCH_PRESS &&
              x >= bounds.x &&
              x <= bounds.x + bounds.width &&
