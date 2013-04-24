@@ -659,7 +659,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled() && form->isVisible() && form->getState() == Control::FOCUS)
+        if (form->isEnabled() && form->isVisible() && form->hasFocus())
         {
             if (form->keyEvent(evt, key))
                 return true;
@@ -727,7 +727,7 @@ void Form::gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, uns
         Form* form = __forms[i];
         GP_ASSERT(form);
 
-        if (form->isEnabled() && form->isVisible() && form->isInFocus())
+        if (form->isEnabled() && form->isVisible() && form->hasFocus())
         {
             if (form->gamepadEvent(evt, gamepad, analogIndex))
                 return;
