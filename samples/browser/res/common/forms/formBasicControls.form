@@ -58,6 +58,7 @@ form basicControls
         position = 20, 450
         size = 250, 80
         text = This is a text box.
+		consumeInputEvents = true
     }
 
 	container radioButtonContainer

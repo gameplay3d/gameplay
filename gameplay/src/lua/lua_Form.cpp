@@ -99,7 +99,6 @@ void luaRegister_Form()
         {"insertControl", lua_Form_insertControl},
         {"isContainer", lua_Form_isContainer},
         {"isEnabled", lua_Form_isEnabled},
-        {"isInFocus", lua_Form_isInFocus},
         {"isScrollBarsAutoHide", lua_Form_isScrollBarsAutoHide},
         {"isScrolling", lua_Form_isScrolling},
         {"isVisible", lua_Form_isVisible},
@@ -3055,41 +3054,6 @@ int lua_Form_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Form_isEnabled - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Form_isInFocus(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Form* instance = getInstance(state);
-                bool result = instance->isInFocus();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Form_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
