@@ -365,6 +365,14 @@ void FBXSceneEncoder::loadAnimationChannels(FbxAnimLayer* animLayer, FbxNode* fb
     Matrix matrix;
     double increment = 1000.0 / (double)frameRate;
     int frameCount = (int)ceil((double)(stopTime - startTime) / increment) + 1; // +1 because stop time is inclusive
+
+    // If the animation for this node only has only 1 key frame and it is equal to the node's transform then ignore it.
+    // This is a work around for a bug in the Blender FBX exporter.
+    if (frameCount == 1 && fbxMatrix == fbxNode->EvaluateLocalTransform(0))
+    {
+        return;
+    }
+
     for (int frame = 0; frame < frameCount; ++frame)
     {
         double time = startTime + (frame * (double)increment);
