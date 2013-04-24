@@ -645,7 +645,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             continue;
         }
 
-        if (control->isInFocus() && control->keyEvent(evt, key))
+        if (control->hasFocus() && control->keyEvent(evt, key))
         {
             release();
             return true;
@@ -677,7 +677,7 @@ void Container::guaranteeFocus(Control* inFocus)
         {
             ((Container*)control)->guaranteeFocus(inFocus);
         }
-        else if (control->isInFocus())
+        else if (control->hasFocus())
         {
             control->setState(NORMAL);
             return;
@@ -697,7 +697,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         {
             Control* control = *it;
             GP_ASSERT(control);
-            if (control->isInFocus())
+            if (control->hasFocus())
             {
                 start = control;
                 break;
@@ -904,7 +904,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
 void Container::timeEvent(long timeDiff, void* cookie)
 {
     double time = Game::getAbsoluteTime();
-    if (_focusChangeRepeat && isInFocus() && _focusPressed &&
+    if (_focusChangeRepeat && hasFocus() && _focusPressed &&
         abs(time - timeDiff - _focusChangeRepeatDelay - _focusChangeStartTime) < 50)
     {
         ++_focusChangeCount;
@@ -961,7 +961,7 @@ bool Container::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsign
     {
         Control* control = *it;
         GP_ASSERT(control);
-        if (control->isInFocus() || control->getState() == Control::ACTIVE)
+        if (control->hasFocus() || control->getState() == Control::ACTIVE)
         {
             eventConsumed |= control->gamepadEvent(evt, gamepad, analogIndex);
             break;

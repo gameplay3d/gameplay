@@ -57,7 +57,6 @@ int lua_RadioButton_getY(lua_State* state);
 int lua_RadioButton_getZIndex(lua_State* state);
 int lua_RadioButton_isContainer(lua_State* state);
 int lua_RadioButton_isEnabled(lua_State* state);
-int lua_RadioButton_isInFocus(lua_State* state);
 int lua_RadioButton_isSelected(lua_State* state);
 int lua_RadioButton_isVisible(lua_State* state);
 int lua_RadioButton_release(lua_State* state);

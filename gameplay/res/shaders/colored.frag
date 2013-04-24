@@ -66,7 +66,7 @@ void main()
     gl_FragColor.rgb = getLitPixel();
     
 	#if defined(MODULATE_COLOR)
-    gl_FragColor.a *= u_modulateColor;
+    gl_FragColor *= u_modulateColor;
     #endif
 	#if defined(MODULATE_ALPHA)
     gl_FragColor.a *= u_modulateAlpha;

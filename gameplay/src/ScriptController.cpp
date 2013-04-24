@@ -839,6 +839,27 @@ bool ScriptController::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheel
     return false;
 }
 
+void ScriptController::gestureSwipeEvent(int x, int y, int direction)
+{
+    std::vector<std::string>& list = _callbacks[GESTURE_SWIPE_EVENT];
+    for (size_t i = 0; i < list.size(); ++i)
+        executeFunction<void>(list[i].c_str(), "iii", x, y, direction);
+}
+
+void ScriptController::gesturePinchEvent(int x, int y, float scale)
+{
+    std::vector<std::string>& list = _callbacks[GESTURE_PINCH_EVENT];
+    for (size_t i = 0; i < list.size(); ++i)
+        executeFunction<void>(list[i].c_str(), "iif", x, y, scale);
+}
+
+void ScriptController::gestureTapEvent(int x, int y)
+{
+    std::vector<std::string>& list = _callbacks[GESTURE_TAP_EVENT];
+    for (size_t i = 0; i < list.size(); ++i)
+        executeFunction<void>(list[i].c_str(), "ii", x, y);
+}
+
 void ScriptController::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
 {
     std::vector<std::string>& list = _callbacks[GAMEPAD_EVENT];
@@ -1021,6 +1042,12 @@ ScriptController::ScriptCallback ScriptController::toCallback(const char* name)
         return ScriptController::TOUCH_EVENT;
     else if (strcmp(name, "mouseEvent") == 0)
         return ScriptController::MOUSE_EVENT;
+    else if (strcmp(name, "gestureSwipeEvent") == 0)
+        return ScriptController::GESTURE_SWIPE_EVENT;
+    else if (strcmp(name, "gesturePinchEvent") == 0)
+        return ScriptController::GESTURE_PINCH_EVENT;
+    else if (strcmp(name, "gestureTapEvent") == 0)
+        return ScriptController::GESTURE_TAP_EVENT;
     else if (strcmp(name, "gamepadEvent") == 0)
         return ScriptController::GAMEPAD_EVENT;
     else

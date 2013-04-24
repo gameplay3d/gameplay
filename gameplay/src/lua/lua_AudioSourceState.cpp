@@ -21,7 +21,6 @@ AudioSource::State lua_enumFromString_AudioSourceState(const char* s)
         return AudioSource::PAUSED;
     if (strcmp(s, luaEnumString_AudioSourceState_STOPPED) == 0)
         return AudioSource::STOPPED;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration AudioSource::State.", s);
     return AudioSource::INITIAL;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_AudioSourceState(AudioSource::State e)
         return luaEnumString_AudioSourceState_PAUSED;
     if (e == AudioSource::STOPPED)
         return luaEnumString_AudioSourceState_STOPPED;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration AudioSource::State.", e);
     return enumStringEmpty;
 }
 

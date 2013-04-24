@@ -56,7 +56,6 @@ int lua_TextBox_getY(lua_State* state);
 int lua_TextBox_getZIndex(lua_State* state);
 int lua_TextBox_isContainer(lua_State* state);
 int lua_TextBox_isEnabled(lua_State* state);
-int lua_TextBox_isInFocus(lua_State* state);
 int lua_TextBox_isVisible(lua_State* state);
 int lua_TextBox_release(lua_State* state);
 int lua_TextBox_removeListener(lua_State* state);

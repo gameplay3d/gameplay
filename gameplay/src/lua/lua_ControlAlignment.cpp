@@ -54,7 +54,6 @@ Control::Alignment lua_enumFromString_ControlAlignment(const char* s)
         return Control::ALIGN_VCENTER_RIGHT;
     if (strcmp(s, luaEnumString_ControlAlignment_ALIGN_BOTTOM_RIGHT) == 0)
         return Control::ALIGN_BOTTOM_RIGHT;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Control::Alignment.", s);
     return Control::ALIGN_LEFT;
 }
 
@@ -90,7 +89,6 @@ const char* lua_stringFromEnum_ControlAlignment(Control::Alignment e)
         return luaEnumString_ControlAlignment_ALIGN_VCENTER_RIGHT;
     if (e == Control::ALIGN_BOTTOM_RIGHT)
         return luaEnumString_ControlAlignment_ALIGN_BOTTOM_RIGHT;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Control::Alignment.", e);
     return enumStringEmpty;
 }
 

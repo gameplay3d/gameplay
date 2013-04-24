@@ -80,7 +80,6 @@ void luaRegister_Slider()
         {"getZIndex", lua_Slider_getZIndex},
         {"isContainer", lua_Slider_isContainer},
         {"isEnabled", lua_Slider_isEnabled},
-        {"isInFocus", lua_Slider_isInFocus},
         {"isValueTextVisible", lua_Slider_isValueTextVisible},
         {"isVisible", lua_Slider_isVisible},
         {"release", lua_Slider_release},
@@ -2849,41 +2848,6 @@ int lua_Slider_isEnabled(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Slider_isEnabled - Failed to match the given parameters to a valid function signature.");
-            lua_error(state);
-            break;
-        }
-        default:
-        {
-            lua_pushstring(state, "Invalid number of parameters (expected 1).");
-            lua_error(state);
-            break;
-        }
-    }
-    return 0;
-}
-
-int lua_Slider_isInFocus(lua_State* state)
-{
-    // Get the number of parameters.
-    int paramCount = lua_gettop(state);
-
-    // Attempt to match the parameters to a valid binding.
-    switch (paramCount)
-    {
-        case 1:
-        {
-            if ((lua_type(state, 1) == LUA_TUSERDATA))
-            {
-                Slider* instance = getInstance(state);
-                bool result = instance->isInFocus();
-
-                // Push the return value onto the stack.
-                lua_pushboolean(state, result);
-
-                return 1;
-            }
-
-            lua_pushstring(state, "lua_Slider_isInFocus - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

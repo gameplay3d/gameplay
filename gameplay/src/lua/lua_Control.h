@@ -54,7 +54,6 @@ int lua_Control_getY(lua_State* state);
 int lua_Control_getZIndex(lua_State* state);
 int lua_Control_isContainer(lua_State* state);
 int lua_Control_isEnabled(lua_State* state);
-int lua_Control_isInFocus(lua_State* state);
 int lua_Control_isVisible(lua_State* state);
 int lua_Control_release(lua_State* state);
 int lua_Control_removeListener(lua_State* state);
