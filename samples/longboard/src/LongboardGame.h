@@ -107,7 +107,9 @@ private:
     Matrix _projectionMatrix;
     Matrix _viewProjectionMatrix;
 
-    // Physics
+    // Physics and keyboard controls
+    unsigned int _keyFlags;
+    float _simulatedPitch, _simulatedRoll;
     float _velocity;
     Vector3 _direction;
     Vector2 _groundUVTransform;
