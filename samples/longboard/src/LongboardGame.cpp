@@ -14,6 +14,12 @@ LongboardGame game;
 #define VELOCITY_MIN        0.2f
 #define VELOCITY_MIN_MS     (VELOCITY_MIN / 1000.0f)
 
+// Keyboard input bit-flags (powers of 2)
+#define ACCELERATE (1 << 0)
+#define BRAKE (1 << 1)
+#define STEER_LEFT (1 << 2)
+#define STEER_RIGHT (1 << 3)
+
 // Accelerometer pitch control
 #define PITCH_MIN            20.0f
 #define PITCH_MAX            70.0f
@@ -25,7 +31,8 @@ LongboardGame game;
 #define ROLL_MAX             40.0f
 
 LongboardGame::LongboardGame() 
-    : _ground(NULL), _board(NULL), _wheels(NULL), _gradient(NULL), _stateBlock(NULL), _velocity(VELOCITY_MIN_MS)
+    : _ground(NULL), _board(NULL), _wheels(NULL), _gradient(NULL), _stateBlock(NULL),
+    _keyFlags(0), _simulatedPitch(0), _simulatedRoll(0), _velocity(VELOCITY_MIN_MS)
 {
 }
 
@@ -185,6 +192,39 @@ void LongboardGame::update(float elapsedTime)
     float pitch, roll;
     getAccelerometerValues(&pitch, &roll);
 
+    // On desktop platforms without accelerometers, use key inputs instead.
+    if (!Game::hasAccelerometer())
+    {
+        float pitchTarget = 0;
+        float rollTarget = 0;
+
+        pitch = _simulatedPitch;
+        roll = _simulatedRoll;
+
+        pitchTarget = -0.5f * (PITCH_MAX + PITCH_MIN);
+        if (_keyFlags & BRAKE)
+        {
+            pitchTarget = -PITCH_MAX;
+        }
+        else if (_keyFlags & ACCELERATE)
+        {
+            pitchTarget = -PITCH_MIN;
+        }
+
+        if (_keyFlags & STEER_RIGHT)
+        {
+            rollTarget += ROLL_MAX;
+        }
+
+        if (_keyFlags & STEER_LEFT)
+        {
+            rollTarget -= ROLL_MAX;
+        }
+
+        MathUtil::smooth(&_simulatedPitch, pitchTarget, elapsedTime, 600);
+        MathUtil::smooth(&_simulatedRoll, rollTarget, elapsedTime, 100);
+    }
+
     // Clamp angles
     pitch = max(min(-pitch, PITCH_MAX), PITCH_MIN);
     roll = max(min(roll, ROLL_MAX), -ROLL_MAX);
@@ -255,6 +295,52 @@ void LongboardGame::keyEvent(Keyboard::KeyEvent evt, int key)
         {
         case Keyboard::KEY_ESCAPE:
             exit();
+            break;
+        case Keyboard::KEY_A:
+        case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_LEFT_ARROW:
+            _keyFlags |= STEER_LEFT;
+            break;
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_RIGHT_ARROW:
+            _keyFlags |= STEER_RIGHT;
+            break;
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_CAPITAL_W:
+        case Keyboard::KEY_UP_ARROW:
+            _keyFlags |= ACCELERATE;
+            break;
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_CAPITAL_S:
+        case Keyboard::KEY_DOWN_ARROW:
+            _keyFlags |= BRAKE;
+            break;
+        }
+    }
+    else if (evt == Keyboard::KEY_RELEASE)
+    {
+        switch (key)
+        {
+        case Keyboard::KEY_A:
+        case Keyboard::KEY_CAPITAL_A:
+        case Keyboard::KEY_LEFT_ARROW:
+            _keyFlags &= ~STEER_LEFT;
+            break;
+        case Keyboard::KEY_D:
+        case Keyboard::KEY_CAPITAL_D:
+        case Keyboard::KEY_RIGHT_ARROW:
+            _keyFlags &= ~STEER_RIGHT;
+            break;
+        case Keyboard::KEY_W:
+        case Keyboard::KEY_CAPITAL_W:
+        case Keyboard::KEY_UP_ARROW:
+            _keyFlags &= ~ACCELERATE;
+            break;
+        case Keyboard::KEY_S:
+        case Keyboard::KEY_CAPITAL_S:
+        case Keyboard::KEY_DOWN_ARROW:
+            _keyFlags &= ~BRAKE;
             break;
         }
     }
