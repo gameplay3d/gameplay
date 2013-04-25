@@ -175,6 +175,11 @@ bool Sample::isMultiTouch() const
     return Game::getInstance()->isMultiTouch();
 }
 
+bool Sample::hasAccelerometer() const
+{
+    return Game::getInstance()->hasAccelerometer();
+}
+
 void Sample::getAccelerometerValues(float* pitch, float* roll)
 {
     Game::getInstance()->getAccelerometerValues(pitch, roll);
