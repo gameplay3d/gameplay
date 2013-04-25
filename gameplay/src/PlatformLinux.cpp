@@ -80,8 +80,6 @@ struct timespec __timespec;
 static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
-static float __pitch;
-static float __roll;
 static bool __mouseCaptured = false;
 static float __mouseCapturePointX = 0;
 static float __mouseCapturePointY = 0;
@@ -1113,10 +1111,6 @@ namespace gameplay
 
         updateWindowSize();
 
-        static const float ACCELEROMETER_X_FACTOR = 90.0f / __windowSize[0];
-        static const float ACCELEROMETER_Y_FACTOR = 90.0f / __windowSize[1];
-        static int lx = 0;
-        static int ly = 0;
         static bool shiftDown = false;
         static bool capsOn = false;
         static XEvent evt;
@@ -1300,20 +1294,6 @@ namespace gameplay
                                 {
                                     gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
                                 }
-                                else if (evt.xmotion.state & Button3Mask)
-                                {
-                                    // Update the pitch and roll by adding the scaled deltas.
-                                    __roll += (float)(x - lx) * ACCELEROMETER_X_FACTOR;
-                                    __pitch += -(float)(y - ly) * ACCELEROMETER_Y_FACTOR;
-
-                                    // Clamp the values to the valid range.
-                                    __roll = max(min(__roll, 90.0f), -90.0f);
-                                    __pitch = max(min(__pitch, 90.0f), -90.0f);
-
-                                    // Update the last X/Y values.
-                                    lx = x;
-                                    ly = y;
-                                }
                             }
                         }
                         break;
@@ -1428,13 +1408,18 @@ namespace gameplay
         false;
     }
 
+    bool Platform::hasAccelerometer()
+    {
+        return false;
+    }
+
     void Platform::getAccelerometerValues(float* pitch, float* roll)
     {
         GP_ASSERT(pitch);
         GP_ASSERT(roll);
 
-        *pitch = __pitch;
-        *roll = __roll;
+        *pitch = 0;
+        *roll = 0;
     }
 
     void Platform::getArguments(int* argc, char*** argv)
