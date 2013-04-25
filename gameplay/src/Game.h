@@ -511,14 +511,19 @@ public:
     inline bool canExit() const;
 
     /**
+     * Whether this game has accelerometer support.
+     */
+    inline bool hasAccelerometer() const;
+
+    /**
      * Gets the current accelerometer values for use as an indication of device
      * orientation. Despite its name, implementations are at liberty to combine
      * accelerometer data with data from other sensors as well, such as the gyros.
      * This method is best used to obtain an indication of device orientation; it
      * does not necessarily distinguish between acceleration and rotation rate.
      *
-     * @param pitch The pitch angle returned (in degrees). If NULL then not returned.
-     * @param roll The roll angle returned (in degrees). If NULL then not returned.
+     * @param pitch The pitch angle returned (in degrees). Zero if hasAccelerometer() returns false.
+     * @param roll The roll angle returned (in degrees). Zero if hasAccelerometer() returns false.
      */
     inline void getAccelerometerValues(float* pitch, float* roll);
 
