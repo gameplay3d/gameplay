@@ -1435,6 +1435,11 @@ bool Platform::isMultiTouch()
     return __multiTouch;
 }
 
+bool Platform::hasAccelerometer()
+{
+    return true;
+}
+
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     GP_ASSERT(pitch);

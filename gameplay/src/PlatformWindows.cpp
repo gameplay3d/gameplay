@@ -27,8 +27,6 @@ static double __timeTicksPerMillis;
 static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
-static float __roll;
-static float __pitch;
 static HINSTANCE __hinstance = 0;
 static HWND __attachToWindow = 0;
 static HWND __hwnd = 0;
@@ -341,8 +339,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
-    static int lx, ly;
-
     static bool shiftDown = false;
     static bool capsOn = false;
 
@@ -383,9 +379,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     case WM_RBUTTONDOWN:
         UpdateCapture(wParam);
-        lx = GET_X_LPARAM(lParam);
-        ly = GET_Y_LPARAM(lParam);
-        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_RBUTTONUP:
@@ -431,26 +425,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
                 gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
                 return 0;
-            }
-            else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
-            {
-                // Scale factors for the mouse movement used to simulate the accelerometer.
-                RECT clientRect;
-                GetClientRect(__hwnd, &clientRect);
-                const float xFactor = 90.0f / clientRect.right;
-                const float yFactor = 90.0f / clientRect.bottom;
-
-                // Update the pitch and roll by adding the scaled deltas.
-                __roll += (float)(x - lx) * xFactor;
-                __pitch += -(float)(y - ly) * yFactor;
-
-                // Clamp the values to the valid range.
-                __roll = max(min(__roll, 90.0f), -90.0f);
-                __pitch = max(min(__pitch, 90.0f), -90.0f);
-
-                // Update the last X/Y values.
-                lx = x;
-                ly = y;
             }
         }
         break;
@@ -978,10 +952,6 @@ int Platform::enterMessagePump()
     GP_ASSERT(__timeTicksPerMillis);
     __timeStart = queryTime.QuadPart / __timeTicksPerMillis;
 
-    // Set the initial pitch and roll values.
-    __pitch = 0.0;
-    __roll = 0.0;
-
     SwapBuffers(__hdc);
 
     if (_game->getState() != Game::RUNNING)
@@ -1131,13 +1101,18 @@ bool Platform::isMultiTouch()
     return false;
 }
 
+bool Platform::hasAccelerometer()
+{
+    return false;
+}
+
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     GP_ASSERT(pitch);
     GP_ASSERT(roll);
 
-    *pitch = __pitch;
-    *roll = __roll;
+    *pitch = 0;
+    *roll = 0;
 }
 
 void Platform::getArguments(int* argc, char*** argv)
