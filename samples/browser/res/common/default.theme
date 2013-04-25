@@ -108,11 +108,6 @@ theme mainMenu
         }
     }
 
-	imageList focusImages : normalImages
-	{
-		color = #2A6779ff
-	}
-
     skin mainNormal
     {
         border
@@ -248,8 +243,6 @@ theme mainMenu
 		stateFocus
 		{
 			skin = mainFocus
-			imageList = focusImages
-			textColor = #aaa000ff
 		}
 		
 		stateDisabled
@@ -264,6 +257,12 @@ theme mainMenu
         {
             imageList = activeImages
         }
+		
+		stateFocus
+		{
+			skin = mainNormal
+			textColor = #aaa000ff
+		}
     }
 
     style topLeftAlignedEntry : basic
@@ -322,7 +321,6 @@ theme mainMenu
 		stateFocus
 		{
 			textColor = #aaa000ff
-			imageList = focusImages
 		}
 
         stateActive
