@@ -59,6 +59,7 @@ public:
     void setMouseCaptured(bool captured);
     void setMultiTouch(bool enabled);
     bool isMultiTouch() const;
+    bool hasAccelerometer() const;
     void getAccelerometerValues(float* pitch, float* roll);
     void schedule(long timeOffset, TimeListener* timeListener, void* cookie = 0);
 	void enableScriptCamera(bool enable);
