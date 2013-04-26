@@ -392,14 +392,14 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
                 _directionButtonDown = true;
                 _dirty = true;
                 _gamepadValue = _value;
-                return _consumeInputEvents;
+                return true;
 
             case Keyboard::KEY_RIGHT_ARROW:
                 _delta = 1.0f;
                 _directionButtonDown = true;
                 _dirty = true;
                 _gamepadValue = _value;
-                return _consumeInputEvents;
+                return true;
             }
             break;
 
@@ -412,7 +412,7 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
                     _directionButtonDown = false;
                     _dirty = true;
                     _delta = 0.0f;
-                    return _consumeInputEvents;
+                    return true;
                 }
                 break;
 
@@ -422,7 +422,7 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
                     _directionButtonDown = false;
                     _dirty = true;
                     _delta = 0.0f;
-                    return _consumeInputEvents;
+                    return true;
                 }
                 break;
             }
