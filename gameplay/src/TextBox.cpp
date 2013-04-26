@@ -143,6 +143,12 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
                     notifyListeners(Control::Listener::TEXT_CHANGED);
                     break;
                 }
+                case Keyboard::KEY_TAB:
+                {
+                    // Allow tab to move the focus forward.
+                    return false;
+                    break;
+                }
                 case Keyboard::KEY_LEFT_ARROW:
                 {
                     Font* font = getFont(_state);
@@ -306,6 +312,8 @@ bool TextBox::keyEvent(Keyboard::KeyEvent evt, int key)
             notifyListeners(Control::Listener::TEXT_CHANGED);
             break;
         }
+        case Keyboard::KEY_RELEASE:
+            return false;
     }
 
     _lastKeypress = key;

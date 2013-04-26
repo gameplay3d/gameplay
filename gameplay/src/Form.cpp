@@ -20,7 +20,8 @@ namespace gameplay
 static Effect* __formEffect = NULL;
 static std::vector<Form*> __forms;
 
-Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL), _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0)
+Form::Form() : _theme(NULL), _frameBuffer(NULL), _spriteBatch(NULL), _node(NULL),
+    _nodeQuad(NULL), _nodeMaterial(NULL) , _u2(0), _v1(0), _isGamepad(false)
 {
 }
 
@@ -659,7 +660,7 @@ bool Form::keyEventInternal(Keyboard::KeyEvent evt, int key)
     {
         Form* form = __forms[i];
         GP_ASSERT(form);
-        if (form->isEnabled() && form->isVisible() && form->hasFocus())
+        if (form->isEnabled() && form->isVisible() && form->hasFocus() && !form->_isGamepad)
         {
             if (form->keyEvent(evt, key))
                 return true;
