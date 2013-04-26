@@ -635,6 +635,8 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
     // need to keep it alive until the method returns.
     addRef();
 
+    bool eventConsumed = false;
+
     std::vector<Control*>::const_iterator it;
     for (it = _controls.begin(); it < _controls.end(); it++)
     {
@@ -647,59 +649,47 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
 
         if ((control->hasFocus() || control->getState() == ACTIVE) && control->keyEvent(evt, key))
         {
-            release();
-            return true;
+            eventConsumed |= true;
+            break;
         }
     }
 
-    // If we made it this far, no control handled the event.
     switch (evt)
     {
         case Keyboard::KEY_PRESS:
         {
-            switch (key)
+            if (!eventConsumed)
             {
-            case Keyboard::KEY_TAB:
-                _focusPressed |= NEXT;
-                if (moveFocus(NEXT))
+                switch (key)
                 {
-                    release();
-                    return true;
+                case Keyboard::KEY_TAB:
+                    _focusPressed |= NEXT;
+                    if (moveFocus(NEXT))
+                        eventConsumed |= true;
+                    break;
+                case Keyboard::KEY_UP_ARROW:
+                    _focusPressed |= UP;
+                    if (moveFocus(UP))
+                        eventConsumed |= true;
+                    break;
+                case Keyboard::KEY_DOWN_ARROW:
+                    _focusPressed |= DOWN;
+                    if (moveFocus(DOWN))
+                        eventConsumed |= true;
+                    break;
+                case Keyboard::KEY_LEFT_ARROW:
+                    _focusPressed |= LEFT;
+                    if (moveFocus(LEFT))
+                        eventConsumed |= true;
+                    break;
+                case Keyboard::KEY_RIGHT_ARROW:
+                    _focusPressed |= RIGHT;
+                    if (moveFocus(RIGHT))
+                        eventConsumed |= true;
+                    break;
                 }
-                break;
-            case Keyboard::KEY_UP_ARROW:
-                _focusPressed |= UP;
-                if (moveFocus(UP))
-                {
-                    release();
-                    return true;
-                }
-                break;
-            case Keyboard::KEY_DOWN_ARROW:
-                _focusPressed |= DOWN;
-                if (moveFocus(DOWN))
-                {
-                    release();
-                    return true;
-                }
-                break;
-            case Keyboard::KEY_LEFT_ARROW:
-                _focusPressed |= LEFT;
-                if (moveFocus(LEFT))
-                {
-                    release();
-                    return true;
-                }
-                break;
-            case Keyboard::KEY_RIGHT_ARROW:
-                _focusPressed |= RIGHT;
-                if (moveFocus(RIGHT))
-                {
-                    release();
-                    return true;
-                }
-                break;
             }
+            break;
         }
         case Keyboard::KEY_RELEASE:
         {
@@ -707,25 +697,31 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             {
             case Keyboard::KEY_TAB:
                 _focusPressed &= ~NEXT;
+                eventConsumed |= true;
                 break;
             case Keyboard::KEY_UP_ARROW:
                 _focusPressed &= ~UP;
+                eventConsumed |= true;
                 break;
             case Keyboard::KEY_DOWN_ARROW:
                 _focusPressed &= ~DOWN;
+                eventConsumed |= true;
                 break;
             case Keyboard::KEY_LEFT_ARROW:
                 _focusPressed &= ~LEFT;
+                eventConsumed |= true;
                 break;
             case Keyboard::KEY_RIGHT_ARROW:
                 _focusPressed &= ~RIGHT;
+                eventConsumed |= true;
                 break;
             }
+            break;
         }
     }
 
     release();
-    return false;
+    return eventConsumed;
 }
 
 void Container::guaranteeFocus(Control* inFocus)
@@ -856,6 +852,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             {
                 setState(NORMAL);
                 _focusChangeRepeat = false;
+                _focusPressed = 0;
                 return true;
             }
             
@@ -890,6 +887,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
                 {
                     setState(NORMAL);
                     _focusChangeRepeat = false;
+                    _focusPressed = 0;
                     return true;
                 }
 
@@ -928,6 +926,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
                 ((Container*)next)->moveFocus(direction, start))
             {
                 _focusChangeRepeat = false;
+                _focusPressed = 0;
                 return true;
             }
         }
