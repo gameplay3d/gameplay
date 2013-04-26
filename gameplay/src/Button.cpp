@@ -50,8 +50,8 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
                 _contactIndex = (int) contactIndex;
-                setState(Control::ACTIVE);
                 notifyListeners(Control::Listener::PRESS);
+                setState(Control::ACTIVE);
                 return _consumeInputEvents;
             }
             else
@@ -70,8 +70,8 @@ bool Button::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contac
                 x > _clipBounds.x && x <= _clipBounds.x + _clipBounds.width &&
                 y > _clipBounds.y && y <= _clipBounds.y + _clipBounds.height)
             {
-                setState(Control::FOCUS);
                 notifyListeners(Control::Listener::CLICK);
+                setState(Control::FOCUS);
             }
             else
             {
@@ -116,6 +116,25 @@ bool Button::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
         break;
     default:
         break;
+    }
+
+    return false;
+}
+
+bool Button::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (evt == Keyboard::KEY_PRESS && key == Keyboard::KEY_RETURN)
+    {
+        notifyListeners(Control::Listener::PRESS);
+        setState(Control::ACTIVE);
+        return _consumeInputEvents;
+    }
+    else if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
+    {
+        notifyListeners(Control::Listener::RELEASE);
+        notifyListeners(Control::Listener::CLICK);
+        setState(Control::FOCUS);
+        return _consumeInputEvents;
     }
 
     return false;
