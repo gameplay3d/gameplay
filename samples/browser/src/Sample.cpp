@@ -185,6 +185,11 @@ void Sample::getAccelerometerValues(float* pitch, float* roll)
     Game::getInstance()->getAccelerometerValues(pitch, roll);
 }
 
+void Sample::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    Game::getInstance()->getRawSensorValues(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+}
+
 void Sample::schedule(long timeOffset, TimeListener* timeListener, void* cookie)
 {
     Game::getInstance()->schedule(timeOffset, timeListener, cookie);
