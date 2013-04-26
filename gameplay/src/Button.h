@@ -93,6 +93,14 @@ protected:
     virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
+     * Keyboard callback on key events.
+     *
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    virtual bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
      * @see Control::getType
      */
     const char* getType() const;

@@ -222,6 +222,14 @@ protected:
     bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
+     * Keyboard callback on key events.
+     *
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
      * Slider overrides draw() so that it can avoid resetting the _dirty flag
      * when a joystick is being used to change its value.
      */

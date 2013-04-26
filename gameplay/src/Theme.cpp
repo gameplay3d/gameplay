@@ -475,8 +475,6 @@ Theme::Style* Theme::getEmptyStyle()
         Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
         overlay->addRef();
         overlay->addRef();
-        overlay->addRef();
-        overlay->addRef();
         emptyStyle = new Theme::Style(const_cast<Theme*>(this), "EMPTY_STYLE", 1.0f / _texture->getWidth(), 1.0f / _texture->getHeight(),
             Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, NULL, overlay, NULL);
 

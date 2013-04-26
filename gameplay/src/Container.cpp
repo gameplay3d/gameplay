@@ -645,7 +645,7 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
             continue;
         }
 
-        if (control->hasFocus() && control->keyEvent(evt, key))
+        if ((control->hasFocus() || control->getState() == ACTIVE) && control->keyEvent(evt, key))
         {
             release();
             return true;
@@ -653,10 +653,75 @@ bool Container::keyEvent(Keyboard::KeyEvent evt, int key)
     }
 
     // If we made it this far, no control handled the event.
-    if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_TAB)
+    switch (evt)
     {
-        moveFocus(NEXT);
-        return _consumeInputEvents;
+        case Keyboard::KEY_PRESS:
+        {
+            switch (key)
+            {
+            case Keyboard::KEY_TAB:
+                _focusPressed |= NEXT;
+                if (moveFocus(NEXT))
+                {
+                    release();
+                    return true;
+                }
+                break;
+            case Keyboard::KEY_UP_ARROW:
+                _focusPressed |= UP;
+                if (moveFocus(UP))
+                {
+                    release();
+                    return true;
+                }
+                break;
+            case Keyboard::KEY_DOWN_ARROW:
+                _focusPressed |= DOWN;
+                if (moveFocus(DOWN))
+                {
+                    release();
+                    return true;
+                }
+                break;
+            case Keyboard::KEY_LEFT_ARROW:
+                _focusPressed |= LEFT;
+                if (moveFocus(LEFT))
+                {
+                    release();
+                    return true;
+                }
+                break;
+            case Keyboard::KEY_RIGHT_ARROW:
+                _focusPressed |= RIGHT;
+                if (moveFocus(RIGHT))
+                {
+                    release();
+                    return true;
+                }
+                break;
+            }
+        }
+        case Keyboard::KEY_RELEASE:
+        {
+            switch (key)
+            {
+            case Keyboard::KEY_TAB:
+                _focusPressed &= ~NEXT;
+                break;
+            case Keyboard::KEY_UP_ARROW:
+                _focusPressed &= ~UP;
+                break;
+            case Keyboard::KEY_DOWN_ARROW:
+                _focusPressed &= ~DOWN;
+                break;
+            case Keyboard::KEY_LEFT_ARROW:
+                _focusPressed &= ~LEFT;
+                break;
+            case Keyboard::KEY_RIGHT_ARROW:
+                _focusPressed &= ~RIGHT;
+                break;
+            }
+        }
     }
 
     release();
@@ -787,7 +852,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
         if (!next)
         {
             // Check for controls in the given direction in our parent container.
-            if (!outsideControl && _parent && _parent->moveFocus(direction, start))
+            if (direction != NEXT && !outsideControl && _parent && _parent->moveFocus(direction, start))
             {
                 setState(NORMAL);
                 _focusChangeRepeat = false;
@@ -821,6 +886,13 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
 
             if (focusIndex > _focusIndexMax)
             {
+                if (direction == NEXT && !outsideControl && _parent && _parent->moveFocus(direction, start))
+                {
+                    setState(NORMAL);
+                    _focusChangeRepeat = false;
+                    return true;
+                }
+
                 focusIndex = 0;
             }
             else if (focusIndex < 0)
@@ -839,6 +911,7 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
             if (nextControl->getFocusIndex() == focusIndex)
             {
                 next = nextControl;
+                break;
             }
         }
     }
@@ -851,7 +924,8 @@ bool Container::moveFocus(Direction direction, Control* outsideControl)
 
         if (next->isContainer())
         {
-            if (((Container*)next)->moveFocus(direction, start))
+            if ((direction == NEXT && ((Container*)next)->moveFocus(direction)) ||
+                ((Container*)next)->moveFocus(direction, start))
             {
                 _focusChangeRepeat = false;
                 return true;
