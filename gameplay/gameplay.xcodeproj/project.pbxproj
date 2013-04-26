@@ -3903,7 +3903,6 @@
 				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)_include";
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
-				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 armv7s i386";
@@ -3947,7 +3946,6 @@
 				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)_include";
 				SDKROOT = iphoneos;
 				SHARED_PRECOMPS_DIR = "";
-				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 armv7s i386";
