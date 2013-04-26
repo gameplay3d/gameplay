@@ -378,6 +378,70 @@ bool Slider::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned 
     return eventConsumed;
 }
 
+bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (_state == ACTIVE)
+    {
+        switch (evt)
+        {
+        case Keyboard::KEY_PRESS:
+            switch (key)
+            {
+            case Keyboard::KEY_LEFT_ARROW:
+                _delta = -1.0f;
+                _directionButtonDown = true;
+                _dirty = true;
+                _gamepadValue = _value;
+                return _consumeInputEvents;
+
+            case Keyboard::KEY_RIGHT_ARROW:
+                _delta = 1.0f;
+                _directionButtonDown = true;
+                _dirty = true;
+                _gamepadValue = _value;
+                return _consumeInputEvents;
+            }
+            break;
+
+        case Keyboard::KEY_RELEASE:
+            switch (key)
+            {
+            case Keyboard::KEY_LEFT_ARROW:
+                if (_delta == -1.0f)
+                {
+                    _directionButtonDown = false;
+                    _dirty = true;
+                    _delta = 0.0f;
+                    return _consumeInputEvents;
+                }
+                break;
+
+            case Keyboard::KEY_RIGHT_ARROW:
+                if (_delta == 1.0f)
+                {
+                    _directionButtonDown = false;
+                    _dirty = true;
+                    _delta = 0.0f;
+                    return _consumeInputEvents;
+                }
+                break;
+            }
+        }
+    }
+
+    if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_RETURN)
+    {
+        if (hasFocus())
+            setState(ACTIVE);
+        else if (_state == ACTIVE)
+            setState(FOCUS);
+
+        return _consumeInputEvents;
+    }
+
+    return Control::keyEvent(evt, key);
+}
+
 void Slider::update(const Control* container, const Vector2& offset)
 {
     Label::update(container, offset);
