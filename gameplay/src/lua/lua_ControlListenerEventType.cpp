@@ -36,7 +36,6 @@ Control::Listener::EventType lua_enumFromString_ControlListenerEventType(const c
         return Control::Listener::ENTER;
     if (strcmp(s, luaEnumString_ControlListenerEventType_LEAVE) == 0)
         return Control::Listener::LEAVE;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Control::Listener::EventType.", s);
     return Control::Listener::PRESS;
 }
 
@@ -60,7 +59,6 @@ const char* lua_stringFromEnum_ControlListenerEventType(Control::Listener::Event
         return luaEnumString_ControlListenerEventType_ENTER;
     if (e == Control::Listener::LEAVE)
         return luaEnumString_ControlListenerEventType_LEAVE;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Control::Listener::EventType.", e);
     return enumStringEmpty;
 }
 

@@ -153,6 +153,18 @@ void RadioButton::clearSelected(const std::string& groupId)
     }
 }
 
+bool RadioButton::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN && !_selected)
+    {
+        RadioButton::clearSelected(_groupId);
+        _selected = true;
+        notifyListeners(Control::Listener::VALUE_CHANGED);
+    }
+
+    return Button::keyEvent(evt, key);
+}
+
 void RadioButton::update(const Control* container, const Vector2& offset)
 {
     Label::update(container, offset);

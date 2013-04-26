@@ -48,6 +48,7 @@ void luaRegister_Game()
         {"getState", lua_Game_getState},
         {"getViewport", lua_Game_getViewport},
         {"getWidth", lua_Game_getWidth},
+        {"hasAccelerometer", lua_Game_hasAccelerometer},
         {"hasMouse", lua_Game_hasMouse},
         {"isCursorVisible", lua_Game_isCursorVisible},
         {"isGestureRegistered", lua_Game_isGestureRegistered},
@@ -1213,6 +1214,41 @@ int lua_Game_getWidth(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Game_getWidth - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Game_hasAccelerometer(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Game* instance = getInstance(state);
+                bool result = instance->hasAccelerometer();
+
+                // Push the return value onto the stack.
+                lua_pushboolean(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Game_hasAccelerometer - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
