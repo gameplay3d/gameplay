@@ -46,6 +46,12 @@ static bool __multiTouch = false;
 static bool __multiSampling = false;
 static float __pitch;
 static float __roll;
+static float __accelRawX;
+static float __accelRawY;
+static float __accelRawZ;
+static float __gyroRawX;
+static float __gyroRawY;
+static float __gyroRawZ;
 static const char* __glExtensions;
 static struct gestures_set * __gestureSet;
 static bitset<3> __gestureEventsProcessed;
@@ -704,10 +710,16 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     bps_initialize();
 
     // Initialize navigator and orientation
-    static const int SENSOR_RATE = 25000;
+    static const int SENSOR_RATE = 25000; // (25000 microseconds = 40 Hz)
     sensor_set_rate(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, SENSOR_RATE);
+    sensor_set_rate(SENSOR_TYPE_ACCELEROMETER, SENSOR_RATE);
+    sensor_set_rate(SENSOR_TYPE_GYROSCOPE, SENSOR_RATE);
     sensor_set_skip_duplicates(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, true);
+    sensor_set_skip_duplicates(SENSOR_TYPE_ACCELEROMETER, true);
+    sensor_set_skip_duplicates(SENSOR_TYPE_GYROSCOPE, true);
     sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
+    sensor_request_events(SENSOR_TYPE_ACCELEROMETER);
+    sensor_request_events(SENSOR_TYPE_GYROSCOPE);
     navigator_request_events(0);
     navigator_rotation_lock(true);
     __orientationAngle = atoi(getenv("ORIENTATION"));
@@ -1311,6 +1323,14 @@ int Platform::enterMessagePump()
                     float azimuth;
                     sensor_event_get_apr(event, &azimuth, &__pitch, &__roll);
                 }
+                else if (bps_event_get_code(event) == SENSOR_ACCELEROMETER_READING)
+                {
+                    sensor_event_get_xyz(event, &__accelRawX, &__accelRawY, &__accelRawZ);
+                }
+                else if (bps_event_get_code(event) == SENSOR_GYROSCOPE_READING)
+                {
+                    sensor_event_get_xyz(event, &__gyroRawX, &__gyroRawY, &__gyroRawZ);
+                }
             }
         }
 
@@ -1479,6 +1499,39 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     default:
         break;
     }
+}
+
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+	if (accelX)
+	{
+		*accelX = __accelRawX;
+	}
+
+	if (accelY)
+	{
+		*accelY = __accelRawY;
+	}
+
+	if (accelZ)
+	{
+		*accelZ = __accelRawZ;
+	}
+
+	if (gyroX)
+	{
+		*gyroX = __gyroRawX;
+	}
+
+	if (gyroY)
+	{
+		*gyroY = __gyroRawY;
+	}
+
+	if (gyroZ)
+	{
+		*gyroZ = __gyroRawZ;
+	}
 }
 
 void Platform::getArguments(int* argc, char*** argv)

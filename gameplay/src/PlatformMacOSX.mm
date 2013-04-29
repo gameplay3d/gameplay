@@ -1813,6 +1813,34 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     *roll = 0;
 }
 
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    if (accelX)
+    {
+        *accelX = 0;
+    }
+    if (accelY)
+    {
+        *accelY = 0;
+    }
+    if (accelZ)
+    {
+        *accelZ = 0;
+    }
+    if (gyroX)
+    {
+        *gyroX = 0;
+    }
+    if (gyroY)
+    {
+        *gyroY = 0;
+    }
+    if (gyroZ)
+    {
+        *gyroZ = 0;
+    }
+}
+
 void Platform::getArguments(int* argc, char*** argv)
 {
     if (argc)
