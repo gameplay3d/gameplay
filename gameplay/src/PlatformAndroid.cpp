@@ -31,6 +31,13 @@ static ASensorManager* __sensorManager;
 static ASensorEventQueue* __sensorEventQueue;
 static ASensorEvent __sensorEvent;
 static const ASensor* __accelerometerSensor;
+static const ASensor* __gyroscopeSensor;
+static float __accelRawX;
+static float __accelRawY;
+static float __accelRawZ;
+static float __gyroRawX;
+static float __gyroRawY;
+static float __gyroRawZ;
 static int __orientationAngle = 90;
 static bool __multiSampling = false;
 static bool __multiTouch = false;
@@ -905,12 +912,18 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             __initialized = false;
             break;
         case APP_CMD_GAINED_FOCUS:
-            // When our app gains focus, we start monitoring the accelerometer.
+            // When our app gains focus, we start monitoring the sensors.
             if (__accelerometerSensor != NULL) 
             {
                 ASensorEventQueue_enableSensor(__sensorEventQueue, __accelerometerSensor);
                 // We'd like to get 60 events per second (in microseconds).
                 ASensorEventQueue_setEventRate(__sensorEventQueue, __accelerometerSensor, (1000L/60)*1000);
+            }
+            if (__gyroscopeSensor != NULL)
+            {
+                ASensorEventQueue_enableSensor(__sensorEventQueue, __gyroscopeSensor);
+                // We'd like to get 60 events per second (in microseconds).
+                ASensorEventQueue_setEventRate(__sensorEventQueue, __gyroscopeSensor, (1000L/60)*1000);
             }
 
             if (Game::getInstance()->getState() == Game::UNINITIALIZED)
@@ -934,11 +947,15 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd)
             __suspended = true;
             break;
         case APP_CMD_LOST_FOCUS:
-            // When our app loses focus, we stop monitoring the accelerometer.
+            // When our app loses focus, we stop monitoring the sensors.
             // This is to avoid consuming battery while not being used.
             if (__accelerometerSensor != NULL) 
             {
                 ASensorEventQueue_disableSensor(__sensorEventQueue, __accelerometerSensor);
+            }
+            if (__gyroscopeSensor != NULL) 
+            {
+                ASensorEventQueue_disableSensor(__sensorEventQueue, __gyroscopeSensor);
             }
             break;
     }
@@ -1018,6 +1035,7 @@ int Platform::enterMessagePump()
     // Prepare to monitor accelerometer.
     __sensorManager = ASensorManager_getInstance();
     __accelerometerSensor = ASensorManager_getDefaultSensor(__sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+    __gyroscopeSensor = ASensorManager_getDefaultSensor(__sensorManager, ASENSOR_TYPE_GYROSCOPE);
     __sensorEventQueue = ASensorManager_createEventQueue(__sensorManager, __state->looper, LOOPER_ID_USER, NULL, NULL);
     
     // Get the initial time.
@@ -1040,8 +1058,22 @@ int Platform::enterMessagePump()
             
             // If a sensor has data, process it now.
             if (ident == LOOPER_ID_USER && __accelerometerSensor != NULL)
+            {
                 ASensorEventQueue_getEvents(__sensorEventQueue, &__sensorEvent, 1);
-            
+                if (__sensorEvent.type == ASENSOR_TYPE_ACCELEROMETER)
+                {
+                    __accelRawX = __sensorEvent.acceleration.x;
+                    __accelRawY = __sensorEvent.acceleration.y;
+                    __accelRawZ = __sensorEvent.acceleration.z;
+                }
+                else if (__sensorEvent.type == ASENSOR_TYPE_GYROSCOPE)
+                {
+                    __gyroRawX = __sensorEvent.vector.x;
+                    __gyroRawY = __sensorEvent.vector.y;
+                    __gyroRawZ = __sensorEvent.vector.z;
+                }
+            }
+
             if (__state->destroyRequested != 0)
             {
                 return 0;
@@ -1192,23 +1224,23 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     switch (__orientationAngle)
     {
     case 90:
-        tx = -__sensorEvent.acceleration.y;
-        ty = __sensorEvent.acceleration.x;
+        tx = -__accelRawY;
+        ty = __accelRawX;
         break;
     case 180:
-        tx = -__sensorEvent.acceleration.x;
-        ty = -__sensorEvent.acceleration.y;
+        tx = -__accelRawX;
+        ty = -__accelRawY;
         break;
     case 270:
-        tx = __sensorEvent.acceleration.y;
-        ty = -__sensorEvent.acceleration.x;
+        tx = __accelRawY;
+        ty = -__accelRawX;
         break;
     default:
-        tx = __sensorEvent.acceleration.x;
-        ty = __sensorEvent.acceleration.y;
+        tx = __accelRawX;
+        ty = __accelRawY;
         break;
     }
-    tz = __sensorEvent.acceleration.z;
+    tz = __accelRawZ;
 
     if (pitch != NULL)
     {
@@ -1219,6 +1251,39 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     {
         GP_ASSERT(ty * ty + tz * tz);
         *roll = -atan(tx / sqrt(ty * ty + tz * tz)) * 180.0f * M_1_PI;
+    }
+}
+
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    if (accelX)
+    {
+        *accelX = __accelRawX;
+    }
+
+    if (accelY)
+    {
+        *accelY = __accelRawY;
+    }
+
+    if (accelZ)
+    {
+        *accelZ = __accelRawZ;
+    }
+
+    if (gyroX)
+    {
+        *gyroX = __gyroRawX;
+    }
+
+    if (gyroY)
+    {
+        *gyroY = __gyroRawY;
+    }
+
+    if (gyroZ)
+    {
+        *gyroZ = __gyroRawZ;
     }
 }
 
