@@ -339,7 +339,7 @@ bool FileSystem::fileExists(const char* filePath)
     GP_ASSERT(filePath);
 
 #ifdef __ANDROID__
-    if (androidFileExists(filePath))
+    if (androidFileExists(resolvePath(filePath)))
     {
         return true;
     }
