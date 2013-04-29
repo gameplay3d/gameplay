@@ -492,6 +492,7 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderStateAutoBinding.h
     src/lua/lua_RenderStateBlend.cpp
     src/lua/lua_RenderStateBlend.h
+    src/lua/lua_RenderStateCullFaceSide.cpp
     src/lua/lua_RenderStateDepthFunction.cpp
     src/lua/lua_RenderStateDepthFunction.h
     src/lua/lua_RenderStateStateBlock.cpp

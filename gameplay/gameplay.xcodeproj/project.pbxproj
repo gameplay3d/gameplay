@@ -1155,6 +1155,10 @@
 		BD26373616CF865B00CFE15F /* Vector2.inl in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E39147D8FF50000361E /* Vector2.inl */; settings = {ATTRIBUTES = (Public, ); }; };
 		BD26373716CF865B00CFE15F /* Vector3.inl in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E3C147D8FF50000361E /* Vector3.inl */; settings = {ATTRIBUTES = (Public, ); }; };
 		BD26373816CF865B00CFE15F /* Vector4.inl in Headers */ = {isa = PBXBuildFile; fileRef = 42CD0E3F147D8FF50000361E /* Vector4.inl */; settings = {ATTRIBUTES = (Public, ); }; };
+		C054CBE5172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */; };
+		C054CBE6172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */; };
+		C054CBE7172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */ = {isa = PBXBuildFile; fileRef = C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */; };
+		C054CBE8172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */ = {isa = PBXBuildFile; fileRef = C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */; };
 		DD1FF47216DBD8F9000B42EF /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1FF47116DBD8F9000B42EF /* Platform.cpp */; };
 		DD1FF47316DBD8F9000B42EF /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1FF47116DBD8F9000B42EF /* Platform.cpp */; };
 		F1616ABC1614E24B008DD8B7 /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */; };
@@ -1766,6 +1770,8 @@
 		BD2636E216CF5B7400CFE15F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E316CF5B7400CFE15F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		BD2636E416CF5B7400CFE15F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lua_RenderStateCullFaceSide.cpp; sourceTree = "<group>"; };
+		C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_RenderStateCullFaceSide.h; sourceTree = "<group>"; };
 		DD1FF47116DBD8F9000B42EF /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Platform.cpp; path = src/Platform.cpp; sourceTree = SOURCE_ROOT; };
 		F1616ABB1614E24B008DD8B7 /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MathUtil.cpp; path = src/MathUtil.cpp; sourceTree = SOURCE_ROOT; };
 		F18024A31627000D001BFF87 /* gameplay-main-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "gameplay-main-ios.mm"; path = "src/gameplay-main-ios.mm"; sourceTree = SOURCE_ROOT; };
@@ -2341,6 +2347,8 @@
 				42BCD41215EFD0F300C0E076 /* lua_RenderStateAutoBinding.h */,
 				42BCD41315EFD0F300C0E076 /* lua_RenderStateBlend.cpp */,
 				42BCD41415EFD0F300C0E076 /* lua_RenderStateBlend.h */,
+				C054CBE3172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp */,
+				C054CBE4172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h */,
 				B661732D16A61A4B0083A307 /* lua_RenderStateDepthFunction.cpp */,
 				B661732E16A61A4B0083A307 /* lua_RenderStateDepthFunction.h */,
 				42BCD41515EFD0F300C0E076 /* lua_RenderStateStateBlock.cpp */,
@@ -2792,6 +2800,7 @@
 				42A5031316E8F06500F0246C /* ImageControl.h in Headers */,
 				42A5031916E8F08900F0246C /* lua_ImageControl.h in Headers */,
 				42A5031F16E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
+				C054CBE7172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3098,6 +3107,7 @@
 				42A5031416E8F06500F0246C /* ImageControl.h in Headers */,
 				42A5031A16E8F08900F0246C /* lua_ImageControl.h in Headers */,
 				42A5032016E8F0B800F0246C /* lua_TerrainListener.h in Headers */,
+				C054CBE8172EF541000B7DC3 /* lua_RenderStateCullFaceSide.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3473,6 +3483,7 @@
 				42A5031116E8F06500F0246C /* ImageControl.cpp in Sources */,
 				42A5031716E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
 				42A5031D16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
+				C054CBE5172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3753,6 +3764,7 @@
 				42A5031216E8F06500F0246C /* ImageControl.cpp in Sources */,
 				42A5031816E8F08900F0246C /* lua_ImageControl.cpp in Sources */,
 				42A5031E16E8F0B800F0246C /* lua_TerrainListener.cpp in Sources */,
+				C054CBE6172EF541000B7DC3 /* lua_RenderStateCullFaceSide.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

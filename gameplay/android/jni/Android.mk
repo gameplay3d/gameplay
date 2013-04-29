@@ -237,6 +237,7 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderState.cpp \
     lua/lua_RenderStateAutoBinding.cpp \
     lua/lua_RenderStateBlend.cpp \
+    lua/lua_RenderStateCullFaceSide.cpp \
     lua/lua_RenderStateDepthFunction.cpp \
     lua/lua_RenderStateStateBlock.cpp \
     lua/lua_RenderTarget.cpp \
