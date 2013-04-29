@@ -170,6 +170,16 @@ public:
     };
 
     /**
+     * Defines whether front-facing, back-facing or both facets are culled.
+     */
+    enum CullFaceSide
+    {
+        CULL_FACE_SIDE_FRONT = GL_FRONT,
+        CULL_FACE_SIDE_BACK = GL_BACK,
+        CULL_FACE_SIDE_FRONT_AND_BACK = GL_FRONT_AND_BACK
+    };
+
+    /**
      * Defines a block of fixed-function render states that can be applied to a
      * RenderState object.
      */
@@ -225,6 +235,15 @@ public:
          * @param enabled true to enable, false to disable.
          */
         void setCullFace(bool enabled);
+
+        /**
+         * Sets the side of the facets to cull.
+         *
+         * When not explicitly set, the default is to cull back-facing facets
+         * are culled.
+         * @param side The side to cull.
+         */
+        void setCullFaceSide(CullFaceSide side);
 
         /**
          * Toggles depth testing.
@@ -297,6 +316,7 @@ public:
         bool _blendEnabled;
         Blend _blendSrc;
         Blend _blendDst;
+        CullFaceSide _cullFaceSide;
         long _bits;
 
         static StateBlock* _defaultState;
