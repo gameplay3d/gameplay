@@ -429,7 +429,7 @@ bool Slider::keyEvent(Keyboard::KeyEvent evt, int key)
         }
     }
 
-    if (evt == Keyboard::KEY_CHAR && key == Keyboard::KEY_RETURN)
+    if (evt == Keyboard::KEY_PRESS && key == Keyboard::KEY_RETURN)
     {
         if (hasFocus())
             setState(ACTIVE);
