@@ -62,43 +62,43 @@
     <target name="-post-compile">
         <copy file="../game.png.config" tofile="assets/game.config"/>
         <copy file="../res/common/arial40.gpb" tofile="assets/res/common/arial40.gpb"/>
-        <copy file="../res/design/backboard.png" tofile="assets/res/design/backboard.png"/>
-        <copy file="../res/design/basketball.png" tofile="assets/res/design/basketball.png"/>
-        <copy file="../res/design/basketballnet.png" tofile="assets/res/design/basketballnet.png"/>
-        <copy file="../res/design/book.png" tofile="assets/res/design/book.png"/>
-        <copy file="../res/design/bookshelf.png" tofile="assets/res/design/bookshelf.png"/>
+        <copy file="../res/design/backboard.png" tofile="assets/res/png/backboard.png"/>
+        <copy file="../res/design/basketball.png" tofile="assets/res/png/basketball.png"/>
+        <copy file="../res/design/basketballnet.png" tofile="assets/res/png/basketballnet.png"/>
+        <copy file="../res/design/book.png" tofile="assets/res/png/book.png"/>
+        <copy file="../res/design/bookshelf.png" tofile="assets/res/png/bookshelf.png"/>
         <copy file="../res/common/boy.animation" tofile="assets/res/common/boy.animation"/>
-        <copy file="../res/design/character.png" tofile="assets/res/design/character.png"/>
-        <copy file="../res/design/decals.png" tofile="assets/res/design/decals.png"/>
-        <copy file="../res/design/door.png" tofile="assets/res/design/door.png"/>
-        <copy file="../res/design/doorframe.png" tofile="assets/res/design/doorframe.png"/>
-        <copy file="../res/design/easel.png" tofile="assets/res/design/easel.png"/>
-        <copy file="../res/design/floor.png" tofile="assets/res/design/floor.png"/>
-        <copy file="../res/design/floortiles.png" tofile="assets/res/design/floortiles.png"/>
-        <copy file="../res/design/gamepad.png" tofile="assets/res/design/gamepad.png"/>
-        <copy file="../res/design/playtable.png" tofile="assets/res/design/playtable.png"/>
+        <copy file="../res/design/character.png" tofile="assets/res/png/character.png"/>
+        <copy file="../res/design/decals.png" tofile="assets/res/png/decals.png"/>
+        <copy file="../res/design/door.png" tofile="assets/res/png/door.png"/>
+        <copy file="../res/design/doorframe.png" tofile="assets/res/png/doorframe.png"/>
+        <copy file="../res/design/easel.png" tofile="assets/res/png/easel.png"/>
+        <copy file="../res/design/floor.png" tofile="assets/res/png/floor.png"/>
+        <copy file="../res/design/floortiles.png" tofile="assets/res/png/floortiles.png"/>
+        <copy file="../res/design/gamepad.png" tofile="assets/res/png/gamepad.png"/>
+        <copy file="../res/design/playtable.png" tofile="assets/res/png/playtable.png"/>
         <copy file="../res/common/scene.gpb" tofile="assets/res/common/scene.gpb"/>
         <copy file="../res/common/scene.material" tofile="assets/res/common/scene.material"/>
         <copy file="../res/common/scene.physics" tofile="assets/res/common/scene.physics"/>
         <copy file="../res/common/scene.scene" tofile="assets/res/common/scene.scene"/>
-        <copy file="../res/design/shadow.png" tofile="assets/res/design/shadow.png"/>
-        <copy file="../res/design/storageorganizer.png" tofile="assets/res/design/storageorganizer.png"/>
-        <copy file="../res/design/tableleg1.png" tofile="assets/res/design/tableleg1.png"/>
-        <copy file="../res/design/tableleg2.png" tofile="assets/res/design/tableleg2.png"/>
-        <copy file="../res/design/tableleg3.png" tofile="assets/res/design/tableleg3.png"/>
-        <copy file="../res/design/tableleg4.png" tofile="assets/res/design/tableleg4.png"/>
-        <copy file="../res/design/tabletop.png" tofile="assets/res/design/tabletop.png"/>
-        <copy file="../res/design/tiles.png" tofile="assets/res/design/tiles.png"/>
-        <copy file="../res/design/tilesn.png" tofile="assets/res/design/tilesn.png"/>
-        <copy file="../res/design/toybox.png" tofile="assets/res/design/toybox.png"/>
-        <copy file="../res/design/walleast.png" tofile="assets/res/design/walleast.png"/>
-        <copy file="../res/design/wallnorth.png" tofile="assets/res/design/wallnorth.png"/>
-        <copy file="../res/design/walloverhang.png" tofile="assets/res/design/walloverhang.png"/>
-        <copy file="../res/design/wallsouth.png" tofile="assets/res/design/wallsouth.png"/>
-        <copy file="../res/design/wallwest.png" tofile="assets/res/design/wallwest.png"/>
-        <copy file="../res/design/windowledge.png" tofile="assets/res/design/windowledge.png"/>
-        <copy file="../res/design/wood.png" tofile="assets/res/design/wood.png"/>
-        <copy file="../res/design/woodn.png" tofile="assets/res/design/woodn.png"/>
+        <copy file="../res/design/shadow.png" tofile="assets/res/png/shadow.png"/>
+        <copy file="../res/design/storageorganizer.png" tofile="assets/res/png/storageorganizer.png"/>
+        <copy file="../res/design/tableleg1.png" tofile="assets/res/png/tableleg1.png"/>
+        <copy file="../res/design/tableleg2.png" tofile="assets/res/png/tableleg2.png"/>
+        <copy file="../res/design/tableleg3.png" tofile="assets/res/png/tableleg3.png"/>
+        <copy file="../res/design/tableleg4.png" tofile="assets/res/png/tableleg4.png"/>
+        <copy file="../res/design/tabletop.png" tofile="assets/res/png/tabletop.png"/>
+        <copy file="../res/design/tiles.png" tofile="assets/res/png/tiles.png"/>
+        <copy file="../res/design/tilesn.png" tofile="assets/res/png/tilesn.png"/>
+        <copy file="../res/design/toybox.png" tofile="assets/res/png/toybox.png"/>
+        <copy file="../res/design/walleast.png" tofile="assets/res/png/walleast.png"/>
+        <copy file="../res/design/wallnorth.png" tofile="assets/res/png/wallnorth.png"/>
+        <copy file="../res/design/walloverhang.png" tofile="assets/res/png/walloverhang.png"/>
+        <copy file="../res/design/wallsouth.png" tofile="assets/res/png/wallsouth.png"/>
+        <copy file="../res/design/wallwest.png" tofile="assets/res/png/wallwest.png"/>
+        <copy file="../res/design/windowledge.png" tofile="assets/res/png/windowledge.png"/>
+        <copy file="../res/design/wood.png" tofile="assets/res/png/wood.png"/>
+        <copy file="../res/design/woodn.png" tofile="assets/res/png/woodn.png"/>
         <copy todir="assets/res/common">
             <fileset dir="../res/common"/>
         </copy>

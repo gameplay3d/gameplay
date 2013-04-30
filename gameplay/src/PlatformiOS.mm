@@ -850,7 +850,12 @@ int getUnicode(int key);
         motionManager.accelerometerUpdateInterval = 1 / 40.0;    // 40Hz
         [motionManager startAccelerometerUpdates];
     }
-        
+    if([motionManager isGyroAvailable] == YES)
+    {
+        motionManager.gyroUpdateInterval = 1 / 40.0;    // 40Hz
+        [motionManager startGyroUpdates];
+    }
+    
     window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     viewController = [[ViewController alloc] init];
     [window setRootViewController:viewController];
@@ -899,6 +904,28 @@ int getUnicode(int key);
         *pitch = p;
     if(roll != NULL) 
         *roll = r;
+}
+
+- (void)getRawAccelX:(float*)x Y:(float*)y Z:(float*)z
+{
+    CMAccelerometerData* accelerometerData = motionManager.accelerometerData;
+    if(accelerometerData != nil)
+    {
+        *x = -9.81f * accelerometerData.acceleration.x;
+        *y = -9.81f * accelerometerData.acceleration.y;
+        *z = -9.81f * accelerometerData.acceleration.z;
+    }
+}
+
+- (void)getRawGyroX:(float*)x Y:(float*)y Z:(float*)z
+{
+    CMGyroData* gyroData = motionManager.gyroData;
+    if(gyroData != nil)
+    {
+        *x = gyroData.rotationRate.x;
+        *y = gyroData.rotationRate.y;
+        *z = gyroData.rotationRate.z;
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -1389,7 +1416,39 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
 }
-    
+
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    float x, y, z;
+    [__appDelegate getRawAccelX:&x Y:&y Z:&z];
+    if (accelX)
+    {
+        *accelX = x;
+    }
+    if (accelY)
+    {
+        *accelY = y;
+    }
+    if (accelZ)
+    {
+        *accelZ = z;
+    }
+
+    [__appDelegate getRawGyroX:&x Y:&y Z:&z];
+    if (gyroX)
+    {
+        *gyroX = x;
+    }
+    if (gyroY)
+    {
+        *gyroY = y;
+    }
+    if (gyroZ)
+    {
+        *gyroZ = z;
+    }
+}
+
 void Platform::getArguments(int* argc, char*** argv)
 {
     if (argc)

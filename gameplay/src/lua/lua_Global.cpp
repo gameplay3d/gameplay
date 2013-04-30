@@ -753,6 +753,15 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("BLEND_ONE_MINUS_CONSTANT_ALPHA", "BLEND_ONE_MINUS_CONSTANT_ALPHA", scopePath);
         gameplay::ScriptUtil::registerConstantString("BLEND_SRC_ALPHA_SATURATE", "BLEND_SRC_ALPHA_SATURATE", scopePath);
     }
+    
+    // Register enumeration RenderState::CullFaceSide
+    {
+        std::vector<std::string> scopePath;
+        scopePath.push_back("RenderState");
+        gameplay::ScriptUtil::registerConstantString("CULL_FACE_SIDE_BACK", "CULL_FACE_SIDE_BACK", scopePath);
+        gameplay::ScriptUtil::registerConstantString("CULL_FACE_SIDE_FRONT", "CULL_FACE_SIDE_FRONT", scopePath);
+        gameplay::ScriptUtil::registerConstantString("CULL_FACE_SIDE_FRONT_AND_BACK", "CULL_FACE_SIDE_FRONT_AND_BACK", scopePath);
+    }
 
     // Register enumeration RenderState::DepthFunction.
     {
@@ -920,6 +929,8 @@ const char* lua_stringFromEnumGlobal(std::string& enumname, unsigned int value)
         return lua_stringFromEnum_RenderStateAutoBinding((RenderState::AutoBinding)value);
     if (enumname == "RenderState::Blend")
         return lua_stringFromEnum_RenderStateBlend((RenderState::Blend)value);
+    if (enumname == "RenderState::CullFaceSide")
+        return lua_stringFromEnum_RenderStateCullFaceSide((RenderState::CullFaceSide)value);
     if (enumname == "RenderState::DepthFunction")
         return lua_stringFromEnum_RenderStateDepthFunction((RenderState::DepthFunction)value);
     if (enumname == "Scene::DebugFlags")

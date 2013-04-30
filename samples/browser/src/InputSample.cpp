@@ -11,7 +11,8 @@
 static const char* keyString(int key);
 
 InputSample::InputSample()
-    :  _mouseString("No Mouse"), _font(NULL), _inputSampleControls(NULL), _mouseWheel(0), _crosshair(NULL)
+    :  _mouseString("No Mouse"), _font(NULL), _inputSampleControls(NULL), _mouseWheel(0), _crosshair(NULL),
+       _scene(NULL), _formNode(NULL), _formNodeParent(NULL)
 {
 }
 
@@ -44,6 +45,32 @@ void InputSample::initialize()
     _inputSampleControls->getControl("restoreMouseLabel")->setVisible(false);
 
     _mousePoint.set(-100, -100);
+
+    // Create a 3D form that responds to raw sensor inputs.
+    // For this, we will need a scene with a camera node.
+    Camera* camera = Camera::createPerspective(45.0f, (float)getWidth() / (float)getHeight(), 0.25f, 100.0f);
+    _scene = Scene::create();
+    Node* cameraNode = _scene->addNode("Camera");
+    cameraNode->setCamera(camera);
+    _scene->setActiveCamera(camera);
+    SAFE_RELEASE(camera);
+    _formNodeParent = _scene->addNode("FormParent");
+    _formNode = Node::create("Form");
+    _formNodeParent->addChild(_formNode);
+    Theme* theme = _inputSampleControls->getTheme();
+    Form* form = Form::create("testForm", theme->getStyle("basicContainer"));
+    form->setSize(225, 100);
+    Label* label = Label::create("sensorLabel", theme->getStyle("iconNoBorder"));
+    label->setPosition(25, 15);
+    label->setSize(175, 50);
+    label->setText("Raw sensor response (accel/gyro)");
+    form->addControl(label);
+    label->release();
+    _formNode->setScale(0.0015f, 0.0015f, 1.0f);
+    _formNodeRestPosition.set(0, 0, -1.5f);
+    _formNodeParent->setTranslation(_formNodeRestPosition);
+    _formNode->setTranslation(-0.2f, -0.2f, 0);
+    _formNode->setForm(form);
 }
 
 void InputSample::finalize()
@@ -54,6 +81,8 @@ void InputSample::finalize()
         displayKeyboard(false);
     }
 
+    SAFE_RELEASE(_scene);
+    SAFE_RELEASE(_formNode);
     SAFE_RELEASE(_inputSampleControls);
     SAFE_DELETE(_crosshair);
     SAFE_RELEASE(_font);
@@ -61,6 +90,34 @@ void InputSample::finalize()
 
 void InputSample::update(float elapsedTime)
 {
+    if (hasAccelerometer())
+    {
+        Vector3 accelRaw, gyroRaw;
+        getRawSensorValues(&accelRaw.x, &accelRaw.y, &accelRaw.z, &gyroRaw.x, &gyroRaw.y, &gyroRaw.z);
+
+        // Adjust for landscape mode
+        float temp = accelRaw.x;
+        accelRaw.x = -accelRaw.y;
+        accelRaw.y = temp;
+        temp = gyroRaw.x;
+        gyroRaw.x = -gyroRaw.y;
+        gyroRaw.y = temp;
+
+        // Respond to raw accelerometer inputs
+        Vector3 position;
+        _formNodeParent->getTranslation(&position);
+        position.smooth(_formNodeRestPosition - accelRaw*0.04f, elapsedTime, 100);
+        _formNodeParent->setTranslation(position);
+
+        // Respond to raw gyroscope inputs
+        Vector3 rotation;
+        float angle = _formNodeParent->getRotation(&rotation);
+        rotation *= angle;
+        rotation.smooth(gyroRaw*(-0.18f), elapsedTime, 220);
+        angle = rotation.length();
+        rotation.normalize();
+        _formNodeParent->setRotation(rotation, angle);
+    }
 }
 
 void InputSample::render(float elapsedTime)
@@ -157,6 +214,8 @@ void InputSample::render(float elapsedTime)
     }
     if (hasAccelerometer() && !_keyboardState)
     {
+        _formNode->getForm()->draw();
+
         sprintf(buffer, "Pitch: %f   Roll: %f", pitch, roll);
         _font->measureText(buffer, _font->getSize(), &width, &height);
         _font->drawText(buffer, getWidth() - width, getHeight() - height, fontColor, _font->getSize());
