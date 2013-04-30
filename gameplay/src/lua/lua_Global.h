@@ -36,6 +36,7 @@
 #include "lua_PropertiesType.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
+#include "lua_RenderStateCullFaceSide.h"
 #include "lua_RenderStateDepthFunction.h"
 #include "lua_SceneDebugFlags.h"
 #include "lua_TerrainFlags.h"
