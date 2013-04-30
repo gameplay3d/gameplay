@@ -13,6 +13,7 @@
 #define RS_DEPTH_TEST 8
 #define RS_DEPTH_WRITE 16
 #define RS_DEPTH_FUNC 32
+#define RS_CULL_FACE_SIDE 64
 
 namespace gameplay
 {
@@ -557,6 +558,11 @@ void RenderState::StateBlock::bindNoRestore()
             GL_ASSERT( glDisable(GL_CULL_FACE) );
         _defaultState->_cullFaceEnabled = _cullFaceEnabled;
     }
+    if ((_bits & RS_CULL_FACE_SIDE) && (_cullFaceSide != _defaultState->_cullFaceSide))
+    {
+        GL_ASSERT( glCullFace((GLenum)_cullFaceSide) );
+        _defaultState->_cullFaceSide = _cullFaceSide;
+    }
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
         if (_depthTestEnabled) 
@@ -609,6 +615,12 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         _defaultState->_bits &= ~RS_CULL_FACE;
         _defaultState->_cullFaceEnabled = false;
     }
+    if (!(stateOverrideBits & RS_CULL_FACE_SIDE) && (_defaultState->_bits & RS_CULL_FACE_SIDE))
+    {
+        GL_ASSERT( glCullFace((GLenum)GL_BACK) );
+        _defaultState->_bits &= ~RS_CULL_FACE_SIDE;
+        _defaultState->_cullFaceSide = RenderState::CULL_FACE_SIDE_BACK;
+    }
     if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState->_bits & RS_DEPTH_TEST))
     {
         GL_ASSERT( glDisable(GL_DEPTH_TEST) );
@@ -655,6 +667,7 @@ void RenderState::StateBlock::cloneInto(StateBlock* state)
     state->_blendEnabled = _blendEnabled;
     state->_blendSrc = _blendSrc;
     state->_blendDst = _blendDst;
+    state->_cullFaceSide = _cullFaceSide;
     state->_bits = _bits;
 }
 
@@ -744,6 +757,26 @@ static RenderState::DepthFunction parseDepthFunc(const char* value)
     }
 }
 
+static RenderState::CullFaceSide parseCullFaceSide(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "BACK")
+        return RenderState::CULL_FACE_SIDE_BACK;
+    else if (upper == "FRONT")
+        return RenderState::CULL_FACE_SIDE_FRONT;
+    else if (upper == "FRONT_AND_BACK")
+        return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
+    else
+    {
+        GP_ERROR("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings)", value);
+        return RenderState::CULL_FACE_SIDE_BACK;
+    }
+}
+
 void RenderState::StateBlock::setState(const char* name, const char* value)
 {
     GP_ASSERT(name);
@@ -763,6 +796,10 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     else if (strcmp(name, "cullFace") == 0)
     {
         setCullFace(parseBoolean(value));
+    }
+    else if (strcmp(name, "cullFaceSide") == 0)
+    {
+        setCullFaceSide(parseCullFaceSide(value));
     }
     else if (strcmp(name, "depthTest") == 0)
     {
@@ -833,6 +870,20 @@ void RenderState::StateBlock::setCullFace(bool enabled)
     else
     {
         _bits |= RS_CULL_FACE;
+    }
+}
+
+void RenderState::StateBlock::setCullFaceSide(CullFaceSide side)
+{
+    _cullFaceSide = side;
+    if (_cullFaceSide == CULL_FACE_SIDE_BACK)
+    {
+        // Default cull side
+        _bits &= ~RS_CULL_FACE_SIDE;
+    }
+    else
+    {
+        _bits |= RS_CULL_FACE_SIDE;
     }
 }
 

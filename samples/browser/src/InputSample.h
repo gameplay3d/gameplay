@@ -65,6 +65,10 @@ private:
     Rectangle _crosshairSrcRect;
     Vector2 _crosshairLowerLimit;
     Vector2 _crosshairUpperLimit;
+    Scene* _scene;
+    Node* _formNode;
+    Node* _formNodeParent;
+    Vector3 _formNodeRestPosition;
 };
 
 #endif

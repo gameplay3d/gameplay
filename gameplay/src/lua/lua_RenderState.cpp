@@ -12,6 +12,7 @@
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
 #include "lua_RenderStateDepthFunction.h"
+#include "lua_RenderStateCullFaceSide.h"
 
 namespace gameplay
 {
