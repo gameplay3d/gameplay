@@ -171,7 +171,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                _state = ACTIVE;
+                setState(ACTIVE);
                 return _consumeInputEvents;
             }
             break;
@@ -228,8 +228,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                     notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                _state = NORMAL;
-
+                setState(NORMAL);
                 return _consumeInputEvents;
             }
             break;
