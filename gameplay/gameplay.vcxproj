@@ -510,7 +510,7 @@
     <ClInclude Include="src\lua\lua_RenderState.h" />
     <ClInclude Include="src\lua\lua_RenderStateAutoBinding.h" />
     <ClInclude Include="src\lua\lua_RenderStateBlend.h" />
-    <ClInclude Include="stc\lua\lua_RenderStateCullFaceSide.h" />
+    <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h" />
     <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h" />
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h" />
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
