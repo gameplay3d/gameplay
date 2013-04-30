@@ -12,6 +12,7 @@
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
 #include "lua_RenderStateDepthFunction.h"
+#include "lua_RenderStateCullFaceSide.h"
 
 namespace gameplay
 {
@@ -28,6 +29,7 @@ void luaRegister_RenderStateStateBlock()
         {"setBlendDst", lua_RenderStateStateBlock_setBlendDst},
         {"setBlendSrc", lua_RenderStateStateBlock_setBlendSrc},
         {"setCullFace", lua_RenderStateStateBlock_setCullFace},
+        {"setCullFaceSide", lua_RenderStateStateBlock_setCullFaceSide},
         {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
         {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
         {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
@@ -352,6 +354,42 @@ int lua_RenderStateStateBlock_setCullFace(lua_State* state)
             }
 
             lua_pushstring(state, "lua_RenderStateStateBlock_setCullFace - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    //Attempt to match the parameters to a valid binding.
+    switch (paramCount) {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                RenderState::CullFaceSide param1 = (RenderState::CullFaceSide)lua_enumFromString_RenderStateCullFaceSide(luaL_checkstring(state, 2));
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setCullFaceSide(param1);
+
+                return 0;
+            }
+
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setCullFaceSide - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
