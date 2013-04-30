@@ -1720,9 +1720,6 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         if (withinClipBounds)
         {
             setState(Control::ACTIVE);
-            withinClipBounds = true;
-            if (eventConsumed)
-                _contactIndices++;
         }
         else if (_contactIndices == 0)
         {
@@ -1731,6 +1728,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
             release();
             return false;
         }
+        _contactIndices++;
         break;
     case Mouse::MOUSE_MOVE:
         if (_state != ACTIVE)
@@ -1761,18 +1759,19 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
         break;
     case Touch::TOUCH_RELEASE:
-        if (eventConsumed && _contactIndices > 0)
-        {
+        if (_contactIndices > 0)
             _contactIndices--;
-        }
 
-        if (_state == ACTIVE && withinClipBounds)
+        if (!_contactIndices)
         {
-            setState(FOCUS);
-        }
-        else
-        {
-            setState(NORMAL);
+			if (_state == ACTIVE && withinClipBounds)
+			{
+				setState(FOCUS);
+			}
+			else
+			{
+				setState(NORMAL);
+			}
         }
         break;
     }
