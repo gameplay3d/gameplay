@@ -145,8 +145,9 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a626c00f77bee1120374694edf4d5f6ab">getChildCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a80062083db7ab8758e66507eceddc971">findNode</a> (const char *id, bool recursive=true, bool exactMatch=true) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a6de79cee46d2ff247cde30309d6091b5">findNodes</a> (const char *id, std::vector&lt; <a class="el" href="classgameplay_1_1_node.html">Node</a> * &gt; &amp;nodes, bool recursive=true, bool exactMatch=true) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a961cf257e36f0a5e08a8da0670e60c0a">getScene</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classgameplay_1_1_scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#ac25a6131d93f001a27c79609d5c4b18a">getScene</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a6b03f4b8af63f2beb3f651a8e1039904">getRootNode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a1e62dc8bc433b52bd6096a8e68039b41">isStatic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a2493835971f261f95ebbc439983f7a8d">getWorldMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a7b475fcb02299ad241ca6f8853fdab03">getWorldViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_node.html#a5b096131c8bf63ebf9a1dcee1c9946dd">getInverseTransposeWorldMatrix</a> () const </td></tr>
@@ -1105,21 +1106,23 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="a961cf257e36f0a5e08a8da0670e60c0a"></a><!-- doxytag: member="gameplay::Node::getScene" ref="a961cf257e36f0a5e08a8da0670e60c0a" args="() const " -->
+<a class="anchor" id="ac25a6131d93f001a27c79609d5c4b18a"></a><!-- doxytag: member="gameplay::Node::getScene" ref="ac25a6131d93f001a27c79609d5c4b18a" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_scene.html">Scene</a>* <a class="el" href="classgameplay_1_1_node.html#a961cf257e36f0a5e08a8da0670e60c0a">gameplay::Node::getScene</a> </td>
+          <td class="memname">virtual <a class="el" href="classgameplay_1_1_scene.html">Scene</a>* <a class="el" href="classgameplay_1_1_node.html#ac25a6131d93f001a27c79609d5c4b18a">gameplay::Node::getScene</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Gets the scene.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The scene. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_joint.html#ae4cf129e4f46e5990afa315e02ad0b11">gameplay::Joint</a>.</p>
 
 </div>
 </div>
@@ -1387,6 +1390,28 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 </div>
 <div class="memdoc">
 <p>Called when this <a class="el" href="classgameplay_1_1_node.html">Node</a>'s hierarchy changes. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1e62dc8bc433b52bd6096a8e68039b41"></a><!-- doxytag: member="gameplay::Node::isStatic" ref="a1e62dc8bc433b52bd6096a8e68039b41" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_node.html#a1e62dc8bc433b52bd6096a8e68039b41">gameplay::Node::isStatic</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns whether the transformation of this node is static.</p>
+<p>Nodes that have static rigid bodies attached to them are considered static.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the transformation of this <a class="el" href="classgameplay_1_1_node.html">Node</a> is static, false otherwise.</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_transform.html#a752648041d8076e1688a87be1b954773">Transform::isStatic()</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_transform.html#a752648041d8076e1688a87be1b954773">gameplay::Transform</a>.</p>
 
 </div>
 </div>
@@ -2218,7 +2243,7 @@ std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:31 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -135,10 +135,14 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a3e5e2c0b3223d3a8eca909e74af4b86b">getViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a6206caba35a865066b102d03aced191b">getInverseViewMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a554002240dc256d9836f9914bb8aaf79">getProjectionMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#abe43e769d7ad7190d9560b66d93c33af">setProjectionMatrix</a> (const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;matrix)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aa1aab8a2804c533fd0cf1d222a796c2d">resetProjectionMatrix</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a33597003be39ecdd56f9ba8648727732">getViewProjectionMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a1185b45d35022716d4b281f07cc55263">getInverseViewProjectionMatrix</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_frustum.html">Frustum</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#acdb9bdff60e8ba7be6b991ca70e5e233">getFrustum</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, float *x, float *y, float *depth=NULL) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#ad5705088141c30b79ec4b5e6d6a79731">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *out) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a12ec9f52b59825cf84d03bf9b185f0bb">project</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;position, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#aad7e4fca47d80aa100a2d5b1cb3f1104">unproject</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, float depth, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_camera.html#a8e253da4bd8ed477f19ca07e9934c328">pickRay</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;viewport, float x, float y, <a class="el" href="classgameplay_1_1_ray.html">Ray</a> *dst) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
@@ -648,10 +652,111 @@ Static Public Member Functions</h2></td></tr>
     <tr><td class="paramname">position</td><td>The world space position. </td></tr>
     <tr><td class="paramname">x</td><td>The returned viewport x coordinate. </td></tr>
     <tr><td class="paramname">y</td><td>The returned viewport y coordinate. </td></tr>
-    <tr><td class="paramname">depth</td><td>The returned pixel depth (can be NULL). </td></tr>
+    <tr><td class="paramname">depth</td><td>The returned pixel depth (can be NULL).</td></tr>
   </table>
   </dd>
 </dl>
+ 
+</div>
+</div>
+<a class="anchor" id="ad5705088141c30b79ec4b5e6d6a79731"></a><!-- doxytag: member="gameplay::Camera::project" ref="ad5705088141c30b79ec4b5e6d6a79731" args="(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector2 *out) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">gameplay::Camera::project</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Projects the specified world position into the viewport coordinates.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">viewport</td><td>The viewport rectangle to use. </td></tr>
+    <tr><td class="paramname">position</td><td>The world space position. </td></tr>
+    <tr><td class="paramname">out</td><td>Populated with the resulting screen-space position. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a12ec9f52b59825cf84d03bf9b185f0bb"></a><!-- doxytag: member="gameplay::Camera::project" ref="a12ec9f52b59825cf84d03bf9b185f0bb" args="(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector3 *out) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">gameplay::Camera::project</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Projects the specified world position into the viewport coordinates.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">viewport</td><td>The viewport rectangle to use. </td></tr>
+    <tr><td class="paramname">position</td><td>The world space position. </td></tr>
+    <tr><td class="paramname">out</td><td>Populated with the resulting screen-space position, with the pixel depth in the Z coordinate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aa1aab8a2804c533fd0cf1d222a796c2d"></a><!-- doxytag: member="gameplay::Camera::resetProjectionMatrix" ref="aa1aab8a2804c533fd0cf1d222a796c2d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#aa1aab8a2804c533fd0cf1d222a796c2d">gameplay::Camera::resetProjectionMatrix</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Resets the camera to use the internally computed projection matrix instead of any previously specified user-defined matrix. </p>
 
 </div>
 </div>
@@ -745,6 +850,31 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">nearPlane</td><td>The near z clipping plane distance. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="abe43e769d7ad7190d9560b66d93c33af"></a><!-- doxytag: member="gameplay::Camera::setProjectionMatrix" ref="abe43e769d7ad7190d9560b66d93c33af" args="(const Matrix &amp;matrix)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_camera.html#abe43e769d7ad7190d9560b66d93c33af">gameplay::Camera::setProjectionMatrix</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets a custom projection matrix to be used by the camera.</p>
+<p>Setting a custom projection matrix results in the internally computed projection matrix being completely overriden until the resetProjectionMatrix method is called. A custom projection matrix is normally not neccessary, but can be used for special projection effects, such as setting an oblique view frustum for near plane clipping.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>Custom projection matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -874,7 +1004,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:29 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

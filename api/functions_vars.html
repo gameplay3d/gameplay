@@ -141,9 +141,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>_b
 : <a class="el" href="classgameplay_1_1_physics_constraint.html#a0effc818674c9fbe8c3e096768e3b1df">gameplay::PhysicsConstraint</a>
 </li>
-<li>_bindPose
-: <a class="el" href="classgameplay_1_1_joint.html#afeded066e7fd5c85f0d984bc1d605c31">gameplay::Joint</a>
-</li>
 <li>_bottomToTop
 : <a class="el" href="classgameplay_1_1_vertical_layout.html#a81c29a553425d75c4dab4e956913d99a">gameplay::VerticalLayout</a>
 </li>
@@ -196,6 +193,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>_customAutoBindingResolvers
 : <a class="el" href="classgameplay_1_1_render_state.html#a268e3038c0cb392889162676cc97aa87">gameplay::RenderState</a>
 </li>
+<li>_delta
+: <a class="el" href="classgameplay_1_1_slider.html#a8bfffd2ef1658b03594a8c3ed25766c1">gameplay::Slider</a>
+</li>
 <li>_directional
 : <a class="el" href="classgameplay_1_1_light.html#a304ae5c41b02bcac7f264bae1bde5b7f">gameplay::Light</a>
 </li>
@@ -247,9 +247,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>_isAlignmentSet
 : <a class="el" href="classgameplay_1_1_control.html#ab8bbf1f6ee2cf1ffa6b54c181c589e05">gameplay::Control</a>
 </li>
-<li>_jointMatrixDirty
-: <a class="el" href="classgameplay_1_1_joint.html#a0718be3b1425ceb2a5ee14690462c99d">gameplay::Joint</a>
-</li>
 <li>_lastKeypress
 : <a class="el" href="classgameplay_1_1_text_box.html#ab3d8868a7aebc306d8a7de798e3b759d">gameplay::TextBox</a>
 </li>
@@ -260,7 +257,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_node.html#aca8208dfbc190ec33dee5b7e1857bd52">gameplay::Node</a>
 </li>
 <li>_listeners
-: <a class="el" href="classgameplay_1_1_control.html#a5159a7a6a2f42d60aaaee5e445f75ac2">gameplay::Control</a>
+: <a class="el" href="classgameplay_1_1_control.html#a5b4f63049a194f91d70772245e01b98a">gameplay::Control</a>
 , <a class="el" href="classgameplay_1_1_transform.html#a1743c40f9ffd1ae5626ec406494feb29">gameplay::Transform</a>
 </li>
 <li>_markerImage
@@ -318,8 +315,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_render_state.html#acd7bc70363d6640dbd24533d6136d7a2">gameplay::RenderState</a>
 </li>
 <li>_parent
-: <a class="el" href="classgameplay_1_1_node.html#a069c03f7125b60c187ad0c443d459fe6">gameplay::Node</a>
-, <a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">gameplay::Control</a>
+: <a class="el" href="classgameplay_1_1_control.html#a28174c6d21906a5b4a9793b82317631c">gameplay::Control</a>
+, <a class="el" href="classgameplay_1_1_node.html#a069c03f7125b60c187ad0c443d459fe6">gameplay::Node</a>
 , <a class="el" href="classgameplay_1_1_render_state.html#a8351f27bf62f28cf497c9231b9d69dda">gameplay::RenderState</a>
 </li>
 <li>_particleEmitter
@@ -427,18 +424,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>_scrollPosition
 : <a class="el" href="classgameplay_1_1_container.html#ac2a1c3bfc493c608123345342c011145">gameplay::Container</a>
 </li>
+<li>_scrollWheelSpeed
+: <a class="el" href="classgameplay_1_1_container.html#a3dc19bdefc3874ffda8dba9b7b7b5613">gameplay::Container</a>
+</li>
 <li>_selected
 : <a class="el" href="classgameplay_1_1_radio_button.html#aff60c0b6ada733737058c29d05047b0a">gameplay::RadioButton</a>
-</li>
-<li>_skinCount
-: <a class="el" href="classgameplay_1_1_joint.html#ae55cc2b89d24d63842bded8ea51a7043">gameplay::Joint</a>
 </li>
 <li>_spot
 : <a class="el" href="classgameplay_1_1_light.html#ac7aae643733afbcb4a729a9778bd6cd4">gameplay::Light</a>
 </li>
 <li>_state
-: <a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">gameplay::Control</a>
-, <a class="el" href="classgameplay_1_1_render_state.html#a10681c9dd163c93c1eba3abda8774c0b">gameplay::RenderState</a>
+: <a class="el" href="classgameplay_1_1_render_state.html#a10681c9dd163c93c1eba3abda8774c0b">gameplay::RenderState</a>
+, <a class="el" href="classgameplay_1_1_control.html#a08e0c8e34c28edcddc7099281e9b423a">gameplay::Control</a>
 </li>
 <li>_step
 : <a class="el" href="classgameplay_1_1_slider.html#a774a0cadb40c9b32d787f993fb3ac48f">gameplay::Slider</a>
@@ -522,7 +519,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:33 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

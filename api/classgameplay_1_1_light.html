@@ -148,6 +148,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_light.html#afd74292447b0b402959e2385ee640b3f">createPoint</a> (float red, float green, float blue, float range)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_light.html#af658e196e14758329e81a41fae933add">createSpot</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;color, float range, float innerAngle, float outerAngle)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_light.html#a9f8211bcd23d02b58407a2265aba543d">createSpot</a> (float red, float green, float blue, float range, float innerAngle, float outerAngle)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_light.html">Light</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_light.html#a438bd1522c6e4a4281e94026c438d0c7">create</a> (<a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a light. </p>
@@ -185,6 +186,32 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a438bd1522c6e4a4281e94026c438d0c7"></a><!-- doxytag: member="gameplay::Light::create" ref="a438bd1522c6e4a4281e94026c438d0c7" args="(Properties *properties)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classgameplay_1_1_light.html">Light</a>* <a class="el" href="classgameplay_1_1_light.html#a438bd1522c6e4a4281e94026c438d0c7">gameplay::Light::create</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td>
+          <td class="paramname"><em>properties</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a light from a properties definition.</p>
+<p>The properties object must contain a "type" parameter, specifying one of the supported <a class="el" href="classgameplay_1_1_light.html#af23b5a5327f98f405431bb0bfd95e0b9">Light::Type</a> values. In addition, values must be supplied for all parameters of the corresponding light-specific creation method.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">properties</td><td>The properties definition of the <a class="el" href="classgameplay_1_1_light.html">Light</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The new <a class="el" href="classgameplay_1_1_light.html">Light</a>. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a3d32bb65d7205b38926d4057e904b975"></a><!-- doxytag: member="gameplay::Light::createDirectional" ref="a3d32bb65d7205b38926d4057e904b975" args="(const Vector3 &amp;color)" -->
 <div class="memitem">
 <div class="memproto">
@@ -829,7 +856,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -14,5 +14,5 @@ var searchData=
   ['pollgamepadstate',['pollGamepadState',['../classgameplay_1_1_platform.html#a8be3321d6f355bd53b5a3ab179d8c9ee',1,'gameplay::Platform']]],
   ['position',['position',['../classgameplay_1_1_stream.html#ac7306cd6371f8f2a7ea4bdbe492e5c27',1,'gameplay::Stream']]],
   ['print',['print',['../classgameplay_1_1_script_controller.html#a344980c5588d2845b74efae26d860eaf',1,'gameplay::ScriptController::print(const char *str)'],['../classgameplay_1_1_script_controller.html#a74610ca6a756aec69ec16912f722eb7e',1,'gameplay::ScriptController::print(const char *str1, const char *str2)']]],
-  ['project',['project',['../classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1',1,'gameplay::Camera']]]
+  ['project',['project',['../classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1',1,'gameplay::Camera::project(const Rectangle &amp;viewport, const Vector3 &amp;position, float *x, float *y, float *depth=NULL) const '],['../classgameplay_1_1_camera.html#ad5705088141c30b79ec4b5e6d6a79731',1,'gameplay::Camera::project(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector2 *out) const '],['../classgameplay_1_1_camera.html#a12ec9f52b59825cf84d03bf9b185f0bb',1,'gameplay::Camera::project(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector3 *out) const ']]]
 ];

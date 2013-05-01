@@ -155,6 +155,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a13a086704042c967d04f97838ca076e8">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a5a6a1e2e2774f849a75b21a79a22deae">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4ef49d4e96928f71d0db8d4d47f56ba7">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ad5c70f4542a1a1f78afbb22a01c09d88">resizeEvent</a> (unsigned int width, unsigned int height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a691572c633a283712e15a5f5f4de48b7">hasMouse</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a154653c979b4da543ac9110f4dfb9a51">isMouseCaptured</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7a63e56a8f4995cbc2eabc0a28c24937">setMouseCaptured</a> (bool captured)</td></tr>
@@ -170,10 +171,16 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a15ebb285ef4dfafbe1cc0875ca2593d2">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a7f1b9a0142092d4f73bb159b93a37d7a">getGamepadCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a9e6c607105f69b400ca5e41815b43286">getGamepad</a> (unsigned int index, bool preferPhysical=true) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4eb19ea23a8d277a472a4443479d2f50">setMultiSampling</a> (bool enabled)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8973e99ca5f49d8a6805efaa6768ad8c"></a><!-- doxytag: member="gameplay::Game::isMultiSampling" ref="a8973e99ca5f49d8a6805efaa6768ad8c" args="() const " -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMultiSampling</b> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#ade96e57a1dbd20ab2dfb4203b4c0d6f6">setMultiTouch</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a04720fabcd25eba03eaee2f81cfcdc16">isMultiTouch</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a73ee5f2487783de209ec5321d2f140c5">canExit</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues</a> (float *pitch, float *roll)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#adaf93336c9fe6575ba2efa4664136eb0">getRawSensorValues</a> (float *accelX, float *accelY, float *accelZ, float *gyroX, float *gyroY, float *gyroZ)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aef085f98f47e0bb24b4befa6f79cfc82">getArguments</a> (int *argc, char ***argv) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a3b8adb5a096f735bfcfec801f02ea0da">schedule</a> (float timeOffset, <a class="el" href="classgameplay_1_1_time_listener.html">TimeListener</a> *timeListener, void *cookie=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#aae0c5115535c01bcac52aae65b7f4bbb">schedule</a> (float timeOffset, const char *function)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_game.html#a4ec7c10e890aea288c4b2ac14f012041">launchURL</a> (const char *url) const </td></tr>
@@ -500,11 +507,11 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT and Gamepad::DISCONNECTED_EVENT.</p>
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events. Override to receive Gamepad::CONNECTED_EVENT and Gamepad::DISCONNECTED_EVENT, and store the Gamepad* in order to poll it from <a class="el" href="classgameplay_1_1_game.html#a519bcb0fb67b399e8246aceefdfc7d0e">update()</a>.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
-    <tr><td class="paramname">gamepad</td><td>the gamepad the event occurred on </td></tr>
+    <tr><td class="paramname">gamepad</td><td>The gamepad that generated the event. </td></tr>
   </table>
   </dd>
 </dl>
@@ -679,11 +686,11 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the current accelerometer values.</p>
+<p>Gets the current accelerometer values for use as an indication of device orientation. Despite its name, implementations are at liberty to combine accelerometer data with data from other sensors as well, such as the gyros. This method is best used to obtain an indication of device orientation; it does not necessarily distinguish between acceleration and rotation rate.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">pitch</td><td>The pitch angle returned (in degrees). If NULL then not returned. </td></tr>
-    <tr><td class="paramname">roll</td><td>The roll angle returned (in degrees). If NULL then not returned. </td></tr>
+    <tr><td class="paramname">pitch</td><td>The pitch angle returned (in degrees). Zero if <a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer()</a> returns false. </td></tr>
+    <tr><td class="paramname">roll</td><td>The roll angle returned (in degrees). Zero if <a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer()</a> returns false. </td></tr>
   </table>
   </dd>
 </dl>
@@ -723,6 +730,41 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the animation controller for managing control of animations associated with the game.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The animation controller for this game. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aef085f98f47e0bb24b4befa6f79cfc82"></a><!-- doxytag: member="gameplay::Game::getArguments" ref="aef085f98f47e0bb24b4befa6f79cfc82" args="(int *argc, char ***argv) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#aef085f98f47e0bb24b4befa6f79cfc82">gameplay::Game::getArguments</a> </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char ***&#160;</td>
+          <td class="paramname"><em>argv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the command line arguments.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>The number of command line arguments. </td></tr>
+    <tr><td class="paramname">argv</td><td>The array of command line arguments.  </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -946,6 +988,69 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="adaf93336c9fe6575ba2efa4664136eb0"></a><!-- doxytag: member="gameplay::Game::getRawSensorValues" ref="adaf93336c9fe6575ba2efa4664136eb0" args="(float *accelX, float *accelY, float *accelZ, float *gyroX, float *gyroY, float *gyroZ)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#adaf93336c9fe6575ba2efa4664136eb0">gameplay::Game::getRawSensorValues</a> </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>accelX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>accelY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>accelZ</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>gyroX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>gyroY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>gyroZ</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets raw sensor values, if equipped, allowing a distinction between device acceleration and rotation rate. Returns zeros on platforms with no corresponding support. See also <a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">hasAccelerometer()</a> and <a class="el" href="classgameplay_1_1_game.html#a11c781fe9845aa0e787f72844059e028">getAccelerometerValues()</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accelX</td><td>The x-coordinate of the raw accelerometer data. </td></tr>
+    <tr><td class="paramname">accelY</td><td>The y-coordinate of the raw accelerometer data. </td></tr>
+    <tr><td class="paramname">accelZ</td><td>The z-coordinate of the raw accelerometer data. </td></tr>
+    <tr><td class="paramname">gyroX</td><td>The x-coordinate of the raw gyroscope data. </td></tr>
+    <tr><td class="paramname">gyroY</td><td>The y-coordinate of the raw gyroscope data. </td></tr>
+    <tr><td class="paramname">gyroZ</td><td>The z-coordinate of the raw gyroscope data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a4c1106e6ca7b0f1e8f4de70c23170c48"></a><!-- doxytag: member="gameplay::Game::getScriptController" ref="a4c1106e6ca7b0f1e8f4de70c23170c48" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1015,6 +1120,23 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the game window width.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The game window width. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a37c0937707f24f78e6b6a255ec542283"></a><!-- doxytag: member="gameplay::Game::hasAccelerometer" ref="a37c0937707f24f78e6b6a255ec542283" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283">gameplay::Game::hasAccelerometer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Whether this game has accelerometer support. </p>
 
 </div>
 </div>
@@ -1444,6 +1566,42 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ad5c70f4542a1a1f78afbb22a01c09d88"></a><!-- doxytag: member="gameplay::Game::resizeEvent" ref="ad5c70f4542a1a1f78afbb22a01c09d88" args="(unsigned int width, unsigned int height)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_game.html#ad5c70f4542a1a1f78afbb22a01c09d88">gameplay::Game::resizeEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Called when the game window has been resized.</p>
+<p>This method is called once the game window is created with its initial size and then again any time the game window changes size.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>The new game window width. </td></tr>
+    <tr><td class="paramname">height</td><td>The new game window height. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a363c5ac0d99fc937dead943351f574c1"></a><!-- doxytag: member="gameplay::Game::resume" ref="a363c5ac0d99fc937dead943351f574c1" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -1600,6 +1758,30 @@ template&lt;class T &gt; </div>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">captured</td><td>true to enable mouse capture mode, false to disable it. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4eb19ea23a8d277a472a4443479d2f50"></a><!-- doxytag: member="gameplay::Game::setMultiSampling" ref="a4eb19ea23a8d277a472a4443479d2f50" args="(bool enabled)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_game.html#a4eb19ea23a8d277a472a4443479d2f50">gameplay::Game::setMultiSampling</a> </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets whether multi-sampling is to be enabled/disabled. Default is disabled.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enabled</td><td>true sets multi-sampling to be enabled, false to be disabled. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1811,7 +1993,7 @@ template&lt;class T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

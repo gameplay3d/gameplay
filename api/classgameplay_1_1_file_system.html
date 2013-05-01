@@ -123,6 +123,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#af65e3195958242239fcb8db228a9db0c">readAll</a> (const char *filePath, int *fileSize=NULL)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a0e8074b04446a8087899d3559e9b0d09">isAbsolutePath</a> (const char *filePath)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a4e310ae4419c45a6fed11fd34c27c7e1">createFileFromAsset</a> (const char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#ab7324718472508fe11c4042c62879f61">getDirectoryName</a> (const char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_file_system.html#a2a9e75f6ad418973f51e435a11b4b3d3">getExtension</a> (const char *path)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -206,6 +207,37 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd><code>true</code> if the file exists; <code>false</code> otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab7324718472508fe11c4042c62879f61"></a><!-- doxytag: member="gameplay::FileSystem::getDirectoryName" ref="ab7324718472508fe11c4042c62879f61" args="(const char *path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string <a class="el" href="classgameplay_1_1_file_system.html#ab7324718472508fe11c4042c62879f61">gameplay::FileSystem::getDirectoryName</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the directory name up to and including the trailing '/'.</p>
+<p>This is a lexical method so it does not verify that the directory exists. Back slashes will be converted to forward slashes.</p>
+<ul>
+<li>"res/image.png" will return "res/"</li>
+<li>"image.png" will return ""</li>
+<li>"c:\foo\bar\image.png" will return "c:/foo/bar/"</li>
+</ul>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">The</td><td>file path. May be relative or absolute, forward or back slashes. May be NULL.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The directory name with the trailing '/'. Returns "" if path is NULL or the path does not contain a directory. </dd></dl>
 
 </div>
 </div>
@@ -551,7 +583,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
