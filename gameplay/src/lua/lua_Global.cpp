@@ -753,8 +753,8 @@ void luaRegister_lua_Global()
         gameplay::ScriptUtil::registerConstantString("BLEND_ONE_MINUS_CONSTANT_ALPHA", "BLEND_ONE_MINUS_CONSTANT_ALPHA", scopePath);
         gameplay::ScriptUtil::registerConstantString("BLEND_SRC_ALPHA_SATURATE", "BLEND_SRC_ALPHA_SATURATE", scopePath);
     }
-    
-    // Register enumeration RenderState::CullFaceSide
+
+    // Register enumeration RenderState::CullFaceSide.
     {
         std::vector<std::string> scopePath;
         scopePath.push_back("RenderState");

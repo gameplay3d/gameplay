@@ -33,3 +33,4 @@ const char* lua_stringFromEnum_RenderStateCullFaceSide(RenderState::CullFaceSide
 }
 
 }
+

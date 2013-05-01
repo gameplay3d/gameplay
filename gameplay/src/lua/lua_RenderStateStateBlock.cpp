@@ -11,8 +11,8 @@
 #include "Technique.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
-#include "lua_RenderStateDepthFunction.h"
 #include "lua_RenderStateCullFaceSide.h"
+#include "lua_RenderStateDepthFunction.h"
 
 namespace gameplay
 {
@@ -372,8 +372,9 @@ int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
 
-    //Attempt to match the parameters to a valid binding.
-    switch (paramCount) {
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
         case 2:
         {
             if ((lua_type(state, 1) == LUA_TUSERDATA) &&
@@ -384,10 +385,9 @@ int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setCullFaceSide(param1);
-
+                
                 return 0;
             }
-
 
             lua_pushstring(state, "lua_RenderStateStateBlock_setCullFaceSide - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
