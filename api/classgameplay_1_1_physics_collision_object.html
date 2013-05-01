@@ -143,6 +143,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a73a730ce9131bf2f04cec61543219b08">getNode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_physics_collision_shape.html">PhysicsCollisionShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a3b805e66d1a19a1205384401d3765bc9">getCollisionShape</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a74cf7be1b865894bf9a38fb234164f3b">isKinematic</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a13e62b65af599df7946aa56ab576f1c2">isStatic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#ac65a05184e3970b805246d729104f4c1">isDynamic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a6045d4fd99339f7f062a2d5511f75d1a">isEnabled</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_physics_collision_object.html#a8f4aeab962d1a1f1db4039de8a84b3bc">setEnabled</a> (bool enable)</td></tr>
@@ -581,6 +582,27 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a13e62b65af599df7946aa56ab576f1c2"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::isStatic" ref="a13e62b65af599df7946aa56ab576f1c2" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_physics_collision_object.html#a13e62b65af599df7946aa56ab576f1c2">gameplay::PhysicsCollisionObject::isStatic</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns whether this collision object is static.</p>
+<p>A static collision object is not simulated by the physics system and cannot be transformed once created.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if the collision object is static. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_physics_rigid_body.html#a7ce7a6c03c7f515b1954ce7c4fdd7f39">gameplay::PhysicsRigidBody</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a39c1515bad6af4d4061363b52bb6ad84"></a><!-- doxytag: member="gameplay::PhysicsCollisionObject::removeCollisionListener" ref="a39c1515bad6af4d4061363b52bb6ad84" args="(CollisionListener *listener, PhysicsCollisionObject *object=NULL)" -->
 <div class="memitem">
 <div class="memproto">
@@ -752,7 +774,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:31 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

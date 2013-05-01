@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['hasaccelerometer',['hasAccelerometer',['../classgameplay_1_1_game.html#a37c0937707f24f78e6b6a255ec542283',1,'gameplay::Game']]],
+  ['hasfocus',['hasFocus',['../classgameplay_1_1_control.html#a09500f6090428a06cf18418ba622a401',1,'gameplay::Control']]],
   ['hasmaterial',['hasMaterial',['../classgameplay_1_1_model.html#a3a93e00f225d15d6501f201154c374fa',1,'gameplay::Model']]],
   ['hasmouse',['hasMouse',['../classgameplay_1_1_game.html#a691572c633a283712e15a5f5f4de48b7',1,'gameplay::Game']]],
   ['hastag',['hasTag',['../classgameplay_1_1_node.html#a2bd733be82848d3d244d976e283aace2',1,'gameplay::Node']]],

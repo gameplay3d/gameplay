@@ -113,6 +113,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_plane.html">Plane</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#ac9135b4becaea0698c29e5d43cda72a9">getTop</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#ad1ae967dc50ed4c262af0727cf4a701d">getMatrix</a> (<a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> *dst) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a2570da2f955daec8fb44a95fe25af049">getCorners</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *corners) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a50294637b164c85b164da850cfde0a35">getNearCorners</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *corners) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#ad15680f12579a40d94600aec6cff7384">getFarCorners</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *corners) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a796be313f7c0d1e4f9e604eca635cd33">intersects</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;point) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#aec557e485662234c4d36b616d11b4ab0">intersects</a> (float x, float y, float z) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_frustum.html#a36cccd1d74cec754ffc8d4a239f60521">intersects</a> (const <a class="el" href="classgameplay_1_1_bounding_sphere.html">BoundingSphere</a> &amp;sphere) const </td></tr>
@@ -247,7 +249,7 @@ Public Member Functions</h2></td></tr>
 <p>The corners are stored in the following order: (N-near, F-far, L-left, R-right, B-bottom, T-top) LTN, LBN, RBN, RTN, RTF, RBF, LBF, LTF.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">corners</td><td>The array to store the corners in. </td></tr>
+    <tr><td class="paramname">corners</td><td>The array (of at least size 8) to store the corners in. </td></tr>
   </table>
   </dd>
 </dl>
@@ -269,6 +271,31 @@ Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the far plane of the frustum.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>far The far plane. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad15680f12579a40d94600aec6cff7384"></a><!-- doxytag: member="gameplay::Frustum::getFarCorners" ref="ad15680f12579a40d94600aec6cff7384" args="(Vector3 *corners) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_frustum.html#ad15680f12579a40d94600aec6cff7384">gameplay::Frustum::getFarCorners</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>corners</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the corners of the frustum's far plane in the specified array.</p>
+<p>The corners are stored in the following order: right-top, right-bottom, left-bottom, left-top.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">corners</td><td>The array (of at least size 4) to store the corners in. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -329,6 +356,31 @@ Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Gets the near plane of the frustum.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>near The near plane. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a50294637b164c85b164da850cfde0a35"></a><!-- doxytag: member="gameplay::Frustum::getNearCorners" ref="a50294637b164c85b164da850cfde0a35" args="(Vector3 *corners) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_frustum.html#a50294637b164c85b164da850cfde0a35">gameplay::Frustum::getNearCorners</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *&#160;</td>
+          <td class="paramname"><em>corners</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the corners of the frustum's near plane in the specified array.</p>
+<p>The corners are stored in the following order: left-top, left-bottom, right-bottom, right-top.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">corners</td><td>The array (of at least size 4) to store the corners in. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -602,7 +654,7 @@ Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

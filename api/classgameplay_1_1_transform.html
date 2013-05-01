@@ -203,6 +203,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a> (<a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *vector)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a144e0fabd934e5f920ddb865f5074ffb">transformVector</a> (const <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> &amp;<a class="el" href="classgameplay_1_1_transform.html#a783ebcd198aff74ba2296834952624c0">transformVector</a>, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#afba175f9a7b81062da6b926f16d9580b">transformVector</a> (float x, float y, float z, float w, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *dst)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a752648041d8076e1688a87be1b954773">isStatic</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a2a160476a329ff502a5c64a5fa3fdb7a">addListener</a> (<a class="el" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a> *listener, long cookie=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a5458202ad2700c3106d0af7663046a04">removeListener</a> (<a class="el" href="classgameplay_1_1_transform_1_1_listener.html">Transform::Listener</a> *listener)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_transform.html#a842ce88c27aaedb5b43e0ac675ba7b1f">getAnimationPropertyComponentCount</a> (int propertyId) const </td></tr>
@@ -1122,6 +1123,27 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>TRUE if the specified matrix dirty bit is set; FALSE if the specified matrix dirty bit is unset. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a752648041d8076e1688a87be1b954773"></a><!-- doxytag: member="gameplay::Transform::isStatic" ref="a752648041d8076e1688a87be1b954773" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_transform.html#a752648041d8076e1688a87be1b954773">gameplay::Transform::isStatic</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns whether or not this <a class="el" href="classgameplay_1_1_transform.html">Transform</a> object is static.</p>
+<p>A static transform object cannot be transformed. This may be the case for special types of <a class="el" href="classgameplay_1_1_transform.html">Transform</a> objects, such as Nodes that have a static rigid body attached to them.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if this <a class="el" href="classgameplay_1_1_transform.html">Transform</a> is static, false otherwise. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_node.html#a1e62dc8bc433b52bd6096a8e68039b41">gameplay::Node</a>.</p>
 
 </div>
 </div>
@@ -2971,7 +2993,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
