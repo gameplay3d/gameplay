@@ -119,8 +119,9 @@ Inheritance diagram for gameplay::Control:</div>
 <area href="classgameplay_1_1_button.html" alt="gameplay::Button" shape="rect" coords="173,168,336,192"/>
 <area href="classgameplay_1_1_slider.html" alt="gameplay::Slider" shape="rect" coords="346,168,509,192"/>
 <area href="classgameplay_1_1_text_box.html" alt="gameplay::TextBox" shape="rect" coords="519,168,682,192"/>
-<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="86,224,249,248"/>
-<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="259,224,422,248"/>
+<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="0,224,163,248"/>
+<area href="classgameplay_1_1_image_control.html" alt="gameplay::ImageControl" shape="rect" coords="173,224,336,248"/>
+<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="346,224,509,248"/>
 </map>
  </div></div>
 
@@ -131,10 +132,14 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control_1_1_listener.html">Listener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> { <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> =  0x01, 
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> { <br/>
+&#160;&#160;<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> =  0x01, 
 <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> =  0x02, 
 <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> =  0x04, 
-<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> =  0x08
+<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> =  0x08, 
+<br/>
+&#160;&#160;<a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a> =  0x10
+<br/>
  }</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a81f7bde0bfab996b044e2dc33aff5d13">Alignment</a> { <br/>
 &#160;&#160;<b>ALIGN_LEFT</b> =  0x01, 
@@ -166,6 +171,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ac794ce5a5271ec9cf4d931c09a842167">setHeight</a> (float height)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#af0913ff556aba2f03a258fac46e814d8">setBounds</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;bounds)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aea9a349ac83a36d7bea4207b03e80d5b">getBounds</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aed1a08b34ad1a7a0ae9faf5629ec46df">getAbsoluteBounds</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3b67523de27b0159fa3cb72a03478a1b">getX</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a97bc6f402701bf1bd073b9ffb266e7d3">getY</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4049decfc54ec35255fe8e22e62a92dc">getWidth</a> () const </td></tr>
@@ -233,7 +239,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a62a89ccb93888f7258287b767cfae107">setAnimationPropertyValue</a> (int propertyId, <a class="el" href="classgameplay_1_1_animation_value.html">AnimationValue</a> *value, float blendWeight=1.0f)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aefc69c44cc549f575b66faee33af06d6">ANIMATE_POSITION</a> = 1</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a87c33d17cf1bd74f0eb64d802c07f228">ANIMATE_POSITION_X</a> = 2</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a82ec35acb4af91d95115e14dcd813243">ANIMATE_POSITION_Y</a> = 3</td></tr>
@@ -250,14 +256,17 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4c9fdfd5a48360be13e7925323513d52">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a24ffdbd2fd875c056ad9cce4f4dcf0f6">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0556a8e97fdca1d40e5bebd895618e29">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a4200259d1a58a6392c6cc0e347150e70">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a7946117d99feaffbc186a4b591bdc885">drawBorder</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a6866910ed0370428aae94dd67acff6a5">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a0c38fc0e79ee94779c0a366b5599dff7">drawText</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">draw</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, bool needsClear, bool cleared, float targetHeight)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab2aab797de258880dab8ab61edd2259a">initialize</a> (<a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *style, <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *properties)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a867d58fde43fb1d38614fc8d3b72e4ba">isDirty</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_theme_image.html">Theme::ThemeImage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1a0ef2fde6b78c668f30d96e49e4dced">getImage</a> (const char *id, <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a> state)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a7e8946a67d3db56e3faaa849e65e5dc1">notifyListeners</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a> eventType)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1dfdb4c476e4ce7829060f0af2347b85">notifyListeners</a> (<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a> eventType)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a09500f6090428a06cf18418ba622a401">hasFocus</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ae43388e365a054968f10526daa0a69c4">getState</a> (const char *state)</td></tr>
@@ -279,8 +288,9 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#ab8bbf1f6ee2cf1ffa6b54c181c589e05">_isAlignmentSet</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a793a5230d5df640c16b4bd8bf3e3c9b7">_autoWidth</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a3e881d2d3994afc23065a362c437e295">_autoHeight</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a>, <br class="typebreak"/>
-std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">Listener</a> * &gt; * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a5159a7a6a2f42d60aaaee5e445f75ac2">_listeners</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::map<br class="typebreak"/>
+&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a>, <br class="typebreak"/>
+std::list&lt; <a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a> * &gt; * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a5b4f63049a194f91d70772245e01b98a">_listeners</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_theme_1_1_style.html">Theme::Style</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a8adea2635b544f38ca34162f11ec903d">_style</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a2105b9665591c98e50f42ddb6b1d8c38">_visible</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_control.html#a1cf80f236ba38ce3d035b5ba62f6454c">_opacity</a></td></tr>
@@ -332,6 +342,9 @@ Static Protected Attributes</h2></td></tr>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448"></a><!-- doxytag: member="DISABLED" ref="a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448" args="" -->DISABLED</em>&nbsp;</td><td>
 <p>State of a control that has been disabled. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21"></a><!-- doxytag: member="HOVER" ref="a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21" args="" -->HOVER</em>&nbsp;</td><td>
+<p>When a mouse is in use, the state of a control the cursor is over. </p>
 </td></tr>
 </table>
 </dd>
@@ -466,7 +479,42 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ab42f7d5f24b9978527c80f972c851cdf">gameplay::Container</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ab42f7d5f24b9978527c80f972c851cdf">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_slider.html#aa0f481fb950736359eacc41005235385">gameplay::Slider</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7946117d99feaffbc186a4b591bdc885"></a><!-- doxytag: member="gameplay::Control::drawBorder" ref="a7946117d99feaffbc186a4b591bdc885" args="(SpriteBatch *spriteBatch, const Rectangle &amp;clip)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classgameplay_1_1_control.html#a7946117d99feaffbc186a4b591bdc885">gameplay::Control::drawBorder</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
+          <td class="paramname"><em>spriteBatch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>clip</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Draws the themed border and background of a control.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">spriteBatch</td><td>The sprite batch containing this control's border images. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clipping rectangle of this control's parent container. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -503,7 +551,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_joystick.html#acc5889195d133684a3375e7174a04d8f">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a1b44c932cb97ef676bfff5734d92638c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac87db1d15aa3d773b994466d09cb0f7c">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_text_box.html#a5d121ad1ba1a14d8204c61368a09f326">gameplay::TextBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a1b44c932cb97ef676bfff5734d92638c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_joystick.html#acc5889195d133684a3375e7174a04d8f">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_check_box.html#ac87db1d15aa3d773b994466d09cb0f7c">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#a5d121ad1ba1a14d8204c61368a09f326">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_image_control.html#aa056caedc0e810e630a951ebc6407dc8">gameplay::ImageControl</a>.</p>
 
 </div>
 </div>
@@ -530,6 +578,68 @@ Static Protected Attributes</h2></td></tr>
 </dl>
 
 <p>Reimplemented in <a class="el" href="classgameplay_1_1_slider.html#ae9230b460a2761a3493f6bd6ba43a469">gameplay::Slider</a>, and <a class="el" href="classgameplay_1_1_label.html#a83ccd932008b95c7ca74751fb1b1d27b">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1eb941b483324abf5cbb3e62dee40a58"></a><!-- doxytag: member="gameplay::Control::gamepadEvent" ref="a1eb941b483324abf5cbb3e62dee40a58" args="(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gameplay::Control::gamepadEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
+          <td class="paramname"><em>gamepad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>analogIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gamepad</td><td>The gamepad whose state changed. </td></tr>
+    <tr><td class="paramname">evt</td><td>The gamepad event that occurred. </td></tr>
+    <tr><td class="paramname">analogIndex</td><td>If evt is JOYSTICK_EVENT or TRIGGER_EVENT, this will be the index of the corresponding control. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a8f3a9dfdfe154e926e184f537f84ed20">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#a8a2b476ed271ba4f75375e59265aeefb">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a59dbcaabaac8e8bf243e196106645c23">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a01d79deaeb17aa0f19e65c3ae0d31de6">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_button.html#ae745966cbae30362d58ca0f4249c5dfe">gameplay::Button</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aed1a08b34ad1a7a0ae9faf5629ec46df"></a><!-- doxytag: member="gameplay::Control::getAbsoluteBounds" ref="aed1a08b34ad1a7a0ae9faf5629ec46df" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a>&amp; <a class="el" href="classgameplay_1_1_control.html#aed1a08b34ad1a7a0ae9faf5629ec46df">gameplay::Control::getAbsoluteBounds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Get the absolute bounds of this control, in pixels, including border and padding, before clipping.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The absolute bounds of this control. </dd></dl>
 
 </div>
 </div>
@@ -1361,7 +1471,7 @@ Static Protected Attributes</h2></td></tr>
 <p>Gets the type of the <a class="el" href="classgameplay_1_1_control.html">Control</a> and returns it as a string.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The string of the <a class="el" href="classgameplay_1_1_control.html">Control</a> type, all in lower-case. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#ae82a9d7043153cdc100fc49e84340ea3">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_form.html#aa211f5d6baced954de1fdf2f961ede71">gameplay::Form</a>, <a class="el" href="classgameplay_1_1_joystick.html#a241fe505e84cda72be29d876b218d398">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_slider.html#a13597ce42b8ea143eb340e114ee72332">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">gameplay::Button</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_text_box.html#a371643acaee26d786c74789de55d4182">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -1437,6 +1547,23 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a09500f6090428a06cf18418ba622a401"></a><!-- doxytag: member="gameplay::Control::hasFocus" ref="a09500f6090428a06cf18418ba622a401" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_control.html#a09500f6090428a06cf18418ba622a401">gameplay::Control::hasFocus</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets whether this control is in focus. Note that a control's state can be HOVER while the control is in focus. When the cursor leaves the control, it will return to the FOCUS state. This method will still return true in this case. </p>
+
+</div>
+</div>
 <a class="anchor" id="ab2aab797de258880dab8ab61edd2259a"></a><!-- doxytag: member="gameplay::Control::initialize" ref="ab2aab797de258880dab8ab61edd2259a" args="(Theme::Style *style, Properties *properties)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1470,7 +1597,7 @@ Static Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_joystick.html#a7cc06618945395cf4c74f18203514379">gameplay::Joystick</a>, and <a class="el" href="classgameplay_1_1_label.html#a5a3f16b1307aa392732e1167dc83ff6f">gameplay::Label</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_joystick.html#a7cc06618945395cf4c74f18203514379">gameplay::Joystick</a>, <a class="el" href="classgameplay_1_1_image_control.html#ae50f3fab285a26000b066dcff9bb4ec7">gameplay::ImageControl</a>, and <a class="el" href="classgameplay_1_1_label.html#a5a3f16b1307aa392732e1167dc83ff6f">gameplay::Label</a>.</p>
 
 </div>
 </div>
@@ -1587,7 +1714,7 @@ Static Protected Attributes</h2></td></tr>
 <dd>
 <a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Keyboard::Key</a> </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a3fa6f23d92572af2221aafa70803949a">gameplay::Container</a>, and <a class="el" href="classgameplay_1_1_text_box.html#a054279ea14d4f37068d57b9a4309e9d6">gameplay::TextBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_container.html#a3fa6f23d92572af2221aafa70803949a">gameplay::Container</a>, <a class="el" href="classgameplay_1_1_slider.html#a0c3d8564baa230a3d14835b2846b486a">gameplay::Slider</a>, <a class="el" href="classgameplay_1_1_radio_button.html#aaf06bf7161c4748afc2dd55c280c04ca">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_check_box.html#a804ffd05be38f95f9b5b5a389240defd">gameplay::CheckBox</a>, <a class="el" href="classgameplay_1_1_text_box.html#a054279ea14d4f37068d57b9a4309e9d6">gameplay::TextBox</a>, and <a class="el" href="classgameplay_1_1_button.html#a591996947d6b3fed03fbfe368e91dcde">gameplay::Button</a>.</p>
 
 </div>
 </div>
@@ -1644,14 +1771,14 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7e8946a67d3db56e3faaa849e65e5dc1"></a><!-- doxytag: member="gameplay::Control::notifyListeners" ref="a7e8946a67d3db56e3faaa849e65e5dc1" args="(Listener::EventType eventType)" -->
+<a class="anchor" id="a1dfdb4c476e4ce7829060f0af2347b85"></a><!-- doxytag: member="gameplay::Control::notifyListeners" ref="a1dfdb4c476e4ce7829060f0af2347b85" args="(Control::Listener::EventType eventType)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a7e8946a67d3db56e3faaa849e65e5dc1">gameplay::Control::notifyListeners</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_control.html#a1dfdb4c476e4ce7829060f0af2347b85">gameplay::Control::notifyListeners</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a>&#160;</td>
           <td class="paramname"><em>eventType</em></td><td>)</td>
           <td><code> [protected]</code></td>
         </tr>
@@ -3018,12 +3145,12 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5159a7a6a2f42d60aaaee5e445f75ac2"></a><!-- doxytag: member="gameplay::Control::_listeners" ref="a5159a7a6a2f42d60aaaee5e445f75ac2" args="" -->
+<a class="anchor" id="a5b4f63049a194f91d70772245e01b98a"></a><!-- doxytag: member="gameplay::Control::_listeners" ref="a5b4f63049a194f91d70772245e01b98a" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt;<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Listener::EventType</a>, std::list&lt;<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Listener</a>*&gt;*&gt;* <a class="el" href="classgameplay_1_1_control.html#a5159a7a6a2f42d60aaaee5e445f75ac2">gameplay::Control::_listeners</a><code> [protected]</code></td>
+          <td class="memname">std::map&lt;<a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7b">Control::Listener::EventType</a>, std::list&lt;<a class="el" href="classgameplay_1_1_control_1_1_listener.html">Control::Listener</a>*&gt;*&gt;* <a class="el" href="classgameplay_1_1_control.html#a5b4f63049a194f91d70772245e01b98a">gameplay::Control::_listeners</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -3261,7 +3388,7 @@ Static Protected Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const unsigned char <a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">gameplay::Control::STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a><code> [static]</code></td>
+          <td class="memname">const unsigned char <a class="el" href="classgameplay_1_1_control.html#a8768cfcc0e44dc168ea8d4445d8a0078">gameplay::Control::STATE_ALL</a> = <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4ab300c2a186b983cc6998d0a2bcc6cb63">NORMAL</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a85e990f398449cb1cdbe2dda9ed349e3">FOCUS</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a3e525c16bca46dd0d7076ff4ebb25a79">ACTIVE</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a149d63a1ebb06973242f39244b5c5448">DISABLED</a> | <a class="el" href="classgameplay_1_1_control.html#a860af277568c805450bd39f66adcf2f4a24e103ee69e3bba78e6932b511f1ef21">HOVER</a><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -3288,7 +3415,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

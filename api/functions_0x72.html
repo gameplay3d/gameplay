@@ -146,6 +146,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>registerAutoBindingResolver()
 : <a class="el" href="classgameplay_1_1_render_state.html#acee9c9011aab62cba6c3a3967569ef32">gameplay::RenderState</a>
 </li>
+<li>registerCallback()
+: <a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">gameplay::ScriptController</a>
+</li>
 <li>registerClonedAnimation()
 : <a class="el" href="classgameplay_1_1_node_clone_context.html#a81e2f74240d6827fc671f9ea45b9fac8">gameplay::NodeCloneContext</a>
 </li>
@@ -180,10 +183,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_physics_collision_object.html#a39c1515bad6af4d4061363b52bb6ad84">gameplay::PhysicsCollisionObject</a>
 </li>
 <li>removeControl()
-: <a class="el" href="classgameplay_1_1_container.html#a432d559bf2af0ec5bba217a1f4f6b2ee">gameplay::Container</a>
+: <a class="el" href="classgameplay_1_1_container.html#a57f6e1e27a03a5aa911a97c95d638b2d">gameplay::Container</a>
 </li>
 <li>removeListener()
 : <a class="el" href="classgameplay_1_1_control.html#a0424351446fdc9904b9c9127c67dd095">gameplay::Control</a>
+, <a class="el" href="classgameplay_1_1_terrain.html#adcea09efade33221debd5a6518a4e729">gameplay::Terrain</a>
 , <a class="el" href="classgameplay_1_1_transform.html#a5458202ad2700c3106d0af7663046a04">gameplay::Transform</a>
 </li>
 <li>removeNode()
@@ -213,6 +217,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>reset()
 : <a class="el" href="classgameplay_1_1_physics_vehicle.html#a03caf2b7efa8bd61c7395314f00f32bc">gameplay::PhysicsVehicle</a>
 </li>
+<li>resetProjectionMatrix()
+: <a class="el" href="classgameplay_1_1_camera.html#aa1aab8a2804c533fd0cf1d222a796c2d">gameplay::Camera</a>
+</li>
+<li>resizeEvent()
+: <a class="el" href="classgameplay_1_1_game.html#ad5c70f4542a1a1f78afbb22a01c09d88">gameplay::Game</a>
+</li>
+<li>resizeEventInternal()
+: <a class="el" href="classgameplay_1_1_platform.html#a675072446a9bb21dbe840b896e52bfd0">gameplay::Platform</a>
+</li>
 <li>ResolveAutoBindingCallback
 : <a class="el" href="classgameplay_1_1_render_state.html#af88d14081aa7bb5a6abc088d7859a052">gameplay::RenderState</a>
 </li>
@@ -223,8 +236,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="structgameplay_1_1_physics_rigid_body_1_1_parameters.html#aedf3c3e0d4e358d4ec9555f637ab9f70">gameplay::PhysicsRigidBody::Parameters</a>
 </li>
 <li>resume()
-: <a class="el" href="classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0">gameplay::AudioSource</a>
-, <a class="el" href="classgameplay_1_1_game.html#a363c5ac0d99fc937dead943351f574c1">gameplay::Game</a>
+: <a class="el" href="classgameplay_1_1_game.html#a363c5ac0d99fc937dead943351f574c1">gameplay::Game</a>
+, <a class="el" href="classgameplay_1_1_audio_source.html#a895920e4520c05ecbf393806bc2ef9f0">gameplay::AudioSource</a>
 </li>
 <li>resumeTransformChanged()
 : <a class="el" href="classgameplay_1_1_transform.html#a9db626711a3620e12051f70d8ec9f325">gameplay::Transform</a>
@@ -234,9 +247,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classgameplay_1_1_properties.html#ade9fc061db01646ef889838713c8cead">gameplay::Properties</a>
 , <a class="el" href="classgameplay_1_1_stream.html#a6d02e6e601a346afa33e4a40aede0702">gameplay::Stream</a>
 </li>
-<li>right
-: <a class="el" href="structgameplay_1_1_theme_1_1_side_regions.html#af236740d28db36ba19e5605bd2c1971e">gameplay::Theme::SideRegions</a>
-, <a class="el" href="classgameplay_1_1_rectangle.html#a0f7bd5c8bc5c9a1f8a3167daf9f04997">gameplay::Rectangle</a>
+<li>right()
+: <a class="el" href="classgameplay_1_1_rectangle.html#a0f7bd5c8bc5c9a1f8a3167daf9f04997">gameplay::Rectangle</a>
+, <a class="el" href="structgameplay_1_1_theme_1_1_side_regions.html#af236740d28db36ba19e5605bd2c1971e">gameplay::Theme::SideRegions</a>
 </li>
 <li>RIGHT_CLICK
 : <a class="el" href="classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7ba4d6f8a5bed091f58c2d44d27fedaf7d3">gameplay::Control::Listener</a>
@@ -245,24 +258,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classgameplay_1_1_physics_collision_object.html#a99aa09f043883dcd33865cd582de463ea07cc1b95ca294433692b4d81591cff82">gameplay::PhysicsCollisionObject</a>
 </li>
 <li>rotate()
-: <a class="el" href="classgameplay_1_1_matrix.html#a2f4ded9528e6782ccf5eb2b8de423d98">gameplay::Matrix</a>
+: <a class="el" href="classgameplay_1_1_matrix.html#ac25b3a478f86c9a64546dc977fd677fb">gameplay::Matrix</a>
 , <a class="el" href="classgameplay_1_1_physics_character.html#a29996f780c7338659d8ddeb4317851c3">gameplay::PhysicsCharacter</a>
-, <a class="el" href="classgameplay_1_1_transform.html#a5be09c000db9f322169e6ce69b08c438">gameplay::Transform</a>
-, <a class="el" href="classgameplay_1_1_matrix.html#ac25b3a478f86c9a64546dc977fd677fb">gameplay::Matrix</a>
-, <a class="el" href="classgameplay_1_1_physics_character.html#ab46f2970653a9253158553fee1f0d64b">gameplay::PhysicsCharacter</a>
-, <a class="el" href="classgameplay_1_1_matrix.html#adc6758d21df1845470b9455a30c54967">gameplay::Matrix</a>
 , <a class="el" href="classgameplay_1_1_transform.html#a23593622609b64feb6b55724e09d9222">gameplay::Transform</a>
+, <a class="el" href="classgameplay_1_1_matrix.html#adc6758d21df1845470b9455a30c54967">gameplay::Matrix</a>
 , <a class="el" href="classgameplay_1_1_vector2.html#a5f67a6256c3fe19cff8b7d5155e22950">gameplay::Vector2</a>
+, <a class="el" href="classgameplay_1_1_transform.html#a8c8c36c06246378a13263b8bc6a7596b">gameplay::Transform</a>
 </li>
 <li>rotateX()
-: <a class="el" href="classgameplay_1_1_matrix.html#a3e5141734bcc793a052578871715939f">gameplay::Matrix</a>
-, <a class="el" href="classgameplay_1_1_transform.html#a403968ed9fec4a9ceebd26d3ef5de768">gameplay::Transform</a>
-, <a class="el" href="classgameplay_1_1_matrix.html#aa639da3d71cbe292af87fd5e701f4424">gameplay::Matrix</a>
+: <a class="el" href="classgameplay_1_1_transform.html#a403968ed9fec4a9ceebd26d3ef5de768">gameplay::Transform</a>
+, <a class="el" href="classgameplay_1_1_matrix.html#a3e5141734bcc793a052578871715939f">gameplay::Matrix</a>
 </li>
 <li>rotateY()
-: <a class="el" href="classgameplay_1_1_matrix.html#a02cf7e244f59e074a3ec5dfa872ef4c8">gameplay::Matrix</a>
+: <a class="el" href="classgameplay_1_1_matrix.html#a6aafc71401555ebdcd4d5ddc788ee02c">gameplay::Matrix</a>
 , <a class="el" href="classgameplay_1_1_transform.html#aba6d6e746c8b6bba97c5d74021344149">gameplay::Transform</a>
-, <a class="el" href="classgameplay_1_1_matrix.html#a6aafc71401555ebdcd4d5ddc788ee02c">gameplay::Matrix</a>
 </li>
 <li>rotateZ()
 : <a class="el" href="classgameplay_1_1_transform.html#ad164b7bb8a430067c29c9392f1ace3fb">gameplay::Transform</a>
@@ -291,7 +300,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:33 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:55 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

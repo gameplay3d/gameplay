@@ -117,6 +117,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#ac4ee9e8ccbe486c6f69b7ec3b075de3c">setBlendSrc</a> (<a class="el" href="classgameplay_1_1_render_state.html#ac4da745bdd2aef1c14407a5ac3f75285">Blend</a> blend)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a174fcec28b8503319d4d946fb49cc54f">setBlendDst</a> (<a class="el" href="classgameplay_1_1_render_state.html#ac4da745bdd2aef1c14407a5ac3f75285">Blend</a> blend)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a81330b9196446698426da7243dee26ed">setCullFace</a> (bool enabled)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#aa4f6baa6632cd157e1c0113998214976">setCullFaceSide</a> (<a class="el" href="classgameplay_1_1_render_state.html#af5a647a5c230188335553706ce8cd0ae">CullFaceSide</a> side)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#aff72f5e76318a14b2d57be82bf96a348">setDepthTest</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#a15b1a1b7b6879f67917c48a99d855c03">setDepthWrite</a> (bool enabled)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#af0475ad06648ecdc3752511a6749c969">setDepthFunction</a> (<a class="el" href="classgameplay_1_1_render_state.html#a81d6c171617af613da8d1b3a92ddf342">DepthFunction</a> func)</td></tr>
@@ -260,6 +261,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa4f6baa6632cd157e1c0113998214976"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setCullFaceSide" ref="aa4f6baa6632cd157e1c0113998214976" args="(CullFaceSide side)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html#aa4f6baa6632cd157e1c0113998214976">gameplay::RenderState::StateBlock::setCullFaceSide</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_render_state.html#af5a647a5c230188335553706ce8cd0ae">CullFaceSide</a>&#160;</td>
+          <td class="paramname"><em>side</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the side of the facets to cull.</p>
+<p>When not explicitly set, the default is to cull back-facing facets. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">side</td><td>The side to cull. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="af0475ad06648ecdc3752511a6749c969"></a><!-- doxytag: member="gameplay::RenderState::StateBlock::setDepthFunction" ref="af0475ad06648ecdc3752511a6749c969" args="(DepthFunction func)" -->
 <div class="memitem">
 <div class="memproto">
@@ -388,7 +414,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -137,6 +137,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a40e005c3e4e6d9f28305b5ee425629a9">getQuaternionFromAxisAngle</a> (const char *name, <a class="el" href="classgameplay_1_1_quaternion.html">Quaternion</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a6abca23de971ae87e57e29ef4f0bfa21">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector3.html">Vector3</a> *out) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#af435904c37ba32c1080d76aa23323003">getColor</a> (const char *name, <a class="el" href="classgameplay_1_1_vector4.html">Vector4</a> *out) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a47350418a007100337277364bef52bab">getPath</a> (const char *name, std::string *path) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_properties.html">Properties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_properties.html#a73bd3ee2ada1ce0455e1b0ff06f3debe">create</a> (const char *url)</td></tr>
@@ -644,6 +645,43 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a47350418a007100337277364bef52bab"></a><!-- doxytag: member="gameplay::Properties::getPath" ref="a47350418a007100337277364bef52bab" args="(const char *name, std::string *path) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_properties.html#a47350418a007100337277364bef52bab">gameplay::Properties::getPath</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the file path for the given property if the file exists.</p>
+<p>This method will first search for the file relative to the working directory. If the file is not found then it will search relative to the directory the bundle file is in.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the property. </td></tr>
+    <tr><td class="paramname">path</td><td>The string to copy the path to if the file exists.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the property exists and the file exists, false otherwise.</dd></dl>
+ 
+</div>
+</div>
 <a class="anchor" id="a40e005c3e4e6d9f28305b5ee425629a9"></a><!-- doxytag: member="gameplay::Properties::getQuaternionFromAxisAngle" ref="a40e005c3e4e6d9f28305b5ee425629a9" args="(const char *name, Quaternion *out) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -873,7 +911,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:31 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

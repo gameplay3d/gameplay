@@ -187,6 +187,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a04810ceb111a6983adb65066e5247bf9">setPoint</a> (unsigned int index, float time, float *value, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, float *inValue, float *outValue)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#a5e1507314653f0962d0f5c827b11e070">setTangent</a> (unsigned int index, <a class="el" href="classgameplay_1_1_curve.html#ae692a9c9671b9f4734aea55bfb3050e1">InterpolationType</a> type, float *inValue, float *outValue)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823">evaluate</a> (float time, float *dst) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#aa12a3d6e621e8e1af43e1b369b7e5af9">evaluate</a> (float time, float startTime, float endTime, float loopBlendTime, float *dst) const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_curve.html">Curve</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_curve.html#abc8ccd32aef348827098296c50dd45b1">create</a> (unsigned int pointCount, unsigned int componentCount)</td></tr>
@@ -421,10 +422,69 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Evaluates the curve at the given position value (between 0.0 and 1.0 inclusive).</p>
+<p>Evaluates the curve at the given position value.</p>
+<p>Time should generally be specified as a value between 0.0 - 1.0, inclusive. A value outside this range can also be specified to perform an interpolation between the two end points of the curve. This can be useful for smoothly interpolating a repeat of the curve.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">time</td><td>The position to evaluate the curve at. </td></tr>
+    <tr><td class="paramname">dst</td><td>The evaluated value of the curve at the given time. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aa12a3d6e621e8e1af43e1b369b7e5af9"></a><!-- doxytag: member="gameplay::Curve::evaluate" ref="aa12a3d6e621e8e1af43e1b369b7e5af9" args="(float time, float startTime, float endTime, float loopBlendTime, float *dst) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_curve.html#ac8e72bf270f5ac3e93c7137bb3e05823">gameplay::Curve::evaluate</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>startTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>endTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>loopBlendTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Evaluates the curve at the given position value (between 0.0 and 1.0 inclusive) within the specified subregion of the curve.</p>
+<p>This method is useful for evaluating sub sections of the curve. A common use for this is when evaluating individual animation clips that are positioned within a larger animation curve. This method also allows looping to occur between the end points of curve sub regions, with optional blending/interpolation between the end points (using the loopBlendTime parameter).</p>
+<p>Time should generally be specified as a value between 0.0 - 1.0, inclusive. A value outside this range can also be specified to perform an interpolation between the two end points of the curve. This can be useful for smoothly interpolating a repeat of the curve.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The position within the subregion of the curve to evaluate the curve at. A time of zero representes the start of the subregion, with a time of one representing the end of the subregion. </td></tr>
+    <tr><td class="paramname">startTime</td><td>Start time for the subregion (between 0.0 - 1.0). </td></tr>
+    <tr><td class="paramname">endTime</td><td>End time for the subregion (between 0.0 - 1.0). </td></tr>
+    <tr><td class="paramname">loopBlendTime</td><td>Time (in milliseconds) to blend between the end points of the curve for looping purposes when time is outside the range 0-1. A value of zero here disables curve looping. </td></tr>
     <tr><td class="paramname">dst</td><td>The evaluated value of the curve at the given time. </td></tr>
   </table>
   </dd>
@@ -717,7 +777,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

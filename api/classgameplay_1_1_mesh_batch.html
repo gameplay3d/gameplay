@@ -107,7 +107,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#ad0ed606c294b9cb9924ba18625f0c998">setCapacity</a> (unsigned int capacity)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#a76c25f547cd583f5bf94d3dbf16eaeb8">getMaterial</a> () const </td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#a7413764448e752865cc62ee439414980">add</a> (T *vertices, unsigned int vertexCount, unsigned short *indices=NULL, unsigned int indexCount=0)</td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#a206473437d1dd1847dc63058a4815ea3">add</a> (const T *vertices, unsigned int vertexCount, const unsigned short *indices=NULL, unsigned int indexCount=0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#ac0ee7bed9a56d787a1f3e00da4898e4c">add</a> (const float *vertices, unsigned int vertexCount, const unsigned short *indices=NULL, unsigned int indexCount=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#a81913c584d37e570e2ac4dcf9cd46ea3">start</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#aa8d1126eae917a78016c0159e28896af">finish</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_mesh_batch.html#a75e257cf877ecf1e9f221cd2dbac9929">draw</a> ()</td></tr>
@@ -137,16 +138,16 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a7413764448e752865cc62ee439414980"></a><!-- doxytag: member="gameplay::MeshBatch::add" ref="a7413764448e752865cc62ee439414980" args="(T *vertices, unsigned int vertexCount, unsigned short *indices=NULL, unsigned int indexCount=0)" -->
+<a class="anchor" id="a206473437d1dd1847dc63058a4815ea3"></a><!-- doxytag: member="gameplay::MeshBatch::add" ref="a206473437d1dd1847dc63058a4815ea3" args="(const T *vertices, unsigned int vertexCount, const unsigned short *indices=NULL, unsigned int indexCount=0)" -->
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classgameplay_1_1_mesh_batch.html#a7413764448e752865cc62ee439414980">gameplay::MeshBatch::add</a> </td>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_mesh_batch.html#a206473437d1dd1847dc63058a4815ea3">gameplay::MeshBatch::add</a> </td>
           <td>(</td>
-          <td class="paramtype">T *&#160;</td>
+          <td class="paramtype">const T *&#160;</td>
           <td class="paramname"><em>vertices</em>, </td>
         </tr>
         <tr>
@@ -158,7 +159,7 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned short *&#160;</td>
+          <td class="paramtype">const unsigned short *&#160;</td>
           <td class="paramname"><em>indices</em> = <code>NULL</code>, </td>
         </tr>
         <tr>
@@ -177,6 +178,58 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 <p>Adds a group of primitives to the batch.</p>
 <p>The vertex list passed in should be a pointer of structs, where the struct T represents the format of a single vertex (e.g. {x,y,z,u,v}).</p>
+<p>If the batch was created with 'indexed' set to true, then valid index data should be passed in this method. However, if 'indexed' was set to false, the indices and indexCount parameters can be omitted since only vertex data will be used.</p>
+<p>If the batch created to draw triangle strips, this method assumes that separate calls to add specify separate triangle strips. In this case, this method will automatically stitch separate triangle strips together using degenerate (zero-area) triangles.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vertices</td><td>Array of vertices. </td></tr>
+    <tr><td class="paramname">vertexCount</td><td>Number of vertices. </td></tr>
+    <tr><td class="paramname">indices</td><td>Array of indices into the vertex array (should be NULL for non-indexed batches). </td></tr>
+    <tr><td class="paramname">indexCount</td><td>Number of indices (should be zero for non-indexed batches). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac0ee7bed9a56d787a1f3e00da4898e4c"></a><!-- doxytag: member="gameplay::MeshBatch::add" ref="ac0ee7bed9a56d787a1f3e00da4898e4c" args="(const float *vertices, unsigned int vertexCount, const unsigned short *indices=NULL, unsigned int indexCount=0)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_mesh_batch.html#a206473437d1dd1847dc63058a4815ea3">gameplay::MeshBatch::add</a> </td>
+          <td>(</td>
+          <td class="paramtype">const float *&#160;</td>
+          <td class="paramname"><em>vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>vertexCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned short *&#160;</td>
+          <td class="paramname"><em>indices</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>indexCount</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds a group of primitives to the batch.</p>
+<p>The vertex list passed in should be a pointer of floats where every X floats represent a single vertex (e.g. {x,y,z,u,v}).</p>
 <p>If the batch was created with 'indexed' set to true, then valid index data should be passed in this method. However, if 'indexed' was set to false, the indices and indexCount parameters can be omitted since only vertex data will be used.</p>
 <p>If the batch created to draw triangle strips, this method assumes that separate calls to add specify separate triangle strips. In this case, this method will automatically stitch separate triangle strips together using degenerate (zero-area) triangles.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
@@ -427,7 +480,7 @@ template&lt;class T &gt; </div>
 </div>
 <div class="memdoc">
 <p>Starts batching.</p>
-<p>This method should be called before calling <a class="el" href="classgameplay_1_1_mesh_batch.html#a7413764448e752865cc62ee439414980">add()</a> to add primitives to the batch. After all primitives have been added to the batch, call the <a class="el" href="classgameplay_1_1_mesh_batch.html#aa8d1126eae917a78016c0159e28896af">finish()</a> method to complete the batch.</p>
+<p>This method should be called before calling <a class="el" href="classgameplay_1_1_mesh_batch.html#a206473437d1dd1847dc63058a4815ea3">add()</a> to add primitives to the batch. After all primitives have been added to the batch, call the <a class="el" href="classgameplay_1_1_mesh_batch.html#aa8d1126eae917a78016c0159e28896af">finish()</a> method to complete the batch.</p>
 <p>Calling this method will clear any primitives currently in the batch and set the position of the batch back to the beginning. </p>
 
 </div>
@@ -450,7 +503,7 @@ template&lt;class T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

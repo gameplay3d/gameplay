@@ -175,10 +175,15 @@ Public Types</h2></td></tr>
 <b>DEPTH_ALWAYS</b> =  GL_ALWAYS
 <br/>
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#af5a647a5c230188335553706ce8cd0ae">CullFaceSide</a> { <b>CULL_FACE_SIDE_BACK</b> =  GL_BACK, 
+<b>CULL_FACE_SIDE_FRONT</b> =  GL_FRONT, 
+<b>CULL_FACE_SIDE_FRONT_AND_BACK</b> =  GL_FRONT_AND_BACK
+ }</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#af88d14081aa7bb5a6abc088d7859a052">ResolveAutoBindingCallback</a> )(const char *autoBinding, <a class="el" href="classgameplay_1_1_node.html">Node</a> *node, <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> *parameter)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#a7b3c363e6fdf7ef5bf16f71b9ce8f4c3">getParameter</a> (const char *name) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#aea9877f61a99812d725b94bf8dde5db0">clearParameter</a> (const char *name)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#ab1928e19eb95a685f3d41d92de470acd">setParameterAutoBinding</a> (const char *name, <a class="el" href="classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017">AutoBinding</a> autoBinding)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#a75d1644271ce619aad182d7d4a14c635">setParameterAutoBinding</a> (const char *name, const char *autoBinding)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_render_state.html#aff8497a435bbca3301b2c1a9b6f2f692">setStateBlock</a> (<a class="el" href="classgameplay_1_1_render_state_1_1_state_block.html">StateBlock</a> *state)</td></tr>
@@ -317,6 +322,20 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af5a647a5c230188335553706ce8cd0ae"></a><!-- doxytag: member="gameplay::RenderState::CullFaceSide" ref="af5a647a5c230188335553706ce8cd0ae" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classgameplay_1_1_render_state.html#af5a647a5c230188335553706ce8cd0ae">gameplay::RenderState::CullFaceSide</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Defines culling criteria for front-facing, back-facing and both-side facets. </p>
+
+</div>
+</div>
 <a class="anchor" id="a81d6c171617af613da8d1b3a92ddf342"></a><!-- doxytag: member="gameplay::RenderState::DepthFunction" ref="a81d6c171617af613da8d1b3a92ddf342" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -422,6 +441,31 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aea9877f61a99812d725b94bf8dde5db0"></a><!-- doxytag: member="gameplay::RenderState::clearParameter" ref="aea9877f61a99812d725b94bf8dde5db0" args="(const char *name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_render_state.html#aea9877f61a99812d725b94bf8dde5db0">gameplay::RenderState::clearParameter</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Clears the <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> with the given name.</p>
+<p>If a material parameter exists for the given name, it is destroyed and removed from this <a class="el" href="classgameplay_1_1_render_state.html">RenderState</a>.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td><a class="el" href="classgameplay_1_1_material.html">Material</a> parameter (uniform) name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a7031d3c8afc88d5af8f27d40e4ffec24"></a><!-- doxytag: member="gameplay::RenderState::cloneInto" ref="a7031d3c8afc88d5af8f27d40e4ffec24" args="(RenderState *renderState, NodeCloneContext &amp;context) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -490,6 +534,7 @@ Static Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Returns a <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> for the specified name.</p>
 <p>The returned <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> can be used to set values for the specified parameter name.</p>
+<p>Note that this method causes a new <a class="el" href="classgameplay_1_1_material_parameter.html">MaterialParameter</a> to be created if one does not already exist for the given parameter name.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td><a class="el" href="classgameplay_1_1_material.html">Material</a> parameter (uniform) name.</td></tr>
@@ -806,7 +851,7 @@ Static Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

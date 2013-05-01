@@ -39,7 +39,7 @@ var searchData=
   ['press',['PRESS',['../classgameplay_1_1_control_1_1_listener.html#aa9f8812153823b2902149969a083af7bab10979e099c8c8fcd542df7b5afaef94',1,'gameplay::Control::Listener']]],
   ['primitivetype',['PrimitiveType',['../classgameplay_1_1_mesh.html#acd5596a388ab216531d2b77aee0417c4',1,'gameplay::Mesh']]],
   ['print',['print',['../classgameplay_1_1_script_controller.html#a344980c5588d2845b74efae26d860eaf',1,'gameplay::ScriptController::print(const char *str)'],['../classgameplay_1_1_script_controller.html#a74610ca6a756aec69ec16912f722eb7e',1,'gameplay::ScriptController::print(const char *str1, const char *str2)']]],
-  ['project',['project',['../classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1',1,'gameplay::Camera']]],
+  ['project',['project',['../classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1',1,'gameplay::Camera::project(const Rectangle &amp;viewport, const Vector3 &amp;position, float *x, float *y, float *depth=NULL) const '],['../classgameplay_1_1_camera.html#ad5705088141c30b79ec4b5e6d6a79731',1,'gameplay::Camera::project(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector2 *out) const '],['../classgameplay_1_1_camera.html#a12ec9f52b59825cf84d03bf9b185f0bb',1,'gameplay::Camera::project(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector3 *out) const ']]],
   ['projection_5fmatrix',['PROJECTION_MATRIX',['../classgameplay_1_1_render_state.html#a1c6aa43f58130b0e447129e39ea36017ae73eac1b7e779040db3ac0f2600e264d',1,'gameplay::RenderState']]],
   ['properties',['Properties',['../classgameplay_1_1_properties.html',1,'gameplay']]]
 ];

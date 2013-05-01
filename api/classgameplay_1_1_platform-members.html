@@ -83,11 +83,17 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#ab5379118d7f39805fb7d62820aa36cd6">enterMessagePump</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a7e094074d74f3ca49f7669bb6f93f4a5">gamepadEventConnectedInternal</a>(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, unsigned int vendorId, unsigned int productId, const char *vendorString, const char *productString)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a4a282fb3ebd9cae31ab3c00a17c10acd">gamepadEventDisconnectedInternal</a>(GamepadHandle handle)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a0256707204f0ade5bdfdd85b4a43693d">gamepadEventInternal</a>(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex=0)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#aca1769dd866f2b7de9fd9009ed0bd0ad">gesturePinchEventInternal</a>(int x, int y, float scale)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#af6c5f44e7970c3ce97508251cc23f64f">gestureSwipeEventInternal</a>(int x, int y, int direction)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a4aa435ce550836b3ab3e5585ba1e3cdd">gestureTapEventInternal</a>(int x, int y)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a8b1b7b370d990cf54d22653b308b9497">keyEventInternal</a>(Keyboard::KeyEvent evt, int key)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a8c4044ab61f9be5853b3cf9d97530e43">mouseEventInternal</a>(Mouse::MouseEvent evt, int x, int y, int wheelDelta)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a8be3321d6f355bd53b5a3ab179d8c9ee">pollGamepadState</a>(Gamepad *gamepad)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a675072446a9bb21dbe840b896e52bfd0">resizeEventInternal</a>(unsigned int width, unsigned int height)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a1f27f0260b230dad54f08bd5d439d4bd">shutdownInternal</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a6812cbda855837531c8631eb4763fdb5">touchEventInternal</a>(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a52ceea1e71f2c8d99310baa61a69223b">swapBuffers</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#a7fa2c9df76b7c19c6711ae496649ee76">touchEventInternal</a>(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool actuallyMouse=false)</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_platform.html#af14fb3031cb23770e420cfd259c41595">~Platform</a>()</td><td><a class="el" href="classgameplay_1_1_platform.html">gameplay::Platform</a></td><td></td></tr>
 </table></div><!-- contents -->
 <!-- window showing the filter options -->
@@ -107,7 +113,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_p
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:31 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:53 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
