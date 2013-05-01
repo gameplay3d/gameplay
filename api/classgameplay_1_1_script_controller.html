@@ -105,6 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#aeee2f3c540bc8cd3480589939ccbf64a">loadScript</a> (const char *path, bool forceReload=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#ae478047facb082367b9d68975af84c88">loadUrl</a> (const char *url)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">registerCallback</a> (const char *callback, const char *function)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#a0b30839f9812471082046e30a79b92dc">unregisterCallback</a> (const char *callback, const char *function)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_script_controller.html#acb739b7fa547e0c17ec2c83003a142b2">executeFunction</a> (const char *func)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -1833,6 +1835,42 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a22d1763653fcd1eec9ae5df93bde398c"></a><!-- doxytag: member="gameplay::ScriptController::registerCallback" ref="a22d1763653fcd1eec9ae5df93bde398c" args="(const char *callback, const char *function)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">gameplay::ScriptController::registerCallback</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Registers the given script callback.</p>
+<p>The 'callback' parameter must be one of the supported global callback event functions. The following strings are accepted: initialize, finalize, update, render, resizeEvent, keyEvent, touchEvent, mouseEvent, gamepadEvent. Signatures for the registered script function must match that of the corresponding signatures of these events on the <a class="el" href="classgameplay_1_1_game.html">Game</a> class.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>The script callback to register for. </td></tr>
+    <tr><td class="paramname">function</td><td>The name of the script function to register. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a7b02af8e375d3d60d3585eae4e5d40c0"></a><!-- doxytag: member="gameplay::ScriptController::setBool" ref="a7b02af8e375d3d60d3585eae4e5d40c0" args="(const char *name, bool v)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2297,6 +2335,42 @@ template&lt;typename T &gt; </div>
  
 </div>
 </div>
+<a class="anchor" id="a0b30839f9812471082046e30a79b92dc"></a><!-- doxytag: member="gameplay::ScriptController::unregisterCallback" ref="a0b30839f9812471082046e30a79b92dc" args="(const char *callback, const char *function)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_script_controller.html#a0b30839f9812471082046e30a79b92dc">gameplay::ScriptController::unregisterCallback</a> </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Unregisters the given script callback.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>The script callback to unregister for. </td></tr>
+    <tr><td class="paramname">function</td><td>The name of the script function to unregister.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_script_controller.html#a22d1763653fcd1eec9ae5df93bde398c">registerCallback(const char*, const char*)</a> </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -2315,7 +2389,7 @@ template&lt;typename T &gt; </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

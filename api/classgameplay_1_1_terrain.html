@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a>  </div>
@@ -111,6 +112,9 @@ Inheritance diagram for gameplay::Terrain:</div>
 
 <p><a href="classgameplay_1_1_terrain-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Listener</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a77a4beef1ca0bf89e4568f34e7091337">Flags</a> { <a class="el" href="classgameplay_1_1_terrain.html#a77a4beef1ca0bf89e4568f34e7091337ad3d303c4b1821ef74c4878ee9f6fcd31">DEBUG_PATCHES</a> =  1, 
@@ -131,6 +135,13 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#aebc6971cb61b3524c6eafd695bf65b0a">getHeight</a> (float x, float z) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a28d968d49d063fd77545b350a2bf964c">draw</a> (bool wireframe=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a9199fd7478ccb6e24c53090d7a9d2498">transformChanged</a> (<a class="el" href="classgameplay_1_1_transform.html">Transform</a> *transform, long cookie)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a95f6dc1e617036c92be1017aaa521748">addListener</a> (<a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Terrain::Listener</a> *listener)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#adcea09efade33221debd5a6518a4e729">removeListener</a> (<a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Terrain::Listener</a> *listener)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#aee72bf46648fc5d6da0a1477a662e067">getWorldMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a7b9dea13f584cb63d96948150a04659a">getInverseWorldMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#af3e5780b010362535a417538afc3edff">getNormalMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a9210f4cb8347a4c8671177146ec2a274">getWorldViewMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a4fc9d3f01378cd8c21aa581be5234614">getWorldViewProjectionMatrix</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_terrain.html">Terrain</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_terrain.html#a63dedd20650320e85abb711123ba0726">create</a> (const char *path)</td></tr>
@@ -178,6 +189,30 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a95f6dc1e617036c92be1017aaa521748"></a><!-- doxytag: member="gameplay::Terrain::addListener" ref="a95f6dc1e617036c92be1017aaa521748" args="(Terrain::Listener *listener)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_terrain.html#a95f6dc1e617036c92be1017aaa521748">gameplay::Terrain::addListener</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Terrain::Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Adds a listener to this terrain.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td><a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Listener</a> to start receiving terrain events. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a63dedd20650320e85abb711123ba0726"></a><!-- doxytag: member="gameplay::Terrain::create" ref="a63dedd20650320e85abb711123ba0726" args="(const char *path)" -->
 <div class="memitem">
 <div class="memproto">
@@ -375,6 +410,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7b9dea13f584cb63d96948150a04659a"></a><!-- doxytag: member="gameplay::Terrain::getInverseWorldMatrix" ref="a7b9dea13f584cb63d96948150a04659a" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="el" href="classgameplay_1_1_terrain.html#a7b9dea13f584cb63d96948150a04659a">gameplay::Terrain::getInverseWorldMatrix</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the terrain's inverse world matrix.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The inverse world matrix for the terrain. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a707b0b95ad0672ee92bb66c20ca55086"></a><!-- doxytag: member="gameplay::Terrain::getNode" ref="a707b0b95ad0672ee92bb66c20ca55086" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -390,6 +443,24 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Returns the node that this terrain is bound to.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The node this terrain is bound to, or NULL if the terrain is not bound to a node. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af3e5780b010362535a417538afc3edff"></a><!-- doxytag: member="gameplay::Terrain::getNormalMatrix" ref="af3e5780b010362535a417538afc3edff" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="el" href="classgameplay_1_1_terrain.html#af3e5780b010362535a417538afc3edff">gameplay::Terrain::getNormalMatrix</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a matrix to be used for transforming normal vectors for the terrain.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The matrix used for normal vector transformation for the terrain. </dd></dl>
 
 </div>
 </div>
@@ -467,6 +538,60 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aee72bf46648fc5d6da0a1477a662e067"></a><!-- doxytag: member="gameplay::Terrain::getWorldMatrix" ref="aee72bf46648fc5d6da0a1477a662e067" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="el" href="classgameplay_1_1_terrain.html#aee72bf46648fc5d6da0a1477a662e067">gameplay::Terrain::getWorldMatrix</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the world matrix of the terrain, factoring in terrain local scaling.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The world matrix for the terrain. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9210f4cb8347a4c8671177146ec2a274"></a><!-- doxytag: member="gameplay::Terrain::getWorldViewMatrix" ref="a9210f4cb8347a4c8671177146ec2a274" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="el" href="classgameplay_1_1_terrain.html#a9210f4cb8347a4c8671177146ec2a274">gameplay::Terrain::getWorldViewMatrix</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the world view matrix for the terrain, factoring in terrain local scaling.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The world-view matrix for the terrain. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4fc9d3f01378cd8c21aa581be5234614"></a><!-- doxytag: member="gameplay::Terrain::getWorldViewProjectionMatrix" ref="a4fc9d3f01378cd8c21aa581be5234614" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&amp; <a class="el" href="classgameplay_1_1_terrain.html#a4fc9d3f01378cd8c21aa581be5234614">gameplay::Terrain::getWorldViewProjectionMatrix</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the world view projection matrix for the terrain, factoring in terrain local scaling.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The world-view-projection matrix for the terrain. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a9734422425b27864cf1c82ff3f5d9e56"></a><!-- doxytag: member="gameplay::Terrain::isFlagSet" ref="a9734422425b27864cf1c82ff3f5d9e56" args="(Flags flag) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -482,6 +607,30 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Determines if the specified terrain flag is currently set. </p>
+
+</div>
+</div>
+<a class="anchor" id="adcea09efade33221debd5a6518a4e729"></a><!-- doxytag: member="gameplay::Terrain::removeListener" ref="adcea09efade33221debd5a6518a4e729" args="(Terrain::Listener *listener)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_terrain.html#adcea09efade33221debd5a6518a4e729">gameplay::Terrain::removeListener</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Terrain::Listener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Removes a listener from this terrain.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td><a class="el" href="classgameplay_1_1_terrain_1_1_listener.html">Listener</a> to stop receiving terrain events. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -644,7 +793,7 @@ Static Public Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

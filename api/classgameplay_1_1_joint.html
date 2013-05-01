@@ -89,10 +89,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pro-static-methods">Static Protected Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gameplay::Joint Class Reference</div>  </div>
 </div><!--header-->
@@ -115,9 +115,13 @@ Inheritance diagram for gameplay::Joint:</div>
 
 <p><a href="classgameplay_1_1_joint-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><b>SkinReference</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_node.html#aeda54e8fa43853b7795b53d99aab08b4">Node::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a0b125d5f1dcee6b9207afa752fe0462a">getType</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#ae4cf129e4f46e5990afa315e02ad0b11">getScene</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a41cbad17fadd507edeb5e805ae19ae1f">getInverseBindPose</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -130,11 +134,6 @@ Protected Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgameplay_1_1_joint.html">Joint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#ad2577426e10c3a85c38e48bd5d35fc7f">create</a> (const char *id)</td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#afeded066e7fd5c85f0d984bc1d605c31">_bindPose</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#a0718be3b1425ceb2a5ee14690462c99d">_jointMatrixDirty</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_joint.html#ae55cc2b89d24d63842bded8ea51a7043">_skinCount</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Defines a basic hierarchical structure of transformation spaces. </p>
@@ -247,6 +246,25 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae4cf129e4f46e5990afa315e02ad0b11"></a><!-- doxytag: member="gameplay::Joint::getScene" ref="ae4cf129e4f46e5990afa315e02ad0b11" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgameplay_1_1_scene.html">Scene</a>* <a class="el" href="classgameplay_1_1_joint.html#ae4cf129e4f46e5990afa315e02ad0b11">gameplay::Joint::getScene</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_node.html#ac25a6131d93f001a27c79609d5c4b18a">Node::getScene()</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_node.html#ac25a6131d93f001a27c79609d5c4b18a">gameplay::Node</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a0b125d5f1dcee6b9207afa752fe0462a"></a><!-- doxytag: member="gameplay::Joint::getType" ref="a0b125d5f1dcee6b9207afa752fe0462a" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -344,49 +362,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="afeded066e7fd5c85f0d984bc1d605c31"></a><!-- doxytag: member="gameplay::Joint::_bindPose" ref="afeded066e7fd5c85f0d984bc1d605c31" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> <a class="el" href="classgameplay_1_1_joint.html#afeded066e7fd5c85f0d984bc1d605c31">gameplay::Joint::_bindPose</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The <a class="el" href="classgameplay_1_1_matrix.html">Matrix</a> representation of the <a class="el" href="classgameplay_1_1_joint.html">Joint</a>'s bind pose. </p>
-
-</div>
-</div>
-<a class="anchor" id="a0718be3b1425ceb2a5ee14690462c99d"></a><!-- doxytag: member="gameplay::Joint::_jointMatrixDirty" ref="a0718be3b1425ceb2a5ee14690462c99d" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classgameplay_1_1_joint.html#a0718be3b1425ceb2a5ee14690462c99d">gameplay::Joint::_jointMatrixDirty</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Flag used to mark if the <a class="el" href="classgameplay_1_1_joint.html">Joint</a>'s matrix is dirty. </p>
-
-</div>
-</div>
-<a class="anchor" id="ae55cc2b89d24d63842bded8ea51a7043"></a><!-- doxytag: member="gameplay::Joint::_skinCount" ref="ae55cc2b89d24d63842bded8ea51a7043" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int <a class="el" href="classgameplay_1_1_joint.html#ae55cc2b89d24d63842bded8ea51a7043">gameplay::Joint::_skinCount</a><code> [protected]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>The number of <a class="el" href="classgameplay_1_1_mesh_skin.html">MeshSkin</a>'s influencing the <a class="el" href="classgameplay_1_1_joint.html">Joint</a>. </p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -405,7 +380,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:30 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:52 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

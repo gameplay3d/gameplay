@@ -121,7 +121,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_animation.html">Animation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a12c347102fdd8fdbe8e30804b1833742">getAnimation</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a66b9cad3b41aba5a1695917489b6f92d">getStartTime</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ae0898f2d6b4d3d886d1f2bba8ef0dbd5">getEndTime</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a50deae8acd757bdde7c824b7297e95ed">getElaspedTime</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a931d14990e9524ea5e78ecb64e2bb198">getElapsedTime</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ab29326cd02dd538d28900b127896ab01">setRepeatCount</a> (float repeatCount)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a006f61a1f72e9428b5d9717530de04c1">getRepeatCount</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ac177842ec1730ce35cd02c47b03f8155">setActiveDuration</a> (unsigned long duration)</td></tr>
@@ -131,6 +131,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a53442765a6241c12aedce275f7cf2248">getSpeed</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a128747035d2e8797a7364494a597c77f">setBlendWeight</a> (float blendWeight)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a87e1eb6ea8944308b8c3c6326565323f">getBlendWeight</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a48fab9d3a958cb9ab1fee3e3d290d89d">setLoopBlendTime</a> (float loopBlendTime)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ad6245c2a651db2a779c10478b2c6271f">getLoopBlendTime</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a5c94a21f0850ea1c91b5612571510027">isPlaying</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#ae3f523b557ddfdb3ef8b05bee79d090c">play</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_animation_clip.html#a60b8be3ef809c7001a870daf460267ba">stop</a> ()</td></tr>
@@ -425,12 +427,12 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a50deae8acd757bdde7c824b7297e95ed"></a><!-- doxytag: member="gameplay::AnimationClip::getElaspedTime" ref="a50deae8acd757bdde7c824b7297e95ed" args="() const " -->
+<a class="anchor" id="a931d14990e9524ea5e78ecb64e2bb198"></a><!-- doxytag: member="gameplay::AnimationClip::getElapsedTime" ref="a931d14990e9524ea5e78ecb64e2bb198" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float <a class="el" href="classgameplay_1_1_animation_clip.html#a50deae8acd757bdde7c824b7297e95ed">gameplay::AnimationClip::getElaspedTime</a> </td>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_animation_clip.html#a931d14990e9524ea5e78ecb64e2bb198">gameplay::AnimationClip::getElapsedTime</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -476,6 +478,24 @@ Static Public Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Gets the <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s ID.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The <a class="el" href="classgameplay_1_1_animation_clip.html">AnimationClip</a>'s ID. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad6245c2a651db2a779c10478b2c6271f"></a><!-- doxytag: member="gameplay::AnimationClip::getLoopBlendTime" ref="ad6245c2a651db2a779c10478b2c6271f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_animation_clip.html#ad6245c2a651db2a779c10478b2c6271f">gameplay::AnimationClip::getLoopBlendTime</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the amount of time (in milliseconds) spent blending the clip's end points when looping.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Time spent blending end points of the clip when looping. </dd></dl>
 
 </div>
 </div>
@@ -634,6 +654,30 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a48fab9d3a958cb9ab1fee3e3d290d89d"></a><!-- doxytag: member="gameplay::AnimationClip::setLoopBlendTime" ref="a48fab9d3a958cb9ab1fee3e3d290d89d" args="(float loopBlendTime)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_animation_clip.html#a48fab9d3a958cb9ab1fee3e3d290d89d">gameplay::AnimationClip::setLoopBlendTime</a> </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>loopBlendTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Sets the time (in milliseconds) to append to the clip's active duration to use for blending the end points of the clip when looping.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">loopBlendTime</td><td>Time spent blending end points of clip when looping. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ab29326cd02dd538d28900b127896ab01"></a><!-- doxytag: member="gameplay::AnimationClip::setRepeatCount" ref="ab29326cd02dd538d28900b127896ab01" args="(float repeatCount)" -->
 <div class="memitem">
 <div class="memproto">
@@ -733,7 +777,7 @@ Static Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:29 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

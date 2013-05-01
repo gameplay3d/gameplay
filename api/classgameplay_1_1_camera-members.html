@@ -102,13 +102,17 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_c
   <tr bgcolor="#f0f0f0"><td><b>PERSPECTIVE</b> enum value (defined in <a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a>)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#a8e253da4bd8ed477f19ca07e9934c328">pickRay</a>(const Rectangle &amp;viewport, float x, float y, Ray *dst) const </td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#a3b013cddd2e40fbf2973a3ac07439dc1">project</a>(const Rectangle &amp;viewport, const Vector3 &amp;position, float *x, float *y, float *depth=NULL) const </td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#ad5705088141c30b79ec4b5e6d6a79731">project</a>(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector2 *out) const </td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#a12ec9f52b59825cf84d03bf9b185f0bb">project</a>(const Rectangle &amp;viewport, const Vector3 &amp;position, Vector3 *out) const </td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a866a859fcc96f2a48d5ee2f06a8c2a43">Ref</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#a4af6b566116534038e02bfffea72867f">Ref</a>(const Ref &amp;copy)</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_ref.html#aafd8a7a7934b33c8bf216756d04cf33b">release</a>()</td><td><a class="el" href="classgameplay_1_1_ref.html">gameplay::Ref</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#aa1aab8a2804c533fd0cf1d222a796c2d">resetProjectionMatrix</a>()</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#ab21cb55054f260c017f7c109557fc2df">setAspectRatio</a>(float aspectRatio)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#a4bd8641f82b4b2837dba98005c0e00cd">setFarPlane</a>(float farPlane)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#ad2c659d993a1117f39a5482a5d589a66">setFieldOfView</a>(float fieldOfView)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#a42c0280969083c2414919e050315dfd6">setNearPlane</a>(float nearPlane)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#abe43e769d7ad7190d9560b66d93c33af">setProjectionMatrix</a>(const Matrix &amp;matrix)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#adaffdd24f5a806aa3597872d2e50daf6">setZoomX</a>(float zoomX)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#a314bb88707a6dbf10c48abcb5d7b958d">setZoomY</a>(float zoomY)</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classgameplay_1_1_camera.html#aa7448d20162cefe7afc712a258c15595">Type</a> enum name</td><td><a class="el" href="classgameplay_1_1_camera.html">gameplay::Camera</a></td><td></td></tr>
@@ -133,7 +137,7 @@ This is the complete list of members for <a class="el" href="classgameplay_1_1_c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:29 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

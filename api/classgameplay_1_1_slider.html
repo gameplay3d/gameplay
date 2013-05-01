@@ -143,6 +143,9 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ad3b4ccc06217743fbb7aa4b8f751ba38">~Slider</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#afb17c09c56241d08f2e5d41d739e641c">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a9bcc08d9d3812775096a92bc4fa3a7e0">mouseEvent</a> (<a class="el" href="classgameplay_1_1_mouse.html#a27dca530300ff1e4c8ddbe5eeee3cc38">Mouse::MouseEvent</a> evt, int x, int y, int wheelDelta)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a8a2b476ed271ba4f75375e59265aeefb">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a0c3d8564baa230a3d14835b2846b486a">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#aa0f481fb950736359eacc41005235385">draw</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip, bool needsClear, bool cleared, float targetHeight)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a00981e76ee43f7d3481a38adc39b8d40">drawImages</a> (<a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *spriteBatch, const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#ae9230b460a2761a3493f6bd6ba43a469">drawText</a> (const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;clip)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#acdcedfbf56339bd486682c5b0b9a157a">update</a> (const <a class="el" href="classgameplay_1_1_control.html">Control</a> *container, const <a class="el" href="classgameplay_1_1_vector2.html">Vector2</a> &amp;offset)</td></tr>
@@ -155,6 +158,7 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#af804f53b2bedc6a2b40fa29a3914ca49">_max</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a774a0cadb40c9b32d787f993fb3ac48f">_step</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#aa7b0603bc0506c1d0cb72b3c8219ee2e">_value</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a8bfffd2ef1658b03594a8c3ed25766c1">_delta</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a26a4e2d2a8002ddebdbabcbd60703614">_originalX</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a9d97e4af0c43053d79f39b85bcb8ae34">_originalValue</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a6836c23137db82e5b9e72c8ea4f44755">_originalConsumeInputEvents</a></td></tr>
@@ -167,6 +171,12 @@ Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgameplay_1_1_font.html#aac2de4588d23d69e5d0cee7b19a5b9cf">Font::Justify</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a2e588c383302685e104724356d881067">_valueTextAlignment</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#a91f9263dc5c042fe4790ba5b321e4715">_valueTextPrecision</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_slider.html#aef6ec999d57eef2e5ebf0148c847fd2a">_valueText</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0ed1e221d1d21e8599f0d205c5c1346"></a><!-- doxytag: member="gameplay::Slider::_selectButtonDown" ref="aa0ed1e221d1d21e8599f0d205c5c1346" args="" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_selectButtonDown</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a907a33c3e84932a9314434ca695f387e"></a><!-- doxytag: member="gameplay::Slider::_directionButtonDown" ref="a907a33c3e84932a9314434ca695f387e" args="" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_directionButtonDown</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6641100782a302bfef99a1f5b8d12c55"></a><!-- doxytag: member="gameplay::Slider::_gamepadValue" ref="a6641100782a302bfef99a1f5b8d12c55" args="" -->
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_gamepadValue</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A slider consists of a marker that can slide along a track between two end-caps. The following properties are available for sliders:</p>
@@ -333,6 +343,54 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa0f481fb950736359eacc41005235385"></a><!-- doxytag: member="gameplay::Slider::draw" ref="aa0f481fb950736359eacc41005235385" args="(SpriteBatch *spriteBatch, const Rectangle &amp;clip, bool needsClear, bool cleared, float targetHeight)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classgameplay_1_1_slider.html#aa0f481fb950736359eacc41005235385">gameplay::Slider::draw</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_sprite_batch.html">SpriteBatch</a> *&#160;</td>
+          <td class="paramname"><em>spriteBatch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgameplay_1_1_rectangle.html">Rectangle</a> &amp;&#160;</td>
+          <td class="paramname"><em>clip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>needsClear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>cleared</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>targetHeight</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_slider.html">Slider</a> overrides <a class="el" href="classgameplay_1_1_slider.html#aa0f481fb950736359eacc41005235385">draw()</a> so that it can avoid resetting the _dirty flag when a joystick is being used to change its value. </p>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#aae210d6d79efcc53ac52feb7ec5d5043">gameplay::Control</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a00981e76ee43f7d3481a38adc39b8d40"></a><!-- doxytag: member="gameplay::Slider::drawImages" ref="a00981e76ee43f7d3481a38adc39b8d40" args="(SpriteBatch *spriteBatch, const Rectangle &amp;clip)" -->
 <div class="memitem">
 <div class="memproto">
@@ -393,6 +451,43 @@ Protected Attributes</h2></td></tr>
 </dl>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a83ccd932008b95c7ca74751fb1b1d27b">gameplay::Label</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8a2b476ed271ba4f75375e59265aeefb"></a><!-- doxytag: member="gameplay::Slider::gamepadEvent" ref="a8a2b476ed271ba4f75375e59265aeefb" args="(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_slider.html#a8a2b476ed271ba4f75375e59265aeefb">gameplay::Slider::gamepadEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
+          <td class="paramname"><em>gamepad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>analogIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">Control::gamepadEvent</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -538,6 +633,39 @@ Protected Attributes</h2></td></tr>
 <div class="memdoc">
 <p>Gets if the slider value text is rendered below the control.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if the slider value text is rendered below the control, false if otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0c3d8564baa230a3d14835b2846b486a"></a><!-- doxytag: member="gameplay::Slider::keyEvent" ref="a0c3d8564baa230a3d14835b2846b486a" args="(Keyboard::KeyEvent evt, int key)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classgameplay_1_1_slider.html#a0c3d8564baa230a3d14835b2846b486a">gameplay::Slider::keyEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_keyboard.html">Keyboard</a> callback on key events.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> </dd>
+<dd>
+<a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Keyboard::Key</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a24ffdbd2fd875c056ad9cce4f4dcf0f6">gameplay::Control</a>.</p>
 
 </div>
 </div>
@@ -853,6 +981,20 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a8bfffd2ef1658b03594a8c3ed25766c1"></a><!-- doxytag: member="gameplay::Slider::_delta" ref="a8bfffd2ef1658b03594a8c3ed25766c1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classgameplay_1_1_slider.html#a8bfffd2ef1658b03594a8c3ed25766c1">gameplay::Slider::_delta</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>When a gamepad is in use, this stores how much to move the slider's value. </p>
+
+</div>
+</div>
 <a class="anchor" id="ad28bda683a14e0affffc06daf0741594"></a><!-- doxytag: member="gameplay::Slider::_markerImage" ref="ad28bda683a14e0affffc06daf0741594" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -1095,7 +1237,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:32 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:54 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

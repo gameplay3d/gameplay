@@ -109,8 +109,9 @@ Inheritance diagram for gameplay::Button:</div>
 <area href="classgameplay_1_1_ref.html" alt="gameplay::Ref" shape="rect" coords="0,0,163,24"/>
 <area href="classgameplay_1_1_animation_target.html" alt="gameplay::AnimationTarget" shape="rect" coords="173,0,336,24"/>
 <area href="classgameplay_1_1_script_target.html" alt="gameplay::ScriptTarget" shape="rect" coords="346,0,509,24"/>
-<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="86,224,249,248"/>
-<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="259,224,422,248"/>
+<area href="classgameplay_1_1_check_box.html" alt="gameplay::CheckBox" shape="rect" coords="0,224,163,248"/>
+<area href="classgameplay_1_1_image_control.html" alt="gameplay::ImageControl" shape="rect" coords="173,224,336,248"/>
+<area href="classgameplay_1_1_radio_button.html" alt="gameplay::RadioButton" shape="rect" coords="346,224,509,248"/>
 </map>
  </div></div>
 
@@ -124,6 +125,8 @@ Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#a0d5ed8952e44fc624ccf67e952041030">Button</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#af64cf51c7dc5f01d4a095fc38c4d0651">~Button</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#a29c96c8eb4cefdf71806fbf3d048bb8f">touchEvent</a> (<a class="el" href="classgameplay_1_1_touch.html#a6563b3b4c9e7ffedfb6be99582290320">Touch::TouchEvent</a> evt, int x, int y, unsigned int contactIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#ae745966cbae30362d58ca0f4249c5dfe">gamepadEvent</a> (<a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a> evt, <a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *gamepad, unsigned int analogIndex)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#a591996947d6b3fed03fbfe368e91dcde">keyEvent</a> (<a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> evt, int key)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#a03e77d7da3b25b327ccde09fe419d29c">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#a0bdab70e091408f286c9ebb9c85d45d5">getDataBinding</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgameplay_1_1_button.html#af808e74a9cf19a1ee689768c704b3bfb">setDataBinding</a> (unsigned int dataBinding)</td></tr>
@@ -220,7 +223,7 @@ Static Protected Member Functions</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#a38c9eb8cfc8afa3e76f13fd8683c6ce1">gameplay::Label</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a1845972d801788eacc8922a36c576d57">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">gameplay::CheckBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a1845972d801788eacc8922a36c576d57">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_image_control.html#a48b090d2c83ab6ac82374532a3332072">gameplay::ImageControl</a>, and <a class="el" href="classgameplay_1_1_check_box.html#ab677341620e314ccf2ae62d5ef431f7b">gameplay::CheckBox</a>.</p>
 
 </div>
 </div>
@@ -260,7 +263,46 @@ Static Protected Member Functions</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#aa4a8eeb08c7a64586da980c9b09999e8">gameplay::Label</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a6d4743577d90447020b20044068c329c">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a5c979c1aed5bdfbee7d933177ebc1e78">gameplay::CheckBox</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a6d4743577d90447020b20044068c329c">gameplay::RadioButton</a>, <a class="el" href="classgameplay_1_1_image_control.html#a8ba5725de47dde4088809d9a0d0ff227">gameplay::ImageControl</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a5c979c1aed5bdfbee7d933177ebc1e78">gameplay::CheckBox</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae745966cbae30362d58ca0f4249c5dfe"></a><!-- doxytag: member="gameplay::Button::gamepadEvent" ref="ae745966cbae30362d58ca0f4249c5dfe" args="(Gamepad::GamepadEvent evt, Gamepad *gamepad, unsigned int analogIndex)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_button.html#ae745966cbae30362d58ca0f4249c5dfe">gameplay::Button::gamepadEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html#ab79068c8eeaa3a4daf6ea1f7a8adc3c9">Gamepad::GamepadEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> *&#160;</td>
+          <td class="paramname"><em>gamepad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>analogIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_gamepad.html">Gamepad</a> callback on gamepad events.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">Control::gamepadEvent</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a1eb941b483324abf5cbb3e62dee40a58">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#a59dbcaabaac8e8bf243e196106645c23">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a01d79deaeb17aa0f19e65c3ae0d31de6">gameplay::CheckBox</a>.</p>
 
 </div>
 </div>
@@ -299,7 +341,42 @@ Static Protected Member Functions</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classgameplay_1_1_label.html#af11e3bc6954d534ee1ed9bf848904c16">gameplay::Label</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>.</p>
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_image_control.html#a5baf1490bb084a487941d00f071b9645">gameplay::ImageControl</a>, <a class="el" href="classgameplay_1_1_check_box.html#ae8a9efbb552eb4c88c500c0e231b4167">gameplay::CheckBox</a>, and <a class="el" href="classgameplay_1_1_radio_button.html#a6d5db6a5dc96eff2c7ebb2139c17abb0">gameplay::RadioButton</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a591996947d6b3fed03fbfe368e91dcde"></a><!-- doxytag: member="gameplay::Button::keyEvent" ref="a591996947d6b3fed03fbfe368e91dcde" args="(Keyboard::KeyEvent evt, int key)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classgameplay_1_1_button.html#a591996947d6b3fed03fbfe368e91dcde">gameplay::Button::keyEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a>&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p><a class="el" href="classgameplay_1_1_keyboard.html">Keyboard</a> callback on key events.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classgameplay_1_1_keyboard.html#af3cf4d9d49adf589737a724e77938c19">Keyboard::KeyEvent</a> </dd>
+<dd>
+<a class="el" href="classgameplay_1_1_keyboard.html#a4e04e50db898d22f57e2a6de766ff81b">Keyboard::Key</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgameplay_1_1_control.html#a24ffdbd2fd875c056ad9cce4f4dcf0f6">gameplay::Control</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classgameplay_1_1_radio_button.html#aaf06bf7161c4748afc2dd55c280c04ca">gameplay::RadioButton</a>, and <a class="el" href="classgameplay_1_1_check_box.html#a804ffd05be38f95f9b5b5a389240defd">gameplay::CheckBox</a>.</p>
 
 </div>
 </div>
@@ -400,7 +477,7 @@ Static Protected Member Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 28 2013 11:49:29 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 1 2013 12:09:51 for gameplay by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
