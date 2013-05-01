@@ -8,6 +8,7 @@ namespace gameplay
 int lua_Pass__gc(lua_State* state);
 int lua_Pass_addRef(lua_State* state);
 int lua_Pass_bind(lua_State* state);
+int lua_Pass_clearParameter(lua_State* state);
 int lua_Pass_getEffect(lua_State* state);
 int lua_Pass_getId(lua_State* state);
 int lua_Pass_getParameter(lua_State* state);

@@ -1,0 +1,46 @@
+form formSelect
+{
+    theme = res/common/default.theme
+    layout = LAYOUT_VERTICAL
+    style = basicContainer
+    alignment = ALIGN_TOP_LEFT
+    width = 200
+    autoHeight = true
+	consumeInputEvents = true
+
+	radioButton form0
+	{
+		style = basic
+		text = Basic Controls
+		group = formSelection
+		size = 180, 60
+		textAlignment = ALIGN_VCENTER_HCENTER
+		selected = true
+	}
+
+	radioButton form1 : form0
+	{
+		text = Scrolling
+		selected = false
+	}
+
+	radioButton form2 : form1
+	{
+		text = Flow Layout
+	}
+
+	radioButton form3 : form1
+	{
+		text = Vertical Layout
+	}
+
+	radioButton form4 : form1
+	{
+		text = Z-Order
+	}
+
+	radioButton form5 : form1
+	{
+		text = Programmatic
+	}
+}

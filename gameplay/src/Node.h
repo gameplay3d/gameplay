@@ -29,6 +29,7 @@ class Node : public Transform, public Ref
     friend class Scene;
     friend class Bundle;
     friend class MeshSkin;
+    friend class Light;
 
 public:
 
@@ -223,12 +224,23 @@ public:
      *
      * @return The scene.
      */
-    Scene* getScene() const;
+    virtual Scene* getScene() const;
 
     /**
      * Gets the top level node in this node's parent hierarchy.
      */
     Node* getRootNode() const;
+    
+    /**
+     * Returns whether the transformation of this node is static.
+     *
+     * Nodes that have static rigid bodies attached to them are considered static.
+     *
+     * @return True if the transformation of this Node is static, false otherwise.
+     *
+     * @see Transform::isStatic()
+     */
+    bool isStatic() const;
 
     /**
      * Gets the world matrix corresponding to this node.

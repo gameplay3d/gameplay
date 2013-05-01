@@ -498,6 +498,12 @@ bool TerrainPatch::updateMaterial()
             material->getParameter("u_column")->setValue((float)_column);
         }
 
+        // Fire terrain listeners
+        for (size_t j = 0, lcount = _terrain->_listeners.size(); j < lcount; ++j)
+        {
+            _terrain->_listeners[j]->materialUpdated(_terrain, material);
+        }
+
         // Set material on this lod level
         _levels[i]->model->setMaterial(material);
 

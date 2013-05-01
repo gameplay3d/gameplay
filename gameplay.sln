@@ -3,42 +3,42 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay", "gameplay\gameplay.vcxproj", "{1032BA4B-57EB-4348-9E03-29DD63E80E4A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameplay-tests", "gameplay-tests\gameplay-tests.vcxproj", "{0F27C8C4-58B2-E367-8D1F-01B714FDBF1B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-browser", "samples\browser\sample-browser.vcxproj", "{0F27C8C4-58B2-E367-8D1F-01B714FDBF1B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample00-mesh", "gameplay-samples\sample00-mesh\sample00-mesh.vcxproj", "{D672DC66-3CE0-4878-B0D2-813CA731012F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-mesh", "samples\mesh\sample-mesh.vcxproj", "{D672DC66-3CE0-4878-B0D2-813CA731012F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample01-longboard", "gameplay-samples\sample01-longboard\sample01-longboard.vcxproj", "{9A515C8B-3320-4C5C-9754-211E91206C9D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-lua", "samples\lua\sample-lua.vcxproj", "{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample02-spaceship", "gameplay-samples\sample02-spaceship\sample02-spaceship.vcxproj", "{CC37B8E9-6402-4841-8D6A-5D908A5909B3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-longboard", "samples\longboard\sample-longboard.vcxproj", "{9A515C8B-3320-4C5C-9754-211E91206C9D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample03-character", "gameplay-samples\sample03-character\sample03-character.vcxproj", "{87388E8B-F3CF-428F-BC2C-C1886248C111}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-spaceship", "samples\spaceship\sample-spaceship.vcxproj", "{CC37B8E9-6402-4841-8D6A-5D908A5909B3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample04-particles", "gameplay-samples\sample04-particles\sample04-particles.vcxproj", "{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-character", "samples\character\sample-character.vcxproj", "{87388E8B-F3CF-428F-BC2C-C1886248C111}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample05-lua", "gameplay-samples\sample05-lua\sample05-lua.vcxproj", "{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-particles", "samples\particles\sample-particles.vcxproj", "{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample06-racer", "gameplay-samples\sample06-racer\sample06-racer.vcxproj", "{82522888-E09A-ED48-AD7D-247237B37B3A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample-racer", "samples\racer\sample-racer.vcxproj", "{82522888-E09A-ED48-AD7D-247237B37B3A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1032BA4B-57EB-4348-9E03-29DD63E80E4A} = {1032BA4B-57EB-4348-9E03-29DD63E80E4A}
 	EndProjectSection
@@ -149,6 +149,36 @@ Global
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|Win32.Build.0 = Release|Win32
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|x64.ActiveCfg = Release|x64
 		{D672DC66-3CE0-4878-B0D2-813CA731012F}.Release|x64.Build.0 = Release|x64
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerry.ActiveCfg = Debug|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerry.Build.0 = Debug|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerry.Deploy.0 = Debug|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerrySimulator.ActiveCfg = Debug|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerrySimulator.Build.0 = Debug|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerrySimulator.Deploy.0 = Debug|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|Win32.Build.0 = Debug|Win32
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|x64.ActiveCfg = Debug|x64
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|x64.Build.0 = Debug|x64
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerry.ActiveCfg = DebugMem|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerry.Build.0 = DebugMem|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerry.Deploy.0 = DebugMem|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerrySimulator.ActiveCfg = DebugMem|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerrySimulator.Build.0 = DebugMem|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerrySimulator.Deploy.0 = DebugMem|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|Win32.Build.0 = DebugMem|Win32
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|x64.ActiveCfg = DebugMem|x64
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|x64.Build.0 = DebugMem|x64
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerry.ActiveCfg = Release|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerry.Build.0 = Release|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerry.Deploy.0 = Release|BlackBerry
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerrySimulator.ActiveCfg = Release|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerrySimulator.Build.0 = Release|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerrySimulator.Deploy.0 = Release|BlackBerrySimulator
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.ActiveCfg = Release|Win32
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.Build.0 = Release|Win32
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|x64.ActiveCfg = Release|x64
+		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|x64.Build.0 = Release|x64
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|BlackBerry.ActiveCfg = Debug|BlackBerry
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|BlackBerry.Build.0 = Debug|BlackBerry
 		{9A515C8B-3320-4C5C-9754-211E91206C9D}.Debug|BlackBerry.Deploy.0 = Debug|BlackBerry
@@ -269,36 +299,6 @@ Global
 		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Release|Win32.Build.0 = Release|Win32
 		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Release|x64.ActiveCfg = Release|x64
 		{CB5ABFAA-EA69-E439-5A4D-3B9359916C71}.Release|x64.Build.0 = Release|x64
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerry.ActiveCfg = Debug|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerry.Build.0 = Debug|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerry.Deploy.0 = Debug|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerrySimulator.ActiveCfg = Debug|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerrySimulator.Build.0 = Debug|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|BlackBerrySimulator.Deploy.0 = Debug|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|Win32.Build.0 = Debug|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|x64.ActiveCfg = Debug|x64
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Debug|x64.Build.0 = Debug|x64
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerry.ActiveCfg = DebugMem|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerry.Build.0 = DebugMem|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerry.Deploy.0 = DebugMem|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerrySimulator.ActiveCfg = DebugMem|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerrySimulator.Build.0 = DebugMem|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|BlackBerrySimulator.Deploy.0 = DebugMem|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|Win32.ActiveCfg = DebugMem|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|Win32.Build.0 = DebugMem|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|x64.ActiveCfg = DebugMem|x64
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.DebugMem|x64.Build.0 = DebugMem|x64
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerry.ActiveCfg = Release|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerry.Build.0 = Release|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerry.Deploy.0 = Release|BlackBerry
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerrySimulator.ActiveCfg = Release|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerrySimulator.Build.0 = Release|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|BlackBerrySimulator.Deploy.0 = Release|BlackBerrySimulator
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.ActiveCfg = Release|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|Win32.Build.0 = Release|Win32
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|x64.ActiveCfg = Release|x64
-		{04EAF3E5-0F9E-AF4D-53F9-269CE114211F}.Release|x64.Build.0 = Release|x64
 		{82522888-E09A-ED48-AD7D-247237B37B3A}.Debug|BlackBerry.ActiveCfg = Debug|BlackBerry
 		{82522888-E09A-ED48-AD7D-247237B37B3A}.Debug|BlackBerry.Build.0 = Debug|BlackBerry
 		{82522888-E09A-ED48-AD7D-247237B37B3A}.Debug|BlackBerry.Deploy.0 = Debug|BlackBerry

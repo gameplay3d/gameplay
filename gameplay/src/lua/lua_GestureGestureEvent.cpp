@@ -21,7 +21,6 @@ Gesture::GestureEvent lua_enumFromString_GestureGestureEvent(const char* s)
         return Gesture::GESTURE_PINCH;
     if (strcmp(s, luaEnumString_GestureGestureEvent_GESTURE_ANY_SUPPORTED) == 0)
         return Gesture::GESTURE_ANY_SUPPORTED;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Gesture::GestureEvent.", s);
     return Gesture::GESTURE_TAP;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_GestureGestureEvent(Gesture::GestureEvent e)
         return luaEnumString_GestureGestureEvent_GESTURE_PINCH;
     if (e == Gesture::GESTURE_ANY_SUPPORTED)
         return luaEnumString_GestureGestureEvent_GESTURE_ANY_SUPPORTED;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Gesture::GestureEvent.", e);
     return enumStringEmpty;
 }
 

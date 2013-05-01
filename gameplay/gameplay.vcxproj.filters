@@ -10,9 +10,6 @@
     <Filter Include="res\shaders">
       <UniqueIdentifier>{be0b36f1-49ed-4a06-9f1f-57c654a554fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="res\shaders\lib">
-      <UniqueIdentifier>{d42defb1-22e2-4573-8077-9bd23e61494c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\lua">
       <UniqueIdentifier>{21cf31c6-9c10-44cb-a864-d46a0e7bfe5e}</UniqueIdentifier>
     </Filter>
@@ -838,6 +835,21 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\lua\lua_HeightField.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_ImageControl.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_TerrainListener.cpp">
+      <Filter>src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_RenderStateCullFaceSide.cpp">
       <Filter>src\lua</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1667,6 +1679,18 @@
     <ClInclude Include="src\lua\lua_HeightField.h">
       <Filter>src\lua</Filter>
     </ClInclude>
+    <ClInclude Include="src\ImageControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ImageControl.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_TerrainListener.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h">
+      <Filter>src\lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Game.inl">
@@ -1714,6 +1738,57 @@
     <None Include="res\shaders\colored-unlit.vert">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="res\shaders\font.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\font.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\form.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\form.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting-directional.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting-directional.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting-point.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting-point.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting-spot.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\lighting-spot.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\skinning.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\skinning-none.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\sprite.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\sprite.vert">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\terrain.frag">
+      <Filter>res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\terrain.vert">
+      <Filter>res\shaders</Filter>
+    </None>
     <None Include="res\shaders\textured.frag">
       <Filter>res\shaders</Filter>
     </None>
@@ -1730,39 +1805,6 @@
       <Filter>res\shaders</Filter>
     </None>
     <None Include="res\shaders\textured-unlit.vert">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\lib\attributes.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\attributes-skinning.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-directional.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-directional.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-point.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-point.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-spot.frag">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\lib\lighting-spot.vert">
-      <Filter>res\shaders\lib</Filter>
-    </None>
-    <None Include="res\shaders\terrain.vert">
-      <Filter>res\shaders</Filter>
-    </None>
-    <None Include="res\shaders\terrain.frag">
       <Filter>res\shaders</Filter>
     </None>
   </ItemGroup>

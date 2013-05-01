@@ -56,6 +56,11 @@ public:
      */
     int enterMessagePump();
 
+    /**
+     * Swaps the frame buffer on the device.
+     */
+    static void swapBuffers();
+
 private:
     
     /**
@@ -116,16 +121,23 @@ private:
     static void setVsync(bool enable);
 
     /**
-     * Swaps the frame buffer on the device.
-     */
-    static void swapBuffers();
-
-    /**
      * Sleeps synchronously for the given amount of time (in milliseconds).
      *
      * @param ms How long to sleep (in milliseconds).
      */
     static void sleep(long ms);
+
+    /**
+     * Set if multi-sampling is enabled on the platform.
+     *
+     * @param enabled true sets multi-sampling to be enabled, false to be disabled.
+     */
+    static void setMultiSampling(bool enabled);
+
+   /**
+    * Is multi-sampling mode enabled.
+    */
+    static bool isMultiSampling();
 
     /**
      * Set if multi-touch is enabled on the platform.
@@ -189,12 +201,43 @@ private:
     static bool isCursorVisible();
 
     /**
-     * Gets the platform accelerometer values.
+     * Whether the platform has accelerometer support.
+     */
+    static bool hasAccelerometer();
+
+    /**
+     * Gets the platform accelerometer values for use as an indication of device
+     * orientation. Despite its name, implementations are at liberty to combine
+     * accelerometer data with data from other sensors as well, such as the gyros.
+     * This method is best used to obtain an indication of device orientation; it
+     * does not necessarily distinguish between acceleration and rotation rate.
      * 
-     * @param pitch The accelerometer pitch.
-     * @param roll The accelerometer roll.
+     * @param pitch The accelerometer pitch. Zero if hasAccelerometer() returns false.
+     * @param roll The accelerometer roll. Zero if hasAccelerometer() returns false.
      */
     static void getAccelerometerValues(float* pitch, float* roll);
+
+    /**
+     * Gets raw sensor values, if equipped, allowing a distinction between device acceleration
+     * and rotation rate. Returns zeros on platforms with no corresponding support. See also
+     * hasAccelerometer() and getAccelerometerValues().
+     *
+     * @param accelX The x-coordinate of the raw accelerometer data.
+     * @param accelY The y-coordinate of the raw accelerometer data.
+     * @param accelZ The z-coordinate of the raw accelerometer data.
+     * @param gyroX The x-coordinate of the raw gyroscope data.
+     * @param gyroY The y-coordinate of the raw gyroscope data.
+     * @param gyroZ The z-coordinate of the raw gyroscope data.
+     */
+    static void getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ);
+
+    /**
+     * Gets the command line arguments.
+     * 
+     * @param argc The number of command line arguments.
+     * @param argv The array of command line arguments.
+     */
+    static void getArguments(int* argc, char*** argv);
     
     /**
      * Shows or hides the virtual keyboard (if supported).
@@ -252,14 +295,14 @@ private:
 
 public:
 
-   /**
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
      */
-    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+    static void touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool actuallyMouse = false);
 
-   /**
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
@@ -273,7 +316,42 @@ public:
      */
     static bool mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
-   /**
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gestureSwipeEventInternal(int x, int y, int direction);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gesturePinchEventInternal(int x, int y, float scale);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gestureTapEventInternal(int x, int y);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void resizeEventInternal(unsigned int width, unsigned int height);
+
+    /**
+     * Internal method used only from static code in various platform implementation.
+     *
+     * @script{ignore}
+     */
+    static void gamepadEventInternal(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex = 0);
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}
@@ -281,7 +359,8 @@ public:
     static void gamepadEventConnectedInternal(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
                                               unsigned int vendorId, unsigned int productId, 
                                               const char* vendorString, const char* productString);
-   /**
+
+    /**
      * Internal method used only from static code in various platform implementation.
      *
      * @script{ignore}

@@ -10,9 +10,12 @@
     #include <windows.h>
     #include <tchar.h>
     #include <stdio.h>
+    #include <direct.h>
     #define gp_stat _stat
     #define gp_stat_struct struct stat
 #else
+    #define __EXT_POSIX2
+    #include <libgen.h>
     #include <dirent.h>
     #define gp_stat stat
     #define gp_stat_struct struct stat
@@ -85,6 +88,27 @@ static bool androidFileExists(const char* filePath)
 /** @script{ignore} */
 static std::string __resourcePath("./");
 static std::map<std::string, std::string> __aliases;
+
+/**
+ * Gets the fully resolved path.
+ * If the path is relative then it will be prefixed with the resource path.
+ * Aliases will be converted to a relative path.
+ * 
+ * @param path The path to resolve.
+ * @param fullPath The full resolved path. (out param)
+ */
+static void getFullPath(const char* path, std::string& fullPath)
+{
+    if (FileSystem::isAbsolutePath(path))
+    {
+        fullPath.assign(path);
+    }
+    else
+    {
+        fullPath.assign(__resourcePath);
+        fullPath += FileSystem::resolvePath(path);
+    }
+}
 
 /**
  * 
@@ -259,30 +283,54 @@ bool FileSystem::listFiles(const char* dirPath, std::vector<std::string>& files)
         path.append(dirPath);
     }
     path.append("/.");
+    bool result = false;
+
     struct dirent* dp;
     DIR* dir = opendir(path.c_str());
-    if (!dir)
+    if (dir != NULL)
     {
-        return false;
-    }
-    while ((dp = readdir(dir)) != NULL)
-    {
-        std::string filepath(path);
-        filepath.append("/");
-        filepath.append(dp->d_name);
-
-        struct stat buf;
-        if (!stat(filepath.c_str(), &buf))
+        while ((dp = readdir(dir)) != NULL)
         {
-            // Add to the list if this is not a directory
-            if (!S_ISDIR(buf.st_mode))
+            std::string filepath(path);
+            filepath.append("/");
+            filepath.append(dp->d_name);
+
+            struct stat buf;
+            if (!stat(filepath.c_str(), &buf))
             {
-                files.push_back(dp->d_name);
+                // Add to the list if this is not a directory
+                if (!S_ISDIR(buf.st_mode))
+                {
+                    files.push_back(dp->d_name);
+                }
             }
         }
+        closedir(dir);
+        result = true;
     }
-    closedir(dir);
-    return true;
+
+#ifdef __ANDROID__
+    // List the files that are in the android APK at this path
+    AAssetDir* assetDir = AAssetManager_openDir(__assetManager, dirPath);
+    if (assetDir != NULL)
+    {
+        AAssetDir_rewind(assetDir);
+        const char* file = NULL;
+        while ((file = AAssetDir_getNextFileName(assetDir)) != NULL)
+        {
+            std::string filename(file);
+            // Check if this file was already added to the list because it was copied to the SD card.
+            if (find(files.begin(), files.end(), filename) == files.end())
+            {
+                files.push_back(filename);
+            }
+        }
+        AAssetDir_close(assetDir);
+        result = true;
+    }
+#endif
+
+    return result;
 #endif
 }
 
@@ -291,19 +339,19 @@ bool FileSystem::fileExists(const char* filePath)
     GP_ASSERT(filePath);
 
 #ifdef __ANDROID__
-    if (androidFileExists(filePath))
+    if (androidFileExists(resolvePath(filePath)))
     {
         return true;
     }
 #endif
 
-    std::string fullPath(__resourcePath);
-    fullPath += resolvePath(filePath);
+    std::string fullPath;
+    getFullPath(filePath, fullPath);
 
     gp_stat_struct s;
 
 #ifdef WIN32
-    if (stat(fullPath.c_str(), &s) != 0)
+    if (!isAbsolutePath(filePath) && stat(fullPath.c_str(), &s) != 0)
     {
         fullPath = __resourcePath;
         fullPath += "../../gameplay/";
@@ -352,12 +400,12 @@ Stream* FileSystem::open(const char* path, size_t mode)
         return FileStreamAndroid::create(resolvePath(path), modeStr);
     }
 #else
-    std::string fullPath(__resourcePath);
-    fullPath += resolvePath(path);
+    std::string fullPath;
+    getFullPath(path, fullPath);
     
 #ifdef WIN32
     gp_stat_struct s;
-    if (stat(fullPath.c_str(), &s) != 0 && (mode & WRITE) == 0)
+    if (!isAbsolutePath(path) && stat(fullPath.c_str(), &s) != 0 && (mode & WRITE) == 0)
     {
         fullPath = __resourcePath;
         fullPath += "../../gameplay/";
@@ -386,15 +434,15 @@ FILE* FileSystem::openFile(const char* filePath, const char* mode)
     GP_ASSERT(filePath);
     GP_ASSERT(mode);
 
-    std::string fullPath(__resourcePath);
-    fullPath += resolvePath(filePath);
+    std::string fullPath;
+    getFullPath(filePath, fullPath);
 
     createFileFromAsset(filePath);
     
     FILE* fp = fopen(fullPath.c_str(), mode);
     
 #ifdef WIN32
-    if (fp == NULL)
+    if (fp == NULL && !isAbsolutePath(filePath))
     {
         fullPath = __resourcePath;
         fullPath += "../../gameplay/";
@@ -452,11 +500,10 @@ bool FileSystem::isAbsolutePath(const char* filePath)
     if (filePath == 0 || filePath[0] == '\0')
         return false;
 #ifdef WIN32
-    if (strlen(filePath) >= 2)
+    if (filePath[1] != '\0')
     {
         char first = filePath[0];
-        if (filePath[1] == ':' && ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')))
-            return true;
+        return (filePath[1] == ':' && ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')));
     }
     return false;
 #else
@@ -513,6 +560,47 @@ void FileSystem::createFileFromAsset(const char* path)
             upToDateAssets.insert(fullPath);
         }
     }
+#endif
+}
+
+std::string FileSystem::getDirectoryName(const char* path)
+{
+    if (path == NULL || strlen(path) == 0)
+    {
+        return "";
+    }
+#ifdef WIN32
+    char drive[_MAX_DRIVE];
+    char dir[_MAX_DIR];
+    _splitpath(path, drive, dir, NULL, NULL);
+    std::string dirname;
+    size_t driveLength = strlen(drive);
+    if (driveLength > 0)
+    {
+        dirname.reserve(driveLength + strlen(dir));
+        dirname.append(drive);
+        dirname.append(dir);
+    }
+    else
+    {
+        dirname.assign(dir);
+    }
+    std::replace(dirname.begin(), dirname.end(), '\\', '/');
+    return dirname;
+#else
+    // dirname() modifies the input string so create a temp string
+    std::string dirname;
+    char* tempPath = new char[strlen(path) + 1];
+    strcpy(tempPath, path);
+    char* dir = ::dirname(tempPath);
+    if (dir && strlen(dir) > 0)
+    {
+        dirname.assign(dir);
+        // dirname() strips off the trailing '/' so add it back to be consistent with Windows
+        dirname.append("/");
+    }
+    SAFE_DELETE_ARRAY(tempPath);
+    return dirname;
 #endif
 }
 

@@ -7,6 +7,7 @@ namespace gameplay
 // Lua bindings for RenderState.
 int lua_RenderState__gc(lua_State* state);
 int lua_RenderState_addRef(lua_State* state);
+int lua_RenderState_clearParameter(lua_State* state);
 int lua_RenderState_getParameter(lua_State* state);
 int lua_RenderState_getRefCount(lua_State* state);
 int lua_RenderState_getStateBlock(lua_State* state);

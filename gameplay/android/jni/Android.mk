@@ -1,17 +1,4 @@
-# Copyright (C) 2009 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+
 LOCAL_PATH := $(call my-dir)/../../src
 
 include $(CLEAR_VARS)
@@ -54,6 +41,7 @@ LOCAL_SRC_FILES := \
     Gamepad.cpp \
     HeightField.cpp \
     Image.cpp \
+	ImageControl.cpp \
     Joint.cpp \
     Joystick.cpp \
     Label.cpp \
@@ -87,6 +75,7 @@ LOCAL_SRC_FILES := \
     PhysicsVehicle.cpp \
     PhysicsVehicleWheel.cpp \
     Plane.cpp \
+    Platform.cpp \
     PlatformAndroid.cpp \
     Properties.cpp \
     Quaternion.cpp \
@@ -178,6 +167,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Global.cpp \
     lua/lua_HeightField.cpp \
     lua/lua_Image.cpp \
+    lua/lua_ImageControl.cpp \
     lua/lua_ImageFormat.cpp \
     lua/lua_Joint.cpp \
     lua/lua_Joystick.cpp \
@@ -247,6 +237,7 @@ LOCAL_SRC_FILES := \
     lua/lua_RenderState.cpp \
     lua/lua_RenderStateAutoBinding.cpp \
     lua/lua_RenderStateBlend.cpp \
+    lua/lua_RenderStateCullFaceSide.cpp \
     lua/lua_RenderStateDepthFunction.cpp \
     lua/lua_RenderStateStateBlock.cpp \
     lua/lua_RenderTarget.cpp \
@@ -260,6 +251,7 @@ LOCAL_SRC_FILES := \
     lua/lua_Technique.cpp \
     lua/lua_Terrain.cpp \
     lua/lua_TerrainFlags.cpp \
+    lua/lua_TerrainListener.cpp \
     lua/lua_TextBox.cpp \
     lua/lua_Texture.cpp \
     lua/lua_TextureFilter.cpp \

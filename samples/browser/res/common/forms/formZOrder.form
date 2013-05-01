@@ -1,0 +1,30 @@
+form zOrder
+{
+    theme = res/common/default.theme
+    style = basicContainer
+    size = 600, 600
+    scroll = SCROLL_BOTH
+	consumeInputEvents = true
+	
+    label label1
+    {
+        style = basic
+        size = 400, 200
+        text = TOP
+        zIndex = 3
+    }
+
+    label label2 : label1
+    {
+        text = MID
+        position = 20, 50
+        zIndex = 2
+    }
+
+    label label3 : label1
+    {
+        text = BOTTOM
+        position = 40, 100
+        zIndex = 1
+    }
+}

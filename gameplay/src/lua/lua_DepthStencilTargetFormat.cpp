@@ -15,7 +15,6 @@ DepthStencilTarget::Format lua_enumFromString_DepthStencilTargetFormat(const cha
         return DepthStencilTarget::DEPTH;
     if (strcmp(s, luaEnumString_DepthStencilTargetFormat_DEPTH_STENCIL) == 0)
         return DepthStencilTarget::DEPTH_STENCIL;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration DepthStencilTarget::Format.", s);
     return DepthStencilTarget::DEPTH;
 }
 
@@ -25,7 +24,6 @@ const char* lua_stringFromEnum_DepthStencilTargetFormat(DepthStencilTarget::Form
         return luaEnumString_DepthStencilTargetFormat_DEPTH;
     if (e == DepthStencilTarget::DEPTH_STENCIL)
         return luaEnumString_DepthStencilTargetFormat_DEPTH_STENCIL;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration DepthStencilTarget::Format.", e);
     return enumStringEmpty;
 }
 

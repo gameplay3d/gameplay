@@ -1,0 +1,443 @@
+form particleEditor
+{
+    theme = res/editor.theme
+    autoWidth = true
+    autoHeight = true
+
+    container presets
+    {
+        style = basic
+        layout = LAYOUT_VERTICAL
+        position = 0, 0
+        size = 160, 220
+        consumeInputEvents = true
+
+        label title
+        {
+            style = title
+            size = 160, 30
+            text = Presets
+        }
+
+        radioButton spiralFlame
+        {
+           style = iconNoBorder
+           text = Fire
+           group = presets
+           size = 160, 40
+           imageSize = 35, 35
+           selected = true
+        }
+
+        radioButton smoke : spiralFlame
+        {
+            text = Smoke
+            selected = false
+        }
+
+        radioButton explosion : smoke
+        {
+            text = Explosion
+        }
+
+        button reset
+        {
+            style = buttonStyle
+            alignment = ALIGN_BOTTOM
+            autoWidth = true
+            height = 50
+            text = Reset
+        }
+    }
+
+    // Emission settings
+    container emission
+    {
+        style = basic
+        position = 0, 220
+        layout = LAYOUT_VERTICAL
+        size = 160, 210
+        consumeInputEvents = true
+
+        // Burst emission
+        button emit
+        {
+            style = buttonStyle
+            position = 0, 50
+            size = 140, 50
+            text = Emit
+        }
+
+        // Emission rate
+        slider emissionRate
+        {
+            style = noBorder
+            size = 140, 50
+            orientation = HORIZONTAL
+            min = 1
+            max = 500
+            value = 100
+            step = 0
+            text = Emission Rate
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2            
+        }
+
+        slider burstSize : emissionRate
+        {
+            text = Burst Size
+            value = 20
+            max = 50
+            step = 1
+        }
+
+        // Start / Stop Emitter
+        checkBox started
+        {
+            style = iconNoBorder
+            size = 140, 40
+            imageSize = 35, 35
+            text = Running
+            checked = true
+        }
+    }
+
+    // Camera Zoom
+    container zoom
+    {
+        style = noBorder
+        size = 160, 50
+        position = 0, 430
+        consumeInputEvents = true
+
+        button zoomIn
+        {
+            style = buttonStyle
+            size = 80, 50
+            text = Zoom  In
+        }
+
+        button zoomOut : zoomIn
+        {
+            position = 80, 0
+            text = Zoom Out
+        }
+    }
+
+    container particleProperties
+    {
+        style = particleProps
+        alignment = ALIGN_TOP_RIGHT
+        width = 210
+        autoHeight = true
+        layout = LAYOUT_VERTICAL
+        scroll = SCROLL_VERTICAL
+        scrollBarsAutoHide = false
+        consumeInputEvents = true
+
+        // Particle Size
+        label titleSize
+        {
+            style = title
+            size = 150, 30
+            text = Size
+        }
+
+        slider startMin
+        {
+            style = noBorder
+            size = 150, 50
+            orientation = HORIZONTAL
+            min = 0
+            max = 5
+            value = 1.5
+            step = 0
+            text = Min Begin
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
+        }
+
+        slider startMax : startMin
+        {
+            text = Max Begin
+        }
+
+        slider endMin : startMin
+        {
+            text = Min End
+        }
+
+        slider endMax : startMin
+        {
+            text = Max End
+        }
+
+        // Energy
+        label titleEnergy : titleSize
+        {
+            text = Energy
+        }
+
+        slider energyMin
+        {
+            style = noBorder
+            size = 150, 50
+            orientation = HORIZONTAL
+            min = 0
+            max = 5000
+            text = Min
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2            
+            consumeInputEvents = false
+        }
+
+        slider energyMax : energyMin
+        {
+            text = Max
+        }
+
+        // Start color
+        label titleStartColor : titleSize
+        {
+            text = Start Color
+        }
+
+        slider startRed
+        {
+            style = noBorder
+            size = 150, 50
+            orientation = HORIZONTAL
+            min = 0
+            max = 1
+            text = Red
+            textAlignment = ALIGN_TOP_HCENTER
+            valueTextVisible = true
+            valueTextAlignment = ALIGN_BOTTOM_HCENTER
+            valueTextPrecision = 2
+            consumeInputEvents = false
+        }
+
+        slider startGreen : startRed
+        {
+            text = Green
+        }
+
+        slider startBlue : startRed
+        {
+            text = Blue
+        }
+
+        slider startAlpha : startRed
+        {
+            text = Alpha
+        }
+
+        // End color
+        label titleEndColor : titleSize
+        {
+            text = End Color
+        }
+
+        slider endRed : startRed
+        {
+        }
+
+        slider endGreen : startGreen
+        {
+        }
+
+        slider endBlue : startBlue
+        {
+        }
+
+        slider endAlpha : startAlpha
+        {
+        }
+
+        // Position variance
+        label titlePositionVar : titleSize
+        {
+            text = Position Var.
+        }
+
+        slider posVarX : startRed
+        {
+            min = 0
+            max = 10
+            text = X
+        }
+
+        slider posVarY : posVarX
+        {
+            text = Y
+        }
+
+        slider posVarZ : posVarX
+        {
+            text = Z
+        }
+
+        // Initial velocity
+        label titleVelocity : titleSize
+        {
+            text = Velocity
+        }
+
+        slider velocityX : posVarX
+        {
+            min = -10
+            max = 10
+            text = X
+        }
+
+        slider velocityY : velocityX
+        {
+            text = Y
+        }
+
+        slider velocityZ : velocityX
+        {
+            text = Z
+        }
+
+        // Velocity variance
+        label titleVelocityVar : titleSize
+        {
+            text = Velocity Var.
+        }
+
+        slider velocityVarX : posVarX
+        {
+        }
+
+        slider velocityVarY : posVarY
+        {
+        }
+
+        slider velocityVarZ : posVarZ
+        {
+        }
+
+        // Acceleration
+        label titleAcceleration : titleSize
+        {
+            text = Accel.
+        }
+
+        slider accelX : velocityX
+        {
+            text = X
+        }
+
+        slider accelY : accelX
+        {
+            text = Y
+        }
+
+        slider accelZ : accelX
+        {
+            text = Z
+        }
+
+        // Acceleration variance
+        label titleAccelerationVar : titleSize
+        {
+            text = Accel. Var.
+        }
+
+        slider accelVarX : posVarX
+        {
+            text = X
+        }
+
+        slider accelVarY : posVarX
+        {
+            text = Y
+        }
+
+        slider accelVarZ : posVarX
+        {
+            text = Z
+        }
+
+        // Local rotation speed
+        label titleSpinSpeed : titleSize
+        {
+            text = Spin Speed
+        }
+
+        slider spinSpeedMin : velocityX
+        {
+            text = Min
+        }
+
+        slider spinSpeedMax : spinSpeedMin
+        {
+            text = Max
+        }
+
+        // Rotation axis
+        label titleRotationAxis : titleSize
+        {
+            text = Axis Rotation
+        }
+
+        slider axisX : startRed
+        {
+            text = X
+        }
+
+        slider axisY : axisX
+        {
+            text = Y
+        }
+
+        slider axisZ : axisX
+        {
+            text = Z
+        }
+
+        // Rotation axis variance
+        label titleRotationAxisVar : titleSize
+        {
+            text = Axis Var.
+        }
+
+        slider axisVarX : axisX
+        {
+            text = X
+        }
+
+        slider axisVarY : axisVarX
+        {
+            text = Y
+        }
+
+        slider axisVarZ : axisVarX
+        {
+            text = Z
+        }
+
+        // Axis rotation speed
+        label titleRotationSpeed : titleSize
+        {
+            text = Rotation Speed
+        }
+
+        slider rotationSpeedMin : velocityX
+        {
+            text = Min
+        }
+
+        slider rotationSpeedMax : rotationSpeedMin
+        {
+            text = Max
+        }
+    }
+}

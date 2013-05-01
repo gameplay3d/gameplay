@@ -141,7 +141,7 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
 
     if (_joints[index])
     {
-        _joints[index]->_skinCount--;
+        _joints[index]->removeSkin(this);
         SAFE_RELEASE(_joints[index]);
     }
 
@@ -150,7 +150,7 @@ void MeshSkin::setJoint(Joint* joint, unsigned int index)
     if (joint)
     {
         joint->addRef();
-        joint->_skinCount++;
+        joint->addSkin(this);
     }
 }
 

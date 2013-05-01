@@ -96,6 +96,16 @@ inline bool Game::isCursorVisible()
     return Platform::isCursorVisible();
 }
 
+inline void Game::setMultiSampling(bool enabled)
+{
+    Platform::setMultiSampling(enabled);
+}
+
+inline bool Game::isMultiSampling() const
+{
+    return Platform::isMultiSampling();
+}
+
 inline void Game::setMultiTouch(bool enabled)
 {
     Platform::setMultiTouch(enabled);
@@ -111,9 +121,19 @@ inline bool Game::canExit() const
     return Platform::canExit();
 }
 
+inline bool Game::hasAccelerometer() const
+{
+	return Platform::hasAccelerometer();
+}
+
 inline void Game::getAccelerometerValues(float* pitch, float* roll)
 {
     Platform::getAccelerometerValues(pitch, roll);
+}
+
+inline void Game::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    return Platform::getRawSensorValues(accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
 }
 
 inline unsigned int Game::getGamepadCount() const

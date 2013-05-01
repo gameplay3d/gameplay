@@ -14,18 +14,21 @@
 #define CAMERA_DIRTY_BOUNDS 32
 #define CAMERA_DIRTY_ALL (CAMERA_DIRTY_VIEW | CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS)
 
+// Other misc camera bits
+#define CAMERA_CUSTOM_PROJECTION 64
+
 namespace gameplay
 {
 
 Camera::Camera(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
     : _type(PERSPECTIVE), _fieldOfView(fieldOfView), _aspectRatio(aspectRatio), _nearPlane(nearPlane), _farPlane(farPlane),
-      _dirtyBits(CAMERA_DIRTY_ALL), _node(NULL)
+      _bits(CAMERA_DIRTY_ALL), _node(NULL)
 {
 }
 
 Camera::Camera(float zoomX, float zoomY, float aspectRatio, float nearPlane, float farPlane)
     : _type(ORTHOGRAPHIC), _aspectRatio(aspectRatio), _nearPlane(nearPlane), _farPlane(farPlane),
-      _dirtyBits(CAMERA_DIRTY_ALL), _node(NULL)
+      _bits(CAMERA_DIRTY_ALL), _node(NULL)
 {
     // Orthographic camera.
     _zoom[0] = zoomX;
@@ -131,7 +134,7 @@ void Camera::setFieldOfView(float fieldOfView)
     GP_ASSERT(_type == Camera::PERSPECTIVE);
 
     _fieldOfView = fieldOfView;
-    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getZoomX() const
@@ -146,7 +149,7 @@ void Camera::setZoomX(float zoomX)
     GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
 
     _zoom[0] = zoomX;
-    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getZoomY() const
@@ -161,7 +164,7 @@ void Camera::setZoomY(float zoomY)
     GP_ASSERT(_type == Camera::ORTHOGRAPHIC);
 
     _zoom[1] = zoomY;
-    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getAspectRatio() const
@@ -172,7 +175,7 @@ float Camera::getAspectRatio() const
 void Camera::setAspectRatio(float aspectRatio)
 {
     _aspectRatio = aspectRatio;
-    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getNearPlane() const
@@ -183,7 +186,7 @@ float Camera::getNearPlane() const
 void Camera::setNearPlane(float nearPlane)
 {
     _nearPlane = nearPlane;
-    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 float Camera::getFarPlane() const
@@ -194,7 +197,7 @@ float Camera::getFarPlane() const
 void Camera::setFarPlane(float farPlane)
 {
     _farPlane = farPlane;
-    _dirtyBits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 Node* Camera::getNode() const
@@ -219,13 +222,13 @@ void Camera::setNode(Node* node)
             _node->addListener(this);
         }
 
-        _dirtyBits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+        _bits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
     }
 }
 
 const Matrix& Camera::getViewMatrix() const
 {
-    if (_dirtyBits & CAMERA_DIRTY_VIEW)
+    if (_bits & CAMERA_DIRTY_VIEW)
     {
         if (_node)
         {
@@ -237,7 +240,7 @@ const Matrix& Camera::getViewMatrix() const
             _view.setIdentity();
         }
 
-        _dirtyBits &= ~CAMERA_DIRTY_VIEW;
+        _bits &= ~CAMERA_DIRTY_VIEW;
     }
 
     return _view;
@@ -245,11 +248,11 @@ const Matrix& Camera::getViewMatrix() const
 
 const Matrix& Camera::getInverseViewMatrix() const
 {
-    if (_dirtyBits & CAMERA_DIRTY_INV_VIEW)
+    if (_bits & CAMERA_DIRTY_INV_VIEW)
     {
         getViewMatrix().invert(&_inverseView);
 
-        _dirtyBits &= ~CAMERA_DIRTY_INV_VIEW;
+        _bits &= ~CAMERA_DIRTY_INV_VIEW;
     }
 
     return _inverseView;
@@ -257,7 +260,7 @@ const Matrix& Camera::getInverseViewMatrix() const
 
 const Matrix& Camera::getProjectionMatrix() const
 {
-    if (_dirtyBits & CAMERA_DIRTY_PROJ)
+    if (!(_bits & CAMERA_CUSTOM_PROJECTION) && (_bits & CAMERA_DIRTY_PROJ))
     {
         if (_type == PERSPECTIVE)
         {
@@ -268,19 +271,35 @@ const Matrix& Camera::getProjectionMatrix() const
             Matrix::createOrthographic(_zoom[0], _zoom[1], _nearPlane, _farPlane, &_projection);
         }
 
-        _dirtyBits &= ~CAMERA_DIRTY_PROJ;
+        _bits &= ~CAMERA_DIRTY_PROJ;
     }
 
     return _projection;
 }
 
+void Camera::setProjectionMatrix(const Matrix& matrix)
+{
+    _projection = matrix;
+    _bits |= CAMERA_CUSTOM_PROJECTION;
+    _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+}
+
+void Camera::resetProjectionMatrix()
+{
+    if (_bits & CAMERA_CUSTOM_PROJECTION)
+    {
+        _bits &= ~CAMERA_CUSTOM_PROJECTION;
+        _bits |= CAMERA_DIRTY_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    }
+}
+
 const Matrix& Camera::getViewProjectionMatrix() const
 {
-    if (_dirtyBits & CAMERA_DIRTY_VIEW_PROJ)
+    if (_bits & CAMERA_DIRTY_VIEW_PROJ)
     {
         Matrix::multiply(getProjectionMatrix(), getViewMatrix(), &_viewProjection);
 
-        _dirtyBits &= ~CAMERA_DIRTY_VIEW_PROJ;
+        _bits &= ~CAMERA_DIRTY_VIEW_PROJ;
     }
 
     return _viewProjection;
@@ -288,11 +307,11 @@ const Matrix& Camera::getViewProjectionMatrix() const
 
 const Matrix& Camera::getInverseViewProjectionMatrix() const
 {
-    if (_dirtyBits & CAMERA_DIRTY_INV_VIEW_PROJ)
+    if (_bits & CAMERA_DIRTY_INV_VIEW_PROJ)
     {
         getViewProjectionMatrix().invert(&_inverseViewProjection);
 
-        _dirtyBits &= ~CAMERA_DIRTY_INV_VIEW_PROJ;
+        _bits &= ~CAMERA_DIRTY_INV_VIEW_PROJ;
     }
 
     return _inverseViewProjection;
@@ -300,12 +319,12 @@ const Matrix& Camera::getInverseViewProjectionMatrix() const
 
 const Frustum& Camera::getFrustum() const
 {
-    if (_dirtyBits & CAMERA_DIRTY_BOUNDS)
+    if (_bits & CAMERA_DIRTY_BOUNDS)
     {
         // Update our bounding frustum from our view projection matrix.
         _bounds.set(getViewProjectionMatrix());
 
-        _dirtyBits &= ~CAMERA_DIRTY_BOUNDS;
+        _bits &= ~CAMERA_DIRTY_BOUNDS;
     }
 
     return _bounds;
@@ -333,6 +352,22 @@ void Camera::project(const Rectangle& viewport, const Vector3& position, float* 
         float ndcZ = clipPos.z / clipPos.w;
         *depth = ndcZ + 1.0f / 2.0f;
     }
+}
+
+void Camera::project(const Rectangle& viewport, const Vector3& position, Vector2* out) const
+{
+    GP_ASSERT(out);
+    float x, y;
+    project(viewport, position, &x, &y);
+    out->set(x, y);
+}
+
+void Camera::project(const Rectangle& viewport, const Vector3& position, Vector3* out) const
+{
+    GP_ASSERT(out);
+    float x, y, depth;
+    project(viewport, position, &x, &y, &depth);
+    out->set(x, y, depth);
 }
 
 void Camera::unproject(const Rectangle& viewport, float x, float y, float depth, Vector3* dst) const
@@ -404,7 +439,7 @@ Camera* Camera::clone(NodeCloneContext &context) const
 
 void Camera::transformChanged(Transform* transform, long cookie)
 {
-    _dirtyBits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
+    _bits |= CAMERA_DIRTY_VIEW | CAMERA_DIRTY_INV_VIEW | CAMERA_DIRTY_INV_VIEW_PROJ | CAMERA_DIRTY_VIEW_PROJ | CAMERA_DIRTY_BOUNDS;
 }
 
 }

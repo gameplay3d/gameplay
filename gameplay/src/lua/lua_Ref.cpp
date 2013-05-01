@@ -20,14 +20,14 @@ void luaRegister_Ref()
     const luaL_Reg* lua_statics = NULL;
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Ref", lua_members, NULL, NULL, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Ref", lua_members, NULL, NULL, lua_statics, scopePath);
 }
 
 static Ref* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Ref");
     luaL_argcheck(state, userdata != NULL, 1, "'Ref' expected.");
-    return (Ref*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Ref*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Ref_addRef(lua_State* state)

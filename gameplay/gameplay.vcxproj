@@ -91,6 +91,7 @@
     <ClCompile Include="src\gameplay-main-windows.cpp" />
     <ClCompile Include="src\HeightField.cpp" />
     <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\ImageControl.cpp" />
     <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\Joystick.cpp" />
     <ClCompile Include="src\Label.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="src\lua\lua_Global.cpp" />
     <ClCompile Include="src\lua\lua_HeightField.cpp" />
     <ClCompile Include="src\lua\lua_Image.cpp" />
+    <ClCompile Include="src\lua\lua_ImageControl.cpp" />
     <ClCompile Include="src\lua\lua_ImageFormat.cpp" />
     <ClCompile Include="src\lua\lua_Joint.cpp" />
     <ClCompile Include="src\lua\lua_Joystick.cpp" />
@@ -227,6 +229,7 @@
     <ClCompile Include="src\lua\lua_RenderState.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateAutoBinding.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateBlend.cpp" />
+    <ClCompile Include="src\lua\lua_RenderStateCullFaceSide.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateDepthFunction.cpp" />
     <ClCompile Include="src\lua\lua_RenderStateStateBlock.cpp" />
     <ClCompile Include="src\lua\lua_RenderTarget.cpp" />
@@ -240,6 +243,7 @@
     <ClCompile Include="src\lua\lua_Technique.cpp" />
     <ClCompile Include="src\lua\lua_Terrain.cpp" />
     <ClCompile Include="src\lua\lua_TerrainFlags.cpp" />
+    <ClCompile Include="src\lua\lua_TerrainListener.cpp" />
     <ClCompile Include="src\lua\lua_TextBox.cpp" />
     <ClCompile Include="src\lua\lua_Texture.cpp" />
     <ClCompile Include="src\lua\lua_TextureFilter.cpp" />
@@ -292,6 +296,7 @@
     <ClCompile Include="src\PhysicsVehicle.cpp" />
     <ClCompile Include="src\PhysicsVehicleWheel.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\Platform.cpp" />
     <ClCompile Include="src\PlatformAndroid.cpp" />
     <ClCompile Include="src\PlatformBlackBerry.cpp" />
     <ClCompile Include="src\PlatformLinux.cpp" />
@@ -366,6 +371,7 @@
     <ClInclude Include="src\Gesture.h" />
     <ClInclude Include="src\HeightField.h" />
     <ClInclude Include="src\Image.h" />
+    <ClInclude Include="src\ImageControl.h" />
     <ClInclude Include="src\Joint.h" />
     <ClInclude Include="src\Joystick.h" />
     <ClInclude Include="src\Keyboard.h" />
@@ -434,6 +440,7 @@
     <ClInclude Include="src\lua\lua_Global.h" />
     <ClInclude Include="src\lua\lua_HeightField.h" />
     <ClInclude Include="src\lua\lua_Image.h" />
+    <ClInclude Include="src\lua\lua_ImageControl.h" />
     <ClInclude Include="src\lua\lua_ImageFormat.h" />
     <ClInclude Include="src\lua\lua_Joint.h" />
     <ClInclude Include="src\lua\lua_Joystick.h" />
@@ -503,6 +510,7 @@
     <ClInclude Include="src\lua\lua_RenderState.h" />
     <ClInclude Include="src\lua\lua_RenderStateAutoBinding.h" />
     <ClInclude Include="src\lua\lua_RenderStateBlend.h" />
+    <ClInclude Include="src\lua\lua_RenderStateCullFaceSide.h" />
     <ClInclude Include="src\lua\lua_RenderStateDepthFunction.h" />
     <ClInclude Include="src\lua\lua_RenderStateStateBlock.h" />
     <ClInclude Include="src\lua\lua_RenderTarget.h" />
@@ -516,6 +524,7 @@
     <ClInclude Include="src\lua\lua_Technique.h" />
     <ClInclude Include="src\lua\lua_Terrain.h" />
     <ClInclude Include="src\lua\lua_TerrainFlags.h" />
+    <ClInclude Include="src\lua\lua_TerrainListener.h" />
     <ClInclude Include="src\lua\lua_TextBox.h" />
     <ClInclude Include="src\lua\lua_Texture.h" />
     <ClInclude Include="src\lua\lua_TextureFilter.h" />
@@ -612,15 +621,21 @@
     <None Include="res\shaders\colored-unlit.vert" />
     <None Include="res\shaders\colored.frag" />
     <None Include="res\shaders\colored.vert" />
-    <None Include="res\shaders\lib\attributes-skinning.vert" />
-    <None Include="res\shaders\lib\attributes.vert" />
-    <None Include="res\shaders\lib\lighting-directional.frag" />
-    <None Include="res\shaders\lib\lighting-directional.vert" />
-    <None Include="res\shaders\lib\lighting-point.frag" />
-    <None Include="res\shaders\lib\lighting-point.vert" />
-    <None Include="res\shaders\lib\lighting-spot.frag" />
-    <None Include="res\shaders\lib\lighting-spot.vert" />
-    <None Include="res\shaders\lib\lighting.frag" />
+    <None Include="res\shaders\font.frag" />
+    <None Include="res\shaders\font.vert" />
+    <None Include="res\shaders\form.frag" />
+    <None Include="res\shaders\form.vert" />
+    <None Include="res\shaders\lighting-directional.frag" />
+    <None Include="res\shaders\lighting-directional.vert" />
+    <None Include="res\shaders\lighting-point.frag" />
+    <None Include="res\shaders\lighting-point.vert" />
+    <None Include="res\shaders\lighting-spot.frag" />
+    <None Include="res\shaders\lighting-spot.vert" />
+    <None Include="res\shaders\lighting.frag" />
+    <None Include="res\shaders\skinning-none.vert" />
+    <None Include="res\shaders\skinning.vert" />
+    <None Include="res\shaders\sprite.frag" />
+    <None Include="res\shaders\sprite.vert" />
     <None Include="res\shaders\terrain.frag" />
     <None Include="res\shaders\terrain.vert" />
     <None Include="res\shaders\textured-bumped.frag" />
@@ -887,7 +902,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>__BB10__;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_BLACKBERRY_GAMEPAD;_ITERATOR_DEBUG_LEVEL=0;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)src;..\external-deps\lua\include;..\external-deps\bullet\include;..\external-deps\openal\include\AL;..\external-deps\alut\include\AL;..\external-deps\oggvorbis\include;..\external-deps\glew\include;..\external-deps\libpng\include;..\external-deps\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>

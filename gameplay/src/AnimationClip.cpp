@@ -11,7 +11,7 @@ namespace gameplay
 
 AnimationClip::AnimationClip(const char* id, Animation* animation, unsigned long startTime, unsigned long endTime)
     : _id(id), _animation(animation), _startTime(startTime), _endTime(endTime), _duration(_endTime - _startTime), 
-      _stateBits(0x00), _repeatCount(1.0f), _activeDuration(_duration * _repeatCount), _speed(1.0f), _timeStarted(0), 
+      _stateBits(0x00), _repeatCount(1.0f), _loopBlendTime(0), _activeDuration(_duration * _repeatCount), _speed(1.0f), _timeStarted(0), 
       _elapsedTime(0), _crossFadeToClip(NULL), _crossFadeOutElapsed(0), _crossFadeOutDuration(0), _blendWeight(1.0f), 
       _beginListeners(NULL), _endListeners(NULL), _listeners(NULL), _listenerItr(NULL), _scriptListeners(NULL)
 {
@@ -93,7 +93,7 @@ unsigned long AnimationClip::getEndTime() const
     return _endTime;
 }
 
-float AnimationClip::getElaspedTime() const
+float AnimationClip::getElapsedTime() const
 {
     return _elapsedTime;
 }
@@ -106,11 +106,14 @@ void AnimationClip::setRepeatCount(float repeatCount)
 
     if (repeatCount == REPEAT_INDEFINITE)
     {
-        _activeDuration = _duration;
+        _activeDuration = _duration + _loopBlendTime;
     }
     else
     {
-        _activeDuration = _repeatCount * _duration;
+        _activeDuration = _duration * _repeatCount;
+
+        if (repeatCount > 1.0f && _loopBlendTime > 0.0f)
+            _activeDuration += std::ceil(repeatCount - 1.0f) * _loopBlendTime;
     }
 }
 
@@ -121,14 +124,15 @@ float AnimationClip::getRepeatCount() const
 
 void AnimationClip::setActiveDuration(unsigned long duration)
 {
+    GP_ASSERT(duration > 0.0f);
+
     if (duration == REPEAT_INDEFINITE)
     {
-        _repeatCount = REPEAT_INDEFINITE;
-        _activeDuration = _duration;
+        _activeDuration = _duration + _loopBlendTime;
     }
     else
     {
-        _activeDuration = _duration;
+        _activeDuration = duration;
         _repeatCount = (float)_activeDuration / (float)_duration;
     }
 }
@@ -164,6 +168,18 @@ void AnimationClip::setBlendWeight(float blendWeight)
 float AnimationClip::getBlendWeight() const
 {
     return _blendWeight;
+}
+
+void AnimationClip::setLoopBlendTime(float loopBlendTime)
+{
+    _loopBlendTime = loopBlendTime;
+    if (_loopBlendTime < 0.0f)
+        _loopBlendTime = 0.0f;
+}
+
+float AnimationClip::getLoopBlendTime() const
+{
+    return _loopBlendTime;
 }
 
 bool AnimationClip::isPlaying() const
@@ -358,57 +374,59 @@ bool AnimationClip::update(float elapsedTime)
     {
         return false;
     }
-    else if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
-    {   // If the marked for removal bit is set, it means stop() was called on the AnimationClip at some point
+
+    if (isClipStateBitSet(CLIP_IS_MARKED_FOR_REMOVAL_BIT))
+    {
+        // If the marked for removal bit is set, it means stop() was called on the AnimationClip at some point
         // after the last update call. Reset the flag, and return true so the AnimationClip is removed from the 
         // running clips on the AnimationController.
         onEnd();
         return true;
     }
-    else if (!isClipStateBitSet(CLIP_IS_STARTED_BIT))
+
+    if (!isClipStateBitSet(CLIP_IS_STARTED_BIT))
     {
+        // Clip is just starting
         onBegin();
     }
     else
     {
+        // Clip was already running
         _elapsedTime += elapsedTime * _speed;
 
         if (_repeatCount == REPEAT_INDEFINITE && _elapsedTime <= 0)
+        {
+            // Elapsed time is moving backwards, so wrap it back around the end when it falls below zero
             _elapsedTime = _activeDuration + _elapsedTime;
+
+            // TODO: account for _loopBlendTime
+        }
     }
 
+    // Current time within a loop of the clip
     float currentTime = 0.0f;
+
     // Check to see if clip is complete.
     if (_repeatCount != REPEAT_INDEFINITE && ((_speed >= 0.0f && _elapsedTime >= _activeDuration) || (_speed <= 0.0f && _elapsedTime <= 0.0f)))
     {
+        // We finished our active duration (including repeats), so clamp to our end value.
         resetClipStateBit(CLIP_IS_STARTED_BIT);
-        
-        if (_speed >= 0.0f)
-        {
-            // If _duration == 0, we have a "pose". Just set currentTime to 0.
-            if (_duration == 0)
-            {
-                currentTime = 0.0f;
-            }
-            else
-            {
-                currentTime = (float)(_activeDuration % _duration); // Get's the fractional part of the final repeat.
-                if (currentTime == 0.0f)
-                    currentTime = _duration;
-            }
-        }
-        else
-        {
-            currentTime = 0.0f; // If we are negative speed, the end value should be 0.
-        }
+
+        // Ensure we end off at the endpoints of our clip (-speed==0, +speed==_duration)
+        currentTime = _speed < 0.0f ? 0.0f : _duration;
     }
     else
     {
         // If _duration == 0, we have a "pose". Just set currentTime to 0.
         if (_duration == 0)
+        {
             currentTime = 0.0f;
-        else // Gets portion/fraction of the repeat.
-            currentTime = fmodf(_elapsedTime, _duration);
+        }
+        else
+        {
+            // Animation is running normally.
+            currentTime = fmodf(_elapsedTime, _duration + _loopBlendTime);
+        }
     }
 
     // Notify any listeners of Animation events.
@@ -445,12 +463,15 @@ bool AnimationClip::update(float elapsedTime)
     // Add back in start time, and divide by the total animation's duration to get the actual percentage complete
     GP_ASSERT(_animation);
 
-    // If the animation duration is zero (start time == end time, such as when there is only a single keyframe),
-    // then prevent a divide by zero and set percentComplete = 1.
-    float percentComplete = _animation->_duration == 0 ? 1 : ((float)_startTime + currentTime) / (float)_animation->_duration;
-    
-    percentComplete = MATH_CLAMP(percentComplete, 0.0f, 1.0f);
+    // Compute percentage complete for the current loop (prevent a divide by zero if _duration==0).
+    // Note that we don't use (currentTime/(_duration+_loopBlendTime)). That's because we want a
+    // % value that is outside the 0-1 range for loop smoothing/blending purposes.
+    float percentComplete = _duration == 0 ? 1 : currentTime / (float)_duration;
 
+    if (_loopBlendTime == 0.0f)
+        percentComplete = MATH_CLAMP(percentComplete, 0.0f, 1.0f);
+
+    // If we're cross fading, compute blend weights
     if (isClipStateBitSet(CLIP_IS_FADING_OUT_BIT))
     {
         GP_ASSERT(_crossFadeToClip);
@@ -503,6 +524,9 @@ bool AnimationClip::update(float elapsedTime)
     AnimationValue* value = NULL;
     AnimationTarget* target = NULL;
     size_t channelCount = _animation->_channels.size();
+    float percentageStart = (float)_startTime / (float)_animation->_duration;
+    float percentageEnd = (float)_endTime / (float)_animation->_duration;
+    float percentageBlend = (float)_loopBlendTime / (float)_animation->_duration;
     for (size_t i = 0; i < channelCount; i++)
     {
         channel = _animation->_channels[i];
@@ -514,7 +538,8 @@ bool AnimationClip::update(float elapsedTime)
 
         // Evaluate the point on Curve
         GP_ASSERT(channel->getCurve());
-        channel->getCurve()->evaluate(percentComplete, value->_value);
+        channel->getCurve()->evaluate(percentComplete, percentageStart, percentageEnd, percentageBlend, value->_value);
+
         // Set the animation value on the target property.
         target->setAnimationPropertyValue(channel->_propertyId, value, _blendWeight);
     }
@@ -531,6 +556,8 @@ bool AnimationClip::update(float elapsedTime)
 
 void AnimationClip::onBegin()
 {
+    addRef();
+
     // Initialize animation to play.
     setClipStateBit(CLIP_IS_STARTED_BIT);
     if (_speed >= 0)
@@ -559,10 +586,14 @@ void AnimationClip::onBegin()
             listener++;
         }
     }
+
+    release();
 }
 
 void AnimationClip::onEnd()
 {
+    addRef();
+
     _blendWeight = 1.0f;
     resetClipStateBit(CLIP_ALL_BITS);
 
@@ -577,6 +608,8 @@ void AnimationClip::onEnd()
             listener++;
         }
     }
+
+    release();
 }
 
 bool AnimationClip::isClipStateBitSet(unsigned char bit) const

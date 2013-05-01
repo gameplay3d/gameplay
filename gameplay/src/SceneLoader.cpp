@@ -4,6 +4,7 @@
 #include "Bundle.h"
 #include "SceneLoader.h"
 #include "Terrain.h"
+#include "Light.h"
 
 namespace gameplay
 {
@@ -43,9 +44,11 @@ Scene* SceneLoader::loadInternal(const char* url)
     }
 
     // Get the path to the main GPB.
-    const char* path = sceneProperties->getString("path");
-    if (path)
+    std::string path;
+    if (sceneProperties->getPath("path", &path))
+    {
         _gpbPath = path;
+    }
 
     // Build the node URL/property and animation reference tables and load the referenced files/store the inline properties objects.
     buildReferenceTables(sceneProperties);
@@ -81,6 +84,7 @@ Scene* SceneLoader::loadInternal(const char* url)
         SceneNodeProperty::MATERIAL | 
         SceneNodeProperty::PARTICLE |
         SceneNodeProperty::TERRAIN |
+        SceneNodeProperty::LIGHT |
         SceneNodeProperty::CAMERA |
         SceneNodeProperty::ROTATE |
         SceneNodeProperty::SCALE |
@@ -211,6 +215,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
         snp._type == SceneNodeProperty::MATERIAL ||
         snp._type == SceneNodeProperty::PARTICLE ||
         snp._type == SceneNodeProperty::TERRAIN ||
+        snp._type == SceneNodeProperty::LIGHT ||
         snp._type == SceneNodeProperty::CAMERA ||
         snp._type == SceneNodeProperty::COLLISION_OBJECT)
     {
@@ -221,6 +226,7 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             GP_ERROR("The referenced node data at url '%s' failed to load.", snp._url.c_str());
             return;
         }
+        p->rewind();
 
         // If the URL didn't specify a particular namespace within the file, pick the first one.
         p = (strlen(p->getNamespace()) > 0) ? p : p->getNextNamespace();
@@ -259,6 +265,13 @@ void SceneLoader::applyNodeProperty(SceneNode& sceneNode, Node* node, const Prop
             Terrain* terrain = Terrain::create(p);
             node->setTerrain(terrain);
             SAFE_RELEASE(terrain);
+            break;
+        }
+        case SceneNodeProperty::LIGHT:
+        {
+            Light* light = Light::create(p);
+            node->setLight(light);
+            SAFE_RELEASE(light);
             break;
         }
         case SceneNodeProperty::CAMERA:
@@ -575,6 +588,12 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::TERRAIN, propertyUrl.c_str());
                     _properties[propertyUrl] = subns;
                 }
+                else if (strcmp(subns->getNamespace(), "light") == 0)
+                {
+                    propertyUrl += "light/" + std::string(subns->getId());
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::LIGHT, propertyUrl.c_str());
+                    _properties[propertyUrl] = subns;
+                }
                 else if (strcmp(subns->getNamespace(), "camera") == 0)
                 {
                     propertyUrl += "camera/" + std::string(subns->getId());
@@ -630,6 +649,10 @@ void SceneLoader::buildReferenceTables(Properties* sceneProperties)
                 else if (strcmp(name, "terrain") == 0)
                 {
                     addSceneNodeProperty(sceneNode, SceneNodeProperty::TERRAIN, ns->getString());
+                }
+                else if (strcmp(name, "light") == 0)
+                {
+                    addSceneNodeProperty(sceneNode, SceneNodeProperty::LIGHT, ns->getString());
                 }
                 else if (strcmp(name, "camera") == 0)
                 {

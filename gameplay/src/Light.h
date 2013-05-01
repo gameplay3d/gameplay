@@ -3,6 +3,7 @@
 
 #include "Ref.h"
 #include "Vector3.h"
+#include "Properties.h"
 
 namespace gameplay
 {
@@ -102,6 +103,19 @@ public:
      * @script{create}
      */
     static Light* createSpot(float red, float green, float blue, float range, float innerAngle, float outerAngle);
+
+    /**
+     * Creates a light from a properties definition.
+     *
+     * The properties object must contain a "type" parameter, specifying one of the
+     * supported Light::Type values. In addition, values must be supplied for all
+     * parameters of the corresponding light-specific creation method.
+     *
+     * @param properties The properties definition of the Light.
+     *
+     * @return The new Light.
+     */
+    static Light* create(Properties* properties);
 
     /**
      * Destructor.

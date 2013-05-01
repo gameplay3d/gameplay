@@ -1,3 +1,58 @@
+## v1.7.0
+
+- Adds -m parameter to encoder to support exporting Material from FBX scenes.
+- Adds encoder animation grouping arguments for auto grouping and disabling grouping via -g:auto and -g:off
+- Adds UI ImageControl
+- Adds UI control events for enter and leave.
+- Adds UI and theme support for focus state on controls.
+- Adds Gamepad support in UI.
+- Adds smooth interial mouse scrolling.
+- Adds keyboard event handling code that was missed on some UI containers and controls.
+- Adds Game accelerometer and gyro improvements.
+- Adds XBox 360 controller support to MacOS X.
+- Adds RenderState enum for supporting cull side definition for front, back and front-back culling.
+- Adds a lua function "convert(object, className)" that will convert a gameplay userdata object to another class type by changing the metatable. (For example: This lets you convert Control to Button in lua)
+- Adds gesture events to script.
+- Adds script friendly verions of Camera:project(..)
+- Adds support for defining lights in .scene file.
+- Adds MaterialParameter setter that are script friendly.
+- Adds methods to FrameBuffer for querying render target info.
+- Adds FileSystem::getDirectoryName()
+- Adds support so that Properties can be loaded relative to .property files.
+- Adds methods on ScriptController for registering and unregisering global script callback functions.
+- Adds Game::resizeEvent(..)
+- Adds Game::getArguments()
+- Adds Scene::load() so it can load from ".gpb" files.
+- Adds some additional operators overloads for Vector classes.
+- Adds RenderState::clearParameter method to allow existing material parameter values/bindings to be cleared.
+- Adds loopBlendTime property for animation clips to support interpolating between the end points of an animation clip when looping.
+- Fixes Xcode support to be up to date to version 6.1
+- Fixes Form::projectPoint for forms that are scaled.
+- Fixes Bullet NEON build problems.
+- Fixes problem with static rigid bodies attached to nodes.
+- Fixes problems with ghost objects and kinimatic rigid bodies.
+- Fixes userData pointer that was not cloned properly when cloning a node.
+- Fixes bug in createChannel with keyCount = 1.
+- Fixes encoder to ignore 1 frame animations caused by FBX export on Blender.
+- Fixes buggy tab order in UI.
+- Fixes touch event problems not propagating up on mobile touch platforms.
+- Fixes parent relationship on cloned Technique and Pass.
+- Fixes Node to include light contribution for bounding volume computations.
+- Fixed issue where multiple samplers pointing to the same texture would share the same state instead of using sampler-specific filter and wrap state.
+- Fixes calculation of the transform matrix in FBX encoder for lights properly considering vectors like pre and post rotation scenarios.
+- Fixes blurry borders on UI forms by using proper texture filtering.
+- Fixes lua dofile on Windows.
+- Fixes in colored shader when using spot ligts.
+- Fixes issue in encoder which was converting point lights into ambient lights when they had no decay.
+- Fixes to CMake projects on different platforms.
+- Cleans up Platform by moving commong platform code to Platform.cpp
+- Cleans up and changes Gamepad APIs.
+- Cleans repo directory restructure dropping gameplay- prefix on many folders and files.
+- Removes bin and external-deps folder/contents to external server with new install scripts that are now required to be run after cloning the repo.
+- Removes pre-compiled api/html docs to reduce repository bloat.
+- Removes support for COLLADA DAE and now support FBX.
+- Removes middle mouse button simulated desktop accelerometer.
+
 ## v1.6.0
 
 - Adds file Stream interface for reading/writing files instead of using fread/fwrite. 

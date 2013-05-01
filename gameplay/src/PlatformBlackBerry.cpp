@@ -26,6 +26,8 @@
 
 using namespace std;
 
+int __argc = 0;
+char** __argv = 0;
 struct timespec __timespec;
 static double __timeStart;
 static double __timeAbsolute;
@@ -41,8 +43,15 @@ static EGLSurface __eglSurface = EGL_NO_SURFACE;
 static EGLConfig __eglConfig = 0;
 static int __orientationAngle;
 static bool __multiTouch = false;
+static bool __multiSampling = false;
 static float __pitch;
 static float __roll;
+static float __accelRawX;
+static float __accelRawY;
+static float __accelRawZ;
+static float __gyroRawX;
+static float __gyroRawY;
+static float __gyroRawZ;
 static const char* __glExtensions;
 static struct gestures_set * __gestureSet;
 static bitset<3> __gestureEventsProcessed;
@@ -454,7 +463,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
                 gesture_swipe_t* swipe = (gesture_swipe_t*)gesture;
                 if (!__gestureSwipeRecognized)
                 {
-                    Game::getInstance()->gestureSwipeEvent(swipe->coords.x, swipe->coords.y, swipe->direction);
+                    Platform::gestureSwipeEventInternal(swipe->coords.x, swipe->coords.y, swipe->direction);
                     __gestureSwipeRecognized = true;
                 }
 
@@ -480,7 +489,7 @@ void gesture_callback(gesture_base_t* gesture, mtouch_event_t* event, void* para
             if ( __gestureEventsProcessed.test(Gesture::GESTURE_TAP) )
             {
                 gesture_tap_t* tap = (gesture_tap_t*)gesture;
-                Game::getInstance()->gestureTapEvent(tap->touch_coords.x, tap->touch_coords.y);
+                Platform::gestureTapEventInternal(tap->touch_coords.x, tap->touch_coords.y);
             }
             break;
         }
@@ -572,7 +581,9 @@ void queryGamepad(GamepadHandle handle, int* buttonCount, int* joystickCount, in
 
 void Platform::pollGamepadState(Gamepad* gamepad)
 {
-    screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_BUTTONS, (int*)&gamepad->_buttons);
+	unsigned int buttons;
+    screen_get_device_property_iv(gamepad->_handle, SCREEN_PROPERTY_BUTTONS, (int*)&buttons);
+	gamepad->setButtons(buttons);
 
     unsigned int i;
     for (i = 0; i < gamepad->_joystickCount; ++i)
@@ -601,7 +612,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         x *= (x < 0) ? 0.0078125f : 0.0078740157480315f;
         y *= (y > 0) ? 0.0078125f : 0.0078740157480315f;
 
-        gamepad->_joysticks[i].set(x, y);        
+		gamepad->setJoystickValue(i, x, y);
     }
 
     for (i = 0; i < gamepad->_triggerCount; ++i)
@@ -620,7 +631,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         }
 
         float value = (float)analog[2] * 0.0078125f;
-        gamepad->_triggers[i] = value;
+		gamepad->setTriggerValue(i, value);
     }
 }
 #else
@@ -699,10 +710,16 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     bps_initialize();
 
     // Initialize navigator and orientation
-    static const int SENSOR_RATE = 25000;
+    static const int SENSOR_RATE = 25000; // (25000 microseconds = 40 Hz)
     sensor_set_rate(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, SENSOR_RATE);
+    sensor_set_rate(SENSOR_TYPE_ACCELEROMETER, SENSOR_RATE);
+    sensor_set_rate(SENSOR_TYPE_GYROSCOPE, SENSOR_RATE);
     sensor_set_skip_duplicates(SENSOR_TYPE_AZIMUTH_PITCH_ROLL, true);
+    sensor_set_skip_duplicates(SENSOR_TYPE_ACCELEROMETER, true);
+    sensor_set_skip_duplicates(SENSOR_TYPE_GYROSCOPE, true);
     sensor_request_events(SENSOR_TYPE_AZIMUTH_PITCH_ROLL);
+    sensor_request_events(SENSOR_TYPE_ACCELEROMETER);
+    sensor_request_events(SENSOR_TYPE_GYROSCOPE);
     navigator_request_events(0);
     navigator_rotation_lock(true);
     __orientationAngle = atoi(getenv("ORIENTATION"));
@@ -745,6 +762,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
         EGL_RENDERABLE_TYPE,    EGL_OPENGL_ES2_BIT,
         EGL_NONE
     };
+    __multiSampling = samples > 0;
 
     const EGLint eglContextAttrs[] =
     {
@@ -929,6 +947,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
             }
         }
 
+        __multiSampling = samples > 0;
+
         if (!success)
         {
             checkErrorEGL("eglChooseConfig");
@@ -1029,7 +1049,7 @@ void mouseOrTouchEvent(Mouse::MouseEvent mouseEvent, Touch::TouchEvent touchEven
 {
     if (!gameplay::Platform::mouseEventInternal(mouseEvent, x, y, 0))
     {
-        Platform::touchEventInternal(touchEvent, x, y, 0);
+        Platform::touchEventInternal(touchEvent, x, y, 0, true);
     }
 }
 
@@ -1303,6 +1323,14 @@ int Platform::enterMessagePump()
                     float azimuth;
                     sensor_event_get_apr(event, &azimuth, &__pitch, &__roll);
                 }
+                else if (bps_event_get_code(event) == SENSOR_ACCELEROMETER_READING)
+                {
+                    sensor_event_get_xyz(event, &__accelRawX, &__accelRawY, &__accelRawZ);
+                }
+                else if (bps_event_get_code(event) == SENSOR_GYROSCOPE_READING)
+                {
+                    sensor_event_get_xyz(event, &__gyroRawX, &__gyroRawY, &__gyroRawZ);
+                }
             }
         }
 
@@ -1400,6 +1428,23 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    //todo
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     __multiTouch = enabled;
@@ -1408,6 +1453,11 @@ void Platform::setMultiTouch(bool enabled)
 bool Platform::isMultiTouch()
 {
     return __multiTouch;
+}
+
+bool Platform::hasAccelerometer()
+{
+    return true;
 }
 
 void Platform::getAccelerometerValues(float* pitch, float* roll)
@@ -1451,6 +1501,47 @@ void Platform::getAccelerometerValues(float* pitch, float* roll)
     }
 }
 
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+	if (accelX)
+	{
+		*accelX = __accelRawX;
+	}
+
+	if (accelY)
+	{
+		*accelY = __accelRawY;
+	}
+
+	if (accelZ)
+	{
+		*accelZ = __accelRawZ;
+	}
+
+	if (gyroX)
+	{
+		*gyroX = __gyroRawX;
+	}
+
+	if (gyroY)
+	{
+		*gyroY = __gyroRawY;
+	}
+
+	if (gyroZ)
+	{
+		*gyroZ = __gyroRawZ;
+	}
+}
+
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
+}
+
 bool Platform::hasMouse()
 {
     // not supported
@@ -1485,51 +1576,6 @@ void Platform::displayKeyboard(bool display)
         virtualkeyboard_show();
     else
         virtualkeyboard_hide();
-}
-
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
-        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
-    }
-}
-
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    if (!Form::keyEventInternal(evt, key))
-    {
-        Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
-    }
-}
-
-bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else
-    {
-        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
-    }
-}
-
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
-}
-
-void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
-{
-    Gamepad::remove(handle);
 }
 
 void Platform::shutdownInternal()

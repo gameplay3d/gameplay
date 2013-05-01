@@ -145,6 +145,21 @@ protected:
     bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
     /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
+    bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
+    /**
+     * Keyboard callback on key events.
+     *
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
      *

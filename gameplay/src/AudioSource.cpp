@@ -77,18 +77,18 @@ AudioSource* AudioSource::create(Properties* properties)
         return NULL;
     }
 
-    const char* path = properties->getString("path");
-    if (path == NULL)
+    std::string path;
+    if (!properties->getPath("path", &path))
     {
         GP_ERROR("Audio file failed to load; the file path was not specified.");
         return NULL;
     }
 
     // Create the audio source.
-    AudioSource* audio = AudioSource::create(path);
+    AudioSource* audio = AudioSource::create(path.c_str());
     if (audio == NULL)
     {
-        GP_ERROR("Audio file '%s' failed to load properly.", path);
+        GP_ERROR("Audio file '%s' failed to load properly.", path.c_str());
         return NULL;
     }
 

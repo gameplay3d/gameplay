@@ -33,7 +33,6 @@ RenderState::DepthFunction lua_enumFromString_RenderStateDepthFunction(const cha
         return RenderState::DEPTH_GEQUAL;
     if (strcmp(s, luaEnumString_RenderStateDepthFunction_DEPTH_ALWAYS) == 0)
         return RenderState::DEPTH_ALWAYS;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration RenderState::DepthFunction.", s);
     return RenderState::DEPTH_NEVER;
 }
 
@@ -55,7 +54,6 @@ const char* lua_stringFromEnum_RenderStateDepthFunction(RenderState::DepthFuncti
         return luaEnumString_RenderStateDepthFunction_DEPTH_GEQUAL;
     if (e == RenderState::DEPTH_ALWAYS)
         return luaEnumString_RenderStateDepthFunction_DEPTH_ALWAYS;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration RenderState::DepthFunction.", e);
     return enumStringEmpty;
 }
 

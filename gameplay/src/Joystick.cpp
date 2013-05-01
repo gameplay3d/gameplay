@@ -110,7 +110,7 @@ void Joystick::initialize(Theme::Style* style, Properties* properties)
 
 void Joystick::addListener(Control::Listener* listener, int eventFlags)
 {
-    if ((eventFlags & Listener::TEXT_CHANGED) == Listener::TEXT_CHANGED)
+    if ((eventFlags & Control::Listener::TEXT_CHANGED) == Control::Listener::TEXT_CHANGED)
     {
         GP_ERROR("TEXT_CHANGED event is not applicable to this control.");
     }
@@ -130,7 +130,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 float dy = 0.0f;
 
                 _contactIndex = (int) contactIndex;
-                notifyListeners(Listener::PRESS);
+                notifyListeners(Control::Listener::PRESS);
 
                 // Get the displacement of the touch from the centre.
                 if (!_relative)
@@ -168,10 +168,10 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 {
                     _value.set(value);
                     _dirty = true;
-                    notifyListeners(Listener::VALUE_CHANGED);
+                    notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                _state = ACTIVE;
+                setState(ACTIVE);
                 return _consumeInputEvents;
             }
             break;
@@ -203,7 +203,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 {
                     _value.set(value);
                     _dirty = true;
-                    notifyListeners(Listener::VALUE_CHANGED);
+                    notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
                 return _consumeInputEvents;
@@ -216,7 +216,7 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
             {
                 _contactIndex = INVALID_CONTACT_INDEX;
 
-                notifyListeners(Listener::RELEASE);
+                notifyListeners(Control::Listener::RELEASE);
 
                 // Reset displacement and direction vectors.
                 _displacement.set(0.0f, 0.0f);
@@ -225,11 +225,10 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
                 {
                     _value.set(value);
                     _dirty = true;
-                    notifyListeners(Listener::VALUE_CHANGED);
+                    notifyListeners(Control::Listener::VALUE_CHANGED);
                 }
 
-                _state = NORMAL;
-
+                setState(NORMAL);
                 return _consumeInputEvents;
             }
             break;
@@ -242,7 +241,6 @@ bool Joystick::touchEvent(Touch::TouchEvent touchEvent, int x, int y, unsigned i
 void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
 {
     GP_ASSERT(spriteBatch);
-    spriteBatch->start();
 
     // If the joystick is not absolute, then only draw if it is active.
     if (!_relative || (_relative && _state == ACTIVE))
@@ -284,7 +282,6 @@ void Joystick::drawImages(SpriteBatch* spriteBatch, const Rectangle& clip)
                 spriteBatch->draw(position.x, position.y, _innerSize->x, _innerSize->y, uvs.u1, uvs.v1, uvs.u2, uvs.v2, color, _viewportClipBounds);
         }
     }
-    spriteBatch->finish();
 }
 
 const char* Joystick::getType() const

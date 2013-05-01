@@ -11,6 +11,7 @@
 #include "ScriptController.h"
 #include "ScriptTarget.h"
 #include "Terrain.h"
+#include "TerrainPatch.h"
 #include "Transform.h"
 #include "lua_CurveInterpolationType.h"
 #include "lua_TerrainFlags.h"
@@ -22,18 +23,25 @@ void luaRegister_Terrain()
 {
     const luaL_Reg lua_members[] = 
     {
+        {"addListener", lua_Terrain_addListener},
         {"addRef", lua_Terrain_addRef},
         {"draw", lua_Terrain_draw},
         {"getBoundingBox", lua_Terrain_getBoundingBox},
         {"getHeight", lua_Terrain_getHeight},
+        {"getInverseWorldMatrix", lua_Terrain_getInverseWorldMatrix},
         {"getNode", lua_Terrain_getNode},
+        {"getNormalMatrix", lua_Terrain_getNormalMatrix},
         {"getPatchCount", lua_Terrain_getPatchCount},
         {"getRefCount", lua_Terrain_getRefCount},
         {"getTriangleCount", lua_Terrain_getTriangleCount},
         {"getVisiblePatchCount", lua_Terrain_getVisiblePatchCount},
         {"getVisibleTriangleCount", lua_Terrain_getVisibleTriangleCount},
+        {"getWorldMatrix", lua_Terrain_getWorldMatrix},
+        {"getWorldViewMatrix", lua_Terrain_getWorldViewMatrix},
+        {"getWorldViewProjectionMatrix", lua_Terrain_getWorldViewProjectionMatrix},
         {"isFlagSet", lua_Terrain_isFlagSet},
         {"release", lua_Terrain_release},
+        {"removeListener", lua_Terrain_removeListener},
         {"setFlag", lua_Terrain_setFlag},
         {"transformChanged", lua_Terrain_transformChanged},
         {NULL, NULL}
@@ -45,14 +53,14 @@ void luaRegister_Terrain()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Terrain", lua_members, NULL, lua_Terrain__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Terrain", lua_members, NULL, lua_Terrain__gc, lua_statics, scopePath);
 }
 
 static Terrain* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Terrain");
     luaL_argcheck(state, userdata != NULL, 1, "'Terrain' expected.");
-    return (Terrain*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Terrain*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Terrain__gc(lua_State* state)
@@ -69,7 +77,7 @@ int lua_Terrain__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Terrain");
                 luaL_argcheck(state, userdata != NULL, 1, "'Terrain' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Terrain* instance = (Terrain*)object->instance;
@@ -86,6 +94,48 @@ int lua_Terrain__gc(lua_State* state)
         default:
         {
             lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Terrain_addListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Terrain::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<Terrain::Listener>(2, "TerrainListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Terrain::Listener'.");
+                    lua_error(state);
+                }
+
+                Terrain* instance = getInstance(state);
+                instance->addListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Terrain_addListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
             lua_error(state);
             break;
         }
@@ -153,7 +203,7 @@ int lua_Terrain_draw(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 Terrain* instance = getInstance(state);
                 instance->draw(param1);
@@ -191,7 +241,7 @@ int lua_Terrain_getBoundingBox(lua_State* state)
                 void* returnPtr = (void*)&(instance->getBoundingBox());
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "BoundingBox");
@@ -262,6 +312,50 @@ int lua_Terrain_getHeight(lua_State* state)
     return 0;
 }
 
+int lua_Terrain_getInverseWorldMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Terrain* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getInverseWorldMatrix());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Terrain_getInverseWorldMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Terrain_getNode(lua_State* state)
 {
     // Get the number of parameters.
@@ -278,7 +372,7 @@ int lua_Terrain_getNode(lua_State* state)
                 void* returnPtr = (void*)instance->getNode();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Node");
@@ -293,6 +387,50 @@ int lua_Terrain_getNode(lua_State* state)
             }
 
             lua_pushstring(state, "lua_Terrain_getNode - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Terrain_getNormalMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Terrain* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getNormalMatrix());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Terrain_getNormalMatrix - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -481,6 +619,138 @@ int lua_Terrain_getVisibleTriangleCount(lua_State* state)
     return 0;
 }
 
+int lua_Terrain_getWorldMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Terrain* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getWorldMatrix());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Terrain_getWorldMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Terrain_getWorldViewMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Terrain* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getWorldViewMatrix());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Terrain_getWorldViewMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_Terrain_getWorldViewProjectionMatrix(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                Terrain* instance = getInstance(state);
+                void* returnPtr = (void*)&(instance->getWorldViewProjectionMatrix());
+                if (returnPtr)
+                {
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
+                    object->instance = returnPtr;
+                    object->owns = false;
+                    luaL_getmetatable(state, "Matrix");
+                    lua_setmetatable(state, -2);
+                }
+                else
+                {
+                    lua_pushnil(state);
+                }
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_Terrain_getWorldViewProjectionMatrix - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Terrain_isFlagSet(lua_State* state)
 {
     // Get the number of parameters.
@@ -552,6 +822,48 @@ int lua_Terrain_release(lua_State* state)
     return 0;
 }
 
+int lua_Terrain_removeListener(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TUSERDATA || lua_type(state, 2) == LUA_TTABLE || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                bool param1Valid;
+                gameplay::ScriptUtil::LuaArray<Terrain::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<Terrain::Listener>(2, "TerrainListener", false, &param1Valid);
+                if (!param1Valid)
+                {
+                    lua_pushstring(state, "Failed to convert parameter 1 to type 'Terrain::Listener'.");
+                    lua_error(state);
+                }
+
+                Terrain* instance = getInstance(state);
+                instance->removeListener(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_Terrain_removeListener - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
 int lua_Terrain_setFlag(lua_State* state)
 {
     // Get the number of parameters.
@@ -570,7 +882,7 @@ int lua_Terrain_setFlag(lua_State* state)
                 Terrain::Flags param1 = (Terrain::Flags)lua_enumFromString_TerrainFlags(luaL_checkstring(state, 2));
 
                 // Get parameter 2 off the stack.
-                bool param2 = ScriptUtil::luaCheckBool(state, 3);
+                bool param2 = gameplay::ScriptUtil::luaCheckBool(state, 3);
 
                 Terrain* instance = getInstance(state);
                 instance->setFlag(param1, param2);
@@ -607,12 +919,12 @@ int lua_Terrain_static_create(lua_State* state)
                 if ((lua_type(state, 1) == LUA_TSTRING || lua_type(state, 1) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(1, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(1, false);
 
                     void* returnPtr = (void*)Terrain::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -633,14 +945,14 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<Properties> param1 = ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<Properties> param1 = gameplay::ScriptUtil::getObjectPointer<Properties>(1, "Properties", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)Terrain::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -661,14 +973,14 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     void* returnPtr = (void*)Terrain::create(param1);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -696,20 +1008,20 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
                     void* returnPtr = (void*)Terrain::create(param1, *param2);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -738,13 +1050,13 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -754,7 +1066,7 @@ int lua_Terrain_static_create(lua_State* state)
                     void* returnPtr = (void*)Terrain::create(param1, *param2, param3);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -784,13 +1096,13 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -803,7 +1115,7 @@ int lua_Terrain_static_create(lua_State* state)
                     void* returnPtr = (void*)Terrain::create(param1, *param2, param3, param4);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -834,13 +1146,13 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -856,7 +1168,7 @@ int lua_Terrain_static_create(lua_State* state)
                     void* returnPtr = (void*)Terrain::create(param1, *param2, param3, param4, param5);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -888,13 +1200,13 @@ int lua_Terrain_static_create(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<HeightField> param1 = ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<HeightField> param1 = gameplay::ScriptUtil::getObjectPointer<HeightField>(1, "HeightField", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
                     // Get parameter 2 off the stack.
                     bool param2Valid;
-                    ScriptUtil::LuaArray<Vector3> param2 = ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
+                    gameplay::ScriptUtil::LuaArray<Vector3> param2 = gameplay::ScriptUtil::getObjectPointer<Vector3>(2, "Vector3", true, &param2Valid);
                     if (!param2Valid)
                         break;
 
@@ -908,12 +1220,12 @@ int lua_Terrain_static_create(lua_State* state)
                     float param5 = (float)luaL_checknumber(state, 5);
 
                     // Get parameter 6 off the stack.
-                    const char* param6 = ScriptUtil::getString(6, false);
+                    const char* param6 = gameplay::ScriptUtil::getString(6, false);
 
                     void* returnPtr = (void*)Terrain::create(param1, *param2, param3, param4, param5, param6);
                     if (returnPtr)
                     {
-                        ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                        gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                         object->instance = returnPtr;
                         object->owns = true;
                         luaL_getmetatable(state, "Terrain");
@@ -958,7 +1270,7 @@ int lua_Terrain_transformChanged(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<Transform> param1 = ScriptUtil::getObjectPointer<Transform>(2, "Transform", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<Transform> param1 = gameplay::ScriptUtil::getObjectPointer<Transform>(2, "Transform", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'Transform'.");

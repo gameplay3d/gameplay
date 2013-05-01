@@ -225,47 +225,225 @@ void MaterialParameter::setValue(const Matrix* values, unsigned int count)
 
 void MaterialParameter::setValue(const Texture::Sampler* sampler)
 {
+    GP_ASSERT(sampler);
     clearValue();
 
-    if (sampler)
-    {
-        const_cast<Texture::Sampler*>(sampler)->addRef();
-        _value.samplerValue = sampler;
-        _type = MaterialParameter::SAMPLER;
-    }
+    const_cast<Texture::Sampler*>(sampler)->addRef();
+    _value.samplerValue = sampler;
+    _type = MaterialParameter::SAMPLER;
 }
 
 void MaterialParameter::setValue(const Texture::Sampler** samplers, unsigned int count)
 {
+    GP_ASSERT(samplers);
     clearValue();
 
-    if (samplers)
+    for (unsigned int i = 0; i < count; ++i)
     {
-        for (unsigned int i = 0; i < count; ++i)
-        {
-            const_cast<Texture::Sampler*>(samplers[i])->addRef();
-        }
-        _value.samplerArrayValue = samplers;
-        _count = count;
-        _type = MaterialParameter::SAMPLER_ARRAY;
+        const_cast<Texture::Sampler*>(samplers[i])->addRef();
     }
+    _value.samplerArrayValue = samplers;
+    _count = count;
+    _type = MaterialParameter::SAMPLER_ARRAY;
 }
 
 Texture::Sampler* MaterialParameter::setValue(const char* texturePath, bool generateMipmaps)
 {
-    if (texturePath)
-    {
-        clearValue();
+    GP_ASSERT(texturePath);
+    clearValue();
 
-        Texture::Sampler* sampler = Texture::Sampler::create(texturePath, generateMipmaps);
-        if (sampler)
-        {
-            _value.samplerValue = sampler;
-            _type = MaterialParameter::SAMPLER;
-        }
-        return sampler;
+    Texture::Sampler* sampler = Texture::Sampler::create(texturePath, generateMipmaps);
+    if (sampler)
+    {
+        _value.samplerValue = sampler;
+        _type = MaterialParameter::SAMPLER;
     }
-    return NULL;
+    return sampler;
+}
+
+void MaterialParameter::setFloat(float value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setFloatArray(const float* values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.floatPtrValue = new float[count];
+        memcpy(_value.floatPtrValue, values, sizeof(float) * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.floatPtrValue = const_cast<float*> (values);
+    }
+
+    _count = count;
+    _type = MaterialParameter::FLOAT_ARRAY;
+}
+
+void MaterialParameter::setInt(int value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setIntArray(const int* values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.intPtrValue = new int[count];
+        memcpy(_value.intPtrValue, values, sizeof(int) * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.intPtrValue = const_cast<int*> (values);
+    }
+
+    _count = count;
+    _type = MaterialParameter::INT_ARRAY;
+}
+
+void MaterialParameter::setVector2(const Vector2& value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setVector2Array(const Vector2* values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.floatPtrValue = new float[2 * count];
+        memcpy(_value.floatPtrValue, const_cast<float*> (&values[0].x), sizeof(float) * 2 * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.floatPtrValue = const_cast<float*> (&values[0].x);
+    }
+
+    _count = count;
+    _type = MaterialParameter::VECTOR2;
+}
+
+void MaterialParameter::setVector3(const Vector3& value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setVector3Array(const Vector3* values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.floatPtrValue = new float[3 * count];
+        memcpy(_value.floatPtrValue, const_cast<float*> (&values[0].x), sizeof(float) * 3 * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.floatPtrValue = const_cast<float*> (&values[0].x);
+    }
+
+    _count = count;
+    _type = MaterialParameter::VECTOR3;
+}
+
+void MaterialParameter::setVector4(const Vector4& value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setVector4Array(const Vector4* values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.floatPtrValue = new float[4 * count];
+        memcpy(_value.floatPtrValue, const_cast<float*> (&values[0].x), sizeof(float) * 4 * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.floatPtrValue = const_cast<float*> (&values[0].x);
+    }
+
+    _count = count;
+    _type = MaterialParameter::VECTOR4;
+}
+
+void MaterialParameter::setMatrix(const Matrix& value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setMatrixArray(const Matrix* values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.floatPtrValue = new float[16 * count];
+        memcpy(_value.floatPtrValue, const_cast<Matrix&> (values[0]).m, sizeof(float) * 16 * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.floatPtrValue = const_cast<Matrix&> (values[0]).m;
+    }
+
+    _count = count;
+    _type = MaterialParameter::MATRIX;
+}
+
+Texture::Sampler* MaterialParameter::setSampler(const char* texturePath, bool generateMipmaps)
+{
+    return setValue(texturePath, generateMipmaps);
+}
+
+void MaterialParameter::setSampler(const Texture::Sampler* value)
+{
+    setValue(value);
+}
+
+void MaterialParameter::setSamplerArray(const Texture::Sampler** values, unsigned int count, bool copy)
+{
+    GP_ASSERT(values);
+    clearValue();
+
+    if (copy)
+    {
+        _value.samplerArrayValue = new const Texture::Sampler*[count];
+        memcpy(_value.samplerArrayValue, values, sizeof(Texture::Sampler*) * count);
+        _dynamic = true;
+    }
+    else
+    {
+        _value.samplerArrayValue = values;
+    }
+
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        const_cast<Texture::Sampler*>(_value.samplerArrayValue[i])->addRef();
+    }
+
+    _count = count;
+    _type = MaterialParameter::SAMPLER_ARRAY;
 }
 
 void MaterialParameter::bind(Effect* effect)
@@ -666,6 +844,11 @@ void MaterialParameter::cloneInto(MaterialParameter* materialParameter) const
     
     NodeCloneContext context;
     this->AnimationTarget::cloneInto(materialParameter, context);
+}
+
+MaterialParameter::MethodBinding::MethodBinding(MaterialParameter* param) :
+    _parameter(param), _autoBinding(false)
+{
 }
 
 }

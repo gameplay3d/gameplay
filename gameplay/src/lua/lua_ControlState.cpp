@@ -10,6 +10,7 @@ static const char* luaEnumString_ControlState_NORMAL = "NORMAL";
 static const char* luaEnumString_ControlState_FOCUS = "FOCUS";
 static const char* luaEnumString_ControlState_ACTIVE = "ACTIVE";
 static const char* luaEnumString_ControlState_DISABLED = "DISABLED";
+static const char* luaEnumString_ControlState_HOVER = "HOVER";
 
 Control::State lua_enumFromString_ControlState(const char* s)
 {
@@ -21,7 +22,8 @@ Control::State lua_enumFromString_ControlState(const char* s)
         return Control::ACTIVE;
     if (strcmp(s, luaEnumString_ControlState_DISABLED) == 0)
         return Control::DISABLED;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Control::State.", s);
+    if (strcmp(s, luaEnumString_ControlState_HOVER) == 0)
+        return Control::HOVER;
     return Control::NORMAL;
 }
 
@@ -35,7 +37,8 @@ const char* lua_stringFromEnum_ControlState(Control::State e)
         return luaEnumString_ControlState_ACTIVE;
     if (e == Control::DISABLED)
         return luaEnumString_ControlState_DISABLED;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Control::State.", e);
+    if (e == Control::HOVER)
+        return luaEnumString_ControlState_HOVER;
     return enumStringEmpty;
 }
 

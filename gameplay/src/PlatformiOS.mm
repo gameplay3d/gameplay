@@ -32,6 +32,9 @@ extern const int WINDOW_WIDTH  = [[UIScreen mainScreen] bounds].size.height * [[
 extern const int WINDOW_HEIGHT = [[UIScreen mainScreen] bounds].size.width * [[UIScreen mainScreen] scale];
 extern const int WINDOW_SCALE = [[UIScreen mainScreen] scale];
 
+int __argc = 0;
+char** __argv = 0;
+
 @class AppDelegate;
 @class View;
 
@@ -280,6 +283,8 @@ int getUnicode(int key);
             samples /= 2;
         }
         
+        //todo: __multiSampling = samples > 0;
+
         // Re-bind the default framebuffer
         GL_ASSERT( glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer) );
         
@@ -706,14 +711,14 @@ int getUnicode(int key);
 - (void)handleTapGesture:(UITapGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:self];
-    game->gestureTapEvent(location.x, location.y);
+    gameplay::Platform::gestureTapEventInternal(location.x, location.y);
 }
 
 - (void)handlePinchGesture:(UIPinchGestureRecognizer*)sender
 {
     CGFloat factor = [sender scale];
     CGPoint location = [sender locationInView:self];
-    game->gesturePinchEvent(location.x, location.y, factor);
+    gameplay::Platform::gesturePinchEventInternal(location.x, location.y, factor);
 }
 
 - (void)handleSwipeGesture:(UISwipeGestureRecognizer*)sender
@@ -735,7 +740,7 @@ int getUnicode(int key);
             gameplayDirection = Gesture::SWIPE_DIRECTION_DOWN;
             break;
     }
-    game->gestureSwipeEvent(location.x, location.y, gameplayDirection);
+    gameplay::Platform::gestureSwipeEventInternal(location.x, location.y, gameplayDirection);
 }
 
 @end
@@ -845,7 +850,12 @@ int getUnicode(int key);
         motionManager.accelerometerUpdateInterval = 1 / 40.0;    // 40Hz
         [motionManager startAccelerometerUpdates];
     }
-        
+    if([motionManager isGyroAvailable] == YES)
+    {
+        motionManager.gyroUpdateInterval = 1 / 40.0;    // 40Hz
+        [motionManager startGyroUpdates];
+    }
+    
     window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     viewController = [[ViewController alloc] init];
     [window setRootViewController:viewController];
@@ -894,6 +904,28 @@ int getUnicode(int key);
         *pitch = p;
     if(roll != NULL) 
         *roll = r;
+}
+
+- (void)getRawAccelX:(float*)x Y:(float*)y Z:(float*)z
+{
+    CMAccelerometerData* accelerometerData = motionManager.accelerometerData;
+    if(accelerometerData != nil)
+    {
+        *x = -9.81f * accelerometerData.acceleration.x;
+        *y = -9.81f * accelerometerData.acceleration.y;
+        *z = -9.81f * accelerometerData.acceleration.z;
+    }
+}
+
+- (void)getRawGyroX:(float*)x Y:(float*)y Z:(float*)z
+{
+    CMGyroData* gyroData = motionManager.gyroData;
+    if(gyroData != nil)
+    {
+        *x = gyroData.rotationRate.x;
+        *y = gyroData.rotationRate.y;
+        *z = gyroData.rotationRate.z;
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -1375,9 +1407,54 @@ void Platform::sleep(long ms)
     usleep(ms * 1000);
 }
 
+bool Platform::hasAccelerometer()
+{
+    return true;
+}
+
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     [__appDelegate getAccelerometerPitch:pitch roll:roll];
+}
+
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    float x, y, z;
+    [__appDelegate getRawAccelX:&x Y:&y Z:&z];
+    if (accelX)
+    {
+        *accelX = x;
+    }
+    if (accelY)
+    {
+        *accelY = y;
+    }
+    if (accelZ)
+    {
+        *accelZ = z;
+    }
+
+    [__appDelegate getRawGyroX:&x Y:&y Z:&z];
+    if (gyroX)
+    {
+        *gyroX = x;
+    }
+    if (gyroY)
+    {
+        *gyroY = y;
+    }
+    if (gyroZ)
+    {
+        *gyroZ = z;
+    }
+}
+
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
 }
 
 bool Platform::hasMouse()
@@ -1408,6 +1485,16 @@ bool Platform::isCursorVisible()
     return false;
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    //todo
+}
+
+bool Platform::isMultiSampling()
+{
+    return false; //todo
+}
+
 void Platform::setMultiTouch(bool enabled) 
 {
     __view.multipleTouchEnabled = enabled;
@@ -1431,51 +1518,6 @@ void Platform::displayKeyboard(bool display)
             [__view dismissKeyboard];
         }
     }
-}
-    
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
-        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
-    }
-}
-    
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    if (!Form::keyEventInternal(evt, key))
-    {
-        Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
-    }
-}
-
-bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else
-    {
-        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
-    }
-}
-
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
-}
-
-void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
-{
-    Gamepad::remove(handle);
 }
 
 void Platform::shutdownInternal()

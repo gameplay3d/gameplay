@@ -215,6 +215,27 @@ protected:
     bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
 
     /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
+    bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
+
+    /**
+     * Keyboard callback on key events.
+     *
+     * @see Keyboard::KeyEvent
+     * @see Keyboard::Key
+     */
+    bool keyEvent(Keyboard::KeyEvent evt, int key);
+
+    /**
+     * Slider overrides draw() so that it can avoid resetting the _dirty flag
+     * when a joystick is being used to change its value.
+     */
+    void draw(SpriteBatch* spriteBatch, const Rectangle& clip, bool needsClear, bool cleared, float targetHeight);
+
+    /**
      * Draw the images associated with this control.
      *
      * @param spriteBatch The sprite batch containing this control's icons.
@@ -257,6 +278,11 @@ protected:
      * The Slider's current value.
      */
     float _value;
+
+    /**
+     * When a gamepad is in use, this stores how much to move the slider's value.
+     */
+    float _delta;
 
     /**
      * The X coordinate of the first touch event in a sequence.
@@ -317,6 +343,13 @@ protected:
      * The text displayed by this slider if set to display its value.
      */
     std::string _valueText;
+
+    // Used by gamepads to toggle Slider state between FOCUS and ACTIVE.
+    bool _selectButtonDown;
+
+    bool _directionButtonDown;
+
+    float _gamepadValue;
 
 private:
 
