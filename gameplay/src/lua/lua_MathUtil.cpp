@@ -20,14 +20,14 @@ void luaRegister_MathUtil()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("MathUtil", lua_members, NULL, lua_MathUtil__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("MathUtil", lua_members, NULL, lua_MathUtil__gc, lua_statics, scopePath);
 }
 
 static MathUtil* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "MathUtil");
     luaL_argcheck(state, userdata != NULL, 1, "'MathUtil' expected.");
-    return (MathUtil*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (MathUtil*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_MathUtil__gc(lua_State* state)
@@ -44,7 +44,7 @@ int lua_MathUtil__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "MathUtil");
                 luaL_argcheck(state, userdata != NULL, 1, "'MathUtil' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     MathUtil* instance = (MathUtil*)object->instance;
@@ -86,7 +86,7 @@ int lua_MathUtil_static_smooth(lua_State* state)
                     lua_type(state, 4) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
+                    gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(1);
 
                     // Get parameter 2 off the stack.
                     float param2 = (float)luaL_checknumber(state, 2);
@@ -118,7 +118,7 @@ int lua_MathUtil_static_smooth(lua_State* state)
                     lua_type(state, 5) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    ScriptUtil::LuaArray<float> param1 = ScriptUtil::getFloatPointer(1);
+                    gameplay::ScriptUtil::LuaArray<float> param1 = gameplay::ScriptUtil::getFloatPointer(1);
 
                     // Get parameter 2 off the stack.
                     float param2 = (float)luaL_checknumber(state, 2);

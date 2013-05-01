@@ -27,9 +27,10 @@ void luaRegister_AnimationClip()
         {"getAnimation", lua_AnimationClip_getAnimation},
         {"getBlendWeight", lua_AnimationClip_getBlendWeight},
         {"getDuration", lua_AnimationClip_getDuration},
-        {"getElaspedTime", lua_AnimationClip_getElaspedTime},
+        {"getElapsedTime", lua_AnimationClip_getElapsedTime},
         {"getEndTime", lua_AnimationClip_getEndTime},
         {"getId", lua_AnimationClip_getId},
+        {"getLoopBlendTime", lua_AnimationClip_getLoopBlendTime},
         {"getRefCount", lua_AnimationClip_getRefCount},
         {"getRepeatCount", lua_AnimationClip_getRepeatCount},
         {"getSpeed", lua_AnimationClip_getSpeed},
@@ -40,6 +41,7 @@ void luaRegister_AnimationClip()
         {"release", lua_AnimationClip_release},
         {"setActiveDuration", lua_AnimationClip_setActiveDuration},
         {"setBlendWeight", lua_AnimationClip_setBlendWeight},
+        {"setLoopBlendTime", lua_AnimationClip_setLoopBlendTime},
         {"setRepeatCount", lua_AnimationClip_setRepeatCount},
         {"setSpeed", lua_AnimationClip_setSpeed},
         {"stop", lua_AnimationClip_stop},
@@ -52,14 +54,14 @@ void luaRegister_AnimationClip()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("AnimationClip", lua_members, NULL, lua_AnimationClip__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AnimationClip", lua_members, NULL, lua_AnimationClip__gc, lua_statics, scopePath);
 }
 
 static AnimationClip* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AnimationClip");
     luaL_argcheck(state, userdata != NULL, 1, "'AnimationClip' expected.");
-    return (AnimationClip*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AnimationClip*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AnimationClip__gc(lua_State* state)
@@ -76,7 +78,7 @@ int lua_AnimationClip__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AnimationClip");
                 luaL_argcheck(state, userdata != NULL, 1, "'AnimationClip' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AnimationClip* instance = (AnimationClip*)object->instance;
@@ -117,7 +119,7 @@ int lua_AnimationClip_addBeginListener(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -134,7 +136,7 @@ int lua_AnimationClip_addBeginListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     AnimationClip* instance = getInstance(state);
                     instance->addBeginListener(param1);
@@ -174,7 +176,7 @@ int lua_AnimationClip_addEndListener(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -191,7 +193,7 @@ int lua_AnimationClip_addEndListener(lua_State* state)
                     (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     AnimationClip* instance = getInstance(state);
                     instance->addEndListener(param1);
@@ -232,7 +234,7 @@ int lua_AnimationClip_addListener(lua_State* state)
                 {
                     // Get parameter 1 off the stack.
                     bool param1Valid;
-                    ScriptUtil::LuaArray<AnimationClip::Listener> param1 = ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
+                    gameplay::ScriptUtil::LuaArray<AnimationClip::Listener> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip::Listener>(2, "AnimationClipListener", false, &param1Valid);
                     if (!param1Valid)
                         break;
 
@@ -253,7 +255,7 @@ int lua_AnimationClip_addListener(lua_State* state)
                     lua_type(state, 3) == LUA_TNUMBER)
                 {
                     // Get parameter 1 off the stack.
-                    const char* param1 = ScriptUtil::getString(2, false);
+                    const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                     // Get parameter 2 off the stack.
                     unsigned long param2 = (unsigned long)luaL_checkunsigned(state, 3);
@@ -327,7 +329,7 @@ int lua_AnimationClip_crossFade(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AnimationClip> param1 = ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AnimationClip> param1 = gameplay::ScriptUtil::getObjectPointer<AnimationClip>(2, "AnimationClip", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AnimationClip'.");
@@ -408,7 +410,7 @@ int lua_AnimationClip_getAnimation(lua_State* state)
                 void* returnPtr = (void*)instance->getAnimation();
                 if (returnPtr)
                 {
-                    ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                    gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                     object->instance = returnPtr;
                     object->owns = false;
                     luaL_getmetatable(state, "Animation");
@@ -506,7 +508,7 @@ int lua_AnimationClip_getDuration(lua_State* state)
     return 0;
 }
 
-int lua_AnimationClip_getElaspedTime(lua_State* state)
+int lua_AnimationClip_getElapsedTime(lua_State* state)
 {
     // Get the number of parameters.
     int paramCount = lua_gettop(state);
@@ -519,7 +521,7 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
             if ((lua_type(state, 1) == LUA_TUSERDATA))
             {
                 AnimationClip* instance = getInstance(state);
-                float result = instance->getElaspedTime();
+                float result = instance->getElapsedTime();
 
                 // Push the return value onto the stack.
                 lua_pushnumber(state, result);
@@ -527,7 +529,7 @@ int lua_AnimationClip_getElaspedTime(lua_State* state)
                 return 1;
             }
 
-            lua_pushstring(state, "lua_AnimationClip_getElaspedTime - Failed to match the given parameters to a valid function signature.");
+            lua_pushstring(state, "lua_AnimationClip_getElapsedTime - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -598,6 +600,41 @@ int lua_AnimationClip_getId(lua_State* state)
             }
 
             lua_pushstring(state, "lua_AnimationClip_getId - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 1).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_getLoopBlendTime(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 1:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA))
+            {
+                AnimationClip* instance = getInstance(state);
+                float result = instance->getLoopBlendTime();
+
+                // Push the return value onto the stack.
+                lua_pushnumber(state, result);
+
+                return 1;
+            }
+
+            lua_pushstring(state, "lua_AnimationClip_getLoopBlendTime - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -941,6 +978,42 @@ int lua_AnimationClip_setBlendWeight(lua_State* state)
             }
 
             lua_pushstring(state, "lua_AnimationClip_setBlendWeight - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_AnimationClip_setLoopBlendTime(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                lua_type(state, 2) == LUA_TNUMBER)
+            {
+                // Get parameter 1 off the stack.
+                float param1 = (float)luaL_checknumber(state, 2);
+
+                AnimationClip* instance = getInstance(state);
+                instance->setLoopBlendTime(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_AnimationClip_setLoopBlendTime - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }

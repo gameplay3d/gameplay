@@ -21,7 +21,6 @@ Font::Style lua_enumFromString_FontStyle(const char* s)
         return Font::ITALIC;
     if (strcmp(s, luaEnumString_FontStyle_BOLD_ITALIC) == 0)
         return Font::BOLD_ITALIC;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration Font::Style.", s);
     return Font::PLAIN;
 }
 
@@ -35,7 +34,6 @@ const char* lua_stringFromEnum_FontStyle(Font::Style e)
         return luaEnumString_FontStyle_ITALIC;
     if (e == Font::BOLD_ITALIC)
         return luaEnumString_FontStyle_BOLD_ITALIC;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration Font::Style.", e);
     return enumStringEmpty;
 }
 

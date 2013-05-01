@@ -179,6 +179,16 @@ public:
     bool isKinematic() const;
 
     /**
+     * Returns whether this collision object is static.
+     *
+     * A static collision object is not simulated by the physics system and cannot be
+     * transformed once created.
+     *
+     * @return true if the collision object is static.
+     */
+    bool isStatic() const;
+
+    /**
      * Returns whether this collision object is dynamic.
      *
      * A dynamic collision object is simulated entirely by the physics system,

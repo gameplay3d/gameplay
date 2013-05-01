@@ -25,14 +25,14 @@ void luaRegister_AIStateListener()
     std::vector<std::string> scopePath;
     scopePath.push_back("AIState");
 
-    ScriptUtil::registerClass("AIStateListener", lua_members, lua_AIStateListener__init, lua_AIStateListener__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("AIStateListener", lua_members, lua_AIStateListener__init, lua_AIStateListener__gc, lua_statics, scopePath);
 }
 
 static AIState::Listener* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "AIStateListener");
     luaL_argcheck(state, userdata != NULL, 1, "'AIStateListener' expected.");
-    return (AIState::Listener*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (AIState::Listener*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_AIStateListener__gc(lua_State* state)
@@ -49,7 +49,7 @@ int lua_AIStateListener__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "AIStateListener");
                 luaL_argcheck(state, userdata != NULL, 1, "'AIStateListener' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     AIState::Listener* instance = (AIState::Listener*)object->instance;
@@ -86,7 +86,7 @@ int lua_AIStateListener__init(lua_State* state)
             void* returnPtr = (void*)new AIState::Listener();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "AIStateListener");
@@ -126,7 +126,7 @@ int lua_AIStateListener_stateEnter(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AIAgent> param1 = gameplay::ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent'.");
@@ -135,7 +135,7 @@ int lua_AIStateListener_stateEnter(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<AIState> param2 = gameplay::ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'AIState'.");
@@ -178,7 +178,7 @@ int lua_AIStateListener_stateExit(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AIAgent> param1 = gameplay::ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent'.");
@@ -187,7 +187,7 @@ int lua_AIStateListener_stateExit(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<AIState> param2 = gameplay::ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'AIState'.");
@@ -231,7 +231,7 @@ int lua_AIStateListener_stateUpdate(lua_State* state)
             {
                 // Get parameter 1 off the stack.
                 bool param1Valid;
-                ScriptUtil::LuaArray<AIAgent> param1 = ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
+                gameplay::ScriptUtil::LuaArray<AIAgent> param1 = gameplay::ScriptUtil::getObjectPointer<AIAgent>(2, "AIAgent", false, &param1Valid);
                 if (!param1Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 1 to type 'AIAgent'.");
@@ -240,7 +240,7 @@ int lua_AIStateListener_stateUpdate(lua_State* state)
 
                 // Get parameter 2 off the stack.
                 bool param2Valid;
-                ScriptUtil::LuaArray<AIState> param2 = ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
+                gameplay::ScriptUtil::LuaArray<AIState> param2 = gameplay::ScriptUtil::getObjectPointer<AIState>(3, "AIState", false, &param2Valid);
                 if (!param2Valid)
                 {
                     lua_pushstring(state, "Failed to convert parameter 2 to type 'AIState'.");

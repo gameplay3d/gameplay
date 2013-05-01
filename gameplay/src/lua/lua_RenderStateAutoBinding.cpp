@@ -54,7 +54,6 @@ RenderState::AutoBinding lua_enumFromString_RenderStateAutoBinding(const char* s
         return RenderState::SCENE_LIGHT_COLOR;
     if (strcmp(s, luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_DIRECTION) == 0)
         return RenderState::SCENE_LIGHT_DIRECTION;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration RenderState::AutoBinding.", s);
     return RenderState::NONE;
 }
 
@@ -90,7 +89,6 @@ const char* lua_stringFromEnum_RenderStateAutoBinding(RenderState::AutoBinding e
         return luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_COLOR;
     if (e == RenderState::SCENE_LIGHT_DIRECTION)
         return luaEnumString_RenderStateAutoBinding_SCENE_LIGHT_DIRECTION;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration RenderState::AutoBinding.", e);
     return enumStringEmpty;
 }
 

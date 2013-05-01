@@ -192,6 +192,26 @@ public:
     const Matrix& getProjectionMatrix() const;
 
     /**
+     * Sets a custom projection matrix to be used by the camera.
+     *
+     * Setting a custom projection matrix results in the internally 
+     * computed projection matrix being completely overriden until
+     * the resetProjectionMatrix method is called. A custom projection
+     * matrix is normally not neccessary, but can be used for special
+     * projection effects, such as setting an oblique view frustum
+     * for near plane clipping.
+     *
+     * @param matrix Custom projection matrix.
+     */
+    void setProjectionMatrix(const Matrix& matrix);
+
+    /**
+     * Resets the camera to use the internally computed projection matrix
+     * instead of any previously specified user-defined matrix.
+     */
+    void resetProjectionMatrix();
+
+    /**
      * Gets the camera's view * projection matrix.
      *
      * @return The camera view * projection matrix.
@@ -220,8 +240,28 @@ public:
      * @param x The returned viewport x coordinate.
      * @param y The returned viewport y coordinate.
      * @param depth The returned pixel depth (can be NULL).
+     *
+     * @script{ignore}
      */
     void project(const Rectangle& viewport, const Vector3& position, float* x, float* y, float* depth = NULL) const;
+
+    /**
+     * Projects the specified world position into the viewport coordinates.
+     *
+     * @param viewport The viewport rectangle to use.
+     * @param position The world space position.
+     * @param out Populated with the resulting screen-space position.
+     */
+    void project(const Rectangle& viewport, const Vector3& position, Vector2* out) const;
+
+    /**
+     * Projects the specified world position into the viewport coordinates.
+     *
+     * @param viewport The viewport rectangle to use.
+     * @param position The world space position.
+     * @param out Populated with the resulting screen-space position, with the pixel depth in the Z coordinate.
+     */
+    void project(const Rectangle& viewport, const Vector3& position, Vector3* out) const;
 
     /**
      * Converts a viewport-space coordinate to a world-space position for the given depth value.
@@ -299,7 +339,7 @@ private:
     mutable Matrix _inverseView;
     mutable Matrix _inverseViewProjection;
     mutable Frustum _bounds;
-    mutable int _dirtyBits;
+    mutable int _bits;
     Node* _node;
 };
 

@@ -94,6 +94,37 @@ bool CheckBox::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
     return Button::touchEvent(evt, x, y, contactIndex);
 }
 
+bool CheckBox::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex)
+{
+    switch (evt)
+    {
+    case Gamepad::BUTTON_EVENT:
+        if (_state == Control::ACTIVE)
+        {
+            if (!gamepad->isButtonDown(Gamepad::BUTTON_A) &&
+                !gamepad->isButtonDown(Gamepad::BUTTON_X))
+            {
+                _checked = !_checked;
+                notifyListeners(Control::Listener::VALUE_CHANGED);   
+            }
+        }
+        break;
+    }
+
+    return Button::gamepadEvent(evt, gamepad, analogIndex);
+}
+
+bool CheckBox::keyEvent(Keyboard::KeyEvent evt, int key)
+{
+    if (_state == ACTIVE && evt == Keyboard::KEY_RELEASE && key == Keyboard::KEY_RETURN)
+    {
+        _checked = !_checked;
+        notifyListeners(Control::Listener::VALUE_CHANGED);
+    }
+
+    return Button::keyEvent(evt, key);
+}
+
 void CheckBox::update(const Control* container, const Vector2& offset)
 {
     Label::update(container, offset);

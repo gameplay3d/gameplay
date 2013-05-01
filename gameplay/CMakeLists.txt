@@ -83,6 +83,8 @@ set(GAMEPLAY_SRC
     src/Image.cpp
     src/Image.h
     src/Image.inl
+    src/ImageControl.cpp
+    src/ImageControl.h
     src/Joint.cpp
     src/Joint.h
     src/Joystick.cpp
@@ -156,6 +158,7 @@ set(GAMEPLAY_SRC
     src/Plane.h
     src/Plane.inl
     src/Platform.h
+    src/Platform.cpp
     src/PlatformAndroid.cpp
     src/PlatformBlackBerry.cpp
     src/PlatformLinux.cpp
@@ -349,6 +352,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_HeightField.h
     src/lua/lua_Image.cpp
     src/lua/lua_Image.h
+    src/lua/lua_ImageControl.cpp
+    src/lua/lua_ImageControl.h
     src/lua/lua_ImageFormat.cpp
     src/lua/lua_ImageFormat.h
     src/lua/lua_Joint.cpp
@@ -487,6 +492,7 @@ set(GAMEPLAY_LUA
     src/lua/lua_RenderStateAutoBinding.h
     src/lua/lua_RenderStateBlend.cpp
     src/lua/lua_RenderStateBlend.h
+    src/lua/lua_RenderStateCullFaceSide.cpp
     src/lua/lua_RenderStateDepthFunction.cpp
     src/lua/lua_RenderStateDepthFunction.h
     src/lua/lua_RenderStateStateBlock.cpp
@@ -513,6 +519,8 @@ set(GAMEPLAY_LUA
     src/lua/lua_Terrain.h
     src/lua/lua_TerrainFlags.cpp
     src/lua/lua_TerrainFlags.h
+    src/lua/lua_TerrainListener.cpp
+    src/lua/lua_TerrainListener.h
     src/lua/lua_TextBox.cpp
     src/lua/lua_TextBox.h
     src/lua/lua_Texture.cpp

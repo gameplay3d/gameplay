@@ -5,12 +5,59 @@
 #include "MeshSkin.h"
 #include "Joint.h"
 #include "Terrain.h"
+#include "Bundle.h"
 
 namespace gameplay
 {
 
 // Global list of active scenes
 static std::vector<Scene*> __sceneList;
+
+static inline char lowercase(char c)
+{
+    if (c >= 'A' && c <='Z')
+    {
+        c |= 0x20;
+    }
+    return c;
+}
+
+// Returns true if 'str' ends with 'suffix'; false otherwise.
+static bool endsWith(const char* str, const char* suffix, bool ignoreCase)
+{
+    if (str == NULL || suffix == NULL)
+        return false;
+    size_t length = strlen(str);
+    size_t suffixLength = strlen(suffix);
+
+    if (suffixLength > length)
+    {
+        return false;
+    }
+
+    size_t offset = length - suffixLength;
+
+    const char* p = str + offset;
+    while (*p != '\0' && *suffix != '\0')
+    {
+        if (ignoreCase)
+        {
+            if (lowercase(*p) != lowercase(*suffix))
+            {
+                return false;
+            }
+        }
+        else if (*p != *suffix)
+        {
+            return false;
+        }
+        
+        ++p;
+        ++suffix;
+    }
+    return true;
+}
+
 
 Scene::Scene(const char* id)
     : _id(id ? id : ""), _activeCamera(NULL), _firstNode(NULL), _lastNode(NULL), _nodeCount(0), 
@@ -50,6 +97,17 @@ Scene* Scene::create(const char* id)
 
 Scene* Scene::load(const char* filePath)
 {
+    if (endsWith(filePath, ".gpb", true))
+    {
+        Scene* scene = NULL;
+        Bundle* bundle = Bundle::create(filePath);
+        if (bundle)
+        {
+            scene = bundle->loadScene();
+            SAFE_RELEASE(bundle);
+        }
+        return scene;
+    }
     return SceneLoader::load(filePath);
 }
 
@@ -134,6 +192,30 @@ unsigned int Scene::findNodes(const char* id, std::vector<Node*>& nodes, bool re
     }
 
     return count;
+}
+
+void Scene::visitNode(Node* node, const char* visitMethod)
+{
+    ScriptController* sc = Game::getInstance()->getScriptController();
+
+    // Invoke the visit method for this node.
+    if (!sc->executeFunction<bool>(visitMethod, "<Node>", node))
+        return;
+
+    // If this node has a model with a mesh skin, visit the joint hierarchy within it
+    // since we don't add joint hierarcies directly to the scene. If joints are never
+    // visited, it's possible that nodes embedded within the joint hierarchy that contain
+    // models will never get visited (and therefore never get drawn).
+    if (node->_model && node->_model->_skin && node->_model->_skin->_rootNode)
+    {
+        visitNode(node->_model->_skin->_rootNode, visitMethod);
+    }
+
+    // Recurse for all children.
+    for (Node* child = node->getFirstChild(); child != NULL; child = child->getNextSibling())
+    {
+        visitNode(child, visitMethod);
+    }
 }
 
 Node* Scene::addNode(const char* id)

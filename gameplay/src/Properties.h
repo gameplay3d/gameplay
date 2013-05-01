@@ -8,7 +8,7 @@
 
 namespace gameplay
 {
-
+class Properties;
 /**
  * Defines a utility for loading text files in the GamePlay "properties" files
  * and reading primitive types and GamePlay math classes out of them.
@@ -377,20 +377,40 @@ public:
      */
     bool getColor(const char* name, Vector4* out) const;
 
+    /**
+     * Gets the file path for the given property if the file exists.
+     * 
+     * This method will first search for the file relative to the working directory.
+     * If the file is not found then it will search relative to the directory the bundle file is in.
+     * 
+     * @param name The name of the property.
+     * @param path The string to copy the path to if the file exists.
+     * 
+     * @return True if the property exists and the file exists, false otherwise.
+     *
+     * @script{ignore}
+     */
+    bool getPath(const char* name, std::string* path) const;
 
 private:
     
     /**
-     * Constructors.
+     * Constructor.
      */
     Properties();
+
+    /**
+     * Constructs the Properties class from a file.
+     *
+     * @param stream The stream used for reading the properties from file.
+     */
     Properties(Stream* stream);
     Properties(const Properties& copy);
 
     /**
-     * Constructor. Read from the beginning of namespace specified
+     * Constructor. Read from the beginning of namespace specified.
      */
-    Properties(Stream* stream, const char* name, const char* id = NULL, const char* parentID = NULL);
+    Properties(Stream* stream, const char* name, const char* id, const char* parentID, Properties* parent);
 
     void readProperties(Stream* stream);
 
@@ -407,6 +427,9 @@ private:
     // Clones the Properties object.
     Properties* clone();
 
+    void setDirectoryPath(const std::string* path);
+    void setDirectoryPath(const std::string& path);
+
     std::string _namespace;
     std::string _id;
     std::string _parentID;
@@ -414,6 +437,8 @@ private:
     std::map<std::string, std::string>::const_iterator _propertiesItr;
     std::vector<Properties*> _namespaces;
     std::vector<Properties*>::const_iterator _namespacesItr;
+    std::string* _dirPath;
+    Properties* _parent;
 };
 
 }

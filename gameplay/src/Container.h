@@ -3,6 +3,7 @@
 
 #include "Control.h"
 #include "Layout.h"
+#include "TimeListener.h"
 
 namespace gameplay
 {
@@ -26,7 +27,10 @@ namespace gameplay
          width       = <width>   // Can be used in place of 'size', e.g. with 'autoHeight = true'
          height      = <height>  // Can be used in place of 'size', e.g. with 'autoWidth = true'
          scroll      = <Container::Scroll constant> // Whether scrolling is allowed and in which directions.
-         scrollBarsAutoHide = <bool>    // Whether scrollbars fade out when not in use.
+         scrollBarsAutoHide = <bool>        // Whether scrollbars fade out when not in use.
+         scrollingFriction = <float>        // Friction applied to inertial scrolling.
+         scrollWheelRequiresFocus = <bool>  // Whether focus or hover state handles scroll-wheel events.
+         scrollWheelSpeed = <float>         // Speed to scroll at on a scroll-wheel event.
          consumeEvents = <bool>             // Whether the container propagates input events to the Game's input event handler. Default is true.
 
          // All the nested controls within this container.
@@ -44,7 +48,7 @@ namespace gameplay
     }
  @endverbatim
  */
-class Container : public Control
+class Container : public Control, TimeListener
 {
 
 public:
@@ -183,6 +187,27 @@ public:
     bool isScrolling() const;
 
     /**
+     * Get the friction applied to scrolling velocity for this container.
+     */
+    float getScrollingFriction() const;
+
+    /**
+     * Get the friction applied to scrolling velocity for this container.
+     * A higher value will bring the viewport to a stop sooner.
+     */
+    void setScrollingFriction(float friction);
+
+    /**
+     * Get the speed added to scrolling velocity on a scroll-wheel event.
+     */
+    float getScrollWheelSpeed() const;
+
+    /**
+     * Set the speed added to scrolling velocity on a scroll-wheel event.
+     */
+    void setScrollWheelSpeed(float speed);
+
+    /**
      * @see AnimationTarget::getAnimation
      */
     Animation* getAnimation(const char* id = NULL) const;
@@ -198,6 +223,21 @@ public:
     const char* getType() const;
 
     /**
+     * Get whether this container requires focus in order to handle scroll-wheel events.
+     */
+    bool getScrollWheelRequiresFocus() const;
+
+    /**
+     * Set whether this container requires focus in order to handle scroll-wheel events.
+     * If this property is set to true, scroll-wheel events will only be handled when the container has focus.
+     * If this property is set tofalse, scroll-wheel events will only be handled
+     * when the container is in the HOVER state.
+     *
+     * @param required Whether focus is required in order to handle scroll-wheel events.
+     */
+    void setScrollWheelRequiresFocus(bool required);
+
+    /**
      * @see AnimationTarget::getAnimationPropertyComponentCount
      */
     virtual unsigned int getAnimationPropertyComponentCount(int propertyId) const;
@@ -211,6 +251,13 @@ public:
      * @see AnimationTarget::setAnimationProperty
      */
     virtual void setAnimationPropertyValue(int propertyId, AnimationValue* value, float blendWeight = 1.0f);
+
+    /**
+     * @see TimeListener::timeEvent
+     *
+     * @script{ignore}
+     */
+    void timeEvent(long timeDiff, void* cookie);
 
 protected:
 
@@ -291,9 +338,16 @@ protected:
      *
      * @return True if the mouse event is consumed or false if it is not consumed.
      *
-     * @see Mouse::MouseEvent
+     * @see Mouse::mouseEvent
      */
     virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta);
+
+    /**
+     * Gamepad callback on gamepad events.
+     *
+     * @see Control::gamepadEvent
+     */
+    virtual bool gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad, unsigned int analogIndex);
 
     /**
      * Gets a Layout::Type enum from a matching string.
@@ -333,6 +387,13 @@ protected:
      * Update scroll position and velocity.
      */
     void updateScroll();
+
+    /**
+     * Sorts controls by Z-Order (for absolute layouts only).
+     * This method is used by controls to notify their parent container when
+     * their Z-Index changes.
+     */
+    void sortControls();
 
     /**
      * Applies touch events to scroll state.
@@ -400,7 +461,7 @@ protected:
      */
     Theme::ThemeImage* _scrollBarTopCap;
     /**
-     * Scrollbar vertical image.
+     * Scrollbar vertical track image.
      */
     Theme::ThemeImage* _scrollBarVertical;
     /**
@@ -412,7 +473,7 @@ protected:
      */
     Theme::ThemeImage* _scrollBarLeftCap;
     /**
-     * Scrollbar horizontal image.
+     * Scrollbar horizontal track image.
      */
     Theme::ThemeImage* _scrollBarHorizontal;
     /**
@@ -424,7 +485,7 @@ protected:
      */
     Scroll _scroll;
     /** 
-     * Scroll bar bounds
+     * Scroll bar bounds.
      */
     Rectangle _scrollBarBounds;
     /** 
@@ -432,7 +493,7 @@ protected:
      */
     Vector2 _scrollPosition;
     /** 
-     * Should the scrollbars auto hide. Default is false.
+     * Whether the scrollbars should auto-hide. Default is false.
      */
     bool _scrollBarsAutoHide;
     /** 
@@ -444,11 +505,11 @@ protected:
      */
     bool _scrolling;
     /** 
-     * First scrolling touch x position
+     * First scrolling touch x position.
      */
     int _scrollingVeryFirstX;
     /**
-     * First scrolling touch y position
+     * First scrolling touch y position.
      */
     int _scrollingVeryFirstY;
     /**
@@ -460,33 +521,37 @@ protected:
      */ 
     int _scrollingFirstY;
     /** 
-     * The last y position when scrolling
+     * The last y position when scrolling.
      */ 
     int _scrollingLastX;
     /** 
-     * The last x position when scrolling
+     * The last x position when scrolling.
      */ 
     int _scrollingLastY;
     /** 
-     * Time we started scrolling in the x
+     * Time we started scrolling horizontally.
      */ 
     double _scrollingStartTimeX;
     /** 
-     * Time we started scrolling in the y
+     * Time we started scrolling vertically.
      */ 
     double _scrollingStartTimeY;
     /** 
-     * The last time we were scrolling
+     * The last time we were scrolling.
      */
     double _scrollingLastTime;
     /** 
-     * Speed to continue scrolling at after touch release.
+     * Speed to continue scrolling at after touch release or a scroll-wheel event.
      */ 
     Vector2 _scrollingVelocity;
     /** 
      * Friction dampens velocity.
      */ 
     float _scrollingFriction;
+    /**
+     * Amount to add to scrolling velocity on a scroll-wheel event;
+     */
+    float _scrollWheelSpeed;
     /** 
      * Are we scrolling to the right?
      */ 
@@ -495,12 +560,10 @@ protected:
      * Are we scrolling down?
      */ 
     bool _scrollingDown;
-
     /**
      * Locked to scrolling vertically by grabbing the scrollbar with the mouse.
      */
     bool _scrollingMouseVertically;
-
     /**
      * Locked to scrolling horizontally by grabbing the scrollbar with the mouse.
      */
@@ -513,17 +576,46 @@ private:
      */
     Container(const Container& copy);
 
+    enum Direction
+    {
+        UP = 0x01,
+        DOWN = 0x02,
+        LEFT = 0x04,
+        RIGHT = 0x08,
+        NEXT = 0x10
+    };
+
+    // Returns true on success; false if there are no controls to focus on,
+    // in which case scrolling can be initiated.
+    bool moveFocus(Direction direction, Control* outsideControl = NULL);
+
+    void guaranteeFocus(Control* inFocus);
+
+    // Starts scrolling at the given horizontal and vertical speeds.
+    void startScrolling(float x, float y, bool resetTime = true);
+
+    void stopScrolling();
+
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
     int _focusIndexDefault;
     int _focusIndexMax;
+    unsigned int _focusPressed;
+    bool _selectButtonDown;
+    double _lastFrameTime;
+
+    // Timing information for repeating focus changes.
+    bool _focusChangeRepeat;
+    double _focusChangeStartTime;
+    double _focusChangeRepeatDelay;
+    unsigned int _focusChangeCount;
+    Direction _direction;
 
     float _totalWidth;
     float _totalHeight;
-
     int _contactIndices;
-
     bool _initializedWithScroll;
+    bool _scrollWheelRequiresFocus;
 };
 
 }

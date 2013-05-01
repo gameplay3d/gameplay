@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="res">
+    </Filter>
+    <Filter Include="src">
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+	<None Include="game.config" />
+    <None Include="icon.png" />
+    <None Include="bar-descriptor.xml" />
+    <None Include="res\box.fbx">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\colored.frag">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\colored.vert">
+      <Filter>res</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\TemplateGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\TemplateGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

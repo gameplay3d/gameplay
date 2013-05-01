@@ -93,6 +93,7 @@ Theme* Theme::create(const char* url)
     GP_ASSERT(theme->_texture);
     theme->_spriteBatch = SpriteBatch::create(theme->_texture);
     GP_ASSERT(theme->_spriteBatch);
+    theme->_spriteBatch->getSampler()->setFilterMode(Texture::NEAREST, Texture::NEAREST);
 
     float tw = 1.0f / theme->_texture->getWidth();
     float th = 1.0f / theme->_texture->getHeight();
@@ -160,6 +161,7 @@ Theme* Theme::create(const char* url)
             Theme::Style::Overlay* focus = NULL;
             Theme::Style::Overlay* active = NULL;
             Theme::Style::Overlay* disabled = NULL;
+            Theme::Style::Overlay* hover = NULL;
 
             // Need to load OVERLAY_NORMAL first so that the other overlays can inherit from it.
             Properties* innerSpace = space->getNextNamespace();
@@ -392,6 +394,26 @@ Theme* Theme::create(const char* url)
                             font->release();
                         }
                     }
+                    else if (strcmp(innerSpacename, "stateHover") == 0)
+                    {
+                        hover = Theme::Style::Overlay::create();
+                        GP_ASSERT(hover);
+                        hover->setSkin(skin);
+                        hover->setCursor(cursor);
+                        hover->setImageList(imageList);
+                        hover->setTextColor(textColor);
+                        hover->setFont(font);
+                        hover->setFontSize(fontSize);
+                        hover->setTextAlignment(textAlignment);
+                        hover->setTextRightToLeft(rightToLeft);
+                        hover->setOpacity(opacity);
+
+                        if (font)
+                        {
+                            theme->_fonts.insert(font);
+                            font->release();
+                        }
+                    }
                 }
 
                 innerSpace = space->getNextNamespace();
@@ -403,19 +425,16 @@ Theme* Theme::create(const char* url)
                 focus->addRef();
             }
 
-            if (!active)
-            {
-                active = normal;
-                active->addRef();
-            }
-
             if (!disabled)
             {
                 disabled = normal;
                 disabled->addRef();
             }
 
-            Theme::Style* s = new Theme::Style(theme, space->getId(), tw, th, margin, padding, normal, focus, active, disabled);
+            // Note: The hover and active states have their overlay left NULL if unspecified.
+            // Events will still be triggered, but a control's overlay will not be changed.
+
+            Theme::Style* s = new Theme::Style(theme, space->getId(), tw, th, margin, padding, normal, focus, active, disabled, hover);
             GP_ASSERT(s);
             theme->_styles.push_back(s);
         }
@@ -456,9 +475,8 @@ Theme::Style* Theme::getEmptyStyle()
         Theme::Style::Overlay* overlay = Theme::Style::Overlay::create();
         overlay->addRef();
         overlay->addRef();
-        overlay->addRef();
         emptyStyle = new Theme::Style(const_cast<Theme*>(this), "EMPTY_STYLE", 1.0f / _texture->getWidth(), 1.0f / _texture->getHeight(),
-            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, overlay, overlay);
+            Theme::Margin::empty(), Theme::Border::empty(), overlay, overlay, NULL, overlay, NULL);
 
         _styles.push_back(emptyStyle);
     }
@@ -504,6 +522,12 @@ const Theme::UVs& Theme::UVs::empty()
 {
     static UVs empty(0, 0, 0, 0);
     return empty;
+}
+
+const Theme::UVs& Theme::UVs::full()
+{
+    static UVs full(0, 1, 1, 0);
+    return full;
 }
 
 /**********************

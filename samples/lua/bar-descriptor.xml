@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<qnx xmlns="http://www.qnx.com/schemas/application/1.0">
+
+<!-- BlackBerry OS application descriptor file.
+
+    Specifies parameters for identifying, installing, and launching native applications on BlackBerry OS.
+
+-->
+
+    <!-- A universally unique application identifier. Must be unique across all BlackBerry OS applications.
+         Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
+    <id>org.gameplay3d.sample_lua</id>
+
+    <!-- The name that is displayed in the BlackBerry OS application installer. 
+         May have multiple values for each language. See samples or xsd schema file. Optional. -->
+    <name>Lua</name>
+
+    <!-- A string value of the format <0-999>.<0-999>.<0-999> that represents application version which can be used to check for application upgrade. 
+         Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
+         An updated version of application must have a versionNumber value higher than the previous version. Required. -->
+    <versionNumber>1.7.0</versionNumber>
+
+    <!-- Fourth digit segment of the package version. First three segments are taken from the 
+         <versionNumber> element.  Must be an integer from 0 to 2^16-1 -->
+    <buildId>1</buildId>
+
+    <!-- Description, displayed in the BlackBerry OS application installer.
+         May have multiple values for each language. See samples or xsd schema file. Optional. -->
+    <description>Lua</description>
+
+    <!-- Name of author which is used for signing. Must match the developer name of your development certificate. -->
+    <author>RIM Canada</author>
+
+    <!-- Unique author ID assigned by signing authority. Required if using debug tokens. -->
+    <!-- <authorId>gYAAgPkLP1tZlyYP1wiMaRFFNMw</authorId> -->
+
+    <initialWindow>
+        <aspectRatio>landscape</aspectRatio>
+        <autoOrients>false</autoOrients>
+        <systemChrome>none</systemChrome>
+        <transparent>false</transparent>
+    </initialWindow>
+
+    <category>core.games</category>
+
+    <asset path="icon.png">icon.png</asset>
+    <asset path="game.config">game.config</asset>
+    <asset path="res">res</asset>
+    <asset path="../../gameplay/res/logo_powered_white.png">res/logo_powered_white.png</asset>
+    <asset path="../../gameplay/res/shaders">res/shaders</asset>
+
+    <configuration id="com.qnx.qcc.configuration.exe.debug.242437683" name="Device-Debug">
+       <platformArchitecture>armle-v7</platformArchitecture>
+       <asset path="Device-Debug/sample-lua" entry="true" type="Qnx/Elf">sample-lua</asset>
+    </configuration>
+    <configuration id="com.qnx.qcc.configuration.exe.release.693953760" name="Device-Release">
+       <platformArchitecture>armle-v7</platformArchitecture>
+       <asset path="Device-Release/sample-lua" entry="true" type="Qnx/Elf">sample-lua</asset>
+    </configuration>
+    <configuration id="com.qnx.qcc.configuration.exe.debug.882133523" name="Simulator">
+        <platformArchitecture>x86</platformArchitecture>
+       <asset path="Simulator/sample-lua" entry="true" type="Qnx/Elf">sample-lua</asset>
+    </configuration>
+
+    <!-- The icon for the application, which should be 114x114. -->
+    <icon>
+        <image>icon.png</image>
+    </icon>
+
+    <!-- The splash screen that will appear when your application is launching. Should be 1280x768. -->
+    <!-- <splashscreen></splashscreen> -->
+
+    <!-- Request permission to execute native code.  Required for native applications. -->
+    <action system="true">run_native</action>
+
+    <!-- The permissions requested by your application. -->
+    <!--  <action>access_shared</action> -->
+    <!--  <action>record_audio</action> -->
+    <!--  <action>read_geolocation</action> -->
+    <!--  <action>use_camera</action> -->
+    <!--  <action>access_internet</action> -->
+    <!--  <action>play_audio</action> -->
+    <!--  <action>post_notification</action> -->
+    <!--  <action>set_audio_volume</action> -->
+    <!--  <action>read_device_identifying_information</action> -->
+
+    <!-- Ensure that shared libraries in the package are found at run-time. -->
+    <env var="LD_LIBRARY_PATH" value="app/native/lib"/>
+
+</qnx>

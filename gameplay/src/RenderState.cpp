@@ -13,6 +13,7 @@
 #define RS_DEPTH_TEST 8
 #define RS_DEPTH_WRITE 16
 #define RS_DEPTH_FUNC 32
+#define RS_CULL_FACE_SIDE 64
 
 namespace gameplay
 {
@@ -75,6 +76,20 @@ MaterialParameter* RenderState::getParameter(const char* name) const
     _parameters.push_back(param);
 
     return param;
+}
+
+void RenderState::clearParameter(const char* name)
+{
+    for (size_t i = 0, count = _parameters.size(); i < count; ++i)
+    {
+        MaterialParameter* p = _parameters[i];
+        if (p->_name == name)
+        {
+            _parameters.erase(_parameters.begin() + i);
+            SAFE_RELEASE(p);
+            break;
+        }
+    }
 }
 
 /**
@@ -208,8 +223,12 @@ void RenderState::setNodeBinding(Node* node)
 
 void RenderState::applyAutoBinding(const char* uniformName, const char* autoBinding)
 {
+    GP_ASSERT(_nodeBinding);
+
     MaterialParameter* param = getParameter(uniformName);
     GP_ASSERT(param);
+
+    bool bound = false;
 
     // First attempt to resolve the binding using custom registered resolvers.
     if (_customAutoBindingResolvers.size() > 0)
@@ -217,83 +236,171 @@ void RenderState::applyAutoBinding(const char* uniformName, const char* autoBind
         for (size_t i = 0, count = _customAutoBindingResolvers.size(); i < count; ++i)
         {
             if (_customAutoBindingResolvers[i](autoBinding, _nodeBinding, param))
-                return; // handled by custom resolver
+            {
+                // Handled by custom auto binding resolver
+                bound = true;
+                break;
+            }
         }
     }
 
     // Perform built-in resolution
-    if (strcmp(autoBinding, "WORLD_MATRIX") == 0)
+    if (!bound)
     {
-        param->bindValue(_nodeBinding, &Node::getWorldMatrix);
-    }
-    else if (strcmp(autoBinding, "VIEW_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getViewMatrix);
-    }
-    else if (strcmp(autoBinding, "PROJECTION_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getProjectionMatrix);
-    }
-    else if (strcmp(autoBinding, "WORLD_VIEW_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getWorldViewMatrix);
-    }
-    else if (strcmp(autoBinding, "VIEW_PROJECTION_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getViewProjectionMatrix);
-    }
-    else if (strcmp(autoBinding, "WORLD_VIEW_PROJECTION_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getWorldViewProjectionMatrix);
-    }
-    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldMatrix);
-    }
-    else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getInverseTransposeWorldViewMatrix);
-    }
-    else if (strcmp(autoBinding, "CAMERA_WORLD_POSITION") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationWorld);
-    }
-    else if (strcmp(autoBinding, "CAMERA_VIEW_POSITION") == 0)
-    {
-        param->bindValue(_nodeBinding, &Node::getActiveCameraTranslationView);
-    }
-    else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
-    {
-        Model* model = _nodeBinding->getModel();
-        MeshSkin* skin = model ? model->getSkin() : NULL;
-        if (skin)
+        bound = true;
+
+        if (strcmp(autoBinding, "WORLD_MATRIX") == 0)
         {
-            GP_ASSERT(param);
-            param->bindValue(skin, &MeshSkin::getMatrixPalette, &MeshSkin::getMatrixPaletteSize);
+            param->bindValue(this, &RenderState::autoBindingGetWorldMatrix);
+        }
+        else if (strcmp(autoBinding, "VIEW_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetViewMatrix);
+        }
+        else if (strcmp(autoBinding, "PROJECTION_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetProjectionMatrix);
+        }
+        else if (strcmp(autoBinding, "WORLD_VIEW_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetWorldViewMatrix);
+        }
+        else if (strcmp(autoBinding, "VIEW_PROJECTION_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetViewProjectionMatrix);
+        }
+        else if (strcmp(autoBinding, "WORLD_VIEW_PROJECTION_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetWorldViewProjectionMatrix);
+        }
+        else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetInverseTransposeWorldMatrix);
+        }
+        else if (strcmp(autoBinding, "INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetInverseTransposeWorldViewMatrix);
+        }
+        else if (strcmp(autoBinding, "CAMERA_WORLD_POSITION") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetCameraWorldPosition);
+        }
+        else if (strcmp(autoBinding, "CAMERA_VIEW_POSITION") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetCameraViewPosition);
+        }
+        else if (strcmp(autoBinding, "MATRIX_PALETTE") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetMatrixPalette, &RenderState::autoBindingGetMatrixPaletteSize);
+        }
+        else if (strcmp(autoBinding, "SCENE_AMBIENT_COLOR") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetAmbientColor);
+        }
+        else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetLightColor);
+        }
+        else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
+        {
+            param->bindValue(this, &RenderState::autoBindingGetLightDirection);
+        }
+        else
+        {
+            bound = false;
+            GP_WARN("Unsupported auto binding type (%d).", autoBinding);
         }
     }
-    else if (strcmp(autoBinding, "SCENE_AMBIENT_COLOR") == 0)
+
+    if (bound)
     {
-        Scene* scene = _nodeBinding->getScene();
-        if (scene)
-            param->bindValue(scene, &Scene::getAmbientColor);
+        // Mark parameter as an auto binding
+        if (param->_type == MaterialParameter::METHOD && param->_value.method)
+            param->_value.method->_autoBinding = true;
     }
-    else if (strcmp(autoBinding, "SCENE_LIGHT_COLOR") == 0)
-    {
-        Scene* scene = _nodeBinding->getScene();
-        if (scene)
-            param->bindValue(scene, &Scene::getLightColor);
-    }
-    else if (strcmp(autoBinding, "SCENE_LIGHT_DIRECTION") == 0)
-    {
-        Scene* scene = _nodeBinding->getScene();
-        if (scene)
-            param->bindValue(scene, &Scene::getLightDirection);
-    }
-    else
-    {
-        GP_WARN("Unsupported auto binding type (%d).", autoBinding);
-    }
+}
+
+const Matrix& RenderState::autoBindingGetWorldMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getWorldMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetViewMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getViewMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetProjectionMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getProjectionMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetWorldViewMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getWorldViewMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetViewProjectionMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getViewProjectionMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetWorldViewProjectionMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getWorldViewProjectionMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetInverseTransposeWorldMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getInverseTransposeWorldMatrix() : Matrix::identity();
+}
+
+const Matrix& RenderState::autoBindingGetInverseTransposeWorldViewMatrix() const
+{
+    return _nodeBinding ? _nodeBinding->getInverseTransposeWorldViewMatrix() : Matrix::identity();
+}
+
+Vector3 RenderState::autoBindingGetCameraWorldPosition() const
+{
+    return _nodeBinding ? _nodeBinding->getActiveCameraTranslationWorld() : Vector3::zero();
+}
+
+Vector3 RenderState::autoBindingGetCameraViewPosition() const
+{
+    return _nodeBinding ? _nodeBinding->getActiveCameraTranslationView() : Vector3::zero();
+}
+
+const Vector4* RenderState::autoBindingGetMatrixPalette() const
+{
+    Model* model = _nodeBinding ? _nodeBinding->getModel() : NULL;
+    MeshSkin* skin = model ? model->getSkin() : NULL;
+    return skin ? skin->getMatrixPalette() : NULL;
+}
+
+unsigned int RenderState::autoBindingGetMatrixPaletteSize() const
+{
+    Model* model = _nodeBinding ? _nodeBinding->getModel() : NULL;
+    MeshSkin* skin = model ? model->getSkin() : NULL;
+    return skin ? skin->getMatrixPaletteSize() : 0;
+}
+
+const Vector3& RenderState::autoBindingGetAmbientColor() const
+{
+    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
+    return scene ? scene->getAmbientColor() : Vector3::zero();
+}
+
+const Vector3& RenderState::autoBindingGetLightColor() const
+{
+    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
+    return scene ? scene->getLightColor() : Vector3::one();
+}
+
+const Vector3& RenderState::autoBindingGetLightDirection() const
+{
+    static Vector3 down(0, -1, 0);
+    Scene* scene = _nodeBinding ? _nodeBinding->getScene() : NULL;
+    return scene ? scene->getLightDirection() : down;
 }
 
 void RenderState::bind(Pass* pass)
@@ -359,6 +466,7 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
 {
     GP_ASSERT(renderState);
 
+    // Clone parameters
     for (std::map<std::string, std::string>::const_iterator it = _autoBindings.begin(); it != _autoBindings.end(); ++it)
     {
         renderState->setParameterAutoBinding(it->first.c_str(), it->second.c_str());
@@ -368,18 +476,26 @@ void RenderState::cloneInto(RenderState* renderState, NodeCloneContext& context)
         const MaterialParameter* param = *it;
         GP_ASSERT(param);
 
+        // If this parameter is a method binding auto binding, don't clone it - it will get setup automatically
+        // via the cloned auto bindings instead.
+        if (param->_type == MaterialParameter::METHOD && param->_value.method && param->_value.method->_autoBinding)
+            continue;
+
         MaterialParameter* paramCopy = new MaterialParameter(param->getName());
         param->cloneInto(paramCopy);
 
         renderState->_parameters.push_back(paramCopy);
     }
-    renderState->_parent = _parent;
+
+    // Clone our state block
     if (_state)
     {
-        renderState->setStateBlock(_state);
+        _state->cloneInto(renderState->getStateBlock());
     }
 
-    // Note that _nodeBinding is not set here, it should be set by the caller.
+    // Notes:
+    // 1. _nodeBinding should not be set here, it should be set by the caller.
+    // 2. _parent should not be set here, since it's set in the constructor of Technique and Pass.
 }
 
 RenderState::StateBlock::StateBlock()
@@ -442,6 +558,11 @@ void RenderState::StateBlock::bindNoRestore()
             GL_ASSERT( glDisable(GL_CULL_FACE) );
         _defaultState->_cullFaceEnabled = _cullFaceEnabled;
     }
+    if ((_bits & RS_CULL_FACE_SIDE) && (_cullFaceSide != _defaultState->_cullFaceSide))
+    {
+        GL_ASSERT( glCullFace((GLenum)_cullFaceSide) );
+        _defaultState->_cullFaceSide = _cullFaceSide;
+    }
     if ((_bits & RS_DEPTH_TEST) && (_depthTestEnabled != _defaultState->_depthTestEnabled))
     {
         if (_depthTestEnabled) 
@@ -494,6 +615,12 @@ void RenderState::StateBlock::restore(long stateOverrideBits)
         _defaultState->_bits &= ~RS_CULL_FACE;
         _defaultState->_cullFaceEnabled = false;
     }
+    if (!(stateOverrideBits & RS_CULL_FACE_SIDE) && (_defaultState->_bits & RS_CULL_FACE_SIDE))
+    {
+        GL_ASSERT( glCullFace((GLenum)GL_BACK) );
+        _defaultState->_bits &= ~RS_CULL_FACE_SIDE;
+        _defaultState->_cullFaceSide = RenderState::CULL_FACE_SIDE_BACK;
+    }
     if (!(stateOverrideBits & RS_DEPTH_TEST) && (_defaultState->_bits & RS_DEPTH_TEST))
     {
         GL_ASSERT( glDisable(GL_DEPTH_TEST) );
@@ -527,6 +654,21 @@ void RenderState::StateBlock::enableDepthWrite()
         _defaultState->_bits &= ~RS_DEPTH_WRITE;
         _defaultState->_depthWriteEnabled = true;
     }
+}
+
+void RenderState::StateBlock::cloneInto(StateBlock* state)
+{
+    GP_ASSERT(state);
+
+    state->_cullFaceEnabled = _cullFaceEnabled;
+    state->_depthTestEnabled = _depthTestEnabled;
+    state->_depthWriteEnabled = _depthWriteEnabled;
+    state->_depthFunction = _depthFunction;
+    state->_blendEnabled = _blendEnabled;
+    state->_blendSrc = _blendSrc;
+    state->_blendDst = _blendDst;
+    state->_cullFaceSide = _cullFaceSide;
+    state->_bits = _bits;
 }
 
 static bool parseBoolean(const char* value)
@@ -615,6 +757,26 @@ static RenderState::DepthFunction parseDepthFunc(const char* value)
     }
 }
 
+static RenderState::CullFaceSide parseCullFaceSide(const char* value)
+{
+    GP_ASSERT(value);
+
+    // Convert string to uppercase for comparison
+    std::string upper(value);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    if (upper == "BACK")
+        return RenderState::CULL_FACE_SIDE_BACK;
+    else if (upper == "FRONT")
+        return RenderState::CULL_FACE_SIDE_FRONT;
+    else if (upper == "FRONT_AND_BACK")
+        return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
+    else
+    {
+        GP_ERROR("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings)", value);
+        return RenderState::CULL_FACE_SIDE_BACK;
+    }
+}
+
 void RenderState::StateBlock::setState(const char* name, const char* value)
 {
     GP_ASSERT(name);
@@ -634,6 +796,10 @@ void RenderState::StateBlock::setState(const char* name, const char* value)
     else if (strcmp(name, "cullFace") == 0)
     {
         setCullFace(parseBoolean(value));
+    }
+    else if (strcmp(name, "cullFaceSide") == 0)
+    {
+        setCullFaceSide(parseCullFaceSide(value));
     }
     else if (strcmp(name, "depthTest") == 0)
     {
@@ -704,6 +870,20 @@ void RenderState::StateBlock::setCullFace(bool enabled)
     else
     {
         _bits |= RS_CULL_FACE;
+    }
+}
+
+void RenderState::StateBlock::setCullFaceSide(CullFaceSide side)
+{
+    _cullFaceSide = side;
+    if (_cullFaceSide == CULL_FACE_SIDE_BACK)
+    {
+        // Default cull side
+        _bits &= ~RS_CULL_FACE_SIDE;
+    }
+    else
+    {
+        _bits |= RS_CULL_FACE_SIDE;
     }
 }
 

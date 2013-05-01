@@ -11,6 +11,7 @@
 #include "Technique.h"
 #include "lua_RenderStateAutoBinding.h"
 #include "lua_RenderStateBlend.h"
+#include "lua_RenderStateCullFaceSide.h"
 #include "lua_RenderStateDepthFunction.h"
 
 namespace gameplay
@@ -28,6 +29,7 @@ void luaRegister_RenderStateStateBlock()
         {"setBlendDst", lua_RenderStateStateBlock_setBlendDst},
         {"setBlendSrc", lua_RenderStateStateBlock_setBlendSrc},
         {"setCullFace", lua_RenderStateStateBlock_setCullFace},
+        {"setCullFaceSide", lua_RenderStateStateBlock_setCullFaceSide},
         {"setDepthFunction", lua_RenderStateStateBlock_setDepthFunction},
         {"setDepthTest", lua_RenderStateStateBlock_setDepthTest},
         {"setDepthWrite", lua_RenderStateStateBlock_setDepthWrite},
@@ -42,14 +44,14 @@ void luaRegister_RenderStateStateBlock()
     std::vector<std::string> scopePath;
     scopePath.push_back("RenderState");
 
-    ScriptUtil::registerClass("RenderStateStateBlock", lua_members, NULL, lua_RenderStateStateBlock__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("RenderStateStateBlock", lua_members, NULL, lua_RenderStateStateBlock__gc, lua_statics, scopePath);
 }
 
 static RenderState::StateBlock* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "RenderStateStateBlock");
     luaL_argcheck(state, userdata != NULL, 1, "'RenderStateStateBlock' expected.");
-    return (RenderState::StateBlock*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (RenderState::StateBlock*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_RenderStateStateBlock__gc(lua_State* state)
@@ -66,7 +68,7 @@ int lua_RenderStateStateBlock__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "RenderStateStateBlock");
                 luaL_argcheck(state, userdata != NULL, 1, "'RenderStateStateBlock' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     RenderState::StateBlock* instance = (RenderState::StateBlock*)object->instance;
@@ -235,7 +237,7 @@ int lua_RenderStateStateBlock_setBlend(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setBlend(param1);
@@ -343,7 +345,7 @@ int lua_RenderStateStateBlock_setCullFace(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setCullFace(param1);
@@ -352,6 +354,42 @@ int lua_RenderStateStateBlock_setCullFace(lua_State* state)
             }
 
             lua_pushstring(state, "lua_RenderStateStateBlock_setCullFace - Failed to match the given parameters to a valid function signature.");
+            lua_error(state);
+            break;
+        }
+        default:
+        {
+            lua_pushstring(state, "Invalid number of parameters (expected 2).");
+            lua_error(state);
+            break;
+        }
+    }
+    return 0;
+}
+
+int lua_RenderStateStateBlock_setCullFaceSide(lua_State* state)
+{
+    // Get the number of parameters.
+    int paramCount = lua_gettop(state);
+
+    // Attempt to match the parameters to a valid binding.
+    switch (paramCount)
+    {
+        case 2:
+        {
+            if ((lua_type(state, 1) == LUA_TUSERDATA) &&
+                (lua_type(state, 2) == LUA_TSTRING || lua_type(state, 2) == LUA_TNIL))
+            {
+                // Get parameter 1 off the stack.
+                RenderState::CullFaceSide param1 = (RenderState::CullFaceSide)lua_enumFromString_RenderStateCullFaceSide(luaL_checkstring(state, 2));
+
+                RenderState::StateBlock* instance = getInstance(state);
+                instance->setCullFaceSide(param1);
+                
+                return 0;
+            }
+
+            lua_pushstring(state, "lua_RenderStateStateBlock_setCullFaceSide - Failed to match the given parameters to a valid function signature.");
             lua_error(state);
             break;
         }
@@ -415,7 +453,7 @@ int lua_RenderStateStateBlock_setDepthTest(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setDepthTest(param1);
@@ -451,7 +489,7 @@ int lua_RenderStateStateBlock_setDepthWrite(lua_State* state)
                 lua_type(state, 2) == LUA_TBOOLEAN)
             {
                 // Get parameter 1 off the stack.
-                bool param1 = ScriptUtil::luaCheckBool(state, 2);
+                bool param1 = gameplay::ScriptUtil::luaCheckBool(state, 2);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setDepthWrite(param1);
@@ -488,10 +526,10 @@ int lua_RenderStateStateBlock_setState(lua_State* state)
                 (lua_type(state, 3) == LUA_TSTRING || lua_type(state, 3) == LUA_TNIL))
             {
                 // Get parameter 1 off the stack.
-                const char* param1 = ScriptUtil::getString(2, false);
+                const char* param1 = gameplay::ScriptUtil::getString(2, false);
 
                 // Get parameter 2 off the stack.
-                const char* param2 = ScriptUtil::getString(3, false);
+                const char* param2 = gameplay::ScriptUtil::getString(3, false);
 
                 RenderState::StateBlock* instance = getInstance(state);
                 instance->setState(param1, param2);
@@ -526,7 +564,7 @@ int lua_RenderStateStateBlock_static_create(lua_State* state)
             void* returnPtr = (void*)RenderState::StateBlock::create();
             if (returnPtr)
             {
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(ScriptUtil::LuaObject));
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)lua_newuserdata(state, sizeof(gameplay::ScriptUtil::LuaObject));
                 object->instance = returnPtr;
                 object->owns = true;
                 luaL_getmetatable(state, "RenderStateStateBlock");

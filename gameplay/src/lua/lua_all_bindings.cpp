@@ -48,6 +48,7 @@ void lua_RegisterAllBindings()
     luaRegister_Gesture();
     luaRegister_HeightField();
     luaRegister_Image();
+    luaRegister_ImageControl();
     luaRegister_Joint();
     luaRegister_Joystick();
     luaRegister_Keyboard();
@@ -109,6 +110,7 @@ void lua_RegisterAllBindings()
     luaRegister_SpriteBatch();
     luaRegister_Technique();
     luaRegister_Terrain();
+    luaRegister_TerrainListener();
     luaRegister_TextBox();
     luaRegister_Texture();
     luaRegister_TextureSampler();

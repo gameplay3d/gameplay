@@ -27,8 +27,6 @@ static double __timeTicksPerMillis;
 static double __timeStart;
 static double __timeAbsolute;
 static bool __vsync = WINDOW_VSYNC;
-static float __roll;
-static float __pitch;
 static HINSTANCE __hinstance = 0;
 static HWND __attachToWindow = 0;
 static HWND __hwnd = 0;
@@ -36,6 +34,7 @@ static HDC __hdc = 0;
 static HGLRC __hrc = 0;
 static bool __mouseCaptured = false;
 static POINT __mouseCapturePoint = { 0, 0 };
+static bool __multiSampling = false;
 static bool __cursorVisible = true;
 static unsigned int __gamepadsConnected = 0;
 
@@ -43,9 +42,7 @@ static unsigned int __gamepadsConnected = 0;
 static const unsigned int XINPUT_BUTTON_COUNT = 14;
 static const unsigned int XINPUT_JOYSTICK_COUNT = 2;
 static const unsigned int XINPUT_TRIGGER_COUNT = 2;
-#endif
 
-#ifdef USE_XINPUT
 static XINPUT_STATE __xInputState;
 static bool __connectedXInput[4];
 
@@ -342,8 +339,6 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
-    static int lx, ly;
-
     static bool shiftDown = false;
     static bool capsOn = false;
 
@@ -366,7 +361,7 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         UpdateCapture(wParam);
         if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_LEFT_BUTTON, x, y, 0))
         {
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_PRESS, x, y, 0, true);
         }
         return 0;
     }
@@ -377,16 +372,14 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         if (!gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_RELEASE_LEFT_BUTTON, x, y, 0))
         {
-            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0);
+            gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_RELEASE, x, y, 0, true);
         }
         UpdateCapture(wParam);
         return 0;
     }
     case WM_RBUTTONDOWN:
         UpdateCapture(wParam);
-        lx = GET_X_LPARAM(lParam);
-        ly = GET_Y_LPARAM(lParam);
-        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, lx, ly, 0);
+        gameplay::Platform::mouseEventInternal(gameplay::Mouse::MOUSE_PRESS_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), 0);
         break;
 
     case WM_RBUTTONUP:
@@ -430,28 +423,8 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if ((wParam & MK_LBUTTON) == MK_LBUTTON)
             {
                 // Mouse move events should be interpreted as touch move only if left mouse is held and the game did not consume the mouse event.
-                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0);
+                gameplay::Platform::touchEventInternal(gameplay::Touch::TOUCH_MOVE, x, y, 0, true);
                 return 0;
-            }
-            else if ((wParam & MK_RBUTTON) == MK_RBUTTON)
-            {
-                // Scale factors for the mouse movement used to simulate the accelerometer.
-                RECT clientRect;
-                GetClientRect(__hwnd, &clientRect);
-                const float xFactor = 90.0f / clientRect.right;
-                const float yFactor = 90.0f / clientRect.bottom;
-
-                // Update the pitch and roll by adding the scaled deltas.
-                __roll += (float)(x - lx) * xFactor;
-                __pitch += -(float)(y - ly) * yFactor;
-
-                // Clamp the values to the valid range.
-                __roll = max(min(__roll, 90.0f), -90.0f);
-                __pitch = max(min(__pitch, 90.0f), -90.0f);
-
-                // Update the last X/Y values.
-                lx = x;
-                ly = y;
             }
         }
         break;
@@ -501,6 +474,11 @@ LRESULT CALLBACK __WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_KILLFOCUS:
         break;
+
+    case WM_SIZE:
+        // Window was resized.
+        gameplay::Platform::resizeEventInternal((unsigned int)(short)LOWORD(lParam), (unsigned int)(short)HIWORD(lParam));
+        break;
     }
     
     return DefWindowProc(hwnd, msg, wParam, lParam); 
@@ -515,6 +493,7 @@ struct WindowCreationParams
     RECT rect;
     std::wstring windowName;
     bool fullscreen;
+    bool resizable;
     int samples;
 };
 
@@ -551,6 +530,7 @@ Platform::~Platform()
 bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
 {
     bool fullscreen = false;
+    bool resizable = false;
     RECT rect = { CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT };
     std::wstring windowName;
     if (params)
@@ -558,11 +538,25 @@ bool createWindow(WindowCreationParams* params, HWND* hwnd, HDC* hdc)
         windowName = params->windowName;
         memcpy(&rect, &params->rect, sizeof(RECT));
         fullscreen = params->fullscreen;
+        resizable = params->resizable;
     }
 
     // Set the window style.
-    DWORD style   = (fullscreen ? WS_POPUP : WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU) | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-    DWORD styleEx = (fullscreen ? WS_EX_APPWINDOW : WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+    DWORD style, styleEx;
+    if (fullscreen)
+    {
+        style = WS_POPUP;
+        styleEx = WS_EX_APPWINDOW;
+    }
+    else
+    {
+        if (resizable)
+            style = WS_OVERLAPPEDWINDOW;
+        else
+            style = WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU;
+        styleEx = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+    }
+    style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
     // Adjust the window rectangle so the client size is the requested size.
     AdjustWindowRectEx(&rect, style, FALSE, styleEx);
@@ -599,8 +593,17 @@ bool initializeGL(WindowCreationParams* params)
     // function for querying GL extensions is a GL extension itself.
     HWND hwnd = NULL;
     HDC hdc = NULL;
-    if (!createWindow(NULL, &hwnd, &hdc))
-        return false;
+
+    if (params)
+    {
+        if (!createWindow(NULL, &hwnd, &hdc))
+            return false;
+    }
+    else
+    {
+        hwnd = __hwnd;
+        hdc = __hdc;
+    }
 
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
@@ -652,8 +655,8 @@ bool initializeGL(WindowCreationParams* params)
     // Note: Keep multisampling attributes at the start of the attribute lists since code below
     // assumes they are array elements 0 through 3.
     int attribList[] = {
-        WGL_SAMPLES_ARB, params->samples,
-        WGL_SAMPLE_BUFFERS_ARB, params->samples > 0 ? 1 : 0,
+        WGL_SAMPLES_ARB, params ? params->samples : 0,
+        WGL_SAMPLE_BUFFERS_ARB, params ? (params->samples > 0 ? 1 : 0) : 0,
         WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
         WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
         WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
@@ -663,11 +666,13 @@ bool initializeGL(WindowCreationParams* params)
         WGL_STENCIL_BITS_ARB, DEFAULT_STENCIL_BUFFER_SIZE,
         0
     };
+    __multiSampling = params && params->samples > 0;
+
     UINT numFormats;
-    if (!wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
+    if ( !wglChoosePixelFormatARB(hdc, attribList, NULL, 1, &pixelFormat, &numFormats) || numFormats == 0)
     {
         bool valid = false;
-        if (params->samples > 0)
+        if (params && params->samples > 0)
         {
             GP_WARN("Failed to choose pixel format with WGL_SAMPLES_ARB == %d. Attempting to fallback to lower samples setting.", params->samples);
             while (params->samples > 0)
@@ -682,6 +687,8 @@ bool initializeGL(WindowCreationParams* params)
                     break;
                 }
             }
+
+            __multiSampling = params->samples > 0;
         }
 
         if (!valid)
@@ -693,14 +700,13 @@ bool initializeGL(WindowCreationParams* params)
         }
     }
 
-    // Destroy old window
-    DestroyWindow(hwnd);
-    hwnd = NULL;
-    hdc = NULL;
-
     // Create new/final window if needed
     if (params)
     {
+        DestroyWindow(hwnd);
+        hwnd = NULL;
+        hdc = NULL;
+
         if (!createWindow(params, &__hwnd, &__hdc))
         {
             wglDeleteContext(tempContext);
@@ -761,6 +767,7 @@ Platform* Platform::create(Game* game, void* attachToWindow)
     // Read window settings from config.
     WindowCreationParams params;
     params.fullscreen = false;
+    params.resizable = false;
     params.rect.left = 0;
     params.rect.top = 0;
     params.rect.right = 0;
@@ -784,6 +791,8 @@ Platform* Platform::create(Game* game, void* attachToWindow)
 
             // Read fullscreen state.
             params.fullscreen = config->getBool("fullscreen");
+            // Read resizable state.
+            params.resizable = config->getBool("resizable");
             // Read multisampling state.
             params.samples = config->getInt("samples");
 
@@ -918,7 +927,6 @@ Platform* Platform::create(Game* game, void* attachToWindow)
                 Platform::gamepadEventConnectedInternal(i, XINPUT_BUTTON_COUNT, XINPUT_JOYSTICK_COUNT, XINPUT_TRIGGER_COUNT, 0, 0, "Microsoft", "XBox360 Controller");
                 __connectedXInput[i] = true;
             }
-
         }
     }
 #endif
@@ -943,10 +951,6 @@ int Platform::enterMessagePump()
     QueryPerformanceCounter(&queryTime);
     GP_ASSERT(__timeTicksPerMillis);
     __timeStart = queryTime.QuadPart / __timeTicksPerMillis;
-
-    // Set the initial pitch and roll values.
-    __pitch = 0.0;
-    __roll = 0.0;
 
     SwapBuffers(__hdc);
 
@@ -991,7 +995,6 @@ int Platform::enterMessagePump()
                 }
             }
 #endif
-
             _game->frame();
             SwapBuffers(__hdc);
         }
@@ -1064,6 +1067,30 @@ void Platform::sleep(long ms)
     Sleep(ms);
 }
 
+void Platform::setMultiSampling(bool enabled)
+{
+    if (enabled == __multiSampling)
+    {
+        return;
+    }
+
+    if (enabled)
+    {
+        glEnable(GL_MULTISAMPLE);
+    }
+    else
+    {
+        glDisable(GL_MULTISAMPLE);
+    }
+
+    __multiSampling = enabled;
+}
+
+bool Platform::isMultiSampling()
+{
+    return __multiSampling;
+}
+
 void Platform::setMultiTouch(bool enabled)
 {
     // not supported
@@ -1074,13 +1101,59 @@ bool Platform::isMultiTouch()
     return false;
 }
 
+bool Platform::hasAccelerometer()
+{
+    return false;
+}
+
 void Platform::getAccelerometerValues(float* pitch, float* roll)
 {
     GP_ASSERT(pitch);
     GP_ASSERT(roll);
 
-    *pitch = __pitch;
-    *roll = __roll;
+    *pitch = 0;
+    *roll = 0;
+}
+
+void Platform::getRawSensorValues(float* accelX, float* accelY, float* accelZ, float* gyroX, float* gyroY, float* gyroZ)
+{
+    if (accelX)
+    {
+        *accelX = 0;
+    }
+
+    if (accelY)
+    {
+        *accelY = 0;
+    }
+
+    if (accelZ)
+    {
+        *accelZ = 0;
+    }
+
+    if (gyroX)
+    {
+        *gyroX = 0;
+    }
+
+    if (gyroY)
+    {
+        *gyroY = 0;
+    }
+
+    if (gyroZ)
+    {
+        *gyroZ = 0;
+    }
+}
+
+void Platform::getArguments(int* argc, char*** argv)
+{
+    if (argc)
+        *argc = __argc;
+    if (argv)
+        *argv = __argv;
 }
 
 bool Platform::hasMouse()
@@ -1184,13 +1257,15 @@ void Platform::pollGamepadState(Gamepad* gamepad)
         };
 
         const unsigned int *mapping = xInputMapping;
-        for (gamepad->_buttons = 0; buttons; buttons >>= 1, mapping++)
+        unsigned int mappedButtons;
+        for (mappedButtons = 0; buttons; buttons >>= 1, mapping++)
         {
             if (buttons & 1)
             {
-                gamepad->_buttons |= (1 << *mapping);
+                mappedButtons |= (1 << *mapping);
             }
         }
+        gamepad->setButtons(mappedButtons);
 
         unsigned int i;
         for (i = 0; i < gamepad->_joystickCount; ++i)
@@ -1211,7 +1286,7 @@ void Platform::pollGamepadState(Gamepad* gamepad)
                 break;
             }
 
-            gamepad->_joysticks[i].set(x, y);
+            gamepad->setJoystickValue(i, x, y);
         }
 
         for (i = 0; i < gamepad->_triggerCount; ++i)
@@ -1231,66 +1306,18 @@ void Platform::pollGamepadState(Gamepad* gamepad)
 
             if (trigger < XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
             {
-                gamepad->_triggers[i] = 0.0f;
+                gamepad->setTriggerValue(i, 0.0f);
             }
             else
             {
-                gamepad->_triggers[i] = (float)trigger / 255.0f;
+                gamepad->setTriggerValue(i, (float)trigger / 255.0f);
             }
         }
     }
 }
 #else
-void Platform::pollGamepadState(Gamepad* gamepad)
-{
-    // TODO: Support generic HID gamepads (including XBox controllers) without requiring XInput.
-}
+void Platform::pollGamepadState(Gamepad* gamepad) { }
 #endif
-
-void Platform::touchEventInternal(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex)
-{
-    if (!Form::touchEventInternal(evt, x, y, contactIndex))
-    {
-        Game::getInstance()->touchEvent(evt, x, y, contactIndex);
-        Game::getInstance()->getScriptController()->touchEvent(evt, x, y, contactIndex);
-    }
-}
-
-void Platform::keyEventInternal(Keyboard::KeyEvent evt, int key)
-{
-    if (!Form::keyEventInternal(evt, key))
-    {
-        Game::getInstance()->keyEvent(evt, key);
-        Game::getInstance()->getScriptController()->keyEvent(evt, key);
-    }
-}
-
-bool Platform::mouseEventInternal(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
-{
-    if (Form::mouseEventInternal(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else if (Game::getInstance()->mouseEvent(evt, x, y, wheelDelta))
-    {
-        return true;
-    }
-    else
-    {
-        return Game::getInstance()->getScriptController()->mouseEvent(evt, x, y, wheelDelta);
-    }
-}
-
-void Platform::gamepadEventConnectedInternal(GamepadHandle handle,  unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount,
-                                             unsigned int vendorId, unsigned int productId, const char* vendorString, const char* productString)
-{
-    Gamepad::add(handle, buttonCount, joystickCount, triggerCount, vendorId, productId, vendorString, productString);
-}
-
-void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
-{
-    Gamepad::remove(handle);
-}
 
 void Platform::shutdownInternal()
 {

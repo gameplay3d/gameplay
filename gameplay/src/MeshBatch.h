@@ -2,10 +2,11 @@
 #define MESHBATCH_H_
 
 #include "Mesh.h"
-#include "Material.h"
 
 namespace gameplay
 {
+
+class Material;
 
 /**
  * Defines a class for rendering multiple mesh into a single draw call on the graphics device.
@@ -90,7 +91,28 @@ public:
      * @param indexCount Number of indices (should be zero for non-indexed batches).
      */
     template <class T>
-    void add(T* vertices, unsigned int vertexCount, unsigned short* indices = NULL, unsigned int indexCount = 0);
+    void add(const T* vertices, unsigned int vertexCount, const unsigned short* indices = NULL, unsigned int indexCount = 0);
+
+    /**
+     * Adds a group of primitives to the batch.
+     *
+     * The vertex list passed in should be a pointer of floats where every X floats represent a
+     * single vertex (e.g. {x,y,z,u,v}).
+     *
+     * If the batch was created with 'indexed' set to true, then valid index data should be
+     * passed in this method. However, if 'indexed' was set to false, the indices and indexCount
+     * parameters can be omitted since only vertex data will be used.
+     *
+     * If the batch created to draw triangle strips, this method assumes that separate calls to
+     * add specify separate triangle strips. In this case, this method will automatically stitch
+     * separate triangle strips together using degenerate (zero-area) triangles.
+     *
+     * @param vertices Array of vertices.
+     * @param vertexCount Number of vertices.
+     * @param indices Array of indices into the vertex array (should be NULL for non-indexed batches).
+     * @param indexCount Number of indices (should be zero for non-indexed batches).
+     */
+    void add(const float* vertices, unsigned int vertexCount, const unsigned short* indices = NULL, unsigned int indexCount = 0);
 
     /**
      * Starts batching.
@@ -130,6 +152,8 @@ private:
      * Hidden copy assignment operator.
      */
     MeshBatch& operator=(const MeshBatch&);
+
+    void add(const void* vertices, size_t size, unsigned int vertexCount, const unsigned short* indices, unsigned int indexCount);
 
     void updateVertexAttributeBinding();
 

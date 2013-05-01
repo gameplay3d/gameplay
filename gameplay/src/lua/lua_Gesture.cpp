@@ -22,14 +22,14 @@ void luaRegister_Gesture()
     };
     std::vector<std::string> scopePath;
 
-    ScriptUtil::registerClass("Gesture", lua_members, NULL, lua_Gesture__gc, lua_statics, scopePath);
+    gameplay::ScriptUtil::registerClass("Gesture", lua_members, NULL, lua_Gesture__gc, lua_statics, scopePath);
 }
 
 static Gesture* getInstance(lua_State* state)
 {
     void* userdata = luaL_checkudata(state, 1, "Gesture");
     luaL_argcheck(state, userdata != NULL, 1, "'Gesture' expected.");
-    return (Gesture*)((ScriptUtil::LuaObject*)userdata)->instance;
+    return (Gesture*)((gameplay::ScriptUtil::LuaObject*)userdata)->instance;
 }
 
 int lua_Gesture__gc(lua_State* state)
@@ -46,7 +46,7 @@ int lua_Gesture__gc(lua_State* state)
             {
                 void* userdata = luaL_checkudata(state, 1, "Gesture");
                 luaL_argcheck(state, userdata != NULL, 1, "'Gesture' expected.");
-                ScriptUtil::LuaObject* object = (ScriptUtil::LuaObject*)userdata;
+                gameplay::ScriptUtil::LuaObject* object = (gameplay::ScriptUtil::LuaObject*)userdata;
                 if (object->owns)
                 {
                     Gesture* instance = (Gesture*)object->instance;

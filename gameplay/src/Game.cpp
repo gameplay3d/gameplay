@@ -86,6 +86,7 @@ int Game::run()
         shutdown();
         return -2;
     }
+
     return 0;
 }
 
@@ -122,30 +123,22 @@ bool Game::startup()
         Properties* scripts = _properties->getNamespace("scripts", true);
         if (scripts)
         {
-            const char* name;
-            while ((name = scripts->getNextProperty()) != NULL)
+            const char* callback;
+            while ((callback = scripts->getNextProperty()) != NULL)
             {
-                ScriptController::ScriptCallback callback = ScriptController::toCallback(name);
-                if (callback != ScriptController::INVALID_CALLBACK)
-                {
-                    std::string url = scripts->getString();
-                    std::string file;
-                    std::string id;
-                    splitURL(url, &file, &id);
+                std::string url = scripts->getString();
+                std::string file;
+                std::string id;
+                splitURL(url, &file, &id);
 
-                    if (file.size() <= 0 || id.size() <= 0)
-                    {
-                        GP_ERROR("Invalid %s script callback function '%s'.", name, url.c_str());
-                    }
-                    else
-                    {
-                        _scriptController->loadScript(file.c_str());
-                        _scriptController->registerCallback(callback, id);
-                    }
+                if (file.size() <= 0 || id.size() <= 0)
+                {
+                    GP_ERROR("Invalid %s script callback function '%s'.", callback, url.c_str());
                 }
                 else
                 {
-                    // Ignore everything else.
+                    _scriptController->loadScript(file.c_str());
+                    _scriptController->registerCallback(callback, id.c_str());
                 }
             }
         }
@@ -258,20 +251,41 @@ void Game::resume()
 
 void Game::exit()
 {
-	// Schedule a call to shutdown rather than calling it right away.
+    // Only perform a full/clean shutdown if FORCE_CLEAN_SHUTDOWN or
+    // GAMEPLAY_MEM_LEAK_DETECTION is defined. Every modern OS is able to
+    // handle reclaiming process memory hundreds of times faster than it
+    // would take us to go through every pointer in the engine and release
+    // them nicely. For large games, shutdown can end up taking long time,
+    // so we'll just call ::exit(0) to force an instant shutdown.
+
+#if defined FORCE_CLEAN_SHUTDOWN || defined GAMEPLAY_MEM_LEAK_DETECTION
+
+    // Schedule a call to shutdown rather than calling it right away.
 	// This handles the case of shutting down the script system from
 	// within a script function (which can cause errors).
 	static ShutdownListener listener;
 	schedule(0, &listener);
+
+#else
+
+    // End the process immediately without a full shutdown
+    ::exit(0);
+
+#endif
 }
+
 
 void Game::frame()
 {
     if (!_initialized)
     {
+        // Perform lazy first time initialization
         initialize();
         _scriptController->initializeGame();
         _initialized = true;
+
+        // Fire first game resize event
+        Platform::resizeEventInternal(_width, _height);
     }
 
 	static double lastFrameTime = Game::getGameTime();
@@ -300,8 +314,14 @@ void Game::frame()
         // Update AI.
         _aiController->update(elapsedTime);
 
+        // Update gamepads.
+        Gamepad::updateInternal(elapsedTime);
+
         // Application Update.
         update(elapsedTime);
+
+        // Update forms.
+        Form::updateInternal(elapsedTime);
 
         // Run script update.
         _scriptController->update(elapsedTime);
@@ -326,8 +346,14 @@ void Game::frame()
     }
 	else if (_state == Game::PAUSED)
     {
+        // Update gamepads.
+        Gamepad::updateInternal(0);
+
         // Application Update.
         update(0);
+
+        // Update forms.
+        Form::updateInternal(0);
 
         // Script update.
         _scriptController->update(0);
@@ -447,6 +473,10 @@ bool Game::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDelta)
     return false;
 }
 
+void Game::resizeEvent(unsigned int width, unsigned int height)
+{
+}
+
 bool Game::isGestureSupported(Gesture::GestureEvent evt)
 {
     return Platform::isGestureSupported(evt);
@@ -481,6 +511,11 @@ void Game::gestureTapEvent(int x, int y)
 
 void Game::gamepadEvent(Gamepad::GamepadEvent evt, Gamepad* gamepad)
 {
+}
+
+void Game::getArguments(int* argc, char*** argv) const
+{
+    Platform::getArguments(argc, argv);
 }
 
 void Game::schedule(float timeOffset, TimeListener* timeListener, void* cookie)

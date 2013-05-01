@@ -18,7 +18,6 @@ AnimationClip::Listener::EventType lua_enumFromString_AnimationClipListenerEvent
         return AnimationClip::Listener::END;
     if (strcmp(s, luaEnumString_AnimationClipListenerEventType_TIME) == 0)
         return AnimationClip::Listener::TIME;
-    GP_ERROR("Invalid enumeration value '%s' for enumeration AnimationClip::Listener::EventType.", s);
     return AnimationClip::Listener::BEGIN;
 }
 
@@ -30,7 +29,6 @@ const char* lua_stringFromEnum_AnimationClipListenerEventType(AnimationClip::Lis
         return luaEnumString_AnimationClipListenerEventType_END;
     if (e == AnimationClip::Listener::TIME)
         return luaEnumString_AnimationClipListenerEventType_TIME;
-    GP_ERROR("Invalid enumeration value '%d' for enumeration AnimationClip::Listener::EventType.", e);
     return enumStringEmpty;
 }
 

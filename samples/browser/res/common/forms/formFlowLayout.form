@@ -1,0 +1,54 @@
+form flowLayout
+{
+    theme = res/common/default.theme
+    layout = LAYOUT_FLOW
+    style = basicContainer
+    size = 600, 600
+    scroll = SCROLL_BOTH
+	consumeInputEvents = true
+
+    label label1
+    {
+        style = basic
+        size = 200, 200
+        text = Flow Layout
+    }
+
+    label otherLabel : label1
+    {
+    }
+
+    label otherLabel : label1
+    {
+    }
+
+    label otherLabel : label1
+    {
+    }
+
+    label otherLabel : label1
+    {
+        size = 250, 200
+    }
+
+    label otherLabel : label1
+    {
+    }
+
+    label otherLabel : label1
+    {
+        size = 250, 250
+    }
+
+    label otherLabel : label1
+    {
+    }
+
+    label otherLabel : label1
+    {
+    }
+
+    label otherLabel : label1
+    {
+    }
+}

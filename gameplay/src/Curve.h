@@ -345,12 +345,44 @@ public:
     void setTangent(unsigned int index, InterpolationType type, float* inValue, float* outValue);
     
     /**
-     * Evaluates the curve at the given position value (between 0.0 and 1.0 inclusive).
+     * Evaluates the curve at the given position value.
+     *
+     * Time should generally be specified as a value between 0.0 - 1.0, inclusive.
+     * A value outside this range can also be specified to perform an interpolation
+     * between the two end points of the curve. This can be useful for smoothly
+     * interpolating a repeat of the curve.
      *
      * @param time The position to evaluate the curve at.
      * @param dst The evaluated value of the curve at the given time.
      */
     void evaluate(float time, float* dst) const;
+
+    /**
+     * Evaluates the curve at the given position value (between 0.0 and 1.0 inclusive)
+     * within the specified subregion of the curve.
+     *
+     * This method is useful for evaluating sub sections of the curve. A common use for
+     * this is when evaluating individual animation clips that are positioned within a
+     * larger animation curve. This method also allows looping to occur between the
+     * end points of curve sub regions, with optional blending/interpolation between
+     * the end points (using the loopBlendTime parameter).
+     *
+     * Time should generally be specified as a value between 0.0 - 1.0, inclusive.
+     * A value outside this range can also be specified to perform an interpolation
+     * between the two end points of the curve. This can be useful for smoothly
+     * interpolating a repeat of the curve.
+     *
+     * @param time The position within the subregion of the curve to evaluate the curve at.
+     *      A time of zero representes the start of the subregion, with a time of one
+     *      representing the end of the subregion.
+     * @param startTime Start time for the subregion (between 0.0 - 1.0).
+     * @param endTime End time for the subregion (between 0.0 - 1.0).
+     * @param loopBlendTime Time (in milliseconds) to blend between the end points of the curve
+     *      for looping purposes when time is outside the range 0-1. A value of zero here
+     *      disables curve looping.
+     * @param dst The evaluated value of the curve at the given time.
+     */
+    void evaluate(float time, float startTime, float endTime, float loopBlendTime, float* dst) const;
 
     /**
      * Linear interpolation function.
@@ -459,7 +491,7 @@ private:
     /**
      * Determines the current keyframe to interpolate from based on the specified time.
      */ 
-    int determineIndex(float time) const;
+    int determineIndex(float time, unsigned int min, unsigned int max) const;
 
     /**
      * Sets the offset for the beginning of a Quaternion piece of data within the curve's value span at the specified
