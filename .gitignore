@@ -26,6 +26,11 @@ Thumbs.db
 /api/xml
 /bin
 /external-deps
+/gameplay-samples
+/gameplay-api/html
+/gameplay-docs
+/api/html
+/gameplay-tests
 
 /gameplay/Debug
 /gameplay/DebugMem
