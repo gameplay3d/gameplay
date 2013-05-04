@@ -606,6 +606,8 @@ void Game::loadConfig()
                     tcAliases = _properties->getNamespace("aliases.pvr", true);
                     break;
                 case Platform::TEXTURE_COMPRESSION_ATITC:
+                    tcAliases = _properties->getNamespace("aliases.ati", true);
+                    break;
                 case Platform::TEXTURE_COMPRESSION_DXTC:
                     tcAliases = _properties->getNamespace("aliases.dxt", true);
                     break;
