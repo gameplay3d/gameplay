@@ -596,6 +596,26 @@ void Game::loadConfig()
             {
                 FileSystem::loadResourceAliases(aliases);
             }
+
+            // Try to override aliases depending on texture compression type.
+            Properties* tcAliases = NULL;
+            Platform::TextureCompressionType tc = Platform::getTextureCompressionType();
+            switch (tc)
+            {
+                case Platform::TEXTURE_COMPRESSION_PVRTC:
+                    tcAliases = _properties->getNamespace("aliases.pvr", true);
+                    break;
+                case Platform::TEXTURE_COMPRESSION_ATITC:
+                case Platform::TEXTURE_COMPRESSION_DXTC:
+                    tcAliases = _properties->getNamespace("aliases.dxt", true);
+                    break;
+                default:
+                    break;
+            }
+            if (tcAliases)
+            {
+                FileSystem::loadResourceAliases(tcAliases);
+            }
         }
         else
         {

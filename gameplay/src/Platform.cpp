@@ -104,4 +104,35 @@ void Platform::gamepadEventDisconnectedInternal(GamepadHandle handle)
     Gamepad::remove(handle);
 }
 
+Platform::TextureCompressionType Platform::getTextureCompressionType()
+{
+    TextureCompressionType type = TEXTURE_COMPRESSION_NONE;
+
+    char *extensions = (char*) glGetString(GL_EXTENSIONS);
+
+    if (!extensions)
+        return type;
+
+    if (strstr(extensions, "GL_AMD_compressed_ATC_texture"))
+        type = TEXTURE_COMPRESSION_ATITC;
+    if (strstr(extensions, "GL_ATI_texture_compression_atitc"))
+        type = TEXTURE_COMPRESSION_ATITC;
+
+    if (strstr(extensions, "GL_IMG_texture_compression_pvrtc"))
+        type = TEXTURE_COMPRESSION_PVRTC;
+
+    if (strstr(extensions, "GL_OES_texture_compression_S3TC"))
+        type = TEXTURE_COMPRESSION_DXTC;
+    if (strstr(extensions, "GL_EXT_texture_compression_s3tc"))
+        type = TEXTURE_COMPRESSION_DXTC;
+    if (strstr(extensions, "GL_EXT_texture_compression_dxt1"))
+        type = TEXTURE_COMPRESSION_DXTC;
+    if (strstr(extensions, "GL_EXT_texture_compression_dxt3"))
+        type = TEXTURE_COMPRESSION_DXTC;
+    if (strstr(extensions, "GL_EXT_texture_compression_dxt5"))
+        type = TEXTURE_COMPRESSION_DXTC;
+
+    return type;
+}
+
 }

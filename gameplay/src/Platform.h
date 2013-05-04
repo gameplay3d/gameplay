@@ -61,6 +61,23 @@ public:
      */
     static void swapBuffers();
 
+    /**
+     * Defines texture compression types supported.
+     */
+    enum TextureCompressionType {
+        TEXTURE_COMPRESSION_NONE,
+        TEXTURE_COMPRESSION_PVRTC,
+        TEXTURE_COMPRESSION_ATITC,
+        TEXTURE_COMPRESSION_DXTC
+    };
+
+    /**
+     * Checks for the supported texture compression of the platform.
+     *
+     * @return Texture compression type.
+     */
+    static TextureCompressionType getTextureCompressionType();
+
 private:
     
     /**
