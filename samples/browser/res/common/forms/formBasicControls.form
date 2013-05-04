@@ -62,6 +62,14 @@ form basicControls
 		consumeInputEvents = true
     }
 
+    passwordTextBox testPasswordTextBox
+    {
+        style = topLeftAlignedEntry
+        position = 20, 540
+        size = 250, 40
+        consumeInputEvents = true
+    }
+
 	container radioButtonContainer
 	{
 		layout = LAYOUT_VERTICAL
