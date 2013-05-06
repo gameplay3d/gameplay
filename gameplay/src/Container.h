@@ -585,6 +585,8 @@ private:
         NEXT = 0x10
     };
 
+    static const int MAX_CONTACT_INDICES = 10;
+
     // Returns true on success; false if there are no controls to focus on,
     // in which case scrolling can be initiated.
     bool moveFocus(Direction direction, Control* outsideControl = NULL);
@@ -616,7 +618,7 @@ private:
 
     float _totalWidth;
     float _totalHeight;
-    bool _contactIndices[10];
+    bool _contactIndices[MAX_CONTACT_INDICES];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
 };
