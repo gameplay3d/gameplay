@@ -596,6 +596,9 @@ private:
 
     void stopScrolling();
 
+    void clearContacts();
+    bool inContact();
+
     AnimationClip* _scrollBarOpacityClip;
     int _zIndexDefault;
     int _focusIndexDefault;
@@ -613,7 +616,7 @@ private:
 
     float _totalWidth;
     float _totalHeight;
-    int _contactIndices;
+    bool _contactIndices[10];
     bool _initializedWithScroll;
     bool _scrollWheelRequiresFocus;
 };
