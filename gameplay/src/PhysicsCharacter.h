@@ -197,7 +197,7 @@ private:
      * @param shape Physics collision shape definition.
      * @param mass The mass of the character.
      */
-    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass);
+    PhysicsCharacter(Node* node, const PhysicsCollisionShape::Definition& shape, float mass, short group = PHYSICS_COLLISION_GROUP_DEFAULT, short mask = PHYSICS_COLLISION_MASK_DEFAULT);
 
     /**
      * Destructor.
