@@ -281,6 +281,7 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\Bundle.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\PasswordTextBox.cpp" />
     <ClCompile Include="src\PhysicsCharacter.cpp" />
     <ClCompile Include="src\PhysicsCollisionObject.cpp" />
     <ClCompile Include="src\PhysicsCollisionShape.cpp" />
@@ -563,6 +564,7 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\Bundle.h" />
     <ClInclude Include="src\ParticleEmitter.h" />
+    <ClInclude Include="src\PasswordTextBox.h" />
     <ClInclude Include="src\PhysicsCharacter.h" />
     <ClInclude Include="src\PhysicsCollisionObject.h" />
     <ClInclude Include="src\PhysicsCollisionShape.h" />

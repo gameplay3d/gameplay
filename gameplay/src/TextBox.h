@@ -122,6 +122,25 @@ protected:
      */
     bool keyEvent(Keyboard::KeyEvent evt, int key);
 
+	/**
+	 * Handle character deletion in the textbox
+	 *
+	 * @param index of the deleted character
+	 *
+	 * @return The new password text box.
+	 */
+	virtual void deleteChar(int index);
+
+	/**
+	 * Handle character insertion in the textbox
+	 *
+	 * @param index of the inserted character
+	 * @param characted inserted
+	 *
+	 * @return The new password text box.
+	 */
+	virtual void insertChar(int index, char character);
+
     /**
      * Called when a control's properties change.  Updates this control's internal rendering
      * properties, such as its text viewport.
