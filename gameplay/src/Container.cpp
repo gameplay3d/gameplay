@@ -39,6 +39,12 @@ static const float FOCUS_CHANGE_REPEAT_DELAY = 300.0f;
  */
 static bool sortControlsByZOrder(Control* c1, Control* c2);
 
+void Container::clearContacts()
+{
+	for (int i = 0; i < MAX_CONTACT_INDICES; ++i)
+		_contactIndices[i] = false;
+}
+
 Container::Container()
     : _layout(NULL), _scrollBarTopCap(NULL), _scrollBarVertical(NULL), _scrollBarBottomCap(NULL),
       _scrollBarLeftCap(NULL), _scrollBarHorizontal(NULL), _scrollBarRightCap(NULL),
@@ -54,8 +60,9 @@ Container::Container()
       _lastFrameTime(0), _focusChangeRepeat(false),
       _focusChangeStartTime(0), _focusChangeRepeatDelay(FOCUS_CHANGE_REPEAT_DELAY), _focusChangeCount(0),
       _totalWidth(0), _totalHeight(0),
-      _contactIndices(0), _initializedWithScroll(false), _scrollWheelRequiresFocus(false)
+      _initializedWithScroll(false), _scrollWheelRequiresFocus(false)
 {
+	clearContacts();
 }
 
 Container::~Container()
@@ -1410,7 +1417,6 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         if (_contactIndex == INVALID_CONTACT_INDEX)
         {
             _contactIndex = (int) contactIndex;
-            _contactIndices++;
             _scrollingLastX = _scrollingFirstX = _scrollingVeryFirstX = x;
             _scrollingLastY = _scrollingFirstY = _scrollingVeryFirstY = y;
             _scrollingVelocity.set(0, 0);
@@ -1494,7 +1500,6 @@ bool Container::touchEventScroll(Touch::TouchEvent evt, int x, int y, unsigned i
         if (_contactIndex == (int) contactIndex)
         {
             _contactIndex = INVALID_CONTACT_INDEX;
-            _contactIndices--;
             _scrolling = false;
             double gameTime = Game::getAbsoluteTime();
             float timeSinceLastMove = (float)(gameTime - _scrollingLastTime);
@@ -1637,6 +1642,16 @@ bool Container::mouseEventScroll(Mouse::MouseEvent evt, int x, int y, int wheelD
     return false;
 }
 
+bool Container::inContact()
+{
+	for (int i = 0; i < MAX_CONTACT_INDICES; ++i)
+	{
+		if (_contactIndices[i])
+			return true;
+	}
+	return false;
+}
+
 bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
 {
     if (!isEnabled() || !isVisible())
@@ -1704,7 +1719,7 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
     if (!isEnabled() || !isVisible())
     {
         _contactIndex = INVALID_CONTACT_INDEX;
-        _contactIndices = 0;
+        clearContacts();
         _scrolling = false;
         _scrollingMouseVertically = _scrollingMouseHorizontally = false;
 
@@ -1721,14 +1736,15 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         {
             setState(Control::ACTIVE);
         }
-        else if (_contactIndices == 0)
+        else if (!inContact())
         {
             setState(Control::NORMAL);
             _contactIndex = INVALID_CONTACT_INDEX;
             release();
             return false;
         }
-        _contactIndices++;
+        if (!mouse)
+        	_contactIndices[data] = true;
         break;
     case Mouse::MOUSE_MOVE:
         if (_state != ACTIVE)
@@ -1759,10 +1775,10 @@ bool Container::pointerEvent(bool mouse, char evt, int x, int y, int data)
         }
         break;
     case Touch::TOUCH_RELEASE:
-        if (_contactIndices > 0)
-            _contactIndices--;
+    	if (!mouse)
+    		_contactIndices[data] = false;
 
-        if (!_contactIndices)
+    	if (!inContact())
         {
 			if (_state == ACTIVE && withinClipBounds)
 			{
