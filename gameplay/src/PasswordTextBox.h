@@ -80,16 +80,25 @@ namespace gameplay
 		static PasswordTextBox* create(Theme::Style* style, Properties* properties);
 
 		/**
-		 * Keyboard callback on key events.
+		 * Handle character deletion in the textbox
 		 *
-		 * @param evt The key event that occurred.
-		 * @param key If evt is KEY_PRESS or KEY_RELEASE then key is the key code from Keyboard::Key.
-		 *            If evt is KEY_CHAR then key is the unicode value of the character.
-		 * 
-		 * @see Keyboard::KeyEvent
-		 * @see Keyboard::Key
+		 * @param index of the deleted character
+		 * @param count the number of deleted characters
+		 *
+		 * @return The new password text box.
 		 */
-		bool keyEvent(Keyboard::KeyEvent evt, int key);
+		virtual void deleteChar(int index);
+
+		/**
+		 * Handle character insertion in the textbox
+		 *
+		 * @param index of the inserted character
+		 * @param count the number of inserted characters
+		 * @param characted inserted
+		 *
+		 * @return The new password text box.
+		 */
+		virtual void insertChar(int index, char character);
 
 		/**
 		 * The password behind the label displayed by this control.
