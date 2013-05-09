@@ -923,8 +923,6 @@ namespace gameplay
 
     const GamepadInfoEntry& getGamepadMappedInfo(const GamepadHandle handle)
     {
-        GP_ASSERT(pad);
-
         for(list<ConnectedGamepadDevInfo>::iterator it = __connectedGamepads.begin(); it != __connectedGamepads.end();++it)
         {
             if(handle == (*it).fd)
