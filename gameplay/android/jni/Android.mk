@@ -60,6 +60,7 @@ LOCAL_SRC_FILES := \
     Node.cpp \
     ParticleEmitter.cpp \
     Pass.cpp \
+    PasswordTextBox.cpp \
     PhysicsCharacter.cpp \
     PhysicsCollisionObject.cpp \
     PhysicsCollisionShape.cpp \
