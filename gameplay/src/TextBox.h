@@ -19,7 +19,7 @@ namespace gameplay
  * The following properties are available for text boxes:
 
  @verbatim
-    label <labelID>
+    textBox <labelID>
     {
          style       = <styleID>
          alignment   = <Control::Alignment constant> // Note: 'position' will be ignored.
